@@ -35,7 +35,13 @@ enum Algorithms {
         let total = Double(values.count)
         let totalMean = zip(hist, centers).reduce(0.0) { $0 + Double($1.0) * $1.1 } / total
 
-        var bestThr = lo, bestVar = -1.0
+        // Bei klar getrennten Clustern ist die Zwischenklassen-Varianz auf
+        // einem ganzen Plateau leerer Bins maximal. Wir nehmen die MITTE
+        // des Plateaus (nicht den ersten Treffer), damit die Schwelle in der
+        // Lücke zwischen Ruhe- und Bewegungs-Cluster liegt statt direkt an
+        // der Rauschkante. (Von der CI auf macOS aufgedeckt.)
+        var bestVar = -1.0
+        var firstBest = 0, lastBest = 0
         var w0 = 0.0, sum0 = 0.0
         for i in 0..<(bins - 1) {
             w0 += Double(hist[i])
@@ -48,10 +54,13 @@ enum Algorithms {
             let between = w0 * w1 * (m0 - m1) * (m0 - m1)
             if between > bestVar {
                 bestVar = between
-                bestThr = centers[i]
+                firstBest = i
+                lastBest = i
+            } else if between == bestVar {
+                lastBest = i
             }
         }
-        return bestThr
+        return centers[(firstBest + lastBest) / 2]
     }
 
     /// Adaptive Schwelle: Otsu mit Perzentil-Untergrenze (Empfindlichkeits-Regler).

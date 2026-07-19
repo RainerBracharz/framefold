@@ -41,7 +41,8 @@ def otsu_threshold(values, bins=128):
         return hi
     hist, edges = np.histogram(values, bins=bins, range=(lo, hi))
     total = hist.sum()
-    best_thr, best_var = lo, -1.0
+    best_var = -1.0
+    first_best = last_best = 0
     w0 = 0.0
     sum0 = 0.0
     centers = (edges[:-1] + edges[1:]) / 2
@@ -59,8 +60,11 @@ def otsu_threshold(values, bins=128):
         between = w0 * w1 * (m0 - m1) ** 2
         if between > best_var:
             best_var = between
-            best_thr = centers[i]
-    return best_thr
+            first_best = last_best = i
+        elif between == best_var:
+            last_best = i
+    # Mitte des Maximum-Plateaus: Schwelle liegt in der Cluster-Lücke
+    return centers[(first_best + last_best) // 2]
 
 
 def run(input_path, output_path, sampling_fps=6.0, analysis_width=160,

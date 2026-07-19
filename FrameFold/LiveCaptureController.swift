@@ -3,6 +3,25 @@ import AVFoundation
 import CoreImage
 import UIKit
 
+/// Threadsichere Analyse-Drossel + CIContext für den Kamera-Thread –
+/// bewusst außerhalb des MainActor-Controllers (Xcode 26 verbietet
+/// synchronen Zugriff auf MainActor-Statik aus dem Capture-Callback).
+private final class CaptureFrameGate: @unchecked Sendable {
+    static let shared = CaptureFrameGate()
+    let ciContext = CIContext()
+    private var lastProcessed = Date.distantPast
+    private let lock = NSLock()
+
+    func allow(interval: TimeInterval) -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        let now = Date()
+        guard now.timeIntervalSince(lastProcessed) >= interval else { return false }
+        lastProcessed = now
+        return true
+    }
+}
+
 /// Live-Capture mit Auto-Shutter:
 /// iPhone aufs Stativ, Aldo arbeitet – die App nimmt automatisch genau dann
 /// einen Frame auf, wenn die Hände aus dem Bild sind und die Szene ruhig ist.
@@ -54,7 +73,6 @@ final class LiveCaptureController: NSObject, ObservableObject {
     private var armed = false            // erst nach erkannter Arbeit wieder auslösen
     private var lastCaptureHash: UInt64?
     private var handDetector: HandDetecting = HandDetectorFactory.make()
-    private let ciContext = CIContext()
     private let videoQueue = DispatchQueue(label: "framefold.livecapture")
     private var onCapture: ((Data) -> Void)?
 
@@ -111,7 +129,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     nonisolated private func process(pixelBuffer: CVPixelBuffer) {
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-        guard let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent) else { return }
+        guard let cgImage = CaptureFrameGate.shared.ciContext.createCGImage(ciImage, from: ciImage.extent) else { return }
 
         let (gray, w, h) = FrameAnalyzer.grayscaleDownsampled(cgImage, targetWidth: 160)
 
@@ -190,23 +208,8 @@ extension LiveCaptureController: AVCaptureVideoDataOutputSampleBufferDelegate {
         from connection: AVCaptureConnection
     ) {
         // Analyse drosseln (~10/s reicht völlig)
-        let now = Date()
-        var shouldProcess = false
-        // lastAnalysis ist MainActor-isoliert – hier bewusst über eine
-        // threadsichere Annäherung: Drosselung via statischer Queue-Zeit.
-        shouldProcess = Self.throttle(now: now, interval: 0.1)
-        guard shouldProcess,
+        guard CaptureFrameGate.shared.allow(interval: 0.1),
               let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         process(pixelBuffer: pixelBuffer)
-    }
-
-    private static var lastProcessed = Date.distantPast
-    private static let throttleLock = NSLock()
-    private static func throttle(now: Date, interval: TimeInterval) -> Bool {
-        throttleLock.lock()
-        defer { throttleLock.unlock() }
-        guard now.timeIntervalSince(lastProcessed) >= interval else { return false }
-        lastProcessed = now
-        return true
     }
 }
