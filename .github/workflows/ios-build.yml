@@ -1,0 +1,59 @@
+name: iOS Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Logik-Tests + iOS-Build
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Xcode-Version
+        run: xcodebuild -version | tee /tmp/xcode-version.txt
+
+      - name: Logik-Tests (Algorithms + Models)
+        run: |
+          set -o pipefail
+          swiftc -o /tmp/fftests FrameFold/Algorithms.swift FrameFold/Models.swift linux-tests/main.swift 2>&1 | tee /tmp/tests-compile.log
+          /tmp/fftests 2>&1 | tee /tmp/tests-run.log
+
+      - name: iOS-Build (ohne Signing)
+        if: always()
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project FrameFold.xcodeproj \
+            -scheme FrameFold \
+            -destination 'generic/platform=iOS' \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            build 2>&1 | tee /tmp/build.log
+
+      - name: Ergebnis in ci-results-Branch veröffentlichen
+        if: always()
+        run: |
+          mkdir -p /tmp/ci-out
+          echo "status=${{ job.status }}" > /tmp/ci-out/STATUS.txt
+          echo "commit=$GITHUB_SHA" >> /tmp/ci-out/STATUS.txt
+          echo "run=$GITHUB_RUN_NUMBER" >> /tmp/ci-out/STATUS.txt
+          cp /tmp/xcode-version.txt /tmp/ci-out/ 2>/dev/null || true
+          cp /tmp/tests-compile.log /tmp/tests-run.log /tmp/ci-out/ 2>/dev/null || true
+          if [ -f /tmp/build.log ]; then
+            grep -E "error:|warning:" /tmp/build.log > /tmp/ci-out/build-errors.txt || true
+            tail -c 150000 /tmp/build.log > /tmp/ci-out/build-tail.log
+          fi
+          cd /tmp/ci-out
+          git init -q -b ci-results
+          git config user.email "ci@framefold.local"
+          git config user.name "FrameFold CI"
+          git add -A
+          git commit -qm "CI-Ergebnis Run $GITHUB_RUN_NUMBER ($GITHUB_SHA)"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" ci-results
