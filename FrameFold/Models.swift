@@ -110,6 +110,7 @@ struct PipelineResult {
 /// Fortschritt der Verarbeitung für die UI.
 enum PipelineStage: Equatable {
     case idle
+    case importing
     case sampling(progress: Double)
     case analyzing(progress: Double)
     case selectingKeyframes
@@ -121,6 +122,7 @@ enum PipelineStage: Equatable {
     var label: String {
         switch self {
         case .idle: return "Bereit"
+        case .importing: return "Lade Video…"
         case .sampling: return "Lese Frames…"
         case .analyzing: return "Analysiere Bewegung…"
         case .selectingKeyframes: return "Wähle Keyframes…"

@@ -58,20 +58,17 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     let session = AVCaptureSession()
 
-    /// Sekunden Stabilität bis zum Auto-Shutter
-    var stableSeconds: Double = 0.8
-    /// Bewegungsschwelle (mittlere Graustufendifferenz, 0–255)
-    var motionThreshold: Double = 2.0
-    /// Handprüfung aktiv
-    var checkHands = true
+    /// Sekunden Stabilität bis zum Auto-Shutter (live änderbar)
+    @Published var stableSeconds: Double = 0.8
+    /// Bewegungsschwelle (mittlere Graustufendifferenz, 0–255; live änderbar)
+    @Published var motionThreshold: Double = 2.0
+    /// Handprüfung aktiv (live änderbar)
+    @Published var checkHands = true
 
-    private let analysisInterval: TimeInterval = 0.1
-    private var lastAnalysis = Date.distantPast
     private var previousGray: [UInt8]?
-    private var grayWH = (w: 0, h: 0)
     private var stableSince: Date?
     private var armed = false            // erst nach erkannter Arbeit wieder auslösen
-    private var lastCaptureHash: UInt64?
+    private var latestFrame: CGImage?    // für den manuellen Auslöser
     private var handDetector: HandDetecting = HandDetectorFactory.make()
     private let videoQueue = DispatchQueue(label: "framefold.livecapture")
     private var onCapture: ((Data) -> Void)?
@@ -144,7 +141,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
             motion = Algorithms.motionScore(gray, prev)
         }
         previousGray = gray
-        grayWH = (w, h)
+        latestFrame = fullFrame
 
         if motion > motionThreshold {
             // Es passiert etwas: scharf stellen auf die nächste Ruhephase
@@ -172,22 +169,27 @@ final class LiveCaptureController: NSObject, ObservableObject {
             return
         }
 
-        // Dedup: hat sich seit dem letzten Capture etwas verändert?
-        let hash = FrameAnalyzer.dHash(gray: gray, width: w, height: h)
-        if let last = lastCaptureHash, FrameAnalyzer.hammingDistance(hash, last) < 3 {
-            armed = false // gleiche Szene – auf echte Arbeit warten
-            status = .waitingForWork
-            return
-        }
+        // Capture! Duplikate verhindert bereits der Zustandsautomat:
+        // ausgelöst wird nur nach erkannter Bewegung ("armed").
+        // (Der frühere dHash-Abgleich hat subtile Änderungen fälschlich
+        // als Duplikat verworfen und den Auslöser dauerhaft blockiert.)
+        capture(frame: fullFrame)
+    }
 
-        // Capture!
-        lastCaptureHash = hash
+    /// Manueller Auslöser – nimmt den aktuellen Frame sofort auf,
+    /// unabhängig von Bewegung und Handprüfung.
+    func captureNow() {
+        guard let frame = latestFrame else { return }
+        capture(frame: frame)
+    }
+
+    private func capture(frame: CGImage) {
         armed = false
         stableSince = nil
         capturedCount += 1
         status = .captured
 
-        let image = UIImage(cgImage: fullFrame)
+        let image = UIImage(cgImage: frame)
         lastCapturedImage = image
         if let data = image.jpegData(compressionQuality: 0.9) {
             onCapture?(data)

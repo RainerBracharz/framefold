@@ -10,6 +10,7 @@ struct LiveCaptureView: View {
     @State private var onionSkin = true
     @State private var showNewProject = false
     @State private var newProjectName = ""
+    @State private var showSettings = false
 
     var body: some View {
         NavigationStack {
@@ -36,9 +37,18 @@ struct LiveCaptureView: View {
                 ToolbarItem(placement: .principal) {
                     CatalogLabel("Live-Aufnahme", color: Theme.paperOnDark, size: 12)
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { showSettings = true } label: {
+                        Image(systemName: "slider.horizontal.3")
+                            .foregroundStyle(Theme.paperOnDark)
+                    }
+                }
             }
             .toolbarBackground(Theme.darkroom, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
+            .sheet(isPresented: $showSettings) {
+                LiveSettingsView(controller: controller)
+            }
         }
     }
 
@@ -127,7 +137,7 @@ struct LiveCaptureView: View {
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
             .padding(16)
 
-            HStack(spacing: 16) {
+            HStack(spacing: 14) {
                 VStack(alignment: .leading, spacing: 3) {
                     CatalogLabel(project.name, color: Theme.paperOnDark, size: 12)
                     CatalogLabel("\(currentCount) Frames", color: Theme.paperOnDark.opacity(0.6))
@@ -142,6 +152,22 @@ struct LiveCaptureView: View {
                         .background(onionSkin ? Theme.paperOnDark : .clear)
                         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
                 }
+
+                // Manueller Auslöser – nimmt sofort einen Frame,
+                // unabhängig vom Auto-Shutter
+                Button {
+                    controller.captureNow()
+                } label: {
+                    ZStack {
+                        Circle()
+                            .stroke(Theme.paperOnDark, lineWidth: 2)
+                            .frame(width: 54, height: 54)
+                        Circle()
+                            .fill(Theme.paperOnDark)
+                            .frame(width: 42, height: 42)
+                    }
+                }
+
                 Button {
                     controller.stop()
                     targetProject = nil
@@ -197,6 +223,55 @@ struct LiveCaptureView: View {
         .padding(.vertical, 10)
         .background(Theme.darkroom.opacity(0.75))
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
+    }
+}
+
+/// Einstellungen des Auto-Shutters – vor UND während der Aufnahme änderbar
+/// (der Controller liest die Werte bei jeder Analyse frisch).
+struct LiveSettingsView: View {
+    @ObservedObject var controller: LiveCaptureController
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Auslöse-Wartezeit: \(controller.stableSeconds, specifier: "%.1f") s")
+                            .font(Theme.body)
+                        Slider(value: $controller.stableSeconds, in: 0.3...2.5, step: 0.1)
+                        Text("So lange muss die Szene ruhig sein, bevor automatisch ausgelöst wird.")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Theme.graphite)
+                    }
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Bewegungs-Toleranz: \(controller.motionThreshold, specifier: "%.1f")")
+                            .font(Theme.body)
+                        Slider(value: $controller.motionThreshold, in: 0.5...8.0, step: 0.5)
+                        Text("Höher = kleine Wackler und Bildrauschen werden ignoriert. Wenn der Auslöser nie Ruhe findet, diesen Wert erhöhen.")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Theme.graphite)
+                    }
+                    Toggle("Nicht auslösen, solange Hände im Bild sind", isOn: $controller.checkHands)
+                        .font(Theme.body)
+                } header: {
+                    CatalogLabel("Auto-Shutter")
+                }
+                .listRowBackground(Theme.paperShade.opacity(0.5))
+            }
+            .scrollContentBackground(.hidden)
+            .background(Theme.paper)
+            .tint(Theme.ink)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    CatalogLabel("Live-Einstellungen", color: Theme.ink, size: 12)
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Fertig") { dismiss() }
+                        .foregroundStyle(Theme.ink)
+                }
+            }
+        }
     }
 }
 

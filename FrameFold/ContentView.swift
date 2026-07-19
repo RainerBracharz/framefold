@@ -15,10 +15,15 @@ struct ContentView: View {
                     startView
                 case .done:
                     if let result = viewModel.result {
-                        ResultView(result: result,
-                                   sourceVideoURL: viewModel.lastVideoURL) {
-                            viewModel.stage = .idle
-                        }
+                        ResultView(
+                            result: result,
+                            sourceVideoURL: viewModel.lastVideoURL,
+                            onReset: { viewModel.stage = .idle },
+                            onReprocess: {
+                                if let url = viewModel.lastVideoURL {
+                                    viewModel.process(videoURL: url)
+                                }
+                            })
                     }
                 case .failed(let message):
                     errorView(message)
@@ -79,9 +84,14 @@ struct ContentView: View {
         }
         .onChange(of: pickerItem) { _, newItem in
             guard let newItem else { return }
+            // Sofort Feedback zeigen – das Kopieren des Videos aus der
+            // Mediathek kann bei langen Aufnahmen einige Sekunden dauern.
+            viewModel.stage = .importing
             Task {
                 if let movie = try? await newItem.loadTransferable(type: VideoPickerFile.self) {
                     viewModel.process(videoURL: movie.url)
+                } else {
+                    viewModel.stage = .failed("Das Video konnte nicht geladen werden.")
                 }
                 pickerItem = nil
             }
@@ -151,6 +161,7 @@ struct ResultView: View {
     let result: PipelineResult
     let sourceVideoURL: URL?
     let onReset: () -> Void
+    let onReprocess: () -> Void
     @EnvironmentObject var store: ProjectStore
     @State private var player: AVPlayer?
     @State private var showSaveToProject = false
@@ -185,12 +196,20 @@ struct ResultView: View {
                         .frame(maxWidth: .infinity)
                         .background(Theme.ink)
                 }
-                Button("Neues Video") { onReset() }
+                Button("Verwerfen") { onReset() }
                     .buttonStyle(HairlineButtonStyle())
             }
             .padding(.horizontal, 24)
 
             if sourceVideoURL != nil {
+                // Einstellungen (Zahnrad oben rechts) ändern und mit
+                // demselben Video sofort neu verarbeiten
+                Button("Mit aktuellen Einstellungen neu verarbeiten") {
+                    onReprocess()
+                }
+                .buttonStyle(HairlineButtonStyle())
+                .padding(.horizontal, 24)
+
                 Button(savedToProject ? "Im Projekt gesichert ✓" : "Als Projekt sichern") {
                     showSaveToProject = true
                 }

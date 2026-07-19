@@ -21,20 +21,22 @@ struct ProjectsView: View {
                             .multilineTextAlignment(.center)
                     }
                 } else {
-                    ScrollView {
-                        LazyVStack(spacing: 0) {
-                            ForEach(Array(store.projects.enumerated()), id: \.element.id) { index, project in
-                                NavigationLink(value: project.id) {
-                                    projectRow(index: index, project: project)
-                                }
-                                .buttonStyle(.plain)
-                                Rectangle().fill(Theme.hairline).frame(height: 1)
+                    List {
+                        ForEach(Array(store.projects.enumerated()), id: \.element.id) { index, project in
+                            NavigationLink(value: project.id) {
+                                projectRow(index: index, project: project)
+                            }
+                            .listRowBackground(Theme.paper)
+                            .listRowSeparatorTint(Theme.hairline)
+                        }
+                        .onDelete { offsets in
+                            for index in offsets {
+                                store.delete(store.projects[index])
                             }
                         }
-                        .overlay(alignment: .top) {
-                            Rectangle().fill(Theme.hairline).frame(height: 1)
-                        }
                     }
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -69,7 +71,7 @@ struct ProjectsView: View {
     }
 
     private func projectRow(index: Int, project: Project) -> some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 14) {
             CatalogLabel(String(format: "%02d", index + 1), color: Theme.graphite)
                 .frame(width: 28, alignment: .leading)
 
@@ -94,20 +96,8 @@ struct ProjectsView: View {
                 CatalogLabel("\(project.frameCount) Frames")
             }
             Spacer()
-            Image(systemName: "chevron.right")
-                .font(.system(size: 12))
-                .foregroundStyle(Theme.graphite)
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 14)
-        .contentShape(Rectangle())
-        .contextMenu {
-            Button(role: .destructive) {
-                store.delete(project)
-            } label: {
-                Label("Projekt löschen", systemImage: "trash")
-            }
-        }
+        .padding(.vertical, 8)
     }
 }
 
@@ -122,6 +112,9 @@ struct ProjectDetailView: View {
     @State private var errorMessage: String?
     @State private var contactSheetURL: URL?
     @State private var isRenderingSheet = false
+    @State private var isEditingFrames = false
+    @State private var showDeleteProject = false
+    @Environment(\.dismiss) private var dismiss
 
     private let columns = [GridItem(.adaptive(minimum: 90), spacing: 2)]
 
@@ -135,6 +128,20 @@ struct ProjectDetailView: View {
             LazyVGrid(columns: columns, spacing: 2) {
                 ForEach(Array(store.frameURLs(for: currentProject).enumerated()), id: \.offset) { index, url in
                     FrameThumbnail(url: url)
+                        .overlay(alignment: .topTrailing) {
+                            if isEditingFrames {
+                                Button {
+                                    store.removeFrames(at: IndexSet(integer: index), from: currentProject)
+                                } label: {
+                                    Image(systemName: "xmark")
+                                        .font(.system(size: 11, weight: .bold))
+                                        .foregroundStyle(Theme.paper)
+                                        .padding(6)
+                                        .background(Theme.ink)
+                                }
+                                .padding(4)
+                            }
+                        }
                         .contextMenu {
                             Button(role: .destructive) {
                                 store.removeFrames(at: IndexSet(integer: index), from: currentProject)
@@ -149,14 +156,51 @@ struct ProjectDetailView: View {
 
             exportSection
                 .padding(20)
+
+            // Projekt löschen – bewusst ganz unten, mit Rückfrage
+            Button(role: .destructive) {
+                showDeleteProject = true
+            } label: {
+                Text("Projekt löschen")
+                    .font(Theme.caption(12))
+                    .tracking(1.6)
+                    .textCase(.uppercase)
+                    .foregroundStyle(.red)
+                    .padding(.vertical, 14)
+                    .frame(maxWidth: .infinity)
+                    .overlay(Rectangle().stroke(.red.opacity(0.4), lineWidth: 1))
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 24)
         }
         .paperStage()
         .toolbar {
             ToolbarItem(placement: .principal) {
                 CatalogLabel(currentProject.name, color: Theme.ink, size: 12)
             }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    isEditingFrames.toggle()
+                } label: {
+                    Text(isEditingFrames ? "Fertig" : "Bearbeiten")
+                        .font(Theme.caption(11))
+                        .tracking(1.2)
+                        .textCase(.uppercase)
+                        .foregroundStyle(Theme.ink)
+                }
+            }
         }
         .toolbarBackground(Theme.paper, for: .navigationBar)
+        .confirmationDialog(
+            "\(currentProject.name) mit allen \(currentProject.frameCount) Frames löschen?",
+            isPresented: $showDeleteProject, titleVisibility: .visible
+        ) {
+            Button("Endgültig löschen", role: .destructive) {
+                store.delete(currentProject)
+                dismiss()
+            }
+            Button("Abbrechen", role: .cancel) { }
+        }
     }
 
     /// Immer den frischen Stand aus dem Store verwenden.
