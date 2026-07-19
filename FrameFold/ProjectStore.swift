@@ -10,8 +10,15 @@ struct Project: Identifiable, Codable {
     var name: String
     var createdAtISO: String
     var frameFilenames: [String]
+    /// Papierkorb: entfernte Frames, 30 Tage wiederherstellbar (optional
+    /// für Abwärtskompatibilität mit älteren Manifesten)
+    var trashFilenames: [String]?
+    /// Fortlaufende Frame-Nummer – verhindert Dateinamens-Kollisionen
+    /// nach dem Löschen einzelner Frames
+    var nextFrameNumber: Int?
 
     var frameCount: Int { frameFilenames.count }
+    var trashCount: Int { trashFilenames?.count ?? 0 }
 }
 
 @MainActor
@@ -26,6 +33,7 @@ final class ProjectStore: ObservableObject {
         root = docs.appendingPathComponent("Projects", isDirectory: true)
         try? FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         reload()
+        purgeOldTrash()
     }
 
     // MARK: Laden & Speichern
@@ -62,9 +70,20 @@ final class ProjectStore: ObservableObject {
         let project = Project(
             id: UUID(), name: name,
             createdAtISO: ISO8601DateFormatter().string(from: Date()),
-            frameFilenames: [])
+            frameFilenames: [],
+            trashFilenames: nil,
+            nextFrameNumber: 0)
         save(project)
         return project
+    }
+
+    /// Fortlaufende Nummer für neue Frames – bei alten Manifesten aus dem
+    /// höchsten vorhandenen Dateinamen abgeleitet.
+    private func nextNumber(for project: Project) -> Int {
+        if let n = project.nextFrameNumber { return n }
+        let all = project.frameFilenames + (project.trashFilenames ?? [])
+        let maxExisting = all.compactMap { Int($0.prefix(6)) }.max() ?? -1
+        return maxExisting + 1
     }
 
     func delete(_ project: Project) {
@@ -81,27 +100,83 @@ final class ProjectStore: ObservableObject {
     /// Hängt ein Bild als neuen Frame an (Live-Capture).
     func appendFrame(jpegData: Data, to project: Project) {
         var updated = project
-        let filename = String(format: "%06d.jpg", updated.frameFilenames.count)
+        let number = nextNumber(for: updated)
+        let filename = String(format: "%06d.jpg", number)
         let dir = directory(for: updated)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         do {
             try jpegData.write(to: dir.appendingPathComponent(filename))
             updated.frameFilenames.append(filename)
+            updated.nextFrameNumber = number + 1
             save(updated)
         } catch { }
     }
 
-    /// Entfernt einzelne Frames (manueller Override in der Timeline).
+    /// Verschiebt Frames in den Papierkorb (30 Tage wiederherstellbar).
     func removeFrames(at offsets: IndexSet, from project: Project) {
         var updated = project
         let dir = directory(for: updated)
+        let trashDir = dir.appendingPathComponent("trash", isDirectory: true)
+        try? FileManager.default.createDirectory(at: trashDir, withIntermediateDirectories: true)
+
+        var trash = updated.trashFilenames ?? []
         for index in offsets {
             guard updated.frameFilenames.indices.contains(index) else { continue }
-            try? FileManager.default.removeItem(
-                at: dir.appendingPathComponent(updated.frameFilenames[index]))
+            let filename = updated.frameFilenames[index]
+            try? FileManager.default.moveItem(
+                at: dir.appendingPathComponent(filename),
+                to: trashDir.appendingPathComponent(filename))
+            trash.append(filename)
         }
         updated.frameFilenames.remove(atOffsets: offsets)
+        updated.trashFilenames = trash
+        updated.nextFrameNumber = nextNumber(for: updated) // für alte Manifeste fixieren
         save(updated)
+    }
+
+    /// Holt alle Frames aus dem Papierkorb zurück (ans Ende der Timeline,
+    /// in ursprünglicher Reihenfolge).
+    func restoreTrash(in project: Project) {
+        var updated = project
+        guard let trash = updated.trashFilenames, !trash.isEmpty else { return }
+        let dir = directory(for: updated)
+        let trashDir = dir.appendingPathComponent("trash", isDirectory: true)
+
+        for filename in trash.sorted() {
+            let source = trashDir.appendingPathComponent(filename)
+            guard FileManager.default.fileExists(atPath: source.path) else { continue }
+            try? FileManager.default.moveItem(
+                at: source, to: dir.appendingPathComponent(filename))
+            updated.frameFilenames.append(filename)
+        }
+        // Timeline in Aufnahme-Reihenfolge halten
+        updated.frameFilenames.sort()
+        updated.trashFilenames = nil
+        save(updated)
+    }
+
+    /// Entfernt Papierkorb-Dateien, die älter als 30 Tage sind.
+    func purgeOldTrash() {
+        let cutoff = Date().addingTimeInterval(-30 * 24 * 3600)
+        for project in projects {
+            guard var trash = project.trashFilenames, !trash.isEmpty else { continue }
+            let trashDir = directory(for: project).appendingPathComponent("trash", isDirectory: true)
+            var changed = false
+            for filename in trash {
+                let url = trashDir.appendingPathComponent(filename)
+                let modified = (try? FileManager.default.attributesOfItem(atPath: url.path)[.modificationDate] as? Date) ?? nil
+                if let modified, modified < cutoff {
+                    try? FileManager.default.removeItem(at: url)
+                    trash.removeAll { $0 == filename }
+                    changed = true
+                }
+            }
+            if changed {
+                var updated = project
+                updated.trashFilenames = trash.isEmpty ? nil : trash
+                save(updated)
+            }
+        }
     }
 
     func frameURLs(for project: Project) -> [URL] {

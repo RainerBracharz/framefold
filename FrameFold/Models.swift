@@ -115,6 +115,7 @@ enum PipelineStage: Equatable {
     case analyzing(progress: Double)
     case selectingKeyframes
     case checkingHands(progress: Double)
+    case reviewing
     case assembling(progress: Double)
     case done
     case failed(String)
@@ -127,6 +128,7 @@ enum PipelineStage: Equatable {
         case .analyzing: return "Analysiere Bewegung…"
         case .selectingKeyframes: return "Wähle Keyframes…"
         case .checkingHands: return "Prüfe auf Hände…"
+        case .reviewing: return "Keyframes prüfen"
         case .assembling: return "Baue Stopmotion…"
         case .done: return "Fertig"
         case .failed(let msg): return "Fehler: \(msg)"

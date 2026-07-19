@@ -11,6 +11,7 @@ struct LiveCaptureView: View {
     @State private var showNewProject = false
     @State private var newProjectName = ""
     @State private var showSettings = false
+    @State private var recentThumbs: [UIImage] = []
 
     var body: some View {
         NavigationStack {
@@ -128,14 +129,50 @@ struct LiveCaptureView: View {
                         .allowsHitTesting(false)
                 }
 
-                VStack {
+                VStack(spacing: 8) {
                     Spacer()
+                    // Bewegungs-Pegel: links ruhig, Markierung = Schwelle.
+                    // Man sieht live, warum der Auto-Shutter (nicht) auslöst.
+                    MotionGauge(motion: controller.currentMotion,
+                                threshold: controller.motionThreshold)
+                        .frame(width: 150, height: 10)
                     statusBadge
                         .padding(.bottom, 12)
                 }
             }
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
-            .padding(16)
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+
+            // Streifen der letzten Frames – letzter ist per ✕ zurücknehmbar
+            if !recentThumbs.isEmpty {
+                HStack(spacing: 4) {
+                    ForEach(Array(recentThumbs.enumerated()), id: \.offset) { index, thumb in
+                        Image(uiImage: thumb)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 44, height: 44)
+                            .clipped()
+                            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+                            .overlay(alignment: .topTrailing) {
+                                if index == recentThumbs.count - 1 {
+                                    Button {
+                                        undoLastFrame(project: project)
+                                    } label: {
+                                        Image(systemName: "xmark")
+                                            .font(.system(size: 9, weight: .bold))
+                                            .foregroundStyle(Theme.darkroom)
+                                            .padding(4)
+                                            .background(Theme.paperOnDark)
+                                    }
+                                }
+                            }
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 10)
+            }
 
             HStack(spacing: 14) {
                 VStack(alignment: .leading, spacing: 3) {
@@ -186,15 +223,29 @@ struct LiveCaptureView: View {
             .padding(.bottom, 16)
         }
         .onAppear {
+            recentThumbs = []
             controller.start { jpegData in
                 if let current = store.projects.first(where: { $0.id == project.id }) {
                     store.appendFrame(jpegData: jpegData, to: current)
+                }
+                if let image = UIImage(data: jpegData) {
+                    recentThumbs.append(image)
+                    if recentThumbs.count > 6 { recentThumbs.removeFirst() }
                 }
             }
         }
         .onDisappear {
             controller.stop()
         }
+    }
+
+    private func undoLastFrame(project: Project) {
+        if let current = store.projects.first(where: { $0.id == project.id }),
+           current.frameCount > 0 {
+            store.removeFrames(at: IndexSet(integer: current.frameCount - 1), from: current)
+        }
+        if !recentThumbs.isEmpty { recentThumbs.removeLast() }
+        controller.revertLastCapture(to: recentThumbs.last)
     }
 
     private var currentCount: Int {
@@ -223,6 +274,37 @@ struct LiveCaptureView: View {
         .padding(.vertical, 10)
         .background(Theme.darkroom.opacity(0.75))
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
+    }
+}
+
+/// Bewegungs-Pegel: Balken = aktuelle Bewegung, Strich in der Mitte = Schwelle.
+/// Balken links vom Strich = Szene gilt als ruhig.
+struct MotionGauge: View {
+    let motion: Double
+    let threshold: Double
+
+    var body: some View {
+        GeometryReader { geo in
+            let fraction = min(1.0, motion / max(0.001, threshold * 2))
+            ZStack(alignment: .leading) {
+                Rectangle()
+                    .fill(Theme.paperOnDark.opacity(0.25))
+                    .frame(height: 2)
+                    .frame(maxHeight: .infinity, alignment: .center)
+                Rectangle()
+                    .fill(motion <= threshold
+                          ? Theme.paperOnDark
+                          : Color(red: 0.95, green: 0.65, blue: 0.3))
+                    .frame(width: geo.size.width * fraction, height: 4)
+                    .frame(maxHeight: .infinity, alignment: .center)
+                // Schwellen-Markierung (immer bei 50 %)
+                Rectangle()
+                    .fill(Theme.paperOnDark.opacity(0.8))
+                    .frame(width: 1.5)
+                    .offset(x: geo.size.width / 2)
+            }
+        }
+        .animation(.linear(duration: 0.1), value: motion)
     }
 }
 

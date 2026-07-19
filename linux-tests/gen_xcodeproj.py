@@ -49,20 +49,30 @@ ids = {
 }
 file_refs = {f: uid("FileRef:" + f) for f in sources}
 build_files = {f: uid("BuildFile:" + f) for f in sources}
+assets_ref = uid("FileRef:Assets.xcassets")
+assets_build = uid("BuildFile:Assets.xcassets")
 
 # --- pbxproj-Inhalt ---
 build_file_entries = "\n".join(
     f"\t\t{build_files[f]} /* {f} in Sources */ = {{isa = PBXBuildFile; "
     f"fileRef = {file_refs[f]} /* {f} */; }};"
     for f in sources)
+build_file_entries += (
+    f"\n\t\t{assets_build} /* Assets.xcassets in Resources */ = "
+    f"{{isa = PBXBuildFile; fileRef = {assets_ref} /* Assets.xcassets */; }};")
 
 file_ref_entries = "\n".join(
     f"\t\t{file_refs[f]} /* {f} */ = {{isa = PBXFileReference; "
     f"lastKnownFileType = sourcecode.swift; path = {f}; sourceTree = \"<group>\"; }};"
     for f in sources)
+file_ref_entries += (
+    f"\n\t\t{assets_ref} /* Assets.xcassets */ = {{isa = PBXFileReference; "
+    f"lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; "
+    f"sourceTree = \"<group>\"; }};")
 
 source_children = "\n".join(
     f"\t\t\t\t{file_refs[f]} /* {f} */," for f in sources)
+source_children += f"\n\t\t\t\t{assets_ref} /* Assets.xcassets */,"
 
 sources_phase_files = "\n".join(
     f"\t\t\t\t{build_files[f]} /* {f} in Sources */," for f in sources)
@@ -83,6 +93,7 @@ SHARED_PROJ_SETTINGS = """\
 				SWIFT_VERSION = 5.0;"""
 
 TARGET_SETTINGS = f"""\
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -214,6 +225,7 @@ pbxproj = f"""// !$*UTF8*$!
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				{assets_build} /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		}};

@@ -24,6 +24,7 @@
 		96CBCC018099EE0B7B40AC86 /* ProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC61E3411A52FB19A5D7E /* ProjectsView.swift */; };
 		C7A97BD0A2F98F786140AD56 /* StopMotionAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC7761875A3A3F18126E58 /* StopMotionAssembler.swift */; };
 		52A0753942DADBD20392C515 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D927AFD3235879AD294246A /* Theme.swift */; };
+		DA47649F07F31FB474676A5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5179CC507784BECC68BB9DEF /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		6F0AC61E3411A52FB19A5D7E /* ProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsView.swift; sourceTree = "<group>"; };
 		86AC7761875A3A3F18126E58 /* StopMotionAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopMotionAssembler.swift; sourceTree = "<group>"; };
 		6D927AFD3235879AD294246A /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		5179CC507784BECC68BB9DEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DEF93E8F8AC229A0D98BBEFA /* FrameFold.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrameFold.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -86,6 +88,7 @@
 				6F0AC61E3411A52FB19A5D7E /* ProjectsView.swift */,
 				86AC7761875A3A3F18126E58 /* StopMotionAssembler.swift */,
 				6D927AFD3235879AD294246A /* Theme.swift */,
+				5179CC507784BECC68BB9DEF /* Assets.xcassets */,
 			);
 			path = FrameFold;
 			sourceTree = "<group>";
@@ -157,6 +160,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA47649F07F31FB474676A5F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,6 +249,7 @@
 		7EBA50094BFA750F0608695D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -270,6 +275,7 @@
 		792B3A5FC2586286261D1B60 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";

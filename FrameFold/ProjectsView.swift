@@ -154,6 +154,25 @@ struct ProjectDetailView: View {
             .padding(.horizontal, 12)
             .padding(.top, 6)
 
+            // Papierkorb: entfernte Frames sind 30 Tage wiederherstellbar
+            if currentProject.trashCount > 0 {
+                Button {
+                    store.restoreTrash(in: currentProject)
+                } label: {
+                    Label("Zuletzt gelöscht: \(currentProject.trashCount) Frames wiederherstellen",
+                          systemImage: "arrow.uturn.backward")
+                        .font(Theme.caption(11))
+                        .tracking(1.2)
+                        .textCase(.uppercase)
+                        .foregroundStyle(Theme.ink)
+                        .padding(.vertical, 12)
+                        .frame(maxWidth: .infinity)
+                        .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 10)
+            }
+
             exportSection
                 .padding(20)
 

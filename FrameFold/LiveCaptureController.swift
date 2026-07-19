@@ -2,6 +2,7 @@ import Foundation
 import AVFoundation
 import CoreImage
 import UIKit
+import AudioToolbox
 
 /// Threadsichere Analyse-Drossel + CIContext für den Kamera-Thread –
 /// bewusst außerhalb des MainActor-Controllers (Xcode 26 verbietet
@@ -35,6 +36,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     enum Status: Equatable {
         case idle
+        case calibrating          // misst 2 s das Grundrauschen der Szene
         case waitingForWork       // Szene ruhig, aber noch nichts Neues passiert
         case working              // Bewegung/Hände erkannt
         case stabilizing(Double)  // Countdown bis Auto-Shutter (0..1)
@@ -43,6 +45,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         var label: String {
             switch self {
             case .idle: return "Kamera startet…"
+            case .calibrating: return "Kalibriere – kurz ruhig lassen…"
             case .waitingForWork: return "Bereit – arbeite einfach"
             case .working: return "Arbeit erkannt…"
             case .stabilizing: return "Ruhig halten…"
@@ -64,11 +67,16 @@ final class LiveCaptureController: NSObject, ObservableObject {
     @Published var motionThreshold: Double = 2.0
     /// Handprüfung aktiv (live änderbar)
     @Published var checkHands = true
+    /// Aktueller Bewegungswert (für den Pegel im Sucher)
+    @Published var currentMotion: Double = 0
 
     private var previousGray: [UInt8]?
     private var stableSince: Date?
     private var armed = false            // erst nach erkannter Arbeit wieder auslösen
     private var latestFrame: CGImage?    // für den manuellen Auslöser
+    /// Auto-Kalibrierung: sammelt beim Start ~2 s Bewegungswerte der ruhigen
+    /// Szene und setzt die Schwelle auf das Dreifache des Grundrauschens.
+    private var calibrationSamples: [Double]? = nil
     private var handDetector: HandDetecting = HandDetectorFactory.make()
     private let videoQueue = DispatchQueue(label: "framefold.livecapture")
     private var onCapture: ((Data) -> Void)?
@@ -87,8 +95,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
             Task.detached { [session = self.session] in
                 session.startRunning()
             }
-            self.status = .waitingForWork
-            self.armed = true // erster Frame darf sofort kommen, sobald stabil
+            self.status = .calibrating
+            self.calibrationSamples = []
+            self.armed = false // scharf erst nach der Kalibrierung
         }
     }
 
@@ -137,11 +146,27 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     private func analyze(gray: [UInt8], w: Int, h: Int, fullFrame: CGImage) {
         var motion = 0.0
+        let hadPrevious = previousGray != nil
         if let prev = previousGray, prev.count == gray.count {
             motion = Algorithms.motionScore(gray, prev)
         }
         previousGray = gray
         latestFrame = fullFrame
+        currentMotion = motion
+
+        // Kalibrierphase: Grundrauschen messen, Schwelle automatisch setzen
+        if calibrationSamples != nil {
+            status = .calibrating
+            if hadPrevious { calibrationSamples?.append(motion) }
+            if let samples = calibrationSamples, samples.count >= 20 {
+                let median = samples.sorted()[samples.count / 2]
+                motionThreshold = min(8.0, max(1.0, (median * 3 * 2).rounded() / 2))
+                calibrationSamples = nil
+                armed = true // erster Frame darf sofort kommen, sobald stabil
+                status = .waitingForWork
+            }
+            return
+        }
 
         if motion > motionThreshold {
             // Es passiert etwas: scharf stellen auf die nächste Ruhephase
@@ -183,11 +208,21 @@ final class LiveCaptureController: NSObject, ObservableObject {
         capture(frame: frame)
     }
 
+    /// Nimmt den letzten Frame zurück (Undo im Thumbnail-Streifen).
+    func revertLastCapture(to previous: UIImage?) {
+        lastCapturedImage = previous
+        capturedCount = max(0, capturedCount - 1)
+    }
+
     private func capture(frame: CGImage) {
         armed = false
         stableSince = nil
         capturedCount += 1
         status = .captured
+
+        // Spürbar & hörbar: Aldo schaut aufs Werk, nicht aufs Display
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        AudioServicesPlaySystemSound(1108) // Kamera-Verschluss
 
         let image = UIImage(cgImage: frame)
         lastCapturedImage = image

@@ -13,17 +13,15 @@ struct ContentView: View {
                 switch viewModel.stage {
                 case .idle:
                     startView
+                case .reviewing:
+                    ReviewView(viewModel: viewModel)
                 case .done:
                     if let result = viewModel.result {
                         ResultView(
                             result: result,
                             sourceVideoURL: viewModel.lastVideoURL,
                             onReset: { viewModel.stage = .idle },
-                            onReprocess: {
-                                if let url = viewModel.lastVideoURL {
-                                    viewModel.process(videoURL: url)
-                                }
-                            })
+                            onReprocess: { viewModel.backToReview() })
                     }
                 case .failed(let message):
                     errorView(message)
@@ -108,6 +106,98 @@ struct ContentView: View {
                 .padding(.horizontal, 32)
             Button("Nochmal versuchen") { viewModel.stage = .idle }
                 .buttonStyle(HairlineButtonStyle(fullWidth: false))
+        }
+    }
+}
+
+/// Review vor dem Export: alle gefundenen Keyframes als Kontaktbogen,
+/// Empfindlichkeit LIVE nachregelbar (Analyse-Cache – kein Neulesen des
+/// Videos), einzelne Frames per Tipp abwählbar.
+struct ReviewView: View {
+    @ObservedObject var viewModel: ProcessingViewModel
+
+    private let columns = [GridItem(.adaptive(minimum: 76), spacing: 2)]
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView {
+                HStack {
+                    CatalogLabel("\(viewModel.selectedCount) von \(viewModel.reviewFrames.count) Frames gewählt",
+                                 color: Theme.ink)
+                    if viewModel.isRecomputing {
+                        ProgressView().tint(Theme.ink).scaleEffect(0.7)
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+
+                CatalogLabel("Antippen zum Abwählen")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 2)
+
+                LazyVGrid(columns: columns, spacing: 2) {
+                    ForEach(viewModel.reviewFrames) { frame in
+                        Button {
+                            viewModel.toggleFrame(frame.id)
+                        } label: {
+                            Group {
+                                if let thumb = frame.thumbnail {
+                                    Image(uiImage: thumb)
+                                        .resizable()
+                                        .scaledToFill()
+                                } else {
+                                    Rectangle().fill(Theme.paperShade)
+                                }
+                            }
+                            .frame(minWidth: 76, minHeight: 76)
+                            .aspectRatio(1, contentMode: .fill)
+                            .clipped()
+                            .opacity(frame.selected ? 1 : 0.3)
+                            .overlay(Rectangle().stroke(
+                                frame.selected ? Theme.ink : Theme.hairline,
+                                lineWidth: frame.selected ? 1.5 : 1))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.top, 8)
+
+                // Empfindlichkeit wirkt sofort auf den Cache
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Empfindlichkeit: \(Int(viewModel.settings.motionPercentile * 100)) %")
+                        .font(Theme.body)
+                    Slider(value: $viewModel.settings.motionPercentile, in: 0.1...0.7, step: 0.05)
+                        .tint(Theme.ink)
+                        .onChange(of: viewModel.settings.motionPercentile) { _, _ in
+                            viewModel.recomputeFromCache()
+                        }
+                    Text("Höher = mehr Momente gelten als ruhig → mehr Frames")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Theme.graphite)
+                }
+                .padding(14)
+                .background(Theme.paperShade.opacity(0.5))
+                .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+                .padding(.horizontal, 20)
+                .padding(.top, 14)
+            }
+
+            VStack(spacing: 10) {
+                Button("Stopmotion erstellen") {
+                    viewModel.createVideo()
+                }
+                .buttonStyle(InkButtonStyle())
+                .disabled(viewModel.selectedCount == 0)
+                Button("Verwerfen") {
+                    viewModel.stage = .idle
+                }
+                .buttonStyle(HairlineButtonStyle())
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 12)
         }
     }
 }
@@ -202,9 +292,9 @@ struct ResultView: View {
             .padding(.horizontal, 24)
 
             if sourceVideoURL != nil {
-                // Einstellungen (Zahnrad oben rechts) ändern und mit
-                // demselben Video sofort neu verarbeiten
-                Button("Mit aktuellen Einstellungen neu verarbeiten") {
+                // Zurück zur Frame-Auswahl – der Analyse-Cache bleibt,
+                // Regler und Auswahl wirken sofort
+                Button("Zurück zur Frame-Auswahl") {
                     onReprocess()
                 }
                 .buttonStyle(HairlineButtonStyle())
