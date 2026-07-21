@@ -258,8 +258,7 @@ struct LiveCaptureView: View {
             switch controller.status {
             case .stabilizing(let progress):
                 HairlineProgress(value: progress,
-                                 trackColor: Theme.paperOnDark.opacity(0.3),
-                                 barColor: Theme.paperOnDark)
+                                 trackColor: Theme.paperOnDark.opacity(0.3))
                     .frame(width: 56)
             case .captured:
                 Image(systemName: "checkmark").foregroundStyle(Theme.paperOnDark)
@@ -291,12 +290,15 @@ struct MotionGauge: View {
                     .fill(Theme.paperOnDark.opacity(0.25))
                     .frame(height: 2)
                     .frame(maxHeight: .infinity, alignment: .center)
-                Rectangle()
-                    .fill(motion <= threshold
-                          ? Theme.paperOnDark
-                          : Color(red: 0.95, green: 0.65, blue: 0.3))
-                    .frame(width: geo.size.width * fraction, height: 4)
-                    .frame(maxHeight: .infinity, alignment: .center)
+                Group {
+                    if motion <= threshold {
+                        Rectangle().fill(Theme.crease)   // ruhig → bereit (spektral)
+                    } else {
+                        Rectangle().fill(Theme.amber)     // Bewegung → warten
+                    }
+                }
+                .frame(width: geo.size.width * fraction, height: 4)
+                .frame(maxHeight: .infinity, alignment: .center)
                 // Schwellen-Markierung (immer bei 50 %)
                 Rectangle()
                     .fill(Theme.paperOnDark.opacity(0.8))

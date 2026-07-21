@@ -210,7 +210,11 @@ struct ContentView: View {
     }
 
     private func recentTile(_ project: Project) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 0) {
+            // Akzentkante des Werks
+            Rectangle()
+                .fill(Theme.accent(for: project.id))
+                .frame(width: 128, height: 3)
             Group {
                 if let thumb = store.thumbnail(for: project) {
                     Image(uiImage: thumb).resizable().scaledToFill()
@@ -220,7 +224,7 @@ struct ContentView: View {
                             .foregroundStyle(Theme.hairline))
                 }
             }
-            .frame(width: 128, height: 128)
+            .frame(width: 128, height: 125)
             .clipped()
             .overlay(Rectangle().stroke(Theme.ink, lineWidth: 1))
 
@@ -228,7 +232,9 @@ struct ContentView: View {
                 .font(Theme.serif(14, .regular))
                 .foregroundStyle(Theme.ink)
                 .lineLimit(1)
+                .padding(.top, 8)
             CatalogLabel("\(project.frameCount) Bilder", size: 9)
+                .padding(.top, 4)
         }
         .frame(width: 128)
     }
@@ -252,8 +258,15 @@ struct ContentView: View {
 /// Videos), einzelne Frames per Tipp abwählbar.
 struct ReviewView: View {
     @ObservedObject var viewModel: ProcessingViewModel
+    @State private var isPreviewing = false
+    @State private var previewIndex = 0
+    private let previewTimer = Timer.publish(every: 1.0/8.0, on: .main, in: .common).autoconnect()
 
     private let columns = [GridItem(.adaptive(minimum: 76), spacing: 2)]
+
+    private var selectedThumbs: [UIImage] {
+        viewModel.reviewFrames.filter(\.selected).compactMap(\.thumbnail)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -265,14 +278,41 @@ struct ReviewView: View {
                         ProgressView().tint(Theme.ink).scaleEffect(0.7)
                     }
                     Spacer()
+                    Button {
+                        previewIndex = 0
+                        isPreviewing.toggle()
+                    } label: {
+                        Label(isPreviewing ? "Anhalten" : "Vorschau",
+                              systemImage: isPreviewing ? "pause.fill" : "play.fill")
+                            .font(Theme.caption(11))
+                            .tracking(1.2)
+                            .textCase(.uppercase)
+                            .foregroundStyle(Theme.ink)
+                    }
+                    .disabled(selectedThumbs.isEmpty)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 12)
 
+                // Endlos-Vorschau der gewählten Bilder – vor dem Rendern
+                if isPreviewing, !selectedThumbs.isEmpty {
+                    Image(uiImage: selectedThumbs[previewIndex % selectedThumbs.count])
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 300)
+                        .plate()
+                        .padding(.horizontal, 20)
+                        .padding(.top, 12)
+                        .onReceive(previewTimer) { _ in
+                            if isPreviewing { previewIndex += 1 }
+                        }
+                }
+
                 CatalogLabel("Antippen zum Abwählen")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 20)
-                    .padding(.top, 2)
+                    .padding(.top, 12)
 
                 LazyVGrid(columns: columns, spacing: 2) {
                     ForEach(viewModel.reviewFrames) { frame in
@@ -291,10 +331,14 @@ struct ReviewView: View {
                             .frame(minWidth: 76, minHeight: 76)
                             .aspectRatio(1, contentMode: .fill)
                             .clipped()
-                            .opacity(frame.selected ? 1 : 0.3)
-                            .overlay(Rectangle().stroke(
-                                frame.selected ? Theme.ink : Theme.hairline,
-                                lineWidth: frame.selected ? 1.5 : 1))
+                            .opacity(frame.selected ? 1 : 0.28)
+                            .overlay {
+                                if frame.selected {
+                                    Rectangle().strokeBorder(Theme.crease, lineWidth: 2.5)
+                                } else {
+                                    Rectangle().stroke(Theme.hairline, lineWidth: 1)
+                                }
+                            }
                         }
                         .buttonStyle(.plain)
                     }

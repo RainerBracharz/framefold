@@ -74,7 +74,12 @@ struct ProjectsView: View {
     private func projectRow(index: Int, project: Project) -> some View {
         HStack(spacing: 14) {
             CatalogLabel(String(format: "%02d", index + 1), color: Theme.graphite)
-                .frame(width: 28, alignment: .leading)
+                .frame(width: 26, alignment: .leading)
+
+            // Akzent des Werks
+            Rectangle()
+                .fill(Theme.accent(for: project.id))
+                .frame(width: 4, height: 52)
 
             if let thumb = store.thumbnail(for: project) {
                 Image(uiImage: thumb)
@@ -119,10 +124,16 @@ struct ProjectDetailView: View {
 
     var body: some View {
         ScrollView {
-            CatalogLabel("\(currentProject.frameCount) Bilder · Kontaktbogen")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 20)
-                .padding(.top, 12)
+            HStack(spacing: 10) {
+                Rectangle()
+                    .fill(Theme.accent(for: currentProject.id))
+                    .frame(width: 22, height: 3)
+                CatalogLabel("\(currentProject.frameCount) Bilder · Kontaktbogen")
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 20)
+            .padding(.top, 12)
 
             LazyVGrid(columns: columns, spacing: 2) {
                 ForEach(Array(store.frameURLs(for: currentProject).enumerated()), id: \.offset) { index, url in

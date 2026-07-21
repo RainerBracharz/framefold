@@ -31,6 +31,35 @@ enum Theme {
     /// Schrift auf Dunkel
     static let paperOnDark = Color(red: 0.929, green: 0.921, blue: 0.906)
 
+    // MARK: Spektrum (Farbe kommt aus dem Falz – wie Licht über Tolinos Facetten)
+
+    static let violet = Color(red: 0.424, green: 0.361, blue: 0.906)  // #6C5CE7
+    static let blue   = Color(red: 0.231, green: 0.510, blue: 0.965)  // #3B82F6
+    static let cyan   = Color(red: 0.133, green: 0.827, blue: 0.776)  // #22D3C6
+    static let magenta = Color(red: 0.910, green: 0.361, blue: 0.690) // #E85CB0
+    static let lime   = Color(red: 0.639, green: 0.902, blue: 0.208)  // #A3E635
+    static let amber  = Color(red: 0.961, green: 0.620, blue: 0.043)  // #F59E0B
+
+    /// Volles Spektrum – Logo, Hero-Momente.
+    static let spectrum = LinearGradient(
+        colors: [magenta, violet, blue, cyan, lime, amber],
+        startPoint: .leading, endPoint: .trailing)
+
+    /// Der gebrochene Falz – Auswahl, Fortschritt, Pegel (violett → cyan).
+    static let crease = LinearGradient(
+        colors: [violet, cyan],
+        startPoint: .topLeading, endPoint: .bottomTrailing)
+
+    /// Akzentpalette; jedes Projekt trägt genau einen daraus.
+    static let accents: [Color] = [violet, blue, cyan, magenta, lime, amber]
+
+    /// Deterministischer Akzent aus einer UUID (stabil über App-Starts –
+    /// bewusst nicht hashValue, das ist pro Prozess zufällig).
+    static func accent(for id: UUID) -> Color {
+        let sum = id.uuidString.unicodeScalars.reduce(0) { $0 + Int($1.value) }
+        return accents[sum % accents.count]
+    }
+
     // MARK: Typografie
 
     /// Serif (New York) – die authored/Buch-Stimme: Titel, Werknamen, Wortmarke.
@@ -79,12 +108,12 @@ struct FoldMark: View {
                 p.addLine(to: CGPoint(x: 0, y: size))
             }
             .stroke(color, lineWidth: 1.2)
-            // Hauptfalz (Diagonale)
+            // Hauptfalz (Diagonale) – bricht das Licht ins Spektrum
             Path { p in
                 p.move(to: CGPoint(x: size, y: 0))
                 p.addLine(to: CGPoint(x: 0, y: size))
             }
-            .stroke(color, lineWidth: 1)
+            .stroke(Theme.crease, lineWidth: 1.6)
             // zweite Falzlinie (Facette)
             Path { p in
                 p.move(to: CGPoint(x: size * 0.5, y: 0))
@@ -177,17 +206,18 @@ struct PlateFrame: ViewModifier {
 }
 
 /// Schmale Fortschrittslinie wie eine Falzmarke.
+/// Standard: spektraler Balken (der Falz „wandert" farbig voran).
 struct HairlineProgress: View {
     let value: Double
     var trackColor: Color = Theme.hairline
-    var barColor: Color = Theme.ink
+    var gradient: LinearGradient = Theme.crease
 
     var body: some View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
                 Rectangle().fill(trackColor).frame(height: 1)
                     .frame(maxHeight: .infinity, alignment: .center)
-                Rectangle().fill(barColor)
+                Rectangle().fill(gradient)
                     .frame(width: geo.size.width * max(0, min(1, value)), height: 3)
                     .frame(maxHeight: .infinity, alignment: .center)
             }
