@@ -607,6 +607,9 @@ struct SettingsView: View {
                         Picker("Format", selection: $settings.aspect) {
                             ForEach(AspectPreset.allCases) { Text($0.rawValue).tag($0) }
                         }
+                        Picker("Auflösung", selection: $settings.exportResolution) {
+                            ForEach(ExportResolution.allCases) { Text($0.rawValue).tag($0) }
+                        }
                         Picker("Abspielmodus", selection: $settings.loopMode) {
                             ForEach(LoopMode.allCases) { Text($0.rawValue).tag($0) }
                         }

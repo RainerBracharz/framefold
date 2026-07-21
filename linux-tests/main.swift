@@ -229,6 +229,26 @@ check(Algorithms.reelFrameCount(frameCounts: [10, 20, 5], titleHold: 12) == 35 +
 check(Algorithms.reelFrameCount(frameCounts: [], titleHold: 12) == 0, "keine Werke → 0")
 check(Algorithms.reelFrameCount(frameCounts: [8], titleHold: 0) == 8, "ohne Titelkarte → nur Frames")
 
+// MARK: Export-Auflösung
+print("exportSize:")
+do {
+    // 9:16-Crop aus 4K-Hochformat (2160×3840) auf 1080p begrenzt
+    let a = Algorithms.exportSize(cropWidth: 2160, cropHeight: 3840, maxDimension: 1920)
+    check(a.width == 1080 && a.height == 1920, "4K-9:16-Crop → exakt 1080×1920")
+    // Querformat 4K auf 1080p
+    let b = Algorithms.exportSize(cropWidth: 3840, cropHeight: 2160, maxDimension: 1920)
+    check(b.width == 1920 && b.height == 1080, "4K-16:9 → 1920×1080")
+    // Kein Limit: Originalgröße, auf gerade Maße gerundet
+    let c = Algorithms.exportSize(cropWidth: 2161, cropHeight: 3841, maxDimension: nil)
+    check(c.width == 2160 && c.height == 3840, "ohne Limit → gerade gerundete Originalgröße")
+    // Nie hochskalieren: kleine Quelle bleibt klein
+    let d = Algorithms.exportSize(cropWidth: 640, cropHeight: 480, maxDimension: 1920)
+    check(d.width == 640 && d.height == 480, "kleine Quelle wird nicht hochskaliert")
+    // Ungültige Eingaben
+    let e = Algorithms.exportSize(cropWidth: 0, cropHeight: 100, maxDimension: 1920)
+    check(e.width == 0 && e.height == 0, "leerer Crop → (0,0)")
+}
+
 // MARK: Ende-zu-Ende: synthetisches Video als Zahlenfolge
 print("Ende-zu-Ende (synthetische Sequenz):")
 // 8 Szenen: Ruhe (Rauschen ~1) und Übergänge (~20), wie make_test_video.py

@@ -102,8 +102,12 @@ final class StopMotionAssembler {
         let cropRect = Self.cropRect(
             imageWidth: firstImage.width, imageHeight: firstImage.height,
             targetRatio: settings.aspect.ratio)
-        let width = Int(cropRect.width) - (Int(cropRect.width) % 2)
-        let height = Int(cropRect.height) - (Int(cropRect.height) % 2)
+        // Ausgabegröße: ggf. auf 1080p begrenzt – schnellerer Encode,
+        // deutlich kleinere Dateien, für Social-Clips ohne sichtbaren Verlust
+        let (width, height) = Algorithms.exportSize(
+            cropWidth: cropRect.width, cropHeight: cropRect.height,
+            maxDimension: settings.exportResolution.maxDimension)
+        let renderScale = CGFloat(width) / max(1, cropRect.width)
 
         let outputURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("framefold-\(UUID().uuidString).mp4")
@@ -158,25 +162,29 @@ final class StopMotionAssembler {
         let echo = settings.interferenzEcho ? max(0, min(0.5, settings.echoStrength)) : 0
 
         for (position, step) in steps.enumerated() {
-            let baseImage = try await image(at: step.baseIndex)
+            var baseImage = try await image(at: step.baseIndex)
             var overlayImage: CGImage? = nil
             if let overlayIndex = step.overlayIndex {
                 overlayImage = try await image(at: overlayIndex)
             }
 
-            // Alignment nur auf echten Keyframes fortschreiben (nicht auf Blenden)
-            let offset: CGPoint
-            if step.overlayIndex == nil {
-                offset = aligner?.register(baseImage) ?? .zero
-            } else {
-                offset = .zero
+            // Alignment nur auf echten Keyframes fortschreiben (nicht auf Blenden).
+            // Stufe 1: Homographie (korrigiert auch Verdrehung/Neigung),
+            // Stufe 2: Verschiebungs-Fallback per Block-Matching.
+            var offset: CGPoint = .zero
+            if step.overlayIndex == nil, let aligner {
+                if let warped = aligner.warp(baseImage) {
+                    baseImage = warped
+                } else {
+                    offset = aligner.register(baseImage)
+                }
             }
 
             guard let pixelBuffer = Self.renderStep(
                 base: baseImage, overlay: overlayImage, revealProgress: step.progress,
                 previousComposed: lastComposed, echoStrength: echo,
                 transitionStyle: settings.transitionStyle, facets: facets,
-                cropRect: cropRect, width: width, height: height,
+                cropRect: cropRect, width: width, height: height, scale: renderScale,
                 offset: offset, pool: adaptor.pixelBufferPool,
                 composedOut: &lastComposed) else { continue }
 
@@ -208,7 +216,7 @@ final class StopMotionAssembler {
         base: CGImage, overlay: CGImage?, revealProgress: Double,
         previousComposed: CGImage?, echoStrength: Double,
         transitionStyle: TransitionStyle, facets: [Algorithms.Facet],
-        cropRect: CGRect, width: Int, height: Int,
+        cropRect: CGRect, width: Int, height: Int, scale: CGFloat,
         offset: CGPoint, pool: CVPixelBufferPool?,
         composedOut: inout CGImage?
     ) -> CVPixelBuffer? {
@@ -236,13 +244,14 @@ final class StopMotionAssembler {
 
         context.interpolationQuality = .high
 
-        // Bild so zeichnen, dass cropRect (plus Alignment-Offset) den Buffer füllt
+        // Bild so zeichnen, dass cropRect (plus Alignment-Offset) den Buffer
+        // füllt – skaliert auf die Ausgabegröße
         func drawRect(for image: CGImage) -> CGRect {
             CGRect(
-                x: -cropRect.minX + offset.x,
-                y: -(CGFloat(image.height) - cropRect.maxY) + offset.y,
-                width: CGFloat(image.width),
-                height: CGFloat(image.height))
+                x: (-cropRect.minX + offset.x) * scale,
+                y: (-(CGFloat(image.height) - cropRect.maxY) + offset.y) * scale,
+                width: CGFloat(image.width) * scale,
+                height: CGFloat(image.height) * scale)
         }
         let bufferRect = CGRect(x: 0, y: 0, width: width, height: height)
 

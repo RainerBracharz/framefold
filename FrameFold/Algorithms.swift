@@ -348,6 +348,19 @@ enum Algorithms {
 
     // MARK: Export-Geometrie
 
+    /// Ausgabegröße des Exports: skaliert den Crop auf eine maximale Kantenlänge
+    /// herunter (nie hoch!) und rundet auf gerade Pixelmaße (Encoder-Anforderung).
+    /// maxDimension nil = Originalgröße behalten.
+    static func exportSize(cropWidth: Double, cropHeight: Double, maxDimension: Double?) -> (width: Int, height: Int) {
+        guard cropWidth > 0, cropHeight > 0 else { return (0, 0) }
+        var scale = 1.0
+        if let maxDim = maxDimension, maxDim > 0 {
+            scale = min(1.0, maxDim / max(cropWidth, cropHeight))
+        }
+        let even = { (v: Double) -> Int in max(2, Int(v) - (Int(v) % 2)) }
+        return (even(cropWidth * scale), even(cropHeight * scale))
+    }
+
     /// Center-Crop-Rechteck für ein Ziel-Seitenverhältnis (Breite/Höhe).
     /// nil = Originalformat behalten.
     static func cropRect(imageWidth: Int, imageHeight: Int, targetRatio: Double?) -> CGRect {

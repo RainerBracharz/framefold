@@ -143,8 +143,12 @@ final class ProcessingViewModel: ObservableObject {
                     if Task.isCancelled { return }
                     for (wi, time) in needCheck {
                         let key = Int(time * 1000)
-                        let hasHands = detected[key] ?? false
+                        let check = detected[key]
+                        let hasHands = check?.hasHands ?? false
                         handCache[key] = hasHands
+                        if let image = check?.image, thumbCache[key] == nil {
+                            thumbCache[key] = image // Vorschaubild gratis mitgenommen
+                        }
                         if hasHands { discardedHands += 1; stillPending.append(wi) }
                         else {
                             let c = candidates[wi][round]
@@ -241,28 +245,37 @@ final class ProcessingViewModel: ObservableObject {
 /// so nie die Oberfläche.
 private enum BatchFrameDecoder {
 
+    struct CheckResult {
+        let hasHands: Bool
+        let image: UIImage?   // dekodiertes Bild gleich mitliefern → dient später als Vorschaubild
+    }
+
     /// Prüft die Frames an den gegebenen Zeiten auf Hände.
-    /// Ergebnis: Zeit-Schlüssel (Millisekunden) → Hände sichtbar.
+    /// Ergebnis: Zeit-Schlüssel (Millisekunden) → Ergebnis inkl. Bild,
+    /// damit die Vorschau NICHT noch einmal dekodieren muss.
     static func detectHands(
         asset: AVAsset,
         times: [Double],
         detector: HandDetecting,
         confidence: Float,
         progress: @escaping (Double) -> Void
-    ) async -> [Int: Bool] {
+    ) async -> [Int: CheckResult] {
         guard !times.isEmpty else { return [:] }
         let generator = makeGenerator(asset: asset)
         let cmTimes = times.map { CMTime(seconds: $0, preferredTimescale: 600) }
 
-        var out: [Int: Bool] = [:]
+        var out: [Int: CheckResult] = [:]
         var index = 0
         for await result in generator.images(for: cmTimes) {
             if Task.isCancelled { break }
             let key = Int(times[index] * 1000)
             if case .success(requestedTime: _, image: let cgImage, actualTime: _) = result {
-                out[key] = detector.containsHands(cgImage: cgImage, confidence: confidence)
+                let hasHands = detector.containsHands(cgImage: cgImage, confidence: confidence)
+                out[key] = CheckResult(
+                    hasHands: hasHands,
+                    image: hasHands ? nil : UIImage(cgImage: cgImage))
             } else {
-                out[key] = false // im Zweifel Frame behalten
+                out[key] = CheckResult(hasHands: false, image: nil) // im Zweifel behalten
             }
             index += 1
             progress(Double(index) / Double(cmTimes.count))

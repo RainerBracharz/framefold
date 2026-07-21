@@ -7,8 +7,10 @@ import CoreGraphics
 /// Alle Werte sind bewusst als Regler exponiert, damit sie sich
 /// an Aldos Arbeitsweise anpassen lassen.
 struct PipelineSettings {
-    /// Abtastrate aus dem Quellvideo (Frames pro Sekunde der Analyse)
-    var samplingFPS: Double = 6.0
+    /// Abtastrate aus dem Quellvideo (Frames pro Sekunde der Analyse).
+    /// Seit der Batch-Dekodierung ist dichtes Abtasten billig – 10 fps treffen
+    /// auch kurze Haltemomente zuverlässig und finden schärfere Kandidaten.
+    var samplingFPS: Double = 10.0
     /// Analyse-Breite in Pixeln (downgesampelt für Geschwindigkeit)
     var analysisWidth: CGFloat = 160
     /// Untergrenze der adaptiven Schwelle als Perzentil der Bewegungsverteilung.
@@ -17,8 +19,9 @@ struct PipelineSettings {
     /// und Überflüssiges in der Bildauswahl entfernen, als wichtige auslassen.
     var motionPercentile: Double = 0.6
     /// Mindestlänge eines Ruhefensters in Sekunden (niedrig – auch kurze
-    /// Haltemomente sollen ein Bild ergeben)
-    var minStillWindowSeconds: Double = 0.3
+    /// Haltemomente sollen ein Bild ergeben; bei 10 fps ≙ 1 Sample-Frame,
+    /// gleiche hohe Ausbeute wie zuvor mit 0.3 s bei 6 fps)
+    var minStillWindowSeconds: Double = 0.15
     /// Hände erkennen und Frames mit Händen verwerfen
     var removeHands: Bool = true
     /// Konfidenz-Schwelle der Vision-Handerkennung
@@ -31,6 +34,9 @@ struct PipelineSettings {
     var outputFPS: Int32 = 10
     /// Seitenverhältnis des Exports (Center-Crop)
     var aspect: AspectPreset = .original
+    /// Auflösung des Exports – 1080p reicht für Social-Clips, exportiert
+    /// deutlich schneller und ergibt viel kleinere Dateien als 4K
+    var exportResolution: ExportResolution = .p1080
     /// Abspielmodus des Exports
     var loopMode: LoopMode = .none
     /// Verwacklung ausgleichen – standardmäßig an, damit auch frei über die
@@ -46,6 +52,22 @@ struct PipelineSettings {
     var transitionFrames: Int = 0
     /// Stil der Überblendung: einfache Falzkante oder triangulierte Facetten
     var transitionStyle: TransitionStyle = .crease
+}
+
+/// Auflösung des exportierten Videos (maximale Kantenlänge).
+enum ExportResolution: String, CaseIterable, Identifiable {
+    case p1080 = "1080p"
+    case original = "Original"
+
+    var id: String { rawValue }
+
+    /// Maximale Kantenlänge in Pixeln; nil = Quellauflösung behalten
+    var maxDimension: Double? {
+        switch self {
+        case .p1080: return 1920
+        case .original: return nil
+        }
+    }
 }
 
 /// Stil der Überblendung zwischen Bildern.
