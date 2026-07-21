@@ -25,16 +25,44 @@ final class StopMotionAssembler {
         generator.appliesPreferredTrackTransform = true
         generator.requestedTimeToleranceBefore = .zero
         generator.requestedTimeToleranceAfter = .zero
+        let times = keyframeTimes.map { CMTime(seconds: $0, preferredTimescale: 600) }
 
-        return try await write(
-            frameCount: keyframeTimes.count,
-            settings: settings,
-            frameProvider: { index in
-                let time = CMTime(seconds: keyframeTimes[index], preferredTimescale: 600)
-                return try await generator.image(at: time).image
-            },
-            progress: progress
-        )
+        if settings.loopMode == .none {
+            // Frames werden monoton aufsteigend gebraucht → direkt aus EINEM
+            // sequentiellen Decoder-Durchlauf streamen. Das erspart den teuren
+            // Einzel-Seek pro Keyframe (der jeweils vom letzten Sync-Frame des
+            // Videos neu dekodieren muss).
+            let source = SequentialFrameSource(generator: generator, times: times)
+            return try await write(
+                frameCount: times.count,
+                settings: settings,
+                frameProvider: { index in try await source.frame(at: index) },
+                progress: progress
+            )
+        }
+
+        // Rückwärts/Boomerang greifen wahlfrei auf Frames zu: Keyframes einmal
+        // sequentiell extrahieren (schnell), dann vom Zwischenspeicher montieren.
+        let tmpDir = FileManager.default.temporaryDirectory
+        let batchID = UUID().uuidString
+        var extracted: [URL] = []
+        var index = 0
+        for await result in generator.images(for: times) {
+            if case .success(requestedTime: _, image: let image, actualTime: _) = result,
+               let data = UIImage(cgImage: image).jpegData(compressionQuality: 0.95) {
+                let url = tmpDir.appendingPathComponent("ff-kf-\(batchID)-\(index).jpg")
+                try? data.write(to: url)
+                extracted.append(url)
+            }
+            index += 1
+            progress(0.3 * Double(index) / Double(times.count))
+        }
+        guard !extracted.isEmpty else { throw PipelineError.noKeyframesFound }
+        defer { for url in extracted { try? FileManager.default.removeItem(at: url) } }
+
+        return try await assemble(imageURLs: extracted, settings: settings) { p in
+            progress(0.3 + 0.7 * p)
+        }
     }
 
     // MARK: Quelle B: Bildsequenz (Live-Capture / Projekte)
@@ -108,6 +136,12 @@ final class StopMotionAssembler {
         // Render-Plan: Reihenfolge + optionale Falz-Blenden-Zwischenframes
         let steps = Algorithms.renderPlan(order: order, transitionFrames: settings.transitionFrames)
 
+        // Facetten-Geometrie EINMAL berechnen statt pro Zwischenframe
+        let facets: [Algorithms.Facet] =
+            (settings.transitionStyle == .facet && settings.transitionFrames > 0)
+            ? Algorithms.facetPlan(width: Double(width), height: Double(height), cols: 6, rows: 6)
+            : []
+
         // Kleiner Frame-Cache (Basis + Overlay), damit lange Videos nicht
         // komplett im Speicher liegen. Der erste Frame ist schon geladen.
         var cache: [Int: CGImage] = [order[0]: firstImage]
@@ -141,7 +175,7 @@ final class StopMotionAssembler {
             guard let pixelBuffer = Self.renderStep(
                 base: baseImage, overlay: overlayImage, revealProgress: step.progress,
                 previousComposed: lastComposed, echoStrength: echo,
-                transitionStyle: settings.transitionStyle,
+                transitionStyle: settings.transitionStyle, facets: facets,
                 cropRect: cropRect, width: width, height: height,
                 offset: offset, pool: adaptor.pixelBufferPool,
                 composedOut: &lastComposed) else { continue }
@@ -173,7 +207,7 @@ final class StopMotionAssembler {
     private static func renderStep(
         base: CGImage, overlay: CGImage?, revealProgress: Double,
         previousComposed: CGImage?, echoStrength: Double,
-        transitionStyle: TransitionStyle,
+        transitionStyle: TransitionStyle, facets: [Algorithms.Facet],
         cropRect: CGRect, width: Int, height: Int,
         offset: CGPoint, pool: CVPixelBufferPool?,
         composedOut: inout CGImage?
@@ -249,9 +283,8 @@ final class StopMotionAssembler {
                 context.restoreGState()
 
             case .facet:
-                // Triangulierte Facetten klappen diagonal gestaffelt um.
-                let facets = Algorithms.facetPlan(
-                    width: Double(width), height: Double(height), cols: 6, rows: 6)
+                // Triangulierte Facetten klappen diagonal gestaffelt um
+                // (Geometrie wurde einmalig in write() berechnet).
                 let od = drawRect(for: overlay)
                 for f in facets {
                     let a = Algorithms.facetAlpha(phase: f.phase, progress: revealProgress)
@@ -282,5 +315,37 @@ final class StopMotionAssembler {
         // 4) Fertiges Bild für das Echo des nächsten Frames sichern
         composedOut = context.makeImage()
         return pixelBuffer
+    }
+}
+
+/// Liefert Frames aus einem EINZIGEN sequentiellen Decoder-Durchlauf für
+/// monoton aufsteigende Index-Anfragen (Normalmodus). Hält nur ein kleines
+/// Fenster im Speicher (aktueller + nächster Frame für Übergänge), sodass
+/// auch lange Sequenzen nicht den Speicher füllen.
+private final class SequentialFrameSource {
+
+    private var iterator: AVAssetImageGenerator.Images.AsyncIterator
+    private var window: [Int: CGImage] = [:]
+    private var nextIndex = 0
+
+    init(generator: AVAssetImageGenerator, times: [CMTime]) {
+        iterator = generator.images(for: times).makeAsyncIterator()
+    }
+
+    func frame(at index: Int) async throws -> CGImage {
+        if let cached = window[index] { return cached }
+        while nextIndex <= index {
+            guard let result = await iterator.next() else {
+                throw PipelineError.exportFailed
+            }
+            if case .success(requestedTime: _, image: let image, actualTime: _) = result {
+                window[nextIndex] = image
+            }
+            nextIndex += 1
+        }
+        // Fenster klein halten: nur Vorgänger + aktueller Frame bleiben
+        window = window.filter { $0.key >= index - 1 }
+        guard let image = window[index] else { throw PipelineError.exportFailed }
+        return image
     }
 }

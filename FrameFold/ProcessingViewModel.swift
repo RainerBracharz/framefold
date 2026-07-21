@@ -92,46 +92,78 @@ final class ProcessingViewModel: ObservableObject {
             return
         }
 
-        let generator = AVAssetImageGenerator(asset: asset)
-        generator.appliesPreferredTrackTransform = true
-        generator.requestedTimeToleranceBefore = .zero
-        generator.requestedTimeToleranceAfter = .zero
-        generator.maximumSize = CGSize(width: 640, height: 640)
-
-        var chosen: [(time: Double, gray: [UInt8], w: Int, h: Int)] = []
+        // Handprüfung RUNDENWEISE statt Frame für Frame:
+        // Runde 0 prüft die besten Kandidaten ALLER Fenster in einem einzigen
+        // sequentiellen Decoder-Durchlauf (statt einem teuren Seek pro Frame).
+        // Nur Fenster, deren Kandidat durchfällt, gehen mit ihrem nächstbesten
+        // in die nächste Runde. Dekodierung + Vision laufen dabei abseits des
+        // MainActors – die UI bleibt flüssig.
+        let candidates = windows.map { KeyframeSelector.rankedCandidates(in: $0) }
+        var chosenPerWindow = [(time: Double, gray: [UInt8], w: Int, h: Int)?](
+            repeating: nil, count: windows.count)
         var discardedHands = 0
 
-        for (index, window) in windows.enumerated() {
-            if Task.isCancelled { return }
-            let candidates = KeyframeSelector.rankedCandidates(in: window)
-            for candidate in candidates {
-                let key = Int(candidate.seconds * 1000)
-                var hasHands = false
-                if settings.removeHands {
+        if settings.removeHands {
+            var pending = Array(windows.indices)
+            var round = 0
+            let totalWindows = windows.count
+            while !pending.isEmpty {
+                if Task.isCancelled { return }
+                var stillPending: [Int] = []
+                var needCheck: [(window: Int, time: Double)] = []
+
+                for wi in pending {
+                    // alle Kandidaten dieses Fensters zeigen Hände → Fenster entfällt
+                    guard round < candidates[wi].count else { continue }
+                    let c = candidates[wi][round]
+                    let key = Int(c.seconds * 1000)
                     if let cached = handCache[key] {
-                        hasHands = cached
+                        if cached { discardedHands += 1; stillPending.append(wi) }
+                        else { chosenPerWindow[wi] = (c.seconds, c.grayPixels, c.width, c.height) }
                     } else {
-                        let time = CMTime(seconds: candidate.seconds, preferredTimescale: 600)
-                        if let cgImage = try? await generator.image(at: time).image {
-                            hasHands = handDetector.containsHands(
-                                cgImage: cgImage, confidence: settings.handConfidence)
-                        }
-                        handCache[key] = hasHands
+                        needCheck.append((wi, c.seconds))
                     }
                 }
-                if hasHands {
-                    discardedHands += 1
-                    continue
+
+                if !needCheck.isEmpty {
+                    needCheck.sort { $0.time < $1.time }
+                    let resolvedSoFar = totalWindows - pending.count
+                    let checkCount = needCheck.count
+                    let detected = await BatchFrameDecoder.detectHands(
+                        asset: asset, times: needCheck.map(\.time),
+                        detector: handDetector, confidence: settings.handConfidence
+                    ) { p in
+                        guard reportProgress else { return }
+                        let overall = (Double(resolvedSoFar) + p * Double(checkCount))
+                            / Double(totalWindows)
+                        Task { @MainActor in
+                            self.stage = .checkingHands(progress: min(1, overall))
+                        }
+                    }
+                    if Task.isCancelled { return }
+                    for (wi, time) in needCheck {
+                        let key = Int(time * 1000)
+                        let hasHands = detected[key] ?? false
+                        handCache[key] = hasHands
+                        if hasHands { discardedHands += 1; stillPending.append(wi) }
+                        else {
+                            let c = candidates[wi][round]
+                            chosenPerWindow[wi] = (c.seconds, c.grayPixels, c.width, c.height)
+                        }
+                    }
                 }
-                chosen.append((candidate.seconds, candidate.grayPixels,
-                               candidate.width, candidate.height))
-                break
+                pending = stillPending
+                round += 1
             }
-            if reportProgress {
-                let p = Double(index + 1) / Double(windows.count)
-                await MainActor.run { self.stage = .checkingHands(progress: p) }
+        } else {
+            for (wi, cands) in candidates.enumerated() {
+                if let c = cands.first {
+                    chosenPerWindow[wi] = (c.seconds, c.grayPixels, c.width, c.height)
+                }
             }
         }
+
+        let chosen = chosenPerWindow.compactMap { $0 }
 
         // dHash-Dedup benachbarter Keyframes
         var deduped: [Double] = []
@@ -147,22 +179,17 @@ final class ProcessingViewModel: ObservableObject {
         }
         self.discardedForHands = discardedHands
 
-        // Vorschaubilder (aus dem Cache, fehlende nachladen)
-        var frames: [ReviewFrame] = []
-        for time in deduped {
-            if Task.isCancelled { return }
-            let key = Int(time * 1000)
-            var thumb = thumbCache[key]
-            if thumb == nil {
-                let cmTime = CMTime(seconds: time, preferredTimescale: 600)
-                if let cgImage = try? await generator.image(at: cmTime).image {
-                    thumb = UIImage(cgImage: cgImage)
-                    thumbCache[key] = thumb
-                }
-            }
-            frames.append(ReviewFrame(id: key, time: time, thumbnail: thumb))
+        // Vorschaubilder: fehlende in EINEM Decoder-Durchlauf nachladen
+        let missing = deduped.filter { thumbCache[Int($0 * 1000)] == nil }
+        if !missing.isEmpty {
+            let thumbs = await BatchFrameDecoder.thumbnails(asset: asset, times: missing)
+            for (key, image) in thumbs { thumbCache[key] = image }
         }
-        self.reviewFrames = frames
+        if Task.isCancelled { return }
+        self.reviewFrames = deduped.map { time in
+            let key = Int(time * 1000)
+            return ReviewFrame(id: key, time: time, thumbnail: thumbCache[key])
+        }
     }
 
     func toggleFrame(_ id: Int) {
@@ -204,5 +231,70 @@ final class ProcessingViewModel: ObservableObject {
     func backToReview() {
         guard !reviewFrames.isEmpty else { return }
         stage = .reviewing
+    }
+}
+
+/// Batch-Dekodierung abseits des MainActors: alle angefragten Zeiten werden
+/// in EINEM sequentiellen Decoder-Durchlauf geliefert (statt einem Seek pro
+/// Frame, der jeweils vom letzten Sync-Frame neu dekodieren müsste).
+/// Bewusst KEIN @MainActor – Vision-Handerkennung und Dekodierung blockieren
+/// so nie die Oberfläche.
+private enum BatchFrameDecoder {
+
+    /// Prüft die Frames an den gegebenen Zeiten auf Hände.
+    /// Ergebnis: Zeit-Schlüssel (Millisekunden) → Hände sichtbar.
+    static func detectHands(
+        asset: AVAsset,
+        times: [Double],
+        detector: HandDetecting,
+        confidence: Float,
+        progress: @escaping (Double) -> Void
+    ) async -> [Int: Bool] {
+        guard !times.isEmpty else { return [:] }
+        let generator = makeGenerator(asset: asset)
+        let cmTimes = times.map { CMTime(seconds: $0, preferredTimescale: 600) }
+
+        var out: [Int: Bool] = [:]
+        var index = 0
+        for await result in generator.images(for: cmTimes) {
+            if Task.isCancelled { break }
+            let key = Int(times[index] * 1000)
+            if case .success(requestedTime: _, image: let cgImage, actualTime: _) = result {
+                out[key] = detector.containsHands(cgImage: cgImage, confidence: confidence)
+            } else {
+                out[key] = false // im Zweifel Frame behalten
+            }
+            index += 1
+            progress(Double(index) / Double(cmTimes.count))
+        }
+        return out
+    }
+
+    /// Lädt Vorschaubilder für die gegebenen Zeiten.
+    /// Ergebnis: Zeit-Schlüssel (Millisekunden) → Bild.
+    static func thumbnails(asset: AVAsset, times: [Double]) async -> [Int: UIImage] {
+        guard !times.isEmpty else { return [:] }
+        let generator = makeGenerator(asset: asset)
+        let cmTimes = times.map { CMTime(seconds: $0, preferredTimescale: 600) }
+
+        var out: [Int: UIImage] = [:]
+        var index = 0
+        for await result in generator.images(for: cmTimes) {
+            if Task.isCancelled { break }
+            if case .success(requestedTime: _, image: let cgImage, actualTime: _) = result {
+                out[Int(times[index] * 1000)] = UIImage(cgImage: cgImage)
+            }
+            index += 1
+        }
+        return out
+    }
+
+    private static func makeGenerator(asset: AVAsset) -> AVAssetImageGenerator {
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        generator.requestedTimeToleranceBefore = .zero
+        generator.requestedTimeToleranceAfter = .zero
+        generator.maximumSize = CGSize(width: 640, height: 640)
+        return generator
     }
 }

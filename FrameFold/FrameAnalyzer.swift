@@ -42,13 +42,20 @@ final class FrameAnalyzer {
 
         var results: [AnalyzedFrame] = []
         var previousGray: [UInt8]? = nil
-        var grayWidth = 0, grayHeight = 0
 
-        for (index, time) in times.enumerated() {
-            guard let cgImage = try? await generator.image(at: time).image else { continue }
+        // Batch-Dekodierung: EIN sequentieller Decoder-Durchlauf statt einem
+        // teuren Einzel-Seek pro Frame (der jeweils vom letzten Sync-Frame neu
+        // dekodieren muss) – auf typischen iPhone-Videos ~10x schneller.
+        let total = times.count
+        let progressStride = max(1, total / 50) // UI nicht mit Updates fluten
+        var index = 0
+        for await result in generator.images(for: times) {
+            index += 1
+            guard case .success(requestedTime: let requested, image: let cgImage, actualTime: _) = result else {
+                continue
+            }
 
             let (gray, w, h) = Self.grayscaleDownsampled(cgImage, targetWidth: Int(settings.analysisWidth))
-            grayWidth = w; grayHeight = h
 
             var motion = 0.0
             if let prev = previousGray, prev.count == gray.count {
@@ -57,13 +64,15 @@ final class FrameAnalyzer {
             previousGray = gray
 
             results.append(AnalyzedFrame(
-                seconds: time.seconds,
+                seconds: requested.seconds,
                 motionScore: motion,
                 grayPixels: gray,
-                width: grayWidth,
-                height: grayHeight
+                width: w,
+                height: h
             ))
-            progress(Double(index + 1) / Double(times.count))
+            if index % progressStride == 0 || index == total {
+                progress(Double(index) / Double(total))
+            }
         }
         return results
     }
