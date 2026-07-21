@@ -257,7 +257,7 @@ struct ProjectDetailView: View {
                         Text("10 fps").tag(Int32(10))
                         Text("12 fps").tag(Int32(12))
                     }
-                    Toggle("Frames ausrichten", isOn: $exportSettings.alignFrames)
+                    Toggle("Verwacklung ausgleichen", isOn: $exportSettings.alignFrames)
                     Toggle("Interferenz-Echo", isOn: $exportSettings.interferenzEcho)
                     Picker("Falz-Blende", selection: $exportSettings.transitionFrames) {
                         Text("Aus").tag(0)

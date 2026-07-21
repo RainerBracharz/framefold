@@ -1,54 +1,51 @@
 import Foundation
-import Vision
 import CoreGraphics
 
-/// Gleicht kleine Verschiebungen zwischen aufeinanderfolgenden Frames aus
-/// (z. B. wenn das Stativ zwischen Sessions minimal bewegt wurde).
+/// Gleicht Verwacklung zwischen Keyframes aus – wichtig, wenn das iPhone
+/// nicht auf einem Stativ steht, sondern über die Arbeit gehalten wird.
 ///
-/// Arbeitet inkrementell: jeder Frame wird gegen den vorherigen registriert
-/// (VNTranslationalImageRegistrationRequest), die Offsets werden akkumuliert,
-/// sodass alle Frames im Koordinatensystem des ersten Frames landen.
-/// Nur der jeweils letzte Frame bleibt im Speicher.
+/// Jeder Frame wird gegen einen FESTEN Referenzframe (den ersten) ausgerichtet,
+/// nicht gegen den Vorgänger – dadurch entsteht kein aufsummierter Drift über
+/// lange Sequenzen. Die Verschiebung wird selbst per Block-Matching auf einer
+/// Graustufen-Verkleinerung geschätzt (Algorithms.estimateTranslation), die
+/// deterministisch und unit-getestet ist.
+///
+/// Grenzen: korrigiert Verschiebung (das Dominante beim Handhalten) sehr gut;
+/// starke Verdrehung/Neigung bleibt teilweise bestehen. Für makellose
+/// Ergebnisse ist eine feste Auflage/Stativ weiterhin am besten.
 final class FrameAligner {
 
-    private var previous: CGImage?
-    private var accumulated = CGPoint.zero
-    /// Maximal erlaubte Gesamtverschiebung in Pixeln – schützt vor
-    /// Fehlregistrierungen bei komplett veränderten Szenen.
-    var maxShift: CGFloat = 80
+    private var referenceGray: [UInt8]?
+    private var refW = 0
+    private var refH = 0
 
-    /// Registriert den Frame gegen den Vorgänger und liefert den
-    /// akkumulierten Offset (in Pixeln des Quellbilds), der beim Zeichnen
-    /// angewendet werden soll. Erster Frame → .zero.
+    /// Analysebreite für die Schätzung (klein = schnell, robust).
+    private let analysisWidth = 160
+    /// Maximale Korrektur als Anteil der Breite (15 %).
+    private let maxShiftFraction = 0.15
+
+    /// Liefert den Zeichnungs-Offset (in Pixeln des Originalbilds), mit dem
+    /// `image` auf den Referenzframe ausgerichtet wird. Erster Frame → .zero.
     func register(_ image: CGImage) -> CGPoint {
-        defer { previous = image }
-        guard let previous else { return .zero }
+        let (gray, w, h) = FrameAnalyzer.grayscaleDownsampled(image, targetWidth: analysisWidth)
 
-        let request = VNTranslationalImageRegistrationRequest(targetedCGImage: image, options: [:])
-        let handler = VNImageRequestHandler(cgImage: previous, options: [:])
-        do {
-            try handler.perform([request])
-        } catch {
-            return accumulated
+        guard let reference = referenceGray, w == refW, h == refH else {
+            referenceGray = gray; refW = w; refH = h
+            return .zero
         }
-        guard let observation = request.results?.first else {
-            return accumulated
-        }
-        let t = observation.alignmentTransform
-        // Verschiebung, die den neuen Frame auf den alten abbildet
-        let shift = CGPoint(x: -t.tx, y: t.ty) // Vision-Y ist gespiegelt zu CoreGraphics
-        let next = CGPoint(x: accumulated.x + shift.x, y: accumulated.y + shift.y)
 
-        // Ausreißer verwerfen (Szenenwechsel, Fehlregistrierung)
-        if abs(next.x) > maxShift || abs(next.y) > maxShift {
-            return accumulated
-        }
-        accumulated = next
-        return accumulated
+        let maxShift = max(4, Int(Double(w) * maxShiftFraction))
+        let (dx, dy) = Algorithms.estimateTranslation(
+            reference: reference, current: gray,
+            width: w, height: h, maxShift: maxShift)
+
+        // Analysepixel → Originalpixel; current um (−dx,−dy) zurückschieben.
+        let scale = CGFloat(image.width) / CGFloat(max(1, w))
+        return CGPoint(x: -CGFloat(dx) * scale, y: CGFloat(dy) * scale)
     }
 
     func reset() {
-        previous = nil
-        accumulated = .zero
+        referenceGray = nil
+        refW = 0; refH = 0
     }
 }

@@ -158,6 +158,43 @@ let big = Algorithms.contactSheetLayout(count: 100, pageWidth: 595.2, pageHeight
                                         margin: 40, gutter: 6, columns: 4, captionHeight: 46)
 check(big.flatMap { $0 }.count == 100, "100 Frames vollständig auf \(big.count) Seiten")
 
+// MARK: estimateTranslation (Verwacklungs-Korrektur)
+print("estimateTranslation:")
+// Referenzbild mit Struktur (Gradient + Block), current = um (dx,dy) verschoben.
+func shifted(_ ref: [UInt8], w: Int, h: Int, dx: Int, dy: Int) -> [UInt8] {
+    // current[x+dx, y+dy] == reference[x,y]  ⇒  current[cx,cy] = reference[cx-dx, cy-dy]
+    var out = [UInt8](repeating: 0, count: w * h)
+    for cy in 0..<h {
+        for cx in 0..<w {
+            let rx = cx - dx, ry = cy - dy
+            if rx >= 0, rx < w, ry >= 0, ry < h {
+                out[cy * w + cx] = ref[ry * w + rx]
+            }
+        }
+    }
+    return out
+}
+let rw = 60, rh = 40
+var refImg = [UInt8](repeating: 0, count: rw * rh)
+for y in 0..<rh { for x in 0..<rw {
+    var v = (x * 3 + y * 5) % 256
+    if x >= 20 && x < 30 && y >= 12 && y < 22 { v = 240 }   // Kontrastblock
+    refImg[y * rw + x] = UInt8(v)
+}}
+for (tdx, tdy) in [(0,0),(3,0),(0,2),(4,3),(-3,2),(-5,-4),(6,-2)] {
+    let cur = shifted(refImg, w: rw, h: rh, dx: tdx, dy: tdy)
+    let (dx, dy) = Algorithms.estimateTranslation(
+        reference: refImg, current: cur, width: rw, height: rh, maxShift: 8, sampleStep: 1)
+    check(dx == tdx && dy == tdy, "Verschiebung (\(tdx),\(tdy)) korrekt erkannt → (\(dx),\(dy))")
+}
+// identische Bilder → keine Verschiebung
+let (zx, zy) = Algorithms.estimateTranslation(
+    reference: refImg, current: refImg, width: rw, height: rh, maxShift: 6)
+check(zx == 0 && zy == 0, "identisch → (0,0)")
+// Fehlerfälle
+check(Algorithms.estimateTranslation(reference: [], current: [], width: 0, height: 0, maxShift: 4) == (0,0),
+      "leer → (0,0)")
+
 // MARK: Ende-zu-Ende: synthetisches Video als Zahlenfolge
 print("Ende-zu-Ende (synthetische Sequenz):")
 // 8 Szenen: Ruhe (Rauschen ~1) und Übergänge (~20), wie make_test_video.py

@@ -214,6 +214,56 @@ enum Algorithms {
         return pages
     }
 
+    // MARK: Stabilisierung (Verwacklung)
+
+    /// Schätzt die Verschiebung zwischen zwei gleich großen Graustufenbildern
+    /// per Block-Matching (minimale mittlere absolute Differenz über ein
+    /// Suchfenster). Ergebnis (dx, dy): So weit ist der Inhalt von `current`
+    /// gegenüber `reference` verschoben — d. h. current[x+dx, y+dy] ≈ reference[x, y].
+    /// Zum Ausrichten wird `current` um (−dx, −dy) zurückgeschoben.
+    /// Deterministisch und unit-getestet (kein Vision-Blackbox, exakte Vorzeichen).
+    static func estimateTranslation(
+        reference: [UInt8], current: [UInt8],
+        width: Int, height: Int, maxShift: Int, sampleStep: Int = 2
+    ) -> (dx: Int, dy: Int) {
+        guard width > 0, height > 0,
+              reference.count == width * height,
+              current.count == width * height else { return (0, 0) }
+        let step = max(1, sampleStep)
+        var best = (dx: 0, dy: 0)
+        var bestScore = Double.greatestFiniteMagnitude
+
+        for sy in -maxShift...maxShift {
+            for sx in -maxShift...maxShift {
+                var sum = 0.0
+                var n = 0
+                var y = max(0, -sy)
+                let yEnd = min(height, height - sy)
+                while y < yEnd {
+                    var x = max(0, -sx)
+                    let xEnd = min(width, width - sx)
+                    let refRow = y * width
+                    let curRow = (y + sy) * width + sx
+                    while x < xEnd {
+                        let d = Int(reference[refRow + x]) - Int(current[curRow + x])
+                        sum += Double(abs(d))
+                        n += 1
+                        x += step
+                    }
+                    y += step
+                }
+                guard n > 0 else { continue }
+                // kleiner Strafterm bevorzugt die kleinste Verschiebung bei Gleichstand
+                let score = sum / Double(n) + 0.001 * Double(abs(sx) + abs(sy))
+                if score < bestScore {
+                    bestScore = score
+                    best = (sx, sy)
+                }
+            }
+        }
+        return best
+    }
+
     // MARK: Export-Geometrie
 
     /// Center-Crop-Rechteck für ein Ziel-Seitenverhältnis (Breite/Höhe).

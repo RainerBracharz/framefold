@@ -33,8 +33,9 @@ struct PipelineSettings {
     var aspect: AspectPreset = .original
     /// Abspielmodus des Exports
     var loopMode: LoopMode = .none
-    /// Frames gegeneinander ausrichten (gleicht kleine Stativ-Verschiebungen aus)
-    var alignFrames: Bool = false
+    /// Verwacklung ausgleichen – standardmäßig an, damit auch frei über die
+    /// Arbeit gehaltene Aufnahmen ruhig wirken (gegen festen Referenzframe).
+    var alignFrames: Bool = true
     /// Interferenz-Echo: der vorherige Output-Frame schimmert im nächsten nach
     /// (Rekursion des eigenen Bildes – Bild → Objekt → Bild)
     var interferenzEcho: Bool = false

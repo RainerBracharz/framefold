@@ -547,7 +547,7 @@ struct SettingsView: View {
                     Picker("Abspielmodus", selection: $settings.loopMode) {
                         ForEach(LoopMode.allCases) { Text($0.rawValue).tag($0) }
                     }
-                    Toggle("Bilder ausrichten", isOn: $settings.alignFrames)
+                    Toggle("Verwacklung ausgleichen", isOn: $settings.alignFrames)
                 } header: {
                     CatalogLabel("Ausgabe")
                 }
