@@ -195,6 +195,40 @@ check(zx == 0 && zy == 0, "identisch → (0,0)")
 check(Algorithms.estimateTranslation(reference: [], current: [], width: 0, height: 0, maxShift: 4) == (0,0),
       "leer → (0,0)")
 
+// MARK: Facetten-Übergang
+print("facetPlan / facetAlpha:")
+let facets = Algorithms.facetPlan(width: 600, height: 400, cols: 6, rows: 6)
+check(facets.count == 6 * 6 * 2, "6×6 Zellen → 72 Facetten (\(facets.count))")
+check(facets.allSatisfy { $0.phase >= 0 && $0.phase <= 1 }, "alle Phasen in [0,1]")
+check(facets.first!.phase == 0, "erste Facette (oben links) Phase 0")
+check(facets.last!.phase == 1, "letzte Facette (unten rechts) Phase 1")
+check(Algorithms.facetAlpha(phase: 0.5, progress: 0.4) == 0, "Fortschritt vor Phase → 0")
+check(Algorithms.facetAlpha(phase: 0.5, progress: 0.5) == 0, "genau an der Phase → 0")
+check(Algorithms.facetAlpha(phase: 0.5, progress: 1.0) == 1, "weit danach → 1 (geklammert)")
+check(abs(Algorithms.facetAlpha(phase: 0.5, progress: 0.64, feather: 0.28) - 0.5) < 0.01, "weiche Kante linear")
+check(Algorithms.facetPlan(width: 0, height: 10, cols: 4, rows: 4).isEmpty, "0-Breite → leer")
+
+// MARK: Faltvorlage-Linien
+print("foldTemplateLines:")
+let fr = CGRect(x: 10, y: 20, width: 200, height: 300)
+let flines = Algorithms.foldTemplateLines(rect: fr, cols: 4, rows: 5)
+check(flines.filter { $0.cut }.count == 4, "4 Schnittkanten (Rahmen)")
+check(flines.contains { !$0.cut }, "innere Falzlinien vorhanden")
+check(flines.allSatisfy {
+    $0.p0.x >= fr.minX - 1e-9 && $0.p0.x <= fr.maxX + 1e-9 &&
+    $0.p1.x >= fr.minX - 1e-9 && $0.p1.x <= fr.maxX + 1e-9 &&
+    $0.p0.y >= fr.minY - 1e-9 && $0.p0.y <= fr.maxY + 1e-9 &&
+    $0.p1.y >= fr.minY - 1e-9 && $0.p1.y <= fr.maxY + 1e-9
+}, "alle Linien innerhalb des Bildrahmens")
+// 4 Schnitt + 3 Senkrechte + 4 Waagrechte + 20 Diagonalen = 31
+check(flines.count == 4 + 3 + 4 + 20, "Linienzahl stimmt (\(flines.count))")
+
+// MARK: Reel-Bildzahl
+print("reelFrameCount:")
+check(Algorithms.reelFrameCount(frameCounts: [10, 20, 5], titleHold: 12) == 35 + 36, "Frames + Titelkarten je Werk")
+check(Algorithms.reelFrameCount(frameCounts: [], titleHold: 12) == 0, "keine Werke → 0")
+check(Algorithms.reelFrameCount(frameCounts: [8], titleHold: 0) == 8, "ohne Titelkarte → nur Frames")
+
 // MARK: Ende-zu-Ende: synthetisches Video als Zahlenfolge
 print("Ende-zu-Ende (synthetische Sequenz):")
 // 8 Szenen: Ruhe (Rauschen ~1) und Übergänge (~20), wie make_test_video.py

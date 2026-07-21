@@ -177,6 +177,88 @@ enum Algorithms {
         return (2 * width * t, 2 * height * t)
     }
 
+    // MARK: Facetten-Übergang (trianguliert – nach Tolinos Faltstruktur)
+
+    /// Ein dreieckiges Facettenfeld mit „Phase" (0..1) = Zeitpunkt im Übergang,
+    /// zu dem die Facette umklappt (diagonal gestaffelt von oben links).
+    struct Facet: Equatable {
+        let a: CGPoint; let b: CGPoint; let c: CGPoint
+        let phase: Double
+    }
+
+    /// Zerlegt eine Fläche in cols×rows Zellen, je zwei Dreiecke – jede Facette
+    /// bekommt eine diagonale Phase, sodass die Faltung wie eine Welle läuft.
+    static func facetPlan(width: Double, height: Double, cols: Int, rows: Int) -> [Facet] {
+        guard cols > 0, rows > 0, width > 0, height > 0 else { return [] }
+        var facets: [Facet] = []
+        let cw = width / Double(cols), ch = height / Double(rows)
+        let maxIdx = Double((cols - 1) + (rows - 1))
+        for r in 0..<rows {
+            for c in 0..<cols {
+                let x0 = Double(c) * cw, y0 = Double(r) * ch
+                let x1 = x0 + cw, y1 = y0 + ch
+                let phase = maxIdx > 0 ? Double(c + r) / maxIdx : 0
+                facets.append(Facet(a: CGPoint(x: x0, y: y0), b: CGPoint(x: x1, y: y0),
+                                    c: CGPoint(x: x0, y: y1), phase: phase))
+                facets.append(Facet(a: CGPoint(x: x1, y: y0), b: CGPoint(x: x1, y: y1),
+                                    c: CGPoint(x: x0, y: y1), phase: phase))
+            }
+        }
+        return facets
+    }
+
+    /// Deckkraft einer Facette bei gegebenem Fortschritt (weiche Kante).
+    static func facetAlpha(phase: Double, progress: Double, feather: Double = 0.28) -> Double {
+        guard feather > 0 else { return progress >= phase ? 1 : 0 }
+        return max(0, min(1, (progress - phase) / feather))
+    }
+
+    // MARK: Faltvorlage (druckbares Falzmuster)
+
+    struct FoldLine: Equatable { let p0: CGPoint; let p1: CGPoint; let cut: Bool }
+
+    /// Falzlinien für die Druckvorlage: Außenkante als Schnittlinie (cut=true),
+    /// innen ein trianguliertes Falzraster (cut=false) zum Nachfalten.
+    static func foldTemplateLines(rect: CGRect, cols: Int, rows: Int) -> [FoldLine] {
+        guard cols > 0, rows > 0, rect.width > 0, rect.height > 0 else { return [] }
+        var lines: [FoldLine] = []
+        let x0 = rect.minX, y0 = rect.minY, w = rect.width, h = rect.height
+        let cw = w / Double(cols), ch = h / Double(rows)
+
+        // Außenkante (Schnitt)
+        lines.append(FoldLine(p0: CGPoint(x: x0, y: y0), p1: CGPoint(x: x0 + w, y: y0), cut: true))
+        lines.append(FoldLine(p0: CGPoint(x: x0 + w, y: y0), p1: CGPoint(x: x0 + w, y: y0 + h), cut: true))
+        lines.append(FoldLine(p0: CGPoint(x: x0 + w, y: y0 + h), p1: CGPoint(x: x0, y: y0 + h), cut: true))
+        lines.append(FoldLine(p0: CGPoint(x: x0, y: y0 + h), p1: CGPoint(x: x0, y: y0), cut: true))
+
+        // innere Senkrechten / Waagrechten (Falz)
+        for c in 1..<max(1, cols) {
+            let x = x0 + Double(c) * cw
+            lines.append(FoldLine(p0: CGPoint(x: x, y: y0), p1: CGPoint(x: x, y: y0 + h), cut: false))
+        }
+        for r in 1..<max(1, rows) {
+            let y = y0 + Double(r) * ch
+            lines.append(FoldLine(p0: CGPoint(x: x0, y: y), p1: CGPoint(x: x0 + w, y: y), cut: false))
+        }
+        // Diagonalen pro Zelle (Triangulierung)
+        for r in 0..<rows {
+            for c in 0..<cols {
+                let cx = x0 + Double(c) * cw, cy = y0 + Double(r) * ch
+                lines.append(FoldLine(p0: CGPoint(x: cx, y: cy),
+                                      p1: CGPoint(x: cx + cw, y: cy + ch), cut: false))
+            }
+        }
+        return lines
+    }
+
+    // MARK: Ausstellungs-Reel
+
+    /// Gesamtzahl der Bilder eines Reels: pro Werk eine gehaltene Titelkarte
+    /// (titleHold Bilder) plus dessen Frames.
+    static func reelFrameCount(frameCounts: [Int], titleHold: Int) -> Int {
+        frameCounts.reduce(0) { $0 + $1 } + max(0, titleHold) * frameCounts.count
+    }
+
     // MARK: Kontaktbogen-Layout
 
     /// Rasterlayout für den Kontaktbogen: quadratische Zellen in `columns`

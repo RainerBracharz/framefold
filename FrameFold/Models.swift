@@ -41,9 +41,18 @@ struct PipelineSettings {
     var interferenzEcho: Bool = false
     /// Stärke des Echos (Anteil des vorherigen Frames, 0..0.5)
     var echoStrength: Double = 0.3
-    /// Falz-Blende: Zwischenframes pro Übergang, die den nächsten Frame
-    /// entlang einer Diagonale aufdecken (0 = harte Schnitte)
+    /// Überblendung: Zwischenframes pro Übergang, die den nächsten Frame
+    /// aufdecken (0 = harte Schnitte)
     var transitionFrames: Int = 0
+    /// Stil der Überblendung: einfache Falzkante oder triangulierte Facetten
+    var transitionStyle: TransitionStyle = .crease
+}
+
+/// Stil der Überblendung zwischen Bildern.
+enum TransitionStyle: String, CaseIterable, Identifiable {
+    case crease = "Falz"       // diagonale Falzkante
+    case facet  = "Facetten"   // triangulierte Facetten (nach Tolinos Faltstruktur)
+    var id: String { rawValue }
 }
 
 /// Export-Seitenverhältnisse (Center-Crop auf das Zielformat).

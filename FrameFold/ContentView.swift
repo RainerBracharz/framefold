@@ -23,7 +23,8 @@ struct ContentView: View {
                             result: result,
                             sourceVideoURL: viewModel.lastVideoURL,
                             onReset: { viewModel.stage = .idle },
-                            onReprocess: { viewModel.backToReview() })
+                            onReprocess: { viewModel.backToReview() },
+                            onRecurse: { viewModel.process(videoURL: result.outputURL) })
                     }
                 case .failed(let message):
                     errorView(message)
@@ -456,6 +457,7 @@ struct ResultView: View {
     let sourceVideoURL: URL?
     let onReset: () -> Void
     let onReprocess: () -> Void
+    let onRecurse: () -> Void
     @EnvironmentObject var store: ProjectStore
     @State private var player: AVPlayer?
     @State private var showSaveToProject = false
@@ -500,6 +502,13 @@ struct ResultView: View {
                 // Regler und Auswahl wirken sofort
                 Button("Zurück zur Bildauswahl") {
                     onReprocess()
+                }
+                .buttonStyle(HairlineButtonStyle())
+                .padding(.horizontal, 24)
+
+                // Rekursion: das Ergebnis erneut falten – Bild → Objekt → Bild
+                Button("Erneut falten (Rekursion)") {
+                    onRecurse()
                 }
                 .buttonStyle(HairlineButtonStyle())
                 .padding(.horizontal, 24)
@@ -589,7 +598,12 @@ struct SettingsView: View {
                         Text("Kurz").tag(2)
                         Text("Weich").tag(4)
                     }
-                    Text("Blendet das nächste Bild diagonal ein, statt hart zu schneiden.")
+                    if settings.transitionFrames > 0 {
+                        Picker("Übergangsstil", selection: $settings.transitionStyle) {
+                            ForEach(TransitionStyle.allCases) { Text($0.rawValue).tag($0) }
+                        }
+                    }
+                    Text("Blendet das nächste Bild ein — als Falzkante oder als triangulierte Facetten.")
                         .font(Theme.mono(11))
                         .foregroundStyle(Theme.graphite)
                 } header: {

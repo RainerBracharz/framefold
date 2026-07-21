@@ -7,6 +7,7 @@ struct ProjectsView: View {
     @EnvironmentObject var store: ProjectStore
     @State private var newProjectName = ""
     @State private var showNewProject = false
+    @State private var showExhibition = false
 
     var body: some View {
         NavigationStack {
@@ -51,6 +52,14 @@ struct ProjectsView: View {
                 ToolbarItem(placement: .principal) {
                     WorkTitle("Projekte", size: 17)
                 }
+                ToolbarItem(placement: .topBarLeading) {
+                    if store.projects.count >= 2 {
+                        Button { showExhibition = true } label: {
+                            Image(systemName: "film.stack")
+                                .foregroundStyle(Theme.ink)
+                        }
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { showNewProject = true } label: {
                         Image(systemName: "plus")
@@ -67,6 +76,9 @@ struct ProjectsView: View {
                     newProjectName = ""
                 }
                 Button("Abbrechen", role: .cancel) { newProjectName = "" }
+            }
+            .sheet(isPresented: $showExhibition) {
+                ExhibitionSheet()
             }
         }
     }
@@ -116,6 +128,8 @@ struct ProjectDetailView: View {
     @State private var errorMessage: String?
     @State private var contactSheetURL: URL?
     @State private var isRenderingSheet = false
+    @State private var foldTemplateURL: URL?
+    @State private var isRenderingTemplate = false
     @State private var isEditingFrames = false
     @State private var showDeleteProject = false
     @Environment(\.dismiss) private var dismiss
@@ -259,10 +273,15 @@ struct ProjectDetailView: View {
                     }
                     Toggle("Verwacklung ausgleichen", isOn: $exportSettings.alignFrames)
                     Toggle("Interferenz-Echo", isOn: $exportSettings.interferenzEcho)
-                    Picker("Falz-Blende", selection: $exportSettings.transitionFrames) {
+                    Picker("Überblendung", selection: $exportSettings.transitionFrames) {
                         Text("Aus").tag(0)
                         Text("Kurz").tag(2)
                         Text("Weich").tag(4)
+                    }
+                    if exportSettings.transitionFrames > 0 {
+                        Picker("Übergangsstil", selection: $exportSettings.transitionStyle) {
+                            ForEach(TransitionStyle.allCases) { Text($0.rawValue).tag($0) }
+                        }
                     }
                 }
                 .font(Theme.body)
@@ -318,6 +337,42 @@ struct ProjectDetailView: View {
                 }
                 .buttonStyle(HairlineButtonStyle())
                 .disabled(currentProject.frameCount == 0 || isRenderingSheet)
+            }
+
+            // Faltvorlage: ein Bild als druckbare Seite mit Falzlinien –
+            // zum Ausdrucken und physischen Nachfalten
+            if let foldTemplateURL {
+                ShareLink(item: foldTemplateURL) {
+                    Text("Faltvorlage teilen (PDF)")
+                        .font(Theme.caption(12)).tracking(1.6).textCase(.uppercase)
+                        .foregroundStyle(Theme.ink)
+                        .padding(.vertical, 14).frame(maxWidth: .infinity)
+                        .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+                }
+            } else {
+                Button(isRenderingTemplate ? "Vorlage wird gesetzt…" : "Faltvorlage (PDF)") {
+                    renderFoldTemplate()
+                }
+                .buttonStyle(HairlineButtonStyle())
+                .disabled(currentProject.frameCount == 0 || isRenderingTemplate)
+            }
+        }
+    }
+
+    private func renderFoldTemplate() {
+        isRenderingTemplate = true
+        let urls = store.frameURLs(for: currentProject)
+        let title = currentProject.name
+        Task.detached(priority: .userInitiated) {
+            var result: URL? = nil
+            if let first = urls.first, let data = try? Data(contentsOf: first),
+               let image = UIImage(data: data) {
+                result = FoldTemplateRenderer.render(image: image, title: title)
+            }
+            await MainActor.run {
+                foldTemplateURL = result
+                isRenderingTemplate = false
+                if result == nil { errorMessage = "Faltvorlage konnte nicht erstellt werden." }
             }
         }
     }
@@ -396,6 +451,116 @@ struct FrameThumbnail: View {
                 let renderer = UIGraphicsImageRenderer(size: size)
                 image = renderer.image { _ in
                     full.draw(in: CGRect(origin: .zero, size: size))
+                }
+            }
+        }
+    }
+}
+
+/// Ausstellungsmodus: mehrere Werke auswählen und zu einem durchlaufenden
+/// Reel mit Katalog-Titelkarten montieren.
+struct ExhibitionSheet: View {
+    @EnvironmentObject var store: ProjectStore
+    @Environment(\.dismiss) private var dismiss
+    @State private var selected: Set<UUID> = []
+    @State private var isBuilding = false
+    @State private var progress = 0.0
+    @State private var reelURL: URL?
+    @State private var errorMessage: String?
+
+    private var chosen: [Project] { store.projects.filter { selected.contains($0.id) } }
+    private var totalFrames: Int { chosen.reduce(0) { $0 + $1.frameCount } }
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                CatalogLabel("Werke für die Ausstellung wählen", color: Theme.ink)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20).padding(.top, 14)
+
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        ForEach(store.projects) { project in
+                            Button { toggle(project.id) } label: {
+                                HStack(spacing: 14) {
+                                    Image(systemName: selected.contains(project.id)
+                                          ? "checkmark.square.fill" : "square")
+                                        .foregroundStyle(Theme.ink)
+                                    Rectangle().fill(Theme.accent(for: project.id))
+                                        .frame(width: 4, height: 40)
+                                    VStack(alignment: .leading, spacing: 3) {
+                                        WorkTitle(project.name, size: 16)
+                                        CatalogLabel("\(project.frameCount) Bilder")
+                                    }
+                                    Spacer()
+                                }
+                                .padding(.vertical, 12).padding(.horizontal, 20)
+                                .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            Rectangle().fill(Theme.hairline).frame(height: 1)
+                        }
+                    }
+                }
+
+                VStack(spacing: 10) {
+                    if isBuilding {
+                        HairlineProgress(value: progress)
+                        CatalogLabel("Reel wird montiert…")
+                    } else if let reelURL {
+                        ShareLink(item: reelURL) {
+                            Text("Ausstellung teilen")
+                                .font(Theme.caption(12)).tracking(2.2).textCase(.uppercase)
+                                .foregroundStyle(Theme.paper)
+                                .padding(.vertical, 15).frame(maxWidth: .infinity)
+                                .background(Theme.ink)
+                        }
+                    } else {
+                        Button("Ausstellung erstellen") { build() }
+                            .buttonStyle(InkButtonStyle())
+                            .disabled(chosen.count < 2 || totalFrames == 0)
+                    }
+                    if let errorMessage {
+                        Text(errorMessage).font(Theme.mono(11)).foregroundStyle(.red)
+                    }
+                }
+                .padding(20)
+            }
+            .background(Theme.paper)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    CatalogLabel("Ausstellung", color: Theme.ink, size: 12)
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Fertig") { dismiss() }.foregroundStyle(Theme.ink)
+                }
+            }
+        }
+    }
+
+    private func toggle(_ id: UUID) {
+        if selected.contains(id) { selected.remove(id) } else { selected.insert(id) }
+        reelURL = nil
+    }
+
+    private func build() {
+        isBuilding = true; progress = 0; errorMessage = nil; reelURL = nil
+        let works = chosen.map { p in
+            ExhibitionBuilder.Work(
+                title: p.name,
+                year: String(p.createdAtISO.prefix(4)),
+                frames: store.frameURLs(for: p))
+        }
+        Task {
+            do {
+                let url = try await ExhibitionBuilder.build(
+                    works: works, settings: PipelineSettings()
+                ) { p in Task { @MainActor in progress = p } }
+                await MainActor.run { reelURL = url; isBuilding = false }
+            } catch {
+                await MainActor.run {
+                    errorMessage = error.localizedDescription
+                    isBuilding = false
                 }
             }
         }

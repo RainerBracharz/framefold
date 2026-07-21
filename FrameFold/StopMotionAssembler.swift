@@ -141,6 +141,7 @@ final class StopMotionAssembler {
             guard let pixelBuffer = Self.renderStep(
                 base: baseImage, overlay: overlayImage, revealProgress: step.progress,
                 previousComposed: lastComposed, echoStrength: echo,
+                transitionStyle: settings.transitionStyle,
                 cropRect: cropRect, width: width, height: height,
                 offset: offset, pool: adaptor.pixelBufferPool,
                 composedOut: &lastComposed) else { continue }
@@ -172,6 +173,7 @@ final class StopMotionAssembler {
     private static func renderStep(
         base: CGImage, overlay: CGImage?, revealProgress: Double,
         previousComposed: CGImage?, echoStrength: Double,
+        transitionStyle: TransitionStyle,
         cropRect: CGRect, width: Int, height: Int,
         offset: CGPoint, pool: CVPixelBufferPool?,
         composedOut: inout CGImage?
@@ -223,29 +225,54 @@ final class StopMotionAssembler {
         }
         context.draw(base, in: drawRect(for: base))
 
-        // 3) Falz-Blende: Overlay entlang der Diagonale aufdecken.
-        //    (CoreGraphics-Ursprung ist links unten – das Aufdeck-Dreieck
-        //    startet daher optisch in der linken unteren Ecke des Videos.)
+        // 3) Übergang: Overlay aufdecken – als Falzkante oder als Facetten.
         if let overlay, revealProgress > 0 {
-            let legs = Algorithms.foldRevealLegs(
-                progress: revealProgress,
-                width: Double(width), height: Double(height))
-            context.saveGState()
-            let clip = CGMutablePath()
-            clip.move(to: CGPoint(x: 0, y: 0))
-            clip.addLine(to: CGPoint(x: legs.lx, y: 0))
-            clip.addLine(to: CGPoint(x: 0, y: legs.ly))
-            clip.closeSubpath()
-            context.addPath(clip)
-            context.clip()
-            context.draw(overlay, in: drawRect(for: overlay))
-            // Falzkante als Haarlinie
-            context.setStrokeColor(CGColor(gray: 0.95, alpha: 0.8))
-            context.setLineWidth(2)
-            context.move(to: CGPoint(x: legs.lx, y: 0))
-            context.addLine(to: CGPoint(x: 0, y: legs.ly))
-            context.strokePath()
-            context.restoreGState()
+            switch transitionStyle {
+            case .crease:
+                let legs = Algorithms.foldRevealLegs(
+                    progress: revealProgress,
+                    width: Double(width), height: Double(height))
+                context.saveGState()
+                let clip = CGMutablePath()
+                clip.move(to: CGPoint(x: 0, y: 0))
+                clip.addLine(to: CGPoint(x: legs.lx, y: 0))
+                clip.addLine(to: CGPoint(x: 0, y: legs.ly))
+                clip.closeSubpath()
+                context.addPath(clip)
+                context.clip()
+                context.draw(overlay, in: drawRect(for: overlay))
+                context.setStrokeColor(CGColor(gray: 0.95, alpha: 0.8))
+                context.setLineWidth(2)
+                context.move(to: CGPoint(x: legs.lx, y: 0))
+                context.addLine(to: CGPoint(x: 0, y: legs.ly))
+                context.strokePath()
+                context.restoreGState()
+
+            case .facet:
+                // Triangulierte Facetten klappen diagonal gestaffelt um.
+                let facets = Algorithms.facetPlan(
+                    width: Double(width), height: Double(height), cols: 6, rows: 6)
+                let od = drawRect(for: overlay)
+                for f in facets {
+                    let a = Algorithms.facetAlpha(phase: f.phase, progress: revealProgress)
+                    if a <= 0 { continue }
+                    context.saveGState()
+                    let tri = CGMutablePath()
+                    tri.move(to: f.a); tri.addLine(to: f.b); tri.addLine(to: f.c); tri.closeSubpath()
+                    context.addPath(tri)
+                    context.clip()
+                    context.setAlpha(CGFloat(a))
+                    context.draw(overlay, in: od)
+                    context.setAlpha(1)
+                    if a < 1 { // Kante der gerade klappenden Facette betonen
+                        context.addPath(tri)
+                        context.setStrokeColor(CGColor(gray: 0.96, alpha: 0.45))
+                        context.setLineWidth(1.5)
+                        context.strokePath()
+                    }
+                    context.restoreGState()
+                }
+            }
         }
         if useEcho {
             context.endTransparencyLayer()
