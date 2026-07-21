@@ -15,10 +15,11 @@ struct ProjectsView: View {
                     VStack(spacing: 18) {
                         FoldMark(size: 48, color: Theme.graphite)
                         CatalogLabel("Noch keine Projekte", color: Theme.ink)
-                        Text("Ein Projekt pro Werk. Frames sammeln sich\nüber beliebig viele Sessions – live oder aus Videos.")
-                            .font(.system(size: 13))
+                        Text("Ein Projekt pro Werk. Bilder sammeln sich\nüber beliebig viele Aufnahmen – live oder aus Videos.")
+                            .font(Theme.mono(12))
                             .foregroundStyle(Theme.graphite)
                             .multilineTextAlignment(.center)
+                            .lineSpacing(2)
                     }
                 } else {
                     List {
@@ -48,7 +49,7 @@ struct ProjectsView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    CatalogLabel("Werkverzeichnis", color: Theme.ink, size: 12)
+                    WorkTitle("Projekte", size: 17)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { showNewProject = true } label: {
@@ -90,10 +91,8 @@ struct ProjectsView: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(project.name)
-                    .font(Theme.body)
-                    .foregroundStyle(Theme.ink)
-                CatalogLabel("\(project.frameCount) Frames")
+                WorkTitle(project.name, size: 17)
+                CatalogLabel("\(project.frameCount) Bilder")
             }
             Spacer()
         }
@@ -120,7 +119,7 @@ struct ProjectDetailView: View {
 
     var body: some View {
         ScrollView {
-            CatalogLabel("\(currentProject.frameCount) Frames · Kontaktbogen")
+            CatalogLabel("\(currentProject.frameCount) Bilder · Kontaktbogen")
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 20)
                 .padding(.top, 12)
@@ -195,7 +194,7 @@ struct ProjectDetailView: View {
         .paperStage()
         .toolbar {
             ToolbarItem(placement: .principal) {
-                CatalogLabel(currentProject.name, color: Theme.ink, size: 12)
+                WorkTitle(currentProject.name, size: 17)
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {

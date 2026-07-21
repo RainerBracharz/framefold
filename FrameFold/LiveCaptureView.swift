@@ -36,7 +36,7 @@ struct LiveCaptureView: View {
             .background(Theme.darkroom.ignoresSafeArea())
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    CatalogLabel("Live-Aufnahme", color: Theme.paperOnDark, size: 12)
+                    WorkTitle("Kamera", size: 17, color: Theme.paperOnDark)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { showSettings = true } label: {
@@ -60,7 +60,7 @@ struct LiveCaptureView: View {
             Spacer()
             FoldMark(size: 56, color: Theme.paperOnDark)
                 .padding(.bottom, 32)
-            CatalogLabel("Wohin sollen die Frames?", color: Theme.paperOnDark)
+            CatalogLabel("In welches Projekt?", color: Theme.paperOnDark)
                 .padding(.bottom, 12)
             Text("iPhone aufs Stativ, Projekt wählen, arbeiten.\nFrameFold nimmt automatisch einen Frame auf,\nsobald deine Hände aus dem Bild sind.")
                 .font(.system(size: 13))
@@ -176,8 +176,8 @@ struct LiveCaptureView: View {
 
             HStack(spacing: 14) {
                 VStack(alignment: .leading, spacing: 3) {
-                    CatalogLabel(project.name, color: Theme.paperOnDark, size: 12)
-                    CatalogLabel("\(currentCount) Frames", color: Theme.paperOnDark.opacity(0.6))
+                    WorkTitle(project.name, size: 16, color: Theme.paperOnDark)
+                    CatalogLabel("\(currentCount) Bilder", color: Theme.paperOnDark.opacity(0.6))
                 }
                 Spacer()
                 Button {

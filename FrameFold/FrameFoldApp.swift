@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct FrameFoldApp: App {
     @StateObject private var projectStore = ProjectStore()
+    @State private var selectedTab = 0
 
     init() {
         // Papier-&-Falz-Erscheinungsbild für Tab- und Navigationsleiste
@@ -23,17 +24,20 @@ struct FrameFoldApp: App {
 
     var body: some Scene {
         WindowGroup {
-            TabView {
-                ContentView()
-                    .tabItem { Label("Video", systemImage: "film.stack") }
+            TabView(selection: $selectedTab) {
+                ContentView(selectedTab: $selectedTab)
+                    .tabItem { Label("Video", systemImage: "triangle") }
+                    .tag(0)
                 LiveCaptureView()
-                    .tabItem { Label("Live", systemImage: "camera") }
+                    .tabItem { Label("Kamera", systemImage: "circle.lefthalf.filled") }
+                    .tag(1)
                 ProjectsView()
-                    .tabItem { Label("Projekte", systemImage: "folder") }
+                    .tabItem { Label("Projekte", systemImage: "square.grid.2x2") }
+                    .tag(2)
             }
             .environmentObject(projectStore)
             .tint(Theme.ink)
-            .preferredColorScheme(.light) // Papierbühne, konsistent im Atelier
+            .preferredColorScheme(.light) // Galeriewand, konsistent im Atelier
         }
     }
 }

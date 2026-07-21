@@ -3,7 +3,9 @@ import PhotosUI
 import AVKit
 
 struct ContentView: View {
+    @Binding var selectedTab: Int
     @StateObject private var viewModel = ProcessingViewModel()
+    @EnvironmentObject var store: ProjectStore
     @State private var pickerItem: PhotosPickerItem?
     @State private var showSettings = false
 
@@ -32,7 +34,7 @@ struct ContentView: View {
             .paperStage()
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    CatalogLabel("FrameFold", color: Theme.ink, size: 12)
+                    WorkTitle("FrameFold", size: 17)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { showSettings = true } label: {
@@ -48,37 +50,98 @@ struct ContentView: View {
         }
     }
 
-    private var startView: some View {
-        VStack(spacing: 0) {
-            Spacer()
-            FoldMark(size: 64)
-                .padding(.bottom, 36)
-            CatalogLabel("Video → Stopmotion", color: Theme.ink)
-                .padding(.bottom, 14)
-            Text("Die ruhigen Momente der Arbeit,\ngefunden und montiert.")
-                .font(Theme.title)
-                .foregroundStyle(Theme.ink)
-                .multilineTextAlignment(.center)
-                .padding(.bottom, 10)
-            Text("Frames mit Händen werden entfernt. Alles bleibt auf diesem Gerät.")
-                .font(.system(size: 13))
-                .foregroundStyle(Theme.graphite)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 40)
-            Spacer()
+    private var recentProjects: [Project] { Array(store.projects.prefix(4)) }
 
-            PhotosPicker(selection: $pickerItem, matching: .videos) {
-                Text("Video auswählen")
-                    .font(Theme.caption(12))
-                    .tracking(1.6)
-                    .textCase(.uppercase)
-                    .foregroundStyle(Theme.paper)
-                    .padding(.vertical, 14)
-                    .frame(maxWidth: .infinity)
-                    .background(Theme.ink)
+    private var startView: some View {
+        ScrollView {
+            VStack(spacing: 0) {
+                // Kopfbereich mit Signet + Titel
+                HStack(alignment: .center, spacing: 16) {
+                    FoldMark(size: 46)
+                    VStack(alignment: .leading, spacing: 5) {
+                        CatalogLabel("Video → Stopmotion")
+                        Text("Dein Arbeitsvideo,\nautomatisch zur Stopmotion.")
+                            .font(Theme.serif(19, .light))
+                            .foregroundStyle(Theme.ink)
+                            .lineSpacing(2)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal, 22)
+                .padding(.top, 8)
+                .padding(.bottom, 20)
+
+                Rectangle().fill(Theme.hairline).frame(height: 1)
+                    .padding(.horizontal, 22)
+
+                // Zwei Einstiege – groß und eindeutig
+                VStack(spacing: 10) {
+                    PhotosPicker(selection: $pickerItem, matching: .videos) {
+                        entryCard(icon: "triangle.fill",
+                                  title: "Video auswählen",
+                                  sub: "Aus einem fertigen Video",
+                                  filled: true)
+                    }
+                    Button {
+                        selectedTab = 1
+                    } label: {
+                        entryCard(icon: "circle.lefthalf.filled",
+                                  title: "Direkt aufnehmen",
+                                  sub: "Kamera aufs Stativ, automatisch auslösen",
+                                  filled: false)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(.horizontal, 22)
+                .padding(.top, 20)
+
+                // So funktioniert's – kompakte Dreierreihe
+                HStack(alignment: .top, spacing: 0) {
+                    stepCell(no: "1", text: "Aufnehmen\noder wählen")
+                    stepDivider
+                    stepCell(no: "2", text: "Bilder\nprüfen")
+                    stepDivider
+                    stepCell(no: "3", text: "Teilen\noder sichern")
+                }
+                .padding(.horizontal, 22)
+                .padding(.top, 26)
+
+                // Zuletzt bearbeitete Projekte
+                if !recentProjects.isEmpty {
+                    HStack {
+                        CatalogLabel("Zuletzt bearbeitet", color: Theme.ink)
+                        Spacer()
+                        Button { selectedTab = 2 } label: {
+                            CatalogLabel("Alle →", color: Theme.graphite, size: 10)
+                        }
+                    }
+                    .padding(.horizontal, 22)
+                    .padding(.top, 30)
+                    .padding(.bottom, 10)
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            ForEach(recentProjects) { project in
+                                Button { selectedTab = 2 } label: {
+                                    recentTile(project)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                        .padding(.horizontal, 22)
+                    }
+                }
+
+                Text("Die ruhigen Momente werden gewählt, Bilder mit Händen verworfen. Alles bleibt auf diesem Gerät.")
+                    .font(Theme.mono(10.5))
+                    .foregroundStyle(Theme.graphite)
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(2)
+                    .padding(.horizontal, 34)
+                    .padding(.top, 30)
+                    .padding(.bottom, 24)
             }
-            .padding(.horizontal, 24)
-            .padding(.bottom, 24)
         }
         .onChange(of: pickerItem) { _, newItem in
             guard let newItem else { return }
@@ -94,6 +157,80 @@ struct ContentView: View {
                 pickerItem = nil
             }
         }
+    }
+
+    // MARK: Start-Bausteine
+
+    private func entryCard(icon: String, title: String, sub: String, filled: Bool) -> some View {
+        HStack(spacing: 14) {
+            Image(systemName: icon)
+                .font(.system(size: 18))
+                .foregroundStyle(filled ? Theme.paper : Theme.ink)
+                .frame(width: 26)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                    .font(Theme.caption(13))
+                    .tracking(1.5)
+                    .textCase(.uppercase)
+                    .foregroundStyle(filled ? Theme.paper : Theme.ink)
+                Text(sub)
+                    .font(Theme.mono(10))
+                    .foregroundStyle(filled ? Theme.paper.opacity(0.7) : Theme.graphite)
+            }
+            Spacer()
+            Image(systemName: "arrow.right")
+                .font(.system(size: 13))
+                .foregroundStyle(filled ? Theme.paper.opacity(0.8) : Theme.graphite)
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 18)
+        .frame(maxWidth: .infinity)
+        .background(filled ? Theme.ink : Theme.paper)
+        .overlay(Rectangle().stroke(filled ? Color.clear : Theme.hairline, lineWidth: 1))
+    }
+
+    private func stepCell(no: String, text: String) -> some View {
+        VStack(spacing: 8) {
+            Text(no)
+                .font(Theme.serif(22, .light))
+                .foregroundStyle(Theme.ink)
+            Text(text)
+                .font(Theme.mono(9.5))
+                .tracking(0.8)
+                .textCase(.uppercase)
+                .foregroundStyle(Theme.graphite)
+                .multilineTextAlignment(.center)
+                .lineSpacing(2)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private var stepDivider: some View {
+        Rectangle().fill(Theme.hairline).frame(width: 1, height: 40)
+    }
+
+    private func recentTile(_ project: Project) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Group {
+                if let thumb = store.thumbnail(for: project) {
+                    Image(uiImage: thumb).resizable().scaledToFill()
+                } else {
+                    Rectangle().fill(Theme.paperShade)
+                        .overlay(Image(systemName: "square.grid.2x2")
+                            .foregroundStyle(Theme.hairline))
+                }
+            }
+            .frame(width: 128, height: 128)
+            .clipped()
+            .overlay(Rectangle().stroke(Theme.ink, lineWidth: 1))
+
+            Text(project.name)
+                .font(Theme.serif(14, .regular))
+                .foregroundStyle(Theme.ink)
+                .lineLimit(1)
+            CatalogLabel("\(project.frameCount) Bilder", size: 9)
+        }
+        .frame(width: 128)
     }
 
     private func errorView(_ message: String) -> some View {
@@ -122,7 +259,7 @@ struct ReviewView: View {
         VStack(spacing: 0) {
             ScrollView {
                 HStack {
-                    CatalogLabel("\(viewModel.selectedCount) von \(viewModel.reviewFrames.count) Frames gewählt",
+                    CatalogLabel("\(viewModel.selectedCount) von \(viewModel.reviewFrames.count) Bildern gewählt",
                                  color: Theme.ink)
                     if viewModel.isRecomputing {
                         ProgressView().tint(Theme.ink).scaleEffect(0.7)
@@ -165,17 +302,21 @@ struct ReviewView: View {
                 .padding(.horizontal, 12)
                 .padding(.top, 8)
 
-                // Empfindlichkeit wirkt sofort auf den Cache
+                // Optionale Feineinstellung – Standard erfasst bereits großzügig,
+                // wirkt sofort mit Live-Vorschau (kein verstecktes Vertun möglich)
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Empfindlichkeit: \(Int(viewModel.settings.motionPercentile * 100)) %")
-                        .font(Theme.body)
-                    Slider(value: $viewModel.settings.motionPercentile, in: 0.1...0.7, step: 0.05)
+                    HStack {
+                        CatalogLabel("Weniger Bilder", size: 9)
+                        Spacer()
+                        CatalogLabel("Mehr Bilder", size: 9)
+                    }
+                    Slider(value: $viewModel.settings.motionPercentile, in: 0.35...0.75, step: 0.05)
                         .tint(Theme.ink)
                         .onChange(of: viewModel.settings.motionPercentile) { _, _ in
                             viewModel.recomputeFromCache()
                         }
-                    Text("Höher = mehr Momente gelten als ruhig → mehr Frames")
-                        .font(.system(size: 12))
+                    Text("Standard erfasst großzügig. Unerwünschte Bilder oben einfach abwählen.")
+                        .font(Theme.mono(11))
                         .foregroundStyle(Theme.graphite)
                 }
                 .padding(14)
@@ -270,7 +411,7 @@ struct ResultView: View {
                 }
 
             VStack(spacing: 6) {
-                CatalogLabel("\(result.keyframeTimes.count) Keyframes · \(Int(result.sourceDuration)) s Quelle",
+                CatalogLabel("\(result.keyframeTimes.count) Bilder · aus \(Int(result.sourceDuration)) s Video",
                              color: Theme.ink)
                 CatalogLabel("\(result.discardedForHands) mit Händen entfernt · \(result.discardedAsDuplicates) Duplikate")
             }
@@ -279,7 +420,7 @@ struct ResultView: View {
                 ShareLink(item: result.outputURL) {
                     Text("Teilen")
                         .font(Theme.caption(12))
-                        .tracking(1.6)
+                        .tracking(2.2)
                         .textCase(.uppercase)
                         .foregroundStyle(Theme.paper)
                         .padding(.vertical, 14)
@@ -292,9 +433,9 @@ struct ResultView: View {
             .padding(.horizontal, 24)
 
             if sourceVideoURL != nil {
-                // Zurück zur Frame-Auswahl – der Analyse-Cache bleibt,
+                // Zurück zur Bildauswahl – der Analyse-Cache bleibt,
                 // Regler und Auswahl wirken sofort
-                Button("Zurück zur Frame-Auswahl") {
+                Button("Zurück zur Bildauswahl") {
                     onReprocess()
                 }
                 .buttonStyle(HairlineButtonStyle())
@@ -323,7 +464,7 @@ struct ResultView: View {
             }
             Button("Abbrechen", role: .cancel) { saveProjectName = "" }
         } message: {
-            Text("Die Keyframes wandern in ein Projekt und lassen sich dort mit weiteren Sessions ergänzen und neu exportieren.")
+            Text("Die Bilder wandern in ein Projekt und lassen sich dort mit weiteren Aufnahmen ergänzen und neu exportieren.")
         }
     }
 }
@@ -336,34 +477,21 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Empfindlichkeit: \(Int(settings.motionPercentile * 100)) %")
-                            .font(Theme.body)
-                        Slider(value: $settings.motionPercentile, in: 0.1...0.7, step: 0.05)
-                        Text("Höher = mehr Frames werden als ruhig akzeptiert")
-                            .font(.system(size: 12))
+                    HStack(spacing: 12) {
+                        Image(systemName: "wand.and.stars")
+                            .foregroundStyle(Theme.ink)
+                        Text("Die Bildauswahl läuft automatisch: FrameFold erfasst alle ruhigen Momente und entfernt Bilder mit Händen. Feinschliff machst du danach in der Bildauswahl.")
+                            .font(Theme.mono(11))
                             .foregroundStyle(Theme.graphite)
-                    }
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Mindest-Ruhezeit: \(settings.minStillWindowSeconds, specifier: "%.1f") s")
-                            .font(Theme.body)
-                        Slider(value: $settings.minStillWindowSeconds, in: 0.2...2.0, step: 0.1)
+                            .lineSpacing(2)
                     }
                 } header: {
-                    CatalogLabel("Keyframe-Erkennung")
+                    CatalogLabel("Bildauswahl")
                 }
                 .listRowBackground(Theme.paperShade.opacity(0.5))
 
                 Section {
-                    Toggle("Frames mit Händen entfernen", isOn: $settings.removeHands)
-                        .font(Theme.body)
-                } header: {
-                    CatalogLabel("Hände")
-                }
-                .listRowBackground(Theme.paperShade.opacity(0.5))
-
-                Section {
-                    Picker("Framerate", selection: $settings.outputFPS) {
+                    Picker("Bildrate", selection: $settings.outputFPS) {
                         Text("6 fps").tag(Int32(6))
                         Text("8 fps").tag(Int32(8))
                         Text("10 fps").tag(Int32(10))
@@ -375,34 +503,34 @@ struct SettingsView: View {
                     Picker("Abspielmodus", selection: $settings.loopMode) {
                         ForEach(LoopMode.allCases) { Text($0.rawValue).tag($0) }
                     }
-                    Toggle("Frames ausrichten", isOn: $settings.alignFrames)
+                    Toggle("Bilder ausrichten", isOn: $settings.alignFrames)
                 } header: {
                     CatalogLabel("Ausgabe")
                 }
                 .listRowBackground(Theme.paperShade.opacity(0.5))
 
                 Section {
-                    Toggle("Interferenz-Echo", isOn: $settings.interferenzEcho)
+                    Toggle("Bild-Echo (Nachbild)", isOn: $settings.interferenzEcho)
                     if settings.interferenzEcho {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("Echo-Stärke: \(Int(settings.echoStrength * 100)) %")
                                 .font(Theme.body)
                             Slider(value: $settings.echoStrength, in: 0.1...0.5, step: 0.05)
-                            Text("Der vorherige Frame schimmert im nächsten nach – Rekursion des eigenen Bildes.")
-                                .font(.system(size: 12))
+                            Text("Das vorherige Bild schimmert im nächsten leicht nach.")
+                                .font(Theme.mono(11))
                                 .foregroundStyle(Theme.graphite)
                         }
                     }
-                    Picker("Falz-Blende", selection: $settings.transitionFrames) {
+                    Picker("Überblendung", selection: $settings.transitionFrames) {
                         Text("Aus").tag(0)
                         Text("Kurz").tag(2)
                         Text("Weich").tag(4)
                     }
-                    Text("Übergänge decken den nächsten Frame entlang einer Diagonale auf – wie ein umgeschlagenes Blatt.")
-                        .font(.system(size: 12))
+                    Text("Blendet das nächste Bild diagonal ein, statt hart zu schneiden.")
+                        .font(Theme.mono(11))
                         .foregroundStyle(Theme.graphite)
                 } header: {
-                    CatalogLabel("Interferenz")
+                    CatalogLabel("Effekte")
                 }
                 .listRowBackground(Theme.paperShade.opacity(0.5))
             }
@@ -424,5 +552,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    ContentView().environmentObject(ProjectStore())
+    ContentView(selectedTab: .constant(0)).environmentObject(ProjectStore())
 }

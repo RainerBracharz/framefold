@@ -12,11 +12,13 @@ struct PipelineSettings {
     /// Analyse-Breite in Pixeln (downgesampelt für Geschwindigkeit)
     var analysisWidth: CGFloat = 160
     /// Untergrenze der adaptiven Schwelle als Perzentil der Bewegungsverteilung.
-    /// Die eigentliche Schwelle wird per Otsu-Split bestimmt (siehe KeyframeSelector);
-    /// dieses Perzentil dient als Fallback/Untergrenze und ist der "Empfindlichkeit"-Regler.
-    var motionPercentile: Double = 0.35
-    /// Mindestlänge eines Ruhefensters in Sekunden
-    var minStillWindowSeconds: Double = 0.5
+    /// Die eigentliche Schwelle wird per Otsu-Split bestimmt (siehe KeyframeSelector).
+    /// Standard bewusst HOCH: lieber alle wichtigen Bilder erfassen (hohe Ausbeute)
+    /// und Überflüssiges in der Bildauswahl entfernen, als wichtige auslassen.
+    var motionPercentile: Double = 0.6
+    /// Mindestlänge eines Ruhefensters in Sekunden (niedrig – auch kurze
+    /// Haltemomente sollen ein Bild ergeben)
+    var minStillWindowSeconds: Double = 0.3
     /// Hände erkennen und Frames mit Händen verwerfen
     var removeHands: Bool = true
     /// Konfidenz-Schwelle der Vision-Handerkennung

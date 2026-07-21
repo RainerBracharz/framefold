@@ -49,7 +49,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
             case .waitingForWork: return "Bereit – arbeite einfach"
             case .working: return "Arbeit erkannt…"
             case .stabilizing: return "Ruhig halten…"
-            case .captured: return "Frame aufgenommen ✓"
+            case .captured: return "Bild aufgenommen ✓"
             }
         }
     }
