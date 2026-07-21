@@ -9,6 +9,12 @@
 [![iOS Build](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml/badge.svg)](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml)
 &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
 
+<br/>
+
+<img src="docs/demo.gif" width="300" alt="FrameFold demo" />
+
+<sub>A finished stop-motion, playing in the app · [watch as video](docs/demo.mp4)</sub>
+
 </div>
 
 ---
@@ -42,11 +48,7 @@ The signal-processing core (rest detection, sharpness, perceptual hashing, crop 
 
 ## Design
 
-Strictly monochrome — a quiet **gallery** for viewing and a **darkroom** for capture — with colour entering only where light breaks in Tolino’s folds: the logo, the active selection, the progress and level indicators. Each project carries its own spectral accent drawn from the work. Typography pairs **New York** (serif, the catalogue voice) with **SF Mono** (the annotation-on-the-back-of-a-print voice).
-
-<div align="center">
-<img src="docs/logos.png" width="720" alt="Logo directions" />
-</div>
+Strictly monochrome — a quiet **gallery** for viewing and a **darkroom** for capture — with colour entering only where light breaks in Tolino’s folds: the logo, the active selection, the progress and level indicators. Each project carries its own spectral accent drawn from the work. Typography pairs **New York** (serif, the catalogue voice) with **SF Mono** (the annotation-on-the-back-of-a-print voice). The mark is an “F” crossed by a single spectral crease — a folded sheet catching the light.
 
 ## Engineering
 
