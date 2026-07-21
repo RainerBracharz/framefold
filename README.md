@@ -11,9 +11,9 @@
 
 <br/>
 
-<img src="docs/demo.gif" width="300" alt="FrameFold demo" />
+<img src="docs/demo-placeholder.png" width="280" alt="Screen recording placeholder" />
 
-<sub>A finished stop-motion, playing in the app · [watch as video](docs/demo.mp4)</sub>
+<sub>A screen recording of the app running on device will go here.</sub>
 
 </div>
 
