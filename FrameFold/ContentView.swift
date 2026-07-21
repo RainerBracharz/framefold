@@ -259,7 +259,7 @@ struct ContentView: View {
 /// Videos), einzelne Frames per Tipp abwählbar.
 struct ReviewView: View {
     @ObservedObject var viewModel: ProcessingViewModel
-    @AppStorage("appMode") private var modeRaw: Int = AppMode.tolino.rawValue
+    @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     private var mode: AppMode { AppMode.current(modeRaw) }
     @State private var isPreviewing = false
     @State private var previewIndex = 0
@@ -463,7 +463,7 @@ struct ResultView: View {
     let onReprocess: () -> Void
     let onRecurse: () -> Void
     @EnvironmentObject var store: ProjectStore
-    @AppStorage("appMode") private var modeRaw: Int = AppMode.tolino.rawValue
+    @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     private var mode: AppMode { AppMode.current(modeRaw) }
     @State private var player: AVPlayer?
     @State private var showSaveToProject = false
@@ -553,7 +553,7 @@ struct ResultView: View {
 
 struct SettingsView: View {
     @Binding var settings: PipelineSettings
-    @AppStorage("appMode") private var modeRaw: Int = AppMode.tolino.rawValue
+    @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     @Environment(\.dismiss) private var dismiss
 
     private var mode: AppMode { AppMode.current(modeRaw) }

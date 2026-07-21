@@ -8,7 +8,7 @@ struct ProjectsView: View {
     @State private var newProjectName = ""
     @State private var showNewProject = false
     @State private var showExhibition = false
-    @AppStorage("appMode") private var modeRaw: Int = AppMode.tolino.rawValue
+    @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
 
     var body: some View {
         NavigationStack {
@@ -133,7 +133,7 @@ struct ProjectDetailView: View {
     @State private var isRenderingTemplate = false
     @State private var isEditingFrames = false
     @State private var showDeleteProject = false
-    @AppStorage("appMode") private var modeRaw: Int = AppMode.tolino.rawValue
+    @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     private var mode: AppMode { AppMode.current(modeRaw) }
     @Environment(\.dismiss) private var dismiss
 

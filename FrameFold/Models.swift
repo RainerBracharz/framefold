@@ -75,7 +75,7 @@ enum AppMode: Int, CaseIterable, Identifiable {
     /// Arty-Spezialfeatures sichtbar
     var showsTolino: Bool { self == .tolino }
 
-    static func current(_ raw: Int) -> AppMode { AppMode(rawValue: raw) ?? .tolino }
+    static func current(_ raw: Int) -> AppMode { AppMode(rawValue: raw) ?? .basic }
 }
 
 /// Export-Seitenverhältnisse (Center-Crop auf das Zielformat).
