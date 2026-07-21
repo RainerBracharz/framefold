@@ -8,6 +8,7 @@ struct ProjectsView: View {
     @State private var newProjectName = ""
     @State private var showNewProject = false
     @State private var showExhibition = false
+    @AppStorage("appMode") private var modeRaw: Int = AppMode.tolino.rawValue
 
     var body: some View {
         NavigationStack {
@@ -53,7 +54,7 @@ struct ProjectsView: View {
                     WorkTitle("Projekte", size: 17)
                 }
                 ToolbarItem(placement: .topBarLeading) {
-                    if store.projects.count >= 2 {
+                    if store.projects.count >= 2 && AppMode.current(modeRaw).showsTolino {
                         Button { showExhibition = true } label: {
                             Image(systemName: "film.stack")
                                 .foregroundStyle(Theme.ink)
@@ -132,6 +133,8 @@ struct ProjectDetailView: View {
     @State private var isRenderingTemplate = false
     @State private var isEditingFrames = false
     @State private var showDeleteProject = false
+    @AppStorage("appMode") private var modeRaw: Int = AppMode.tolino.rawValue
+    private var mode: AppMode { AppMode.current(modeRaw) }
     @Environment(\.dismiss) private var dismiss
 
     private let columns = [GridItem(.adaptive(minimum: 90), spacing: 2)]
@@ -253,6 +256,7 @@ struct ProjectDetailView: View {
 
     private var exportSection: some View {
         VStack(spacing: 14) {
+            if mode.showsAdvanced {
             VStack(spacing: 0) {
                 CatalogLabel("Export", color: Theme.ink)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -272,15 +276,17 @@ struct ProjectDetailView: View {
                         Text("12 fps").tag(Int32(12))
                     }
                     Toggle("Verwacklung ausgleichen", isOn: $exportSettings.alignFrames)
-                    Toggle("Interferenz-Echo", isOn: $exportSettings.interferenzEcho)
-                    Picker("Überblendung", selection: $exportSettings.transitionFrames) {
-                        Text("Aus").tag(0)
-                        Text("Kurz").tag(2)
-                        Text("Weich").tag(4)
-                    }
-                    if exportSettings.transitionFrames > 0 {
-                        Picker("Übergangsstil", selection: $exportSettings.transitionStyle) {
-                            ForEach(TransitionStyle.allCases) { Text($0.rawValue).tag($0) }
+                    if mode.showsTolino {
+                        Toggle("Interferenz-Echo", isOn: $exportSettings.interferenzEcho)
+                        Picker("Überblendung", selection: $exportSettings.transitionFrames) {
+                            Text("Aus").tag(0)
+                            Text("Kurz").tag(2)
+                            Text("Weich").tag(4)
+                        }
+                        if exportSettings.transitionFrames > 0 {
+                            Picker("Übergangsstil", selection: $exportSettings.transitionStyle) {
+                                ForEach(TransitionStyle.allCases) { Text($0.rawValue).tag($0) }
+                            }
                         }
                     }
                 }
@@ -291,6 +297,7 @@ struct ProjectDetailView: View {
             .padding(14)
             .background(Theme.paperShade.opacity(0.5))
             .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+            }
 
             if isExporting {
                 HairlineProgress(value: exportProgress)
@@ -318,43 +325,45 @@ struct ProjectDetailView: View {
                     .foregroundStyle(.red)
             }
 
-            // Kontaktbogen: druckfertiges PDF aller Frames –
-            // zum Ausdrucken und Wiederfalten (Bild → Objekt → Bild)
-            if let contactSheetURL {
-                ShareLink(item: contactSheetURL) {
-                    Text("Kontaktbogen teilen (PDF)")
-                        .font(Theme.caption(12))
-                        .tracking(1.6)
-                        .textCase(.uppercase)
-                        .foregroundStyle(Theme.ink)
-                        .padding(.vertical, 14)
-                        .frame(maxWidth: .infinity)
-                        .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+            // Kontaktbogen: druckfertiges PDF aller Frames (ab „Erweitert")
+            if mode.showsAdvanced {
+                if let contactSheetURL {
+                    ShareLink(item: contactSheetURL) {
+                        Text("Kontaktbogen teilen (PDF)")
+                            .font(Theme.caption(12))
+                            .tracking(1.6)
+                            .textCase(.uppercase)
+                            .foregroundStyle(Theme.ink)
+                            .padding(.vertical, 14)
+                            .frame(maxWidth: .infinity)
+                            .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+                    }
+                } else {
+                    Button(isRenderingSheet ? "Bogen wird gesetzt…" : "Kontaktbogen (PDF)") {
+                        renderContactSheet()
+                    }
+                    .buttonStyle(HairlineButtonStyle())
+                    .disabled(currentProject.frameCount == 0 || isRenderingSheet)
                 }
-            } else {
-                Button(isRenderingSheet ? "Bogen wird gesetzt…" : "Kontaktbogen (PDF)") {
-                    renderContactSheet()
-                }
-                .buttonStyle(HairlineButtonStyle())
-                .disabled(currentProject.frameCount == 0 || isRenderingSheet)
             }
 
-            // Faltvorlage: ein Bild als druckbare Seite mit Falzlinien –
-            // zum Ausdrucken und physischen Nachfalten
-            if let foldTemplateURL {
-                ShareLink(item: foldTemplateURL) {
-                    Text("Faltvorlage teilen (PDF)")
-                        .font(Theme.caption(12)).tracking(1.6).textCase(.uppercase)
-                        .foregroundStyle(Theme.ink)
-                        .padding(.vertical, 14).frame(maxWidth: .infinity)
-                        .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+            // Faltvorlage: druckbare Seite mit Falzlinien zum Nachfalten (nur Tolino-Modus)
+            if mode.showsTolino {
+                if let foldTemplateURL {
+                    ShareLink(item: foldTemplateURL) {
+                        Text("Faltvorlage teilen (PDF)")
+                            .font(Theme.caption(12)).tracking(1.6).textCase(.uppercase)
+                            .foregroundStyle(Theme.ink)
+                            .padding(.vertical, 14).frame(maxWidth: .infinity)
+                            .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+                    }
+                } else {
+                    Button(isRenderingTemplate ? "Vorlage wird gesetzt…" : "Faltvorlage (PDF)") {
+                        renderFoldTemplate()
+                    }
+                    .buttonStyle(HairlineButtonStyle())
+                    .disabled(currentProject.frameCount == 0 || isRenderingTemplate)
                 }
-            } else {
-                Button(isRenderingTemplate ? "Vorlage wird gesetzt…" : "Faltvorlage (PDF)") {
-                    renderFoldTemplate()
-                }
-                .buttonStyle(HairlineButtonStyle())
-                .disabled(currentProject.frameCount == 0 || isRenderingTemplate)
             }
         }
     }

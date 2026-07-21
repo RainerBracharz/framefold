@@ -55,6 +55,29 @@ enum TransitionStyle: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
+/// Bedien-Modus – blendet Optionen gestaffelt ein, damit man nicht von zu
+/// vielen Einstellungen erschlagen wird.
+enum AppMode: Int, CaseIterable, Identifiable {
+    case basic = 0      // nur: Video → Stopmotion
+    case advanced = 1   // klassische Einstellungen (Format, Framerate, …)
+    case tolino = 2     // dazu die Arty-Features (Facetten, Echo, Faltvorlage, Rekursion, Ausstellung)
+
+    var id: Int { rawValue }
+    var label: String {
+        switch self {
+        case .basic: return "Einfach"
+        case .advanced: return "Erweitert"
+        case .tolino: return "Aldo Tolino"
+        }
+    }
+    /// klassische Einstellungen sichtbar
+    var showsAdvanced: Bool { self != .basic }
+    /// Arty-Spezialfeatures sichtbar
+    var showsTolino: Bool { self == .tolino }
+
+    static func current(_ raw: Int) -> AppMode { AppMode(rawValue: raw) ?? .tolino }
+}
+
 /// Export-Seitenverhältnisse (Center-Crop auf das Zielformat).
 enum AspectPreset: String, CaseIterable, Identifiable {
     case original = "Original"

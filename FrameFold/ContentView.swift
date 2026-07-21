@@ -259,6 +259,8 @@ struct ContentView: View {
 /// Videos), einzelne Frames per Tipp abwählbar.
 struct ReviewView: View {
     @ObservedObject var viewModel: ProcessingViewModel
+    @AppStorage("appMode") private var modeRaw: Int = AppMode.tolino.rawValue
+    private var mode: AppMode { AppMode.current(modeRaw) }
     @State private var isPreviewing = false
     @State private var previewIndex = 0
     private let previewTimer = Timer.publish(every: 1.0/8.0, on: .main, in: .common).autoconnect()
@@ -366,28 +368,30 @@ struct ReviewView: View {
                 .padding(.horizontal, 12)
                 .padding(.top, 8)
 
-                // Optionale Feineinstellung – Standard erfasst bereits großzügig,
-                // wirkt sofort mit Live-Vorschau (kein verstecktes Vertun möglich)
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack {
-                        CatalogLabel("Weniger Bilder", size: 9)
-                        Spacer()
-                        CatalogLabel("Mehr Bilder", size: 9)
-                    }
-                    Slider(value: $viewModel.settings.motionPercentile, in: 0.35...0.75, step: 0.05)
-                        .tint(Theme.ink)
-                        .onChange(of: viewModel.settings.motionPercentile) { _, _ in
-                            viewModel.recomputeFromCache()
+                // Optionale Feineinstellung (ab „Erweitert") – Standard erfasst
+                // bereits großzügig, wirkt sofort mit Live-Vorschau
+                if mode.showsAdvanced {
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            CatalogLabel("Weniger Bilder", size: 9)
+                            Spacer()
+                            CatalogLabel("Mehr Bilder", size: 9)
                         }
-                    Text("Standard erfasst großzügig. Unerwünschte Bilder oben einfach abwählen.")
-                        .font(Theme.mono(11))
-                        .foregroundStyle(Theme.graphite)
+                        Slider(value: $viewModel.settings.motionPercentile, in: 0.35...0.75, step: 0.05)
+                            .tint(Theme.ink)
+                            .onChange(of: viewModel.settings.motionPercentile) { _, _ in
+                                viewModel.recomputeFromCache()
+                            }
+                        Text("Standard erfasst großzügig. Unerwünschte Bilder oben einfach abwählen.")
+                            .font(Theme.mono(11))
+                            .foregroundStyle(Theme.graphite)
+                    }
+                    .padding(14)
+                    .background(Theme.paperShade.opacity(0.5))
+                    .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+                    .padding(.horizontal, 20)
+                    .padding(.top, 14)
                 }
-                .padding(14)
-                .background(Theme.paperShade.opacity(0.5))
-                .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
-                .padding(.horizontal, 20)
-                .padding(.top, 14)
             }
 
             VStack(spacing: 10) {
@@ -459,6 +463,8 @@ struct ResultView: View {
     let onReprocess: () -> Void
     let onRecurse: () -> Void
     @EnvironmentObject var store: ProjectStore
+    @AppStorage("appMode") private var modeRaw: Int = AppMode.tolino.rawValue
+    private var mode: AppMode { AppMode.current(modeRaw) }
     @State private var player: AVPlayer?
     @State private var showSaveToProject = false
     @State private var saveProjectName = ""
@@ -498,20 +504,24 @@ struct ResultView: View {
             .padding(.horizontal, 24)
 
             if sourceVideoURL != nil {
-                // Zurück zur Bildauswahl – der Analyse-Cache bleibt,
-                // Regler und Auswahl wirken sofort
-                Button("Zurück zur Bildauswahl") {
-                    onReprocess()
+                if mode.showsAdvanced {
+                    // Zurück zur Bildauswahl – der Analyse-Cache bleibt,
+                    // Regler und Auswahl wirken sofort
+                    Button("Zurück zur Bildauswahl") {
+                        onReprocess()
+                    }
+                    .buttonStyle(HairlineButtonStyle())
+                    .padding(.horizontal, 24)
                 }
-                .buttonStyle(HairlineButtonStyle())
-                .padding(.horizontal, 24)
 
-                // Rekursion: das Ergebnis erneut falten – Bild → Objekt → Bild
-                Button("Erneut falten (Rekursion)") {
-                    onRecurse()
+                if mode.showsTolino {
+                    // Rekursion: das Ergebnis erneut falten – Bild → Objekt → Bild
+                    Button("Erneut falten (Rekursion)") {
+                        onRecurse()
+                    }
+                    .buttonStyle(HairlineButtonStyle())
+                    .padding(.horizontal, 24)
                 }
-                .buttonStyle(HairlineButtonStyle())
-                .padding(.horizontal, 24)
 
                 Button(savedToProject ? "Im Projekt gesichert ✓" : "Als Projekt sichern") {
                     showSaveToProject = true
@@ -543,11 +553,35 @@ struct ResultView: View {
 
 struct SettingsView: View {
     @Binding var settings: PipelineSettings
+    @AppStorage("appMode") private var modeRaw: Int = AppMode.tolino.rawValue
     @Environment(\.dismiss) private var dismiss
+
+    private var mode: AppMode { AppMode.current(modeRaw) }
+    private var modeHint: String {
+        switch mode {
+        case .basic: return "Nur das Nötigste: Video wählen → Stopmotion."
+        case .advanced: return "Klassische Einstellungen: Format, Framerate, Abspielmodus, Stabilisierung."
+        case .tolino: return "Alles dabei — plus die Spezialfeatures: Facetten, Echo, Faltvorlage, Rekursion, Ausstellung."
+        }
+    }
 
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    Picker("Modus", selection: $modeRaw) {
+                        ForEach(AppMode.allCases) { Text($0.label).tag($0.rawValue) }
+                    }
+                    .pickerStyle(.segmented)
+                    Text(modeHint)
+                        .font(Theme.mono(11))
+                        .foregroundStyle(Theme.graphite)
+                        .lineSpacing(2)
+                } header: {
+                    CatalogLabel("Modus")
+                }
+                .listRowBackground(Theme.paperShade.opacity(0.5))
+
                 Section {
                     HStack(spacing: 12) {
                         Image(systemName: "wand.and.stars")
@@ -562,25 +596,28 @@ struct SettingsView: View {
                 }
                 .listRowBackground(Theme.paperShade.opacity(0.5))
 
-                Section {
-                    Picker("Bildrate", selection: $settings.outputFPS) {
-                        Text("6 fps").tag(Int32(6))
-                        Text("8 fps").tag(Int32(8))
-                        Text("10 fps").tag(Int32(10))
-                        Text("12 fps").tag(Int32(12))
+                if mode.showsAdvanced {
+                    Section {
+                        Picker("Bildrate", selection: $settings.outputFPS) {
+                            Text("6 fps").tag(Int32(6))
+                            Text("8 fps").tag(Int32(8))
+                            Text("10 fps").tag(Int32(10))
+                            Text("12 fps").tag(Int32(12))
+                        }
+                        Picker("Format", selection: $settings.aspect) {
+                            ForEach(AspectPreset.allCases) { Text($0.rawValue).tag($0) }
+                        }
+                        Picker("Abspielmodus", selection: $settings.loopMode) {
+                            ForEach(LoopMode.allCases) { Text($0.rawValue).tag($0) }
+                        }
+                        Toggle("Verwacklung ausgleichen", isOn: $settings.alignFrames)
+                    } header: {
+                        CatalogLabel("Ausgabe")
                     }
-                    Picker("Format", selection: $settings.aspect) {
-                        ForEach(AspectPreset.allCases) { Text($0.rawValue).tag($0) }
-                    }
-                    Picker("Abspielmodus", selection: $settings.loopMode) {
-                        ForEach(LoopMode.allCases) { Text($0.rawValue).tag($0) }
-                    }
-                    Toggle("Verwacklung ausgleichen", isOn: $settings.alignFrames)
-                } header: {
-                    CatalogLabel("Ausgabe")
+                    .listRowBackground(Theme.paperShade.opacity(0.5))
                 }
-                .listRowBackground(Theme.paperShade.opacity(0.5))
 
+                if mode.showsTolino {
                 Section {
                     Toggle("Bild-Echo (Nachbild)", isOn: $settings.interferenzEcho)
                     if settings.interferenzEcho {
@@ -610,6 +647,7 @@ struct SettingsView: View {
                     CatalogLabel("Effekte")
                 }
                 .listRowBackground(Theme.paperShade.opacity(0.5))
+                }
             }
             .font(Theme.body)
             .scrollContentBackground(.hidden)
