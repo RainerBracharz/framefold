@@ -294,6 +294,25 @@ struct ReviewView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 12)
 
+                // Ergebnis-Wächter: bei sehr wenigen Bildern klar sagen, warum
+                if !viewModel.isRecomputing && viewModel.reviewFrames.count < 3 {
+                    HStack(alignment: .top, spacing: 10) {
+                        Image(systemName: "exclamationmark.triangle")
+                            .foregroundStyle(Theme.amber)
+                        Text(viewModel.reviewFrames.isEmpty
+                             ? "Keine ruhigen Momente gefunden. Das Video ist evtl. sehr kurz oder durchgehend in Bewegung — schiebe den Regler unten Richtung Mehr Bilder oder nimm etwas länger auf."
+                             : "Nur wenige Bilder gefunden. Für eine flüssigere Stopmotion den Regler unten Richtung Mehr Bilder schieben oder länger aufnehmen.")
+                            .font(Theme.mono(11))
+                            .foregroundStyle(Theme.ink)
+                            .lineSpacing(2)
+                    }
+                    .padding(12)
+                    .background(Theme.amber.opacity(0.12))
+                    .overlay(Rectangle().stroke(Theme.amber.opacity(0.5), lineWidth: 1))
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                }
+
                 // Endlos-Vorschau der gewählten Bilder – vor dem Rendern
                 if isPreviewing, !selectedThumbs.isEmpty {
                     Image(uiImage: selectedThumbs[previewIndex % selectedThumbs.count])

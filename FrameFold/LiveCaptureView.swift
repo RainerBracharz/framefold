@@ -12,6 +12,10 @@ struct LiveCaptureView: View {
     @State private var newProjectName = ""
     @State private var showSettings = false
     @State private var recentThumbs: [UIImage] = []
+    @StateObject private var level = MotionLevel()
+    @AppStorage("liveShowGrid") private var showGrid = true
+    @AppStorage("liveShowLevel") private var showLevel = true
+    @AppStorage("didSeeCameraTip") private var didSeeCameraTip = false
 
     var body: some View {
         NavigationStack {
@@ -48,7 +52,44 @@ struct LiveCaptureView: View {
             .toolbarBackground(Theme.darkroom, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .sheet(isPresented: $showSettings) {
-                LiveSettingsView(controller: controller)
+                LiveSettingsView(controller: controller,
+                                 showGrid: $showGrid, showLevel: $showLevel)
+            }
+            .overlay {
+                // Einmaliger, überspringbarer Tipp beim ersten Öffnen
+                if !didSeeCameraTip && !controller.permissionDenied {
+                    cameraTip
+                }
+            }
+        }
+    }
+
+    private var cameraTip: some View {
+        ZStack {
+            Color.black.opacity(0.82).ignoresSafeArea()
+            VStack(spacing: 18) {
+                FoldMark(size: 44, color: Theme.paperOnDark)
+                CatalogLabel("So funktioniert die Kamera", color: Theme.paperOnDark)
+                Text("iPhone aufs Stativ oder ruhig über die Arbeit halten. Arbeite einfach — FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.")
+                    .font(Theme.mono(12))
+                    .foregroundStyle(Theme.paperOnDark.opacity(0.85))
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(3)
+                    .padding(.horizontal, 34)
+                Text("Der runde Knopf löst jederzeit von Hand aus.")
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.paperOnDark.opacity(0.6))
+                    .multilineTextAlignment(.center)
+                Button {
+                    didSeeCameraTip = true
+                } label: {
+                    Text("Verstanden")
+                        .font(Theme.caption(12)).tracking(2.2).textCase(.uppercase)
+                        .foregroundStyle(Theme.darkroom)
+                        .padding(.vertical, 14).padding(.horizontal, 40)
+                        .background(Theme.paperOnDark)
+                }
+                .padding(.top, 6)
             }
         }
     }
@@ -126,6 +167,12 @@ struct LiveCaptureView: View {
                         .resizable()
                         .scaledToFill()
                         .opacity(0.35)
+                        .allowsHitTesting(false)
+                }
+
+                if showGrid { ThirdsGrid().allowsHitTesting(false) }
+                if showLevel {
+                    BubbleLevel(gx: level.gx, gy: level.gy, isLevel: level.isLevel)
                         .allowsHitTesting(false)
                 }
 
@@ -224,6 +271,7 @@ struct LiveCaptureView: View {
         }
         .onAppear {
             recentThumbs = []
+            level.start()
             controller.start { jpegData in
                 if let current = store.projects.first(where: { $0.id == project.id }) {
                     store.appendFrame(jpegData: jpegData, to: current)
@@ -236,6 +284,7 @@ struct LiveCaptureView: View {
         }
         .onDisappear {
             controller.stop()
+            level.stop()
         }
     }
 
@@ -273,6 +322,56 @@ struct LiveCaptureView: View {
         .padding(.vertical, 10)
         .background(Theme.darkroom.opacity(0.75))
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
+    }
+}
+
+/// Drittel-Raster (Rule of Thirds) als Haarlinien im Sucher.
+struct ThirdsGrid: View {
+    var body: some View {
+        GeometryReader { geo in
+            Path { p in
+                let w = geo.size.width, h = geo.size.height
+                for i in 1...2 {
+                    let x = w * CGFloat(i) / 3
+                    p.move(to: CGPoint(x: x, y: 0)); p.addLine(to: CGPoint(x: x, y: h))
+                    let y = h * CGFloat(i) / 3
+                    p.move(to: CGPoint(x: 0, y: y)); p.addLine(to: CGPoint(x: w, y: y))
+                }
+            }
+            .stroke(Theme.paperOnDark.opacity(0.22), lineWidth: 0.5)
+        }
+    }
+}
+
+/// Wasserwaage: feste Fadenkreuz-Marke + Blase, die sich mit der Neigung
+/// bewegt. Zentriert und spektral, wenn das iPhone ausgerichtet ist.
+struct BubbleLevel: View {
+    let gx: Double
+    let gy: Double
+    let isLevel: Bool
+
+    var body: some View {
+        ZStack {
+            // feste Ziel-Marke
+            Circle()
+                .stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1)
+                .frame(width: 46, height: 46)
+            Path { p in
+                p.move(to: CGPoint(x: -30, y: 0)); p.addLine(to: CGPoint(x: -10, y: 0))
+                p.move(to: CGPoint(x: 10, y: 0)); p.addLine(to: CGPoint(x: 30, y: 0))
+            }
+            .stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1)
+            .frame(width: 60, height: 1)
+
+            // bewegliche Blase (Neigung skaliert)
+            Circle()
+                .fill(isLevel ? AnyShapeStyle(Theme.crease) : AnyShapeStyle(Theme.paperOnDark.opacity(0.85)))
+                .frame(width: isLevel ? 18 : 14, height: isLevel ? 18 : 14)
+                .offset(x: CGFloat(gx) * 220, y: CGFloat(gy) * 220)
+                .animation(.easeOut(duration: 0.1), value: gx)
+                .animation(.easeOut(duration: 0.1), value: gy)
+        }
+        .frame(width: 60, height: 60)
     }
 }
 
@@ -314,11 +413,23 @@ struct MotionGauge: View {
 /// (der Controller liest die Werte bei jeder Analyse frisch).
 struct LiveSettingsView: View {
     @ObservedObject var controller: LiveCaptureController
+    @Binding var showGrid: Bool
+    @Binding var showLevel: Bool
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    Toggle("Drittel-Raster", isOn: $showGrid)
+                        .font(Theme.body)
+                    Toggle("Wasserwaage", isOn: $showLevel)
+                        .font(Theme.body)
+                } header: {
+                    CatalogLabel("Sucher")
+                }
+                .listRowBackground(Theme.paperShade.opacity(0.5))
+
                 Section {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Auslöse-Wartezeit: \(controller.stableSeconds, specifier: "%.1f") s")

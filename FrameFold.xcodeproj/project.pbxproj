@@ -19,6 +19,7 @@
 		2F97FFBA1AFB2FC17C8F6E8F /* LiveCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA8297A3233B23D9AE700 /* LiveCaptureController.swift */; };
 		A3DE04E07922CC8BB966001C /* LiveCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C12FBC1940CDA6F9C95797 /* LiveCaptureView.swift */; };
 		D53EE5B81BCE0006DC1EE58F /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD6BD598D4F623F37DCAF09 /* Models.swift */; };
+		4DD658CFC92A7563F0AB0ECA /* MotionLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDB9F45CA291A2DA744E92B /* MotionLevel.swift */; };
 		0E02C30C0D9FB6293B4FD9BD /* ProcessingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6583ADB31D00356EDCE7FA83 /* ProcessingViewModel.swift */; };
 		BD9B7454EB7D37A5500730CA /* ProjectStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AAEDEDE5FC50D5C58EF7D3 /* ProjectStore.swift */; };
 		96CBCC018099EE0B7B40AC86 /* ProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC61E3411A52FB19A5D7E /* ProjectsView.swift */; };
@@ -40,6 +41,7 @@
 		CCEFA8297A3233B23D9AE700 /* LiveCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCaptureController.swift; sourceTree = "<group>"; };
 		C3C12FBC1940CDA6F9C95797 /* LiveCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCaptureView.swift; sourceTree = "<group>"; };
 		5DD6BD598D4F623F37DCAF09 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		ABDB9F45CA291A2DA744E92B /* MotionLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionLevel.swift; sourceTree = "<group>"; };
 		6583ADB31D00356EDCE7FA83 /* ProcessingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingViewModel.swift; sourceTree = "<group>"; };
 		F6AAEDEDE5FC50D5C58EF7D3 /* ProjectStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectStore.swift; sourceTree = "<group>"; };
 		6F0AC61E3411A52FB19A5D7E /* ProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsView.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 				CCEFA8297A3233B23D9AE700 /* LiveCaptureController.swift */,
 				C3C12FBC1940CDA6F9C95797 /* LiveCaptureView.swift */,
 				5DD6BD598D4F623F37DCAF09 /* Models.swift */,
+				ABDB9F45CA291A2DA744E92B /* MotionLevel.swift */,
 				6583ADB31D00356EDCE7FA83 /* ProcessingViewModel.swift */,
 				F6AAEDEDE5FC50D5C58EF7D3 /* ProjectStore.swift */,
 				6F0AC61E3411A52FB19A5D7E /* ProjectsView.swift */,
@@ -183,6 +186,7 @@
 				2F97FFBA1AFB2FC17C8F6E8F /* LiveCaptureController.swift in Sources */,
 				A3DE04E07922CC8BB966001C /* LiveCaptureView.swift in Sources */,
 				D53EE5B81BCE0006DC1EE58F /* Models.swift in Sources */,
+				4DD658CFC92A7563F0AB0ECA /* MotionLevel.swift in Sources */,
 				0E02C30C0D9FB6293B4FD9BD /* ProcessingViewModel.swift in Sources */,
 				BD9B7454EB7D37A5500730CA /* ProjectStore.swift in Sources */,
 				96CBCC018099EE0B7B40AC86 /* ProjectsView.swift in Sources */,
