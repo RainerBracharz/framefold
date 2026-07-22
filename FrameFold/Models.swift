@@ -50,8 +50,16 @@ struct PipelineSettings {
     /// Überblendung: Zwischenframes pro Übergang, die den nächsten Frame
     /// aufdecken (0 = harte Schnitte)
     var transitionFrames: Int = 0
-    /// Stil der Überblendung: einfache Falzkante oder triangulierte Facetten
+    /// Stil der Überblendung: Falzkante, triangulierte Facetten oder Verwebung
     var transitionStyle: TransitionStyle = .crease
+    /// Papierrelief: jede Facette liegt anders im Licht – das Bild wirkt wie
+    /// gefaltetes, wieder abfotografiertes Papier (Bild → Objekt → Bild)
+    var paperRelief: Bool = false
+    /// Stärke des Papierreliefs (0.05..0.3)
+    var reliefStrength: Double = 0.12
+    /// Druckbild: Schwarzweiß mit warmem Papierton – wie Tolinos
+    /// abfotografierte Drucke
+    var printLook: Bool = false
 }
 
 /// Auflösung des exportierten Videos (maximale Kantenlänge).
@@ -72,8 +80,9 @@ enum ExportResolution: String, CaseIterable, Identifiable {
 
 /// Stil der Überblendung zwischen Bildern.
 enum TransitionStyle: String, CaseIterable, Identifiable {
-    case crease = "Falz"       // diagonale Falzkante
-    case facet  = "Facetten"   // triangulierte Facetten (nach Tolinos Faltstruktur)
+    case crease = "Falz"        // diagonale Falzkante
+    case facet  = "Facetten"    // triangulierte Facetten (nach Tolinos Faltstruktur)
+    case weave  = "Verwebung"   // eingewobene Bildstreifen (nach Tolinos Webtechnik)
     var id: String { rawValue }
 }
 

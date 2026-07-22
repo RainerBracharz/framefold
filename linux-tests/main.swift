@@ -229,6 +229,42 @@ check(Algorithms.reelFrameCount(frameCounts: [10, 20, 5], titleHold: 12) == 35 +
 check(Algorithms.reelFrameCount(frameCounts: [], titleHold: 12) == 0, "keine Werke → 0")
 check(Algorithms.reelFrameCount(frameCounts: [8], titleHold: 0) == 8, "ohne Titelkarte → nur Frames")
 
+// MARK: Verwebung
+print("weavePlan/weaveReveal:")
+do {
+    let plan = Algorithms.weavePlan(width: 900, strips: 9)
+    check(plan.count == 9, "9 Streifen")
+    let total = plan.reduce(0.0) { $0 + $1.width }
+    check(abs(total - 900) < 1e-9, "Streifen decken die volle Breite")
+    check(plan[0].fromTop && !plan[1].fromTop, "abwechselnd von oben/unten")
+    check(plan.allSatisfy { $0.phase >= 0 && $0.phase < 1 }, "Phasen in [0,1)")
+    check(plan[0].phase < plan[8].phase, "Phasen gestaffelt")
+    check(Algorithms.weavePlan(width: 0, strips: 5).isEmpty, "Breite 0 → leer")
+
+    check(Algorithms.weaveReveal(phase: 0.4, progress: 0) == 0, "Start → 0")
+    check(Algorithms.weaveReveal(phase: 0.4, progress: 1) == 1, "Ende → 1 (jede Phase)")
+    check(Algorithms.weaveReveal(phase: 0, progress: 0.5) == 0.5, "Phase 0 → linear")
+    let a = Algorithms.weaveReveal(phase: 0.4, progress: 0.5)
+    let b = Algorithms.weaveReveal(phase: 0.4, progress: 0.8)
+    check(a < b, "monoton steigend")
+}
+
+// MARK: Papierrelief
+print("facetShade:")
+do {
+    check(Algorithms.facetShade(index: 3, phase: 0.5, strength: 0) == 0, "Stärke 0 → 0")
+    let s = 0.15
+    let allBounded = (0..<72).allSatisfy { i in
+        abs(Algorithms.facetShade(index: i, phase: Double(i % 12) / 12, strength: s)) <= s + 1e-12
+    }
+    check(allBounded, "immer innerhalb ±Stärke")
+    let v1 = Algorithms.facetShade(index: 7, phase: 0.3, strength: s)
+    let v2 = Algorithms.facetShade(index: 7, phase: 0.3, strength: s)
+    check(v1 == v2, "deterministisch (reproduzierbare Exporte)")
+    let distinct = Set((0..<20).map { Algorithms.facetShade(index: $0, phase: 0.5, strength: s) })
+    check(distinct.count > 10, "streut über die Facetten")
+}
+
 // MARK: Export-Auflösung
 print("exportSize:")
 do {

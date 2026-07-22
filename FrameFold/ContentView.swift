@@ -622,6 +622,23 @@ struct SettingsView: View {
 
                 if mode.showsTolino {
                 Section {
+                    Toggle("Druckbild (Schwarzweiß)", isOn: $settings.printLook)
+                    if settings.printLook {
+                        Text("Schwarzweiß mit warmem Papierton — wie ein abfotografierter Druck.")
+                            .font(Theme.mono(11))
+                            .foregroundStyle(Theme.graphite)
+                    }
+                    Toggle("Papierrelief", isOn: $settings.paperRelief)
+                    if settings.paperRelief {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Relief-Stärke: \(Int(settings.reliefStrength * 100)) %")
+                                .font(Theme.body)
+                            Slider(value: $settings.reliefStrength, in: 0.05...0.3, step: 0.01)
+                            Text("Jede Facette liegt anders im Licht — als wäre das Bild gefaltet und wieder abfotografiert worden.")
+                                .font(Theme.mono(11))
+                                .foregroundStyle(Theme.graphite)
+                        }
+                    }
                     Toggle("Bild-Echo (Nachbild)", isOn: $settings.interferenzEcho)
                     if settings.interferenzEcho {
                         VStack(alignment: .leading, spacing: 6) {
@@ -643,7 +660,7 @@ struct SettingsView: View {
                             ForEach(TransitionStyle.allCases) { Text($0.rawValue).tag($0) }
                         }
                     }
-                    Text("Blendet das nächste Bild ein — als Falzkante oder als triangulierte Facetten.")
+                    Text("Blendet das nächste Bild ein — als Falzkante, als triangulierte Facetten oder als eingewobene Bildstreifen.")
                         .font(Theme.mono(11))
                         .foregroundStyle(Theme.graphite)
                 } header: {

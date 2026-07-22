@@ -213,6 +213,55 @@ enum Algorithms {
         return max(0, min(1, (progress - phase) / feather))
     }
 
+    // MARK: Verwebung (nach Tolinos Webtechnik – Bildstreifen ineinander geflochten)
+
+    /// Ein vertikaler Webstreifen: wird gestaffelt von oben bzw. unten
+    /// "eingewoben" (abwechselnd, wie Kette und Schuss).
+    struct WeaveStrip: Equatable {
+        let x: Double
+        let width: Double
+        let phase: Double    // Stagger 0..<1 – Reihenfolge des Einwebens
+        let fromTop: Bool    // abwechselnd von oben/unten
+    }
+
+    /// Zerlegt die Breite in vertikale Streifen mit gestaffelter Phase.
+    static func weavePlan(width: Double, strips: Int) -> [WeaveStrip] {
+        guard strips > 0, width > 0 else { return [] }
+        let sw = width / Double(strips)
+        return (0..<strips).map { i in
+            WeaveStrip(
+                x: Double(i) * sw,
+                width: sw,
+                phase: strips > 1 ? Double(i) / Double(strips) * 0.5 : 0,
+                fromTop: i % 2 == 0)
+        }
+    }
+
+    /// Anteil der Streifenhöhe, der bei `progress` bereits eingewoben ist.
+    /// Gestaffelt über die Phase; bei progress 1 immer vollständig.
+    static func weaveReveal(phase: Double, progress: Double) -> Double {
+        let p = max(0, min(1, progress))
+        let ph = max(0, min(0.9, phase))
+        return max(0, min(1, (p - ph) / (1 - ph)))
+    }
+
+    // MARK: Papierrelief (Facetten unterschiedlich „belichtet")
+
+    /// Deterministische Relief-Stärke einer Facette in −strength…+strength:
+    /// positive Werte hellen auf, negative dunkeln ab – als läge Licht von
+    /// links oben auf unterschiedlich geneigten Papierfacetten. Rein
+    /// arithmetisch, kein Zufall → reproduzierbare Exporte.
+    static func facetShade(index: Int, phase: Double, strength: Double) -> Double {
+        guard strength > 0 else { return 0 }
+        // Pseudo-Streuung (hash-artig, deterministisch) + Richtungsanteil:
+        // Facetten mit kleiner Phase (links oben) tendenziell heller.
+        let scatter = (sin(Double(index + 1) * 12.9898) * 43758.5453)
+            .truncatingRemainder(dividingBy: 1)          // −1..1
+        let directional = (0.5 - phase) * 2               // +1 (links oben) … −1 (rechts unten)
+        let raw = 0.6 * scatter + 0.4 * directional       // −1..1 (ungefähr)
+        return max(-strength, min(strength, raw * strength))
+    }
+
     // MARK: Faltvorlage (druckbares Falzmuster)
 
     struct FoldLine: Equatable { let p0: CGPoint; let p1: CGPoint; let cut: Bool }

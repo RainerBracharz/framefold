@@ -140,9 +140,16 @@ final class StopMotionAssembler {
         // Render-Plan: Reihenfolge + optionale Falz-Blenden-Zwischenframes
         let steps = Algorithms.renderPlan(order: order, transitionFrames: settings.transitionFrames)
 
-        // Facetten-Geometrie EINMAL berechnen statt pro Zwischenframe
+        // Effekt-Geometrie EINMAL berechnen statt pro Frame
         let facets: [Algorithms.Facet] =
             (settings.transitionStyle == .facet && settings.transitionFrames > 0)
+            ? Algorithms.facetPlan(width: Double(width), height: Double(height), cols: 6, rows: 6)
+            : []
+        let weave: [Algorithms.WeaveStrip] =
+            (settings.transitionStyle == .weave && settings.transitionFrames > 0)
+            ? Algorithms.weavePlan(width: Double(width), strips: 9)
+            : []
+        let reliefFacets: [Algorithms.Facet] = settings.paperRelief
             ? Algorithms.facetPlan(width: Double(width), height: Double(height), cols: 6, rows: 6)
             : []
 
@@ -183,7 +190,9 @@ final class StopMotionAssembler {
             guard let pixelBuffer = Self.renderStep(
                 base: baseImage, overlay: overlayImage, revealProgress: step.progress,
                 previousComposed: lastComposed, echoStrength: echo,
-                transitionStyle: settings.transitionStyle, facets: facets,
+                transitionStyle: settings.transitionStyle, facets: facets, weave: weave,
+                reliefFacets: reliefFacets, reliefStrength: settings.reliefStrength,
+                printLook: settings.printLook,
                 cropRect: cropRect, width: width, height: height, scale: renderScale,
                 offset: offset, pool: adaptor.pixelBufferPool,
                 composedOut: &lastComposed) else { continue }
@@ -216,6 +225,8 @@ final class StopMotionAssembler {
         base: CGImage, overlay: CGImage?, revealProgress: Double,
         previousComposed: CGImage?, echoStrength: Double,
         transitionStyle: TransitionStyle, facets: [Algorithms.Facet],
+        weave: [Algorithms.WeaveStrip],
+        reliefFacets: [Algorithms.Facet], reliefStrength: Double, printLook: Bool,
         cropRect: CGRect, width: Int, height: Int, scale: CGFloat,
         offset: CGPoint, pool: CVPixelBufferPool?,
         composedOut: inout CGImage?
@@ -284,12 +295,19 @@ final class StopMotionAssembler {
                 context.addPath(clip)
                 context.clip()
                 context.draw(overlay, in: drawRect(for: overlay))
+                context.restoreGState()
+                // Falzlicht: helle Falzkante + Schlagschatten dahinter
+                // (Licht von links oben, wie in Tolinos Aufnahmen)
+                context.setStrokeColor(CGColor(gray: 0.05, alpha: 0.22))
+                context.setLineWidth(4)
+                context.move(to: CGPoint(x: legs.lx + 3, y: 0))
+                context.addLine(to: CGPoint(x: 0, y: legs.ly + 3))
+                context.strokePath()
                 context.setStrokeColor(CGColor(gray: 0.95, alpha: 0.8))
                 context.setLineWidth(2)
                 context.move(to: CGPoint(x: legs.lx, y: 0))
                 context.addLine(to: CGPoint(x: 0, y: legs.ly))
                 context.strokePath()
-                context.restoreGState()
 
             case .facet:
                 // Triangulierte Facetten klappen diagonal gestaffelt um
@@ -306,7 +324,10 @@ final class StopMotionAssembler {
                     context.setAlpha(CGFloat(a))
                     context.draw(overlay, in: od)
                     context.setAlpha(1)
-                    if a < 1 { // Kante der gerade klappenden Facette betonen
+                    if a < 1 { // Falzlicht: klappende Facette liegt im Schatten
+                        context.addPath(tri)
+                        context.setFillColor(CGColor(gray: 0, alpha: (1 - a) * 0.2))
+                        context.fillPath()
                         context.addPath(tri)
                         context.setStrokeColor(CGColor(gray: 0.96, alpha: 0.45))
                         context.setLineWidth(1.5)
@@ -314,6 +335,41 @@ final class StopMotionAssembler {
                     }
                     context.restoreGState()
                 }
+
+            case .weave:
+                // Der nächste Frame wird als Streifen "eingewoben" – abwechselnd
+                // von oben und unten, gestaffelt (nach Tolinos Webtechnik).
+                let od = drawRect(for: overlay)
+                let bufferH = Double(height)
+                for strip in weave {
+                    let reveal = Algorithms.weaveReveal(phase: strip.phase, progress: revealProgress)
+                    if reveal <= 0 { continue }
+                    let stripH = bufferH * reveal
+                    // CG-Ursprung ist unten links: "von oben" = oberer Bildbereich
+                    let clipRect = strip.fromTop
+                        ? CGRect(x: strip.x, y: bufferH - stripH, width: strip.width, height: stripH)
+                        : CGRect(x: strip.x, y: 0, width: strip.width, height: stripH)
+                    context.saveGState()
+                    context.clip(to: clipRect)
+                    context.draw(overlay, in: od)
+                    context.restoreGState()
+                    if reveal < 1 { // Webkante betonen
+                        let edgeY = strip.fromTop ? bufferH - stripH : stripH
+                        context.setStrokeColor(CGColor(gray: 0.95, alpha: 0.7))
+                        context.setLineWidth(2)
+                        context.move(to: CGPoint(x: strip.x, y: edgeY))
+                        context.addLine(to: CGPoint(x: strip.x + strip.width, y: edgeY))
+                        context.strokePath()
+                    }
+                }
+                // Vertikale Webfugen mit zartem Schatten (Über-/Unter-Effekt)
+                context.setStrokeColor(CGColor(gray: 0.08, alpha: 0.16))
+                context.setLineWidth(1.5)
+                for strip in weave.dropFirst() {
+                    context.move(to: CGPoint(x: strip.x, y: 0))
+                    context.addLine(to: CGPoint(x: strip.x, y: bufferH))
+                }
+                context.strokePath()
             }
         }
         if useEcho {
@@ -321,7 +377,42 @@ final class StopMotionAssembler {
             context.setAlpha(1)
         }
 
-        // 4) Fertiges Bild für das Echo des nächsten Frames sichern
+        // 4) Papierrelief: jede Facette liegt anders im Licht – das Bild wirkt
+        //    wie gefaltetes, wieder abfotografiertes Papier (Bild → Objekt → Bild)
+        if !reliefFacets.isEmpty {
+            for (index, facet) in reliefFacets.enumerated() {
+                let shade = Algorithms.facetShade(
+                    index: index, phase: facet.phase, strength: reliefStrength)
+                let tri = CGMutablePath()
+                tri.move(to: facet.a); tri.addLine(to: facet.b)
+                tri.addLine(to: facet.c); tri.closeSubpath()
+                if abs(shade) >= 0.005 {
+                    context.addPath(tri)
+                    context.setFillColor(CGColor(gray: shade > 0 ? 1 : 0, alpha: abs(shade)))
+                    context.fillPath()
+                }
+                // hauchfeine Falzlinien des Reliefs
+                context.addPath(tri)
+                context.setStrokeColor(CGColor(gray: 0.1, alpha: 0.05))
+                context.setLineWidth(1)
+                context.strokePath()
+            }
+        }
+
+        // 5) Druckbild: Schwarzweiß (Blend-Modus „color" nimmt die Farbe,
+        //    lässt die Helligkeit) + warmer Papierton übers Multiplizieren
+        if printLook {
+            context.saveGState()
+            context.setBlendMode(.color)
+            context.setFillColor(CGColor(gray: 0, alpha: 1))
+            context.fill(bufferRect)
+            context.setBlendMode(.multiply)
+            context.setFillColor(CGColor(red: 0.965, green: 0.955, blue: 0.93, alpha: 1))
+            context.fill(bufferRect)
+            context.restoreGState()
+        }
+
+        // 6) Fertiges Bild für das Echo des nächsten Frames sichern
         composedOut = context.makeImage()
         return pixelBuffer
     }
