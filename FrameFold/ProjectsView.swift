@@ -373,11 +373,13 @@ struct ProjectDetailView: View {
         let urls = store.frameURLs(for: currentProject)
         let title = currentProject.name
         Task.detached(priority: .userInitiated) {
-            var result: URL? = nil
-            if let first = urls.first, let data = try? Data(contentsOf: first),
-               let image = UIImage(data: data) {
-                result = FoldTemplateRenderer.render(image: image, title: title)
-            }
+            // Konstante statt veränderlicher Variable – eine im nebenläufigen
+            // Kontext gefangene `var` ist ab Swift 6 ein Fehler.
+            let result: URL? = {
+                guard let first = urls.first, let data = try? Data(contentsOf: first),
+                      let image = UIImage(data: data) else { return nil }
+                return FoldTemplateRenderer.render(image: image, title: title)
+            }()
             await MainActor.run {
                 foldTemplateURL = result
                 isRenderingTemplate = false
