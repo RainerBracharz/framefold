@@ -1,0 +1,517 @@
+Command line invocation:
+    /Applications/Xcode_26.5.app/Contents/Developer/usr/bin/xcodebuild -project FrameFold.xcodeproj -scheme FrameFold -destination generic/platform=iOS -configuration Debug CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build
+
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+    CODE_SIGNING_REQUIRED = NO
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'FrameFold' in project 'FrameFold' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode_26.5.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/runner/work/framefold/framefold/FrameFold/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode_26.5.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode_26.5.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 8a156d74a8eb7d289a12bf5eabaab8dc
+Build description path: /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/XCBuildData/8a156d74a8eb7d289a12bf5eabaab8dc.xcbuilddata
+CreateBuildDirectory /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products
+    cd /Users/runner/work/framefold/framefold/FrameFold.xcodeproj
+    builtin-create-build-directory /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products
+
+CreateBuildDirectory /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex
+    cd /Users/runner/work/framefold/framefold/FrameFold.xcodeproj
+    builtin-create-build-directory /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex
+
+ClangStatCache /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_26.5.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk /Users/runner/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.5-23F73-688ef53f1462e2c8f657fdc38a81448f67b36cc14858027d908dabaffc6b2e8d.sdkstatcache
+    cd /Users/runner/work/framefold/framefold/FrameFold.xcodeproj
+    /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_26.5.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -o /Users/runner/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.5-23F73-688ef53f1462e2c8f657fdc38a81448f67b36cc14858027d908dabaffc6b2e8d.sdkstatcache
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold-5a021d6845f1a0560ee55c4be317c721-VFS-iphoneos/all-product-headers.yaml
+    cd /Users/runner/work/framefold/framefold/FrameFold.xcodeproj
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold-5a021d6845f1a0560ee55c4be317c721-VFS-iphoneos/all-product-headers.yaml
+
+CreateBuildDirectory /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos
+    cd /Users/runner/work/framefold/framefold/FrameFold.xcodeproj
+    builtin-create-build-directory /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos
+
+CreateBuildDirectory /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+    cd /Users/runner/work/framefold/framefold/FrameFold.xcodeproj
+    builtin-create-build-directory /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+CreateBuildDirectory /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/ExplicitPrecompiledModules
+    cd /Users/runner/work/framefold/framefold/FrameFold.xcodeproj
+    builtin-create-build-directory /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+CreateBuildDirectory /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos
+    cd /Users/runner/work/framefold/framefold/FrameFold.xcodeproj
+    builtin-create-build-directory /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/empty-FrameFold.plist (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/empty-FrameFold.plist
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold_const_extract_protocols.json (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold_const_extract_protocols.json
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.SwiftFileList (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.SwiftFileList
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.SwiftConstValuesFileList (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.LinkFileList (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.LinkFileList
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold-OutputFileMap.json (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold-OutputFileMap.json
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold.hmap (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold.hmap
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold.DependencyStaticMetadataFileList (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold.DependencyMetadataFileList (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold.DependencyMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-project-headers.hmap (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-project-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-own-target-headers.hmap (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-own-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-generated-files.hmap (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-generated-files.hmap
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-all-target-headers.hmap (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-all-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-all-non-framework-target-headers.hmap (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-DebugDylibPath-normal-arm64.txt (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-DebugDylibPath-normal-arm64.txt
+
+WriteAuxiliaryFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-DebugDylibInstallName-normal-arm64.txt (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    write-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-DebugDylibInstallName-normal-arm64.txt
+
+MkDir /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    /bin/mkdir -p /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app
+
+Ld /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/__preview.dylib normal (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios17.0 -dynamiclib -isysroot /Applications/Xcode_26.5.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -O0 -L/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos -F/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos -install_name @rpath/FrameFold.debug.dylib -Xlinker -dead_strip -rdynamic -Xlinker -no_deduplicate -Xlinker -dependency_info -Xlinker /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold_dependency_info.dat -o /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/__preview.dylib
+
+MkDir /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_output/unthinned (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    /bin/mkdir -p /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_output/unthinned
+
+MkDir /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_output/thinned (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    /bin/mkdir -p /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_output/thinned
+
+GenerateAssetSymbols /Users/runner/work/framefold/framefold/FrameFold/Assets.xcassets (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    /Applications/Xcode_26.5.app/Contents/Developer/usr/bin/actool /Users/runner/work/framefold/framefold/FrameFold/Assets.xcassets --compile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app --output-format human-readable-text --notices --warnings --export-dependency-info /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_dependencies --output-partial-info-plist /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_generated_info.plist --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --development-region de --target-device iphone --minimum-deployment-target 17.0 --platform iphoneos --bundle-identifier com.rainer.framefold --generate-swift-asset-symbol-extensions NO --generate-swift-asset-symbols /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources/GeneratedAssetSymbols.swift --generate-objc-asset-symbols /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources/GeneratedAssetSymbols.h --generate-asset-symbol-index /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/* com.apple.actool.compilation-results */
+/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources/GeneratedAssetSymbols.h
+/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources/GeneratedAssetSymbols.swift
+
+
+CompileAssetCatalogVariant thinned /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app /Users/runner/work/framefold/framefold/FrameFold/Assets.xcassets (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    /Applications/Xcode_26.5.app/Contents/Developer/usr/bin/actool /Users/runner/work/framefold/framefold/FrameFold/Assets.xcassets --compile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_generated_info.plist_thinned --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --development-region de --target-device iphone --minimum-deployment-target 17.0 --platform iphoneos
+/* com.apple.actool.compilation-results */
+/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_generated_info.plist_thinned
+/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_output/thinned/AppIcon60x60@2x.png
+/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_output/thinned/AppIcon76x76@2x~ipad.png
+/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_output/thinned/Assets.car
+
+
+SwiftDriver FrameFold normal arm64 com.apple.xcode.tools.swift.compiler (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    builtin-SwiftDriver -- /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name FrameFold -Onone @/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_26.5.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -target arm64-apple-ios17.0 -g -module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos -F /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos -emit-localized-strings -emit-localized-strings-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64 -c -j3 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.5-23F73-688ef53f1462e2c8f657fdc38a81448f67b36cc14858027d908dabaffc6b2e8d.sdkstatcache -output-file-map /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold_const_extract_protocols.json -Xcc -iquote -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-generated-files.hmap -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-own-target-headers.hmap -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-all-target-headers.hmap -Xcc -iquote -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-project-headers.hmap -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/include -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources-normal/arm64 -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources/arm64 -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold-Swift.h -working-directory /Users/runner/work/framefold/framefold -experimental-emit-module-separately -disable-cmo
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/SwiftShims-60UF3JF876HJ2OLLI5I6YIZFI.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_stdbool-BPT75SLBYKNXNU5MDMDFYXGXT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_stdarg-ENNZCKMODMYYX6Q9EHH7GFYZ6.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/DeveloperToolsSupport-DRF0XOSCJHK9KKFVAS8ZTB5DF.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_AvailabilityInternal-3SAISLKXMP1EMS7N5NLORAVCT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/ptrauth-3SL6YXT8DUR2GGUEOX8RQEJ6W.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_stddef-DR4EXX4CK1SUU4S65ZH43EPV9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_float-109XU4EL04M184PPEUH24VNYZ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/ptrcheck-7EKHMMGBDG7S14Q0WYITTI455.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_SwiftConcurrencyShims-A1MYTSTVU6MFF2GSI5T7K08H7.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_DarwinFoundation1-9X8OE21X97HCYN5ZIW2WU6MAL.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_DarwinFoundation2-3DNIEHLNR77WN5E8U1XARQCCZ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/ExtensionFoundation-CQNL1WFSPPDUU9ZDWPW438MKV.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_limits-2SCXPUS9IVCM7HY80UO6A2SEN.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_stdint-5BX3S2IS4L827BAELHPDLIQSZ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/sys_types-2VW57OFDIZ5JLEAVGSC52NE3E.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_tgmath-7FMCKXOH9Z8AHXVMKXNOR8OLO.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_DarwinFoundation3-76OAIUWNUXJRT578BOA8EOMFH.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_stdatomic-5FXN87I6NO1F8DSDZYUAZI8OA.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_intrinsics-BCOHIONARAIZ9XU4P4NRD2QX4.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_inttypes-1ZPYEFDAYJYYILMAVSOAT2JHK.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Darwin-BD7BPYGIPH3ICBOKIPB8M2NPK.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/simd-9DLD7JAHYB1YFA1QTB9MKDPC1.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/MachO-7J13HY4XQ11J5IK5YALK395GM.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/ObjectiveC-E5KSGBQTQ8PFTH7BXTS0ORZL3.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/os_object-E4WPH2KB2VS8QPK64CFW76Q9X.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Spatial-7TR5W5LX3IRUJAW2P014KGF6C.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/os_workgroup-2OZLW1LYJQXKNPNHHRJ8EUPB7.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Dispatch-6A53BDUOJ3QC4YF3TK1PASXEA.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/dnssd-3CSM8AXR53WH93ZD0EA0JSOFT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/XPC-1X7SZUDDKRNU7SJMQ2CJHZ5N.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreFoundation-63JCNY25O4C9XRXKEJKEGW9ZQ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/os-5X5UUC4FUBJ1VX7WXOMD5JLVE.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Security-3XXQVHDSHSQD4VUMSMM4FYUCP.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreGraphics-4360XOEWWI7BMBI5UNDTYVZKK.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreAudioTypes-RYSOGTEZL5OH2E41LX9P6AJ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CFNetwork-AECZEBZSM53QBNSGIA3N0SQOJ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/ImageIO-2UEVLCZXDC6I0X9MOI5IBE3SW.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreText-CYEOEYZS2C1G5WVP1MOZF7TOP.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Foundation-39RGJNTA9PQSIP0PX9NQEWPRJ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreAudio-CI2ZUC63PTY6DYE4VBJ3W72W.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreData-DA70H6VFAVRBOZTVBLNLXNGAF.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/FileProvider-880FIQE81WPAZ28LHT1YUAO7A.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Accessibility-F4C0TUF0F7FWV766IMUQ1J2PU.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/DataDetection-EKEHNC97CYO53PTCCENPFMKZ1.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/UniformTypeIdentifiers-DJJBM3SDI1KS1EGYQ19X2XR7D.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/OSLog-1VY69NQU6HP2GUALO8T06T5FN.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreMIDI-DCXCFEGKAIEMWR30SV88G913Q.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_LocationEssentials-332ETYXJ5LT14YEV3TAXZO8M6.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Symbols-A47Y7DO3CWOEF68YTVGH5JKTK.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreLocation-MYXYQ5NKLGJ5CH91WK67MB7H.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/AudioToolbox-6FSCHVCTKBSNO3057DPCNCTXZ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/IOSurface-BZWLUCWNFGQPFO9OOX5R27067.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreMotion-H48QA4LE265TP0IVK49WBXQ0.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/UserNotifications-8OKKT0VVD1ZARK3H7FDVR2I0L.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/OpenGLES-DE368T02OY49BCR81VMS8PPIB.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/MediaAccessibility-D1VNTEOH5EOEIGX21WDSLRWX0.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Metal-D8M1FSFYBC2M6Z8KD2F0YQIPD.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreTransferable-16PAXYG9X632XYP3AEXD6MCJ3.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Network-CC0KE2TTJBE9R53QWKVPJNIVA.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/UIUtilities-54OQN6IFHCATYOG8Q43VO0O0U.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/AVRouting-3X98L3T9SAFU9WRNJGBKZ42CF.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreVideo-2FLSZURGIHXM9YVOYU5W3CCOU.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/QuartzCore-VP1CR4PKBLQGTCZFUBDPSBY5.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreML-9X2QSML9TP8SPOCU5RN9V4TAT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreMedia-3I5EHVMYW5LPK4KQHFUSZBFF.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Accelerate-1IIN5O9EG76R6Y1CW5Y5P4CF1.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/SwiftUICore-8X04ESRB8DJC7ANGO4RGDW2VX.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Vision-39P4LZEEJXZW65O5WES309BOC.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreImage-9XGMNAUIV07OGN4FYZ75L2KWC.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/MediaToolbox-5P5M916Y4R9KTKZJVDDHYIVDK.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/UIKit-2XR01YB3ZKB7U7SH3LKI0LKN4.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/AVFAudio-5BDQ85V038FFAQ7V3LG3N5CVB.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/AVFoundation-E7U0MRRT4F18O2FH0MJUFDT5E.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Photos-20SAEBF6FUNZX34GXHRQBGT1E.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/SwiftUI-1KBA6QACVDTE8NV6X7PINWTH7.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/PhotosUI-7BT2ESQRKQDX16OQS9K6N3L6O.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/AVKit-4IKVN5420TTT3XMQMNQI1IJLC.pcm
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ FrameFold (in target 'FrameFold' from project 'FrameFold')
+
+EmitSwiftModule normal arm64 (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 Compiling\ FrameAnalyzer.swift,\ FrameFoldApp.swift,\ HandDetector.swift,\ KeyframeSelector.swift,\ LiveCaptureController.swift,\ LiveCaptureView.swift,\ Models.swift /Users/runner/work/framefold/framefold/FrameFold/FrameAnalyzer.swift /Users/runner/work/framefold/framefold/FrameFold/FrameFoldApp.swift /Users/runner/work/framefold/framefold/FrameFold/HandDetector.swift /Users/runner/work/framefold/framefold/FrameFold/KeyframeSelector.swift /Users/runner/work/framefold/framefold/FrameFold/LiveCaptureController.swift /Users/runner/work/framefold/framefold/FrameFold/LiveCaptureView.swift /Users/runner/work/framefold/framefold/FrameFold/Models.swift (in target 'FrameFold' from project 'FrameFold')
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/FrameAnalyzer.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/FrameFoldApp.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/HandDetector.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/KeyframeSelector.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/LiveCaptureController.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/LiveCaptureView.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/Models.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 Compiling\ Algorithms.swift,\ ContactSheetRenderer.swift,\ ContentView.swift,\ CoreMLHandDetector.swift,\ ExhibitionBuilder.swift,\ FoldTemplateRenderer.swift,\ FrameAligner.swift /Users/runner/work/framefold/framefold/FrameFold/Algorithms.swift /Users/runner/work/framefold/framefold/FrameFold/ContactSheetRenderer.swift /Users/runner/work/framefold/framefold/FrameFold/ContentView.swift /Users/runner/work/framefold/framefold/FrameFold/CoreMLHandDetector.swift /Users/runner/work/framefold/framefold/FrameFold/ExhibitionBuilder.swift /Users/runner/work/framefold/framefold/FrameFold/FoldTemplateRenderer.swift /Users/runner/work/framefold/framefold/FrameFold/FrameAligner.swift (in target 'FrameFold' from project 'FrameFold')
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/Algorithms.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/ContactSheetRenderer.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/ContentView.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/CoreMLHandDetector.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/ExhibitionBuilder.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/FoldTemplateRenderer.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/FrameAligner.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for FrameFold (in target 'FrameFold' from project 'FrameFold')
+
+SwiftDriver\ Compilation\ Requirements FrameFold normal arm64 com.apple.xcode.tools.swift.compiler (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name FrameFold -Onone @/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_26.5.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -target arm64-apple-ios17.0 -g -module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos -F /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos -emit-localized-strings -emit-localized-strings-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64 -c -j3 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.5-23F73-688ef53f1462e2c8f657fdc38a81448f67b36cc14858027d908dabaffc6b2e8d.sdkstatcache -output-file-map /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold_const_extract_protocols.json -Xcc -iquote -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-generated-files.hmap -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-own-target-headers.hmap -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-all-target-headers.hmap -Xcc -iquote -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-project-headers.hmap -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/include -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources-normal/arm64 -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources/arm64 -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold-Swift.h -working-directory /Users/runner/work/framefold/framefold -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling Algorithms.swift, ContactSheetRenderer.swift, ContentView.swift, CoreMLHandDetector.swift, ExhibitionBuilder.swift, FoldTemplateRenderer.swift, FrameAligner.swift (in target 'FrameFold' from project 'FrameFold')
+
+SwiftCompile normal arm64 Compiling\ MotionLevel.swift,\ ProcessingViewModel.swift,\ ProjectStore.swift,\ ProjectsView.swift,\ StopMotionAssembler.swift,\ Theme.swift,\ GeneratedAssetSymbols.swift /Users/runner/work/framefold/framefold/FrameFold/MotionLevel.swift /Users/runner/work/framefold/framefold/FrameFold/ProcessingViewModel.swift /Users/runner/work/framefold/framefold/FrameFold/ProjectStore.swift /Users/runner/work/framefold/framefold/FrameFold/ProjectsView.swift /Users/runner/work/framefold/framefold/FrameFold/StopMotionAssembler.swift /Users/runner/work/framefold/framefold/FrameFold/Theme.swift /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'FrameFold' from project 'FrameFold')
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/MotionLevel.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/ProcessingViewModel.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/ProjectStore.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/ProjectsView.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/StopMotionAssembler.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/work/framefold/framefold/FrameFold/Theme.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftCompile normal arm64 /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    
+
+SwiftMergeGeneratedHeaders /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources/FrameFold-Swift.h /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold-Swift.h (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    builtin-swiftHeaderTool -arch arm64 /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold-Swift.h -o /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources/FrameFold-Swift.h
+
+SwiftDriverJobDiscovery normal arm64 Compiling FrameAnalyzer.swift, FrameFoldApp.swift, HandDetector.swift, KeyframeSelector.swift, LiveCaptureController.swift, LiveCaptureView.swift, Models.swift (in target 'FrameFold' from project 'FrameFold')
+
+Copy /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.swiftmodule/arm64-apple-ios.swiftmodule /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.swiftmodule (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.swiftmodule /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.swiftmodule/arm64-apple-ios.swiftmodule
+
+Copy /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.swiftmodule/arm64-apple-ios.swiftdoc /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.swiftdoc (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.swiftdoc /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.swiftmodule/arm64-apple-ios.swiftdoc
+
+Copy /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.swiftmodule/arm64-apple-ios.abi.json /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.abi.json (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.abi.json /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.swiftmodule/arm64-apple-ios.abi.json
+
+Copy /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.swiftsourceinfo (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-unsigned-binaries -strip-deterministic -strip-tool /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks -rename /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.swiftsourceinfo /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo
+
+SwiftDriverJobDiscovery normal arm64 Compiling MotionLevel.swift, ProcessingViewModel.swift, ProjectStore.swift, ProjectsView.swift, StopMotionAssembler.swift, Theme.swift, GeneratedAssetSymbols.swift (in target 'FrameFold' from project 'FrameFold')
+
+SwiftDriver\ Compilation FrameFold normal arm64 com.apple.xcode.tools.swift.compiler (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    builtin-Swift-Compilation -- /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name FrameFold -Onone @/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode_26.5.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -target arm64-apple-ios17.0 -g -module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos -F /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos -emit-localized-strings -emit-localized-strings-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64 -c -j3 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.5-23F73-688ef53f1462e2c8f657fdc38a81448f67b36cc14858027d908dabaffc6b2e8d.sdkstatcache -output-file-map /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/runner/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold_const_extract_protocols.json -Xcc -iquote -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-generated-files.hmap -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-own-target-headers.hmap -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-all-target-headers.hmap -Xcc -iquote -Xcc /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-project-headers.hmap -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/include -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources-normal/arm64 -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources/arm64 -Xcc -I/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold-Swift.h -working-directory /Users/runner/work/framefold/framefold -experimental-emit-module-separately -disable-cmo
+
+Ld /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/FrameFold.debug.dylib normal (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios17.0 -dynamiclib -isysroot /Applications/Xcode_26.5.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -O0 -L/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos -L/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos -F/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphoneos -F/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos -filelist /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.LinkFileList -install_name @rpath/FrameFold.debug.dylib -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -dependency_info -Xlinker /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.swiftmodule @/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold-linker-args.resp -Xlinker -alias -Xlinker _main -Xlinker ___debug_main_executable_dylib_entry_point -o /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/FrameFold.debug.dylib
+
+ConstructStubExecutorLinkFileList /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-ExecutorLinkFileList-normal-arm64.txt (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    construct-stub-executor-link-file-list /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/FrameFold.debug.dylib /Applications/Xcode_26.5.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/libPreviewsJITStubExecutor_no_swift_entry_point.a /Applications/Xcode_26.5.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/libPreviewsJITStubExecutor.a --output /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-ExecutorLinkFileList-normal-arm64.txt
+note: Using stub executor library with Swift entry point. (in target 'FrameFold' from project 'FrameFold')
+
+Ld /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/FrameFold normal (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios17.0 -isysroot /Applications/Xcode_26.5.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -O0 -L/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos -F/Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos -Xlinker -rpath -Xlinker @executable_path -Xlinker -rpath -Xlinker @executable_path/Frameworks -rdynamic -Xlinker -no_deduplicate -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-DebugDylibPath-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-DebugDylibInstallName-normal-arm64.txt -Xlinker -filelist -Xlinker /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold-ExecutorLinkFileList-normal-arm64.txt /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/FrameFold.debug.dylib -o /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/FrameFold
+
+LinkAssetCatalog /Users/runner/work/framefold/framefold/FrameFold/Assets.xcassets (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    builtin-linkAssetCatalog --thinned /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_output/thinned --thinned-dependencies /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_generated_info.plist_unthinned --output /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app --plist-output /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_generated_info.plist
+note: Emplaced /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/Assets.car (in target 'FrameFold' from project 'FrameFold')
+note: Emplaced /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/AppIcon60x60@2x.png (in target 'FrameFold' from project 'FrameFold')
+note: Emplaced /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/AppIcon76x76@2x~ipad.png (in target 'FrameFold' from project 'FrameFold')
+
+ProcessInfoPlistFile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/Info.plist /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/empty-FrameFold.plist (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    builtin-infoPlistUtility /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/empty-FrameFold.plist -producttype com.apple.product-type.application -genpkginfo /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/PkgInfo -expandbuildsettings -format binary -platform iphoneos -additionalcontentfile /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/assetcatalog_generated_info.plist -requiredArchitecture arm64 -o /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/Info.plist
+
+CopySwiftLibs /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    builtin-swiftStdLibTool --copy --verbose --scan-executable /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/FrameFold.debug.dylib --scan-folder /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/Frameworks --scan-folder /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/PlugIns --scan-folder /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/SystemExtensions --scan-folder /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/Extensions --platform iphoneos --toolchain /var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.6.42.0.jIzUGe/Metal.xctoolchain --toolchain /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os --back-deploy-swift-span
+Ignoring --strip-bitcode because --sign was not passed
+
+ExtractAppIntentsMetadata (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.6.42.0.jIzUGe/Metal.xctoolchain --module-name FrameFold --sdk-root /Applications/Xcode_26.5.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk --xcode-version 17F42 --platform-family iOS --deployment-target 17.0 --bundle-identifier com.rainer.framefold --output /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app --target-triple arm64-apple-ios17.0 --binary-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/FrameFold --dependency-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold_dependency_info.dat --stringsdata-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.SwiftFileList --metadata-file-list /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold.DependencyMetadataFileList --static-metadata-file-list /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold.DependencyStaticMetadataFileList --swift-const-vals-list /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/Objects-normal/arm64/FrameFold.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-07-22 06:33:14.708 appintentsmetadataprocessor[7149:26112] Starting appintentsmetadataprocessor export
+2026-07-22 06:33:14.721 appintentsmetadataprocessor[7149:26112] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+AppIntentsSSUTraining (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    /Applications/Xcode_26.5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsnltrainingprocessor --infoplist-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/Info.plist --temp-dir-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/ssu --bundle-id com.rainer.framefold --product-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app --extracted-metadata-path /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/Metadata.appintents --metadata-file-list /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Intermediates.noindex/FrameFold.build/Debug-iphoneos/FrameFold.build/FrameFold.DependencyMetadataFileList --source-file /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app/Info.plist --archive-ssu-assets
+2026-07-22 06:33:14.758 appintentsnltrainingprocessor[7151:26134] Parsing options for appintentsnltrainingprocessor
+2026-07-22 06:33:14.759 appintentsnltrainingprocessor[7151:26134] Starting AppIntents SSU YAML Generation
+2026-07-22 06:33:14.762 appintentsnltrainingprocessor[7151:26134] No AppShortcuts found - Skipping.
+
+RegisterExecutionPolicyException /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    builtin-RegisterExecutionPolicyException /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app
+
+Validate /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    builtin-validationUtility /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app -shallow-bundle -infoplist-subpath Info.plist
+
+Touch /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app (in target 'FrameFold' from project 'FrameFold')
+    cd /Users/runner/work/framefold/framefold
+    /usr/bin/touch -c /Users/runner/Library/Developer/Xcode/DerivedData/FrameFold-gividtizfydgwdbjobljhlqeyqnv/Build/Products/Debug-iphoneos/FrameFold.app
+
+** BUILD SUCCEEDED **
+

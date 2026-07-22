@@ -1,0 +1,125 @@
+motionScore:
+  ✓ identische Bilder → 0
+  ✓ mittlere Differenz korrekt
+  ✓ leer → 0
+  ✓ ungleiche Größe → 0
+otsuThreshold / motionThreshold:
+  ✓ Schwelle trennt die Cluster (8.19)
+  ✓ leer → 0
+  ✓ ein Wert → dieser Wert
+  ✓ konstant → dieser Wert
+stillWindowRanges:
+  ✓ 8 Ruhefenster erkannt (8)
+  ✓ alle Fenster 6 Frames lang
+  ✓ zu kurze Fenster werden verworfen
+  ✓ durchgehend ruhig → ein Fenster bis zum Ende
+laplacianVariance:
+  ✓ homogenes Bild → Schärfe 0
+  ✓ Kanten → höhere Schärfe
+  ✓ zu klein → 0
+dHash / hammingDistance:
+  ✓ gleiches Bild → gleicher Hash
+  ✓ Distanz zu sich selbst 0
+  ✓ gegenläufige Gradienten → große Distanz
+  ✓ leer → 0
+cropRect:
+  ✓ 3840x2160 → 9:16 zentriert & maßhaltig
+  ✓ 3840x2160 → 1:1 zentriert & maßhaltig
+  ✓ 3840x2160 → 16:9 zentriert & maßhaltig
+  ✓ 2160x3840 → 9:16 zentriert & maßhaltig
+  ✓ 2160x3840 → 1:1 zentriert & maßhaltig
+  ✓ 2160x3840 → 16:9 zentriert & maßhaltig
+  ✓ 1920x1080 → 9:16 zentriert & maßhaltig
+  ✓ 1920x1080 → 1:1 zentriert & maßhaltig
+  ✓ 1920x1080 → 16:9 zentriert & maßhaltig
+  ✓ 1080x1920 → 9:16 zentriert & maßhaltig
+  ✓ 1080x1920 → 1:1 zentriert & maßhaltig
+  ✓ 1080x1920 → 16:9 zentriert & maßhaltig
+  ✓ nil-Ratio → Original
+LoopMode.frameOrder:
+  ✓ Normal
+  ✓ Rückwärts
+  ✓ Boomerang ohne Doppel-Endpunkte
+  ✓ Boomerang bei 2 Frames
+  ✓ Boomerang bei 1 Frame
+renderPlan:
+  ✓ ohne Blende: 1 Schritt pro Frame
+  ✓ ohne Blende: keine Overlays
+  ✓ 2 Blendenframes pro Übergang (7)
+  ✓ Start = purer Frame
+  ✓ 1. Blende: Overlay 1, t=1/3
+  ✓ 2. Blende: t=2/3
+  ✓ Ende = purer letzter Frame
+  ✓ alle Keyframes erhalten
+  ✓ Boomerang(4) + Blende(1): 11 Schritte (11)
+  ✓ leer → leer
+  ✓ 1 Frame → keine Blende
+foldRevealLegs:
+  ✓ t=0 → nichts aufgedeckt
+  ✓ t=1 → Dreieck deckt Rechteck (Ecke (w,h) liegt auf Hypotenuse)
+  ✓ t=0.5 → Diagonale erreicht
+  ✓ progress wird auf 1 begrenzt
+  ✓ progress wird auf 0 begrenzt
+contactSheetLayout:
+  ✓ alle 23 Zellen platziert (23)
+  ✓ mindestens eine Seite
+  ✓ alle Zellen innerhalb Satzspiegel + Kopfzeile
+  ✓ Zellen quadratisch
+  ✓ keine Überlappungen
+  ✓ 0 Frames → leer
+  ✓ 100 Frames vollständig auf 5 Seiten
+estimateTranslation:
+  ✓ Verschiebung (0,0) korrekt erkannt → (0,0)
+  ✓ Verschiebung (3,0) korrekt erkannt → (3,0)
+  ✓ Verschiebung (0,2) korrekt erkannt → (0,2)
+  ✓ Verschiebung (4,3) korrekt erkannt → (4,3)
+  ✓ Verschiebung (-3,2) korrekt erkannt → (-3,2)
+  ✓ Verschiebung (-5,-4) korrekt erkannt → (-5,-4)
+  ✓ Verschiebung (6,-2) korrekt erkannt → (6,-2)
+  ✓ identisch → (0,0)
+  ✓ leer → (0,0)
+facetPlan / facetAlpha:
+  ✓ 6×6 Zellen → 72 Facetten (72)
+  ✓ alle Phasen in [0,1]
+  ✓ erste Facette (oben links) Phase 0
+  ✓ letzte Facette (unten rechts) Phase 1
+  ✓ Fortschritt vor Phase → 0
+  ✓ genau an der Phase → 0
+  ✓ weit danach → 1 (geklammert)
+  ✓ weiche Kante linear
+  ✓ 0-Breite → leer
+foldTemplateLines:
+  ✓ 4 Schnittkanten (Rahmen)
+  ✓ innere Falzlinien vorhanden
+  ✓ alle Linien innerhalb des Bildrahmens
+  ✓ Linienzahl stimmt (31)
+reelFrameCount:
+  ✓ Frames + Titelkarten je Werk
+  ✓ keine Werke → 0
+  ✓ ohne Titelkarte → nur Frames
+weavePlan/weaveReveal:
+  ✓ 9 Streifen
+  ✓ Streifen decken die volle Breite
+  ✓ abwechselnd von oben/unten
+  ✓ Phasen in [0,1)
+  ✓ Phasen gestaffelt
+  ✓ Breite 0 → leer
+  ✓ Start → 0
+  ✓ Ende → 1 (jede Phase)
+  ✓ Phase 0 → linear
+  ✓ monoton steigend
+facetShade:
+  ✓ Stärke 0 → 0
+  ✓ immer innerhalb ±Stärke
+  ✓ deterministisch (reproduzierbare Exporte)
+  ✓ streut über die Facetten
+exportSize:
+  ✓ 4K-9:16-Crop → exakt 1080×1920
+  ✓ 4K-16:9 → 1920×1080
+  ✓ ohne Limit → gerade gerundete Originalgröße
+  ✓ kleine Quelle wird nicht hochskaliert
+  ✓ leerer Crop → (0,0)
+Ende-zu-Ende (synthetische Sequenz):
+  ✓ Otsu + Fensterung findet 8/8 Szenen (8)
+
+ALLE TESTS BESTANDEN ✓
