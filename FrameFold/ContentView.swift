@@ -35,7 +35,7 @@ struct ContentView: View {
             .paperStage()
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    WorkTitle("FrameFold", size: 17)
+                    LogoLockup()
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { showSettings = true } label: {

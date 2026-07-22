@@ -125,6 +125,45 @@ struct FoldMark: View {
     }
 }
 
+/// Das FrameFold-Logo als Kachel (wie das App-Icon): schwarze Fläche,
+/// weißes Serif-F, Spektral-Falz über die linke obere Ecke – Rand zu Rand.
+struct LogoTile: View {
+    var size: CGFloat = 28
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: size * 0.22, style: .continuous)
+                .fill(Theme.ink)
+            Text("F")
+                .font(Theme.serif(size * 0.58, .medium))
+                .foregroundStyle(Theme.paper)
+                .offset(x: size * 0.02, y: size * 0.03)
+            Path { p in
+                p.move(to: CGPoint(x: size * 0.5, y: 0))
+                p.addLine(to: CGPoint(x: 0, y: size * 0.5))
+            }
+            .stroke(Theme.crease, lineWidth: max(1.5, size * 0.055))
+        }
+        .frame(width: size, height: size)
+        .clipShape(RoundedRectangle(cornerRadius: size * 0.22, style: .continuous))
+    }
+}
+
+/// Logo-Lockup für Titelleisten: Kachel + Wortmarke in Serif.
+struct LogoLockup: View {
+    var tileSize: CGFloat = 26
+    var textSize: CGFloat = 16
+
+    var body: some View {
+        HStack(spacing: 9) {
+            LogoTile(size: tileSize)
+            Text("FrameFold")
+                .font(Theme.serif(textSize, .regular))
+                .foregroundStyle(Theme.ink)
+        }
+    }
+}
+
 // MARK: Bausteine
 
 /// Gesperrte Mono-Versalien-Zeile, z. B. "23 BLÄTTER · 2026".

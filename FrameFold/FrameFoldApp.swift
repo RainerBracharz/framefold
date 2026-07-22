@@ -26,13 +26,13 @@ struct FrameFoldApp: App {
         WindowGroup {
             TabView(selection: $selectedTab) {
                 ContentView(selectedTab: $selectedTab)
-                    .tabItem { Label("Video", systemImage: "triangle") }
+                    .tabItem { Label("Video", systemImage: "film") }
                     .tag(0)
                 LiveCaptureView()
-                    .tabItem { Label("Kamera", systemImage: "circle.lefthalf.filled") }
+                    .tabItem { Label("Kamera", systemImage: "camera") }
                     .tag(1)
                 ProjectsView()
-                    .tabItem { Label("Projekte", systemImage: "square.grid.2x2") }
+                    .tabItem { Label("Projekte", systemImage: "folder") }
                     .tag(2)
             }
             .environmentObject(projectStore)
