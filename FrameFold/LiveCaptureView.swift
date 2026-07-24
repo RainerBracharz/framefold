@@ -1,5 +1,7 @@
 import SwiftUI
 import AVFoundation
+import PhotosUI
+import UIKit
 
 /// Live-Aufnahme als „Dunkelkammer": schwarze Bühne, Papierton-Typografie.
 /// Kamerabild, Onion-Skin des letzten Frames, Auto-Shutter-Status.
@@ -16,6 +18,10 @@ struct LiveCaptureView: View {
     @AppStorage("liveShowGrid") private var showGrid = true
     @AppStorage("liveShowLevel") private var showLevel = true
     @AppStorage("didSeeCameraTip") private var didSeeCameraTip = false
+    @AppStorage("liveOnionOpacity") private var onionOpacity: Double = 0.35
+    @AppStorage("liveOnionFirst") private var onionFirst: Bool = false
+    @State private var referenceImage: UIImage?
+    @State private var refPickerItem: PhotosPickerItem?
 
     var body: some View {
         NavigationStack {
@@ -175,13 +181,26 @@ struct LiveCaptureView: View {
     private func captureView(project: Project) -> some View {
         VStack(spacing: 0) {
             ZStack {
-                CameraPreview(session: controller.session)
+                CameraPreview(session: controller.session) { devicePoint in
+                    controller.focus(atDevicePoint: devicePoint)
+                }
 
-                if onionSkin, let last = controller.lastCapturedImage {
-                    Image(uiImage: last)
+                // Zwiebelhaut: letzter oder – für den Drift-Check – erster Frame
+                if onionSkin,
+                   let ghost = onionFirst ? controller.firstCapturedImage : controller.lastCapturedImage {
+                    Image(uiImage: ghost)
                         .resizable()
                         .scaledToFill()
-                        .opacity(0.35)
+                        .opacity(onionOpacity)
+                        .allowsHitTesting(false)
+                }
+
+                // Optionales Referenzbild als Ghost (Serien/Nachstellen)
+                if let referenceImage {
+                    Image(uiImage: referenceImage)
+                        .resizable()
+                        .scaledToFill()
+                        .opacity(onionOpacity * 0.9)
                         .allowsHitTesting(false)
                 }
 
@@ -203,6 +222,23 @@ struct LiveCaptureView: View {
                 }
             }
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
+            .overlay(alignment: .topLeading) {
+                VStack(spacing: 8) {
+                    // Kamera neu fixieren (nach Licht-/Aufbau-Änderung)
+                    sucherButton("camera.metering.center.weighted") {
+                        controller.refixCamera()
+                    }
+                    // Referenzbild als Ghost ein-/ausblenden
+                    if referenceImage == nil {
+                        PhotosPicker(selection: $refPickerItem, matching: .images) {
+                            sucherIcon("photo")
+                        }
+                    } else {
+                        sucherButton("photo.fill") { referenceImage = nil }
+                    }
+                }
+                .padding(12)
+            }
             .padding(.horizontal, 16)
             .padding(.top, 16)
 
@@ -239,7 +275,7 @@ struct LiveCaptureView: View {
             HStack(spacing: 14) {
                 VStack(alignment: .leading, spacing: 3) {
                     WorkTitle(project.name, size: 16, color: Theme.paperOnDark)
-                    CatalogLabel("\(currentCount) Bilder", color: Theme.paperOnDark.opacity(0.6))
+                    CatalogLabel(lengthHint, color: Theme.paperOnDark.opacity(0.6))
                 }
                 Spacer()
                 Button {
@@ -285,6 +321,7 @@ struct LiveCaptureView: View {
             .padding(.bottom, 16)
         }
         .onAppear {
+            UIApplication.shared.isIdleTimerDisabled = true // Bildschirm wach halten
             recentThumbs = []
             level.start()
             controller.start { jpegData in
@@ -298,8 +335,19 @@ struct LiveCaptureView: View {
             }
         }
         .onDisappear {
+            UIApplication.shared.isIdleTimerDisabled = false
             controller.stop()
             level.stop()
+        }
+        .onChange(of: refPickerItem) { _, item in
+            guard let item else { return }
+            Task {
+                if let data = try? await item.loadTransferable(type: Data.self),
+                   let img = UIImage(data: data) {
+                    referenceImage = img
+                }
+                refPickerItem = nil
+            }
         }
     }
 
@@ -315,6 +363,25 @@ struct LiveCaptureView: View {
     private var currentCount: Int {
         guard let project = targetProject else { return 0 }
         return store.projects.first(where: { $0.id == project.id })?.frameCount ?? 0
+    }
+
+    /// „48 Bilder · ~4,8 s bei 10 fps" – gibt ein Gefühl für die Werk-Länge.
+    private var lengthHint: String {
+        let secs = Double(currentCount) / 10.0
+        return String(format: "%d Bilder · ~%.1f s bei 10 fps", currentCount, secs)
+    }
+
+    private func sucherIcon(_ name: String) -> some View {
+        Image(systemName: name)
+            .font(.system(size: 15))
+            .foregroundStyle(Theme.paperOnDark)
+            .frame(width: 38, height: 38)
+            .background(Theme.darkroom.opacity(0.6))
+            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+    }
+
+    private func sucherButton(_ name: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) { sucherIcon(name) }
     }
 
     private var statusBadge: some View {
@@ -431,6 +498,8 @@ struct LiveSettingsView: View {
     @Binding var showGrid: Bool
     @Binding var showLevel: Bool
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("liveOnionOpacity") private var onionOpacity: Double = 0.35
+    @AppStorage("liveOnionFirst") private var onionFirst: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -466,6 +535,47 @@ struct LiveSettingsView: View {
                         .font(Theme.body)
                 } header: {
                     CatalogLabel("Auto-Shutter")
+                }
+                .listRowBackground(Theme.paperShade.opacity(0.5))
+
+                Section {
+                    Picker("Auslöser", selection: $controller.captureMode) {
+                        ForEach(LiveCaptureController.CaptureMode.allCases) { Text($0.label).tag($0) }
+                    }
+                    if controller.captureMode == .interval {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Intervall: \(controller.intervalSeconds, specifier: "%.0f") s")
+                                .font(Theme.body)
+                            Slider(value: $controller.intervalSeconds, in: 1...30, step: 1)
+                            Text("Im Intervall-Modus löst FrameFold in festem Takt aus – unabhängig von Bewegung.")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Theme.graphite)
+                        }
+                    }
+                    Picker("Netzfrequenz", selection: $controller.mainsHz) {
+                        Text("50 Hz (EU)").tag(50)
+                        Text("60 Hz (US)").tag(60)
+                    }
+                    Toggle("Auslöse-Ton", isOn: $controller.playShutterSound)
+                        .font(Theme.body)
+                } header: {
+                    CatalogLabel("Auslöser & Belichtung")
+                }
+                .listRowBackground(Theme.paperShade.opacity(0.5))
+
+                Section {
+                    Toggle("Gegen ersten Frame (Drift)", isOn: $onionFirst)
+                        .font(Theme.body)
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Deckkraft: \(Int(onionOpacity * 100)) %")
+                            .font(Theme.body)
+                        Slider(value: $onionOpacity, in: 0.1...0.8, step: 0.05)
+                        Text("Zeigt ersten oder letzten Frame als Überblendung – zum Ausrichten und um Drift zu erkennen.")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Theme.graphite)
+                    }
+                } header: {
+                    CatalogLabel("Zwiebelhaut")
                 }
                 .listRowBackground(Theme.paperShade.opacity(0.5))
 
@@ -508,18 +618,41 @@ struct LiveSettingsView: View {
     }
 }
 
-/// UIKit-Brücke für die Kamera-Vorschau.
+/// UIKit-Brücke für die Kamera-Vorschau. Tippen setzt Fokus-/Belichtungspunkt.
 struct CameraPreview: UIViewRepresentable {
     let session: AVCaptureSession
+    var onFocusTap: ((CGPoint) -> Void)? = nil
 
     func makeUIView(context: Context) -> PreviewView {
         let view = PreviewView()
         view.videoPreviewLayer.session = session
         view.videoPreviewLayer.videoGravity = .resizeAspectFill
+        let tap = UITapGestureRecognizer(
+            target: context.coordinator,
+            action: #selector(Coordinator.handleTap(_:)))
+        view.addGestureRecognizer(tap)
+        context.coordinator.view = view
         return view
     }
 
-    func updateUIView(_ uiView: PreviewView, context: Context) { }
+    func updateUIView(_ uiView: PreviewView, context: Context) {
+        context.coordinator.onFocusTap = onFocusTap
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator(onFocusTap: onFocusTap) }
+
+    final class Coordinator: NSObject {
+        var onFocusTap: ((CGPoint) -> Void)?
+        weak var view: PreviewView?
+        init(onFocusTap: ((CGPoint) -> Void)?) { self.onFocusTap = onFocusTap }
+
+        @objc func handleTap(_ gesture: UITapGestureRecognizer) {
+            guard let view else { return }
+            let point = gesture.location(in: view)
+            let devicePoint = view.videoPreviewLayer.captureDevicePointConverted(fromLayerPoint: point)
+            onFocusTap?(devicePoint)
+        }
+    }
 
     final class PreviewView: UIView {
         override static var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
