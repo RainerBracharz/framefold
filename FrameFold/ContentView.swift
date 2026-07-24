@@ -465,10 +465,18 @@ struct ResultView: View {
     @EnvironmentObject var store: ProjectStore
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     private var mode: AppMode { AppMode.current(modeRaw) }
-    @State private var player: AVPlayer?
+    @State private var player: AVQueuePlayer?
+    @State private var looper: AVPlayerLooper?
     @State private var showSaveToProject = false
     @State private var saveProjectName = ""
-    @State private var savedToProject = false
+    @State private var savedProjectID: UUID?
+
+    /// Als „gesichert" gilt nur, solange das Zielprojekt noch existiert –
+    /// so verschwindet der Haken, wenn das Projekt gelöscht wurde.
+    private var savedToProject: Bool {
+        guard let id = savedProjectID else { return false }
+        return store.projects.contains { $0.id == id }
+    }
 
     var body: some View {
         VStack(spacing: 18) {
@@ -476,10 +484,16 @@ struct ResultView: View {
                 .aspectRatio(9/16, contentMode: .fit)
                 .passepartout()
                 .onAppear {
-                    let p = AVPlayer(url: result.outputURL)
-                    p.play()
-                    player = p
+                    // Endlos-Loop, damit sich die Animation – und besonders die
+                    // Übergänge (Verwebung/Falz/Facetten) – in Ruhe ansehen lassen.
+                    let queue = AVQueuePlayer()
+                    looper = AVPlayerLooper(
+                        player: queue,
+                        templateItem: AVPlayerItem(url: result.outputURL))
+                    queue.play()
+                    player = queue
                 }
+                .onDisappear { player?.pause() }
 
             VStack(spacing: 6) {
                 CatalogLabel("\(result.keyframeTimes.count) Bilder · aus \(Int(result.sourceDuration)) s Video",
@@ -537,11 +551,11 @@ struct ResultView: View {
             Button("Sichern") {
                 guard let url = sourceVideoURL, !saveProjectName.isEmpty else { return }
                 let project = store.createProject(name: saveProjectName)
+                savedProjectID = project.id
                 saveProjectName = ""
                 Task {
                     await store.importKeyframes(
                         from: url, times: result.keyframeTimes, into: project)
-                    savedToProject = true
                 }
             }
             Button("Abbrechen", role: .cancel) { saveProjectName = "" }
