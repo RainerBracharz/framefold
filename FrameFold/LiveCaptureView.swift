@@ -468,6 +468,16 @@ struct LiveSettingsView: View {
                     CatalogLabel("Auto-Shutter")
                 }
                 .listRowBackground(Theme.paperShade.opacity(0.5))
+
+                Section {
+                    tipRow("lightbulb", "Licht konstant halten: Kunstlicht nutzen, Fenster abdunkeln. Billige LED-/Leuchtstofflampen flackern im Netztakt und streifen einzelne Frames.")
+                    tipRow("hand.raised", "iPhone nicht berühren: aufs Stativ stellen und den Auto-Shutter arbeiten lassen (oder den runden Knopf).")
+                    tipRow("lock", "Kamera bleibt fixiert: FrameFold sperrt Belichtung, Fokus und Weißabgleich nach der kurzen Kalibrierung – so driftet zwischen den Bildern nichts.")
+                    tipRow("square.2.layers.3d", "Drift früh erkennen: Onion-Skin anlassen und die Aufnahme ab und zu mit dem ersten Frame vergleichen.")
+                } header: {
+                    CatalogLabel("Aufnahme-Tipps")
+                }
+                .listRowBackground(Theme.paperShade.opacity(0.5))
             }
             .scrollContentBackground(.hidden)
             .background(Theme.paper)
@@ -481,6 +491,19 @@ struct LiveSettingsView: View {
                         .foregroundStyle(Theme.ink)
                 }
             }
+        }
+    }
+
+    private func tipRow(_ icon: String, _ text: String) -> some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: icon)
+                .font(.system(size: 13))
+                .foregroundStyle(Theme.ink)
+                .frame(width: 18)
+            Text(text)
+                .font(.system(size: 12.5))
+                .foregroundStyle(Theme.graphite)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }
