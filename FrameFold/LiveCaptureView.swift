@@ -30,6 +30,8 @@ struct LiveCaptureView: View {
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 40)
                     }
+                } else if controller.cameraUnavailable {
+                    cameraUnavailableView
                 } else if let project = targetProject {
                     captureView(project: project)
                 } else {
@@ -57,7 +59,7 @@ struct LiveCaptureView: View {
             }
             .overlay {
                 // Einmaliger, überspringbarer Tipp beim ersten Öffnen
-                if !didSeeCameraTip && !controller.permissionDenied {
+                if !didSeeCameraTip && !controller.permissionDenied && !controller.cameraUnavailable {
                     cameraTip
                 }
             }
@@ -91,6 +93,19 @@ struct LiveCaptureView: View {
                 }
                 .padding(.top, 6)
             }
+        }
+    }
+
+    private var cameraUnavailableView: some View {
+        VStack(spacing: 16) {
+            FoldMark(size: 40, color: Theme.paperOnDark)
+            CatalogLabel("Keine Kamera verfügbar", color: Theme.paperOnDark)
+            Text("Auf diesem Gerät wurde keine Kamera gefunden (z. B. im Simulator). Die Live-Aufnahme braucht ein echtes iPhone. Videos kannst du im Video-Tab trotzdem verarbeiten.")
+                .font(.system(size: 13))
+                .foregroundStyle(Theme.paperOnDark.opacity(0.7))
+                .multilineTextAlignment(.center)
+                .lineSpacing(2)
+                .padding(.horizontal, 40)
         }
     }
 

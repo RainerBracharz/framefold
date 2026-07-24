@@ -58,6 +58,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
     @Published var capturedCount = 0
     @Published var lastCapturedImage: UIImage?   // für Onion-Skin
     @Published var permissionDenied = false
+    /// Kein Aufnahmegerät vorhanden (z. B. iOS-Simulator oder Gerät ohne Kamera).
+    @Published var cameraUnavailable = false
 
     let session = AVCaptureSession()
 
@@ -91,7 +93,12 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 self.permissionDenied = true
                 return
             }
-            self.configureSession()
+            guard self.configureSession() else {
+                // Kein Aufnahmegerät (Simulator/kameraloses Gerät): klar melden,
+                // statt endlos in der Kalibrierung hängenzubleiben.
+                self.cameraUnavailable = true
+                return
+            }
             Task.detached { [session = self.session] in
                 session.startRunning()
             }
@@ -107,7 +114,10 @@ final class LiveCaptureController: NSObject, ObservableObject {
         }
     }
 
-    private func configureSession() {
+    /// Baut die Capture-Session auf. Gibt `false` zurück, wenn kein
+    /// Aufnahmegerät verfügbar ist (Simulator/kameraloses Gerät).
+    @discardableResult
+    private func configureSession() -> Bool {
         session.beginConfiguration()
         session.sessionPreset = .hd1920x1080
 
@@ -115,7 +125,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
               let input = try? AVCaptureDeviceInput(device: device),
               session.canAddInput(input) else {
             session.commitConfiguration()
-            return
+            return false
         }
         session.addInput(input)
 
@@ -125,10 +135,11 @@ final class LiveCaptureController: NSObject, ObservableObject {
         output.setSampleBufferDelegate(self, queue: videoQueue)
         guard session.canAddOutput(output) else {
             session.commitConfiguration()
-            return
+            return false
         }
         session.addOutput(output)
         session.commitConfiguration()
+        return true
     }
 
     // MARK: Frame-Verarbeitung (auf videoQueue, UI-Updates via MainActor)
