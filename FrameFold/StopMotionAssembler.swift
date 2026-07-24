@@ -407,7 +407,9 @@ final class StopMotionAssembler {
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(bufferRect)
             context.setBlendMode(.multiply)
-            context.setFillColor(CGColor(red: 0.965, green: 0.955, blue: 0.93, alpha: 1))
+            // Kräftigerer warmer Papierton (Blau deutlich stärker gedämpft):
+            // der Druck liegt sichtbar auf cremefarbenem Papier statt fast neutralgrau.
+            context.setFillColor(CGColor(red: 0.98, green: 0.94, blue: 0.85, alpha: 1))
             context.fill(bufferRect)
             context.restoreGState()
         }
