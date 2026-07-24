@@ -1,5 +1,6 @@
 import SwiftUI
 import AVKit
+import UIKit
 
 /// Projektliste im Werkverzeichnis-Stil: nummerierte Einträge,
 /// Haarlinien, gesperrte Versalien.
@@ -131,6 +132,7 @@ struct ProjectDetailView: View {
     @State private var isRenderingSheet = false
     @State private var foldTemplateURL: URL?
     @State private var isRenderingTemplate = false
+    @State private var shareItem: ShareItem?
     @State private var isEditingFrames = false
     @State private var showDeleteProject = false
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
@@ -246,6 +248,9 @@ struct ProjectDetailView: View {
                 dismiss()
             }
             Button("Abbrechen", role: .cancel) { }
+        }
+        .sheet(item: $shareItem) { item in
+            ActivityView(items: [item.url])
         }
     }
 
@@ -383,7 +388,11 @@ struct ProjectDetailView: View {
             await MainActor.run {
                 foldTemplateURL = result
                 isRenderingTemplate = false
-                if result == nil { errorMessage = "Faltvorlage konnte nicht erstellt werden." }
+                if let result {
+                    shareItem = ShareItem(url: result)   // Teilen-Sheet direkt öffnen
+                } else {
+                    errorMessage = "Faltvorlage konnte nicht erstellt werden."
+                }
             }
         }
     }
@@ -400,7 +409,9 @@ struct ProjectDetailView: View {
             await MainActor.run {
                 contactSheetURL = url
                 isRenderingSheet = false
-                if url == nil {
+                if let url {
+                    shareItem = ShareItem(url: url)   // Teilen-Sheet direkt öffnen
+                } else {
                     errorMessage = "Kontaktbogen konnte nicht erstellt werden."
                 }
             }
@@ -576,4 +587,19 @@ struct ExhibitionSheet: View {
             }
         }
     }
+}
+
+/// Trägt eine fertige Datei (z. B. PDF) in den System-Teilen-Dialog,
+/// damit er sich direkt nach dem Erzeugen öffnen lässt.
+struct ShareItem: Identifiable {
+    let id = UUID()
+    let url: URL
+}
+
+struct ActivityView: UIViewControllerRepresentable {
+    let items: [Any]
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
+    }
+    func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
 }
