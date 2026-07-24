@@ -62,6 +62,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
     @Published var cameraUnavailable = false
 
     let session = AVCaptureSession()
+    /// Aktuelles Aufnahmegerät – zum Fixieren von Belichtung/Fokus/Weißabgleich.
+    private var device: AVCaptureDevice?
 
     /// Sekunden Stabilität bis zum Auto-Shutter (live änderbar)
     @Published var stableSeconds: Double = 0.8
@@ -128,6 +130,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
             return false
         }
         session.addInput(input)
+        self.device = device
 
         let output = AVCaptureVideoDataOutput()
         output.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
@@ -140,6 +143,45 @@ final class LiveCaptureController: NSObject, ObservableObject {
         session.addOutput(output)
         session.commitConfiguration()
         return true
+    }
+
+    /// Fixiert Belichtung, Fokus und Weißabgleich für Stop-Motion. Wenn möglich
+    /// mit niedriger ISO und entsprechend längerer Belichtungszeit (gleiche
+    /// Helligkeit, weniger Rauschen – bei statischem Set unkritisch).
+    private func lockCameraSettings() {
+        guard let device else { return }
+        do {
+            try device.lockForConfiguration()
+
+            if device.isFocusModeSupported(.locked) {
+                device.focusMode = .locked
+            }
+            if device.isWhiteBalanceModeSupported(.locked) {
+                device.whiteBalanceMode = .locked
+            }
+
+            let exposure = Double(device.iso) * CMTimeGetSeconds(device.exposureDuration)
+            if device.isExposureModeSupported(.custom), exposure > 0 {
+                let format = device.activeFormat
+                let minISO = format.minISO
+                let maxISO = format.maxISO
+                let minDur = CMTimeGetSeconds(format.minExposureDuration)
+                let maxDur = CMTimeGetSeconds(format.maxExposureDuration)
+                // ISO so niedrig wie möglich, die Belichtungszeit hält die Helligkeit
+                let duration = max(minDur, min(maxDur, exposure / Double(minISO)))
+                var iso = Float(exposure / duration)
+                iso = min(maxISO, max(minISO, iso))
+                device.setExposureModeCustom(
+                    duration: CMTimeMakeWithSeconds(duration, preferredTimescale: 1_000_000),
+                    iso: iso, completionHandler: nil)
+            } else if device.isExposureModeSupported(.locked) {
+                device.exposureMode = .locked
+            }
+
+            device.unlockForConfiguration()
+        } catch {
+            // Fixieren nicht möglich – die App läuft mit Auto-Einstellungen weiter.
+        }
     }
 
     // MARK: Frame-Verarbeitung (auf videoQueue, UI-Updates via MainActor)
@@ -175,6 +217,10 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 calibrationSamples = nil
                 armed = true // erster Frame darf sofort kommen, sobald stabil
                 status = .waitingForWork
+                // Für Stop-Motion: Belichtung, Fokus und Weißabgleich jetzt
+                // fixieren – die Auto-Regelung würde sonst zwischen den Bildern
+                // nachziehen und das Set „atmen" lassen.
+                lockCameraSettings()
             }
             return
         }
