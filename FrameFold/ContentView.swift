@@ -8,6 +8,7 @@ struct ContentView: View {
     @EnvironmentObject var store: ProjectStore
     @State private var pickerItem: PhotosPickerItem?
     @State private var showSettings = false
+    @State private var homeIn = false
 
     var body: some View {
         NavigationStack {
@@ -128,6 +129,12 @@ struct ContentView: View {
 
                 Spacer(minLength: 28)
             }
+            // Ruhiger Auftritt: der Inhalt steigt beim ersten Erscheinen sanft ein
+            .opacity(homeIn ? 1 : 0)
+            .offset(y: homeIn ? 0 : 12)
+        }
+        .onAppear {
+            if !homeIn { withAnimation(.smooth(duration: 0.55)) { homeIn = true } }
         }
         .onChange(of: pickerItem) { _, newItem in
             guard let newItem else { return }
@@ -293,6 +300,8 @@ struct ReviewView: View {
                 HStack {
                     CatalogLabel("\(viewModel.selectedCount) von \(viewModel.reviewFrames.count) Bildern gewählt",
                                  color: Theme.ink)
+                        .contentTransition(.numericText())
+                        .animation(.snappy, value: viewModel.selectedCount)
                     if viewModel.isRecomputing {
                         ProgressView().tint(Theme.ink).scaleEffect(0.7)
                     }
@@ -445,6 +454,7 @@ struct VideoPickerFile: Transferable {
 
 struct ProcessingView: View {
     let stage: PipelineStage
+    @State private var pulse = false
 
     private var progress: Double? {
         switch stage {
@@ -458,7 +468,12 @@ struct ProcessingView: View {
     var body: some View {
         VStack(spacing: 22) {
             Spacer()
+            // Das Falz-Signet „atmet", während gebaut wird
             FoldMark(size: 40)
+                .scaleEffect(pulse ? 1.06 : 0.94)
+                .opacity(pulse ? 1 : 0.7)
+                .animation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true), value: pulse)
+                .onAppear { pulse = true }
             CatalogLabel(stage.label, color: Theme.ink)
             if let progress {
                 HairlineProgress(value: progress)
