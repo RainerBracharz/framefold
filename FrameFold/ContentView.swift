@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var pickerItem: PhotosPickerItem?
     @State private var showSettings = false
     @State private var homeIn = false
+    @AppStorage("artistName") private var artistName = "Aldo"
 
     var body: some View {
         NavigationStack {
@@ -56,78 +57,39 @@ struct ContentView: View {
 
     private var startView: some View {
         ScrollView {
-            VStack(spacing: 0) {
-                // Hero – trägt die Stimme, füllt den oberen Raum
-                VStack(alignment: .leading, spacing: 14) {
-                    CatalogLabel("Video → Stopmotion")
-                    Text("Vom Video zur\nStopmotion.")
-                        .font(Theme.serif(31, .regular))
+            VStack(alignment: .leading, spacing: 0) {
+                // 1 – Begrüßung statt Ansage
+                VStack(alignment: .leading, spacing: 10) {
+                    CatalogLabel(greetingLine)
+                    Text("Woran arbeitest du\nheute?")
+                        .font(Theme.serif(29, .regular))
                         .foregroundStyle(Theme.ink)
                         .lineSpacing(2)
-                        .fixedSize(horizontal: false, vertical: true)
-                    Text("Die ruhigen Momente werden gewählt, Bilder mit Händen verworfen — alles bleibt auf deinem Gerät.")
-                        .font(Theme.mono(12))
-                        .foregroundStyle(Theme.graphite)
-                        .lineSpacing(3)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 24)
-                .padding(.top, 18)
-                .padding(.bottom, 28)
+                .padding(.top, 12)
+                .padding(.bottom, 22)
 
-                // Primäraktion – groß, eindeutig, klarer Tap
+                // 2 + 3 – die Werk-Tafel ist der Hauptgriff
                 PhotosPicker(selection: $pickerItem, matching: .videos) {
-                    primaryAction
+                    heroPlate
                 }
                 .padding(.horizontal, 24)
 
-                // Sekundäraktion – klar untergeordnet
+                // 4 – Zweitweg, leise
                 Button { selectedTab = 1 } label: {
                     secondaryAction
                 }
                 .buttonStyle(.plain)
                 .padding(.horizontal, 24)
-                .padding(.top, 12)
+                .padding(.top, 14)
 
-                // So funktioniert's – kompakte Dreierreihe
-                HStack(alignment: .top, spacing: 0) {
-                    stepCell(no: "1", text: "Aufnehmen\noder wählen")
-                    stepDivider
-                    stepCell(no: "2", text: "Bilder\nprüfen")
-                    stepDivider
-                    stepCell(no: "3", text: "Teilen\noder sichern")
-                }
-                .padding(.horizontal, 22)
-                .padding(.top, 26)
+                // 5 – die Werke als gefaltete Kacheln
+                if !recentProjects.isEmpty { recentStrip }
 
-                // Zuletzt bearbeitete Projekte
-                if !recentProjects.isEmpty {
-                    HStack {
-                        CatalogLabel("Zuletzt bearbeitet", color: Theme.ink)
-                        Spacer()
-                        Button { selectedTab = 2 } label: {
-                            CatalogLabel("Alle →", color: Theme.graphite, size: 10)
-                        }
-                    }
-                    .padding(.horizontal, 22)
-                    .padding(.top, 30)
-                    .padding(.bottom, 10)
-
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 12) {
-                            ForEach(recentProjects) { project in
-                                Button { selectedTab = 2 } label: {
-                                    recentTile(project)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                        }
-                        .padding(.horizontal, 22)
-                    }
-                }
-
-                Spacer(minLength: 28)
+                Spacer(minLength: 26)
             }
             // Ruhiger Auftritt: der Inhalt steigt beim ersten Erscheinen sanft ein
             .opacity(homeIn ? 1 : 0)
@@ -154,37 +116,116 @@ struct ContentView: View {
 
     // MARK: Start-Bausteine
 
-    /// Primäraktion: großer warmer Ink-Block, Film-Icon (wie der Video-Tab),
-    /// feiner Marine-Falz in der Ecke – der eindeutige erste Griff.
-    private var primaryAction: some View {
-        HStack(spacing: 16) {
-            Image(systemName: "film")
-                .font(.system(size: 22))
-                .foregroundStyle(Theme.paper)
-                .frame(width: 30)
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Video auswählen")
-                    .font(Theme.caption(15)).tracking(1.6).textCase(.uppercase)
-                    .foregroundStyle(Theme.paper)
-                Text("Aus einem fertigen Video")
-                    .font(Theme.mono(11)).foregroundStyle(Theme.paper.opacity(0.72))
-            }
-            Spacer()
-            Image(systemName: "arrow.right")
-                .font(.system(size: 15, weight: .medium))
-                .foregroundStyle(Theme.paper.opacity(0.85))
+    /// Tageszeit-Gruß: die App begrüßt, statt anzusagen.
+    private var greetingLine: String {
+        let hour = Calendar.current.component(.hour, from: Date())
+        let greeting: String
+        switch hour {
+        case 5..<11:  greeting = "Guten Morgen"
+        case 11..<14: greeting = "Hallo"
+        case 14..<18: greeting = "Guten Tag"
+        case 18..<23: greeting = "Guten Abend"
+        default:      greeting = "Gute Nacht"
         }
-        .padding(.horizontal, 22)
-        .padding(.vertical, 24)
-        .frame(maxWidth: .infinity)
-        .background(Theme.ink)
-        .overlay(alignment: .topLeading) {
-            Path { p in
-                p.move(to: CGPoint(x: 0, y: 20))
-                p.addLine(to: CGPoint(x: 20, y: 0))
+        let name = artistName.trimmingCharacters(in: .whitespaces)
+        return name.isEmpty ? greeting : "\(greeting), \(name)"
+    }
+
+    private var latestProject: Project? { store.projects.first }
+
+    /// Die Werk-Tafel: gefaltetes Papier mit angeschlagener Bildunterschrift –
+    /// die ganze Fläche ist der Griff. Ohne Projekt faltet sich ein leeres Blatt.
+    private var heroPlate: some View {
+        VStack(spacing: 0) {
+            FoldedPaperHero(
+                image: latestProject.flatMap { store.thumbnail(for: $0) },
+                seed: foldSeed(for: latestProject?.id),
+                accent: latestProject.map { Theme.accent(for: $0.id) } ?? Theme.violet)
+                .frame(height: 248)
+
+            HStack(spacing: 14) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Video wählen")
+                        .font(Theme.caption(15)).tracking(1.8).textCase(.uppercase)
+                        .foregroundStyle(Theme.paper)
+                    Text("Die ruhigen Momente werden gefunden")
+                        .font(Theme.mono(10.5))
+                        .foregroundStyle(Theme.paper.opacity(0.70))
+                }
+                Spacer()
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(Theme.paper.opacity(0.85))
             }
-            .stroke(Theme.crease, lineWidth: 2)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .frame(maxWidth: .infinity)
+            .background(Theme.ink)
+            .overlay(alignment: .topLeading) {
+                Path { p in
+                    p.move(to: CGPoint(x: 0, y: 18))
+                    p.addLine(to: CGPoint(x: 18, y: 0))
+                }
+                .stroke(Theme.crease, lineWidth: 2.2)
+            }
         }
+        .overlay(Rectangle().stroke(Theme.ink, lineWidth: 1))
+    }
+
+    /// Stabile Faltung pro Werk – dieselbe Geometrie bei jedem Start.
+    private func foldSeed(for id: UUID?) -> UInt64 {
+        guard let id else { return 7 }
+        return id.uuidString.unicodeScalars.reduce(UInt64(7)) { ($0 &* 31) &+ UInt64($1.value) }
+    }
+
+    private var recentStrip: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                CatalogLabel("Zuletzt im Atelier", color: Theme.ink)
+                Spacer()
+                Button { selectedTab = 2 } label: {
+                    CatalogLabel("Alle →", color: Theme.graphite, size: 10)
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 12)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(recentProjects) { project in
+                        Button { selectedTab = 2 } label: {
+                            foldedTile(project)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, 24)
+            }
+        }
+        .padding(.top, 30)
+    }
+
+    /// Ein Werk als gefaltete Kachel mit farbiger Werkkante.
+    private func foldedTile(_ project: Project) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            FoldedPaperHero(image: store.thumbnail(for: project),
+                            seed: foldSeed(for: project.id),
+                            accent: Theme.accent(for: project.id),
+                            animatesLight: false)
+                .frame(width: 126, height: 92)
+                .overlay(Rectangle().stroke(Theme.ink, lineWidth: 1))
+                .overlay(alignment: .leading) {
+                    Rectangle().fill(Theme.accent(for: project.id)).frame(width: 3)
+                }
+            Text(project.name)
+                .font(Theme.serif(14, .regular))
+                .foregroundStyle(Theme.ink)
+                .lineLimit(1)
+                .padding(.top, 8)
+            CatalogLabel("\(project.frameCount) Bilder", size: 9)
+                .padding(.top, 3)
+        }
+        .frame(width: 126)
     }
 
     /// Sekundäraktion: klar untergeordnet, Kamera-Icon (wie der Kamera-Tab).
@@ -211,56 +252,6 @@ struct ContentView: View {
         .frame(maxWidth: .infinity)
         .background(Theme.paper)
         .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
-    }
-
-    private func stepCell(no: String, text: String) -> some View {
-        VStack(spacing: 8) {
-            Text(no)
-                .font(Theme.serif(22, .light))
-                .foregroundStyle(Theme.ink)
-            Text(text)
-                .font(Theme.mono(9.5))
-                .tracking(0.8)
-                .textCase(.uppercase)
-                .foregroundStyle(Theme.graphite)
-                .multilineTextAlignment(.center)
-                .lineSpacing(2)
-        }
-        .frame(maxWidth: .infinity)
-    }
-
-    private var stepDivider: some View {
-        Rectangle().fill(Theme.hairline).frame(width: 1, height: 40)
-    }
-
-    private func recentTile(_ project: Project) -> some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // Akzentkante des Werks
-            Rectangle()
-                .fill(Theme.accent(for: project.id))
-                .frame(width: 128, height: 3)
-            Group {
-                if let thumb = store.thumbnail(for: project) {
-                    Image(uiImage: thumb).resizable().scaledToFill()
-                } else {
-                    Rectangle().fill(Theme.paperShade)
-                        .overlay(Image(systemName: "square.grid.2x2")
-                            .foregroundStyle(Theme.hairline))
-                }
-            }
-            .frame(width: 128, height: 125)
-            .clipped()
-            .overlay(Rectangle().stroke(Theme.ink, lineWidth: 1))
-
-            Text(project.name)
-                .font(Theme.serif(14, .regular))
-                .foregroundStyle(Theme.ink)
-                .lineLimit(1)
-                .padding(.top, 8)
-            CatalogLabel("\(project.frameCount) Bilder", size: 9)
-                .padding(.top, 4)
-        }
-        .frame(width: 128)
     }
 
     private func errorView(_ message: String) -> some View {
