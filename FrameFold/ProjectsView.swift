@@ -570,36 +570,84 @@ struct ExhibitionSheet: View {
     private var chosen: [Project] { store.projects.filter { selected.contains($0.id) } }
     private var totalFrames: Int { chosen.reduce(0) { $0 + $1.frameCount } }
 
+    /// Sagt jederzeit, wo man steht – statt eines stummen, grauen Knopfs.
+    private var selectionHint: String {
+        switch chosen.count {
+        case 0: return "Mindestens zwei Werke wählen."
+        case 1: return "Ein Werk gewählt – noch mindestens eines."
+        default: return "\(chosen.count) Werke · \(totalFrames) Bilder"
+        }
+    }
+
+    /// Werkzeile mit gefalteter Kachel; Auswahl wird durch Inversion
+    /// markiert (Tuschblock) statt durch ein System-Häkchen.
+    private func exhibitionRow(_ project: Project) -> some View {
+        let isOn = selected.contains(project.id)
+        return HStack(spacing: 14) {
+            FoldedPaperHero(image: store.thumbnail(for: project),
+                            seed: FoldSeed.make(project.id),
+                            accent: Theme.accent(for: project.id),
+                            animatesLight: false)
+                .frame(width: 54, height: 54)
+                .overlay(alignment: .leading) {
+                    Rectangle().fill(Theme.accent(for: project.id)).frame(width: 3)
+                }
+                .overlay(Rectangle().stroke(Theme.ink.opacity(0.45), lineWidth: 1))
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(project.name)
+                    .font(Theme.serif(17, .regular))
+                    .foregroundStyle(isOn ? Theme.paper : Theme.ink)
+                    .lineLimit(1)
+                CatalogLabel("\(project.frameCount) Bilder",
+                             color: isOn ? Theme.paper.opacity(0.7) : Theme.graphite, size: 9)
+            }
+            Spacer()
+
+            // Katalog-Marke statt Häkchen
+            Rectangle()
+                .fill(isOn ? Theme.paper : Color.clear)
+                .frame(width: 11, height: 11)
+                .overlay(Rectangle().stroke(isOn ? Theme.paper : Theme.graphite, lineWidth: 1.2))
+        }
+        .padding(12)
+        .background(isOn ? Theme.ink : Theme.paper)
+        .overlay(Rectangle().stroke(isOn ? Theme.ink : Theme.hairline, lineWidth: 1))
+        .contentShape(Rectangle())
+        .animation(.snappy(duration: 0.18), value: isOn)
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                CatalogLabel("Werke für die Ausstellung wählen", color: Theme.ink)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 20).padding(.top, 14)
+                // Kopf im Katalogton – sagt, was hier entsteht
+                VStack(alignment: .leading, spacing: 8) {
+                    CatalogLabel("Ausstellung")
+                    Text("Mehrere Werke,\nein durchlaufendes Reel.")
+                        .font(Theme.serif(23, .regular))
+                        .foregroundStyle(Theme.ink)
+                        .lineSpacing(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text(selectionHint)
+                        .font(Theme.mono(11.5))
+                        .foregroundStyle(Theme.graphite)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+                .padding(.bottom, 18)
 
                 ScrollView {
-                    LazyVStack(spacing: 0) {
+                    LazyVStack(spacing: 10) {
                         ForEach(store.projects) { project in
                             Button { toggle(project.id) } label: {
-                                HStack(spacing: 14) {
-                                    Image(systemName: selected.contains(project.id)
-                                          ? "checkmark.square.fill" : "square")
-                                        .foregroundStyle(Theme.ink)
-                                    Rectangle().fill(Theme.accent(for: project.id))
-                                        .frame(width: 4, height: 40)
-                                    VStack(alignment: .leading, spacing: 3) {
-                                        WorkTitle(project.name, size: 16)
-                                        CatalogLabel("\(project.frameCount) Bilder")
-                                    }
-                                    Spacer()
-                                }
-                                .padding(.vertical, 12).padding(.horizontal, 20)
-                                .contentShape(Rectangle())
+                                exhibitionRow(project)
                             }
                             .buttonStyle(.plain)
-                            Rectangle().fill(Theme.hairline).frame(height: 1)
                         }
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 8)
                 }
 
                 VStack(spacing: 10) {
@@ -615,9 +663,12 @@ struct ExhibitionSheet: View {
                                 .background(Theme.ink)
                         }
                     } else {
-                        Button("Ausstellung erstellen") { build() }
+                        Button(chosen.count >= 2
+                               ? "\(chosen.count) Werke montieren"
+                               : "Ausstellung erstellen") { build() }
                             .buttonStyle(InkButtonStyle())
                             .disabled(chosen.count < 2 || totalFrames == 0)
+                            .opacity(chosen.count < 2 ? 0.45 : 1)
                     }
                     if let errorMessage {
                         Text(errorMessage).font(Theme.mono(11)).foregroundStyle(Theme.oxblood)
