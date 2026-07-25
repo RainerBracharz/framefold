@@ -139,7 +139,7 @@ struct ContentView: View {
         VStack(spacing: 0) {
             FoldedPaperHero(
                 image: latestProject.flatMap { store.thumbnail(for: $0) },
-                seed: foldSeed(for: latestProject?.id),
+                seed: FoldSeed.make(latestProject?.id),
                 accent: latestProject.map { Theme.accent(for: $0.id) } ?? Theme.violet)
                 .frame(height: 248)
 
@@ -170,12 +170,6 @@ struct ContentView: View {
             }
         }
         .overlay(Rectangle().stroke(Theme.ink, lineWidth: 1))
-    }
-
-    /// Stabile Faltung pro Werk – dieselbe Geometrie bei jedem Start.
-    private func foldSeed(for id: UUID?) -> UInt64 {
-        guard let id else { return 7 }
-        return id.uuidString.unicodeScalars.reduce(UInt64(7)) { ($0 &* 31) &+ UInt64($1.value) }
     }
 
     private var recentStrip: some View {
@@ -209,7 +203,7 @@ struct ContentView: View {
     private func foldedTile(_ project: Project) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             FoldedPaperHero(image: store.thumbnail(for: project),
-                            seed: foldSeed(for: project.id),
+                            seed: FoldSeed.make(project.id),
                             accent: Theme.accent(for: project.id),
                             animatesLight: false)
                 .frame(width: 126, height: 92)
@@ -492,6 +486,9 @@ struct ResultView: View {
     @State private var showSaveToProject = false
     @State private var saveProjectName = ""
     @State private var savedProjectID: UUID?
+    /// Seitenverhältnis des Ergebnisses – wird aus der Datei gelesen,
+    /// damit kein Hochformat-Rahmen um ein Querformat-Video steht.
+    @State private var previewAspect: CGFloat = 9.0 / 16.0
 
     /// Als „gesichert" gilt nur, solange das Zielprojekt noch existiert –
     /// so verschwindet der Haken, wenn das Projekt gelöscht wurde.
@@ -503,8 +500,17 @@ struct ResultView: View {
     var body: some View {
         VStack(spacing: 18) {
             VideoPlayer(player: player)
-                .aspectRatio(9/16, contentMode: .fit)
+                .aspectRatio(previewAspect, contentMode: .fit)
                 .passepartout()
+                .task {
+                    let asset = AVURLAsset(url: result.outputURL)
+                    guard let track = try? await asset.loadTracks(withMediaType: .video).first,
+                          let size = try? await track.load(.naturalSize),
+                          let transform = try? await track.load(.preferredTransform) else { return }
+                    let shown = size.applying(transform)
+                    let w = abs(shown.width), h = abs(shown.height)
+                    if w > 0, h > 0 { previewAspect = w / h }
+                }
                 .onAppear {
                     // Endlos-Loop, damit sich die Animation – und besonders die
                     // Übergänge (Verwebung/Falz/Facetten) – in Ruhe ansehen lassen.
@@ -605,10 +611,22 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section {
-                    Picker("Modus", selection: $modeRaw) {
-                        ForEach(AppMode.allCases) { Text($0.label).tag($0.rawValue) }
+                    // Katalog-Reiter statt System-Segmentschalter
+                    HStack(spacing: 0) {
+                        ForEach(AppMode.allCases) { m in
+                            Button { modeRaw = m.rawValue } label: {
+                                Text(m.label)
+                                    .font(Theme.caption(11)).tracking(1.1).textCase(.uppercase)
+                                    .foregroundStyle(modeRaw == m.rawValue ? Theme.paper : Theme.ink)
+                                    .padding(.vertical, 11)
+                                    .frame(maxWidth: .infinity)
+                                    .background(modeRaw == m.rawValue ? Theme.ink : Color.clear)
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
-                    .pickerStyle(.segmented)
+                    .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+                    .listRowInsets(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12))
                     Text(modeHint)
                         .font(Theme.mono(11))
                         .foregroundStyle(Theme.graphite)
