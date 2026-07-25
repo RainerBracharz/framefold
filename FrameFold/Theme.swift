@@ -1,4 +1,22 @@
 import SwiftUI
+import UIKit
+import CoreText
+
+/// Registriert die gebündelten Schriften (Fraunces, Inter) aus dem
+/// Asset-Katalog zur Laufzeit – ohne Info.plist-Eintrag.
+enum AppFonts {
+    private static var registered = false
+    static func register() {
+        guard !registered else { return }
+        registered = true
+        for name in ["Fraunces-Regular", "Fraunces-Light", "Inter-Regular", "Inter-Medium"] {
+            guard let asset = NSDataAsset(name: name),
+                  let provider = CGDataProvider(data: asset.data as CFData),
+                  let font = CGFont(provider) else { continue }
+            CTFontManagerRegisterGraphicsFont(font, nil)
+        }
+    }
+}
 
 /// Designsystem „Falz & Flut" — abgeleitet aus Aldo Tolinos aktueller Praxis:
 /// mattes Papier, gefaltet über geologische und wässrige Fotografie
@@ -67,24 +85,31 @@ enum Theme {
 
     // MARK: Typografie
 
-    /// Serif (New York) – die authored/Buch-Stimme: Titel, Werknamen, Wortmarke.
+    /// Serif (Fraunces) – die Katalog-/Buchstimme: Titel, Werknamen, Wortmarke.
+    /// Fällt sauber auf die System-Serife zurück, falls die Schrift fehlt.
     static func serif(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
-        .system(size: size, weight: weight, design: .serif)
+        let light: Set<Font.Weight> = [.ultraLight, .thin, .light]
+        let ps = light.contains(weight) ? "Fraunces-Light" : "Fraunces-Regular"
+        if UIFont(name: ps, size: size) != nil { return .custom(ps, size: size) }
+        return .system(size: size, weight: weight, design: .serif)
     }
-    /// Grotesk (SF Pro) mit Tabellenziffern – Angaben, Zähler, Zustände, Knöpfe.
-    /// Ruhige Katalog-Stimme statt Terminal-Monospace; Ziffern bleiben dimensionsgleich.
+    /// Grotesk (Inter) mit Tabellenziffern – Angaben, Zähler, Zustände, Knöpfe.
+    /// Fällt sauber auf SF Pro zurück, falls die Schrift fehlt.
     static func mono(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
-        .system(size: size, weight: weight, design: .default).monospacedDigit()
+        let strong: Set<Font.Weight> = [.medium, .semibold, .bold, .heavy, .black]
+        let ps = strong.contains(weight) ? "Inter-Medium" : "Inter-Regular"
+        if UIFont(name: ps, size: size) != nil { return .custom(ps, size: size).monospacedDigit() }
+        return .system(size: size, weight: weight, design: .default).monospacedDigit()
     }
 
     /// Gesperrte Grotesk-Versalien für Abschnitts- und Statuszeilen.
     static func caption(_ size: CGFloat = 11) -> Font { mono(size, .medium) }
     /// Werktitel (Serif).
-    static let title = Font.system(size: 23, weight: .light, design: .serif)
+    static var title: Font { serif(23, .light) }
     /// Kurzer Fließtext / Anmerkung (Grotesk).
-    static let body = Font.system(size: 13, weight: .regular, design: .default)
+    static var body: Font { mono(13, .regular) }
     /// Zahlen – gleichbreite Ziffern (Tabellenziffern).
-    static let numeral = Font.system(size: 14, weight: .medium, design: .default).monospacedDigit()
+    static var numeral: Font { mono(14, .medium) }
 }
 
 // MARK: Falz-Signet (Dreiecksfacette)
