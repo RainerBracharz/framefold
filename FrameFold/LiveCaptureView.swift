@@ -118,52 +118,69 @@ struct LiveCaptureView: View {
     // MARK: Projektwahl
 
     private var projectChooser: some View {
-        VStack(spacing: 0) {
-            Spacer()
-            FoldMark(size: 56, color: Theme.paperOnDark)
-                .padding(.bottom, 32)
-            CatalogLabel("In welches Projekt?", color: Theme.paperOnDark)
-                .padding(.bottom, 12)
-            Text("iPhone aufs Stativ, Projekt wählen, arbeiten.\nFrameFold nimmt automatisch einen Frame auf,\nsobald deine Hände aus dem Bild sind.")
-                .font(.system(size: 13))
-                .foregroundStyle(Theme.paperOnDark.opacity(0.7))
-                .multilineTextAlignment(.center)
-            Spacer()
-
-            VStack(spacing: 10) {
-                ForEach(store.projects.prefix(3)) { project in
-                    Button {
-                        targetProject = project
-                    } label: {
-                        HStack {
-                            Text(project.name)
-                            Spacer()
-                            Text("\(project.frameCount)")
-                        }
-                        .font(Theme.caption(12))
-                        .tracking(1.4)
-                        .textCase(.uppercase)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                // Dunkelkammer-Fassung der Begrüßung
+                VStack(alignment: .leading, spacing: 10) {
+                    CatalogLabel("Dunkelkammer", color: Theme.paperOnDark.opacity(0.55))
+                    Text("Welches Werk\nnimmst du auf?")
+                        .font(Theme.serif(27, .regular))
                         .foregroundStyle(Theme.paperOnDark)
-                        .padding(.vertical, 14)
-                        .padding(.horizontal, 16)
-                        .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
-                    }
+                        .lineSpacing(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text("iPhone aufs Stativ. FrameFold löst aus, sobald deine Hände aus dem Bild sind.")
+                        .font(Theme.mono(11.5))
+                        .foregroundStyle(Theme.paperOnDark.opacity(0.6))
+                        .lineSpacing(3)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
+                .padding(.horizontal, 24)
+                .padding(.top, 10)
+                .padding(.bottom, 22)
+
+                if store.projects.isEmpty {
+                    VStack(spacing: 0) {
+                        FoldedPaperHero(seed: 33, accent: Theme.violet, animatesLight: false)
+                            .frame(height: 150)
+                            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.3), lineWidth: 1))
+                        Text("Noch kein Werk – leg eines an, dann kann die Kamera loslegen.")
+                            .font(Theme.mono(11.5))
+                            .foregroundStyle(Theme.paperOnDark.opacity(0.6))
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(3)
+                            .padding(.top, 16)
+                    }
+                    .padding(.horizontal, 24)
+                } else {
+                    VStack(spacing: 10) {
+                        ForEach(store.projects.prefix(4)) { project in
+                            Button { targetProject = project } label: {
+                                darkProjectRow(project)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                }
+
                 Button {
                     showNewProject = true
                 } label: {
-                    Text("Neues Projekt")
-                        .font(Theme.caption(12))
-                        .tracking(1.6)
-                        .textCase(.uppercase)
-                        .foregroundStyle(Theme.darkroom)
-                        .padding(.vertical, 14)
-                        .frame(maxWidth: .infinity)
-                        .background(Theme.paperOnDark)
+                    HStack(spacing: 10) {
+                        Image(systemName: "plus").font(.system(size: 14, weight: .medium))
+                        Text("Neues Werk")
+                            .font(Theme.caption(12)).tracking(1.8).textCase(.uppercase)
+                    }
+                    .foregroundStyle(Theme.darkroom)
+                    .padding(.vertical, 15)
+                    .frame(maxWidth: .infinity)
+                    .background(Theme.paperOnDark)
                 }
+                .padding(.horizontal, 24)
+                .padding(.top, 16)
+
+                Spacer(minLength: 24)
             }
-            .padding(.horizontal, 24)
-            .padding(.bottom, 24)
         }
         .alert("Neues Projekt", isPresented: $showNewProject) {
             TextField("Name", text: $newProjectName)
@@ -174,6 +191,36 @@ struct LiveCaptureView: View {
             }
             Button("Abbrechen", role: .cancel) { newProjectName = "" }
         }
+    }
+
+    /// Werkzeile in der Dunkelkammer: gefaltetes Blatt + Werkkante.
+    private func darkProjectRow(_ project: Project) -> some View {
+        HStack(spacing: 14) {
+            FoldedPaperHero(image: store.thumbnail(for: project),
+                            seed: FoldSeed.make(project.id),
+                            accent: Theme.accent(for: project.id),
+                            animatesLight: false)
+                .frame(width: 54, height: 54)
+                .overlay(alignment: .leading) {
+                    Rectangle().fill(Theme.accent(for: project.id)).frame(width: 3)
+                }
+                .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.3), lineWidth: 1))
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(project.name)
+                    .font(Theme.serif(17, .regular))
+                    .foregroundStyle(Theme.paperOnDark)
+                    .lineLimit(1)
+                CatalogLabel("\(project.frameCount) Bilder",
+                             color: Theme.paperOnDark.opacity(0.55), size: 9)
+            }
+            Spacer()
+            Image(systemName: "arrow.right")
+                .font(.system(size: 13))
+                .foregroundStyle(Theme.paperOnDark.opacity(0.5))
+        }
+        .padding(12)
+        .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.28), lineWidth: 1))
     }
 
     // MARK: Aufnahme
@@ -542,6 +589,7 @@ struct LiveSettingsView: View {
                     Picker("Auslöser", selection: $controller.captureMode) {
                         ForEach(LiveCaptureController.CaptureMode.allCases) { Text($0.label).tag($0) }
                     }
+                    .font(Theme.body)
                     if controller.captureMode == .interval {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("Intervall: \(controller.intervalSeconds, specifier: "%.0f") s")
@@ -556,6 +604,7 @@ struct LiveSettingsView: View {
                         Text("50 Hz (EU)").tag(50)
                         Text("60 Hz (US)").tag(60)
                     }
+                    .font(Theme.body)
                     Toggle("Auslöse-Ton", isOn: $controller.playShutterSound)
                         .font(Theme.body)
                 } header: {
