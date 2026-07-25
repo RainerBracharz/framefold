@@ -34,8 +34,8 @@ struct ContentView: View {
             }
             .paperStage()
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    LogoLockup()
+                ToolbarItem(placement: .topBarLeading) {
+                    LogoTile(size: 26)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { showSettings = true } label: {
@@ -56,46 +56,38 @@ struct ContentView: View {
     private var startView: some View {
         ScrollView {
             VStack(spacing: 0) {
-                // Kopfbereich mit Signet + Titel
-                HStack(alignment: .center, spacing: 16) {
-                    FoldMark(size: 46)
-                    VStack(alignment: .leading, spacing: 5) {
-                        CatalogLabel("Video → Stopmotion")
-                        Text("Dein Arbeitsvideo,\nautomatisch zur Stopmotion.")
-                            .font(Theme.serif(19, .light))
-                            .foregroundStyle(Theme.ink)
-                            .lineSpacing(2)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    Spacer()
+                // Hero – trägt die Stimme, füllt den oberen Raum
+                VStack(alignment: .leading, spacing: 14) {
+                    CatalogLabel("Video → Stopmotion")
+                    Text("Vom Video zur\nStopmotion.")
+                        .font(Theme.serif(31, .regular))
+                        .foregroundStyle(Theme.ink)
+                        .lineSpacing(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text("Die ruhigen Momente werden gewählt, Bilder mit Händen verworfen — alles bleibt auf deinem Gerät.")
+                        .font(Theme.mono(12))
+                        .foregroundStyle(Theme.graphite)
+                        .lineSpacing(3)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                .padding(.horizontal, 22)
-                .padding(.top, 8)
-                .padding(.bottom, 20)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 24)
+                .padding(.top, 18)
+                .padding(.bottom, 28)
 
-                Rectangle().fill(Theme.hairline).frame(height: 1)
-                    .padding(.horizontal, 22)
-
-                // Zwei Einstiege – groß und eindeutig
-                VStack(spacing: 10) {
-                    PhotosPicker(selection: $pickerItem, matching: .videos) {
-                        entryCard(icon: "triangle.fill",
-                                  title: "Video auswählen",
-                                  sub: "Aus einem fertigen Video",
-                                  filled: true)
-                    }
-                    Button {
-                        selectedTab = 1
-                    } label: {
-                        entryCard(icon: "circle.lefthalf.filled",
-                                  title: "Direkt aufnehmen",
-                                  sub: "Kamera aufs Stativ, automatisch auslösen",
-                                  filled: false)
-                    }
-                    .buttonStyle(.plain)
+                // Primäraktion – groß, eindeutig, klarer Tap
+                PhotosPicker(selection: $pickerItem, matching: .videos) {
+                    primaryAction
                 }
-                .padding(.horizontal, 22)
-                .padding(.top, 20)
+                .padding(.horizontal, 24)
+
+                // Sekundäraktion – klar untergeordnet
+                Button { selectedTab = 1 } label: {
+                    secondaryAction
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, 24)
+                .padding(.top, 12)
 
                 // So funktioniert's – kompakte Dreierreihe
                 HStack(alignment: .top, spacing: 0) {
@@ -134,14 +126,7 @@ struct ContentView: View {
                     }
                 }
 
-                Text("Die ruhigen Momente werden gewählt, Bilder mit Händen verworfen. Alles bleibt auf diesem Gerät.")
-                    .font(Theme.mono(10.5))
-                    .foregroundStyle(Theme.graphite)
-                    .multilineTextAlignment(.center)
-                    .lineSpacing(2)
-                    .padding(.horizontal, 34)
-                    .padding(.top, 30)
-                    .padding(.bottom, 24)
+                Spacer(minLength: 28)
             }
         }
         .onChange(of: pickerItem) { _, newItem in
@@ -162,32 +147,63 @@ struct ContentView: View {
 
     // MARK: Start-Bausteine
 
-    private func entryCard(icon: String, title: String, sub: String, filled: Bool) -> some View {
-        HStack(spacing: 14) {
-            Image(systemName: icon)
-                .font(.system(size: 18))
-                .foregroundStyle(filled ? Theme.paper : Theme.ink)
-                .frame(width: 26)
+    /// Primäraktion: großer warmer Ink-Block, Film-Icon (wie der Video-Tab),
+    /// feiner Marine-Falz in der Ecke – der eindeutige erste Griff.
+    private var primaryAction: some View {
+        HStack(spacing: 16) {
+            Image(systemName: "film")
+                .font(.system(size: 22))
+                .foregroundStyle(Theme.paper)
+                .frame(width: 30)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Video auswählen")
+                    .font(Theme.caption(15)).tracking(1.6).textCase(.uppercase)
+                    .foregroundStyle(Theme.paper)
+                Text("Aus einem fertigen Video")
+                    .font(Theme.mono(11)).foregroundStyle(Theme.paper.opacity(0.72))
+            }
+            Spacer()
+            Image(systemName: "arrow.right")
+                .font(.system(size: 15, weight: .medium))
+                .foregroundStyle(Theme.paper.opacity(0.85))
+        }
+        .padding(.horizontal, 22)
+        .padding(.vertical, 24)
+        .frame(maxWidth: .infinity)
+        .background(Theme.ink)
+        .overlay(alignment: .topLeading) {
+            Path { p in
+                p.move(to: CGPoint(x: 0, y: 20))
+                p.addLine(to: CGPoint(x: 20, y: 0))
+            }
+            .stroke(Theme.crease, lineWidth: 2)
+        }
+    }
+
+    /// Sekundäraktion: klar untergeordnet, Kamera-Icon (wie der Kamera-Tab).
+    private var secondaryAction: some View {
+        HStack(spacing: 16) {
+            Image(systemName: "camera")
+                .font(.system(size: 19))
+                .foregroundStyle(Theme.ink)
+                .frame(width: 30)
             VStack(alignment: .leading, spacing: 3) {
-                Text(title)
-                    .font(Theme.caption(13))
-                    .tracking(1.5)
-                    .textCase(.uppercase)
-                    .foregroundStyle(filled ? Theme.paper : Theme.ink)
-                Text(sub)
-                    .font(Theme.mono(10))
-                    .foregroundStyle(filled ? Theme.paper.opacity(0.7) : Theme.graphite)
+                Text("Direkt aufnehmen")
+                    .font(Theme.caption(13)).tracking(1.6).textCase(.uppercase)
+                    .foregroundStyle(Theme.ink)
+                Text("Kamera aufs Stativ, automatisch auslösen")
+                    .font(Theme.mono(10)).foregroundStyle(Theme.graphite)
             }
             Spacer()
             Image(systemName: "arrow.right")
                 .font(.system(size: 13))
-                .foregroundStyle(filled ? Theme.paper.opacity(0.8) : Theme.graphite)
+                .foregroundStyle(Theme.graphite)
         }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 18)
+        .padding(.horizontal, 22)
+        .padding(.vertical, 17)
         .frame(maxWidth: .infinity)
-        .background(filled ? Theme.ink : Theme.paper)
-        .overlay(Rectangle().stroke(filled ? Color.clear : Theme.hairline, lineWidth: 1))
+        .background(Theme.paper)
+        .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
     }
 
     private func stepCell(no: String, text: String) -> some View {
