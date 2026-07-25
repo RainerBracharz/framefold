@@ -156,6 +156,136 @@ struct FoldMark: View {
     }
 }
 
+// MARK: Gefaltetes Papier (Facetten-Fläche)
+
+/// Deterministische Facetten-Geometrie: ein leicht verzogenes Dreiecksraster
+/// in Einheitskoordinaten (0…1) – dieselbe Faltung bei jedem App-Start.
+enum FoldFacets {
+    struct Tri { let a: CGPoint; let b: CGPoint; let c: CGPoint }
+
+    private struct Rng {
+        var state: UInt64
+        mutating func next() -> Double {
+            state = state &* 6364136223846793005 &+ 1442695040888963407
+            return Double((state >> 33) & 0xFFFFFF) / Double(0xFFFFFF)
+        }
+    }
+
+    static func triangles(cols: Int = 4, rows: Int = 3, seed: UInt64 = 7) -> [Tri] {
+        var rng = Rng(state: seed &* 2654435761 &+ 12345)
+        var grid: [[CGPoint]] = []
+        for r in 0...rows {
+            var row: [CGPoint] = []
+            for c in 0...cols {
+                let fx = CGFloat(c) / CGFloat(cols)
+                let fy = CGFloat(r) / CGFloat(rows)
+                // Randpunkte bleiben am Blattrand – gefaltet wird innen
+                let jx: CGFloat = (c == 0 || c == cols) ? 0 : CGFloat(rng.next() - 0.5) * 0.12
+                let jy: CGFloat = (r == 0 || r == rows) ? 0 : CGFloat(rng.next() - 0.5) * 0.12
+                row.append(CGPoint(x: fx + jx, y: fy + jy))
+            }
+            grid.append(row)
+        }
+        var out: [Tri] = []
+        for r in 0..<rows {
+            for c in 0..<cols {
+                let p00 = grid[r][c], p01 = grid[r][c + 1]
+                let p10 = grid[r + 1][c], p11 = grid[r + 1][c + 1]
+                out.append(Tri(a: p00, b: p01, c: p11))
+                out.append(Tri(a: p00, b: p11, c: p10))
+            }
+        }
+        return out
+    }
+
+    /// Wie stark eine Facette das Licht fängt (−1 Schatten … +1 Licht).
+    /// Das Licht fällt von links oben – wie in Tolinos Aufnahmen.
+    static func light(_ t: Tri, index: Int) -> Double {
+        let cx = Double(t.a.x + t.b.x + t.c.x) / 3
+        let cy = Double(t.a.y + t.b.y + t.c.y) / 3
+        let lit = 1 - (cx + cy) / 2
+        let alternate = index % 2 == 0 ? 0.12 : -0.10
+        return (lit - 0.5) * 0.9 + alternate
+    }
+}
+
+/// Eine gefaltete Papierfläche – das Werk als Objekt.
+/// Liegt ein Bild vor, wird es über die Facetten gefaltet; sonst entsteht ein
+/// Blatt aus Papierton mit einzelnen farbigen Splittern.
+struct FoldedPaperHero: View {
+    var image: UIImage? = nil
+    var seed: UInt64 = 7
+    var accent: Color = Theme.violet
+    var animatesLight: Bool = true
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var sweep = false
+
+    private var tris: [FoldFacets.Tri] { FoldFacets.triangles(seed: seed) }
+
+    var body: some View {
+        GeometryReader { geo in
+            let size = geo.size
+            ZStack {
+                if let image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: size.width, height: size.height)
+                        .clipped()
+                } else {
+                    Theme.paperShade
+                }
+
+                Canvas { ctx, canvasSize in
+                    for (i, t) in tris.enumerated() {
+                        var path = Path()
+                        path.move(to: scaled(t.a, canvasSize))
+                        path.addLine(to: scaled(t.b, canvasSize))
+                        path.addLine(to: scaled(t.c, canvasSize))
+                        path.closeSubpath()
+
+                        // Ohne Bild: einzelne Splitter in Werkfarbe
+                        if image == nil, i % 7 == 3 {
+                            ctx.fill(path, with: .color(accent.opacity(0.70)))
+                        } else if image == nil, i % 11 == 5 {
+                            ctx.fill(path, with: .color(Theme.amber.opacity(0.45)))
+                        }
+
+                        let l = FoldFacets.light(t, index: i)
+                        ctx.fill(path, with: .color(l >= 0
+                            ? Color.white.opacity(l * 0.55)
+                            : Color(red: 0.11, green: 0.10, blue: 0.09).opacity(-l * 0.42)))
+                        ctx.stroke(path, with: .color(Theme.ink.opacity(0.13)), lineWidth: 0.6)
+                    }
+                }
+
+                // Das Licht wandert langsam über die Faltung
+                if animatesLight, !reduceMotion {
+                    LinearGradient(colors: [.clear, .white.opacity(0.22), .clear],
+                                   startPoint: .topLeading, endPoint: .bottomTrailing)
+                        .frame(width: max(size.width * 0.55, 1))
+                        .offset(x: sweep ? size.width : -size.width)
+                        .blendMode(.softLight)
+                        .allowsHitTesting(false)
+                }
+            }
+            .frame(width: size.width, height: size.height)
+            .clipped()
+            .onAppear {
+                guard animatesLight, !reduceMotion, !sweep else { return }
+                withAnimation(.linear(duration: 14).repeatForever(autoreverses: false)) {
+                    sweep = true
+                }
+            }
+        }
+    }
+
+    private func scaled(_ p: CGPoint, _ s: CGSize) -> CGPoint {
+        CGPoint(x: p.x * s.width, y: p.y * s.height)
+    }
+}
+
 /// Das FrameFold-Logo als Kachel (wie das App-Icon): schwarze Fläche,
 /// weißes Serif-F, Spektral-Falz über die linke obere Ecke – Rand zu Rand.
 struct LogoTile: View {
