@@ -1,57 +1,62 @@
 import SwiftUI
 
-/// Designsystem „Bild · Objekt · Bild" — abgeleitet aus Aldo Tolinos Praxis:
-/// gefaltete Porträtfotografien, streng monochrom, in Serien gedacht,
+/// Designsystem „Falz & Flut" — abgeleitet aus Aldo Tolinos aktueller Praxis:
+/// mattes Papier, gefaltet über geologische und wässrige Fotografie
+/// (Bone, Stein, Marmor, ein Marine-Blau der Fluten), in Serien gedacht,
 /// und seiner Grundidee der endlosen Schleife Bild → Objekt → Bild.
 ///
 /// Zwei Zustände statt bunter Oberfläche:
-///   • Galerie (weiße Wand)  – sehen, ordnen, prüfen
-///   • Kammer (Dunkelkammer) – belichten, aufnehmen
+///   • Galerie (warme Papierwand)  – sehen, ordnen, prüfen
+///   • Kammer (warme Dunkelkammer) – belichten, aufnehmen
 ///
-/// Typografie: New York (Serif) als Katalog-/Buchstimme für Titel;
-/// SF Mono für alle Angaben, Zähler und Zustände – wie Anmerkungen auf
-/// der Rückseite eines Abzugs. Auswahl wird nicht farbig, sondern durch
-/// Inversion markiert (schwarzer Block – wie ein Passepartout).
+/// Farbe kommt nur aus dem Falz – als weiches Licht (Papier → Ocker → Marine),
+/// nie als Neon. Typografie: New York (Serif) als Katalog-Stimme für Titel;
+/// eine ruhige Grotesk mit Tabellenziffern für Angaben, Zähler und Zustände.
+/// Auswahl wird durch Inversion markiert (Tuscheblock – wie ein Passepartout).
 enum Theme {
 
-    // MARK: Farben (streng monochrom – wie sein Werk)
+    // MARK: Farben („Falz & Flut" – warmes Papier, geologische Ruhe)
 
-    /// Galeriewand, neutralweiß (bewusst kein Creme)
-    static let paper = Color(red: 0.957, green: 0.953, blue: 0.945)
-    /// Fläche auf der Wand
-    static let paperShade = Color(red: 0.925, green: 0.918, blue: 0.905)
-    /// Tuscheschwarz
-    static let ink = Color(red: 0.067, green: 0.063, blue: 0.063)
-    /// Graphit (Sekundärtext, Anmerkungen)
-    static let graphite = Color(red: 0.29, green: 0.28, blue: 0.26)
-    /// Haarlinie / Falzmarke
-    static let hairline = Color(red: 0.812, green: 0.800, blue: 0.776)
-    /// Dunkelkammer
-    static let darkroom = Color(red: 0.039, green: 0.039, blue: 0.039)
-    /// Schrift auf Dunkel
-    static let paperOnDark = Color(red: 0.929, green: 0.921, blue: 0.906)
+    /// Galeriewand, warmes Bone (sein Papier ist warm, nicht kaltweiß)
+    static let paper = Color(red: 0.937, green: 0.914, blue: 0.871)
+    /// Fläche auf der Wand (Papierschatten)
+    static let paperShade = Color(red: 0.890, green: 0.863, blue: 0.800)
+    /// Tusche – warmes Schwarz statt hartem Neutralschwarz
+    static let ink = Color(red: 0.114, green: 0.102, blue: 0.086)
+    /// Stein/Graphit (Sekundärtext, Anmerkungen)
+    static let graphite = Color(red: 0.420, green: 0.392, blue: 0.349)
+    /// Haarlinie / Falzmarke (Gips)
+    static let hairline = Color(red: 0.839, green: 0.804, blue: 0.741)
+    /// Dunkelkammer – warmes Fast-Schwarz
+    static let darkroom = Color(red: 0.078, green: 0.071, blue: 0.059)
+    /// Schrift auf Dunkel (warmes Bone)
+    static let paperOnDark = Color(red: 0.922, green: 0.894, blue: 0.839)
 
-    // MARK: Spektrum (Farbe kommt aus dem Falz – wie Licht über Tolinos Facetten)
+    // MARK: Akzente (aus seiner Werkwelt: Flut, Fels, Salbei, Marmor – entsättigt)
 
-    static let violet = Color(red: 0.424, green: 0.361, blue: 0.906)  // #6C5CE7
-    static let blue   = Color(red: 0.231, green: 0.510, blue: 0.965)  // #3B82F6
-    static let cyan   = Color(red: 0.133, green: 0.827, blue: 0.776)  // #22D3C6
-    static let magenta = Color(red: 0.910, green: 0.361, blue: 0.690) // #E85CB0
-    static let lime   = Color(red: 0.639, green: 0.902, blue: 0.208)  // #A3E635
-    static let amber  = Color(red: 0.961, green: 0.620, blue: 0.043)  // #F59E0B
+    static let violet  = Color(red: 0.208, green: 0.341, blue: 0.416) // Flut (Marine) #35576A
+    static let blue    = Color(red: 0.173, green: 0.275, blue: 0.341) // Tiefsee #2C4657
+    static let cyan    = Color(red: 0.596, green: 0.655, blue: 0.549) // Salbei #98A78C
+    static let magenta = Color(red: 0.780, green: 0.604, blue: 0.573) // Marmor (Blush) #C79A92
+    static let lime    = Color(red: 0.541, green: 0.604, blue: 0.431) // Moos #8A9A6E
+    static let amber   = Color(red: 0.690, green: 0.486, blue: 0.263) // Fels (Ocker) #B07C43
 
-    /// Volles Spektrum – Logo, Hero-Momente.
+    /// „Falz im Licht" – weiche, entsättigte Tonwelle (Papier → Ocker → Marine)
+    /// statt Neon-Regenbogen. Für Logo und Hero-Momente.
     static let spectrum = LinearGradient(
-        colors: [magenta, violet, blue, cyan, lime, amber],
+        colors: [Color(red: 0.937, green: 0.898, blue: 0.804),   // warmes Papierlicht
+                 Color(red: 0.855, green: 0.729, blue: 0.545),   // Ocker-Schimmer
+                 Color(red: 0.561, green: 0.651, blue: 0.690)],  // Marine-Licht
         startPoint: .leading, endPoint: .trailing)
 
-    /// Der gebrochene Falz – Auswahl, Fortschritt, Pegel (violett → cyan).
+    /// Der gebrochene Falz – Auswahl, Fortschritt, Pegel (Marine, ruhig).
     static let crease = LinearGradient(
-        colors: [violet, cyan],
+        colors: [Color(red: 0.286, green: 0.427, blue: 0.502),   // Flut hell
+                 Color(red: 0.173, green: 0.275, blue: 0.341)],  // Tiefsee
         startPoint: .topLeading, endPoint: .bottomTrailing)
 
-    /// Akzentpalette; jedes Projekt trägt genau einen daraus.
-    static let accents: [Color] = [violet, blue, cyan, magenta, lime, amber]
+    /// Akzentpalette; jedes Projekt trägt genau einen daraus (entsättigt).
+    static let accents: [Color] = [violet, amber, cyan, magenta, lime, blue]
 
     /// Deterministischer Akzent aus einer UUID (stabil über App-Starts –
     /// bewusst nicht hashValue, das ist pro Prozess zufällig).
@@ -66,19 +71,20 @@ enum Theme {
     static func serif(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
         .system(size: size, weight: weight, design: .serif)
     }
-    /// Monospace (SF Mono) – alle Angaben, Zähler, Zustände, Knöpfe.
+    /// Grotesk (SF Pro) mit Tabellenziffern – Angaben, Zähler, Zustände, Knöpfe.
+    /// Ruhige Katalog-Stimme statt Terminal-Monospace; Ziffern bleiben dimensionsgleich.
     static func mono(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
-        .system(size: size, weight: weight, design: .monospaced)
+        .system(size: size, weight: weight, design: .default).monospacedDigit()
     }
 
-    /// Gesperrte Mono-Versalien für Abschnitts- und Statuszeilen.
+    /// Gesperrte Grotesk-Versalien für Abschnitts- und Statuszeilen.
     static func caption(_ size: CGFloat = 11) -> Font { mono(size, .medium) }
     /// Werktitel (Serif).
     static let title = Font.system(size: 23, weight: .light, design: .serif)
-    /// Kurzer Fließtext / Anmerkung (Mono).
-    static let body = Font.system(size: 13, weight: .regular, design: .monospaced)
-    /// Zahlen – gleichbreite Ziffern (Mono ist ohnehin dimensionsgleich).
-    static let numeral = Font.system(size: 14, weight: .medium, design: .monospaced)
+    /// Kurzer Fließtext / Anmerkung (Grotesk).
+    static let body = Font.system(size: 13, weight: .regular, design: .default)
+    /// Zahlen – gleichbreite Ziffern (Tabellenziffern).
+    static let numeral = Font.system(size: 14, weight: .medium, design: .default).monospacedDigit()
 }
 
 // MARK: Falz-Signet (Dreiecksfacette)
