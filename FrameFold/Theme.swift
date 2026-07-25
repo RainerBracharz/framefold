@@ -58,6 +58,8 @@ enum Theme {
     static let magenta = Color(red: 0.780, green: 0.604, blue: 0.573) // Marmor (Blush) #C79A92
     static let lime    = Color(red: 0.541, green: 0.604, blue: 0.431) // Moos #8A9A6E
     static let amber   = Color(red: 0.690, green: 0.486, blue: 0.263) // Fels (Ocker) #B07C43
+    /// Warnung/Löschen – gedämpftes Oxblood statt grellem Systemrot.
+    static let oxblood = Color(red: 0.510, green: 0.208, blue: 0.180) // #82352E
 
     /// „Falz im Licht" – weiche, entsättigte Tonwelle (Papier → Ocker → Marine)
     /// statt Neon-Regenbogen. Für Logo und Hero-Momente.
@@ -206,6 +208,14 @@ enum FoldFacets {
         let lit = 1 - (cx + cy) / 2
         let alternate = index % 2 == 0 ? 0.12 : -0.10
         return (lit - 0.5) * 0.9 + alternate
+    }
+}
+
+/// Stabile Faltung pro Werk: dieselbe Geometrie bei jedem App-Start.
+enum FoldSeed {
+    static func make(_ id: UUID?) -> UInt64 {
+        guard let id else { return 7 }
+        return id.uuidString.unicodeScalars.reduce(UInt64(7)) { ($0 &* 31) &+ UInt64($1.value) }
     }
 }
 
