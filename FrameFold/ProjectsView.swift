@@ -271,6 +271,10 @@ struct ProjectDetailView: View {
         .sheet(item: $shareItem) { item in
             ActivityView(items: [item.url])
         }
+        .onChange(of: exportSettings) { _, _ in
+            // Einstellungen geändert → das fertige Video passt nicht mehr dazu
+            exportURL = nil
+        }
     }
 
     /// Immer den frischen Stand aus dem Store verwenden.
@@ -362,24 +366,25 @@ struct ProjectDetailView: View {
             }
 
             if isExporting {
-                HairlineProgress(value: exportProgress)
+                VStack(spacing: 8) {
+                    HairlineProgress(value: exportProgress)
+                    CatalogLabel("Stopmotion wird montiert…", size: 10)
+                }
+            } else if let exportURL {
+                // Fertig: teilen ist jetzt der Hauptgriff (Sichern, AirDrop, …)
+                Button {
+                    shareItem = ShareItem(url: exportURL)
+                } label: {
+                    Text("Video teilen")
+                }
+                .buttonStyle(InkButtonStyle())
+
+                Button("Neu exportieren") { export() }
+                    .buttonStyle(HairlineButtonStyle())
             } else {
                 Button("Stopmotion exportieren") { export() }
                     .buttonStyle(InkButtonStyle())
                     .disabled(currentProject.frameCount == 0)
-            }
-
-            if let exportURL {
-                ShareLink(item: exportURL) {
-                    Text("Video teilen")
-                        .font(Theme.caption(12))
-                        .tracking(1.6)
-                        .textCase(.uppercase)
-                        .foregroundStyle(Theme.ink)
-                        .padding(.vertical, 14)
-                        .frame(maxWidth: .infinity)
-                        .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
-                }
             }
             if let errorMessage {
                 Text(errorMessage)
@@ -513,6 +518,9 @@ struct ProjectDetailView: View {
                 await MainActor.run {
                     exportURL = url
                     isExporting = false
+                    // Direkt anbieten: sichern, teilen, AirDrop – statt den
+                    // Nutzer auf demselben Screen raten zu lassen.
+                    shareItem = ShareItem(url: url)
                 }
             } catch {
                 await MainActor.run {
@@ -566,6 +574,7 @@ struct ExhibitionSheet: View {
     @State private var progress = 0.0
     @State private var reelURL: URL?
     @State private var errorMessage: String?
+    @State private var shareItem: ShareItem?
 
     private var chosen: [Project] { store.projects.filter { selected.contains($0.id) } }
     private var totalFrames: Int { chosen.reduce(0) { $0 + $1.frameCount } }
@@ -655,13 +664,12 @@ struct ExhibitionSheet: View {
                         HairlineProgress(value: progress)
                         CatalogLabel("Reel wird montiert…")
                     } else if let reelURL {
-                        ShareLink(item: reelURL) {
+                        Button {
+                            shareItem = ShareItem(url: reelURL)
+                        } label: {
                             Text("Ausstellung teilen")
-                                .font(Theme.caption(12)).tracking(2.2).textCase(.uppercase)
-                                .foregroundStyle(Theme.paper)
-                                .padding(.vertical, 15).frame(maxWidth: .infinity)
-                                .background(Theme.ink)
                         }
+                        .buttonStyle(InkButtonStyle())
                     } else {
                         Button(chosen.count >= 2
                                ? "\(chosen.count) Werke montieren"
@@ -685,6 +693,9 @@ struct ExhibitionSheet: View {
                     Button("Fertig") { dismiss() }.foregroundStyle(Theme.ink)
                 }
             }
+            .sheet(item: $shareItem) { item in
+                ActivityView(items: [item.url])
+            }
         }
     }
 
@@ -706,7 +717,11 @@ struct ExhibitionSheet: View {
                 let url = try await ExhibitionBuilder.build(
                     works: works, settings: PipelineSettings()
                 ) { p in Task { @MainActor in progress = p } }
-                await MainActor.run { reelURL = url; isBuilding = false }
+                await MainActor.run {
+                    reelURL = url
+                    isBuilding = false
+                    shareItem = ShareItem(url: url)   // direkt anbieten
+                }
             } catch {
                 await MainActor.run {
                     errorMessage = error.localizedDescription

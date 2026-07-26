@@ -6,7 +6,7 @@ import CoreGraphics
 /// Einstellungen der Stopmotion-Pipeline.
 /// Alle Werte sind bewusst als Regler exponiert, damit sie sich
 /// an Aldos Arbeitsweise anpassen lassen.
-struct PipelineSettings {
+struct PipelineSettings: Equatable {
     /// Abtastrate aus dem Quellvideo (Frames pro Sekunde der Analyse).
     /// Seit der Batch-Dekodierung ist dichtes Abtasten billig – 10 fps treffen
     /// auch kurze Haltemomente zuverlässig und finden schärfere Kandidaten.
