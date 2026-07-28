@@ -17,38 +17,43 @@ Danach geht Deployment auch kabellos (gleiches WLAN). Gratis-Profil: Signatur l�
 
 ### Was im Projekt schon konfiguriert ist
 
-- Alle 17 Swift-Dateien sind im Build-Target eingetragen
-- Kamera-Berechtigung (für den Live-Tab) ist gesetzt
+- Alle 20 Swift-Dateien sind im Build-Target eingetragen
+- Kamera-Berechtigung (für den Kamera-Tab) ist gesetzt
 - Automatisches Signing, Bundle-ID `com.rainer.framefold`, iOS 17+, Portrait
 - Info.plist wird von Xcode automatisch generiert
+- Die Schriften Fraunces und Inter liegen als Data-Sets im Asset-Katalog und
+  werden beim Start registriert – kein Info.plist-Eintrag nötig
 
 ### Die Dateien im Ordner `FrameFold/`
 
-- FrameFoldApp.swift (App + Tab-Navigation)
-- Theme.swift (Design-System „Papier & Falz" nach Aldo Tolinos Arbeiten: Papierweiß/Tuschschwarz, scharfe Kanten, Haarlinien, Falz-Signet, Katalog-Typografie; Live-Tab als Dunkelkammer)
-- Algorithms.swift (pure Kernlogik – auf Linux mit Swift 6 kompiliert und durch 39 Tests verifiziert)
-- ContentView.swift (Video-Import-Tab)
+- FrameFoldApp.swift (App + Tab-Navigation, Schrift-Registrierung)
+- Theme.swift (Design-System „Falz & Flut" nach Aldo Tolinos aktuellen Arbeiten: warmes Bone/Tusche, Marine-Akzent, Haarlinien, Falz-Signet, gefaltete Papierfläche `FoldedPaperHero`, Katalog-Typografie; Kamera-Tab als Dunkelkammer)
+- Algorithms.swift (pure Kernlogik – auf Linux mit Swift 6 kompiliert und durch Tests verifiziert)
+- ContentView.swift (Video-Tab: Startscreen, Bildauswahl, Ergebnis, Einstellungen)
 - Models.swift (Einstellungen, Export-Presets, Loop-Modi)
+- MotionLevel.swift (Wasserwaage über CoreMotion)
 - FrameAnalyzer.swift (Bewegung, Schärfe, dHash)
 - KeyframeSelector.swift (Otsu-Schwelle, Ruhefenster)
 - HandDetector.swift (Apple Vision, Stufe A)
 - CoreMLHandDetector.swift (RF-DETR, Stufe B, optional)
 - FrameAligner.swift (Stabilisierung zwischen Frames)
-- StopMotionAssembler.swift (Video-Assembly, Crop, Boomerang, Interferenz-Echo, Falz-Blende)
+- StopMotionAssembler.swift (Video-Assembly, Crop, Boomerang, Interferenz-Echo, Falz-Blende, Druckbild, Papierrelief)
 - ContactSheetRenderer.swift (Kontaktbogen als druckfertiges A4-PDF)
+- FoldTemplateRenderer.swift (Faltvorlage mit Falzlinien als PDF)
+- ExhibitionBuilder.swift (mehrere Werke zu einem Ausstellungs-Reel montieren)
 - ProcessingViewModel.swift (Pipeline-Orchestrierung)
-- LiveCaptureController.swift (Auto-Shutter-Logik)
-- LiveCaptureView.swift (Live-Tab mit Onion-Skin)
+- LiveCaptureController.swift (Auto-Shutter, Kamera-Fixierung, Intervall-Auslöser)
+- LiveCaptureView.swift (Kamera-Tab mit Sucher, Onion-Skin, Live-Einstellungen)
 - ProjectStore.swift (Projekte/Sessions-Persistenz)
-- ProjectsView.swift (Projekte-Tab mit Timeline & Export)
+- ProjectsView.swift (Projekte-Tab mit Kontaktbogen, Export, Ausstellung)
 
 ## Die drei Tabs
 
-**Video-Tab:** Arbeitsvideo aus der Mediathek wählen → App analysiert, entfernt Hand-Frames, zeigt die fertige Stopmotion mit Statistik. Über das Regler-Symbol: Empfindlichkeit, Mindest-Ruhezeit, Handerkennung, Framerate, **Format (9:16 Reel / 1:1 / 16:9)**, **Abspielmodus (Boomerang / Rückwärts)** und **Frame-Ausrichtung**. „Als Projekt sichern" legt die Keyframes in ein Projekt.
+**Video-Tab:** Der Startscreen begrüßt dich und zeigt dein letztes Werk als gefaltete Papierfläche – die ganze Tafel ist der Griff zum Video-Import. Danach: App analysiert, entfernt Hand-Frames, zeigt die Bildauswahl zum Nachjustieren und die fertige Stopmotion (Vorschau läuft in Schleife). Über das Regler-Symbol: Modus, Empfindlichkeit, Bildrate, **Format**, **Auflösung**, **Abspielmodus**, **Frame-Ausrichtung** und die Tolino-Effekte. „Als Projekt sichern" legt die Keyframes in ein Projekt.
 
-**Live-Tab (Auto-Shutter):** iPhone aufs Stativ, Projekt wählen, arbeiten. Die App erkennt „Hände weg + Szene ruhig" und nimmt automatisch einen Frame — mit Onion-Skin-Overlay des letzten Frames (Ebenen-Symbol schaltet es um). „Fertig" beendet die Session; die Frames liegen im Projekt.
+**Kamera-Tab (Auto-Shutter):** iPhone aufs Stativ, Werk wählen, arbeiten. Die App erkennt „Hände weg + Szene ruhig" und nimmt automatisch einen Frame. Nach der kurzen Kalibrierung **fixiert sie Belichtung, Fokus und Weißabgleich** (niedrige ISO, flackerarme Belichtungszeit nach Netzfrequenz), damit zwischen den Bildern nichts driftet. Dazu: **Tippen setzt Fokus/Belichtung**, **Neu fixieren** nach Lichtwechsel, **Intervall-Auslöser** als Alternative zum Bewegungs-Trigger, Onion-Skin wahlweise gegen den **ersten** Frame (Drift-Kontrolle) mit regelbarer Deckkraft, optionales **Referenzbild**, Bildschirm bleibt wach, Auslöse-Ton abschaltbar. „Fertig" beendet die Session.
 
-**Projekte-Tab:** Ein Projekt pro Werk, Sessions über Tage/Wochen sammelbar. Timeline aller Frames (langes Drücken auf einen Frame → entfernen), Export mit allen Presets, direkt teilbar.
+**Projekte-Tab:** Ein Werk pro Projekt, Sessions über Tage/Wochen sammelbar. Nummerierter Kontaktbogen aller Frames (Bearbeiten → einzeln entfernen, 30 Tage Papierkorb), Export mit allen Presets, **Kontaktbogen-PDF** und **Faltvorlage-PDF** zum Drucken. Ab zwei Werken (Tolino-Modus) lässt sich über das Film-Symbol eine **Ausstellung** montieren.
 
 ## RF-DETR nachrüsten (Stufe B, optional)
 
@@ -72,12 +77,19 @@ Falls Xcode rote Fehler zeigt: Meldung kopieren und mir schicken, ich korrigiere
 
 ## Stand der Ausbaustufen
 
-Bereits enthalten: Live-Capture mit Auto-Shutter und Onion-Skin, Projekte/Sessions über mehrere Tage, Frame-Alignment, Export-Presets (9:16/1:1/16:9), Boomerang/Rückwärts, manueller Frame-Override, RF-DETR-Anbindung (Modell einfach reinziehen, siehe oben), Design-System „Papier & Falz".
+Bereits enthalten: Live-Capture mit Auto-Shutter und Onion-Skin, Projekte/Sessions über mehrere Tage, Frame-Alignment, Export-Presets, Boomerang/Rückwärts, manueller Frame-Override, RF-DETR-Anbindung (Modell einfach reinziehen, siehe oben).
 
-**Neu — die Tolino-Stufe:**
+**Die Tolino-Stufe:**
 
-- **Interferenz-Echo** (Einstellungen → Interferenz, oder im Projekt-Export): Jeder Output-Frame schimmert im nächsten nach — eine Rekursion des eigenen Bildes, Stärke regelbar. Das Werk „erinnert" sich an seinen vorherigen Zustand.
-- **Falz-Blende** (Aus/Kurz/Weich): Übergänge decken den nächsten Frame entlang einer wandernden Diagonale auf, mit feiner heller Falzkante — wie ein umgeschlagenes Blatt.
-- **Kontaktbogen (PDF)** (im Projekt, unter dem Export): Alle Frames eines Werks als druckfertiger A4-Bogen im Katalog-Layout (nummerierte Zellen, Haarlinien, Kopfzeile mit Werktitel und Datum, mehrseitig). Zum Ausdrucken — und Wiederfalten: Bild → Objekt → Bild.
+- **Druckbild (Schwarzweiß)**: Graustufen auf warmem Papierton — wie ein abfotografierter Druck.
+- **Papierrelief**: Jede Facette liegt anders im Licht — als wäre das Bild gefaltet und wieder abfotografiert worden. Stärke regelbar.
+- **Interferenz-Echo**: Jeder Output-Frame schimmert im nächsten nach — eine Rekursion des eigenen Bildes. Das Werk „erinnert" sich an seinen vorherigen Zustand.
+- **Überblendung** (Aus/Kurz/Weich) in drei **Übergangsstilen**: **Falz** (wandernde Diagonale mit heller Falzkante), **Facetten** (triangulierte Flächen) und **Verwebung** (eingewobene Bildstreifen, nach seinen gewebten Papierarbeiten).
+- **Kontaktbogen (PDF)**: Alle Frames eines Werks als druckfertiger A4-Bogen im Katalog-Layout (nummerierte Zellen, Haarlinien, Kopfzeile mit Werktitel und Datum, mehrseitig).
+- **Faltvorlage (PDF)**: Druckbare Seite mit gestrichelten Falzlinien zum Nachfalten — Bild → Objekt → Bild.
+- **Ausstellung**: Mehrere Werke zu einem durchlaufenden Reel mit Katalog-Titelkarten montieren.
+- **Erneut falten (Rekursion)**: Das fertige Ergebnis direkt wieder durch die Pipeline schicken.
+
+**Design „Falz & Flut"** (abgeleitet aus seinen aktuellen Serien — mattes Papier über geologischer und wässriger Fotografie): warmes Bone statt Kaltweiß, warmes Tuscheschwarz, ein Marine-Akzent aus den Flood-Arbeiten, gedämpfte Werkfarben (Fels, Salbei, Marmor). Der Startscreen zeigt das letzte Werk als **gefaltete Papierfläche**, über die langsam Licht wandert. Schriften: **Fraunces** (Titel) und **Inter** (Angaben), beide eingebettet. Auswahl wird durch Inversion markiert, nie durch Farbe.
 
 Mögliche nächste Schritte: Filmkorn/Jitter-Look (Metal), Audio/Click-Track, Saliency-basierter Smart-Crop, Hintergrundverarbeitung langer Videos, TestFlight für Aldo.
