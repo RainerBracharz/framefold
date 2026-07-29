@@ -10,6 +10,8 @@ struct ContentView: View {
     @State private var showSettings = false
     @State private var homeIn = false
     @AppStorage("artistName") private var artistName = "Aldo"
+    /// Neigungs-Licht: das Galerielicht folgt der Hand (CoreMotion).
+    @StateObject private var lightTilt = LightTilt()
 
     var body: some View {
         NavigationStack {
@@ -62,7 +64,7 @@ struct ContentView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     CatalogLabel(greetingLine)
                     Text("Woran arbeitest du\nheute?")
-                        .font(Theme.serif(29, .regular))
+                        .font(Theme.serifItalic(28))
                         .foregroundStyle(Theme.ink)
                         .lineSpacing(2)
                         .fixedSize(horizontal: false, vertical: true)
@@ -97,7 +99,9 @@ struct ContentView: View {
         }
         .onAppear {
             if !homeIn { withAnimation(.smooth(duration: 0.55)) { homeIn = true } }
+            lightTilt.start()
         }
+        .onDisappear { lightTilt.stop() }
         .onChange(of: pickerItem) { _, newItem in
             guard let newItem else { return }
             // Sofort Feedback zeigen – das Kopieren des Videos aus der
@@ -140,7 +144,8 @@ struct ContentView: View {
             FoldedPaperHero(
                 image: latestProject.flatMap { store.thumbnail(for: $0) },
                 seed: FoldSeed.make(latestProject?.id),
-                accent: latestProject.map { Theme.accent(for: $0.id) } ?? Theme.violet)
+                accent: latestProject.map { Theme.accent(for: $0.id) } ?? Theme.violet,
+                tilt: lightTilt.offset)
                 .frame(height: 248)
 
             HStack(spacing: 14) {
@@ -170,6 +175,7 @@ struct ContentView: View {
             }
         }
         .overlay(Rectangle().stroke(Theme.ink, lineWidth: 1))
+        .hung()   // hängt als Abzug an der Galeriewand
     }
 
     private var recentStrip: some View {
@@ -211,6 +217,7 @@ struct ContentView: View {
                 .overlay(alignment: .leading) {
                     Rectangle().fill(Theme.accent(for: project.id)).frame(width: 3)
                 }
+                .shadow(color: Theme.ink.opacity(0.14), radius: 8, x: 0, y: 5)
             Text(project.name)
                 .font(Theme.serif(14, .regular))
                 .foregroundStyle(Theme.ink)
@@ -501,7 +508,7 @@ struct ResultView: View {
         VStack(spacing: 18) {
             VideoPlayer(player: player)
                 .aspectRatio(previewAspect, contentMode: .fit)
-                .passepartout()
+                .editionPlate()   // wie seine Editionen: unter Acrylglas
                 .task {
                     let asset = AVURLAsset(url: result.outputURL)
                     guard let track = try? await asset.loadTracks(withMediaType: .video).first,
@@ -527,6 +534,7 @@ struct ResultView: View {
                 CatalogLabel("\(result.keyframeTimes.count) Bilder · aus \(Int(result.sourceDuration)) s Video",
                              color: Theme.ink)
                 CatalogLabel("\(result.discardedForHands) mit Händen entfernt · \(result.discardedAsDuplicates) Duplikate")
+                CatalogLabel("Serie von \(result.keyframeTimes.count) · datiert \(String(Calendar.current.component(.year, from: Date())))", size: 9)
             }
 
             HStack(spacing: 12) {

@@ -23,7 +23,7 @@ struct ProjectsView: View {
                             .overlay(Rectangle().stroke(Theme.ink, lineWidth: 1))
                             .padding(.horizontal, 44)
                         Text("Ein Blatt pro Werk.")
-                            .font(Theme.serif(21, .regular))
+                            .font(Theme.serifItalic(21))
                             .foregroundStyle(Theme.ink)
                             .padding(.top, 24)
                         Text("Bilder sammeln sich über beliebig viele\nAufnahmen – live oder aus Videos.")

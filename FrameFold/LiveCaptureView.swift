@@ -124,7 +124,7 @@ struct LiveCaptureView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     CatalogLabel("Dunkelkammer", color: Theme.paperOnDark.opacity(0.55))
                     Text("Welches Werk\nnimmst du auf?")
-                        .font(Theme.serif(27, .regular))
+                        .font(Theme.serifItalic(26))
                         .foregroundStyle(Theme.paperOnDark)
                         .lineSpacing(2)
                         .fixedSize(horizontal: false, vertical: true)
