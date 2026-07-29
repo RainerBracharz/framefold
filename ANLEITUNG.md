@@ -27,7 +27,7 @@ Danach geht Deployment auch kabellos (gleiches WLAN). Gratis-Profil: Signatur l�
 ### Die Dateien im Ordner `FrameFold/`
 
 - FrameFoldApp.swift (App + Tab-Navigation, Schrift-Registrierung)
-- Theme.swift (Design-System „Falz & Flut" nach Aldo Tolinos aktuellen Arbeiten: warmes Bone/Tusche, Marine-Akzent, Haarlinien, Falz-Signet, gefaltete Papierfläche `FoldedPaperHero`, Katalog-Typografie; Kamera-Tab als Dunkelkammer)
+- Theme.swift (Design-System „Bruch & Licht" nach Aldo Tolinos 2024er-Serien: helle Galerie mit Lichtverlauf, Amber-Signal, Teal/Schiefer, geknüllte Papierfläche `FoldedPaperHero` mit Durchleuchtung, Neigungs-Licht `LightTilt`, Acrylglas-Rahmen, Katalog-Typografie mit kursiver Stimme; Kamera-Tab als Dunkelkammer)
 - Algorithms.swift (pure Kernlogik – auf Linux mit Swift 6 kompiliert und durch Tests verifiziert)
 - ContentView.swift (Video-Tab: Startscreen, Bildauswahl, Ergebnis, Einstellungen)
 - Models.swift (Einstellungen, Export-Presets, Loop-Modi)
@@ -90,6 +90,6 @@ Bereits enthalten: Live-Capture mit Auto-Shutter und Onion-Skin, Projekte/Sessio
 - **Ausstellung**: Mehrere Werke zu einem durchlaufenden Reel mit Katalog-Titelkarten montieren.
 - **Erneut falten (Rekursion)**: Das fertige Ergebnis direkt wieder durch die Pipeline schicken.
 
-**Design „Falz & Flut"** (abgeleitet aus seinen aktuellen Serien — mattes Papier über geologischer und wässriger Fotografie): warmes Bone statt Kaltweiß, warmes Tuscheschwarz, ein Marine-Akzent aus den Flood-Arbeiten, gedämpfte Werkfarben (Fels, Salbei, Marmor). Der Startscreen zeigt das letzte Werk als **gefaltete Papierfläche**, über die langsam Licht wandert. Schriften: **Fraunces** (Titel) und **Inter** (Angaben), beide eingebettet. Auswahl wird durch Inversion markiert, nie durch Farbe.
+**Design „Bruch & Licht"** (abgeleitet aus den 2024er-Serien — Full-Blown, Cracked, die Reliefs): helle Galeriewand mit Lichtverlauf, **Amber als Signal**, Teal/Schiefer als Zweitfarben, warmes Tuscheschwarz. Der Startscreen zeigt das letzte Werk als **geknüllte Papierfläche**, durch die Licht in Amber und Werkfarbe scheint — **neigt man das iPhone, wandert das Licht über die Facetten** (wie ein Abzug unter Galerielicht). Das fertige Stopmotion hängt **unter Acrylglas** (Glanz, Schatten, Editions-Zeile). Schriften: **Fraunces** (Titel, kursiv als Stimme) und **Inter** (Angaben), beide eingebettet. Auswahl wird durch Inversion markiert, nie durch Farbe.
 
 Mögliche nächste Schritte: Filmkorn/Jitter-Look (Metal), Audio/Click-Track, Saliency-basierter Smart-Crop, Hintergrundverarbeitung langer Videos, TestFlight für Aldo.

@@ -52,13 +52,13 @@ Video ─▶ sample ~10 fps ─▶ motion + sharpness scoring ─▶ Otsu “res
 
 The signal-processing core (rest detection, sharpness, perceptual hashing, crop geometry, shift estimation) is isolated in a single dependency-free file and covered by **60+ tests that run on every push**, so the maths is verified independently of the Apple frameworks.
 
-## Design — “Fold & Flood”
+## Design — “Crack & Light”
 
-The language is drawn from Tolino’s recent work: matte paper folded over geological and aqueous photography. A warm **bone** gallery for viewing and a warm **darkroom** for capture; ink is a warm black, never a hard neutral. Colour enters only where light breaks in the fold — a single **marine** accent from his flood series, with muted rock, sage and marble as the per-work accents.
+The language is drawn from Tolino’s 2024 series (*Full-Blown*, *Cracked*, the reliefs): crushed white paper on luminous gradient fields, colour glowing **through** the sheet, and **amber** as his recurring signal. The gallery is a light wall with a soft vertical light gradient; the darkroom stays warm for capture. Colour enters as light behind the paper — amber first, then teal and slate; muted sage, marble and moss carry the per-work accents.
 
-The home screen doesn’t describe folding, it **folds**: a triangulated paper field, filled with the frames of your latest work, light travelling slowly across the facets — the whole plate is the way in, with its caption struck along the bottom like a catalogue print.
+The home screen doesn’t describe folding, it **crumples**: an irregular fractured paper field, filled with the frames of your latest work, hung with a soft shadow like a print on the wall. **Tilt the phone and the light travels across the facets** — as if you were turning the print under gallery light: image → object → image, made physical. The finished stop-motion is presented like his editions — sealed under acrylic glass, with a gloss, a shadow and an edition line (“Serie von 8 · datiert 2026”).
 
-Typography pairs **Fraunces** (serif, the catalogue voice) with **Inter** (the annotation-on-the-back-of-a-print voice), both bundled and registered at runtime. Selection is marked by inversion — an ink block — never by colour. The mark is an “F” crossed by a single marine crease: a folded sheet catching the light.
+Typography pairs **Fraunces** (serif — with the *italic* as the speaking voice, as on his website) with **Inter** (the annotation-on-the-back-of-a-print voice), both bundled and registered at runtime. Selection is marked by inversion — an ink block — never by colour. The mark is an “F” crossed by a single amber crease: a folded sheet catching the light.
 
 ## Engineering
 
