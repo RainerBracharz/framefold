@@ -58,8 +58,12 @@ final class LiveCaptureController: NSObject, ObservableObject {
     @Published var capturedCount = 0
     @Published var lastCapturedImage: UIImage?   // für Onion-Skin
     @Published var permissionDenied = false
+    /// Kein Aufnahmegerät vorhanden (z. B. iOS-Simulator oder Gerät ohne Kamera).
+    @Published var cameraUnavailable = false
 
     let session = AVCaptureSession()
+    /// Aktuelles Aufnahmegerät – zum Fixieren von Belichtung/Fokus/Weißabgleich.
+    private var device: AVCaptureDevice?
 
     /// Sekunden Stabilität bis zum Auto-Shutter (live änderbar)
     @Published var stableSeconds: Double = 0.8
@@ -69,6 +73,25 @@ final class LiveCaptureController: NSObject, ObservableObject {
     @Published var checkHands = true
     /// Aktueller Bewegungswert (für den Pegel im Sucher)
     @Published var currentMotion: Double = 0
+
+    // MARK: Aufnahme-Optionen (live änderbar)
+    enum CaptureMode: Int, CaseIterable, Identifiable {
+        case motion, interval
+        var id: Int { rawValue }
+        var label: String { self == .motion ? "Bewegung" : "Intervall" }
+    }
+    /// Auslöser: Bewegung (Auto-Shutter) oder fester Zeittakt.
+    @Published var captureMode: CaptureMode = .motion {
+        didSet { startIntervalIfNeeded() }
+    }
+    /// Intervall in Sekunden für den Zeitraffer-Auslöser.
+    @Published var intervalSeconds: Double = 3.0
+    /// Netzfrequenz für flackerarme Belichtungszeiten (50 Hz / 60 Hz).
+    @Published var mainsHz: Int = 50
+    /// Auslöse-Ton (Verschlussgeräusch) abspielen.
+    @Published var playShutterSound = true
+    /// Erster Frame der Session – als Drift-Referenz im Onion-Skin.
+    @Published var firstCapturedImage: UIImage?
 
     private var previousGray: [UInt8]?
     private var stableSince: Date?
@@ -80,6 +103,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     private var handDetector: HandDetecting = HandDetectorFactory.make()
     private let videoQueue = DispatchQueue(label: "framefold.livecapture")
     private var onCapture: ((Data) -> Void)?
+    private var intervalTask: Task<Void, Never>?
 
     // MARK: Lifecycle
 
@@ -91,10 +115,16 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 self.permissionDenied = true
                 return
             }
-            self.configureSession()
+            guard self.configureSession() else {
+                // Kein Aufnahmegerät (Simulator/kameraloses Gerät): klar melden,
+                // statt endlos in der Kalibrierung hängenzubleiben.
+                self.cameraUnavailable = true
+                return
+            }
             Task.detached { [session = self.session] in
                 session.startRunning()
             }
+            self.firstCapturedImage = nil
             self.status = .calibrating
             self.calibrationSamples = []
             self.armed = false // scharf erst nach der Kalibrierung
@@ -102,12 +132,17 @@ final class LiveCaptureController: NSObject, ObservableObject {
     }
 
     func stop() {
+        intervalTask?.cancel()
+        intervalTask = nil
         Task.detached { [session = self.session] in
             session.stopRunning()
         }
     }
 
-    private func configureSession() {
+    /// Baut die Capture-Session auf. Gibt `false` zurück, wenn kein
+    /// Aufnahmegerät verfügbar ist (Simulator/kameraloses Gerät).
+    @discardableResult
+    private func configureSession() -> Bool {
         session.beginConfiguration()
         session.sessionPreset = .hd1920x1080
 
@@ -115,9 +150,10 @@ final class LiveCaptureController: NSObject, ObservableObject {
               let input = try? AVCaptureDeviceInput(device: device),
               session.canAddInput(input) else {
             session.commitConfiguration()
-            return
+            return false
         }
         session.addInput(input)
+        self.device = device
 
         let output = AVCaptureVideoDataOutput()
         output.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
@@ -125,10 +161,113 @@ final class LiveCaptureController: NSObject, ObservableObject {
         output.setSampleBufferDelegate(self, queue: videoQueue)
         guard session.canAddOutput(output) else {
             session.commitConfiguration()
-            return
+            return false
         }
         session.addOutput(output)
         session.commitConfiguration()
+        return true
+    }
+
+    /// Fixiert Belichtung, Fokus und Weißabgleich für Stop-Motion. Wenn möglich
+    /// mit niedriger ISO und entsprechend längerer Belichtungszeit (gleiche
+    /// Helligkeit, weniger Rauschen – bei statischem Set unkritisch).
+    private func lockCameraSettings() {
+        guard let device else { return }
+        do {
+            try device.lockForConfiguration()
+
+            if device.isFocusModeSupported(.locked) {
+                device.focusMode = .locked
+            }
+            if device.isWhiteBalanceModeSupported(.locked) {
+                device.whiteBalanceMode = .locked
+            }
+
+            let exposure = Double(device.iso) * CMTimeGetSeconds(device.exposureDuration)
+            if device.isExposureModeSupported(.custom), exposure > 0 {
+                let format = device.activeFormat
+                let minISO = format.minISO
+                let maxISO = format.maxISO
+                let minDur = CMTimeGetSeconds(format.minExposureDuration)
+                let maxDur = CMTimeGetSeconds(format.maxExposureDuration)
+                // ISO so niedrig wie möglich, die Belichtungszeit hält die Helligkeit
+                var duration = max(minDur, min(maxDur, exposure / Double(minISO)))
+                // Flacker-Vermeidung: Belichtungszeit auf ein Vielfaches der
+                // Netz-Halbwelle runden (1/100 s bei 50 Hz, 1/120 s bei 60 Hz),
+                // sonst streifen billige LED-/Leuchtstofflampen einzelne Frames.
+                let halfCycle = 1.0 / (2.0 * Double(mainsHz))
+                if duration >= halfCycle {
+                    duration = max(minDur, min(maxDur, (duration / halfCycle).rounded() * halfCycle))
+                }
+                var iso = Float(exposure / duration)
+                iso = min(maxISO, max(minISO, iso))
+                device.setExposureModeCustom(
+                    duration: CMTimeMakeWithSeconds(duration, preferredTimescale: 1_000_000),
+                    iso: iso, completionHandler: nil)
+            } else if device.isExposureModeSupported(.locked) {
+                device.exposureMode = .locked
+            }
+
+            device.unlockForConfiguration()
+        } catch {
+            // Fixieren nicht möglich – die App läuft mit Auto-Einstellungen weiter.
+        }
+    }
+
+    /// Setzt Belichtung/Fokus/WB zurück auf Automatik und startet die kurze
+    /// Kalibrierung neu – danach wird automatisch wieder fixiert. Für den Fall,
+    /// dass sich Licht oder Aufbau während der Session geändert haben.
+    func refixCamera() {
+        resetToContinuous()
+        status = .calibrating
+        calibrationSamples = []
+        armed = false
+    }
+
+    /// Tippen im Sucher: Fokus- und Belichtungspunkt aufs Werk setzen,
+    /// danach neu messen und fixieren.
+    func focus(atDevicePoint point: CGPoint) {
+        guard let device else { return }
+        try? device.lockForConfiguration()
+        if device.isFocusPointOfInterestSupported {
+            device.focusPointOfInterest = point
+        }
+        if device.isExposurePointOfInterestSupported {
+            device.exposurePointOfInterest = point
+        }
+        device.unlockForConfiguration()
+        refixCamera()
+    }
+
+    /// Belichtung/Fokus/Weißabgleich zurück auf kontinuierliche Automatik.
+    private func resetToContinuous() {
+        guard let device else { return }
+        try? device.lockForConfiguration()
+        if device.isFocusModeSupported(.continuousAutoFocus) {
+            device.focusMode = .continuousAutoFocus
+        }
+        if device.isExposureModeSupported(.continuousAutoExposure) {
+            device.exposureMode = .continuousAutoExposure
+        }
+        if device.isWhiteBalanceModeSupported(.continuousAutoWhiteBalance) {
+            device.whiteBalanceMode = .continuousAutoWhiteBalance
+        }
+        device.unlockForConfiguration()
+    }
+
+    /// Zeitraffer: alle `intervalSeconds` automatisch auslösen (nur im
+    /// Intervall-Modus, unabhängig von Bewegung).
+    private func startIntervalIfNeeded() {
+        intervalTask?.cancel()
+        guard captureMode == .interval else { return }
+        intervalTask = Task { [weak self] in
+            while !Task.isCancelled {
+                let seconds = self?.intervalSeconds ?? 3.0
+                try? await Task.sleep(nanoseconds: UInt64(max(0.5, seconds) * 1_000_000_000))
+                guard let self, !Task.isCancelled else { break }
+                self.captureNow()
+            }
+        }
     }
 
     // MARK: Frame-Verarbeitung (auf videoQueue, UI-Updates via MainActor)
@@ -164,9 +303,17 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 calibrationSamples = nil
                 armed = true // erster Frame darf sofort kommen, sobald stabil
                 status = .waitingForWork
+                // Für Stop-Motion: Belichtung, Fokus und Weißabgleich jetzt
+                // fixieren – die Auto-Regelung würde sonst zwischen den Bildern
+                // nachziehen und das Set „atmen" lassen.
+                lockCameraSettings()
+                startIntervalIfNeeded()
             }
             return
         }
+
+        // Intervall-Modus: fester Zeittakt statt Bewegungs-Trigger
+        if captureMode == .interval { return }
 
         if motion > motionThreshold {
             // Es passiert etwas: scharf stellen auf die nächste Ruhephase
@@ -222,10 +369,13 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
         // Spürbar & hörbar: Aldo schaut aufs Werk, nicht aufs Display
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        AudioServicesPlaySystemSound(1108) // Kamera-Verschluss
+        if playShutterSound {
+            AudioServicesPlaySystemSound(1108) // Kamera-Verschluss
+        }
 
         let image = UIImage(cgImage: frame)
         lastCapturedImage = image
+        if firstCapturedImage == nil { firstCapturedImage = image } // Drift-Referenz
         if let data = image.jpegData(compressionQuality: 0.9) {
             onCapture?(data)
         }

@@ -1,57 +1,85 @@
 import SwiftUI
+import UIKit
+import CoreText
+import CoreMotion
 
-/// Designsystem „Bild · Objekt · Bild" — abgeleitet aus Aldo Tolinos Praxis:
-/// gefaltete Porträtfotografien, streng monochrom, in Serien gedacht,
-/// und seiner Grundidee der endlosen Schleife Bild → Objekt → Bild.
+/// Registriert die gebündelten Schriften (Fraunces, Inter) aus dem
+/// Asset-Katalog zur Laufzeit – ohne Info.plist-Eintrag.
+enum AppFonts {
+    private static var registered = false
+    static func register() {
+        guard !registered else { return }
+        registered = true
+        for name in ["Fraunces-Regular", "Fraunces-Light", "Fraunces-Italic", "Inter-Regular", "Inter-Medium"] {
+            guard let asset = NSDataAsset(name: name),
+                  let provider = CGDataProvider(data: asset.data as CFData),
+                  let font = CGFont(provider) else { continue }
+            CTFontManagerRegisterGraphicsFont(font, nil)
+        }
+    }
+}
+
+/// Designsystem „Bruch & Licht" — abgeleitet aus Aldo Tolinos Arbeiten von
+/// 2024 (Full-Blown, Cracked, die Reliefs): zerknülltes weißes Papier auf
+/// leuchtenden Verlaufsfeldern, Farbe die durch das Blatt scheint, Amber
+/// als wiederkehrendes Signal — und seiner Grundidee der endlosen Schleife
+/// Bild → Objekt → Bild.
 ///
 /// Zwei Zustände statt bunter Oberfläche:
-///   • Galerie (weiße Wand)  – sehen, ordnen, prüfen
-///   • Kammer (Dunkelkammer) – belichten, aufnehmen
+///   • Galerie (helle Wand mit Lichtverlauf) – sehen, ordnen, prüfen
+///   • Kammer (warme Dunkelkammer)           – belichten, aufnehmen
 ///
-/// Typografie: New York (Serif) als Katalog-/Buchstimme für Titel;
-/// SF Mono für alle Angaben, Zähler und Zustände – wie Anmerkungen auf
-/// der Rückseite eines Abzugs. Auswahl wird nicht farbig, sondern durch
-/// Inversion markiert (schwarzer Block – wie ein Passepartout).
+/// Farbe kommt aus dem Licht hinter dem Papier (Amber, Teal, Schiefer),
+/// nie als Neon. Typografie: Fraunces (Serif, kursiv als Stimme) für Titel;
+/// Inter mit Tabellenziffern für Angaben, Zähler und Zustände.
+/// Auswahl wird durch Inversion markiert (Tuscheblock – wie ein Passepartout).
 enum Theme {
 
-    // MARK: Farben (streng monochrom – wie sein Werk)
+    // MARK: Farben („Bruch & Licht" – helle Galerie, leuchtende Akzente)
 
-    /// Galeriewand, neutralweiß (bewusst kein Creme)
-    static let paper = Color(red: 0.957, green: 0.953, blue: 0.945)
-    /// Fläche auf der Wand
-    static let paperShade = Color(red: 0.925, green: 0.918, blue: 0.905)
-    /// Tuscheschwarz
-    static let ink = Color(red: 0.067, green: 0.063, blue: 0.063)
-    /// Graphit (Sekundärtext, Anmerkungen)
-    static let graphite = Color(red: 0.29, green: 0.28, blue: 0.26)
+    /// Galeriewand – helles, leicht kühles Papierweiß (Ausstellungslicht)
+    static let paper = Color(red: 0.957, green: 0.949, blue: 0.925)
+    /// Fläche auf der Wand (Papierschatten)
+    static let paperShade = Color(red: 0.902, green: 0.894, blue: 0.859)
+    /// Unteres Ende des Wand-Verlaufs – Salbei/Schiefer-Hauch
+    static let paperDeep = Color(red: 0.851, green: 0.871, blue: 0.851)
+    /// Tusche – warmes Schwarz statt hartem Neutralschwarz
+    static let ink = Color(red: 0.114, green: 0.102, blue: 0.086)
+    /// Stein/Graphit (Sekundärtext, Anmerkungen)
+    static let graphite = Color(red: 0.408, green: 0.392, blue: 0.357)
     /// Haarlinie / Falzmarke
-    static let hairline = Color(red: 0.812, green: 0.800, blue: 0.776)
-    /// Dunkelkammer
-    static let darkroom = Color(red: 0.039, green: 0.039, blue: 0.039)
-    /// Schrift auf Dunkel
-    static let paperOnDark = Color(red: 0.929, green: 0.921, blue: 0.906)
+    static let hairline = Color(red: 0.847, green: 0.835, blue: 0.796)
+    /// Dunkelkammer – warmes Fast-Schwarz
+    static let darkroom = Color(red: 0.078, green: 0.071, blue: 0.059)
+    /// Schrift auf Dunkel (warmes Bone)
+    static let paperOnDark = Color(red: 0.922, green: 0.894, blue: 0.839)
 
-    // MARK: Spektrum (Farbe kommt aus dem Falz – wie Licht über Tolinos Facetten)
+    // MARK: Akzente (aus den 2024er-Serien: Amber-Signal, Teal, Schiefer)
 
-    static let violet = Color(red: 0.424, green: 0.361, blue: 0.906)  // #6C5CE7
-    static let blue   = Color(red: 0.231, green: 0.510, blue: 0.965)  // #3B82F6
-    static let cyan   = Color(red: 0.133, green: 0.827, blue: 0.776)  // #22D3C6
-    static let magenta = Color(red: 0.910, green: 0.361, blue: 0.690) // #E85CB0
-    static let lime   = Color(red: 0.639, green: 0.902, blue: 0.208)  // #A3E635
-    static let amber  = Color(red: 0.961, green: 0.620, blue: 0.043)  // #F59E0B
+    static let amber   = Color(red: 0.851, green: 0.608, blue: 0.169) // Amber (Signal) #D99B2B
+    static let amberLight = Color(red: 0.949, green: 0.796, blue: 0.420) // Amber hell #F2CB6B
+    static let violet  = Color(red: 0.306, green: 0.478, blue: 0.502) // Teal #4E7A80
+    static let blue    = Color(red: 0.369, green: 0.455, blue: 0.518) // Schiefer #5E7484
+    static let cyan    = Color(red: 0.596, green: 0.655, blue: 0.549) // Salbei #98A78C
+    static let magenta = Color(red: 0.780, green: 0.604, blue: 0.573) // Marmor (Blush) #C79A92
+    static let lime    = Color(red: 0.541, green: 0.604, blue: 0.431) // Moos #8A9A6E
+    /// Warnung/Löschen – gedämpftes Oxblood statt grellem Systemrot.
+    static let oxblood = Color(red: 0.510, green: 0.208, blue: 0.180) // #82352E
 
-    /// Volles Spektrum – Logo, Hero-Momente.
+    /// „Licht im Blatt" – Papierlicht → Amber → Teal. Für Logo und Hero-Momente.
     static let spectrum = LinearGradient(
-        colors: [magenta, violet, blue, cyan, lime, amber],
+        colors: [Color(red: 0.957, green: 0.929, blue: 0.855),
+                 amberLight,
+                 Color(red: 0.498, green: 0.659, blue: 0.671)],
         startPoint: .leading, endPoint: .trailing)
 
-    /// Der gebrochene Falz – Auswahl, Fortschritt, Pegel (violett → cyan).
+    /// Der gebrochene Falz – Auswahl, Fortschritt, Pegel (Amber, sein Signal).
     static let crease = LinearGradient(
-        colors: [violet, cyan],
+        colors: [amberLight, amber],
         startPoint: .topLeading, endPoint: .bottomTrailing)
 
     /// Akzentpalette; jedes Projekt trägt genau einen daraus.
-    static let accents: [Color] = [violet, blue, cyan, magenta, lime, amber]
+    static let accents: [Color] = [amber, violet, blue, cyan, magenta, lime]
 
     /// Deterministischer Akzent aus einer UUID (stabil über App-Starts –
     /// bewusst nicht hashValue, das ist pro Prozess zufällig).
@@ -62,23 +90,39 @@ enum Theme {
 
     // MARK: Typografie
 
-    /// Serif (New York) – die authored/Buch-Stimme: Titel, Werknamen, Wortmarke.
+    /// Serif (Fraunces) – die Katalog-/Buchstimme: Titel, Werknamen, Wortmarke.
+    /// Fällt sauber auf die System-Serife zurück, falls die Schrift fehlt.
     static func serif(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
-        .system(size: size, weight: weight, design: .serif)
+        let light: Set<Font.Weight> = [.ultraLight, .thin, .light]
+        let ps = light.contains(weight) ? "Fraunces-Light" : "Fraunces-Regular"
+        if UIFont(name: ps, size: size) != nil { return .custom(ps, size: size) }
+        return .system(size: size, weight: weight, design: .serif)
     }
-    /// Monospace (SF Mono) – alle Angaben, Zähler, Zustände, Knöpfe.
+    /// Grotesk (Inter) mit Tabellenziffern – Angaben, Zähler, Zustände, Knöpfe.
+    /// Fällt sauber auf SF Pro zurück, falls die Schrift fehlt.
     static func mono(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
-        .system(size: size, weight: weight, design: .monospaced)
+        let strong: Set<Font.Weight> = [.medium, .semibold, .bold, .heavy, .black]
+        let ps = strong.contains(weight) ? "Inter-Medium" : "Inter-Regular"
+        if UIFont(name: ps, size: size) != nil { return .custom(ps, size: size).monospacedDigit() }
+        return .system(size: size, weight: weight, design: .default).monospacedDigit()
     }
 
-    /// Gesperrte Mono-Versalien für Abschnitts- und Statuszeilen.
+    /// Kursive Serifenstimme (Fraunces Italic) – Begrüßung, Fragen, Zitate.
+    static func serifItalic(_ size: CGFloat) -> Font {
+        if UIFont(name: "Fraunces-Italic", size: size) != nil {
+            return .custom("Fraunces-Italic", size: size)
+        }
+        return .system(size: size, design: .serif).italic()
+    }
+
+    /// Gesperrte Grotesk-Versalien für Abschnitts- und Statuszeilen.
     static func caption(_ size: CGFloat = 11) -> Font { mono(size, .medium) }
     /// Werktitel (Serif).
-    static let title = Font.system(size: 23, weight: .light, design: .serif)
-    /// Kurzer Fließtext / Anmerkung (Mono).
-    static let body = Font.system(size: 13, weight: .regular, design: .monospaced)
-    /// Zahlen – gleichbreite Ziffern (Mono ist ohnehin dimensionsgleich).
-    static let numeral = Font.system(size: 14, weight: .medium, design: .monospaced)
+    static var title: Font { serif(23, .light) }
+    /// Kurzer Fließtext / Anmerkung (Grotesk).
+    static var body: Font { mono(13, .regular) }
+    /// Zahlen – gleichbreite Ziffern (Tabellenziffern).
+    static var numeral: Font { mono(14, .medium) }
 }
 
 // MARK: Falz-Signet (Dreiecksfacette)
@@ -122,6 +166,207 @@ struct FoldMark: View {
             .stroke(creaseColor, lineWidth: 0.8)
         }
         .frame(width: size, height: size)
+    }
+}
+
+// MARK: Gefaltetes Papier (Facetten-Fläche)
+
+/// Deterministische Facetten-Geometrie: ein leicht verzogenes Dreiecksraster
+/// in Einheitskoordinaten (0…1) – dieselbe Faltung bei jedem App-Start.
+enum FoldFacets {
+    struct Tri { let a: CGPoint; let b: CGPoint; let c: CGPoint }
+
+    private struct Rng {
+        var state: UInt64
+        mutating func next() -> Double {
+            state = state &* 6364136223846793005 &+ 1442695040888963407
+            return Double((state >> 33) & 0xFFFFFF) / Double(0xFFFFFF)
+        }
+    }
+
+    static func triangles(cols: Int = 5, rows: Int = 4, seed: UInt64 = 7) -> [Tri] {
+        var rng = Rng(state: seed &* 2654435761 &+ 12345)
+        var grid: [[CGPoint]] = []
+        for r in 0...rows {
+            var row: [CGPoint] = []
+            for c in 0...cols {
+                let fx = CGFloat(c) / CGFloat(cols)
+                let fy = CGFloat(r) / CGFloat(rows)
+                // Randpunkte bleiben am Blattrand – geknüllt wird innen.
+                // Kräftigerer Versatz: Bruch statt sauberem Raster.
+                let jx: CGFloat = (c == 0 || c == cols) ? 0 : CGFloat(rng.next() - 0.5) * 0.24
+                let jy: CGFloat = (r == 0 || r == rows) ? 0 : CGFloat(rng.next() - 0.5) * 0.24
+                row.append(CGPoint(x: fx + jx, y: fy + jy))
+            }
+            grid.append(row)
+        }
+        var out: [Tri] = []
+        for r in 0..<rows {
+            for c in 0..<cols {
+                let p00 = grid[r][c], p01 = grid[r][c + 1]
+                let p10 = grid[r + 1][c], p11 = grid[r + 1][c + 1]
+                out.append(Tri(a: p00, b: p01, c: p11))
+                out.append(Tri(a: p00, b: p11, c: p10))
+            }
+        }
+        return out
+    }
+
+    /// Wie stark eine Facette das Licht fängt (−1 Schatten … +1 Licht).
+    /// Grundlicht von links oben; `tilt` verschiebt die Lichtrichtung –
+    /// die Neigung des iPhones, als hielte man den Abzug unter Galerielicht.
+    static func light(_ t: Tri, index: Int, tilt: CGPoint = .zero) -> Double {
+        let cx = Double(t.a.x + t.b.x + t.c.x) / 3
+        let cy = Double(t.a.y + t.b.y + t.c.y) / 3
+        let wx = 0.5 + max(-0.45, min(0.45, Double(tilt.x) * 1.6))
+        let wy = 0.5 + max(-0.45, min(0.45, Double(tilt.y) * 1.6))
+        let lit = 1 - (cx * wx + cy * wy)
+        // Bruch-Varianz: jede Facette liegt anders im Licht (deterministisch)
+        let h = Double((UInt64(index) &* 2654435761) & 0xFF) / 255.0
+        return (lit - 0.5) * 1.05 + (h - 0.5) * 0.5
+    }
+}
+
+/// Neigungs-Licht: reagiert auf Änderungen der Gerätelage und driftet
+/// langsam zur Ruhe zurück – unabhängig davon, wie man das iPhone hält.
+/// Ohne Bewegungsdaten (Simulator) bleibt der Versatz null.
+final class LightTilt: ObservableObject {
+    @Published var offset: CGPoint = .zero
+    private let manager = CMMotionManager()
+    private var baseX = 0.0, baseY = 0.0, hasBase = false
+
+    func start() {
+        guard manager.isDeviceMotionAvailable, !manager.isDeviceMotionActive else { return }
+        manager.deviceMotionUpdateInterval = 1.0 / 30.0
+        hasBase = false
+        manager.startDeviceMotionUpdates(to: .main) { [weak self] motion, _ in
+            guard let self, let g = motion?.gravity else { return }
+            if !hasBase { baseX = g.x; baseY = g.y; hasBase = true }
+            // Basislage folgt sehr langsam → Effekt reagiert auf Neigung,
+            // kehrt in Ruhe aber sanft zur Mitte zurück
+            baseX = baseX * 0.995 + g.x * 0.005
+            baseY = baseY * 0.995 + g.y * 0.005
+            let dx = g.x - baseX, dy = g.y - baseY
+            offset = CGPoint(x: offset.x * 0.7 + dx * 0.3,
+                             y: offset.y * 0.7 + dy * 0.3)
+        }
+    }
+
+    func stop() { manager.stopDeviceMotionUpdates() }
+}
+
+/// Stabile Faltung pro Werk: dieselbe Geometrie bei jedem App-Start.
+enum FoldSeed {
+    static func make(_ id: UUID?) -> UInt64 {
+        guard let id else { return 7 }
+        return id.uuidString.unicodeScalars.reduce(UInt64(7)) { ($0 &* 31) &+ UInt64($1.value) }
+    }
+}
+
+/// Eine geknüllte Papierfläche – das Werk als Objekt.
+/// Liegt ein Bild vor, wird es über die Facetten gebrochen; sonst entsteht
+/// ein weißes Blatt, durch das Licht in Amber und Werkfarbe scheint –
+/// wie in Tolinos Serien von 2024 (Full-Blown, Cracked).
+/// `tilt` verschiebt die Lichtrichtung mit der Neigung des iPhones.
+struct FoldedPaperHero: View {
+    var image: UIImage? = nil
+    var seed: UInt64 = 7
+    var accent: Color = Theme.violet
+    var animatesLight: Bool = true
+    var tilt: CGPoint = .zero
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var sweep = false
+
+    private var tris: [FoldFacets.Tri] { FoldFacets.triangles(seed: seed) }
+
+    var body: some View {
+        GeometryReader { geo in
+            let size = geo.size
+            ZStack {
+                if let image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: size.width, height: size.height)
+                        .clipped()
+                    // Leises Leuchten der Werkfarbe – vereint Foto und Blatt
+                    Ellipse()
+                        .fill(accent)
+                        .frame(width: size.width * 0.8, height: size.height * 0.7)
+                        .offset(x: -size.width * 0.3, y: size.height * 0.3)
+                        .blur(radius: 34)
+                        .opacity(0.22)
+                        .blendMode(.softLight)
+                } else {
+                    // Lichtfelder HINTER dem Papier – Farbe scheint durchs Blatt
+                    Theme.paperShade
+                    Ellipse()
+                        .fill(LinearGradient(colors: [Theme.amberLight, Theme.amber],
+                                             startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .frame(width: size.width * 0.85, height: size.height * 0.8)
+                        .offset(x: -size.width * 0.24, y: size.height * 0.2)
+                        .blur(radius: 26)
+                        .opacity(0.9)
+                    Ellipse()
+                        .fill(accent)
+                        .frame(width: size.width * 0.75, height: size.height * 0.7)
+                        .offset(x: size.width * 0.3, y: -size.height * 0.18)
+                        .blur(radius: 30)
+                        .opacity(0.85)
+                }
+
+                Canvas { ctx, canvasSize in
+                    for (i, t) in tris.enumerated() {
+                        var path = Path()
+                        path.move(to: scaled(t.a, canvasSize))
+                        path.addLine(to: scaled(t.b, canvasSize))
+                        path.addLine(to: scaled(t.c, canvasSize))
+                        path.closeSubpath()
+
+                        // Ohne Bild: Papier in wechselnder Deckung –
+                        // dünne Stellen lassen das Licht durch
+                        if image == nil {
+                            let h = Double((UInt64(i) &* 40503) & 0xFF) / 255.0
+                            ctx.fill(path, with: .color(Color.white.opacity(0.40 + h * 0.48)))
+                        }
+
+                        let l = FoldFacets.light(t, index: i, tilt: tilt)
+                        ctx.fill(path, with: .color(l >= 0
+                            ? Color.white.opacity(l * 0.60)
+                            : Color(red: 0.11, green: 0.10, blue: 0.09).opacity(-l * 0.45)))
+                        ctx.stroke(path, with: .color(Theme.ink.opacity(0.12)), lineWidth: 0.5)
+                        // Grat-Licht: stark belichtete Facetten glänzen an der Kante
+                        if l > 0.28 {
+                            ctx.stroke(path, with: .color(.white.opacity(min(0.55, l * 0.7))),
+                                       lineWidth: 1.1)
+                        }
+                    }
+                }
+
+                // Ohne Neigungsdaten wandert das Licht langsam von selbst
+                if animatesLight, !reduceMotion, tilt == .zero {
+                    LinearGradient(colors: [.clear, .white.opacity(0.22), .clear],
+                                   startPoint: .topLeading, endPoint: .bottomTrailing)
+                        .frame(width: max(size.width * 0.55, 1))
+                        .offset(x: sweep ? size.width : -size.width)
+                        .blendMode(.softLight)
+                        .allowsHitTesting(false)
+                }
+            }
+            .frame(width: size.width, height: size.height)
+            .clipped()
+            .onAppear {
+                guard animatesLight, !reduceMotion, !sweep else { return }
+                withAnimation(.linear(duration: 14).repeatForever(autoreverses: false)) {
+                    sweep = true
+                }
+            }
+        }
+    }
+
+    private func scaled(_ p: CGPoint, _ s: CGSize) -> CGPoint {
+        CGPoint(x: p.x * s.width, y: p.y * s.height)
     }
 }
 
@@ -265,17 +510,41 @@ struct HairlineProgress: View {
     }
 }
 
+/// Edition unter Acrylglas: Passepartout, Keyline, feiner Glanz, Schatten –
+/// wie seine „fine art pigment prints sealed under acrylic glass".
+struct EditionFrame: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(10)
+            .background(Theme.paper)
+            .overlay(Rectangle().stroke(Theme.ink, lineWidth: 1))
+            .overlay(
+                LinearGradient(colors: [.white.opacity(0.20), .clear, .clear],
+                               startPoint: .topLeading, endPoint: .bottomTrailing)
+                    .allowsHitTesting(false)
+            )
+            .shadow(color: Theme.ink.opacity(0.20), radius: 18, x: 0, y: 10)
+    }
+}
+
 extension View {
     /// Gerahmte Tafel (schwarze Keyline).
     func plate() -> some View { modifier(PlateFrame()) }
     /// Alias (Rückwärtskompatibilität mit älteren Views).
     func passepartout() -> some View { modifier(PlateFrame()) }
-    /// Galeriewand als Hintergrund der ganzen Ansicht.
+    /// Edition unter Acrylglas (Glanz + Schatten).
+    func editionPlate() -> some View { modifier(EditionFrame()) }
+    /// Wie ein gerahmter Abzug an der Wand: weicher Schlagschatten.
+    func hung() -> some View {
+        self.shadow(color: Theme.ink.opacity(0.16), radius: 15, x: 0, y: 8)
+    }
+    /// Galeriewand mit Lichtverlauf – Ausstellungslicht statt flacher Fläche.
     func galleryStage() -> some View {
-        self.background(Theme.paper.ignoresSafeArea())
+        self.background(
+            LinearGradient(colors: [Theme.paper, Theme.paper, Theme.paperDeep],
+                           startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea())
     }
     /// Alias (Rückwärtskompatibilität).
-    func paperStage() -> some View {
-        self.background(Theme.paper.ignoresSafeArea())
-    }
+    func paperStage() -> some View { galleryStage() }
 }

@@ -1,5 +1,6 @@
 import SwiftUI
 import AVKit
+import UIKit
 
 /// Projektliste im Werkverzeichnis-Stil: nummerierte Einträge,
 /// Haarlinien, gesperrte Versalien.
@@ -14,14 +15,29 @@ struct ProjectsView: View {
         NavigationStack {
             Group {
                 if store.projects.isEmpty {
-                    VStack(spacing: 18) {
-                        FoldMark(size: 48, color: Theme.graphite)
-                        CatalogLabel("Noch keine Projekte", color: Theme.ink)
-                        Text("Ein Projekt pro Werk. Bilder sammeln sich\nüber beliebig viele Aufnahmen – live oder aus Videos.")
+                    // Leeres Blatt als Einladung – nicht bloß ein Hinweistext
+                    VStack(spacing: 0) {
+                        Spacer(minLength: 20)
+                        FoldedPaperHero(seed: 21, accent: Theme.violet)
+                            .frame(height: 190)
+                            .overlay(Rectangle().stroke(Theme.ink, lineWidth: 1))
+                            .padding(.horizontal, 44)
+                        Text("Ein Blatt pro Werk.")
+                            .font(Theme.serifItalic(21))
+                            .foregroundStyle(Theme.ink)
+                            .padding(.top, 24)
+                        Text("Bilder sammeln sich über beliebig viele\nAufnahmen – live oder aus Videos.")
                             .font(Theme.mono(12))
                             .foregroundStyle(Theme.graphite)
                             .multilineTextAlignment(.center)
-                            .lineSpacing(2)
+                            .lineSpacing(3)
+                            .padding(.top, 8)
+                        Button { showNewProject = true } label: {
+                            Text("Werk anlegen")
+                        }
+                        .buttonStyle(InkButtonStyle(fullWidth: false))
+                        .padding(.top, 22)
+                        Spacer(minLength: 20)
                     }
                 } else {
                     List {
@@ -94,19 +110,13 @@ struct ProjectsView: View {
                 .fill(Theme.accent(for: project.id))
                 .frame(width: 4, height: 52)
 
-            if let thumb = store.thumbnail(for: project) {
-                Image(uiImage: thumb)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 52, height: 52)
-                    .clipped()
-                    .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
-            } else {
-                Rectangle()
-                    .fill(Theme.paperShade)
-                    .frame(width: 52, height: 52)
-                    .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
-            }
+            // Das Werk als gefaltetes Blatt – wie auf dem Startscreen
+            FoldedPaperHero(image: store.thumbnail(for: project),
+                            seed: FoldSeed.make(project.id),
+                            accent: Theme.accent(for: project.id),
+                            animatesLight: false)
+                .frame(width: 52, height: 52)
+                .overlay(Rectangle().stroke(Theme.ink.opacity(0.5), lineWidth: 1))
 
             VStack(alignment: .leading, spacing: 4) {
                 WorkTitle(project.name, size: 17)
@@ -131,6 +141,7 @@ struct ProjectDetailView: View {
     @State private var isRenderingSheet = false
     @State private var foldTemplateURL: URL?
     @State private var isRenderingTemplate = false
+    @State private var shareItem: ShareItem?
     @State private var isEditingFrames = false
     @State private var showDeleteProject = false
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
@@ -155,6 +166,16 @@ struct ProjectDetailView: View {
             LazyVGrid(columns: columns, spacing: 2) {
                 ForEach(Array(store.frameURLs(for: currentProject).enumerated()), id: \.offset) { index, url in
                     FrameThumbnail(url: url)
+                        // Nummerierte Zelle wie im gedruckten Kontaktbogen
+                        .overlay(alignment: .bottomLeading) {
+                            Text(String(format: "%02d", index + 1))
+                                .font(Theme.mono(8.5, .medium))
+                                .foregroundStyle(Theme.paperOnDark)
+                                .padding(.horizontal, 4)
+                                .padding(.vertical, 2)
+                                .background(Theme.ink.opacity(0.72))
+                                .padding(5)
+                        }
                         .overlay(alignment: .topTrailing) {
                             if isEditingFrames {
                                 Button {
@@ -211,10 +232,10 @@ struct ProjectDetailView: View {
                     .font(Theme.caption(12))
                     .tracking(1.6)
                     .textCase(.uppercase)
-                    .foregroundStyle(.red)
+                    .foregroundStyle(Theme.oxblood)
                     .padding(.vertical, 14)
                     .frame(maxWidth: .infinity)
-                    .overlay(Rectangle().stroke(.red.opacity(0.4), lineWidth: 1))
+                    .overlay(Rectangle().stroke(Theme.oxblood.opacity(0.45), lineWidth: 1))
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 24)
@@ -247,11 +268,38 @@ struct ProjectDetailView: View {
             }
             Button("Abbrechen", role: .cancel) { }
         }
+        .sheet(item: $shareItem) { item in
+            ActivityView(items: [item.url])
+        }
+        .onChange(of: exportSettings) { _, _ in
+            // Einstellungen geändert → das fertige Video passt nicht mehr dazu
+            exportURL = nil
+        }
     }
 
     /// Immer den frischen Stand aus dem Store verwenden.
     private var currentProject: Project {
         store.projects.first(where: { $0.id == project.id }) ?? project
+    }
+
+    /// Eine Einstellzeile: links wofür, rechts der Wert – sonst steht im
+    /// Panel nur „Original" oder „Normal", ohne dass man weiß, was gemeint ist.
+    private func optionRow<Content: View>(_ label: String,
+                                          @ViewBuilder content: () -> Content) -> some View {
+        HStack(spacing: 12) {
+            Text(label)
+                .font(Theme.body)
+                .foregroundStyle(Theme.ink)
+            Spacer(minLength: 8)
+            content()
+                .labelsHidden()
+                .tint(Theme.ink)
+        }
+        .padding(.vertical, 8)
+    }
+
+    private var optionDivider: some View {
+        Rectangle().fill(Theme.hairline).frame(height: 1)
     }
 
     private var exportSection: some View {
@@ -262,37 +310,55 @@ struct ProjectDetailView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 8)
 
-                Group {
-                    Picker("Format", selection: $exportSettings.aspect) {
-                        ForEach(AspectPreset.allCases) { Text($0.rawValue).tag($0) }
+                // Beschriftete Zeilen: links wofür, rechts der Wert
+                VStack(spacing: 0) {
+                    optionRow("Format") {
+                        Picker("", selection: $exportSettings.aspect) {
+                            ForEach(AspectPreset.allCases) { Text($0.rawValue).tag($0) }
+                        }
                     }
-                    Picker("Abspielmodus", selection: $exportSettings.loopMode) {
-                        ForEach(LoopMode.allCases) { Text($0.rawValue).tag($0) }
+                    optionDivider
+                    optionRow("Abspielmodus") {
+                        Picker("", selection: $exportSettings.loopMode) {
+                            ForEach(LoopMode.allCases) { Text($0.rawValue).tag($0) }
+                        }
                     }
-                    Picker("Framerate", selection: $exportSettings.outputFPS) {
-                        Text("6 fps").tag(Int32(6))
-                        Text("8 fps").tag(Int32(8))
-                        Text("10 fps").tag(Int32(10))
-                        Text("12 fps").tag(Int32(12))
+                    optionDivider
+                    optionRow("Bildrate") {
+                        Picker("", selection: $exportSettings.outputFPS) {
+                            Text("6 fps").tag(Int32(6))
+                            Text("8 fps").tag(Int32(8))
+                            Text("10 fps").tag(Int32(10))
+                            Text("12 fps").tag(Int32(12))
+                        }
                     }
-                    Toggle("Verwacklung ausgleichen", isOn: $exportSettings.alignFrames)
+                    optionDivider
+                    optionRow("Verwacklung ausgleichen") {
+                        Toggle("", isOn: $exportSettings.alignFrames)
+                    }
                     if mode.showsTolino {
-                        Toggle("Interferenz-Echo", isOn: $exportSettings.interferenzEcho)
-                        Picker("Überblendung", selection: $exportSettings.transitionFrames) {
-                            Text("Aus").tag(0)
-                            Text("Kurz").tag(2)
-                            Text("Weich").tag(4)
+                        optionDivider
+                        optionRow("Interferenz-Echo") {
+                            Toggle("", isOn: $exportSettings.interferenzEcho)
+                        }
+                        optionDivider
+                        optionRow("Überblendung") {
+                            Picker("", selection: $exportSettings.transitionFrames) {
+                                Text("Aus").tag(0)
+                                Text("Kurz").tag(2)
+                                Text("Weich").tag(4)
+                            }
                         }
                         if exportSettings.transitionFrames > 0 {
-                            Picker("Übergangsstil", selection: $exportSettings.transitionStyle) {
-                                ForEach(TransitionStyle.allCases) { Text($0.rawValue).tag($0) }
+                            optionDivider
+                            optionRow("Übergangsstil") {
+                                Picker("", selection: $exportSettings.transitionStyle) {
+                                    ForEach(TransitionStyle.allCases) { Text($0.rawValue).tag($0) }
+                                }
                             }
                         }
                     }
                 }
-                .font(Theme.body)
-                .tint(Theme.ink)
-                .padding(.vertical, 6)
             }
             .padding(14)
             .background(Theme.paperShade.opacity(0.5))
@@ -300,72 +366,93 @@ struct ProjectDetailView: View {
             }
 
             if isExporting {
-                HairlineProgress(value: exportProgress)
+                VStack(spacing: 8) {
+                    HairlineProgress(value: exportProgress)
+                    CatalogLabel("Stopmotion wird montiert…", size: 10)
+                }
+            } else if let exportURL {
+                // Fertig: teilen ist jetzt der Hauptgriff (Sichern, AirDrop, …)
+                Button {
+                    shareItem = ShareItem(url: exportURL)
+                } label: {
+                    Text("Video teilen")
+                }
+                .buttonStyle(InkButtonStyle())
+
+                Button("Neu exportieren") { export() }
+                    .buttonStyle(HairlineButtonStyle())
             } else {
                 Button("Stopmotion exportieren") { export() }
                     .buttonStyle(InkButtonStyle())
                     .disabled(currentProject.frameCount == 0)
             }
-
-            if let exportURL {
-                ShareLink(item: exportURL) {
-                    Text("Video teilen")
-                        .font(Theme.caption(12))
-                        .tracking(1.6)
-                        .textCase(.uppercase)
-                        .foregroundStyle(Theme.ink)
-                        .padding(.vertical, 14)
-                        .frame(maxWidth: .infinity)
-                        .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
-                }
-            }
             if let errorMessage {
                 Text(errorMessage)
-                    .font(.system(size: 12))
-                    .foregroundStyle(.red)
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.oxblood)
             }
 
-            // Kontaktbogen: druckfertiges PDF aller Frames (ab „Erweitert")
+            // Drucksachen – bewusst leiser als der Export, als Paar
             if mode.showsAdvanced {
-                if let contactSheetURL {
-                    ShareLink(item: contactSheetURL) {
-                        Text("Kontaktbogen teilen (PDF)")
-                            .font(Theme.caption(12))
-                            .tracking(1.6)
-                            .textCase(.uppercase)
-                            .foregroundStyle(Theme.ink)
-                            .padding(.vertical, 14)
-                            .frame(maxWidth: .infinity)
-                            .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
-                    }
-                } else {
-                    Button(isRenderingSheet ? "Bogen wird gesetzt…" : "Kontaktbogen (PDF)") {
-                        renderContactSheet()
-                    }
-                    .buttonStyle(HairlineButtonStyle())
-                    .disabled(currentProject.frameCount == 0 || isRenderingSheet)
-                }
-            }
+                VStack(alignment: .leading, spacing: 8) {
+                    CatalogLabel("Drucken", size: 9)
+                    HStack(spacing: 8) {
+                        pdfButton(
+                            title: contactSheetURL == nil
+                                ? (isRenderingSheet ? "Wird gesetzt…" : "Kontaktbogen")
+                                : "Kontaktbogen teilen",
+                            icon: "square.grid.3x3",
+                            disabled: currentProject.frameCount == 0 || isRenderingSheet
+                        ) {
+                            if let contactSheetURL {
+                                shareItem = ShareItem(url: contactSheetURL)
+                            } else {
+                                renderContactSheet()
+                            }
+                        }
 
-            // Faltvorlage: druckbare Seite mit Falzlinien zum Nachfalten (nur Tolino-Modus)
-            if mode.showsTolino {
-                if let foldTemplateURL {
-                    ShareLink(item: foldTemplateURL) {
-                        Text("Faltvorlage teilen (PDF)")
-                            .font(Theme.caption(12)).tracking(1.6).textCase(.uppercase)
-                            .foregroundStyle(Theme.ink)
-                            .padding(.vertical, 14).frame(maxWidth: .infinity)
-                            .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+                        if mode.showsTolino {
+                            pdfButton(
+                                title: foldTemplateURL == nil
+                                    ? (isRenderingTemplate ? "Wird gesetzt…" : "Faltvorlage")
+                                    : "Faltvorlage teilen",
+                                icon: "arrow.triangle.turn.up.right.diamond",
+                                disabled: currentProject.frameCount == 0 || isRenderingTemplate
+                            ) {
+                                if let foldTemplateURL {
+                                    shareItem = ShareItem(url: foldTemplateURL)
+                                } else {
+                                    renderFoldTemplate()
+                                }
+                            }
+                        }
                     }
-                } else {
-                    Button(isRenderingTemplate ? "Vorlage wird gesetzt…" : "Faltvorlage (PDF)") {
-                        renderFoldTemplate()
-                    }
-                    .buttonStyle(HairlineButtonStyle())
-                    .disabled(currentProject.frameCount == 0 || isRenderingTemplate)
                 }
+                .padding(.top, 6)
             }
         }
+    }
+
+    /// Drucksache: kleiner, ruhiger Knopf – ordnet sich dem Export unter.
+    private func pdfButton(title: String, icon: String, disabled: Bool,
+                           action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            VStack(spacing: 7) {
+                Image(systemName: icon)
+                    .font(.system(size: 15))
+                    .foregroundStyle(Theme.ink)
+                Text(title)
+                    .font(Theme.caption(10)).tracking(1.2).textCase(.uppercase)
+                    .foregroundStyle(Theme.ink)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.vertical, 14)
+            .frame(maxWidth: .infinity)
+            .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+        }
+        .buttonStyle(.plain)
+        .disabled(disabled)
+        .opacity(disabled ? 0.45 : 1)
     }
 
     private func renderFoldTemplate() {
@@ -383,7 +470,11 @@ struct ProjectDetailView: View {
             await MainActor.run {
                 foldTemplateURL = result
                 isRenderingTemplate = false
-                if result == nil { errorMessage = "Faltvorlage konnte nicht erstellt werden." }
+                if let result {
+                    shareItem = ShareItem(url: result)   // Teilen-Sheet direkt öffnen
+                } else {
+                    errorMessage = "Faltvorlage konnte nicht erstellt werden."
+                }
             }
         }
     }
@@ -400,7 +491,9 @@ struct ProjectDetailView: View {
             await MainActor.run {
                 contactSheetURL = url
                 isRenderingSheet = false
-                if url == nil {
+                if let url {
+                    shareItem = ShareItem(url: url)   // Teilen-Sheet direkt öffnen
+                } else {
                     errorMessage = "Kontaktbogen konnte nicht erstellt werden."
                 }
             }
@@ -425,6 +518,9 @@ struct ProjectDetailView: View {
                 await MainActor.run {
                     exportURL = url
                     isExporting = false
+                    // Direkt anbieten: sichern, teilen, AirDrop – statt den
+                    // Nutzer auf demselben Screen raten zu lassen.
+                    shareItem = ShareItem(url: url)
                 }
             } catch {
                 await MainActor.run {
@@ -478,40 +574,89 @@ struct ExhibitionSheet: View {
     @State private var progress = 0.0
     @State private var reelURL: URL?
     @State private var errorMessage: String?
+    @State private var shareItem: ShareItem?
 
     private var chosen: [Project] { store.projects.filter { selected.contains($0.id) } }
     private var totalFrames: Int { chosen.reduce(0) { $0 + $1.frameCount } }
 
+    /// Sagt jederzeit, wo man steht – statt eines stummen, grauen Knopfs.
+    private var selectionHint: String {
+        switch chosen.count {
+        case 0: return "Mindestens zwei Werke wählen."
+        case 1: return "Ein Werk gewählt – noch mindestens eines."
+        default: return "\(chosen.count) Werke · \(totalFrames) Bilder"
+        }
+    }
+
+    /// Werkzeile mit gefalteter Kachel; Auswahl wird durch Inversion
+    /// markiert (Tuschblock) statt durch ein System-Häkchen.
+    private func exhibitionRow(_ project: Project) -> some View {
+        let isOn = selected.contains(project.id)
+        return HStack(spacing: 14) {
+            FoldedPaperHero(image: store.thumbnail(for: project),
+                            seed: FoldSeed.make(project.id),
+                            accent: Theme.accent(for: project.id),
+                            animatesLight: false)
+                .frame(width: 54, height: 54)
+                .overlay(alignment: .leading) {
+                    Rectangle().fill(Theme.accent(for: project.id)).frame(width: 3)
+                }
+                .overlay(Rectangle().stroke(Theme.ink.opacity(0.45), lineWidth: 1))
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(project.name)
+                    .font(Theme.serif(17, .regular))
+                    .foregroundStyle(isOn ? Theme.paper : Theme.ink)
+                    .lineLimit(1)
+                CatalogLabel("\(project.frameCount) Bilder",
+                             color: isOn ? Theme.paper.opacity(0.7) : Theme.graphite, size: 9)
+            }
+            Spacer()
+
+            // Katalog-Marke statt Häkchen
+            Rectangle()
+                .fill(isOn ? Theme.paper : Color.clear)
+                .frame(width: 11, height: 11)
+                .overlay(Rectangle().stroke(isOn ? Theme.paper : Theme.graphite, lineWidth: 1.2))
+        }
+        .padding(12)
+        .background(isOn ? Theme.ink : Theme.paper)
+        .overlay(Rectangle().stroke(isOn ? Theme.ink : Theme.hairline, lineWidth: 1))
+        .contentShape(Rectangle())
+        .animation(.snappy(duration: 0.18), value: isOn)
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                CatalogLabel("Werke für die Ausstellung wählen", color: Theme.ink)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 20).padding(.top, 14)
+                // Kopf im Katalogton – sagt, was hier entsteht
+                VStack(alignment: .leading, spacing: 8) {
+                    CatalogLabel("Ausstellung")
+                    Text("Mehrere Werke,\nein durchlaufendes Reel.")
+                        .font(Theme.serif(23, .regular))
+                        .foregroundStyle(Theme.ink)
+                        .lineSpacing(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text(selectionHint)
+                        .font(Theme.mono(11.5))
+                        .foregroundStyle(Theme.graphite)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+                .padding(.bottom, 18)
 
                 ScrollView {
-                    LazyVStack(spacing: 0) {
+                    LazyVStack(spacing: 10) {
                         ForEach(store.projects) { project in
                             Button { toggle(project.id) } label: {
-                                HStack(spacing: 14) {
-                                    Image(systemName: selected.contains(project.id)
-                                          ? "checkmark.square.fill" : "square")
-                                        .foregroundStyle(Theme.ink)
-                                    Rectangle().fill(Theme.accent(for: project.id))
-                                        .frame(width: 4, height: 40)
-                                    VStack(alignment: .leading, spacing: 3) {
-                                        WorkTitle(project.name, size: 16)
-                                        CatalogLabel("\(project.frameCount) Bilder")
-                                    }
-                                    Spacer()
-                                }
-                                .padding(.vertical, 12).padding(.horizontal, 20)
-                                .contentShape(Rectangle())
+                                exhibitionRow(project)
                             }
                             .buttonStyle(.plain)
-                            Rectangle().fill(Theme.hairline).frame(height: 1)
                         }
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 8)
                 }
 
                 VStack(spacing: 10) {
@@ -519,20 +664,22 @@ struct ExhibitionSheet: View {
                         HairlineProgress(value: progress)
                         CatalogLabel("Reel wird montiert…")
                     } else if let reelURL {
-                        ShareLink(item: reelURL) {
+                        Button {
+                            shareItem = ShareItem(url: reelURL)
+                        } label: {
                             Text("Ausstellung teilen")
-                                .font(Theme.caption(12)).tracking(2.2).textCase(.uppercase)
-                                .foregroundStyle(Theme.paper)
-                                .padding(.vertical, 15).frame(maxWidth: .infinity)
-                                .background(Theme.ink)
                         }
+                        .buttonStyle(InkButtonStyle())
                     } else {
-                        Button("Ausstellung erstellen") { build() }
+                        Button(chosen.count >= 2
+                               ? "\(chosen.count) Werke montieren"
+                               : "Ausstellung erstellen") { build() }
                             .buttonStyle(InkButtonStyle())
                             .disabled(chosen.count < 2 || totalFrames == 0)
+                            .opacity(chosen.count < 2 ? 0.45 : 1)
                     }
                     if let errorMessage {
-                        Text(errorMessage).font(Theme.mono(11)).foregroundStyle(.red)
+                        Text(errorMessage).font(Theme.mono(11)).foregroundStyle(Theme.oxblood)
                     }
                 }
                 .padding(20)
@@ -545,6 +692,9 @@ struct ExhibitionSheet: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Fertig") { dismiss() }.foregroundStyle(Theme.ink)
                 }
+            }
+            .sheet(item: $shareItem) { item in
+                ActivityView(items: [item.url])
             }
         }
     }
@@ -567,7 +717,11 @@ struct ExhibitionSheet: View {
                 let url = try await ExhibitionBuilder.build(
                     works: works, settings: PipelineSettings()
                 ) { p in Task { @MainActor in progress = p } }
-                await MainActor.run { reelURL = url; isBuilding = false }
+                await MainActor.run {
+                    reelURL = url
+                    isBuilding = false
+                    shareItem = ShareItem(url: url)   // direkt anbieten
+                }
             } catch {
                 await MainActor.run {
                     errorMessage = error.localizedDescription
@@ -576,4 +730,19 @@ struct ExhibitionSheet: View {
             }
         }
     }
+}
+
+/// Trägt eine fertige Datei (z. B. PDF) in den System-Teilen-Dialog,
+/// damit er sich direkt nach dem Erzeugen öffnen lässt.
+struct ShareItem: Identifiable {
+    let id = UUID()
+    let url: URL
+}
+
+struct ActivityView: UIViewControllerRepresentable {
+    let items: [Any]
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
+    }
+    func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
 }

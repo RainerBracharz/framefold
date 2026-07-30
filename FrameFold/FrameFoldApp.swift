@@ -6,6 +6,7 @@ struct FrameFoldApp: App {
     @State private var selectedTab = 0
 
     init() {
+        AppFonts.register() // Fraunces + Inter aus dem Asset-Katalog registrieren
         // Papier-&-Falz-Erscheinungsbild für Tab- und Navigationsleiste
         let tabAppearance = UITabBarAppearance()
         tabAppearance.configureWithOpaqueBackground()

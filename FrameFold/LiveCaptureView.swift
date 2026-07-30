@@ -1,5 +1,7 @@
 import SwiftUI
 import AVFoundation
+import PhotosUI
+import UIKit
 
 /// Live-Aufnahme als „Dunkelkammer": schwarze Bühne, Papierton-Typografie.
 /// Kamerabild, Onion-Skin des letzten Frames, Auto-Shutter-Status.
@@ -16,6 +18,10 @@ struct LiveCaptureView: View {
     @AppStorage("liveShowGrid") private var showGrid = true
     @AppStorage("liveShowLevel") private var showLevel = true
     @AppStorage("didSeeCameraTip") private var didSeeCameraTip = false
+    @AppStorage("liveOnionOpacity") private var onionOpacity: Double = 0.35
+    @AppStorage("liveOnionFirst") private var onionFirst: Bool = false
+    @State private var referenceImage: UIImage?
+    @State private var refPickerItem: PhotosPickerItem?
 
     var body: some View {
         NavigationStack {
@@ -30,6 +36,8 @@ struct LiveCaptureView: View {
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 40)
                     }
+                } else if controller.cameraUnavailable {
+                    cameraUnavailableView
                 } else if let project = targetProject {
                     captureView(project: project)
                 } else {
@@ -57,7 +65,7 @@ struct LiveCaptureView: View {
             }
             .overlay {
                 // Einmaliger, überspringbarer Tipp beim ersten Öffnen
-                if !didSeeCameraTip && !controller.permissionDenied {
+                if !didSeeCameraTip && !controller.permissionDenied && !controller.cameraUnavailable {
                     cameraTip
                 }
             }
@@ -94,55 +102,85 @@ struct LiveCaptureView: View {
         }
     }
 
-    // MARK: Projektwahl
-
-    private var projectChooser: some View {
-        VStack(spacing: 0) {
-            Spacer()
-            FoldMark(size: 56, color: Theme.paperOnDark)
-                .padding(.bottom, 32)
-            CatalogLabel("In welches Projekt?", color: Theme.paperOnDark)
-                .padding(.bottom, 12)
-            Text("iPhone aufs Stativ, Projekt wählen, arbeiten.\nFrameFold nimmt automatisch einen Frame auf,\nsobald deine Hände aus dem Bild sind.")
+    private var cameraUnavailableView: some View {
+        VStack(spacing: 16) {
+            FoldMark(size: 40, color: Theme.paperOnDark)
+            CatalogLabel("Keine Kamera verfügbar", color: Theme.paperOnDark)
+            Text("Auf diesem Gerät wurde keine Kamera gefunden (z. B. im Simulator). Die Live-Aufnahme braucht ein echtes iPhone. Videos kannst du im Video-Tab trotzdem verarbeiten.")
                 .font(.system(size: 13))
                 .foregroundStyle(Theme.paperOnDark.opacity(0.7))
                 .multilineTextAlignment(.center)
-            Spacer()
+                .lineSpacing(2)
+                .padding(.horizontal, 40)
+        }
+    }
 
-            VStack(spacing: 10) {
-                ForEach(store.projects.prefix(3)) { project in
-                    Button {
-                        targetProject = project
-                    } label: {
-                        HStack {
-                            Text(project.name)
-                            Spacer()
-                            Text("\(project.frameCount)")
-                        }
-                        .font(Theme.caption(12))
-                        .tracking(1.4)
-                        .textCase(.uppercase)
+    // MARK: Projektwahl
+
+    private var projectChooser: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                // Dunkelkammer-Fassung der Begrüßung
+                VStack(alignment: .leading, spacing: 10) {
+                    CatalogLabel("Dunkelkammer", color: Theme.paperOnDark.opacity(0.55))
+                    Text("Welches Werk\nnimmst du auf?")
+                        .font(Theme.serifItalic(26))
                         .foregroundStyle(Theme.paperOnDark)
-                        .padding(.vertical, 14)
-                        .padding(.horizontal, 16)
-                        .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
-                    }
+                        .lineSpacing(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text("iPhone aufs Stativ. FrameFold löst aus, sobald deine Hände aus dem Bild sind.")
+                        .font(Theme.mono(11.5))
+                        .foregroundStyle(Theme.paperOnDark.opacity(0.6))
+                        .lineSpacing(3)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
+                .padding(.horizontal, 24)
+                .padding(.top, 10)
+                .padding(.bottom, 22)
+
+                if store.projects.isEmpty {
+                    VStack(spacing: 0) {
+                        FoldedPaperHero(seed: 33, accent: Theme.violet, animatesLight: false)
+                            .frame(height: 150)
+                            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.3), lineWidth: 1))
+                        Text("Noch kein Werk – leg eines an, dann kann die Kamera loslegen.")
+                            .font(Theme.mono(11.5))
+                            .foregroundStyle(Theme.paperOnDark.opacity(0.6))
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(3)
+                            .padding(.top, 16)
+                    }
+                    .padding(.horizontal, 24)
+                } else {
+                    VStack(spacing: 10) {
+                        ForEach(store.projects.prefix(4)) { project in
+                            Button { targetProject = project } label: {
+                                darkProjectRow(project)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                }
+
                 Button {
                     showNewProject = true
                 } label: {
-                    Text("Neues Projekt")
-                        .font(Theme.caption(12))
-                        .tracking(1.6)
-                        .textCase(.uppercase)
-                        .foregroundStyle(Theme.darkroom)
-                        .padding(.vertical, 14)
-                        .frame(maxWidth: .infinity)
-                        .background(Theme.paperOnDark)
+                    HStack(spacing: 10) {
+                        Image(systemName: "plus").font(.system(size: 14, weight: .medium))
+                        Text("Neues Werk")
+                            .font(Theme.caption(12)).tracking(1.8).textCase(.uppercase)
+                    }
+                    .foregroundStyle(Theme.darkroom)
+                    .padding(.vertical, 15)
+                    .frame(maxWidth: .infinity)
+                    .background(Theme.paperOnDark)
                 }
+                .padding(.horizontal, 24)
+                .padding(.top, 16)
+
+                Spacer(minLength: 24)
             }
-            .padding(.horizontal, 24)
-            .padding(.bottom, 24)
         }
         .alert("Neues Projekt", isPresented: $showNewProject) {
             TextField("Name", text: $newProjectName)
@@ -155,18 +193,61 @@ struct LiveCaptureView: View {
         }
     }
 
+    /// Werkzeile in der Dunkelkammer: gefaltetes Blatt + Werkkante.
+    private func darkProjectRow(_ project: Project) -> some View {
+        HStack(spacing: 14) {
+            FoldedPaperHero(image: store.thumbnail(for: project),
+                            seed: FoldSeed.make(project.id),
+                            accent: Theme.accent(for: project.id),
+                            animatesLight: false)
+                .frame(width: 54, height: 54)
+                .overlay(alignment: .leading) {
+                    Rectangle().fill(Theme.accent(for: project.id)).frame(width: 3)
+                }
+                .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.3), lineWidth: 1))
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(project.name)
+                    .font(Theme.serif(17, .regular))
+                    .foregroundStyle(Theme.paperOnDark)
+                    .lineLimit(1)
+                CatalogLabel("\(project.frameCount) Bilder",
+                             color: Theme.paperOnDark.opacity(0.55), size: 9)
+            }
+            Spacer()
+            Image(systemName: "arrow.right")
+                .font(.system(size: 13))
+                .foregroundStyle(Theme.paperOnDark.opacity(0.5))
+        }
+        .padding(12)
+        .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.28), lineWidth: 1))
+    }
+
     // MARK: Aufnahme
 
     private func captureView(project: Project) -> some View {
         VStack(spacing: 0) {
             ZStack {
-                CameraPreview(session: controller.session)
+                CameraPreview(session: controller.session) { devicePoint in
+                    controller.focus(atDevicePoint: devicePoint)
+                }
 
-                if onionSkin, let last = controller.lastCapturedImage {
-                    Image(uiImage: last)
+                // Zwiebelhaut: letzter oder – für den Drift-Check – erster Frame
+                if onionSkin,
+                   let ghost = onionFirst ? controller.firstCapturedImage : controller.lastCapturedImage {
+                    Image(uiImage: ghost)
                         .resizable()
                         .scaledToFill()
-                        .opacity(0.35)
+                        .opacity(onionOpacity)
+                        .allowsHitTesting(false)
+                }
+
+                // Optionales Referenzbild als Ghost (Serien/Nachstellen)
+                if let referenceImage {
+                    Image(uiImage: referenceImage)
+                        .resizable()
+                        .scaledToFill()
+                        .opacity(onionOpacity * 0.9)
                         .allowsHitTesting(false)
                 }
 
@@ -188,6 +269,23 @@ struct LiveCaptureView: View {
                 }
             }
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
+            .overlay(alignment: .topLeading) {
+                VStack(spacing: 8) {
+                    // Kamera neu fixieren (nach Licht-/Aufbau-Änderung)
+                    sucherButton("camera.metering.center.weighted") {
+                        controller.refixCamera()
+                    }
+                    // Referenzbild als Ghost ein-/ausblenden
+                    if referenceImage == nil {
+                        PhotosPicker(selection: $refPickerItem, matching: .images) {
+                            sucherIcon("photo")
+                        }
+                    } else {
+                        sucherButton("photo.fill") { referenceImage = nil }
+                    }
+                }
+                .padding(12)
+            }
             .padding(.horizontal, 16)
             .padding(.top, 16)
 
@@ -224,7 +322,7 @@ struct LiveCaptureView: View {
             HStack(spacing: 14) {
                 VStack(alignment: .leading, spacing: 3) {
                     WorkTitle(project.name, size: 16, color: Theme.paperOnDark)
-                    CatalogLabel("\(currentCount) Bilder", color: Theme.paperOnDark.opacity(0.6))
+                    CatalogLabel(lengthHint, color: Theme.paperOnDark.opacity(0.6))
                 }
                 Spacer()
                 Button {
@@ -270,6 +368,7 @@ struct LiveCaptureView: View {
             .padding(.bottom, 16)
         }
         .onAppear {
+            UIApplication.shared.isIdleTimerDisabled = true // Bildschirm wach halten
             recentThumbs = []
             level.start()
             controller.start { jpegData in
@@ -283,8 +382,19 @@ struct LiveCaptureView: View {
             }
         }
         .onDisappear {
+            UIApplication.shared.isIdleTimerDisabled = false
             controller.stop()
             level.stop()
+        }
+        .onChange(of: refPickerItem) { _, item in
+            guard let item else { return }
+            Task {
+                if let data = try? await item.loadTransferable(type: Data.self),
+                   let img = UIImage(data: data) {
+                    referenceImage = img
+                }
+                refPickerItem = nil
+            }
         }
     }
 
@@ -300,6 +410,25 @@ struct LiveCaptureView: View {
     private var currentCount: Int {
         guard let project = targetProject else { return 0 }
         return store.projects.first(where: { $0.id == project.id })?.frameCount ?? 0
+    }
+
+    /// „48 Bilder · ~4,8 s bei 10 fps" – gibt ein Gefühl für die Werk-Länge.
+    private var lengthHint: String {
+        let secs = Double(currentCount) / 10.0
+        return String(format: "%d Bilder · ~%.1f s bei 10 fps", currentCount, secs)
+    }
+
+    private func sucherIcon(_ name: String) -> some View {
+        Image(systemName: name)
+            .font(.system(size: 15))
+            .foregroundStyle(Theme.paperOnDark)
+            .frame(width: 38, height: 38)
+            .background(Theme.darkroom.opacity(0.6))
+            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+    }
+
+    private func sucherButton(_ name: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) { sucherIcon(name) }
     }
 
     private var statusBadge: some View {
@@ -416,6 +545,8 @@ struct LiveSettingsView: View {
     @Binding var showGrid: Bool
     @Binding var showLevel: Bool
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("liveOnionOpacity") private var onionOpacity: Double = 0.35
+    @AppStorage("liveOnionFirst") private var onionFirst: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -453,6 +584,59 @@ struct LiveSettingsView: View {
                     CatalogLabel("Auto-Shutter")
                 }
                 .listRowBackground(Theme.paperShade.opacity(0.5))
+
+                Section {
+                    Picker("Auslöser", selection: $controller.captureMode) {
+                        ForEach(LiveCaptureController.CaptureMode.allCases) { Text($0.label).tag($0) }
+                    }
+                    .font(Theme.body)
+                    if controller.captureMode == .interval {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Intervall: \(controller.intervalSeconds, specifier: "%.0f") s")
+                                .font(Theme.body)
+                            Slider(value: $controller.intervalSeconds, in: 1...30, step: 1)
+                            Text("Im Intervall-Modus löst FrameFold in festem Takt aus – unabhängig von Bewegung.")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Theme.graphite)
+                        }
+                    }
+                    Picker("Netzfrequenz", selection: $controller.mainsHz) {
+                        Text("50 Hz (EU)").tag(50)
+                        Text("60 Hz (US)").tag(60)
+                    }
+                    .font(Theme.body)
+                    Toggle("Auslöse-Ton", isOn: $controller.playShutterSound)
+                        .font(Theme.body)
+                } header: {
+                    CatalogLabel("Auslöser & Belichtung")
+                }
+                .listRowBackground(Theme.paperShade.opacity(0.5))
+
+                Section {
+                    Toggle("Gegen ersten Frame (Drift)", isOn: $onionFirst)
+                        .font(Theme.body)
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Deckkraft: \(Int(onionOpacity * 100)) %")
+                            .font(Theme.body)
+                        Slider(value: $onionOpacity, in: 0.1...0.8, step: 0.05)
+                        Text("Zeigt ersten oder letzten Frame als Überblendung – zum Ausrichten und um Drift zu erkennen.")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Theme.graphite)
+                    }
+                } header: {
+                    CatalogLabel("Zwiebelhaut")
+                }
+                .listRowBackground(Theme.paperShade.opacity(0.5))
+
+                Section {
+                    tipRow("lightbulb", "Licht konstant halten: Kunstlicht nutzen, Fenster abdunkeln. Billige LED-/Leuchtstofflampen flackern im Netztakt und streifen einzelne Frames.")
+                    tipRow("hand.raised", "iPhone nicht berühren: aufs Stativ stellen und den Auto-Shutter arbeiten lassen (oder den runden Knopf).")
+                    tipRow("lock", "Kamera bleibt fixiert: FrameFold sperrt Belichtung, Fokus und Weißabgleich nach der kurzen Kalibrierung – so driftet zwischen den Bildern nichts.")
+                    tipRow("square.2.layers.3d", "Drift früh erkennen: Onion-Skin anlassen und die Aufnahme ab und zu mit dem ersten Frame vergleichen.")
+                } header: {
+                    CatalogLabel("Aufnahme-Tipps")
+                }
+                .listRowBackground(Theme.paperShade.opacity(0.5))
             }
             .scrollContentBackground(.hidden)
             .background(Theme.paper)
@@ -468,20 +652,56 @@ struct LiveSettingsView: View {
             }
         }
     }
+
+    private func tipRow(_ icon: String, _ text: String) -> some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: icon)
+                .font(.system(size: 13))
+                .foregroundStyle(Theme.ink)
+                .frame(width: 18)
+            Text(text)
+                .font(.system(size: 12.5))
+                .foregroundStyle(Theme.graphite)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
 }
 
-/// UIKit-Brücke für die Kamera-Vorschau.
+/// UIKit-Brücke für die Kamera-Vorschau. Tippen setzt Fokus-/Belichtungspunkt.
 struct CameraPreview: UIViewRepresentable {
     let session: AVCaptureSession
+    var onFocusTap: ((CGPoint) -> Void)? = nil
 
     func makeUIView(context: Context) -> PreviewView {
         let view = PreviewView()
         view.videoPreviewLayer.session = session
         view.videoPreviewLayer.videoGravity = .resizeAspectFill
+        let tap = UITapGestureRecognizer(
+            target: context.coordinator,
+            action: #selector(Coordinator.handleTap(_:)))
+        view.addGestureRecognizer(tap)
+        context.coordinator.view = view
         return view
     }
 
-    func updateUIView(_ uiView: PreviewView, context: Context) { }
+    func updateUIView(_ uiView: PreviewView, context: Context) {
+        context.coordinator.onFocusTap = onFocusTap
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator(onFocusTap: onFocusTap) }
+
+    final class Coordinator: NSObject {
+        var onFocusTap: ((CGPoint) -> Void)?
+        weak var view: PreviewView?
+        init(onFocusTap: ((CGPoint) -> Void)?) { self.onFocusTap = onFocusTap }
+
+        @objc func handleTap(_ gesture: UITapGestureRecognizer) {
+            guard let view else { return }
+            let point = gesture.location(in: view)
+            let devicePoint = view.videoPreviewLayer.captureDevicePointConverted(fromLayerPoint: point)
+            onFocusTap?(devicePoint)
+        }
+    }
 
     final class PreviewView: UIView {
         override static var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
