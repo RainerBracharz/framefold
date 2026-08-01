@@ -620,21 +620,8 @@ struct SettingsView: View {
             Form {
                 Section {
                     // Katalog-Reiter statt System-Segmentschalter
-                    HStack(spacing: 0) {
-                        ForEach(AppMode.allCases) { m in
-                            Button { modeRaw = m.rawValue } label: {
-                                Text(m.label)
-                                    .font(Theme.caption(11)).tracking(1.1).textCase(.uppercase)
-                                    .foregroundStyle(modeRaw == m.rawValue ? Theme.paper : Theme.ink)
-                                    .padding(.vertical, 11)
-                                    .frame(maxWidth: .infinity)
-                                    .background(modeRaw == m.rawValue ? Theme.ink : Color.clear)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
-                    .listRowInsets(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12))
+                    ModeTabs(modeRaw: $modeRaw)
+                        .listRowInsets(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12))
                     Text(modeHint)
                         .font(Theme.mono(11))
                         .foregroundStyle(Theme.graphite)

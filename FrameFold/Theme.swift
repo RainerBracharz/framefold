@@ -411,6 +411,29 @@ struct LogoLockup: View {
 
 // MARK: Bausteine
 
+/// Modus-Umschalter als Katalog-Reiter (statt System-Segmentschalter).
+/// Wird im Video- und im Kamera-Tab verwendet.
+struct ModeTabs: View {
+    @Binding var modeRaw: Int
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(AppMode.allCases) { m in
+                Button { modeRaw = m.rawValue } label: {
+                    Text(m.label)
+                        .font(Theme.caption(11)).tracking(1.1).textCase(.uppercase)
+                        .foregroundStyle(modeRaw == m.rawValue ? Theme.paper : Theme.ink)
+                        .padding(.vertical, 11)
+                        .frame(maxWidth: .infinity)
+                        .background(modeRaw == m.rawValue ? Theme.ink : Color.clear)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+    }
+}
+
 /// Gesperrte Mono-Versalien-Zeile, z. B. "23 BLÄTTER · 2026".
 struct CatalogLabel: View {
     let text: String

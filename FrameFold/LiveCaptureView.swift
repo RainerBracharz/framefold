@@ -22,6 +22,10 @@ struct LiveCaptureView: View {
     @AppStorage("liveOnionFirst") private var onionFirst: Bool = false
     @State private var referenceImage: UIImage?
     @State private var refPickerItem: PhotosPickerItem?
+    /// Im Einfach-Modus bleiben nur Auslöser und Fertig – alles andere
+    /// (Raster, Wasserwaage, Pegel, Neu-Fixieren, Referenzbild) ab „Erweitert".
+    @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
+    private var mode: AppMode { AppMode.current(modeRaw) }
 
     var body: some View {
         NavigationStack {
@@ -251,8 +255,8 @@ struct LiveCaptureView: View {
                         .allowsHitTesting(false)
                 }
 
-                if showGrid { ThirdsGrid().allowsHitTesting(false) }
-                if showLevel {
+                if mode.showsAdvanced, showGrid { ThirdsGrid().allowsHitTesting(false) }
+                if mode.showsAdvanced, showLevel {
                     BubbleLevel(gx: level.gx, gy: level.gy, isLevel: level.isLevel)
                         .allowsHitTesting(false)
                 }
@@ -261,9 +265,11 @@ struct LiveCaptureView: View {
                     Spacer()
                     // Bewegungs-Pegel: links ruhig, Markierung = Schwelle.
                     // Man sieht live, warum der Auto-Shutter (nicht) auslöst.
-                    MotionGauge(motion: controller.currentMotion,
-                                threshold: controller.motionThreshold)
-                        .frame(width: 150, height: 10)
+                    if mode.showsAdvanced {
+                        MotionGauge(motion: controller.currentMotion,
+                                    threshold: controller.motionThreshold)
+                            .frame(width: 150, height: 10)
+                    }
                     statusBadge
                     // Sagt im Klartext, warum kein Auslöser kommt
                     if let hint = controller.hint {
@@ -282,21 +288,25 @@ struct LiveCaptureView: View {
             }
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
             .overlay(alignment: .topLeading) {
-                VStack(spacing: 8) {
-                    // Kamera neu fixieren (nach Licht-/Aufbau-Änderung)
-                    sucherButton("camera.metering.center.weighted") {
-                        controller.refixCamera()
-                    }
-                    // Referenzbild als Ghost ein-/ausblenden
-                    if referenceImage == nil {
-                        PhotosPicker(selection: $refPickerItem, matching: .images) {
-                            sucherIcon("photo")
+                // Werkzeuge erst ab „Erweitert" – im Einfach-Modus stört alles,
+                // was nicht Auslöser oder Fertig ist.
+                if mode.showsAdvanced {
+                    VStack(spacing: 8) {
+                        // Kamera neu fixieren (nach Licht-/Aufbau-Änderung)
+                        sucherButton("camera.metering.center.weighted") {
+                            controller.refixCamera()
                         }
-                    } else {
-                        sucherButton("photo.fill") { referenceImage = nil }
+                        // Referenzbild als Ghost ein-/ausblenden
+                        if referenceImage == nil {
+                            PhotosPicker(selection: $refPickerItem, matching: .images) {
+                                sucherIcon("photo")
+                            }
+                        } else {
+                            sucherButton("photo.fill") { referenceImage = nil }
+                        }
                     }
+                    .padding(12)
                 }
-                .padding(12)
             }
             .padding(.horizontal, 16)
             .padding(.top, 16)
@@ -337,14 +347,17 @@ struct LiveCaptureView: View {
                     CatalogLabel(lengthHint, color: Theme.paperOnDark.opacity(0.6))
                 }
                 Spacer()
-                Button {
-                    onionSkin.toggle()
-                } label: {
-                    Image(systemName: "square.2.layers.3d")
-                        .foregroundStyle(onionSkin ? Theme.darkroom : Theme.paperOnDark)
-                        .padding(10)
-                        .background(onionSkin ? Theme.paperOnDark : .clear)
-                        .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+                // Zwiebelhaut ist im Einfach-Modus einfach an – kein Schalter
+                if mode.showsAdvanced {
+                    Button {
+                        onionSkin.toggle()
+                    } label: {
+                        Image(systemName: "square.2.layers.3d")
+                            .foregroundStyle(onionSkin ? Theme.darkroom : Theme.paperOnDark)
+                            .padding(10)
+                            .background(onionSkin ? Theme.paperOnDark : .clear)
+                            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+                    }
                 }
 
                 // Manueller Auslöser – nimmt sofort einen Frame,
@@ -562,10 +575,29 @@ struct LiveSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @AppStorage("liveOnionOpacity") private var onionOpacity: Double = 0.35
     @AppStorage("liveOnionFirst") private var onionFirst: Bool = false
+    @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
+    private var mode: AppMode { AppMode.current(modeRaw) }
 
     var body: some View {
         NavigationStack {
             Form {
+                // Der Modus steht oben – im Einfach-Modus ist er das Einzige,
+                // was man hier überhaupt einstellen kann.
+                Section {
+                    ModeTabs(modeRaw: $modeRaw)
+                        .listRowInsets(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12))
+                    Text(mode == .basic
+                         ? "Einfach: nur Auslöser und Fertig. Alles Weitere erscheint ab \"Erweitert\"."
+                         : "Alle Werkzeuge sichtbar: Raster, Wasserwaage, Pegel, Neu-Fixieren, Referenzbild.")
+                        .font(Theme.mono(11))
+                        .foregroundStyle(Theme.graphite)
+                        .lineSpacing(2)
+                } header: {
+                    CatalogLabel("Modus")
+                }
+                .listRowBackground(Theme.paperShade.opacity(0.5))
+
+                if mode.showsAdvanced {
                 Section {
                     Toggle("Drittel-Raster", isOn: $showGrid)
                         .font(Theme.body)
@@ -642,6 +674,7 @@ struct LiveSettingsView: View {
                     CatalogLabel("Zwiebelhaut")
                 }
                 .listRowBackground(Theme.paperShade.opacity(0.5))
+                } // Ende: nur ab „Erweitert"
 
                 Section {
                     tipRow("lightbulb", "Licht konstant halten: Kunstlicht nutzen, Fenster abdunkeln. Billige LED-/Leuchtstofflampen flackern im Netztakt und streifen einzelne Frames.")

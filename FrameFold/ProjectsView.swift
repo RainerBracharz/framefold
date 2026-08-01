@@ -246,14 +246,18 @@ struct ProjectDetailView: View {
                 WorkTitle(currentProject.name, size: 17)
             }
             ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    isEditingFrames.toggle()
-                } label: {
-                    Text(isEditingFrames ? "Fertig" : "Bearbeiten")
-                        .font(Theme.caption(11))
-                        .tracking(1.2)
-                        .textCase(.uppercase)
-                        .foregroundStyle(Theme.ink)
+                // Frame-Bearbeitung erst ab „Erweitert" – im Einfach-Modus
+                // reicht: ansehen, exportieren, teilen.
+                if mode.showsAdvanced {
+                    Button {
+                        isEditingFrames.toggle()
+                    } label: {
+                        Text(isEditingFrames ? "Fertig" : "Bearbeiten")
+                            .font(Theme.caption(11))
+                            .tracking(1.2)
+                            .textCase(.uppercase)
+                            .foregroundStyle(Theme.ink)
+                    }
                 }
             }
         }
