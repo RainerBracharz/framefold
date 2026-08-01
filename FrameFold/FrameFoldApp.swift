@@ -37,7 +37,9 @@ struct FrameFoldApp: App {
                     .tag(2)
             }
             .environmentObject(projectStore)
-            .tint(Theme.ink)
+            // Der Kamera-Tab ist die Dunkelkammer – dort wird die Tab-Leiste
+            // dunkel. Tuscheschwarz wäre darauf unsichtbar, also hell tönen.
+            .tint(selectedTab == 1 ? Theme.paperOnDark : Theme.ink)
             .preferredColorScheme(.light) // Galeriewand, konsistent im Atelier
         }
     }
