@@ -371,7 +371,10 @@ struct ProjectDetailView: View {
                     CatalogLabel("Stopmotion wird montiert…", size: 10)
                 }
             } else if let exportURL {
-                // Fertig: teilen ist jetzt der Hauptgriff (Sichern, AirDrop, …)
+                // Fertig: erst ansehen (Endlos-Schleife), dann teilen
+                LoopingVideoPreview(url: exportURL)
+                    .editionPlate()
+
                 Button {
                     shareItem = ShareItem(url: exportURL)
                 } label: {
@@ -518,9 +521,8 @@ struct ProjectDetailView: View {
                 await MainActor.run {
                     exportURL = url
                     isExporting = false
-                    // Direkt anbieten: sichern, teilen, AirDrop – statt den
-                    // Nutzer auf demselben Screen raten zu lassen.
-                    shareItem = ShareItem(url: url)
+                    // Kein automatisches Teilen-Sheet mehr: das Ergebnis läuft
+                    // jetzt direkt als Vorschau – teilen entscheidet der Nutzer.
                 }
             } catch {
                 await MainActor.run {
@@ -664,6 +666,9 @@ struct ExhibitionSheet: View {
                         HairlineProgress(value: progress)
                         CatalogLabel("Reel wird montiert…")
                     } else if let reelURL {
+                        LoopingVideoPreview(url: reelURL)
+                            .frame(maxHeight: 260)
+                            .editionPlate()
                         Button {
                             shareItem = ShareItem(url: reelURL)
                         } label: {
@@ -719,8 +724,7 @@ struct ExhibitionSheet: View {
                 ) { p in Task { @MainActor in progress = p } }
                 await MainActor.run {
                     reelURL = url
-                    isBuilding = false
-                    shareItem = ShareItem(url: url)   // direkt anbieten
+                    isBuilding = false   // läuft direkt als Vorschau
                 }
             } catch {
                 await MainActor.run {
@@ -729,6 +733,38 @@ struct ExhibitionSheet: View {
                 }
             }
         }
+    }
+}
+
+/// Endlos-Vorschau eines fertigen Videos – ansehen statt nur teilen.
+/// Liest das Seitenverhältnis aus der Datei, damit nichts beschnitten wirkt.
+struct LoopingVideoPreview: View {
+    let url: URL
+    @State private var player: AVQueuePlayer?
+    @State private var looper: AVPlayerLooper?
+    @State private var aspect: CGFloat = 9.0 / 16.0
+
+    var body: some View {
+        VideoPlayer(player: player)
+            .aspectRatio(aspect, contentMode: .fit)
+            .onAppear {
+                guard player == nil else { return }
+                let queue = AVQueuePlayer()
+                looper = AVPlayerLooper(player: queue,
+                                        templateItem: AVPlayerItem(url: url))
+                queue.play()
+                player = queue
+            }
+            .onDisappear { player?.pause() }
+            .task(id: url) {
+                let asset = AVURLAsset(url: url)
+                guard let track = try? await asset.loadTracks(withMediaType: .video).first,
+                      let size = try? await track.load(.naturalSize),
+                      let transform = try? await track.load(.preferredTransform) else { return }
+                let shown = size.applying(transform)
+                let w = abs(shown.width), h = abs(shown.height)
+                if w > 0, h > 0 { aspect = w / h }
+            }
     }
 }
 

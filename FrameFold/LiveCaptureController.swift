@@ -60,6 +60,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
     @Published var permissionDenied = false
     /// Kein Aufnahmegerät vorhanden (z. B. iOS-Simulator oder Gerät ohne Kamera).
     @Published var cameraUnavailable = false
+    /// Klartext-Hinweis, wenn der Auslöser aus erkennbarem Grund nicht kommt.
+    @Published var hint: String?
 
     let session = AVCaptureSession()
     /// Aktuelles Aufnahmegerät – zum Fixieren von Belichtung/Fokus/Weißabgleich.
@@ -104,6 +106,11 @@ final class LiveCaptureController: NSObject, ObservableObject {
     private let videoQueue = DispatchQueue(label: "framefold.livecapture")
     private var onCapture: ((Data) -> Void)?
     private var intervalTask: Task<Void, Never>?
+    private var relockTask: Task<Void, Never>?
+    /// Beginn der laufenden Kalibrierung – für den Sicherheits-Timeout.
+    private var calibrationStart: Date?
+    /// Seit wann die Szene ununterbrochen zu unruhig zum Auslösen ist.
+    private var restlessSince: Date?
 
     // MARK: Lifecycle
 
@@ -124,9 +131,16 @@ final class LiveCaptureController: NSObject, ObservableObject {
             Task.detached { [session = self.session] in
                 session.startRunning()
             }
+            // Sauberer Start: Reste einer vorherigen Session verwerfen
             self.firstCapturedImage = nil
+            self.previousGray = nil
+            self.stableSince = nil
+            self.restlessSince = nil
+            self.currentMotion = 0
+            self.hint = nil
             self.status = .calibrating
             self.calibrationSamples = []
+            self.calibrationStart = Date()
             self.armed = false // scharf erst nach der Kalibrierung
         }
     }
@@ -134,6 +148,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
     func stop() {
         intervalTask?.cancel()
         intervalTask = nil
+        relockTask?.cancel()
+        relockTask = nil
+        hint = nil
         Task.detached { [session = self.session] in
             session.stopRunning()
         }
@@ -221,11 +238,15 @@ final class LiveCaptureController: NSObject, ObservableObject {
         resetToContinuous()
         status = .calibrating
         calibrationSamples = []
+        calibrationStart = Date()
+        restlessSince = nil
+        hint = nil
         armed = false
     }
 
-    /// Tippen im Sucher: Fokus- und Belichtungspunkt aufs Werk setzen,
-    /// danach neu messen und fixieren.
+    /// Tippen im Sucher: Fokus- und Belichtungspunkt aufs Werk setzen und die
+    /// Kamera neu fixieren. Die Bewegungs-Kalibrierung bleibt bewusst bestehen –
+    /// sonst würde jeder Tipp den Auslöser entschärfen.
     func focus(atDevicePoint point: CGPoint) {
         guard let device else { return }
         try? device.lockForConfiguration()
@@ -236,7 +257,20 @@ final class LiveCaptureController: NSObject, ObservableObject {
             device.exposurePointOfInterest = point
         }
         device.unlockForConfiguration()
-        refixCamera()
+        relockCamera()
+    }
+
+    /// Belichtung/Fokus/Weißabgleich neu einmessen und wieder fixieren –
+    /// ohne die Bewegungs-Kalibrierung zu verwerfen.
+    func relockCamera() {
+        resetToContinuous()
+        relockTask?.cancel()
+        relockTask = Task { [weak self] in
+            // Automatik kurz einschwingen lassen, dann festhalten
+            try? await Task.sleep(nanoseconds: 900_000_000)
+            guard let self, !Task.isCancelled else { return }
+            self.lockCameraSettings()
+        }
     }
 
     /// Belichtung/Fokus/Weißabgleich zurück auf kontinuierliche Automatik.
@@ -297,10 +331,16 @@ final class LiveCaptureController: NSObject, ObservableObject {
         if calibrationSamples != nil {
             status = .calibrating
             if hadPrevious { calibrationSamples?.append(motion) }
-            if let samples = calibrationSamples, samples.count >= 20 {
-                let median = samples.sorted()[samples.count / 2]
+            // Sicherheits-Timeout: lieber mit weniger Messwerten starten, als
+            // ewig in der Kalibrierung hängen zu bleiben.
+            let enough = (calibrationSamples?.count ?? 0) >= 20
+            let timedOut = calibrationStart.map { Date().timeIntervalSince($0) > 4.0 } ?? false
+            if enough || timedOut {
+                let samples = (calibrationSamples ?? []).sorted()
+                let median = samples.isEmpty ? 1.0 : samples[samples.count / 2]
                 motionThreshold = min(8.0, max(1.0, (median * 3 * 2).rounded() / 2))
                 calibrationSamples = nil
+                calibrationStart = nil
                 armed = true // erster Frame darf sofort kommen, sobald stabil
                 status = .waitingForWork
                 // Für Stop-Motion: Belichtung, Fokus und Weißabgleich jetzt
@@ -320,8 +360,16 @@ final class LiveCaptureController: NSObject, ObservableObject {
             armed = true
             stableSince = nil
             status = .working
+            // Bleibt es dauerhaft unruhig, kommt nie ein Auslöser – sagen,
+            // woran es liegt, statt den Nutzer raten zu lassen.
+            if restlessSince == nil { restlessSince = Date() }
+            if Date().timeIntervalSince(restlessSince!) > 6 {
+                hint = "Szene wirkt dauerhaft unruhig. Stativ prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen."
+            }
             return
         }
+        restlessSince = nil
+        if hint != nil { hint = nil }
 
         // Szene ist ruhig
         guard armed else {

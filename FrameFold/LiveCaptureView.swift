@@ -265,7 +265,19 @@ struct LiveCaptureView: View {
                                 threshold: controller.motionThreshold)
                         .frame(width: 150, height: 10)
                     statusBadge
-                        .padding(.bottom, 12)
+                    // Sagt im Klartext, warum kein Auslöser kommt
+                    if let hint = controller.hint {
+                        Text(hint)
+                            .font(Theme.mono(11))
+                            .foregroundStyle(Theme.paperOnDark)
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(2)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 10)
+                            .background(Theme.amber.opacity(0.9))
+                            .padding(.horizontal, 20)
+                    }
+                    Spacer().frame(height: 12)
                 }
             }
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
@@ -354,7 +366,10 @@ struct LiveCaptureView: View {
                     controller.stop()
                     targetProject = nil
                 } label: {
-                    Text("Fertig")
+                    // Ohne aufgenommene Bilder ist es ein Abbruch, kein „fertig"
+                    Text(controller.capturedCount == 0
+                         ? "Abbrechen"
+                         : "Fertig · \(controller.capturedCount)")
                         .font(Theme.caption(12))
                         .tracking(1.6)
                         .textCase(.uppercase)
