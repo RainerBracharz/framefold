@@ -12,6 +12,10 @@ struct ContentView: View {
     @AppStorage("artistName") private var artistName = "Aldo"
     /// Neigungs-Licht: das Galerielicht folgt der Hand (CoreMotion).
     @StateObject private var lightTilt = LightTilt()
+    /// Das Faltbild ist ein Spielzeug: antippen faltet es neu.
+    @State private var foldNudge: UInt64 = 0
+    @AppStorage("appMode") private var homeModeRaw: Int = AppMode.basic.rawValue
+    private var mode: AppMode { AppMode.current(homeModeRaw) }
 
     var body: some View {
         NavigationStack {
@@ -63,7 +67,7 @@ struct ContentView: View {
                 // 1 – Begrüßung statt Ansage
                 VStack(alignment: .leading, spacing: 10) {
                     CatalogLabel(greetingLine)
-                    Text("Woran arbeitest du\nheute?")
+                    Text(mode == .basic ? "Was falten wir\nheute?" : "Woran arbeitest du\nheute?")
                         .font(Theme.serifItalic(28))
                         .foregroundStyle(Theme.ink)
                         .lineSpacing(2)
@@ -143,10 +147,20 @@ struct ContentView: View {
         VStack(spacing: 0) {
             FoldedPaperHero(
                 image: latestProject.flatMap { store.thumbnail(for: $0) },
-                seed: FoldSeed.make(latestProject?.id),
+                seed: FoldSeed.make(latestProject?.id) &+ foldNudge,
                 accent: latestProject.map { Theme.accent(for: $0.id) } ?? Theme.violet,
                 tilt: lightTilt.offset)
                 .frame(height: 248)
+                .overlay {
+                    // Antippen faltet neu – ein kleines Spielzeug im Einfach-Modus
+                    if mode == .basic {
+                        Color.clear
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                withAnimation(.smooth(duration: 0.45)) { foldNudge &+= 17 }
+                            }
+                    }
+                }
 
             HStack(spacing: 14) {
                 VStack(alignment: .leading, spacing: 4) {

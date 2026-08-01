@@ -42,14 +42,24 @@ final class LiveCaptureController: NSObject, ObservableObject {
         case stabilizing(Double)  // Countdown bis Auto-Shutter (0..1)
         case captured
 
-        var label: String {
+        var label: String { label(playful: false) }
+
+        /// Im Einfach-Modus spricht die App wie ein Werkstatt-Kollege,
+        /// in den anderen Modi im Katalogton.
+        func label(playful: Bool) -> String {
             switch self {
-            case .idle: return "Kamera startet…"
-            case .calibrating: return "Kalibriere – kurz ruhig lassen…"
-            case .waitingForWork: return "Bereit – arbeite einfach"
-            case .working: return "Arbeit erkannt…"
-            case .stabilizing: return "Ruhig halten…"
-            case .captured: return "Bild aufgenommen ✓"
+            case .idle:
+                return playful ? "Gleich geht's los…" : "Kamera startet…"
+            case .calibrating:
+                return playful ? "Halt kurz still…" : "Kalibriere – kurz ruhig lassen…"
+            case .waitingForWork:
+                return playful ? "Los — ich schau zu" : "Bereit – arbeite einfach"
+            case .working:
+                return playful ? "Ich warte, bis du weg bist…" : "Arbeit erkannt…"
+            case .stabilizing:
+                return playful ? "Nicht bewegen…" : "Ruhig halten…"
+            case .captured:
+                return playful ? "Klick!" : "Bild aufgenommen ✓"
             }
         }
     }

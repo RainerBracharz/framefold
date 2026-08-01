@@ -27,6 +27,15 @@ struct LiveCaptureView: View {
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     private var mode: AppMode { AppMode.current(modeRaw) }
 
+    // Sofort-Ergebnis: nach „Fertig" wird direkt montiert und gezeigt,
+    // statt den Nutzer in die Werkliste zurückzuwerfen.
+    @State private var finishedProject: Project?
+    @State private var isAssembling = false
+    @State private var assembleProgress = 0.0
+    @State private var resultURL: URL?
+    @State private var resultError: String?
+    @State private var resultShare: ShareItem?
+
     var body: some View {
         NavigationStack {
             Group {
@@ -42,6 +51,9 @@ struct LiveCaptureView: View {
                     }
                 } else if controller.cameraUnavailable {
                     cameraUnavailableView
+                } else if let finishedProject {
+                    // Direkt nach der Aufnahme: Ergebnis ansehen
+                    resultView(project: finishedProject)
                 } else if let project = targetProject {
                     captureView(project: project)
                 } else {
@@ -127,7 +139,7 @@ struct LiveCaptureView: View {
                 // Dunkelkammer-Fassung der Begrüßung
                 VStack(alignment: .leading, spacing: 10) {
                     CatalogLabel("Dunkelkammer", color: Theme.paperOnDark.opacity(0.55))
-                    Text("Welches Werk\nnimmst du auf?")
+                    Text(mode == .basic ? "Was falten\nwir heute?" : "Welches Werk\nnimmst du auf?")
                         .font(Theme.serifItalic(26))
                         .foregroundStyle(Theme.paperOnDark)
                         .lineSpacing(2)
@@ -195,6 +207,119 @@ struct LiveCaptureView: View {
             }
             Button("Abbrechen", role: .cancel) { newProjectName = "" }
         }
+    }
+
+    // MARK: Sofort-Ergebnis
+
+    /// Beendet die Session und montiert das Ergebnis gleich – der Lohn der
+    /// Arbeit soll unmittelbar zu sehen sein, nicht drei Tipps entfernt.
+    private func finishSession(project: Project) {
+        controller.stop()
+        level.stop()
+        let captured = controller.capturedCount
+        targetProject = nil
+        guard captured > 0 else { return }   // Abbruch ohne Bilder
+
+        finishedProject = project
+        resultURL = nil
+        resultError = nil
+        isAssembling = true
+        assembleProgress = 0
+
+        let urls = store.frameURLs(for: store.projects.first(where: { $0.id == project.id }) ?? project)
+        Task {
+            do {
+                let url = try await StopMotionAssembler().assemble(
+                    imageURLs: urls, settings: PipelineSettings()
+                ) { p in Task { @MainActor in assembleProgress = p } }
+                await MainActor.run { resultURL = url; isAssembling = false }
+            } catch {
+                await MainActor.run {
+                    resultError = "Das hat leider nicht geklappt."
+                    isAssembling = false
+                }
+            }
+        }
+    }
+
+    private func resultView(project: Project) -> some View {
+        let count = store.projects.first(where: { $0.id == project.id })?.frameCount ?? 0
+        let seconds = Double(count) / 10.0
+        return VStack(spacing: 0) {
+            Spacer(minLength: 16)
+
+            VStack(spacing: 6) {
+                Text(mode == .basic ? "Fertig! \(count) Bilder" : "\(count) Bilder aufgenommen")
+                    .font(Theme.serifItalic(24))
+                    .foregroundStyle(Theme.paperOnDark)
+                CatalogLabel(String(format: "%.1f Sekunden · läuft in Schleife", seconds),
+                             color: Theme.paperOnDark.opacity(0.55), size: 9)
+            }
+            .padding(.bottom, 18)
+
+            if isAssembling {
+                VStack(spacing: 12) {
+                    HairlineProgress(value: assembleProgress,
+                                     trackColor: Theme.paperOnDark.opacity(0.25))
+                        .frame(width: 180)
+                    CatalogLabel(mode == .basic ? "Wird zusammengesetzt…" : "Stopmotion wird montiert…",
+                                 color: Theme.paperOnDark.opacity(0.6), size: 9)
+                }
+                .frame(maxHeight: .infinity)
+            } else if let resultURL {
+                LoopingVideoPreview(url: resultURL)
+                    .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.3), lineWidth: 1))
+                    .padding(.horizontal, 20)
+                    .frame(maxHeight: .infinity)
+            } else if let resultError {
+                Text(resultError)
+                    .font(Theme.mono(12))
+                    .foregroundStyle(Theme.amber)
+                    .frame(maxHeight: .infinity)
+            }
+
+            VStack(spacing: 10) {
+                if let resultURL {
+                    Button { resultShare = ShareItem(url: resultURL) } label: {
+                        Text("Teilen")
+                            .font(Theme.caption(12)).tracking(2.2).textCase(.uppercase)
+                            .foregroundStyle(Theme.darkroom)
+                            .padding(.vertical, 15)
+                            .frame(maxWidth: .infinity)
+                            .background(Theme.paperOnDark)
+                    }
+                }
+                HStack(spacing: 10) {
+                    Button {
+                        // Nochmal: gleiche Werkzeile, neue Session
+                        finishedProject = nil
+                        targetProject = project
+                    } label: {
+                        darkAction(mode == .basic ? "Nochmal" : "Weiter aufnehmen")
+                    }
+                    Button {
+                        finishedProject = nil
+                    } label: {
+                        darkAction("Fertig")
+                    }
+                }
+                CatalogLabel("gespeichert in \(project.name)",
+                             color: Theme.paperOnDark.opacity(0.45), size: 8)
+                    .padding(.top, 2)
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 22)
+        }
+        .sheet(item: $resultShare) { item in ActivityView(items: [item.url]) }
+    }
+
+    private func darkAction(_ title: String) -> some View {
+        Text(title)
+            .font(Theme.caption(11)).tracking(1.5).textCase(.uppercase)
+            .foregroundStyle(Theme.paperOnDark)
+            .padding(.vertical, 13)
+            .frame(maxWidth: .infinity)
+            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
     }
 
     /// Werkzeile in der Dunkelkammer: gefaltetes Blatt + Werkkante.
@@ -269,6 +394,9 @@ struct LiveCaptureView: View {
                         MotionGauge(motion: controller.currentMotion,
                                     threshold: controller.motionThreshold)
                             .frame(width: 150, height: 10)
+                    } else {
+                        // Einfach-Modus: der Zähler ist der Held, nicht die Technik
+                        bigCounter
                     }
                     statusBadge
                     // Sagt im Klartext, warum kein Auslöser kommt
@@ -376,8 +504,7 @@ struct LiveCaptureView: View {
                 }
 
                 Button {
-                    controller.stop()
-                    targetProject = nil
+                    finishSession(project: project)
                 } label: {
                     // Ohne aufgenommene Bilder ist es ein Abbruch, kein „fertig"
                     Text(controller.capturedCount == 0
@@ -459,6 +586,36 @@ struct LiveCaptureView: View {
         Button(action: action) { sucherIcon(name) }
     }
 
+    /// Großer Zähler mit fühlbarem Fortschritt: 10 Bilder = 1 Sekunde Film.
+    private var bigCounter: some View {
+        let count = controller.capturedCount
+        let toNext = (10 - (count % 10)) % 10
+        return VStack(spacing: 4) {
+            Text("\(count)")
+                .font(Theme.serif(58, .regular))
+                .foregroundStyle(Theme.amberLight)
+                .contentTransition(.numericText())
+                .animation(.snappy(duration: 0.25), value: count)
+            CatalogLabel("Bilder", color: Theme.paperOnDark.opacity(0.7), size: 9)
+
+            if count > 0 {
+                ZStack(alignment: .leading) {
+                    Rectangle().fill(Theme.paperOnDark.opacity(0.2))
+                        .frame(width: 130, height: 3)
+                    Rectangle().fill(Theme.amber)
+                        .frame(width: 130 * CGFloat(count % 10 == 0 ? 10 : count % 10) / 10, height: 3)
+                }
+                .animation(.snappy, value: count)
+                Text(toNext == 0
+                     ? "\(count / 10) Sekunde\(count / 10 == 1 ? "" : "n") Film!"
+                     : "noch \(toNext) für eine Sekunde Film")
+                    .font(Theme.mono(10))
+                    .foregroundStyle(Theme.paperOnDark.opacity(0.65))
+            }
+        }
+        .padding(.bottom, 6)
+    }
+
     private var statusBadge: some View {
         HStack(spacing: 10) {
             switch controller.status {
@@ -473,7 +630,8 @@ struct LiveCaptureView: View {
             default:
                 Image(systemName: "eye").foregroundStyle(Theme.paperOnDark.opacity(0.6))
             }
-            CatalogLabel(controller.status.label, color: Theme.paperOnDark)
+            CatalogLabel(controller.status.label(playful: mode == .basic),
+                         color: Theme.paperOnDark)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
