@@ -66,10 +66,36 @@ struct LiveCaptureView: View {
                 ToolbarItem(placement: .principal) {
                     WorkTitle("Kamera", size: 17, color: Theme.paperOnDark)
                 }
+                // Während der Aufnahme steht der Ausstieg immer oben rechts –
+                // unabhängig davon, wie eng die untere Leiste wird.
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button { showSettings = true } label: {
-                        Image(systemName: "slider.horizontal.3")
-                            .foregroundStyle(Theme.paperOnDark)
+                    if let project = targetProject {
+                        Button { finishSession(project: project) } label: {
+                            Text(controller.capturedCount == 0
+                                 ? "Abbrechen"
+                                 : "Fertig · \(controller.capturedCount)")
+                                .font(Theme.caption(12))
+                                .tracking(1.2)
+                                .textCase(.uppercase)
+                                .foregroundStyle(Theme.darkroom)
+                                .padding(.vertical, 7)
+                                .padding(.horizontal, 12)
+                                .background(Theme.paperOnDark)
+                        }
+                    } else {
+                        Button { showSettings = true } label: {
+                            Image(systemName: "slider.horizontal.3")
+                                .foregroundStyle(Theme.paperOnDark)
+                        }
+                    }
+                }
+                // Einstellungen bleiben während der Aufnahme links erreichbar
+                ToolbarItem(placement: .topBarLeading) {
+                    if targetProject != nil, mode.showsAdvanced {
+                        Button { showSettings = true } label: {
+                            Image(systemName: "slider.horizontal.3")
+                                .foregroundStyle(Theme.paperOnDark)
+                        }
                     }
                 }
             }
@@ -414,6 +440,10 @@ struct LiveCaptureView: View {
                     Spacer().frame(height: 12)
                 }
             }
+            // Die Vorschau nimmt nur den Platz, der übrig bleibt – die
+            // Bedienleiste darunter darf nie hinausgeschoben werden.
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .clipped()
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
             .overlay(alignment: .topLeading) {
                 // Werkzeuge erst ab „Erweitert" – im Einfach-Modus stört alles,
@@ -469,12 +499,17 @@ struct LiveCaptureView: View {
                 .padding(.top, 10)
             }
 
-            HStack(spacing: 14) {
+            HStack(spacing: 12) {
+                // Darf schrumpfen – Auslöser und Fertig haben Vorrang
                 VStack(alignment: .leading, spacing: 3) {
-                    WorkTitle(project.name, size: 16, color: Theme.paperOnDark)
-                    CatalogLabel(lengthHint, color: Theme.paperOnDark.opacity(0.6))
+                    WorkTitle(project.name, size: 15, color: Theme.paperOnDark)
+                        .lineLimit(1)
+                    CatalogLabel(lengthHint, color: Theme.paperOnDark.opacity(0.6), size: 9)
+                        .lineLimit(1)
                 }
-                Spacer()
+                .layoutPriority(0)
+                .minimumScaleFactor(0.7)
+                Spacer(minLength: 4)
                 // Zwiebelhaut ist im Einfach-Modus einfach an – kein Schalter
                 if mode.showsAdvanced {
                     Button {
@@ -507,17 +542,17 @@ struct LiveCaptureView: View {
                     finishSession(project: project)
                 } label: {
                     // Ohne aufgenommene Bilder ist es ein Abbruch, kein „fertig"
-                    Text(controller.capturedCount == 0
-                         ? "Abbrechen"
-                         : "Fertig · \(controller.capturedCount)")
+                    Text(controller.capturedCount == 0 ? "Abbrechen" : "Fertig")
+                        .fixedSize()
                         .font(Theme.caption(12))
                         .tracking(1.6)
                         .textCase(.uppercase)
                         .foregroundStyle(Theme.darkroom)
                         .padding(.vertical, 12)
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 18)
                         .background(Theme.paperOnDark)
                 }
+                .layoutPriority(1)   // darf nie weggedrückt werden
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 16)
