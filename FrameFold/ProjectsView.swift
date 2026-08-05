@@ -742,33 +742,126 @@ struct ExhibitionSheet: View {
 
 /// Endlos-Vorschau eines fertigen Videos – ansehen statt nur teilen.
 /// Liest das Seitenverhältnis aus der Datei, damit nichts beschnitten wirkt.
+/// Bild-für-Bild-Vorschau: liest die Frames aus dem fertigen Video und spielt
+/// sie in Schleife. Mit dem Finger ziehen blättert frame-genau durch die
+/// Sequenz – für Stopmotion das passende Werkzeug, und anders als ein
+/// Video-Player bei sehr kurzen Clips absolut verlässlich.
 struct LoopingVideoPreview: View {
     let url: URL
-    @State private var player: AVQueuePlayer?
-    @State private var looper: AVPlayerLooper?
+
+    @State private var frames: [UIImage] = []
+    @State private var index = 0
     @State private var aspect: CGFloat = 9.0 / 16.0
+    @State private var playFPS: Double = 10
+    @State private var isScrubbing = false
+    @State private var isLoading = true
 
     var body: some View {
-        VideoPlayer(player: player)
-            .aspectRatio(aspect, contentMode: .fit)
-            .onAppear {
-                guard player == nil else { return }
-                let queue = AVQueuePlayer()
-                looper = AVPlayerLooper(player: queue,
-                                        templateItem: AVPlayerItem(url: url))
-                queue.play()
-                player = queue
+        GeometryReader { geo in
+            ZStack {
+                if let image = currentFrame {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    Rectangle().fill(Theme.paperShade)
+                    if isLoading { ProgressView().tint(Theme.ink) }
+                }
             }
-            .onDisappear { player?.pause() }
-            .task(id: url) {
-                let asset = AVURLAsset(url: url)
-                guard let track = try? await asset.loadTracks(withMediaType: .video).first,
-                      let size = try? await track.load(.naturalSize),
-                      let transform = try? await track.load(.preferredTransform) else { return }
-                let shown = size.applying(transform)
-                let w = abs(shown.width), h = abs(shown.height)
-                if w > 0, h > 0 { aspect = w / h }
+            .frame(width: geo.size.width, height: geo.size.height)
+            .contentShape(Rectangle())
+            .gesture(
+                // Ziehen blättert frame-genau; loslassen spielt weiter
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        guard !frames.isEmpty, geo.size.width > 0 else { return }
+                        isScrubbing = true
+                        let fraction = min(max(value.location.x / geo.size.width, 0), 1)
+                        index = min(frames.count - 1,
+                                    max(0, Int(fraction * CGFloat(frames.count - 1))))
+                    }
+                    .onEnded { _ in isScrubbing = false }
+            )
+        }
+        .aspectRatio(aspect, contentMode: .fit)
+        .overlay(alignment: .bottom) { scrubBar }
+        .task(id: url) { await loadFrames() }
+        .onReceive(Timer.publish(every: 1.0 / max(1, playFPS), on: .main, in: .common).autoconnect()) { _ in
+            guard !isScrubbing, frames.count > 1 else { return }
+            index = (index + 1) % frames.count
+        }
+    }
+
+    private var currentFrame: UIImage? {
+        frames.indices.contains(index) ? frames[index] : nil
+    }
+
+    /// Dünne Leiste: zeigt die Position und lädt zum Ziehen ein.
+    private var scrubBar: some View {
+        Group {
+            if frames.count > 1 {
+                VStack(spacing: 5) {
+                    GeometryReader { g in
+                        ZStack(alignment: .leading) {
+                            Rectangle().fill(Color.black.opacity(0.25))
+                            Rectangle().fill(Theme.amber)
+                                .frame(width: g.size.width * CGFloat(index + 1) / CGFloat(frames.count))
+                        }
+                    }
+                    .frame(height: 3)
+                    Text(isScrubbing
+                         ? "Bild \(index + 1) von \(frames.count)"
+                         : "Ziehen zum Durchblättern")
+                        .font(Theme.mono(9))
+                        .foregroundStyle(.white.opacity(0.85))
+                        .shadow(radius: 2)
+                }
+                .padding(.horizontal, 8)
+                .padding(.bottom, 7)
             }
+        }
+    }
+
+    private func loadFrames() async {
+        isLoading = true
+        let asset = AVURLAsset(url: url)
+        guard let track = try? await asset.loadTracks(withMediaType: .video).first,
+              let duration = try? await asset.load(.duration) else {
+            isLoading = false
+            return
+        }
+        if let size = try? await track.load(.naturalSize),
+           let transform = try? await track.load(.preferredTransform) {
+            let shown = size.applying(transform)
+            let w = abs(shown.width), h = abs(shown.height)
+            if w > 0, h > 0 { aspect = w / h }
+        }
+        let nominal = (try? await track.load(.nominalFrameRate)) ?? 10
+        let rate = Double(nominal > 0 ? nominal : 10)
+        playFPS = rate
+
+        let seconds = CMTimeGetSeconds(duration)
+        guard seconds > 0 else { isLoading = false; return }
+        // Sehr lange Sequenzen ausdünnen – der Speicher soll ruhig bleiben
+        let total = max(1, min(Int((seconds * rate).rounded()), 300))
+        let step = seconds / Double(total)
+        let times = (0..<total).map {
+            CMTime(seconds: Double($0) * step + step / 2, preferredTimescale: 600)
+        }
+
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        generator.requestedTimeToleranceBefore = .zero
+        generator.requestedTimeToleranceAfter = .zero
+        generator.maximumSize = CGSize(width: 720, height: 720)
+
+        var loaded: [UIImage] = []
+        for await result in generator.images(for: times) {
+            if let cg = try? result.image { loaded.append(UIImage(cgImage: cg)) }
+        }
+        frames = loaded
+        index = 0
+        isLoading = false
     }
 }
 

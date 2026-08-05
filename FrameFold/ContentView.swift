@@ -502,14 +502,9 @@ struct ResultView: View {
     @EnvironmentObject var store: ProjectStore
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     private var mode: AppMode { AppMode.current(modeRaw) }
-    @State private var player: AVQueuePlayer?
-    @State private var looper: AVPlayerLooper?
     @State private var showSaveToProject = false
     @State private var saveProjectName = ""
     @State private var savedProjectID: UUID?
-    /// Seitenverhältnis des Ergebnisses – wird aus der Datei gelesen,
-    /// damit kein Hochformat-Rahmen um ein Querformat-Video steht.
-    @State private var previewAspect: CGFloat = 9.0 / 16.0
 
     /// Als „gesichert" gilt nur, solange das Zielprojekt noch existiert –
     /// so verschwindet der Haken, wenn das Projekt gelöscht wurde.
@@ -520,29 +515,10 @@ struct ResultView: View {
 
     var body: some View {
         VStack(spacing: 18) {
-            VideoPlayer(player: player)
-                .aspectRatio(previewAspect, contentMode: .fit)
+            // Bild-für-Bild statt Video-Player: läuft zuverlässig in Schleife
+            // und lässt sich mit dem Finger frame-genau durchblättern.
+            LoopingVideoPreview(url: result.outputURL)
                 .editionPlate()   // wie seine Editionen: unter Acrylglas
-                .task {
-                    let asset = AVURLAsset(url: result.outputURL)
-                    guard let track = try? await asset.loadTracks(withMediaType: .video).first,
-                          let size = try? await track.load(.naturalSize),
-                          let transform = try? await track.load(.preferredTransform) else { return }
-                    let shown = size.applying(transform)
-                    let w = abs(shown.width), h = abs(shown.height)
-                    if w > 0, h > 0 { previewAspect = w / h }
-                }
-                .onAppear {
-                    // Endlos-Loop, damit sich die Animation – und besonders die
-                    // Übergänge (Verwebung/Falz/Facetten) – in Ruhe ansehen lassen.
-                    let queue = AVQueuePlayer()
-                    looper = AVPlayerLooper(
-                        player: queue,
-                        templateItem: AVPlayerItem(url: result.outputURL))
-                    queue.play()
-                    player = queue
-                }
-                .onDisappear { player?.pause() }
 
             VStack(spacing: 6) {
                 CatalogLabel("\(result.keyframeTimes.count) Bilder · aus \(Int(result.sourceDuration)) s Video",
