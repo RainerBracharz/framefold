@@ -58,7 +58,9 @@ The language is drawn from Tolino’s 2024 series (*Full-Blown*, *Cracked*, the 
 
 The home screen doesn’t describe folding, it **crumples**: an irregular fractured paper field, filled with the frames of your latest work, hung with a soft shadow like a print on the wall. **Tilt the phone and the light travels across the facets** — as if you were turning the print under gallery light: image → object → image, made physical. The finished stop-motion is presented like his editions — sealed under acrylic glass, with a gloss, a shadow and an edition line (“Serie von 8 · datiert 2026”).
 
-Typography pairs **Fraunces** (serif — with the *italic* as the speaking voice, as on his website) with **Inter** (the annotation-on-the-back-of-a-print voice), both bundled and registered at runtime. Selection is marked by inversion — an ink block — never by colour. The mark is an “F” crossed by a single amber crease: a folded sheet catching the light.
+Typography pairs **Fraunces** (serif — with the *italic* as the speaking voice, as on his website) with **Inter** (the annotation-on-the-back-of-a-print voice), both bundled and registered at runtime. Selection is marked by inversion — an ink block — never by colour.
+
+**The mark** is not a letter. A sheet whose folded corner contains a sheet, whose folded corner contains a sheet — Tolino’s endless loop *image → object → image* drawn as a figure, with amber marking the layer you currently stand on. Its concentric squares nod to Albers, whom he cites directly when he asks “whether the surface itself can generate images”.
 
 ## Engineering
 

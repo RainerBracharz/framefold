@@ -125,45 +125,48 @@ enum Theme {
     static var numeral: Font { mono(14, .medium) }
 }
 
-// MARK: Falz-Signet (Dreiecksfacette)
+// MARK: Signet „Rekursion"
 
-/// Das Signet: ein Blatt, entlang der Diagonale gefaltet – eine Hälfte Fläche,
-/// eine Hälfte Kontur, mit feiner zweiter Falzlinie. Echo der triangulierten
-/// Faltungen in Tolinos Porträts.
+/// Das Signet: ein Blatt, dessen umgeschlagene Ecke ein Blatt enthält, dessen
+/// Ecke wieder ein Blatt enthält — Aldo Tolinos endlose Schleife
+/// „Bild → Objekt → Bild" als Figur. Die mittlere Falz trägt Amber: die Ebene,
+/// auf der man gerade steht.
 struct FoldMark: View {
     var size: CGFloat = 56
     var color: Color = Theme.ink
-    var creaseColor: Color = Theme.graphite
+    /// Farbe der hervorgehobenen (mittleren) Falz-Ecke.
+    var accent: Color = Theme.amber
+    /// Anzahl der Verschachtelungen.
+    var depth: Int = 3
 
     var body: some View {
-        ZStack {
-            // umgeschlagene Ecke (Fläche)
-            Path { p in
-                p.move(to: .zero)
-                p.addLine(to: CGPoint(x: size, y: 0))
-                p.addLine(to: CGPoint(x: 0, y: size))
-                p.closeSubpath()
+        Canvas { ctx, canvas in
+            let s = min(canvas.width, canvas.height)
+            let line = max(1, s * 0.045)
+
+            for level in 0..<depth {
+                // Jede Ebene sitzt zentriert und ist kleiner als die vorige
+                let inset = s * 0.20 * CGFloat(level)
+                let side = s - inset * 2
+                guard side > line * 2 else { break }
+                let rect = CGRect(x: inset, y: inset, width: side, height: side)
+
+                // Blattkontur
+                ctx.stroke(Path(rect), with: .color(color),
+                           lineWidth: line * (1 - CGFloat(level) * 0.15))
+
+                // Umgeschlagene Ecke rechts oben
+                let corner = side * 0.40
+                var fold = Path()
+                fold.move(to: CGPoint(x: rect.maxX, y: rect.minY))
+                fold.addLine(to: CGPoint(x: rect.maxX, y: rect.minY + corner))
+                fold.addLine(to: CGPoint(x: rect.maxX - corner, y: rect.minY))
+                fold.closeSubpath()
+
+                // Die mittlere Ebene trägt das Amber – der aktuelle Zustand
+                let isAccent = (level == depth / 2)
+                ctx.fill(fold, with: .color(isAccent ? accent : color))
             }
-            .fill(color)
-            // offenes Blatt (Kontur rechts + unten)
-            Path { p in
-                p.move(to: CGPoint(x: size, y: 0))
-                p.addLine(to: CGPoint(x: size, y: size))
-                p.addLine(to: CGPoint(x: 0, y: size))
-            }
-            .stroke(color, lineWidth: 1.2)
-            // Hauptfalz (Diagonale) – bricht das Licht ins Spektrum
-            Path { p in
-                p.move(to: CGPoint(x: size, y: 0))
-                p.addLine(to: CGPoint(x: 0, y: size))
-            }
-            .stroke(Theme.crease, lineWidth: 1.6)
-            // zweite Falzlinie (Facette)
-            Path { p in
-                p.move(to: CGPoint(x: size * 0.5, y: 0))
-                p.addLine(to: CGPoint(x: 0, y: size * 0.5))
-            }
-            .stroke(creaseColor, lineWidth: 0.8)
         }
         .frame(width: size, height: size)
     }
@@ -382,15 +385,8 @@ struct LogoTile: View {
         ZStack {
             RoundedRectangle(cornerRadius: size * 0.22, style: .continuous)
                 .fill(Theme.ink)
-            Text("F")
-                .font(Theme.serif(size * 0.58, .medium))
-                .foregroundStyle(Theme.paper)
-                .offset(x: size * 0.02, y: size * 0.03)
-            Path { p in
-                p.move(to: CGPoint(x: size * 0.5, y: 0))
-                p.addLine(to: CGPoint(x: 0, y: size * 0.5))
-            }
-            .stroke(Theme.crease, lineWidth: max(1.5, size * 0.055))
+            // Das Signet selbst – kein Buchstabe, sondern die Rekursion
+            FoldMark(size: size * 0.66, color: Theme.paper, accent: Theme.amber)
         }
         .frame(width: size, height: size)
         .clipShape(RoundedRectangle(cornerRadius: size * 0.22, style: .continuous))
