@@ -356,6 +356,9 @@ struct FoldedPaperHero: View {
             }
             .frame(width: size.width, height: size.height)
             .clipped()
+            // Reine Dekoration: darf niemals Tipps abfangen, sonst reagieren
+            // die Zeilen und Kacheln nicht, in denen das Blatt sitzt.
+            .allowsHitTesting(false)
             .onAppear {
                 guard animatesLight, !reduceMotion, !sweep else { return }
                 withAnimation(.linear(duration: 14).repeatForever(autoreverses: false)) {

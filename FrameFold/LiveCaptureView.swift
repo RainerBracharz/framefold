@@ -376,189 +376,76 @@ struct LiveCaptureView: View {
         }
         .padding(12)
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.28), lineWidth: 1))
+        .contentShape(Rectangle())   // ganze Zeile ist tippbar
     }
 
     // MARK: Aufnahme
 
+    /// Sucher – bewusst flach aufgebaut: EIN ZStack, das Kamerabild füllt
+    /// alles, darüber genau eine Spalte mit Status und Bedienung. Keine
+    /// verschachtelten Stapel, keine Layout-Prioritäten: so kann die
+    /// Bedienleiste strukturell nicht verschwinden.
     private func captureView(project: Project) -> some View {
-        VStack(spacing: 0) {
-            ZStack {
-                CameraPreview(session: controller.session) { devicePoint in
-                    controller.focus(atDevicePoint: devicePoint)
-                }
+        GeometryReader { geo in
+        ZStack(alignment: .bottom) {
+            // Feste Größe: sonst macht scaledToFill das Bild breiter als den
+            // Bildschirm – der ganze Stapel wird überbreit und die Bedienung
+            // rutscht seitlich hinaus. Genau das war der alte Fehler.
+            cameraLayer
+                .frame(width: geo.size.width, height: geo.size.height)
+                .clipped()
 
-                // Zwiebelhaut: letzter oder – für den Drift-Check – erster Frame
-                if onionSkin,
-                   let ghost = onionFirst ? controller.firstCapturedImage : controller.lastCapturedImage {
-                    Image(uiImage: ghost)
-                        .resizable()
-                        .scaledToFill()
-                        .opacity(onionOpacity)
-                        .allowsHitTesting(false)
-                }
-
-                // Optionales Referenzbild als Ghost (Serien/Nachstellen)
-                if let referenceImage {
-                    Image(uiImage: referenceImage)
-                        .resizable()
-                        .scaledToFill()
-                        .opacity(onionOpacity * 0.9)
-                        .allowsHitTesting(false)
-                }
-
-                if mode.showsAdvanced, showGrid { ThirdsGrid().allowsHitTesting(false) }
-                if mode.showsAdvanced, showLevel {
-                    BubbleLevel(gx: level.gx, gy: level.gy, isLevel: level.isLevel)
-                        .allowsHitTesting(false)
-                }
-
-                VStack(spacing: 8) {
-                    Spacer()
-                    // Bewegungs-Pegel: links ruhig, Markierung = Schwelle.
-                    // Man sieht live, warum der Auto-Shutter (nicht) auslöst.
-                    if mode.showsAdvanced {
-                        MotionGauge(motion: controller.currentMotion,
-                                    threshold: controller.motionThreshold)
-                            .frame(width: 150, height: 10)
-                    } else {
-                        // Einfach-Modus: der Zähler ist der Held, nicht die Technik
-                        bigCounter
-                    }
-                    statusBadge
-                    // Sagt im Klartext, warum kein Auslöser kommt
-                    if let hint = controller.hint {
-                        Text(hint)
-                            .font(Theme.mono(11))
-                            .foregroundStyle(Theme.paperOnDark)
-                            .multilineTextAlignment(.center)
-                            .lineSpacing(2)
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 10)
-                            .background(Theme.amber.opacity(0.9))
-                            .padding(.horizontal, 20)
-                    }
-                    Spacer().frame(height: 12)
-                }
-            }
-            // Die Vorschau nimmt nur den Platz, der übrig bleibt – die
-            // Bedienleiste darunter darf nie hinausgeschoben werden.
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .clipped()
-            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
-            .overlay(alignment: .topLeading) {
-                // Werkzeuge erst ab „Erweitert" – im Einfach-Modus stört alles,
-                // was nicht Auslöser oder Fertig ist.
+            VStack(spacing: 12) {
                 if mode.showsAdvanced {
-                    VStack(spacing: 8) {
-                        // Kamera neu fixieren (nach Licht-/Aufbau-Änderung)
-                        sucherButton("camera.metering.center.weighted") {
-                            controller.refixCamera()
-                        }
-                        // Referenzbild als Ghost ein-/ausblenden
-                        if referenceImage == nil {
-                            PhotosPicker(selection: $refPickerItem, matching: .images) {
-                                sucherIcon("photo")
-                            }
-                        } else {
-                            sucherButton("photo.fill") { referenceImage = nil }
-                        }
-                    }
-                    .padding(12)
-                }
-            }
-            .padding(.horizontal, 16)
-            .padding(.top, 16)
-
-            // Streifen der letzten Frames – letzter ist per ✕ zurücknehmbar
-            if !recentThumbs.isEmpty {
-                HStack(spacing: 4) {
-                    ForEach(Array(recentThumbs.enumerated()), id: \.offset) { index, thumb in
-                        Image(uiImage: thumb)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 44, height: 44)
-                            .clipped()
-                            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
-                            .overlay(alignment: .topTrailing) {
-                                if index == recentThumbs.count - 1 {
-                                    Button {
-                                        undoLastFrame(project: project)
-                                    } label: {
-                                        Image(systemName: "xmark")
-                                            .font(.system(size: 9, weight: .bold))
-                                            .foregroundStyle(Theme.darkroom)
-                                            .padding(4)
-                                            .background(Theme.paperOnDark)
-                                    }
-                                }
-                            }
-                    }
-                    Spacer()
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 10)
-            }
-
-            HStack(spacing: 12) {
-                // Darf schrumpfen – Auslöser und Fertig haben Vorrang
-                VStack(alignment: .leading, spacing: 3) {
-                    WorkTitle(project.name, size: 15, color: Theme.paperOnDark)
-                        .lineLimit(1)
-                    CatalogLabel(lengthHint, color: Theme.paperOnDark.opacity(0.6), size: 9)
-                        .lineLimit(1)
-                }
-                .layoutPriority(0)
-                .minimumScaleFactor(0.7)
-                Spacer(minLength: 4)
-                // Zwiebelhaut ist im Einfach-Modus einfach an – kein Schalter
-                if mode.showsAdvanced {
-                    Button {
-                        onionSkin.toggle()
-                    } label: {
-                        Image(systemName: "square.2.layers.3d")
-                            .foregroundStyle(onionSkin ? Theme.darkroom : Theme.paperOnDark)
-                            .padding(10)
-                            .background(onionSkin ? Theme.paperOnDark : .clear)
-                            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
-                    }
+                    MotionGauge(motion: controller.currentMotion,
+                                threshold: controller.motionThreshold)
+                        .frame(width: 150, height: 10)
+                } else {
+                    bigCounter
                 }
 
-                // Manueller Auslöser – nimmt sofort einen Frame,
-                // unabhängig vom Auto-Shutter
-                Button {
-                    controller.captureNow()
-                } label: {
-                    ZStack {
-                        Circle()
-                            .stroke(Theme.paperOnDark, lineWidth: 2)
-                            .frame(width: 54, height: 54)
-                        Circle()
-                            .fill(Theme.paperOnDark)
-                            .frame(width: 42, height: 42)
-                    }
-                }
+                statusBadge
 
-                Button {
-                    finishSession(project: project)
-                } label: {
-                    // Ohne aufgenommene Bilder ist es ein Abbruch, kein „fertig"
-                    Text(controller.capturedCount == 0 ? "Abbrechen" : "Fertig")
-                        .fixedSize()
-                        .font(Theme.caption(12))
-                        .tracking(1.6)
-                        .textCase(.uppercase)
+                if let hint = controller.hint {
+                    Text(hint)
+                        .font(Theme.mono(11))
                         .foregroundStyle(Theme.darkroom)
-                        .padding(.vertical, 12)
-                        .padding(.horizontal, 18)
-                        .background(Theme.paperOnDark)
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(2)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Theme.amber)
                 }
-                .layoutPriority(1)   // darf nie weggedrückt werden
+
+                controlRow(project: project)
             }
             .padding(.horizontal, 20)
-            .padding(.bottom, 16)
+            .padding(.bottom, 24)
+            .frame(width: geo.size.width)
+        }
+        .frame(width: geo.size.width, height: geo.size.height)
+        .clipped()
+        }
+        .overlay(alignment: .topLeading) {
+            // Werkzeuge erst ab „Erweitert"
+            if mode.showsAdvanced {
+                VStack(spacing: 8) {
+                    sucherButton("camera.metering.center.weighted") {
+                        controller.refixCamera()
+                    }
+                    if referenceImage == nil {
+                        PhotosPicker(selection: $refPickerItem, matching: .images) {
+                            sucherIcon("photo")
+                        }
+                    } else {
+                        sucherButton("photo.fill") { referenceImage = nil }
+                    }
+                }
+                .padding(16)
+            }
         }
         .onAppear {
-            UIApplication.shared.isIdleTimerDisabled = true // Bildschirm wach halten
+            UIApplication.shared.isIdleTimerDisabled = true
             recentThumbs = []
             level.start()
             controller.start { jpegData in
@@ -588,6 +475,85 @@ struct LiveCaptureView: View {
         }
     }
 
+    /// Kamerabild samt Überblendungen (Zwiebelhaut, Referenz, Raster, Waage).
+    @ViewBuilder
+    private var cameraLayer: some View {
+        ZStack {
+            #if targetEnvironment(simulator)
+            if let sim = controller.simulatedPreview {
+                Image(uiImage: sim).resizable().scaledToFill()
+            } else {
+                Theme.darkroom
+            }
+            #else
+            CameraPreview(session: controller.session) { devicePoint in
+                controller.focus(atDevicePoint: devicePoint)
+            }
+            #endif
+
+            if onionSkin,
+               let ghost = onionFirst ? controller.firstCapturedImage : controller.lastCapturedImage {
+                Image(uiImage: ghost).resizable().scaledToFill()
+                    .opacity(onionOpacity).allowsHitTesting(false)
+            }
+            if let referenceImage {
+                Image(uiImage: referenceImage).resizable().scaledToFill()
+                    .opacity(onionOpacity * 0.9).allowsHitTesting(false)
+            }
+            if mode.showsAdvanced, showGrid { ThirdsGrid().allowsHitTesting(false) }
+            if mode.showsAdvanced, showLevel {
+                BubbleLevel(gx: level.gx, gy: level.gy, isLevel: level.isLevel)
+                    .allowsHitTesting(false)
+            }
+        }
+    }
+
+    /// Bedienung: Auslöser in der Mitte, Fertig rechts – wie in jeder Kamera-App.
+    private func controlRow(project: Project) -> some View {
+        HStack(spacing: 16) {
+            // Links: Zwiebelhaut (nur Erweitert), sonst Platzhalter
+            Group {
+                if mode.showsAdvanced {
+                    Button { onionSkin.toggle() } label: {
+                        Image(systemName: "square.2.layers.3d")
+                            .font(.system(size: 17))
+                            .foregroundStyle(onionSkin ? Theme.darkroom : Theme.paperOnDark)
+                            .frame(width: 46, height: 46)
+                            .background(onionSkin ? Theme.paperOnDark : Color.black.opacity(0.35))
+                    }
+                } else {
+                    Color.clear
+                }
+            }
+            .frame(width: 46, height: 46)
+
+            Spacer(minLength: 0)
+
+            // Mitte: Auslöser
+            Button { controller.captureNow() } label: {
+                ZStack {
+                    Circle().fill(Color.black.opacity(0.25)).frame(width: 74, height: 74)
+                    Circle().stroke(Theme.paperOnDark, lineWidth: 3).frame(width: 68, height: 68)
+                    Circle().fill(Theme.paperOnDark).frame(width: 54, height: 54)
+                }
+            }
+
+            Spacer(minLength: 0)
+
+            // Rechts: Fertig / Abbrechen
+            Button { finishSession(project: project) } label: {
+                Text(controller.capturedCount == 0 ? "Abbrechen" : "Fertig")
+                    .font(Theme.caption(11))
+                    .tracking(1.4)
+                    .textCase(.uppercase)
+                    .foregroundStyle(Theme.darkroom)
+                    .frame(width: 92, height: 46)
+                    .background(Theme.paperOnDark)
+            }
+            .frame(width: 92, height: 46)
+        }
+        .frame(maxWidth: .infinity)
+    }
     private func undoLastFrame(project: Project) {
         if let current = store.projects.first(where: { $0.id == project.id }),
            current.frameCount > 0 {

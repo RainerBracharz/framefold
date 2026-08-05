@@ -121,11 +121,25 @@ final class LiveCaptureController: NSObject, ObservableObject {
     private var calibrationStart: Date?
     /// Seit wann die Szene ununterbrochen zu unruhig zum Auslösen ist.
     private var restlessSince: Date?
+    /// Simulator-Kamera: Task und aktuelles Vorschaubild.
+    private var simulatorTask: Task<Void, Never>?
+    /// Im Simulator statt des Kamerabilds angezeigt (nil auf echten Geräten).
+    @Published var simulatedPreview: UIImage?
 
     // MARK: Lifecycle
 
     func start(onCapture: @escaping (Data) -> Void) {
         self.onCapture = onCapture
+        cameraUnavailable = false   // jeder Start beginnt unbelastet
+
+        #if targetEnvironment(simulator)
+        // Im Simulator gibt es keine Kamera – wir speisen synthetische Frames
+        // ein (Ruhephasen + „Hand"-Bewegung), damit der komplette Live-Ablauf
+        // testbar ist: Kalibrierung, Auto-Shutter, Zähler, Ergebnis.
+        resetSessionState()
+        startSimulatedCamera()
+        return
+        #else
         Task {
             let granted = await AVCaptureDevice.requestAccess(for: .video)
             guard granted else {
@@ -141,18 +155,23 @@ final class LiveCaptureController: NSObject, ObservableObject {
             Task.detached { [session = self.session] in
                 session.startRunning()
             }
-            // Sauberer Start: Reste einer vorherigen Session verwerfen
-            self.firstCapturedImage = nil
-            self.previousGray = nil
-            self.stableSince = nil
-            self.restlessSince = nil
-            self.currentMotion = 0
-            self.hint = nil
-            self.status = .calibrating
-            self.calibrationSamples = []
-            self.calibrationStart = Date()
-            self.armed = false // scharf erst nach der Kalibrierung
+            self.resetSessionState()
         }
+        #endif
+    }
+
+    /// Sauberer Start: Reste einer vorherigen Session verwerfen.
+    private func resetSessionState() {
+        firstCapturedImage = nil
+        previousGray = nil
+        stableSince = nil
+        restlessSince = nil
+        currentMotion = 0
+        hint = nil
+        status = .calibrating
+        calibrationSamples = []
+        calibrationStart = Date()
+        armed = false // scharf erst nach der Kalibrierung
     }
 
     func stop() {
@@ -160,6 +179,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
         intervalTask = nil
         relockTask?.cancel()
         relockTask = nil
+        simulatorTask?.cancel()
+        simulatorTask = nil
         hint = nil
         Task.detached { [session = self.session] in
             session.stopRunning()
@@ -170,6 +191,11 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Aufnahmegerät verfügbar ist (Simulator/kameraloses Gerät).
     @discardableResult
     private func configureSession() -> Bool {
+        // Schon eingerichtet (zweite Session nach „Nochmal"): nicht erneut
+        // dieselben Ein-/Ausgänge hinzufügen – das schlug bisher fehl und
+        // ließ die App fälschlich „keine Kamera" melden.
+        if !session.inputs.isEmpty, !session.outputs.isEmpty { return true }
+
         session.beginConfiguration()
         session.sessionPreset = .hd1920x1080
 
@@ -313,6 +339,84 @@ final class LiveCaptureController: NSObject, ObservableObject {
             }
         }
     }
+
+    // MARK: Simulator-Kamera (nur im Simulator einkompiliert)
+
+    #if targetEnvironment(simulator)
+    /// Erzeugt 10 Frames/s: ein Papierquadrat wandert in Schritten über den
+    /// Tisch, dazwischen fährt eine „Hand" ins Bild. Dieselbe Struktur wie das
+    /// Referenz-Testvideo – der Auto-Shutter sollte pro Ruhephase auslösen.
+    private func startSimulatedCamera() {
+        simulatorTask?.cancel()
+        simulatorTask = Task { [weak self] in
+            var tick = 0
+            let stillFrames = 14        // ~1,4 s Ruhe
+            let moveFrames = 6          // ~0,6 s Bewegung
+            let cycle = stillFrames + moveFrames
+            while !Task.isCancelled {
+                guard let self else { return }
+                let step = tick / cycle
+                let inCycle = tick % cycle
+                let moving = inCycle >= stillFrames
+                let progress = moving ? Double(inCycle - stillFrames) / Double(moveFrames) : 0
+                if let cg = Self.makeSimulatedFrame(step: step, moving: moving, progress: progress) {
+                    self.simulatedPreview = UIImage(cgImage: cg)
+                    let (gray, w, h) = FrameAnalyzer.grayscaleDownsampled(cg, targetWidth: 160)
+                    self.analyze(gray: gray, w: w, h: h, fullFrame: cg)
+                }
+                tick += 1
+                try? await Task.sleep(nanoseconds: 100_000_000)
+            }
+        }
+    }
+
+    /// Zeichnet einen synthetischen Atelier-Frame (640×360).
+    private static func makeSimulatedFrame(step: Int, moving: Bool, progress: Double) -> CGImage? {
+        let w = 640, h = 360
+        guard let ctx = CGContext(data: nil, width: w, height: h, bitsPerComponent: 8,
+                                  bytesPerRow: 0, space: CGColorSpaceCreateDeviceRGB(),
+                                  bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
+        else { return nil }
+
+        // Tisch
+        ctx.setFillColor(red: 0.91, green: 0.86, blue: 0.78, alpha: 1)
+        ctx.fill(CGRect(x: 0, y: 0, width: w, height: h))
+        ctx.setFillColor(red: 0.69, green: 0.63, blue: 0.55, alpha: 1)
+        ctx.fill(CGRect(x: 0, y: 0, width: w, height: 60))
+
+        // Papierquadrat wandert in 8 Schritten
+        let positions = (0..<8).map { 40.0 + Double($0) * 70.0 }
+        let from = positions[step % positions.count]
+        let to = positions[(step + 1) % positions.count]
+        let x = moving ? from + (to - from) * progress : from
+
+        ctx.setFillColor(red: 0.98, green: 0.97, blue: 0.95, alpha: 1)
+        ctx.fill(CGRect(x: x, y: 150, width: 80, height: 80))
+        ctx.setStrokeColor(red: 0.35, green: 0.33, blue: 0.30, alpha: 1)
+        ctx.setLineWidth(2)
+        ctx.stroke(CGRect(x: x, y: 150, width: 80, height: 80))
+        ctx.move(to: CGPoint(x: x, y: 150))
+        ctx.addLine(to: CGPoint(x: x + 80, y: 230))
+        ctx.strokePath()
+
+        // „Hand" nur während der Bewegung
+        if moving {
+            let hy = 60 + 150 * sin(Double.pi * progress)
+            ctx.setFillColor(red: 0.85, green: 0.66, blue: 0.55, alpha: 1)
+            ctx.fillEllipse(in: CGRect(x: x + 10, y: hy, width: 70, height: 70))
+            ctx.fill(CGRect(x: x + 30, y: 0, width: 34, height: hy))
+        }
+
+        // Sensorrauschen, damit die Bewegung nie exakt null ist
+        for _ in 0..<220 {
+            ctx.setFillColor(red: .random(in: 0...1), green: .random(in: 0...1),
+                             blue: .random(in: 0...1), alpha: 0.05)
+            ctx.fill(CGRect(x: .random(in: 0...Double(w)), y: .random(in: 0...Double(h)),
+                            width: 2, height: 2))
+        }
+        return ctx.makeImage()
+    }
+    #endif
 
     // MARK: Frame-Verarbeitung (auf videoQueue, UI-Updates via MainActor)
 
