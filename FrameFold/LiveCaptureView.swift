@@ -26,6 +26,12 @@ struct LiveCaptureView: View {
     /// (Raster, Wasserwaage, Pegel, Neu-Fixieren, Referenzbild) ab „Erweitert".
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     private var mode: AppMode { AppMode.current(modeRaw) }
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// Kurzer weißer Blitz im Sucher bei jeder Aufnahme – sichtbar auch aus
+    /// zwei Metern Entfernung, wenn man am Set steht statt am Display.
+    @State private var flashOpacity = 0.0
+    /// Jubel-Impuls des großen Zählers (Einfach): alle 10 Bilder = 1 s Film.
+    @State private var celebratePulse = 1.0
 
     // Sofort-Ergebnis: nach „Fertig" wird direkt montiert und gezeigt,
     // statt den Nutzer in die Werkliste zurückzuwerfen.
@@ -395,19 +401,32 @@ struct LiveCaptureView: View {
                 .frame(width: geo.size.width, height: geo.size.height)
                 .clipped()
 
+            // Aufnahme-Blitz über dem Kamerabild, unter der Bedienung
+            if flashOpacity > 0 {
+                Color.white.opacity(flashOpacity)
+                    .frame(width: geo.size.width, height: geo.size.height)
+                    .allowsHitTesting(false)
+            }
+
             VStack(spacing: 12) {
-                if mode.showsAdvanced {
-                    MotionGauge(motion: controller.currentMotion,
-                                threshold: controller.motionThreshold)
-                        .frame(width: 150, height: 10)
-                } else {
-                    bigCounter
+                // Drei Gesichter derselben Kamera:
+                //   Einfach     – Spielzeug: großer Zähler, sonst nichts
+                //   Erweitert   – Werkzeug: Pegel + kompakter Stand
+                //   Aldo Tolino – Messinstrument: Labor-HUD mit Zahlen
+                switch mode {
+                case .basic:    bigCounter
+                case .advanced: advancedStatusRow
+                case .tolino:   tolinoHUD
                 }
 
                 statusBadge
 
                 if let hint = controller.hint {
-                    Text(hint)
+                    // Im Einfach-Modus sind die Einstellungen unerreichbar –
+                    // der Rat muss ohne sie auskommen.
+                    Text(mode == .basic
+                         ? "Zu viel Wackeln – leg das iPhone irgendwo auf oder lehne es an."
+                         : hint)
                         .font(Theme.mono(11))
                         .foregroundStyle(Theme.darkroom)
                         .multilineTextAlignment(.center)
@@ -415,6 +434,10 @@ struct LiveCaptureView: View {
                         .padding(.horizontal, 14)
                         .padding(.vertical, 10)
                         .background(Theme.amber)
+                }
+
+                if mode.showsAdvanced, !recentThumbs.isEmpty {
+                    thumbStrip(project: project)
                 }
 
                 controlRow(project: project)
@@ -473,6 +496,20 @@ struct LiveCaptureView: View {
                 refPickerItem = nil
             }
         }
+        .onChange(of: controller.capturedCount) { old, new in
+            guard new > old else { return }   // Undo blitzt nicht
+            if !reduceMotion {
+                flashOpacity = 0.5
+                withAnimation(.easeOut(duration: 0.28)) { flashOpacity = 0 }
+            }
+            // Jubel im Einfach-Modus: jede volle Filmsekunde federt der Zähler
+            if mode == .basic, new % 10 == 0, !reduceMotion {
+                celebratePulse = 1.22
+                withAnimation(.spring(response: 0.4, dampingFraction: 0.45)) {
+                    celebratePulse = 1.0
+                }
+            }
+        }
     }
 
     /// Kamerabild samt Überblendungen (Zwiebelhaut, Referenz, Raster, Waage).
@@ -509,9 +546,20 @@ struct LiveCaptureView: View {
     }
 
     /// Bedienung: Auslöser in der Mitte, Fertig rechts – wie in jeder Kamera-App.
+    /// Einfach bekommt den größten Knopf (Kinderhände, Blick aufs Set);
+    /// Tolino trägt den Falz-Countdown als Amber-Ring um den Auslöser.
     private func controlRow(project: Project) -> some View {
-        HStack(spacing: 16) {
-            // Links: Zwiebelhaut (nur Erweitert), sonst Platzhalter
+        // Auto-Shutter-Fortschritt (0..1), nur während „Ruhig halten…"
+        let stabilizing: Double? = {
+            if case .stabilizing(let p) = controller.status { return p }
+            return nil
+        }()
+        let outer: CGFloat = mode == .basic ? 84 : 74
+        let ring:  CGFloat = mode == .basic ? 78 : 68
+        let core:  CGFloat = mode == .basic ? 62 : 54
+
+        return HStack(spacing: 16) {
+            // Links: Zwiebelhaut (nur Erweitert/Tolino), sonst Platzhalter
             Group {
                 if mode.showsAdvanced {
                     Button { onionSkin.toggle() } label: {
@@ -532,9 +580,19 @@ struct LiveCaptureView: View {
             // Mitte: Auslöser
             Button { controller.captureNow() } label: {
                 ZStack {
-                    Circle().fill(Color.black.opacity(0.25)).frame(width: 74, height: 74)
-                    Circle().stroke(Theme.paperOnDark, lineWidth: 3).frame(width: 68, height: 68)
-                    Circle().fill(Theme.paperOnDark).frame(width: 54, height: 54)
+                    Circle().fill(Color.black.opacity(0.25)).frame(width: outer, height: outer)
+                    Circle().stroke(Theme.paperOnDark, lineWidth: 3).frame(width: ring, height: ring)
+                    // Tolino: der Countdown bis zum Auto-Shutter wandert als
+                    // Falz in Amber um den Knopf – man sieht die Auslösung kommen.
+                    if mode.showsTolino, let p = stabilizing {
+                        Circle()
+                            .trim(from: 0, to: p)
+                            .stroke(Theme.amber, style: StrokeStyle(lineWidth: 3, lineCap: .butt))
+                            .rotationEffect(.degrees(-90))
+                            .frame(width: ring, height: ring)
+                            .animation(.linear(duration: 0.1), value: p)
+                    }
+                    Circle().fill(Theme.paperOnDark).frame(width: core, height: core)
                 }
             }
 
@@ -553,6 +611,88 @@ struct LiveCaptureView: View {
             .frame(width: 92, height: 46)
         }
         .frame(maxWidth: .infinity)
+    }
+
+    /// Erweitert: Pegel + kompakter Stand („12 · 1,2 s") in einer Zeile.
+    private var advancedStatusRow: some View {
+        let count = controller.capturedCount
+        return HStack(spacing: 12) {
+            MotionGauge(motion: controller.currentMotion,
+                        threshold: controller.motionThreshold)
+                .frame(width: 150, height: 10)
+            Text(String(format: "%d · %.1f s", count, Double(count) / 10.0))
+                .font(Theme.mono(11, .medium))
+                .foregroundStyle(Theme.paperOnDark)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(Theme.darkroom.opacity(0.6))
+        }
+    }
+
+    /// Tolino: das Labor-HUD. Blattnummer, Sitzungsuhr, fixierte Belichtung,
+    /// darunter der Pegel mit Messwert gegen Schwelle – ein Instrument,
+    /// kein Spielzeug. Alles in Katalog-Versalien auf Dunkelkammer-Grund.
+    private var tolinoHUD: some View {
+        let count = controller.capturedCount
+        return VStack(spacing: 9) {
+            HStack {
+                CatalogLabel(String(format: "Blatt %02d · %.1f s", count, Double(count) / 10.0),
+                             color: Theme.amberLight, size: 10)
+                Spacer()
+                if let start = controller.sessionStart {
+                    TimelineView(.periodic(from: .now, by: 1)) { ctx in
+                        CatalogLabel(sessionClock(from: start, now: ctx.date),
+                                     color: Theme.paperOnDark.opacity(0.8), size: 10)
+                    }
+                }
+                Spacer()
+                CatalogLabel(controller.exposureInfo ?? "—",
+                             color: Theme.paperOnDark.opacity(0.8), size: 10)
+            }
+            HStack(spacing: 10) {
+                MotionGauge(motion: controller.currentMotion,
+                            threshold: controller.motionThreshold)
+                    .frame(height: 10)
+                Text(String(format: "%.1f / %.1f", controller.currentMotion,
+                            controller.motionThreshold))
+                    .font(Theme.mono(10, .medium))
+                    .foregroundStyle(Theme.paperOnDark.opacity(0.75))
+                    .frame(width: 62, alignment: .trailing)
+            }
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 11)
+        .background(Theme.darkroom.opacity(0.75))
+        .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
+    }
+
+    /// „02:41" seit Sessionbeginn.
+    private func sessionClock(from start: Date, now: Date) -> String {
+        let s = max(0, Int(now.timeIntervalSince(start)))
+        return String(format: "%02d:%02d", s / 60, s % 60)
+    }
+
+    /// Daumenkino der letzten Aufnahmen + Zurücknehmen des letzten Bildes.
+    /// Ein danebengegangener Frame ruiniert sonst die ganze Schleife.
+    private func thumbStrip(project: Project) -> some View {
+        HStack(spacing: 6) {
+            ForEach(Array(recentThumbs.enumerated()), id: \.offset) { _, img in
+                Image(uiImage: img)
+                    .resizable().scaledToFill()
+                    .frame(width: 44, height: 33)
+                    .clipped()
+                    .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.4), lineWidth: 1))
+            }
+            Button { undoLastFrame(project: project) } label: {
+                Image(systemName: "arrow.uturn.backward")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(Theme.paperOnDark)
+                    .frame(width: 36, height: 33)
+                    .background(Color.black.opacity(0.35))
+                    .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+            }
+            .accessibilityLabel("Letztes Bild zurücknehmen")
+        }
     }
     private func undoLastFrame(project: Project) {
         if let current = store.projects.first(where: { $0.id == project.id }),
@@ -597,6 +737,7 @@ struct LiveCaptureView: View {
                 .foregroundStyle(Theme.amberLight)
                 .contentTransition(.numericText())
                 .animation(.snappy(duration: 0.25), value: count)
+                .scaleEffect(celebratePulse)   // federt bei jeder vollen Filmsekunde
             CatalogLabel("Bilder", color: Theme.paperOnDark.opacity(0.7), size: 9)
 
             if count > 0 {
@@ -631,8 +772,10 @@ struct LiveCaptureView: View {
             default:
                 Image(systemName: "eye").foregroundStyle(Theme.paperOnDark.opacity(0.6))
             }
+            // Einfach: einen Tick größer – wird oft aus Entfernung gelesen
             CatalogLabel(controller.status.label(playful: mode == .basic),
-                         color: Theme.paperOnDark)
+                         color: Theme.paperOnDark,
+                         size: mode == .basic ? 12 : 11)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
@@ -747,7 +890,9 @@ struct LiveSettingsView: View {
                         .listRowInsets(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12))
                     Text(mode == .basic
                          ? "Einfach: nur Auslöser und Fertig. Alles Weitere erscheint ab \"Erweitert\"."
-                         : "Alle Werkzeuge sichtbar: Raster, Wasserwaage, Pegel, Neu-Fixieren, Referenzbild.")
+                         : mode.showsTolino
+                         ? "Labor-Ansicht: Blattnummer, Sitzungsuhr, fixierte Belichtung, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser."
+                         : "Alle Werkzeuge sichtbar: Raster, Wasserwaage, Pegel, Daumenkino mit Zurücknehmen, Neu-Fixieren, Referenzbild.")
                         .font(Theme.mono(11))
                         .foregroundStyle(Theme.graphite)
                         .lineSpacing(2)
@@ -806,11 +951,14 @@ struct LiveSettingsView: View {
                                 .foregroundStyle(Theme.graphite)
                         }
                     }
-                    Picker("Netzfrequenz", selection: $controller.mainsHz) {
-                        Text("50 Hz (EU)").tag(50)
-                        Text("60 Hz (US)").tag(60)
+                    // Netzfrequenz ist Labor-Wissen – erst im Tolino-Modus zeigen
+                    if mode.showsTolino {
+                        Picker("Netzfrequenz", selection: $controller.mainsHz) {
+                            Text("50 Hz (EU)").tag(50)
+                            Text("60 Hz (US)").tag(60)
+                        }
+                        .font(Theme.body)
                     }
-                    .font(Theme.body)
                     Toggle("Auslöse-Ton", isOn: $controller.playShutterSound)
                         .font(Theme.body)
                 } header: {

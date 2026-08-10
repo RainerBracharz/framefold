@@ -85,6 +85,10 @@ final class LiveCaptureController: NSObject, ObservableObject {
     @Published var checkHands = true
     /// Aktueller Bewegungswert (für den Pegel im Sucher)
     @Published var currentMotion: Double = 0
+    /// Nach dem Fixieren: „1/100 s · ISO 32" – Labor-Anzeige im Tolino-Modus.
+    @Published var exposureInfo: String?
+    /// Beginn der laufenden Session – für die Sitzungsuhr im Labor-HUD.
+    @Published var sessionStart: Date?
 
     // MARK: Aufnahme-Optionen (live änderbar)
     enum CaptureMode: Int, CaseIterable, Identifiable {
@@ -162,6 +166,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     /// Sauberer Start: Reste einer vorherigen Session verwerfen.
     private func resetSessionState() {
+        sessionStart = Date()
+        exposureInfo = nil
         firstCapturedImage = nil
         previousGray = nil
         stableSince = nil
@@ -257,8 +263,12 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 device.setExposureModeCustom(
                     duration: CMTimeMakeWithSeconds(duration, preferredTimescale: 1_000_000),
                     iso: iso, completionHandler: nil)
+                exposureInfo = Self.exposureLabel(duration: duration, iso: Double(iso))
             } else if device.isExposureModeSupported(.locked) {
                 device.exposureMode = .locked
+                exposureInfo = Self.exposureLabel(
+                    duration: CMTimeGetSeconds(device.exposureDuration),
+                    iso: Double(device.iso))
             }
 
             device.unlockForConfiguration()
@@ -309,8 +319,17 @@ final class LiveCaptureController: NSObject, ObservableObject {
         }
     }
 
+    /// „1/100 s · ISO 32" – Belichtungszeit als Bruch, ISO gerundet.
+    private static func exposureLabel(duration: Double, iso: Double) -> String {
+        let time = duration >= 1
+            ? String(format: "%.1f s", duration)
+            : "1/\(Int((1.0 / max(duration, 1e-6)).rounded())) s"
+        return "\(time) · ISO \(Int(iso.rounded()))"
+    }
+
     /// Belichtung/Fokus/Weißabgleich zurück auf kontinuierliche Automatik.
     private func resetToContinuous() {
+        exposureInfo = nil
         guard let device else { return }
         try? device.lockForConfiguration()
         if device.isFocusModeSupported(.continuousAutoFocus) {
