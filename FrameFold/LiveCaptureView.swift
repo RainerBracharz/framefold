@@ -281,10 +281,16 @@ struct LiveCaptureView: View {
             Spacer(minLength: 16)
 
             VStack(spacing: 6) {
-                Text(mode == .basic ? "Fertig! \(count) Bilder" : "\(count) Bilder aufgenommen")
+                // Tolino spricht Katalog: Blätter statt Bilder, Serie statt Zähler
+                Text(mode == .basic ? "Fertig! \(count) Bilder"
+                     : mode == .tolino
+                        ? (count == 1 ? "Ein Blatt" : String(format: "Blatt 01 – %02d", count))
+                        : "\(count) Bilder aufgenommen")
                     .font(Theme.serifItalic(24))
                     .foregroundStyle(Theme.paperOnDark)
-                CatalogLabel(String(format: "%.1f Sekunden · läuft in Schleife", seconds),
+                CatalogLabel(mode == .tolino
+                    ? "Serie von \(count) · datiert \(String(Calendar.current.component(.year, from: Date()))) · Schleife"
+                    : String(format: "%.1f Sekunden · läuft in Schleife", seconds),
                              color: Theme.paperOnDark.opacity(0.55), size: 9)
             }
             .padding(.bottom, 18)
@@ -294,7 +300,9 @@ struct LiveCaptureView: View {
                     HairlineProgress(value: assembleProgress,
                                      trackColor: Theme.paperOnDark.opacity(0.25))
                         .frame(width: 180)
-                    CatalogLabel(mode == .basic ? "Wird zusammengesetzt…" : "Stopmotion wird montiert…",
+                    CatalogLabel(mode == .basic ? "Wird zusammengesetzt…"
+                                 : mode == .tolino ? "Werk wird montiert…"
+                                 : "Stopmotion wird montiert…",
                                  color: Theme.paperOnDark.opacity(0.6), size: 9)
                 }
                 .frame(maxHeight: .infinity)
@@ -659,6 +667,38 @@ struct LiveCaptureView: View {
                     .foregroundStyle(Theme.paperOnDark.opacity(0.75))
                     .frame(width: 62, alignment: .trailing)
             }
+
+            // Schnellzugriff: Auslöser direkt im Instrument umschalten –
+            // der Gang in die Einstellungen unterbricht sonst die Arbeit.
+            Button {
+                controller.captureMode =
+                    controller.captureMode == .motion ? .interval : .motion
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: controller.captureMode == .motion
+                          ? "hand.raised" : "timer")
+                        .font(.system(size: 10, weight: .medium))
+                    Text(controller.captureMode == .motion
+                         ? "Auslöser · Bewegung"
+                         : String(format: "Auslöser · Intervall %.0f s",
+                                  controller.intervalSeconds))
+                        .font(Theme.caption(9))
+                        .tracking(1.4)
+                        .textCase(.uppercase)
+                }
+                .foregroundStyle(controller.captureMode == .interval
+                                 ? Theme.darkroom : Theme.paperOnDark.opacity(0.85))
+                .padding(.vertical, 6)
+                .padding(.horizontal, 10)
+                .background(controller.captureMode == .interval
+                            ? Theme.amberLight : Color.clear)
+                .overlay(Rectangle().stroke(
+                    controller.captureMode == .interval
+                    ? Theme.amberLight : Theme.paperOnDark.opacity(0.35),
+                    lineWidth: 1))
+            }
+            .buttonStyle(.plain)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 11)
