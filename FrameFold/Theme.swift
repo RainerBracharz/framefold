@@ -484,6 +484,67 @@ struct InkButtonStyle: ButtonStyle {
     }
 }
 
+/// Primäraktion in der Dunkelkammer: gefüllter Papierton auf Dunkel.
+struct DarkPrimaryButtonStyle: ButtonStyle {
+    var fullWidth = true
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(Theme.caption(11))
+            .tracking(1.5)
+            .textCase(.uppercase)
+            .foregroundStyle(Theme.darkroom)
+            .padding(.vertical, 13)
+            .frame(maxWidth: fullWidth ? .infinity : nil)
+            .padding(.horizontal, fullWidth ? 0 : 18)
+            .background(Theme.paperOnDark.opacity(configuration.isPressed ? 0.78 : 1))
+    }
+}
+
+/// Sekundäraktion in der Dunkelkammer: Kontur auf Dunkel.
+struct DarkSecondaryButtonStyle: ButtonStyle {
+    var fullWidth = true
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(Theme.caption(11))
+            .tracking(1.5)
+            .textCase(.uppercase)
+            .foregroundStyle(Theme.paperOnDark.opacity(configuration.isPressed ? 0.6 : 1))
+            .padding(.vertical, 13)
+            .frame(maxWidth: fullWidth ? .infinity : nil)
+            .padding(.horizontal, fullWidth ? 0 : 18)
+            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+    }
+}
+
+/// Quadratischer Icon-Knopf (48 pt) – z. B. Mistkübel oder Werkzeuge.
+/// `stage` wählt Galerie- oder Dunkelkammer-Farben, `destructive` färbt
+/// das Symbol Oxblood (nur auf heller Bühne sinnvoll).
+struct IconSquare: View {
+    enum Stage { case paper, dark }
+    let icon: String
+    var stage: Stage = .paper
+    var destructive = false
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: icon)
+                .font(.system(size: 15))
+                .foregroundStyle(destructive && stage == .paper
+                                 ? Theme.oxblood
+                                 : stage == .paper ? Theme.ink : Theme.paperOnDark.opacity(0.85))
+                .frame(width: 48, height: 48)
+                .background(stage == .paper ? Theme.paper : Color.black.opacity(0.35))
+                .overlay(Rectangle().stroke(
+                    destructive && stage == .paper
+                    ? Theme.oxblood.opacity(0.45)
+                    : stage == .paper ? Theme.hairline : Theme.paperOnDark.opacity(0.35),
+                    lineWidth: 1))
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 /// Sekundäraktion: Haarlinien-Rahmen auf der Wand.
 struct HairlineButtonStyle: ButtonStyle {
     var fullWidth = true

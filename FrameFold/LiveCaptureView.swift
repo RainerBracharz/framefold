@@ -196,16 +196,9 @@ struct LiveCaptureView: View {
                 Button {
                     showNewProject = true
                 } label: {
-                    HStack(spacing: 10) {
-                        Image(systemName: "plus").font(.system(size: 14, weight: .medium))
-                        Text("Neues Werk")
-                            .font(Theme.caption(12)).tracking(1.8).textCase(.uppercase)
-                    }
-                    .foregroundStyle(Theme.darkroom)
-                    .padding(.vertical, 15)
-                    .frame(maxWidth: .infinity)
-                    .background(Theme.paperOnDark)
+                    Label("Neues Werk", systemImage: "plus")
                 }
+                .buttonStyle(DarkPrimaryButtonStyle())
                 .padding(.horizontal, 24)
                 .padding(.top, 16)
 
@@ -303,46 +296,27 @@ struct LiveCaptureView: View {
 
             VStack(spacing: 10) {
                 if let resultURL {
-                    Button { resultShare = ShareItem(url: resultURL) } label: {
-                        Text("Teilen")
-                            .font(Theme.caption(12)).tracking(2.2).textCase(.uppercase)
-                            .foregroundStyle(Theme.darkroom)
-                            .padding(.vertical, 15)
-                            .frame(maxWidth: .infinity)
-                            .background(Theme.paperOnDark)
-                    }
+                    Button("Teilen") { resultShare = ShareItem(url: resultURL) }
+                        .buttonStyle(DarkPrimaryButtonStyle())
                 }
                 HStack(spacing: 10) {
                     // Verwerfen: Session löschen und von vorn – als Mistkübel
-                    Button {
+                    IconSquare(icon: "trash", stage: .dark) {
                         discardSession(project: project)
-                    } label: {
-                        Image(systemName: "trash")
-                            .font(.system(size: 15))
-                            .foregroundStyle(Theme.paperOnDark.opacity(0.8))
-                            .frame(width: 48, height: 46)
-                            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
                     }
 
                     // Weiter aufnehmen = die produktive Aktion → gefüllt
-                    Button {
+                    Button(mode == .basic ? "Nochmal" : "Weiter aufnehmen") {
                         finishedProject = nil
                         targetProject = project
-                    } label: {
-                        Text(mode == .basic ? "Nochmal" : "Weiter aufnehmen")
-                            .font(Theme.caption(11)).tracking(1.5).textCase(.uppercase)
-                            .foregroundStyle(Theme.darkroom)
-                            .padding(.vertical, 13)
-                            .frame(maxWidth: .infinity)
-                            .background(Theme.paperOnDark)
                     }
+                    .buttonStyle(DarkPrimaryButtonStyle())
 
                     // Fertig = abschließen → bewusst leiser, nur Kontur
-                    Button {
+                    Button("Fertig") {
                         finishedProject = nil
-                    } label: {
-                        darkAction("Fertig")
                     }
+                    .buttonStyle(DarkSecondaryButtonStyle())
                 }
                 CatalogLabel("gespeichert in \(project.name)",
                              color: Theme.paperOnDark.opacity(0.45), size: 8)
@@ -368,14 +342,6 @@ struct LiveCaptureView: View {
         targetProject = project   // ohne Umweg zurück in den Sucher
     }
 
-    private func darkAction(_ title: String) -> some View {
-        Text(title)
-            .font(Theme.caption(11)).tracking(1.5).textCase(.uppercase)
-            .foregroundStyle(Theme.paperOnDark)
-            .padding(.vertical, 13)
-            .frame(maxWidth: .infinity)
-            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
-    }
 
     /// Werkzeile in der Dunkelkammer: gefaltetes Blatt + Werkkante.
     private func darkProjectRow(_ project: Project) -> some View {

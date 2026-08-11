@@ -425,16 +425,18 @@ struct ReviewView: View {
                 }
             }
 
-            VStack(spacing: 10) {
-                Button("Stopmotion erstellen") {
+            // Erstellen dominiert; Verwerfen ist destruktiv → Mistkübel,
+            // kein gleichwertiger Balken direkt unterm Primärknopf.
+            HStack(spacing: 10) {
+                Button(mode == .basic ? "Zeig's mir!" : "Stopmotion erstellen") {
                     viewModel.createVideo()
                 }
                 .buttonStyle(InkButtonStyle())
                 .disabled(viewModel.selectedCount == 0)
-                Button("Verwerfen") {
+
+                IconSquare(icon: "trash", stage: .paper, destructive: true) {
                     viewModel.stage = .idle
                 }
-                .buttonStyle(HairlineButtonStyle())
             }
             .padding(.horizontal, 24)
             .padding(.vertical, 12)
@@ -527,22 +529,31 @@ struct ResultView: View {
                 CatalogLabel("Serie von \(result.keyframeTimes.count) · datiert \(String(Calendar.current.component(.year, from: Date())))", size: 9)
             }
 
-            HStack(spacing: 12) {
+            // Primärzeile: Sichern schützt das Werk, Teilen trägt es hinaus –
+            // beide stark. Verwerfen ist destruktiv → Mistkübel, nicht Balken.
+            HStack(spacing: 10) {
+                if sourceVideoURL != nil {
+                    if savedToProject {
+                        Button("Gesichert ✓") {}
+                            .buttonStyle(HairlineButtonStyle())
+                            .disabled(true)
+                    } else {
+                        Button("Sichern") { showSaveToProject = true }
+                            .buttonStyle(InkButtonStyle())
+                    }
+                }
                 ShareLink(item: result.outputURL) {
                     Text("Teilen")
-                        .font(Theme.caption(12))
-                        .tracking(2.2)
-                        .textCase(.uppercase)
-                        .foregroundStyle(Theme.paper)
-                        .padding(.vertical, 14)
-                        .frame(maxWidth: .infinity)
-                        .background(Theme.ink)
                 }
-                Button("Verwerfen") { onReset() }
-                    .buttonStyle(HairlineButtonStyle())
+                .buttonStyle(InkButtonStyle())
+
+                IconSquare(icon: "trash", stage: .paper, destructive: true) {
+                    onReset()
+                }
             }
             .padding(.horizontal, 24)
 
+            // Leise Extras je nach Modus
             if sourceVideoURL != nil {
                 if mode.showsAdvanced {
                     // Zurück zur Bildauswahl – der Analyse-Cache bleibt,
@@ -562,13 +573,6 @@ struct ResultView: View {
                     .buttonStyle(HairlineButtonStyle())
                     .padding(.horizontal, 24)
                 }
-
-                Button(savedToProject ? "Im Projekt gesichert ✓" : "Als Projekt sichern") {
-                    showSaveToProject = true
-                }
-                .buttonStyle(HairlineButtonStyle())
-                .padding(.horizontal, 24)
-                .disabled(savedToProject)
             }
         }
         .padding(.vertical)

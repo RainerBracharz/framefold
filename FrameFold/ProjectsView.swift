@@ -71,9 +71,18 @@ struct ProjectsView: View {
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     if store.projects.count >= 2 && AppMode.current(modeRaw).showsTolino {
+                        // Mit Wortmarke statt kryptischem Symbol – das Feature
+                        // war sonst praktisch unauffindbar
                         Button { showExhibition = true } label: {
-                            Image(systemName: "film.stack")
-                                .foregroundStyle(Theme.ink)
+                            HStack(spacing: 5) {
+                                Image(systemName: "film.stack")
+                                    .font(.system(size: 13))
+                                Text("Ausstellung")
+                                    .font(Theme.caption(10))
+                                    .tracking(1.2)
+                                    .textCase(.uppercase)
+                            }
+                            .foregroundStyle(Theme.ink)
                         }
                     }
                 }
