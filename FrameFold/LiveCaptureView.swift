@@ -313,31 +313,36 @@ struct LiveCaptureView: View {
                     }
                 }
                 HStack(spacing: 10) {
+                    // Verwerfen: Session löschen und von vorn – als Mistkübel
                     Button {
-                        // Nochmal: gleiche Werkzeile, neue Session
+                        discardSession(project: project)
+                    } label: {
+                        Image(systemName: "trash")
+                            .font(.system(size: 15))
+                            .foregroundStyle(Theme.paperOnDark.opacity(0.8))
+                            .frame(width: 48, height: 46)
+                            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+                    }
+
+                    // Weiter aufnehmen = die produktive Aktion → gefüllt
+                    Button {
                         finishedProject = nil
                         targetProject = project
                     } label: {
-                        darkAction(mode == .basic ? "Nochmal" : "Weiter aufnehmen")
+                        Text(mode == .basic ? "Nochmal" : "Weiter aufnehmen")
+                            .font(Theme.caption(11)).tracking(1.5).textCase(.uppercase)
+                            .foregroundStyle(Theme.darkroom)
+                            .padding(.vertical, 13)
+                            .frame(maxWidth: .infinity)
+                            .background(Theme.paperOnDark)
                     }
+
+                    // Fertig = abschließen → bewusst leiser, nur Kontur
                     Button {
                         finishedProject = nil
                     } label: {
                         darkAction("Fertig")
                     }
-                }
-                // Danebengegangen? Session sofort löschen und neu beginnen –
-                // ohne Umweg über den Projekte-Tab.
-                Button {
-                    discardSession(project: project)
-                } label: {
-                    Text("Verwerfen & von vorn")
-                        .font(Theme.caption(10))
-                        .tracking(1.4)
-                        .textCase(.uppercase)
-                        .foregroundStyle(Theme.paperOnDark.opacity(0.65))
-                        .underline()
-                        .padding(.top, 4)
                 }
                 CatalogLabel("gespeichert in \(project.name)",
                              color: Theme.paperOnDark.opacity(0.45), size: 8)

@@ -216,19 +216,27 @@ struct FrameFoldApp: App {
         WindowGroup {
             TabView(selection: $selectedTab) {
                 ContentView(selectedTab: $selectedTab)
+                    .toolbarBackground(Theme.paper, for: .tabBar)
+                    .toolbarBackground(.visible, for: .tabBar)
                     .tabItem { Label("Video", systemImage: "film") }
                     .tag(0)
                 LiveCaptureView()
+                    .toolbarBackground(Theme.paper, for: .tabBar)
+                    .toolbarBackground(.visible, for: .tabBar)
                     .tabItem { Label("Kamera", systemImage: "camera") }
                     .tag(1)
                 ProjectsView()
+                    .toolbarBackground(Theme.paper, for: .tabBar)
+                    .toolbarBackground(.visible, for: .tabBar)
                     .tabItem { Label("Projekte", systemImage: "folder") }
                     .tag(2)
             }
             .environmentObject(projectStore)
-            // Der Kamera-Tab ist die Dunkelkammer – dort wird die Tab-Leiste
-            // dunkel. Tuscheschwarz wäre darauf unsichtbar, also hell tönen.
-            .tint(selectedTab == 1 ? Theme.paperOnDark : Theme.ink)
+            // Die Tab-Leiste steht IMMER auf Papier – die schwebende Leiste
+            // passt sich sonst dem Inhalt an (dunkel in der Dunkelkammer,
+            // hell überm Kamerabild), und keine einzelne Akzentfarbe bleibt
+            // auf beidem lesbar. Fester Grund + Tusche funktioniert überall.
+            .tint(Theme.ink)
             .preferredColorScheme(.light) // Galeriewand, konsistent im Atelier
             .overlay {
                 if !didOnboard {

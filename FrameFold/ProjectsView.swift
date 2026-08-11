@@ -246,18 +246,15 @@ struct ProjectDetailView: View {
                 WorkTitle(currentProject.name, size: 17)
             }
             ToolbarItem(placement: .topBarTrailing) {
-                // Frame-Bearbeitung erst ab „Erweitert" – im Einfach-Modus
-                // reicht: ansehen, exportieren, teilen.
-                if mode.showsAdvanced {
-                    Button {
-                        isEditingFrames.toggle()
-                    } label: {
-                        Text(isEditingFrames ? "Fertig" : "Bearbeiten")
-                            .font(Theme.caption(11))
-                            .tracking(1.2)
-                            .textCase(.uppercase)
-                            .foregroundStyle(Theme.ink)
-                    }
+                // Einzelne Frames entfernen ist Grundhygiene – in jedem Modus.
+                Button {
+                    isEditingFrames.toggle()
+                } label: {
+                    Text(isEditingFrames ? "Fertig" : "Bearbeiten")
+                        .font(Theme.caption(11))
+                        .tracking(1.2)
+                        .textCase(.uppercase)
+                        .foregroundStyle(Theme.ink)
                 }
             }
         }
@@ -277,6 +274,10 @@ struct ProjectDetailView: View {
         }
         .onChange(of: exportSettings) { _, _ in
             // Einstellungen geändert → das fertige Video passt nicht mehr dazu
+            exportURL = nil
+        }
+        .onChange(of: currentProject.frameCount) { _, _ in
+            // Frames entfernt/ergänzt → dito
             exportURL = nil
         }
     }
@@ -385,9 +386,9 @@ struct ProjectDetailView: View {
                     Text("Video teilen")
                 }
                 .buttonStyle(InkButtonStyle())
-
-                Button("Neu exportieren") { export() }
-                    .buttonStyle(HairlineButtonStyle())
+                // Kein „Neu exportieren": ändern sich Einstellungen oder
+                // Frames, verfällt das Video ohnehin und der Export-Knopf
+                // kehrt von selbst zurück.
             } else {
                 Button("Stopmotion exportieren") { export() }
                     .buttonStyle(InkButtonStyle())
