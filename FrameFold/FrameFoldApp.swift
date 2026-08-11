@@ -201,6 +201,16 @@ struct FrameFoldApp: App {
         tabAppearance.configureWithOpaqueBackground()
         tabAppearance.backgroundColor = UIColor(Theme.paper)
         tabAppearance.shadowColor = UIColor(Theme.hairline)
+        // Item-Farben explizit: Tusche für aktiv, Graphit für inaktiv –
+        // unabhängig davon, was der System-Stil sonst erraten würde.
+        for item in [tabAppearance.stackedLayoutAppearance,
+                     tabAppearance.inlineLayoutAppearance,
+                     tabAppearance.compactInlineLayoutAppearance] {
+            item.selected.iconColor = UIColor(Theme.ink)
+            item.selected.titleTextAttributes = [.foregroundColor: UIColor(Theme.ink)]
+            item.normal.iconColor = UIColor(Theme.graphite)
+            item.normal.titleTextAttributes = [.foregroundColor: UIColor(Theme.graphite)]
+        }
         UITabBar.appearance().standardAppearance = tabAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabAppearance
 

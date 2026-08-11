@@ -61,7 +61,16 @@ final class ProjectStore: ObservableObject {
         if let data = try? JSONEncoder().encode(project) {
             try? data.write(to: dir.appendingPathComponent("manifest.json"))
         }
-        reload()
+        // Nur das eine Projekt im Speicher aktualisieren. Das frühere
+        // reload() las nach JEDEM aufgenommenen Bild sämtliche Manifeste
+        // von der Platte – auf dem Hauptthread, mitten in der Aufnahme.
+        if let idx = projects.firstIndex(where: { $0.id == project.id }) {
+            projects[idx] = project
+        } else {
+            projects.append(project)
+            projects.sort { $0.createdAtISO > $1.createdAtISO }
+        }
+        thumbnailCache[project.id] = nil
     }
 
     // MARK: API
@@ -88,7 +97,8 @@ final class ProjectStore: ObservableObject {
 
     func delete(_ project: Project) {
         try? FileManager.default.removeItem(at: directory(for: project))
-        reload()
+        projects.removeAll { $0.id == project.id }
+        thumbnailCache[project.id] = nil
     }
 
     func rename(_ project: Project, to name: String) {
@@ -184,10 +194,23 @@ final class ProjectStore: ObservableObject {
         return project.frameFilenames.map { dir.appendingPathComponent($0) }
     }
 
+    /// Klein gerechnete Vorschaubilder, gecacht pro Projekt – vorher wurde
+    /// bei jedem Listen-Render das volle 1080p-JPEG neu dekodiert.
+    private var thumbnailCache: [UUID: UIImage] = [:]
+
     func thumbnail(for project: Project) -> UIImage? {
+        if let cached = thumbnailCache[project.id] { return cached }
         guard let first = frameURLs(for: project).first,
-              let data = try? Data(contentsOf: first) else { return nil }
-        return UIImage(data: data)
+              let data = try? Data(contentsOf: first),
+              let full = UIImage(data: data) else { return nil }
+        let maxSide: CGFloat = 320
+        let scale = min(1, maxSide / max(full.size.width, full.size.height))
+        let size = CGSize(width: full.size.width * scale, height: full.size.height * scale)
+        let small = UIGraphicsImageRenderer(size: size).image { _ in
+            full.draw(in: CGRect(origin: .zero, size: size))
+        }
+        thumbnailCache[project.id] = small
+        return small
     }
 
     /// Sichert die Keyframes eines verarbeiteten Videos als Projekt-Session
@@ -206,7 +229,7 @@ final class ProjectStore: ObservableObject {
             let time = CMTime(seconds: seconds, preferredTimescale: 600)
             guard let cgImage = try? await generator.image(at: time).image else { continue }
             if let data = UIImage(cgImage: cgImage).jpegData(compressionQuality: 0.9) {
-                // reload() in appendFrame hält das Manifest aktuell;
+                // save() in appendFrame aktualisiert das Projekt im Speicher;
                 // Projekt-Objekt jeweils frisch holen:
                 if let current = projects.first(where: { $0.id == project.id }) {
                     appendFrame(jpegData: data, to: current)

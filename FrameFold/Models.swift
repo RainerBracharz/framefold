@@ -190,7 +190,7 @@ enum PipelineStage: Equatable {
         switch self {
         case .idle: return "Bereit"
         case .importing: return "Lade Video…"
-        case .sampling: return "Lese Frames…"
+        case .sampling: return "Lese Bilder…"
         case .analyzing: return "Analysiere Bewegung…"
         case .selectingKeyframes: return "Wähle Keyframes…"
         case .checkingHands: return "Prüfe auf Hände…"

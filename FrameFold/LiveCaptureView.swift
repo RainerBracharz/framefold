@@ -998,13 +998,13 @@ struct LiveSettingsView: View {
                 .listRowBackground(Theme.paperShade.opacity(0.5))
 
                 Section {
-                    Toggle("Gegen ersten Frame (Drift)", isOn: $onionFirst)
+                    Toggle("Gegen erstes Bild (Drift)", isOn: $onionFirst)
                         .font(Theme.body)
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Deckkraft: \(Int(onionOpacity * 100)) %")
                             .font(Theme.body)
                         Slider(value: $onionOpacity, in: 0.1...0.8, step: 0.05)
-                        Text("Zeigt ersten oder letzten Frame als Überblendung – zum Ausrichten und um Drift zu erkennen.")
+                        Text("Zeigt das erste oder letzte Bild als Überblendung – zum Ausrichten und um Drift zu erkennen.")
                             .font(.system(size: 12))
                             .foregroundStyle(Theme.graphite)
                     }
@@ -1015,10 +1015,10 @@ struct LiveSettingsView: View {
                 } // Ende: nur ab „Erweitert"
 
                 Section {
-                    tipRow("lightbulb", "Licht konstant halten: Kunstlicht nutzen, Fenster abdunkeln. Billige LED-/Leuchtstofflampen flackern im Netztakt und streifen einzelne Frames.")
+                    tipRow("lightbulb", "Licht konstant halten: Kunstlicht nutzen, Fenster abdunkeln. Billige LED-/Leuchtstofflampen flackern im Netztakt und streifen einzelne Bilder.")
                     tipRow("hand.raised", "iPhone nicht berühren: aufs Stativ stellen und den Auto-Shutter arbeiten lassen (oder den runden Knopf).")
                     tipRow("lock", "Kamera bleibt fixiert: FrameFold sperrt Belichtung, Fokus und Weißabgleich nach der kurzen Kalibrierung – so driftet zwischen den Bildern nichts.")
-                    tipRow("square.2.layers.3d", "Drift früh erkennen: Onion-Skin anlassen und die Aufnahme ab und zu mit dem ersten Frame vergleichen.")
+                    tipRow("square.2.layers.3d", "Drift früh erkennen: Zwiebelhaut anlassen und die Aufnahme ab und zu mit dem ersten Bild vergleichen.")
                 } header: {
                     CatalogLabel("Aufnahme-Tipps")
                 }

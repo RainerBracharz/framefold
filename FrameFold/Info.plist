@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Klassisches (opakes) Leisten-Design statt Liquid Glass: die
+	     schwebende Glas-Tab-Bar von iOS 26 passt sich dem Inhalt an und
+	     macht die Tusche-Tint auf dunklen Screens unlesbar. Mit diesem
+	     Schlüssel greift der feste Papier-Grund aus FrameFoldApp überall. -->
+	<key>UIDesignRequiresCompatibility</key>
+	<true/>
+</dict>
+</plist>

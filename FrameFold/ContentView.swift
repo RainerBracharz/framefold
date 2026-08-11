@@ -525,7 +525,10 @@ struct ResultView: View {
             VStack(spacing: 6) {
                 CatalogLabel("\(result.keyframeTimes.count) Bilder · aus \(Int(result.sourceDuration)) s Video",
                              color: Theme.ink)
-                CatalogLabel("\(result.discardedForHands) mit Händen entfernt · \(result.discardedAsDuplicates) Duplikate")
+                // „0 entfernt · 0 Duplikate" ist im Einfach-Modus nur Rauschen
+                if mode != .basic || result.discardedForHands + result.discardedAsDuplicates > 0 {
+                    CatalogLabel("\(result.discardedForHands) mit Händen entfernt · \(result.discardedAsDuplicates) Duplikate")
+                }
                 CatalogLabel("Serie von \(result.keyframeTimes.count) · datiert \(String(Calendar.current.component(.year, from: Date())))", size: 9)
             }
 
@@ -604,7 +607,7 @@ struct SettingsView: View {
     private var modeHint: String {
         switch mode {
         case .basic: return "Nur das Nötigste: Video wählen → Stopmotion."
-        case .advanced: return "Klassische Einstellungen: Format, Framerate, Abspielmodus, Stabilisierung."
+        case .advanced: return "Klassische Einstellungen: Format, Bildrate, Abspielmodus, Stabilisierung."
         case .tolino: return "Alles dabei — plus die Spezialfeatures: Facetten, Echo, Faltvorlage, Rekursion, Ausstellung."
         }
     }

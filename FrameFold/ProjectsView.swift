@@ -203,7 +203,7 @@ struct ProjectDetailView: View {
                             Button(role: .destructive) {
                                 store.removeFrames(at: IndexSet(integer: index), from: currentProject)
                             } label: {
-                                Label("Frame entfernen", systemImage: "trash")
+                                Label("Bild entfernen", systemImage: "trash")
                             }
                         }
                 }
@@ -216,7 +216,7 @@ struct ProjectDetailView: View {
                 Button {
                     store.restoreTrash(in: currentProject)
                 } label: {
-                    Label("Zuletzt gelöscht: \(currentProject.trashCount) Frames wiederherstellen",
+                    Label("Zuletzt gelöscht: \(currentProject.trashCount) Bilder wiederherstellen",
                           systemImage: "arrow.uturn.backward")
                         .font(Theme.caption(11))
                         .tracking(1.2)
@@ -269,7 +269,7 @@ struct ProjectDetailView: View {
         }
         .toolbarBackground(Theme.paper, for: .navigationBar)
         .confirmationDialog(
-            "\(currentProject.name) mit allen \(currentProject.frameCount) Frames löschen?",
+            "\(currentProject.name) mit allen \(currentProject.frameCount) Bildern löschen?",
             isPresented: $showDeleteProject, titleVisibility: .visible
         ) {
             Button("Endgültig löschen", role: .destructive) {
@@ -795,10 +795,14 @@ struct LoopingVideoPreview: View {
         }
         .aspectRatio(aspect, contentMode: .fit)
         .overlay(alignment: .bottom) { scrubBar }
-        .task(id: url) { await loadFrames() }
-        .onReceive(Timer.publish(every: 1.0 / max(1, playFPS), on: .main, in: .common).autoconnect()) { _ in
-            guard !isScrubbing, frames.count > 1 else { return }
-            index = (index + 1) % frames.count
+        .task(id: url) {
+            await loadFrames()
+            // Eine Task-Schleife statt Timer.publish im Modifier: der
+            // Publisher wurde bei jedem Render neu aufgebaut.
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: UInt64(1_000_000_000 / max(1, playFPS)))
+                if !isScrubbing, frames.count > 1 { index = (index + 1) % frames.count }
+            }
         }
     }
 
@@ -852,8 +856,9 @@ struct LoopingVideoPreview: View {
 
         let seconds = CMTimeGetSeconds(duration)
         guard seconds > 0 else { isLoading = false; return }
-        // Sehr lange Sequenzen ausdünnen – der Speicher soll ruhig bleiben
-        let total = max(1, min(Int((seconds * rate).rounded()), 300))
+        // Sehr lange Sequenzen ausdünnen – 300 Bilder à 720 px waren bis zu
+        // ~350 MB Arbeitsspeicher; 180 à 480 px reichen für die Vorschau.
+        let total = max(1, min(Int((seconds * rate).rounded()), 180))
         let step = seconds / Double(total)
         let times = (0..<total).map {
             CMTime(seconds: Double($0) * step + step / 2, preferredTimescale: 600)
@@ -863,7 +868,7 @@ struct LoopingVideoPreview: View {
         generator.appliesPreferredTrackTransform = true
         generator.requestedTimeToleranceBefore = .zero
         generator.requestedTimeToleranceAfter = .zero
-        generator.maximumSize = CGSize(width: 720, height: 720)
+        generator.maximumSize = CGSize(width: 480, height: 480)
 
         var loaded: [UIImage] = []
         for await result in generator.images(for: times) {
