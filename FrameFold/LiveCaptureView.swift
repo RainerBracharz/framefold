@@ -41,6 +41,8 @@ struct LiveCaptureView: View {
     @State private var resultURL: URL?
     @State private var resultError: String?
     @State private var resultShare: ShareItem?
+    /// Wie viele Frames die letzte Session beigetragen hat – für „Verwerfen".
+    @State private var lastSessionCount = 0
 
     var body: some View {
         NavigationStack {
@@ -72,36 +74,12 @@ struct LiveCaptureView: View {
                 ToolbarItem(placement: .principal) {
                     WorkTitle("Kamera", size: 17, color: Theme.paperOnDark)
                 }
-                // Während der Aufnahme steht der Ausstieg immer oben rechts –
-                // unabhängig davon, wie eng die untere Leiste wird.
+                // Ein Ausstieg reicht: der Fertig-Knopf unten. Oben bleibt
+                // nur das Regler-Symbol – wie in allen anderen Tabs.
                 ToolbarItem(placement: .topBarTrailing) {
-                    if let project = targetProject {
-                        Button { finishSession(project: project) } label: {
-                            Text(controller.capturedCount == 0
-                                 ? "Abbrechen"
-                                 : "Fertig · \(controller.capturedCount)")
-                                .font(Theme.caption(12))
-                                .tracking(1.2)
-                                .textCase(.uppercase)
-                                .foregroundStyle(Theme.darkroom)
-                                .padding(.vertical, 7)
-                                .padding(.horizontal, 12)
-                                .background(Theme.paperOnDark)
-                        }
-                    } else {
-                        Button { showSettings = true } label: {
-                            Image(systemName: "slider.horizontal.3")
-                                .foregroundStyle(Theme.paperOnDark)
-                        }
-                    }
-                }
-                // Einstellungen bleiben während der Aufnahme links erreichbar
-                ToolbarItem(placement: .topBarLeading) {
-                    if targetProject != nil, mode.showsAdvanced {
-                        Button { showSettings = true } label: {
-                            Image(systemName: "slider.horizontal.3")
-                                .foregroundStyle(Theme.paperOnDark)
-                        }
+                    Button { showSettings = true } label: {
+                        Image(systemName: "slider.horizontal.3")
+                            .foregroundStyle(Theme.paperOnDark)
                     }
                 }
             }
@@ -249,6 +227,7 @@ struct LiveCaptureView: View {
         controller.stop()
         level.stop()
         let captured = controller.capturedCount
+        lastSessionCount = captured
         targetProject = nil
         guard captured > 0 else { return }   // Abbruch ohne Bilder
 
@@ -343,6 +322,19 @@ struct LiveCaptureView: View {
                         darkAction("Fertig")
                     }
                 }
+                // Danebengegangen? Session sofort löschen und neu beginnen –
+                // ohne Umweg über den Projekte-Tab.
+                Button {
+                    discardSession(project: project)
+                } label: {
+                    Text("Verwerfen & von vorn")
+                        .font(Theme.caption(10))
+                        .tracking(1.4)
+                        .textCase(.uppercase)
+                        .foregroundStyle(Theme.paperOnDark.opacity(0.65))
+                        .underline()
+                        .padding(.top, 4)
+                }
                 CatalogLabel("gespeichert in \(project.name)",
                              color: Theme.paperOnDark.opacity(0.45), size: 8)
                     .padding(.top, 2)
@@ -351,6 +343,20 @@ struct LiveCaptureView: View {
             .padding(.bottom, 22)
         }
         .sheet(item: $resultShare) { item in ActivityView(items: [item.url]) }
+    }
+
+    /// Entfernt die Frames der letzten Session aus dem Werk (wandern in den
+    /// 30-Tage-Papierkorb) und startet direkt eine neue Aufnahme.
+    private func discardSession(project: Project) {
+        if let current = store.projects.first(where: { $0.id == project.id }),
+           lastSessionCount > 0, current.frameCount >= lastSessionCount {
+            let range = (current.frameCount - lastSessionCount)..<current.frameCount
+            store.removeFrames(at: IndexSet(integersIn: range), from: current)
+        }
+        resultURL = nil
+        lastSessionCount = 0
+        finishedProject = nil
+        targetProject = project   // ohne Umweg zurück in den Sucher
     }
 
     private func darkAction(_ title: String) -> some View {
@@ -484,7 +490,13 @@ struct LiveCaptureView: View {
                     store.appendFrame(jpegData: jpegData, to: current)
                 }
                 if let image = UIImage(data: jpegData) {
-                    recentThumbs.append(image)
+                    // Klein rechnen: Vollauflösung im Daumenkino zwingt SwiftUI,
+                    // bei jedem Update sechs 1080p-Bilder zu skalieren.
+                    let target = CGSize(width: 132, height: 176)
+                    let thumb = UIGraphicsImageRenderer(size: target).image { _ in
+                        image.draw(in: CGRect(origin: .zero, size: target))
+                    }
+                    recentThumbs.append(thumb)
                     if recentThumbs.count > 6 { recentThumbs.removeFirst() }
                 }
             }
@@ -566,26 +578,9 @@ struct LiveCaptureView: View {
         let ring:  CGFloat = mode == .basic ? 78 : 68
         let core:  CGFloat = mode == .basic ? 62 : 54
 
-        return HStack(spacing: 16) {
-            // Links: Zwiebelhaut (nur Erweitert/Tolino), sonst Platzhalter
-            Group {
-                if mode.showsAdvanced {
-                    Button { onionSkin.toggle() } label: {
-                        Image(systemName: "square.2.layers.3d")
-                            .font(.system(size: 17))
-                            .foregroundStyle(onionSkin ? Theme.darkroom : Theme.paperOnDark)
-                            .frame(width: 46, height: 46)
-                            .background(onionSkin ? Theme.paperOnDark : Color.black.opacity(0.35))
-                    }
-                } else {
-                    Color.clear
-                }
-            }
-            .frame(width: 46, height: 46)
-
-            Spacer(minLength: 0)
-
-            // Mitte: Auslöser
+        // ZStack statt HStack: der Auslöser ist absolut zentriert und kann
+        // von unterschiedlich breiten Nachbarn nicht mehr verschoben werden.
+        return ZStack {
             Button { controller.captureNow() } label: {
                 ZStack {
                     Circle().fill(Color.black.opacity(0.25)).frame(width: outer, height: outer)
@@ -604,19 +599,40 @@ struct LiveCaptureView: View {
                 }
             }
 
-            Spacer(minLength: 0)
-
-            // Rechts: Fertig / Abbrechen
-            Button { finishSession(project: project) } label: {
-                Text(controller.capturedCount == 0 ? "Abbrechen" : "Fertig")
-                    .font(Theme.caption(11))
-                    .tracking(1.4)
-                    .textCase(.uppercase)
-                    .foregroundStyle(Theme.darkroom)
-                    .frame(width: 92, height: 46)
-                    .background(Theme.paperOnDark)
+            HStack {
+                if mode.showsAdvanced {
+                    Button { onionSkin.toggle() } label: {
+                        Image(systemName: "square.2.layers.3d")
+                            .font(.system(size: 17))
+                            .foregroundStyle(onionSkin ? Theme.darkroom : Theme.paperOnDark)
+                            .frame(width: 48, height: 48)
+                            .background(onionSkin ? Theme.paperOnDark : Color.black.opacity(0.35))
+                            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.4), lineWidth: 1))
+                    }
+                }
+                Spacer()
+                // Fertig / Abbrechen – im Stil der Bildunterschriften:
+                // Versalien, klare Fläche, Falz-Ecke in Amber
+                Button { finishSession(project: project) } label: {
+                    Text(controller.capturedCount == 0
+                         ? "Abbrechen"
+                         : "Fertig · \(controller.capturedCount)")
+                        .font(Theme.caption(11))
+                        .tracking(1.8)
+                        .textCase(.uppercase)
+                        .foregroundStyle(Theme.darkroom)
+                        .padding(.horizontal, 18)
+                        .frame(height: 48)
+                        .background(Theme.paperOnDark)
+                        .overlay(alignment: .topLeading) {
+                            Path { p in
+                                p.move(to: CGPoint(x: 0, y: 12))
+                                p.addLine(to: CGPoint(x: 12, y: 0))
+                            }
+                            .stroke(Theme.amber, lineWidth: 2)
+                        }
+                }
             }
-            .frame(width: 92, height: 46)
         }
         .frame(maxWidth: .infinity)
     }

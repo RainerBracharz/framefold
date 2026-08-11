@@ -168,6 +168,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     private func resetSessionState() {
         sessionStart = Date()
         exposureInfo = nil
+        capturedCount = 0   // Zähler gilt pro Session, nicht pro App-Lauf
         firstCapturedImage = nil
         previousGray = nil
         stableSince = nil
@@ -223,6 +224,13 @@ final class LiveCaptureController: NSObject, ObservableObject {
             return false
         }
         session.addOutput(output)
+        // Hochformat erzwingen: der Sensor liefert Querformat. Ohne diese
+        // Rotation sind Zwiebelhaut, gespeicherte Frames und das fertige
+        // Video um 90° gedreht – genau der gemeldete Fehler.
+        if let conn = output.connection(with: .video),
+           conn.isVideoRotationAngleSupported(90) {
+            conn.videoRotationAngle = 90
+        }
         session.commitConfiguration()
         return true
     }
@@ -458,7 +466,10 @@ final class LiveCaptureController: NSObject, ObservableObject {
         }
         previousGray = gray
         latestFrame = fullFrame
-        currentMotion = motion
+        // Gerundet und nur bei echter Änderung veröffentlichen – sonst
+        // zeichnet SwiftUI den ganzen Sucher zehnmal pro Sekunde neu.
+        let rounded = (motion * 10).rounded() / 10
+        if abs(rounded - currentMotion) > 0.05 { currentMotion = rounded }
 
         // Kalibrierphase: Grundrauschen messen, Schwelle automatisch setzen
         if calibrationSamples != nil {
