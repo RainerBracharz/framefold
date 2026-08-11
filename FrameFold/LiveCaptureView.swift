@@ -85,6 +85,10 @@ struct LiveCaptureView: View {
             }
             .toolbarBackground(Theme.darkroom, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
+            // Die App-weite Akzentfarbe ist auf diesem Tab hell (für die
+            // dunkle Tab-Leiste) – System-Dialoge erben sie und wären hell
+            // auf hell. Hier gilt für Dialoge wieder Tusche.
+            .tint(Theme.ink)
             .sheet(isPresented: $showSettings) {
                 LiveSettingsView(controller: controller,
                                  showGrid: $showGrid, showLevel: $showLevel)
