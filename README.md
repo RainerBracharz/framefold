@@ -7,12 +7,17 @@
 **Turn a video of your working process into an automatic stop-motion — entirely on your iPhone.**
 
 [![iOS Build](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml/badge.svg)](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml)
-&nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
+&nbsp;·&nbsp; **Version 1.0** &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
 
 </div>
 
 <div align="center">
 <img src="docs/app.png" width="880" alt="FrameFold — home, projects and export, auto-shutter camera" />
+</div>
+
+<div align="center">
+<img src="docs/demo.gif" width="320" alt="Made with FrameFold: a print folds itself into facets and back — image → object → image" />
+<br/><sub><em>Made entirely with FrameFold — a print folds itself into facets and unfolds again: image → object → image.<br/>Keyframe selection, facet transitions, paper relief and image echo all rendered by the app's pipeline.</em></sub>
 </div>
 
 ---
@@ -27,7 +32,8 @@ It was built as a **bespoke tool for the Austrian artist [Aldo Tolino](https://w
 - **Hands removed.** Frames with visible hands are discarded via Apple’s Vision hand-pose detection (with an optional path to a custom-trained RF-DETR CoreML model).
 - **Auto-shutter camera.** Put the phone on a tripod; it captures a frame by itself whenever your hands leave the frame and the scene settles. The camera then **locks exposure, focus and white balance** so nothing drifts between frames, snaps the shutter speed to the mains frequency to avoid LED flicker, and offers **tap-to-focus**, an **interval (time-lapse) trigger**, a live motion gauge, spirit level, thirds grid and haptic shutter.
 - **Onion skin & drift check.** Overlay the previous frame — or the **very first** frame of the session — at adjustable opacity, plus an optional external reference image, to catch drift early. The screen stays awake for the whole session.
-- **Review before render.** Every candidate frame shown as a contact sheet; deselect with a tap, play the selection as a live loop before committing.
+- **Review before render.** Every candidate frame shown as a contact sheet; deselect with a tap, adjust the yield with a single slider, play the selection as a live loop before committing.
+- **A result like an edition.** A live session ends straight in a catalogue-style result card — *“Blatt 01 – 24 · Serie von 24 · datiert 2026”* — with the finished loop, ready to share, save as a project or refold.
 - **Hand-held stabilisation.** Each frame is aligned to a fixed reference (verified block-matching) so free-hand footage sits still.
 - **Projects & archive.** Works organised in series, collected across many sessions, with a 30-day trash, a print-ready **contact-sheet PDF** and a **fold-template PDF** for printing and re-folding.
 - **Exhibition reel.** Assemble several works into one continuous reel with catalogue title cards.
@@ -35,9 +41,11 @@ It was built as a **bespoke tool for the Austrian artist [Aldo Tolino](https://w
 
 ## Three modes
 
+A three-card onboarding on first launch explains the two ways of working — pick a video or record live — and lets you choose your mode; the choice can be changed at any time from the settings.
+
 | Mode | For |
 |---|---|
-| **Simple** | Pick a video, get a stop-motion. Nothing else on screen. |
+| **Simple** | Pick a video, get a stop-motion. Nothing else on screen. Built playfully enough for Tolino's students — big counter, warm language, instant result. |
 | **Advanced** | Frame rate, aspect, resolution, playback mode, stabilisation. |
 | **Aldo Tolino** | Everything, plus the studio effects below. |
 
@@ -85,7 +93,7 @@ Designed and built by **[Bracharz Consulting](https://www.bracharz.com)** — Ra
 
 Typefaces: [Fraunces](https://github.com/undercasetype/Fraunces) and [Inter](https://github.com/rsms/inter), both under the SIL Open Font License (see `FrameFold/Fonts-Licenses/`).
 
-*Status: beta, in active development.*
+*Status: **version 1.0 — live**, in daily use in the studio.*
 
 ---
 
