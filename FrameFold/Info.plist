@@ -8,5 +8,9 @@
 	     Schlüssel greift der feste Papier-Grund aus FrameFoldApp überall. -->
 	<key>UIDesignRequiresCompatibility</key>
 	<true/>
+	<!-- Keine eigene Verschluesselung — erspart die Compliance-Frage
+	     bei jedem App-Store-Upload. -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>

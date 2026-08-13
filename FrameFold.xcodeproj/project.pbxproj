@@ -12,6 +12,7 @@
 		6EC6DE6FF0464AC9AD90443E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC799115617B1A713B60FF /* ContentView.swift */; };
 		AFAAD6ED30E050C36CB1008E /* CoreMLHandDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F829535D7C9019A39F763DF /* CoreMLHandDetector.swift */; };
 		E466B79C40F7AC551AA8FCDF /* ExhibitionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CD31EE9EE75040932168D5 /* ExhibitionBuilder.swift */; };
+		AA11F0F0F0F0F0F0F0F0F001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */; };
 		0CAEF231501404EE77F40FB6 /* FoldTemplateRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0054D6E78B2E0461321D7680 /* FoldTemplateRenderer.swift */; };
 		A4C483879CD17FB6351FCFDF /* FrameAligner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856EF7169EBADC9E0A4E3FEB /* FrameAligner.swift */; };
 		F18E9E67D58704115602C98F /* FrameAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41366FECBE0FAF2939DF1DAD /* FrameAnalyzer.swift */; };
@@ -52,6 +53,7 @@
 		86AC7761875A3A3F18126E58 /* StopMotionAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopMotionAssembler.swift; sourceTree = "<group>"; };
 		6D927AFD3235879AD294246A /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		5179CC507784BECC68BB9DEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DEF93E8F8AC229A0D98BBEFA /* FrameFold.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrameFold.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -98,6 +100,7 @@
 				86AC7761875A3A3F18126E58 /* StopMotionAssembler.swift */,
 				6D927AFD3235879AD294246A /* Theme.swift */,
 				5179CC507784BECC68BB9DEF /* Assets.xcassets */,
+				AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */,
 			);
 			path = FrameFold;
 			sourceTree = "<group>";
@@ -170,6 +173,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA47649F07F31FB474676A5F /* Assets.xcassets in Resources */,
+				AA11F0F0F0F0F0F0F0F0F001 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,7 +189,7 @@
 				6EC6DE6FF0464AC9AD90443E /* ContentView.swift in Sources */,
 				AFAAD6ED30E050C36CB1008E /* CoreMLHandDetector.swift in Sources */,
 				E466B79C40F7AC551AA8FCDF /* ExhibitionBuilder.swift in Sources */,
-				0CAEF231501404EE77F40FB6 /* FoldTemplateRenderer.swift in Sources */,
+		0CAEF231501404EE77F40FB6 /* FoldTemplateRenderer.swift in Sources */,
 				A4C483879CD17FB6351FCFDF /* FrameAligner.swift in Sources */,
 				F18E9E67D58704115602C98F /* FrameAnalyzer.swift in Sources */,
 				949020BFE94303FA69C4606D /* FrameFoldApp.swift in Sources */,
@@ -269,6 +273,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FrameFold/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -296,6 +301,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FrameFold/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
