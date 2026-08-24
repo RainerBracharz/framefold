@@ -8,53 +8,53 @@
 
 /* Begin PBXBuildFile section */
 		04FA675C7F188EF8179B0975 /* Algorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90F27737EE2A3D892E97F55 /* Algorithms.swift */; };
-		85D26E9D051224422D40FEDE /* ContactSheetRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A16ED755D49527D84B6FFE /* ContactSheetRenderer.swift */; };
-		6EC6DE6FF0464AC9AD90443E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC799115617B1A713B60FF /* ContentView.swift */; };
-		AFAAD6ED30E050C36CB1008E /* CoreMLHandDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F829535D7C9019A39F763DF /* CoreMLHandDetector.swift */; };
-		E466B79C40F7AC551AA8FCDF /* ExhibitionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CD31EE9EE75040932168D5 /* ExhibitionBuilder.swift */; };
-		AA11F0F0F0F0F0F0F0F0F001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */; };
 		0CAEF231501404EE77F40FB6 /* FoldTemplateRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0054D6E78B2E0461321D7680 /* FoldTemplateRenderer.swift */; };
-		A4C483879CD17FB6351FCFDF /* FrameAligner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856EF7169EBADC9E0A4E3FEB /* FrameAligner.swift */; };
-		F18E9E67D58704115602C98F /* FrameAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41366FECBE0FAF2939DF1DAD /* FrameAnalyzer.swift */; };
-		949020BFE94303FA69C4606D /* FrameFoldApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C84F7E8C0DE1E8C227DD75C /* FrameFoldApp.swift */; };
+		0E02C30C0D9FB6293B4FD9BD /* ProcessingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6583ADB31D00356EDCE7FA83 /* ProcessingViewModel.swift */; };
+		2F97FFBA1AFB2FC17C8F6E8F /* LiveCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA8297A3233B23D9AE700 /* LiveCaptureController.swift */; };
 		3059C6016C96E13B484F9C75 /* HandDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F57A631B9FBDA6F9338B4C /* HandDetector.swift */; };
 		398AA4E00E8419C936A9123B /* KeyframeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C7AEA4E4A264C569DEA9D5 /* KeyframeSelector.swift */; };
-		2F97FFBA1AFB2FC17C8F6E8F /* LiveCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA8297A3233B23D9AE700 /* LiveCaptureController.swift */; };
-		A3DE04E07922CC8BB966001C /* LiveCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C12FBC1940CDA6F9C95797 /* LiveCaptureView.swift */; };
-		D53EE5B81BCE0006DC1EE58F /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD6BD598D4F623F37DCAF09 /* Models.swift */; };
 		4DD658CFC92A7563F0AB0ECA /* MotionLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDB9F45CA291A2DA744E92B /* MotionLevel.swift */; };
-		0E02C30C0D9FB6293B4FD9BD /* ProcessingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6583ADB31D00356EDCE7FA83 /* ProcessingViewModel.swift */; };
-		BD9B7454EB7D37A5500730CA /* ProjectStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AAEDEDE5FC50D5C58EF7D3 /* ProjectStore.swift */; };
-		96CBCC018099EE0B7B40AC86 /* ProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC61E3411A52FB19A5D7E /* ProjectsView.swift */; };
-		C7A97BD0A2F98F786140AD56 /* StopMotionAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC7761875A3A3F18126E58 /* StopMotionAssembler.swift */; };
 		52A0753942DADBD20392C515 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D927AFD3235879AD294246A /* Theme.swift */; };
+		6EC6DE6FF0464AC9AD90443E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC799115617B1A713B60FF /* ContentView.swift */; };
+		85D26E9D051224422D40FEDE /* ContactSheetRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A16ED755D49527D84B6FFE /* ContactSheetRenderer.swift */; };
+		949020BFE94303FA69C4606D /* FrameFoldApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C84F7E8C0DE1E8C227DD75C /* FrameFoldApp.swift */; };
+		96CBCC018099EE0B7B40AC86 /* ProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC61E3411A52FB19A5D7E /* ProjectsView.swift */; };
+		A3DE04E07922CC8BB966001C /* LiveCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C12FBC1940CDA6F9C95797 /* LiveCaptureView.swift */; };
+		A4C483879CD17FB6351FCFDF /* FrameAligner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856EF7169EBADC9E0A4E3FEB /* FrameAligner.swift */; };
+		AA11F0F0F0F0F0F0F0F0F001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */; };
+		AFAAD6ED30E050C36CB1008E /* CoreMLHandDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F829535D7C9019A39F763DF /* CoreMLHandDetector.swift */; };
+		BD9B7454EB7D37A5500730CA /* ProjectStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AAEDEDE5FC50D5C58EF7D3 /* ProjectStore.swift */; };
+		C7A97BD0A2F98F786140AD56 /* StopMotionAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC7761875A3A3F18126E58 /* StopMotionAssembler.swift */; };
+		D53EE5B81BCE0006DC1EE58F /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD6BD598D4F623F37DCAF09 /* Models.swift */; };
 		DA47649F07F31FB474676A5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5179CC507784BECC68BB9DEF /* Assets.xcassets */; };
+		E466B79C40F7AC551AA8FCDF /* ExhibitionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CD31EE9EE75040932168D5 /* ExhibitionBuilder.swift */; };
+		F18E9E67D58704115602C98F /* FrameAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41366FECBE0FAF2939DF1DAD /* FrameAnalyzer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E90F27737EE2A3D892E97F55 /* Algorithms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Algorithms.swift; sourceTree = "<group>"; };
-		37A16ED755D49527D84B6FFE /* ContactSheetRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSheetRenderer.swift; sourceTree = "<group>"; };
-		9BBC799115617B1A713B60FF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		0F829535D7C9019A39F763DF /* CoreMLHandDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLHandDetector.swift; sourceTree = "<group>"; };
-		32CD31EE9EE75040932168D5 /* ExhibitionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitionBuilder.swift; sourceTree = "<group>"; };
 		0054D6E78B2E0461321D7680 /* FoldTemplateRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldTemplateRenderer.swift; sourceTree = "<group>"; };
-		856EF7169EBADC9E0A4E3FEB /* FrameAligner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameAligner.swift; sourceTree = "<group>"; };
-		41366FECBE0FAF2939DF1DAD /* FrameAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameAnalyzer.swift; sourceTree = "<group>"; };
+		0F829535D7C9019A39F763DF /* CoreMLHandDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLHandDetector.swift; sourceTree = "<group>"; };
 		1C84F7E8C0DE1E8C227DD75C /* FrameFoldApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameFoldApp.swift; sourceTree = "<group>"; };
-		57F57A631B9FBDA6F9338B4C /* HandDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandDetector.swift; sourceTree = "<group>"; };
-		B9C7AEA4E4A264C569DEA9D5 /* KeyframeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyframeSelector.swift; sourceTree = "<group>"; };
-		CCEFA8297A3233B23D9AE700 /* LiveCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCaptureController.swift; sourceTree = "<group>"; };
-		C3C12FBC1940CDA6F9C95797 /* LiveCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCaptureView.swift; sourceTree = "<group>"; };
-		5DD6BD598D4F623F37DCAF09 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
-		ABDB9F45CA291A2DA744E92B /* MotionLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionLevel.swift; sourceTree = "<group>"; };
-		6583ADB31D00356EDCE7FA83 /* ProcessingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingViewModel.swift; sourceTree = "<group>"; };
-		F6AAEDEDE5FC50D5C58EF7D3 /* ProjectStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectStore.swift; sourceTree = "<group>"; };
-		6F0AC61E3411A52FB19A5D7E /* ProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsView.swift; sourceTree = "<group>"; };
-		86AC7761875A3A3F18126E58 /* StopMotionAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopMotionAssembler.swift; sourceTree = "<group>"; };
-		6D927AFD3235879AD294246A /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		32CD31EE9EE75040932168D5 /* ExhibitionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitionBuilder.swift; sourceTree = "<group>"; };
+		37A16ED755D49527D84B6FFE /* ContactSheetRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSheetRenderer.swift; sourceTree = "<group>"; };
+		41366FECBE0FAF2939DF1DAD /* FrameAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameAnalyzer.swift; sourceTree = "<group>"; };
 		5179CC507784BECC68BB9DEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		57F57A631B9FBDA6F9338B4C /* HandDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandDetector.swift; sourceTree = "<group>"; };
+		5DD6BD598D4F623F37DCAF09 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		6583ADB31D00356EDCE7FA83 /* ProcessingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingViewModel.swift; sourceTree = "<group>"; };
+		6D927AFD3235879AD294246A /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		6F0AC61E3411A52FB19A5D7E /* ProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsView.swift; sourceTree = "<group>"; };
+		856EF7169EBADC9E0A4E3FEB /* FrameAligner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameAligner.swift; sourceTree = "<group>"; };
+		86AC7761875A3A3F18126E58 /* StopMotionAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopMotionAssembler.swift; sourceTree = "<group>"; };
+		9BBC799115617B1A713B60FF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		ABDB9F45CA291A2DA744E92B /* MotionLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionLevel.swift; sourceTree = "<group>"; };
+		B9C7AEA4E4A264C569DEA9D5 /* KeyframeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyframeSelector.swift; sourceTree = "<group>"; };
+		C3C12FBC1940CDA6F9C95797 /* LiveCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCaptureView.swift; sourceTree = "<group>"; };
+		CCEFA8297A3233B23D9AE700 /* LiveCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCaptureController.swift; sourceTree = "<group>"; };
 		DEF93E8F8AC229A0D98BBEFA /* FrameFold.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrameFold.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E90F27737EE2A3D892E97F55 /* Algorithms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Algorithms.swift; sourceTree = "<group>"; };
+		F6AAEDEDE5FC50D5C58EF7D3 /* ProjectStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +68,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		61DEB054F32CA5A5B7265A5E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DEF93E8F8AC229A0D98BBEFA /* FrameFold.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		97A63A01E61FD439E8760B8E = {
 			isa = PBXGroup;
 			children = (
@@ -103,14 +111,6 @@
 				AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */,
 			);
 			path = FrameFold;
-			sourceTree = "<group>";
-		};
-		61DEB054F32CA5A5B7265A5E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DEF93E8F8AC229A0D98BBEFA /* FrameFold.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,7 +189,7 @@
 				6EC6DE6FF0464AC9AD90443E /* ContentView.swift in Sources */,
 				AFAAD6ED30E050C36CB1008E /* CoreMLHandDetector.swift in Sources */,
 				E466B79C40F7AC551AA8FCDF /* ExhibitionBuilder.swift in Sources */,
-		0CAEF231501404EE77F40FB6 /* FoldTemplateRenderer.swift in Sources */,
+				0CAEF231501404EE77F40FB6 /* FoldTemplateRenderer.swift in Sources */,
 				A4C483879CD17FB6351FCFDF /* FrameAligner.swift in Sources */,
 				F18E9E67D58704115602C98F /* FrameAnalyzer.swift in Sources */,
 				949020BFE94303FA69C4606D /* FrameFoldApp.swift in Sources */,
@@ -210,32 +210,59 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		AB8615DB3E3E142DDB89E274 /* Debug */ = {
+		792B3A5FC2586286261D1B60 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_NO_COMMON_BLOCKS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MTL_FAST_MATH = YES;
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 5.0;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_TESTABILITY = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 57TBDSR367;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FrameFold/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
+					"@executable_path/Frameworks",
 				);
-				ONLY_ACTIVE_ARCH = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				MARKETING_VERSION = 1.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.framefold;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		7EBA50094BFA750F0608695D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 57TBDSR367;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FrameFold/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.framefold;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -246,6 +273,8 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -254,69 +283,40 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 5.0;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		7EBA50094BFA750F0608695D /* Debug */ = {
+		AB8615DB3E3E142DDB89E274 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 57TBDSR367;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FrameFold/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				LD_RUNPATH_SEARCH_PATHS = (
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
 					"$(inherited)",
-					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.framefold;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
-		};
-		792B3A5FC2586286261D1B60 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 57TBDSR367;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FrameFold/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.framefold;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
 		};
 /* End XCBuildConfiguration section */
 

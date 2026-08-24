@@ -84,6 +84,7 @@ struct ProjectsView: View {
                             }
                             .foregroundStyle(Theme.ink)
                         }
+                        .accessibilityLabel("Ausstellung montieren")
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
@@ -91,6 +92,7 @@ struct ProjectsView: View {
                         Image(systemName: "plus")
                             .foregroundStyle(Theme.ink)
                     }
+                    .accessibilityLabel("Neues Werk anlegen")
                 }
             }
             .toolbarBackground(Theme.paper, for: .navigationBar)
@@ -340,10 +342,22 @@ struct ProjectDetailView: View {
                     optionDivider
                     optionRow("Bildrate") {
                         Picker("", selection: $exportSettings.outputFPS) {
+                            Text("2 fps").tag(Int32(2))
+                            Text("3 fps").tag(Int32(3))
+                            Text("4 fps").tag(Int32(4))
                             Text("6 fps").tag(Int32(6))
                             Text("8 fps").tag(Int32(8))
                             Text("10 fps").tag(Int32(10))
                             Text("12 fps").tag(Int32(12))
+                        }
+                    }
+                    optionDivider
+                    optionRow("Letztes Bild halten") {
+                        Picker("", selection: $exportSettings.holdLastFrameSeconds) {
+                            Text("Aus").tag(0.0)
+                            Text("1 s").tag(1.0)
+                            Text("2 s").tag(2.0)
+                            Text("3 s").tag(3.0)
                         }
                     }
                     optionDivider

@@ -92,27 +92,48 @@ enum Theme {
 
     /// Serif (Fraunces) – die Katalog-/Buchstimme: Titel, Werknamen, Wortmarke.
     /// Fällt sauber auf die System-Serife zurück, falls die Schrift fehlt.
+    /// Ordnet einer festen Punktgröße den passenden System-Textstil zu.
+    /// Nur so wächst die Schrift mit der Einstellung „Größerer Text" mit —
+    /// ohne relativeTo bleiben eigene Schriften bei jeder Systemgröße gleich.
+    private static func style(for size: CGFloat) -> Font.TextStyle {
+        switch size {
+        case 30...:   return .largeTitle
+        case 24..<30: return .title
+        case 20..<24: return .title2
+        case 17..<20: return .title3
+        case 15..<17: return .body
+        case 13..<15: return .callout
+        case 12..<13: return .subheadline
+        case 11..<12: return .footnote
+        default:      return .caption
+        }
+    }
+
     static func serif(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
         let light: Set<Font.Weight> = [.ultraLight, .thin, .light]
         let ps = light.contains(weight) ? "Fraunces-Light" : "Fraunces-Regular"
-        if UIFont(name: ps, size: size) != nil { return .custom(ps, size: size) }
-        return .system(size: size, weight: weight, design: .serif)
+        if UIFont(name: ps, size: size) != nil {
+            return .custom(ps, size: size, relativeTo: style(for: size))
+        }
+        return .system(style(for: size), design: .serif).weight(weight)
     }
     /// Grotesk (Inter) mit Tabellenziffern – Angaben, Zähler, Zustände, Knöpfe.
     /// Fällt sauber auf SF Pro zurück, falls die Schrift fehlt.
     static func mono(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
         let strong: Set<Font.Weight> = [.medium, .semibold, .bold, .heavy, .black]
         let ps = strong.contains(weight) ? "Inter-Medium" : "Inter-Regular"
-        if UIFont(name: ps, size: size) != nil { return .custom(ps, size: size).monospacedDigit() }
-        return .system(size: size, weight: weight, design: .default).monospacedDigit()
+        if UIFont(name: ps, size: size) != nil {
+            return .custom(ps, size: size, relativeTo: style(for: size)).monospacedDigit()
+        }
+        return .system(style(for: size), design: .default).weight(weight).monospacedDigit()
     }
 
     /// Kursive Serifenstimme (Fraunces Italic) – Begrüßung, Fragen, Zitate.
     static func serifItalic(_ size: CGFloat) -> Font {
         if UIFont(name: "Fraunces-Italic", size: size) != nil {
-            return .custom("Fraunces-Italic", size: size)
+            return .custom("Fraunces-Italic", size: size, relativeTo: style(for: size))
         }
-        return .system(size: size, design: .serif).italic()
+        return .system(style(for: size), design: .serif).italic()
     }
 
     /// Gesperrte Grotesk-Versalien für Abschnitts- und Statuszeilen.
@@ -169,6 +190,7 @@ struct FoldMark: View {
             }
         }
         .frame(width: size, height: size)
+        .accessibilityHidden(true)   // Bildmarke ohne Informationswert
     }
 }
 
@@ -369,6 +391,7 @@ struct FoldedPaperHero: View {
                 }
             }
         }
+        .accessibilityHidden(true)   // dekorativ; die Beschriftung daneben trägt den Sinn
     }
 
     private func scaled(_ p: CGPoint, _ s: CGSize) -> CGPoint {
@@ -379,6 +402,7 @@ struct FoldedPaperHero: View {
 /// Das FrameFold-Logo als Kachel (wie das App-Icon): schwarze Fläche,
 /// weißes Serif-F, Spektral-Falz über die linke obere Ecke – Rand zu Rand.
 struct LogoTile: View {
+    // Reine Bildmarke – für VoiceOver ohne Information.
     var size: CGFloat = 28
 
     var body: some View {
@@ -390,6 +414,7 @@ struct LogoTile: View {
         }
         .frame(width: size, height: size)
         .clipShape(RoundedRectangle(cornerRadius: size * 0.22, style: .continuous))
+        .accessibilityHidden(true)   // Bildmarke, kein Bedienelement
     }
 }
 
@@ -524,7 +549,21 @@ struct IconSquare: View {
     let icon: String
     var stage: Stage = .paper
     var destructive = false
+    /// Beschriftung für VoiceOver – ein Symbol allein wird sonst nur als
+    /// „Taste" vorgelesen. Fällt auf eine Zuordnung nach Symbolnamen zurück.
+    var label: String? = nil
     let action: () -> Void
+
+    private var voiceLabel: String {
+        if let label { return label }
+        switch icon {
+        case "trash": return "Verwerfen"
+        case "arrow.uturn.backward": return "Letztes Bild zurücknehmen"
+        case "plus": return "Neues Werk anlegen"
+        case "xmark": return "Schließen"
+        default: return "Taste"
+        }
+    }
 
     var body: some View {
         Button(action: action) {
@@ -542,6 +581,7 @@ struct IconSquare: View {
                     lineWidth: 1))
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(voiceLabel)
     }
 }
 

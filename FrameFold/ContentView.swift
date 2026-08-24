@@ -16,6 +16,7 @@ struct ContentView: View {
     @State private var foldNudge: UInt64 = 0
     @AppStorage("appMode") private var homeModeRaw: Int = AppMode.basic.rawValue
     private var mode: AppMode { AppMode.current(homeModeRaw) }
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         NavigationStack {
@@ -50,6 +51,7 @@ struct ContentView: View {
                         Image(systemName: "slider.horizontal.3")
                             .foregroundStyle(Theme.ink)
                     }
+                    .accessibilityLabel("Einstellungen")
                 }
             }
             .toolbarBackground(Theme.paper, for: .navigationBar)
@@ -102,7 +104,10 @@ struct ContentView: View {
             .offset(y: homeIn ? 0 : 12)
         }
         .onAppear {
-            if !homeIn { withAnimation(.smooth(duration: 0.55)) { homeIn = true } }
+            if !homeIn {
+                if reduceMotion { homeIn = true }
+                else { withAnimation(.smooth(duration: 0.55)) { homeIn = true } }
+            }
             lightTilt.start()
         }
         .onDisappear { lightTilt.stop() }
@@ -157,7 +162,8 @@ struct ContentView: View {
                         Color.clear
                             .contentShape(Rectangle())
                             .onTapGesture {
-                                withAnimation(.smooth(duration: 0.45)) { foldNudge &+= 17 }
+                                if reduceMotion { foldNudge &+= 17 }
+                                else { withAnimation(.smooth(duration: 0.45)) { foldNudge &+= 17 } }
                             }
                     }
                 }
@@ -463,6 +469,7 @@ struct VideoPickerFile: Transferable {
 struct ProcessingView: View {
     let stage: PipelineStage
     @State private var pulse = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var progress: Double? {
         switch stage {
@@ -480,8 +487,10 @@ struct ProcessingView: View {
             FoldMark(size: 40)
                 .scaleEffect(pulse ? 1.06 : 0.94)
                 .opacity(pulse ? 1 : 0.7)
-                .animation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true), value: pulse)
-                .onAppear { pulse = true }
+                .animation(reduceMotion ? nil
+                           : .easeInOut(duration: 1.1).repeatForever(autoreverses: true),
+                           value: pulse)
+                .onAppear { if !reduceMotion { pulse = true } }
             CatalogLabel(stage.label, color: Theme.ink)
             if let progress {
                 HairlineProgress(value: progress)
@@ -645,10 +654,19 @@ struct SettingsView: View {
                 if mode.showsAdvanced {
                     Section {
                         Picker("Bildrate", selection: $settings.outputFPS) {
+                            Text("2 fps – sehr langsam").tag(Int32(2))
+                            Text("3 fps").tag(Int32(3))
+                            Text("4 fps").tag(Int32(4))
                             Text("6 fps").tag(Int32(6))
                             Text("8 fps").tag(Int32(8))
                             Text("10 fps").tag(Int32(10))
                             Text("12 fps").tag(Int32(12))
+                        }
+                        Picker("Letztes Bild halten", selection: $settings.holdLastFrameSeconds) {
+                            Text("Aus").tag(0.0)
+                            Text("1 s").tag(1.0)
+                            Text("2 s").tag(2.0)
+                            Text("3 s").tag(3.0)
                         }
                         Picker("Format", selection: $settings.aspect) {
                             ForEach(AspectPreset.allCases) { Text($0.rawValue).tag($0) }

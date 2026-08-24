@@ -30,8 +30,13 @@ struct PipelineSettings: Equatable {
     /// In Tests mit der Referenzpipeline lagen echte Szenenwechsel bei Distanz 5–8,
     /// echte Duplikate bei 0–2 → 3 trennt sauber.
     var dedupHashThreshold: Int = 3
-    /// Framerate des ausgegebenen Stopmotion-Videos
+    /// Bildrate des ausgegebenen Stopmotion-Videos.
+    /// Niedrige Werte (2–4) sind für kurze Sequenzen gedacht: zehn Bilder
+    /// bei 10 fps sind nur eine Sekunde – bei 2 fps fünf.
     var outputFPS: Int32 = 10
+    /// Standbild am Ende: das letzte Bild bleibt so viele Sekunden stehen,
+    /// statt dass der Film abrupt abreißt (0 = aus).
+    var holdLastFrameSeconds: Double = 0
     /// Seitenverhältnis des Exports (Center-Crop)
     var aspect: AspectPreset = .original
     /// Auflösung des Exports – 1080p reicht für Social-Clips, exportiert

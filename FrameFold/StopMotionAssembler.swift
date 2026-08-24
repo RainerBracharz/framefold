@@ -205,10 +205,53 @@ final class StopMotionAssembler {
             progress(Double(position + 1) / Double(steps.count))
         }
 
+        // Standbild am Ende: das Schlussbild wird als Wiederholung angehängt,
+        // damit der Film nicht abreißt. Identische Frames kosten dank
+        // Zwischenbild-Kompression praktisch keine Dateigröße.
+        let holdFrames = Int((settings.holdLastFrameSeconds * Double(settings.outputFPS)).rounded())
+        if holdFrames > 0, let finalImage = lastComposed {
+            for i in 0..<holdFrames {
+                while !input.isReadyForMoreMediaData {
+                    try await Task.sleep(nanoseconds: 10_000_000)
+                }
+                guard let buffer = Self.buffer(from: finalImage,
+                                               width: width, height: height,
+                                               pool: adaptor.pixelBufferPool) else { break }
+                let time = CMTimeMultiply(frameDuration, multiplier: Int32(steps.count + i))
+                adaptor.append(buffer, withPresentationTime: time)
+            }
+        }
+
         input.markAsFinished()
         await writer.finishWriting()
         guard writer.status == .completed else { throw PipelineError.exportFailed }
         return outputURL
+    }
+
+    /// Zeichnet ein fertig komponiertes Bild 1:1 in einen neuen Pixel-Buffer –
+    /// für das Standbild am Ende.
+    private static func buffer(from image: CGImage, width: Int, height: Int,
+                               pool: CVPixelBufferPool?) -> CVPixelBuffer? {
+        var buffer: CVPixelBuffer?
+        if let pool { CVPixelBufferPoolCreatePixelBuffer(nil, pool, &buffer) }
+        if buffer == nil {
+            CVPixelBufferCreate(nil, width, height, kCVPixelFormatType_32BGRA,
+                                [kCVPixelBufferCGImageCompatibilityKey: true] as CFDictionary,
+                                &buffer)
+        }
+        guard let pixelBuffer = buffer else { return nil }
+        CVPixelBufferLockBaseAddress(pixelBuffer, [])
+        defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, []) }
+        guard let context = CGContext(
+            data: CVPixelBufferGetBaseAddress(pixelBuffer),
+            width: width, height: height,
+            bitsPerComponent: 8,
+            bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer),
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue
+        ) else { return nil }
+        context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+        return pixelBuffer
     }
 
     /// Center-Crop-Rechteck (delegiert an Algorithms).

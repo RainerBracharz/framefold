@@ -247,6 +247,9 @@ struct FrameFoldApp: App {
             // hell überm Kamerabild), und keine einzelne Akzentfarbe bleibt
             // auf beidem lesbar. Fester Grund + Tusche funktioniert überall.
             .tint(Theme.ink)
+            // Schriften wachsen mit „Größerer Text" mit; nach oben begrenzt,
+            // damit Sucher-HUD und Kontaktbogen nicht auseinanderfallen.
+            .dynamicTypeSize(...DynamicTypeSize.accessibility3)
             .preferredColorScheme(.light) // Galeriewand, konsistent im Atelier
             .overlay {
                 if !didOnboard {

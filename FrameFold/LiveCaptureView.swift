@@ -81,6 +81,7 @@ struct LiveCaptureView: View {
                         Image(systemName: "slider.horizontal.3")
                             .foregroundStyle(Theme.paperOnDark)
                     }
+                    .accessibilityLabel("Aufnahme-Einstellungen")
                 }
             }
             .toolbarBackground(Theme.darkroom, for: .navigationBar)
@@ -442,7 +443,7 @@ struct LiveCaptureView: View {
             // Werkzeuge erst ab „Erweitert"
             if mode.showsAdvanced {
                 VStack(spacing: 8) {
-                    sucherButton("camera.metering.center.weighted") {
+                    sucherButton("camera.metering.center.weighted", label: "Kamera neu fixieren") {
                         controller.refixCamera()
                     }
                     if referenceImage == nil {
@@ -450,7 +451,7 @@ struct LiveCaptureView: View {
                             sucherIcon("photo")
                         }
                     } else {
-                        sucherButton("photo.fill") { referenceImage = nil }
+                        sucherButton("photo.fill", label: "Vergleichsbild entfernen") { referenceImage = nil }
                     }
                 }
                 .padding(16)
@@ -573,6 +574,8 @@ struct LiveCaptureView: View {
                     Circle().fill(Theme.paperOnDark).frame(width: core, height: core)
                 }
             }
+            .accessibilityLabel("Auslöser")
+            .accessibilityHint("Nimmt sofort ein Bild auf. Sonst löst die Kamera von selbst aus, sobald die Hände aus dem Bild sind.")
 
             HStack {
                 if mode.showsAdvanced {
@@ -584,6 +587,9 @@ struct LiveCaptureView: View {
                             .background(onionSkin ? Theme.paperOnDark : Color.black.opacity(0.35))
                             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.4), lineWidth: 1))
                     }
+                    .accessibilityLabel("Zwiebelhaut")
+                    .accessibilityValue(onionSkin ? "an" : "aus")
+                    .accessibilityHint("Blendet das vorherige Bild halbtransparent über den Sucher.")
                 }
                 Spacer()
                 // Fertig / Abbrechen – im Stil der Bildunterschriften:
@@ -652,6 +658,7 @@ struct LiveCaptureView: View {
                 MotionGauge(motion: controller.currentMotion,
                             threshold: controller.motionThreshold)
                     .frame(height: 10)
+                    .accessibilityHidden(true)
                 Text(String(format: "%.1f / %.1f", controller.currentMotion,
                             controller.motionThreshold))
                     .font(Theme.mono(10, .medium))
@@ -687,6 +694,12 @@ struct LiveCaptureView: View {
                     controller.captureMode == .interval
                     ? Theme.amberLight : Theme.paperOnDark.opacity(0.35),
                     lineWidth: 1))
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Auslöser umschalten")
+                .accessibilityValue(controller.captureMode == .motion
+                                    ? "Bewegung"
+                                    : String(format: "Intervall, alle %.0f Sekunden",
+                                             controller.intervalSeconds))
             }
             .buttonStyle(.plain)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -754,8 +767,10 @@ struct LiveCaptureView: View {
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
     }
 
-    private func sucherButton(_ name: String, action: @escaping () -> Void) -> some View {
+    private func sucherButton(_ name: String, label: String,
+                              action: @escaping () -> Void) -> some View {
         Button(action: action) { sucherIcon(name) }
+            .accessibilityLabel(label)
     }
 
     /// Großer Zähler mit fühlbarem Fortschritt: 10 Bilder = 1 Sekunde Film.
@@ -787,6 +802,9 @@ struct LiveCaptureView: View {
             }
         }
         .padding(.bottom, 6)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Aufgenommene Bilder")
+        .accessibilityValue("\(count)")
     }
 
     private var statusBadge: some View {
