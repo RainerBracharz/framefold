@@ -1,0 +1,5 @@
+Bedienungshilfen: FrameFold unterstützt jetzt VoiceOver, größere Schrift und die Einstellung „Bewegung reduzieren".
+
+Langsamere Bildraten: neu ab 2 Bildern pro Sekunde — kurze Sequenzen laufen damit deutlich ruhiger.
+
+Standbild am Ende: das letzte Bild kann ein bis drei Sekunden stehenbleiben, statt dass der Film abrupt endet.

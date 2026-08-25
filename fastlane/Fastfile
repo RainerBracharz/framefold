@@ -1,0 +1,94 @@
+# FrameFold — Veröffentlichung ohne Browser.
+#
+# Einmalig nötig:
+#   brew install fastlane
+#   API-Schlüssel unter ~/.appstoreconnect/AuthKey_RYCY6P77D7.p8
+#
+# Danach genügt für ein Update:
+#   1. Versionsnummer in Xcode erhöhen (oder: fastlane bump version:1.0.2)
+#   2. Release-Notes in fastlane/metadata/de-DE/release_notes.txt schreiben
+#   3. fastlane release
+#
+# Was der Befehl tut: Build-Nummer hochzählen, archivieren, hochladen,
+# Version anlegen, Notes setzen, Build anhängen, zur Prüfung einreichen.
+
+default_platform(:ios)
+
+APP_ID     = "com.bracharz.framefold"
+SCHEME     = "FrameFold"
+PROJECT    = "FrameFold.xcodeproj"
+KEY_ID     = "RYCY6P77D7"
+ISSUER_ID  = "2035739a-efc7-450c-8f2f-61f211394113"
+KEY_PATH   = File.expand_path("~/.appstoreconnect/AuthKey_#{KEY_ID}.p8")
+
+platform :ios do
+
+  # Meldet uns bei der App Store Connect API an. Der private Schlüssel bleibt
+  # auf der Platte, er wandert nie ins Repository.
+  private_lane :login do
+    UI.user_error!("Schlüssel fehlt: #{KEY_PATH}") unless File.exist?(KEY_PATH)
+    app_store_connect_api_key(
+      key_id: KEY_ID,
+      issuer_id: ISSUER_ID,
+      key_filepath: KEY_PATH,
+      in_house: false
+    )
+  end
+
+  desc "Versionsnummer setzen, z. B. fastlane bump version:1.0.2"
+  lane :bump do |options|
+    version = options[:version]
+    UI.user_error!("Bitte version angeben: fastlane bump version:1.0.2") if version.nil?
+    increment_version_number(version_number: version, xcodeproj: PROJECT)
+    UI.success("Version steht auf #{version}")
+  end
+
+  desc "Nur bauen und hochladen (ohne Einreichung) – landet in TestFlight"
+  lane :upload do
+    api_key = login
+    increment_build_number(xcodeproj: PROJECT)
+    build_app(project: PROJECT, scheme: SCHEME, export_method: "app-store")
+    upload_to_testflight(api_key: api_key, skip_waiting_for_build_processing: false)
+    UI.success("Build ist in App Store Connect.")
+  end
+
+  desc "Kompletter Release: bauen, hochladen, Version anlegen, einreichen"
+  lane :release do
+    api_key = login
+
+    increment_build_number(xcodeproj: PROJECT)
+    build_app(project: PROJECT, scheme: SCHEME, export_method: "app-store")
+
+    upload_to_app_store(
+      api_key: api_key,
+      app_identifier: APP_ID,
+      # Metadaten kommen aus fastlane/metadata – nur die Release-Notes
+      # ändern sich pro Version, alles andere bleibt wie im Store.
+      skip_screenshots: true,
+      skip_metadata: false,
+      overwrite_screenshots: false,
+      force: true,                       # keine Rückfrage im Browser
+      precheck_include_in_app_purchases: false,
+      submit_for_review: true,
+      automatic_release: false,          # Veröffentlichung bleibt bei dir
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        export_compliance_uses_encryption: false,
+        content_rights_contains_third_party_content: false
+      }
+    )
+    UI.success("Eingereicht. Freigabe erfolgt danach manuell in App Store Connect.")
+  end
+
+  desc "Status der letzten Einreichung anzeigen"
+  lane :status do
+    api_key = login
+    require "spaceship"
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
+      key_id: KEY_ID, issuer_id: ISSUER_ID, filepath: KEY_PATH)
+    app = Spaceship::ConnectAPI::App.find(APP_ID)
+    app.get_app_store_versions.first(3).each do |v|
+      UI.message("#{v.version_string} — #{v.app_store_state}")
+    end
+  end
+end

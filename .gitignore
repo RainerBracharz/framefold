@@ -6,3 +6,12 @@ build/
 DerivedData/
 *.mp4
 fftests
+
+# fastlane
+*.p8
+*.mobileprovision
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+fastlane/README.md
