@@ -91,4 +91,83 @@ platform :ios do
       UI.message("#{v.version_string} — #{v.app_store_state}")
     end
   end
+
+  desc "Vollständiger Prüfbericht -> fastlane/bericht.txt"
+  lane :check do
+    login
+    require "spaceship"
+    require "json"
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
+      key_id: KEY_ID, issuer_id: ISSUER_ID, filepath: KEY_PATH)
+
+    out = []
+    def out.say(line); self << line; end
+
+    app = Spaceship::ConnectAPI::App.find(APP_ID)
+    out.say "APP"
+    out.say "  Name:        #{app.name}"
+    out.say "  Bundle-ID:   #{app.bundle_id}"
+    out.say "  Primär:      #{app.primary_locale}"
+    out.say ""
+
+    app.get_app_store_versions.first(3).each do |v|
+      out.say "VERSION #{v.version_string} — #{v.app_store_state}"
+      out.say "  Freigabe:  #{v.release_type}"
+      begin
+        b = v.build
+        out.say "  Build:     #{b ? "#{b.version} (hochgeladen #{b.uploaded_date})" : 'KEIN BUILD ANGEHÄNGT'}"
+      rescue => e
+        out.say "  Build:     nicht lesbar (#{e.class})"
+      end
+      begin
+        v.get_app_store_version_localizations.each do |loc|
+          notes = (loc.whats_new || "").strip
+          out.say "  Notes [#{loc.locale}]: #{notes.empty? ? 'LEER' : notes.lines.first.strip + ' …'}"
+        end
+      rescue => e
+        out.say "  Notes:     nicht lesbar (#{e.class})"
+      end
+      out.say ""
+    end
+
+    # Bedienungshilfen – erst seit kurzem in der API, daher abgesichert
+    begin
+      resp  = Spaceship::ConnectAPI::App.client.get("apps/#{app.id}/accessibilityDeclarations")
+      raw   = resp.respond_to?(:body) ? resp.body : resp
+      raw   = JSON.parse(raw) if raw.is_a?(String)
+      items = (raw.is_a?(Hash) ? (raw["data"] || raw[:data]) : nil) || []
+      if items.empty?
+        out.say "BEDIENUNGSHILFEN: keine Angaben gefunden"
+      else
+        out.say "BEDIENUNGSHILFEN:"
+        items.each do |d|
+          attrs = d["attributes"] || {}
+          attrs.sort.each { |k, v| out.say "  #{k}: #{v}" }
+        end
+      end
+    rescue => e
+      out.say "BEDIENUNGSHILFEN: nicht abrufbar (#{e.class}: #{e.message[0, 120]})"
+    end
+    out.say ""
+
+    begin
+      resp = Spaceship::ConnectAPI::App.client.get("apps/#{app.id}/reviewSubmissions")
+      raw  = resp.respond_to?(:body) ? resp.body : resp
+      raw  = JSON.parse(raw) if raw.is_a?(String)
+      subs = (raw.is_a?(Hash) ? (raw["data"] || raw[:data]) : nil) || []
+      out.say "EINREICHUNGEN: #{subs.size}"
+      subs.last(3).each do |s|
+        a = s["attributes"] || {}
+        out.say "  #{a['state']} · eingereicht #{a['submittedDate']}"
+      end
+    rescue => e
+      out.say "EINREICHUNGEN: nicht lesbar (#{e.class}: #{e.message[0, 120]})"
+    end
+
+    # fastlane arbeitet bereits im Ordner fastlane/ – Pfad nicht doppeln
+    path = File.expand_path("bericht.txt", Dir.pwd)
+    File.write(path, out.join("\n") + "\n")
+    UI.success("Bericht geschrieben: #{path}")
+    UI.message(out.join("\n"))
+  end
 end
