@@ -1,19 +1,32 @@
+# macOS
 .DS_Store
-__pycache__/
-*.pyc
+
+# Xcode
 xcuserdata/
 build/
 DerivedData/
+*.mobileprovision
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+reference-pipeline/.venv/
+
+# Arbeitsmaterial: Rohvideos, Screenshots, Build-Protokolle, Zwischenstände.
+# Bleibt lokal liegen, gehört aber nicht in ein öffentliches Repository —
+# die veröffentlichten Bilder liegen direkt unter docs/.
+docs/assets/
+AppStore_Review/
+Beispielausgaben/
 *.mp4
 fftests
 
-# fastlane
+# fastlane — der API-Schlüssel darf niemals ins Repository
 *.p8
-*.mobileprovision
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/README.md
-
 fastlane/bericht.txt
