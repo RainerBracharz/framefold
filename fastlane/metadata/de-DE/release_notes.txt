@@ -1,5 +1,5 @@
-Bedienungshilfen: FrameFold unterstützt jetzt VoiceOver, größere Schrift und die Einstellung „Bewegung reduzieren".
+Schärfer: Die Kamera fixiert Fokus und Belichtung erst, wenn der Autofokus wirklich fertig ist — unscharfe Sessions gehören damit der Vergangenheit an. Tipp: Antippen im Sucher stellt jederzeit neu scharf.
 
-Langsamere Bildraten: neu ab 2 Bildern pro Sekunde — kurze Sequenzen laufen damit deutlich ruhiger.
+Auslösen ohne Wackeln: Die Lautstärketasten von Kopfhörern oder AirPods lösen die Aufnahme aus, ohne das Stativ zu berühren. Alternativ startet gedrückt halten des Auslösers einen 3-Sekunden-Countdown.
 
-Standbild am Ende: das letzte Bild kann ein bis drei Sekunden stehenbleiben, statt dass der Film abrupt endet.
+Schneller exportieren: Drei Presets — Story (9:16), Quadrat und Galerie (langsam, mit Standbild) — stellen alles mit einem Tipp ein. Und die App merkt sich deine letzte Wahl.
