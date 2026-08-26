@@ -320,10 +320,29 @@ final class LiveCaptureController: NSObject, ObservableObject {
         resetToContinuous()
         relockTask?.cancel()
         relockTask = Task { [weak self] in
-            // Automatik kurz einschwingen lassen, dann festhalten
-            try? await Task.sleep(nanoseconds: 900_000_000)
+            // Automatik einschwingen lassen – aber nicht stur eine feste Zeit:
+            // Bei nahen Motiven oder wenig Licht sucht der Autofokus länger,
+            // und wer mitten in der Suche einfriert, hat eine unscharfe Session.
+            await self?.waitUntilAutoSettles()
             guard let self, !Task.isCancelled else { return }
             self.lockCameraSettings()
+        }
+    }
+
+    /// Wartet, bis Autofokus und Belichtung wirklich fertig eingeschwungen
+    /// sind (mindestens 0,5 s, höchstens 4 s). Erst danach darf fixiert werden.
+    private func waitUntilAutoSettles() async {
+        try? await Task.sleep(nanoseconds: 500_000_000)
+        guard let device else { return }
+        let deadline = Date().addingTimeInterval(4.0)
+        while Date() < deadline {
+            if !device.isAdjustingFocus && !device.isAdjustingExposure {
+                // kurz bestätigen – der Fokus meldet zwischen zwei Suchläufen
+                // manchmal für einen Moment „fertig"
+                try? await Task.sleep(nanoseconds: 250_000_000)
+                if !device.isAdjustingFocus && !device.isAdjustingExposure { return }
+            }
+            try? await Task.sleep(nanoseconds: 100_000_000)
         }
     }
 
@@ -489,8 +508,26 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 status = .waitingForWork
                 // Für Stop-Motion: Belichtung, Fokus und Weißabgleich jetzt
                 // fixieren – die Auto-Regelung würde sonst zwischen den Bildern
-                // nachziehen und das Set „atmen" lassen.
-                lockCameraSettings()
+                // nachziehen und das Set „atmen" lassen. Aber erst, wenn der
+                // Autofokus wirklich fertig ist: sonst friert eine unscharfe
+                // Session ein (und die Handerkennung sieht nur noch Matsch).
+                relockTask?.cancel()
+                relockTask = Task { [weak self] in
+                    await self?.waitUntilAutoSettles()
+                    guard let self, !Task.isCancelled else { return }
+                    self.lockCameraSettings()
+                    // Einmal pro App-Leben erklären, wie man nachschärft –
+                    // der fixierte Fokus ist sonst nicht zu durchschauen.
+                    let key = "didExplainTapFocus"
+                    if !UserDefaults.standard.bool(forKey: key) {
+                        UserDefaults.standard.set(true, forKey: key)
+                        self.hint = "Scharf gestellt und fixiert. Wirkt es unscharf? Tippe im Sucher auf dein Werk."
+                        Task { [weak self] in
+                            try? await Task.sleep(nanoseconds: 6_000_000_000)
+                            if self?.hint?.hasPrefix("Scharf gestellt") == true { self?.hint = nil }
+                        }
+                    }
+                }
                 startIntervalIfNeeded()
             }
             return
@@ -545,6 +582,35 @@ final class LiveCaptureController: NSObject, ObservableObject {
     func captureNow() {
         guard let frame = latestFrame else { return }
         capture(frame: frame)
+    }
+
+    // MARK: Selbstauslöser
+
+    /// Countdown des Selbstauslösers (nil = inaktiv) – wird groß im Sucher
+    /// angezeigt, damit man sieht, wann es so weit ist.
+    @Published var selfTimerCount: Int?
+    private var selfTimerTask: Task<Void, Never>?
+
+    /// Auslöser gedrückt halten: löst nach `seconds` Sekunden aus, wenn das
+    /// Wackeln vom Antippen des Stativs abgeklungen ist. Ein zweiter Druck
+    /// bricht den Countdown ab.
+    func startSelfTimer(seconds: Int = 3) {
+        if selfTimerCount != nil {
+            selfTimerTask?.cancel()
+            selfTimerCount = nil
+            return
+        }
+        selfTimerTask?.cancel()
+        selfTimerTask = Task { [weak self] in
+            for remaining in stride(from: seconds, through: 1, by: -1) {
+                self?.selfTimerCount = remaining
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                if Task.isCancelled { self?.selfTimerCount = nil; return }
+            }
+            guard let self, !Task.isCancelled else { return }
+            self.selfTimerCount = nil
+            self.captureNow()
+        }
     }
 
     /// Nimmt den letzten Frame zurück (Undo im Thumbnail-Streifen).

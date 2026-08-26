@@ -143,7 +143,7 @@ struct ProjectsView: View {
 struct ProjectDetailView: View {
     let project: Project
     @EnvironmentObject var store: ProjectStore
-    @State private var exportSettings = PipelineSettings()
+    @State private var exportSettings = PipelineSettings.restored()
     @State private var isExporting = false
     @State private var exportProgress = 0.0
     @State private var exportURL: URL?
@@ -283,9 +283,11 @@ struct ProjectDetailView: View {
         .sheet(item: $shareItem) { item in
             ActivityView(items: [item.url])
         }
-        .onChange(of: exportSettings) { _, _ in
+        .onChange(of: exportSettings) { _, newValue in
             // Einstellungen geändert → das fertige Video passt nicht mehr dazu
             exportURL = nil
+            // … und die Wahl wird zum neuen Standard für den nächsten Export.
+            newValue.persist()
         }
         .onChange(of: currentProject.frameCount) { _, _ in
             // Frames entfernt/ergänzt → dito
@@ -300,6 +302,38 @@ struct ProjectDetailView: View {
 
     /// Eine Einstellzeile: links wofür, rechts der Wert – sonst steht im
     /// Panel nur „Original" oder „Normal", ohne dass man weiß, was gemeint ist.
+    // MARK: Export-Presets
+
+    private var isStoryPreset: Bool {
+        exportSettings.aspect == .reel && exportSettings.outputFPS == 12
+    }
+    private var isSquarePreset: Bool {
+        exportSettings.aspect == .square && exportSettings.outputFPS == 10
+    }
+    private var isGalleryPreset: Bool {
+        exportSettings.aspect == .original && exportSettings.outputFPS == 2
+    }
+
+    private func presetChip(_ label: String, active: Bool,
+                            action: @escaping () -> Void) -> some View {
+        Button {
+            withAnimation(.snappy(duration: 0.15)) { action() }
+        } label: {
+            Text(label)
+                .font(Theme.caption(10))
+                .tracking(1.4)
+                .textCase(.uppercase)
+                .foregroundStyle(active ? Theme.paper : Theme.ink)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 7)
+                .background(active ? Theme.ink : Theme.paper)
+                .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Preset \(label)")
+        .accessibilityAddTraits(active ? .isSelected : [])
+    }
+
     private func optionRow<Content: View>(_ label: String,
                                           @ViewBuilder content: () -> Content) -> some View {
         HStack(spacing: 12) {
@@ -325,6 +359,31 @@ struct ProjectDetailView: View {
                 CatalogLabel("Export", color: Theme.ink)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 8)
+
+                // Schnellwahl: ein Tipp stellt alles ein. Die Regler darunter
+                // bleiben für Feinarbeit – aber meistens reicht ein Preset.
+                HStack(spacing: 8) {
+                    presetChip("Story", active: isStoryPreset) {
+                        exportSettings.aspect = .reel
+                        exportSettings.outputFPS = 12
+                        exportSettings.loopMode = .none
+                        exportSettings.holdLastFrameSeconds = 1
+                    }
+                    presetChip("Quadrat", active: isSquarePreset) {
+                        exportSettings.aspect = .square
+                        exportSettings.outputFPS = 10
+                        exportSettings.loopMode = .none
+                        exportSettings.holdLastFrameSeconds = 1
+                    }
+                    presetChip("Galerie", active: isGalleryPreset) {
+                        exportSettings.aspect = .original
+                        exportSettings.outputFPS = 2
+                        exportSettings.loopMode = .none
+                        exportSettings.holdLastFrameSeconds = 2
+                    }
+                    Spacer()
+                }
+                .padding(.bottom, 10)
 
                 // Beschriftete Zeilen: links wofür, rechts der Wert
                 VStack(spacing: 0) {

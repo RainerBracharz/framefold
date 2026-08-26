@@ -1,5 +1,6 @@
 import SwiftUI
 import AVFoundation
+import AVKit   // AVCaptureEventInteraction (Hardware-Fernauslöser)
 import PhotosUI
 import UIKit
 
@@ -390,6 +391,9 @@ struct LiveCaptureView: View {
             cameraLayer
                 .frame(width: geo.size.width, height: geo.size.height)
                 .clipped()
+                // Kopfhörer-/AirPods-Tasten und BT-Fernbedienungen lösen aus,
+                // ohne das Stativ zu berühren.
+                .background(HardwareShutterBridge { controller.captureNow() })
 
             // Aufnahme-Blitz über dem Kamerabild, unter der Bedienung
             if flashOpacity > 0 {
@@ -413,8 +417,9 @@ struct LiveCaptureView: View {
 
                 if let hint = controller.hint {
                     // Im Einfach-Modus sind die Einstellungen unerreichbar –
-                    // der Rat muss ohne sie auskommen.
-                    Text(mode == .basic
+                    // Hinweise, die dorthin verweisen, brauchen eine einfache
+                    // Fassung. Alle anderen gelten wörtlich.
+                    Text(mode == .basic && hint.contains("Einstellungen")
                          ? "Zu viel Wackeln – leg das iPhone irgendwo auf oder lehne es an."
                          : hint)
                         .font(Theme.mono(11))
@@ -572,8 +577,22 @@ struct LiveCaptureView: View {
                             .animation(.linear(duration: 0.1), value: p)
                     }
                     Circle().fill(Theme.paperOnDark).frame(width: core, height: core)
+                    if let n = controller.selfTimerCount {
+                        Text("\(n)")
+                            .font(Theme.serif(30, .regular))
+                            .foregroundStyle(Theme.darkroom)
+                            .contentTransition(.numericText(countsDown: true))
+                            .animation(.snappy(duration: 0.2), value: n)
+                    }
                 }
             }
+            .simultaneousGesture(
+                // Gedrückt halten = Selbstauslöser: das Wackeln vom Antippen
+                // des Stativs klingt ab, bevor ausgelöst wird.
+                LongPressGesture(minimumDuration: 0.5).onEnded { _ in
+                    controller.startSelfTimer()
+                }
+            )
             .accessibilityLabel("Auslöser")
             .accessibilityHint("Nimmt sofort ein Bild auf. Sonst löst die Kamera von selbst aus, sobald die Hände aus dem Bild sind.")
 
@@ -1037,6 +1056,7 @@ struct LiveSettingsView: View {
                     tipRow("hand.raised", "iPhone nicht berühren: aufs Stativ stellen und den Auto-Shutter arbeiten lassen (oder den runden Knopf).")
                     tipRow("lock", "Kamera bleibt fixiert: FrameFold sperrt Belichtung, Fokus und Weißabgleich nach der kurzen Kalibrierung – so driftet zwischen den Bildern nichts.")
                     tipRow("square.2.layers.3d", "Drift früh erkennen: Zwiebelhaut anlassen und die Aufnahme ab und zu mit dem ersten Bild vergleichen.")
+                    tipRow("timer", "Ohne Wackeln auslösen: Auslöser gedrückt halten startet einen 3-Sekunden-Countdown. Auch die Lautstärketasten von Kopfhörern oder AirPods lösen aus.")
                 } header: {
                     CatalogLabel("Aufnahme-Tipps")
                 }
@@ -1113,4 +1133,30 @@ struct CameraPreview: UIViewRepresentable {
             layer as! AVCaptureVideoPreviewLayer
         }
     }
+}
+
+
+// MARK: Hardware-Fernauslöser
+
+/// Lautstärketasten, AirPods-Stiel und Bluetooth-Kamerafernbedienungen lösen
+/// die Aufnahme aus, ohne das Stativ zu berühren – über Apples offizielle
+/// Capture-Event-API (iOS 17.2+). Die unsichtbare View trägt die Interaction.
+struct HardwareShutterBridge: UIViewRepresentable {
+    let onTrigger: () -> Void
+
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        view.isUserInteractionEnabled = false
+        if #available(iOS 17.2, *) {
+            let trigger = onTrigger
+            let interaction = AVCaptureEventInteraction { event in
+                if event.phase == .ended { trigger() }
+            }
+            interaction.isEnabled = true
+            view.addInteraction(interaction)
+        }
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {}
 }

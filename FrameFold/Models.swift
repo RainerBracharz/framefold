@@ -6,7 +6,7 @@ import CoreGraphics
 /// Einstellungen der Stopmotion-Pipeline.
 /// Alle Werte sind bewusst als Regler exponiert, damit sie sich
 /// an Aldos Arbeitsweise anpassen lassen.
-struct PipelineSettings: Equatable {
+struct PipelineSettings: Equatable, Codable {
     /// Abtastrate aus dem Quellvideo (Frames pro Sekunde der Analyse).
     /// Seit der Batch-Dekodierung ist dichtes Abtasten billig – 10 fps treffen
     /// auch kurze Haltemomente zuverlässig und finden schärfere Kandidaten.
@@ -68,7 +68,7 @@ struct PipelineSettings: Equatable {
 }
 
 /// Auflösung des exportierten Videos (maximale Kantenlänge).
-enum ExportResolution: String, CaseIterable, Identifiable {
+enum ExportResolution: String, CaseIterable, Identifiable, Codable {
     case p1080 = "1080p"
     case original = "Original"
 
@@ -84,7 +84,7 @@ enum ExportResolution: String, CaseIterable, Identifiable {
 }
 
 /// Stil der Überblendung zwischen Bildern.
-enum TransitionStyle: String, CaseIterable, Identifiable {
+enum TransitionStyle: String, CaseIterable, Identifiable, Codable {
     case crease = "Falz"        // diagonale Falzkante
     case facet  = "Facetten"    // triangulierte Facetten (nach Tolinos Faltstruktur)
     case weave  = "Verwebung"   // eingewobene Bildstreifen (nach Tolinos Webtechnik)
@@ -115,7 +115,7 @@ enum AppMode: Int, CaseIterable, Identifiable {
 }
 
 /// Export-Seitenverhältnisse (Center-Crop auf das Zielformat).
-enum AspectPreset: String, CaseIterable, Identifiable {
+enum AspectPreset: String, CaseIterable, Identifiable, Codable {
     case original = "Original"
     case reel = "9:16 Reel"
     case square = "1:1"
@@ -136,7 +136,7 @@ enum AspectPreset: String, CaseIterable, Identifiable {
 
 /// Abspielmodus: normal, Boomerang (vor + zurück) oder rückwärts
 /// ("das Werk faltet sich selbst auseinander").
-enum LoopMode: String, CaseIterable, Identifiable {
+enum LoopMode: String, CaseIterable, Identifiable, Codable {
     case none = "Normal"
     case boomerang = "Boomerang"
     case reverse = "Rückwärts"
@@ -203,6 +203,27 @@ enum PipelineStage: Equatable {
         case .assembling: return "Baue Stopmotion…"
         case .done: return "Fertig"
         case .failed(let msg): return "Fehler: \(msg)"
+        }
+    }
+}
+
+// MARK: Gedächtnis für Export-Einstellungen
+
+extension PipelineSettings {
+    private static let storageKey = "lastExportSettings"
+
+    /// Die zuletzt benutzten Einstellungen – wer einmal 2 fps und Story-Format
+    /// gewählt hat, will das beim nächsten Export nicht neu einstellen.
+    static func restored() -> PipelineSettings {
+        guard let data = UserDefaults.standard.data(forKey: storageKey),
+              let saved = try? JSONDecoder().decode(PipelineSettings.self, from: data)
+        else { return PipelineSettings() }
+        return saved
+    }
+
+    func persist() {
+        if let data = try? JSONEncoder().encode(self) {
+            UserDefaults.standard.set(data, forKey: Self.storageKey)
         }
     }
 }

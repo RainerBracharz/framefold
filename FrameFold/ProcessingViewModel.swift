@@ -20,7 +20,9 @@ final class ProcessingViewModel: ObservableObject {
 
     @Published var stage: PipelineStage = .idle
     @Published var result: PipelineResult?
-    @Published var settings = PipelineSettings()
+    @Published var settings = PipelineSettings.restored() {
+        didSet { settings.persist() }
+    }
     @Published var reviewFrames: [ReviewFrame] = []
     @Published var isRecomputing = false
     /// Quelle des letzten Laufs – für "Als Projekt sichern"
