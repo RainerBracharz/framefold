@@ -37,6 +37,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     enum Status: Equatable {
         case idle
         case calibrating          // misst 2 s das Grundrauschen der Szene
+        case focusing             // Bild noch nicht scharf – es wird nichts gespeichert
         case waitingForWork       // Szene ruhig, aber noch nichts Neues passiert
         case working              // Bewegung/Hände erkannt
         case stabilizing(Double)  // Countdown bis Auto-Shutter (0..1)
@@ -52,6 +53,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 return playful ? "Gleich geht's los…" : "Kamera startet…"
             case .calibrating:
                 return playful ? "Halt kurz still…" : "Kalibriere – kurz ruhig lassen…"
+            case .focusing:
+                return playful ? "Moment, wird scharf…" : "Noch nicht scharf…"
             case .waitingForWork:
                 return playful ? "Los — ich schau zu" : "Bereit – arbeite einfach"
             case .working:
@@ -62,9 +65,126 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 return playful ? "Klick!" : "Bild aufgenommen ✓"
             }
         }
+
+        /// Zustände, die sofort sichtbar sein müssen: Sie erklären entweder
+        /// eine Verzögerung oder quittieren eine Aktion des Nutzers.
+        /// `.focusing` gehört bewusst NICHT dazu – es würde sonst im
+        /// Wechsel mit `.stabilizing` blinken, während das Tor auf Schärfe
+        /// wartet. Es bekommt stattdessen eine Mindesthaltezeit.
+        var isUrgent: Bool {
+            switch self {
+            case .captured, .calibrating, .idle: return true
+            default: return false
+            }
+        }
+
+        /// Vergleich ohne den Fortschrittswert: `.stabilizing(0.2)` und
+        /// `.stabilizing(0.9)` sind derselbe Zustand, nur weiter fortgeschritten.
+        func sameKind(as other: Status) -> Bool {
+            switch (self, other) {
+            case (.idle, .idle), (.calibrating, .calibrating),
+                 (.focusing, .focusing), (.waitingForWork, .waitingForWork),
+                 (.working, .working), (.stabilizing, .stabilizing),
+                 (.captured, .captured):
+                return true
+            default:
+                return false
+            }
+        }
     }
 
-    @Published var status: Status = .idle
+    /// Der im Sucher angezeigte Zustand. Bewusst träger als der interne:
+    /// Zwischen „Arbeit erkannt" und „Ruhig halten" wechselt der Automat
+    /// mehrmals pro Sekunde, und ein flackernder Text macht das Set unruhig,
+    /// ohne irgendetwas zu erklären.
+    @Published private(set) var status: Status = .idle
+
+    /// Interner Wahrheitswert – hierauf reagiert die Logik.
+    private var rawStatus: Status = .idle
+    private var pendingStatus: Status?
+    private var pendingSince: Date?
+    private var lastStatusChange = Date.distantPast
+    /// So lange muss ein neuer Zustand anhalten, bevor er angezeigt wird.
+    private static let statusDwell: TimeInterval = 0.35
+    /// Nach dieser Zeit wird der interne Zustand auf jeden Fall angezeigt –
+    /// sonst könnten zwei schnell wechselnde Zustände (typisch: „arbeitet"
+    /// und „ruhig halten", wenn die Bewegung um die Schwelle pendelt) die
+    /// Anzeige beliebig lange auf einem veralteten Wert einfrieren.
+    private static let statusMaxStale: TimeInterval = 1.2
+    /// So lange bleibt „Noch nicht scharf…" mindestens stehen.
+    private static let focusingMinHold: TimeInterval = 1.2
+
+    /// Setzt den Zustand und entscheidet, ob er sofort angezeigt werden darf.
+    private func setStatus(_ new: Status) {
+        rawStatus = new
+        // „Noch nicht scharf" erklärt als einziger Zustand, warum gerade
+        // nichts gespeichert wird. Es erscheint sofort und bleibt dann eine
+        // Weile stehen – sonst sieht der Nutzer nur einen Fortschrittsbalken,
+        // der immer wieder bei null anfängt, und erfährt nie, woran es liegt.
+        // Bewusst VOR der Gleichheitsprüfung: Jede erneute Blockade muss die
+        // Haltezeit verlängern, sonst blinkt es im Sekundentakt doch wieder.
+        if new == .focusing {
+            publish(new)
+            return
+        }
+        // Fortschritt innerhalb desselben Zustands ungebremst durchreichen,
+        // sonst ruckelt der Balken.
+        if new.sameKind(as: status) {
+            if new != status { status = new }
+            pendingStatus = nil
+            pendingSince = nil
+            return
+        }
+        if status == .focusing, !new.isUrgent,
+           Date().timeIntervalSince(lastStatusChange) < Self.focusingMinHold {
+            pendingStatus = new
+            pendingSince = Date()
+            return
+        }
+        // Wechsel zu oder von einem dringenden Zustand: sofort.
+        if new.isUrgent || status.isUrgent {
+            publish(new)
+            return
+        }
+        // Notbremse gegen Einfrieren.
+        if Date().timeIntervalSince(lastStatusChange) >= Self.statusMaxStale {
+            publish(new)
+            return
+        }
+        guard let pending = pendingStatus, pending.sameKind(as: new) else {
+            pendingStatus = new
+            pendingSince = Date()
+            return
+        }
+        pendingStatus = new
+        if let since = pendingSince, Date().timeIntervalSince(since) >= Self.statusDwell {
+            publish(new)
+        }
+    }
+
+    /// Reicht einen zurückgehaltenen Zustandswechsel nach. Der Dämpfer wird
+    /// sonst nur durch den nächsten `setStatus` bewegt – und den gibt es im
+    /// Intervallmodus nicht, weil die Analyse dort früher aussteigt. „Noch
+    /// nicht scharf" bliebe dann bis zur nächsten Aufnahme stehen.
+    private func flushPendingStatus() {
+        guard !rawStatus.sameKind(as: status) else { return }
+        if status == .focusing,
+           Date().timeIntervalSince(lastStatusChange) < Self.focusingMinHold { return }
+        let waited = Date().timeIntervalSince(lastStatusChange)
+        let held = pendingSince.map { Date().timeIntervalSince($0) } ?? 0
+        if waited >= Self.statusMaxStale || held >= Self.statusDwell {
+            publish(rawStatus)
+        }
+    }
+
+    private func publish(_ new: Status) {
+        // Nur bei echter Änderung zuweisen – eine wiederholte Zuweisung
+        // desselben Werts würde SwiftUI grundlos neu zeichnen lassen.
+        if status != new { status = new }
+        lastStatusChange = Date()
+        pendingStatus = nil
+        pendingSince = nil
+    }
     @Published var capturedCount = 0
     @Published var lastCapturedImage: UIImage?   // für Onion-Skin
     @Published var permissionDenied = false
@@ -72,6 +192,35 @@ final class LiveCaptureController: NSObject, ObservableObject {
     @Published var cameraUnavailable = false
     /// Klartext-Hinweis, wenn der Auslöser aus erkennbarem Grund nicht kommt.
     @Published var hint: String?
+
+    /// Hinweise rund um den Fokus. Bewusst getrennt von `hint`: Der wird bei
+    /// ruhiger Szene laufend geleert, und genau dann entstehen Fokusmeldungen –
+    /// sie wären nie länger als einen Frame zu sehen.
+    @Published var focusHint: String? {
+        didSet { scheduleFocusHintClear() }
+    }
+    private var focusHintTask: Task<Void, Never>?
+
+    /// Setzt einen Fokus-Hinweis nur, wenn er nicht ohnehin schon steht.
+    /// Sonst würde eine wiederkehrende Meldung (Tor blockiert im
+    /// Sekundentakt) den Timer immer wieder neu starten, nie ablaufen und
+    /// bei jedem Aufruf den ganzen Sucher neu zeichnen lassen.
+    private func setFocusHint(_ text: String) {
+        guard focusHint != text else { return }
+        focusHint = text
+    }
+
+    /// Fokus-Hinweise verschwinden nach acht Sekunden von selbst.
+    private func scheduleFocusHintClear() {
+        focusHintTask?.cancel()
+        guard focusHint != nil else { return }
+        focusHintTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 8_000_000_000)
+            guard let self, !Task.isCancelled else { return }
+            self.focusHintTask = nil
+            self.focusHint = nil
+        }
+    }
 
     let session = AVCaptureSession()
     /// Aktuelles Aufnahmegerät – zum Fixieren von Belichtung/Fokus/Weißabgleich.
@@ -109,6 +258,230 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Erster Frame der Session – als Drift-Referenz im Onion-Skin.
     @Published var firstCapturedImage: UIImage?
 
+    // MARK: Aufnahmeart
+
+    /// Steht das iPhone (Stativ, Tisch) oder wird es gehalten? Das entscheidet,
+    /// ob der Fokus fixiert werden darf. Am Stativ ist ein fester Fokus das
+    /// Beste, was man tun kann – aus der Hand ist er falsch, weil sich der
+    /// Abstand zum Werk mit jeder Bewegung ändert.
+    enum Rig: Int, CaseIterable, Identifiable {
+        case tripod, handheld
+        var id: Int { rawValue }
+        var label: String { self == .tripod ? "Stativ" : "Aus der Hand" }
+        var shortLabel: String { self == .tripod ? "STATIV" : "HAND" }
+        /// Aufschlag auf die eingestellte Ruhezeit. Aus der Hand darf länger
+        /// geruht werden – das Zittern der Hand erzeugt sonst nie ein
+        /// sauberes Ruhefenster. Bewusst additiv, damit die Einstellung des
+        /// Nutzers erhalten bleibt.
+        var extraStableSeconds: Double { self == .tripod ? 0 : 0.4 }
+        /// Nur am Stativ wird der Fokus eingefroren.
+        var locksFocus: Bool { self == .tripod }
+    }
+
+    /// Ruhezeit, die tatsächlich gilt: Einstellung plus Aufschlag der
+    /// Aufnahmeart.
+    private var effectiveStableSeconds: Double {
+        stableSeconds + rig.extraStableSeconds
+    }
+
+    @Published private(set) var rig: Rig = .tripod
+    /// Solange `true`, folgt die Aufnahmeart dem Bewegungssensor. Sobald der
+    /// Nutzer selbst umschaltet, hört die Automatik auf – seine Entscheidung
+    /// wiegt schwerer als unsere Messung.
+    @Published private(set) var rigIsAutomatic = true
+    /// Letzter Stand des Bewegungssensors. `onChange` im Sucher feuert nur bei
+    /// einer Flanke – wer die zweite Sitzung im selben Zustand beginnt wie er
+    /// die erste beendet hat, bekäme sonst nie eine Meldung.
+    private var lastMountedSignal = true
+    /// Bis dahin wird die Sensor-Erkennung ignoriert – nach eigener Bedienung.
+    /// 2,5 s, weil `MotionLevel` nach einem festen Tipp aufs Stativ selbst
+    /// rund zwei Sekunden braucht, bis es wieder „steht" meldet.
+    private var suppressRigUntil = Date.distantPast
+
+    /// Holt eine aufgeschobene Sensormeldung nach. Wird aus der Analyse
+    /// gepulst, damit eine während der Bedienung verschluckte Flanke nicht
+    /// für den Rest der Sitzung verloren ist.
+    private func serveRigDetection() {
+        guard rigIsAutomatic, Date() >= suppressRigUntil else { return }
+        let detected: Rig = lastMountedSignal ? .tripod : .handheld
+        guard detected != rig else { return }
+        apply(rig: detected)
+    }
+
+    /// Wird vom Sucher aus dem Bewegungssensor gespeist.
+    func noteDeviceIsMounted(_ mounted: Bool) {
+        lastMountedSignal = mounted
+        guard rigIsAutomatic else { return }
+        // Ein Tipp auf den Sucher oder den Auslöser wackelt am Stativ – das
+        // ist Bedienung, keine Aufnahmeart. Ohne diese Sperre bräche genau
+        // der Tipp, zu dem die App auffordert („Tippe im Sucher auf dein
+        // Werk"), seinen eigenen Fokuslauf ab. Die Meldung wird dabei nur
+        // aufgeschoben, nicht verworfen: `serveRigDetection()` holt sie nach.
+        // Sie kommt nämlich nur bei einer Flanke – wer das iPhone in genau
+        // diesem Moment hochnimmt und in der Hand behält, bekäme sonst nie
+        // wieder eine, und der Fokus bliebe auf dem Stativabstand stehen.
+        guard Date() >= suppressRigUntil else { return }
+        let detected: Rig = mounted ? .tripod : .handheld
+        guard detected != rig else { return }
+        apply(rig: detected)
+    }
+
+    /// Manuelles Umschalten im Sucher.
+    func setRig(_ new: Rig) {
+        rigIsAutomatic = false
+        guard new != rig else { return }
+        apply(rig: new)
+    }
+
+    private func apply(rig new: Rig) {
+        let wasHandheld = rig == .handheld
+        rig = new
+        if new.locksFocus {
+            // Wieder abgestellt: einmal sauber scharfstellen und fixieren.
+            // Gedrosselt wie der Wächter – wer sich übers Stativ beugt und es
+            // streift, soll die Kamera nicht mehrfach neu einmessen lassen.
+            if wasHandheld, calibrationSamples == nil {
+                // Die Drossel darf die Fixierung nur verzögern, nicht
+                // verschlucken: Wer das Stativ zweimal kurz hintereinander
+                // berührt, hätte sonst für den Rest der Sitzung gar keinen
+                // fixierten Fokus mehr – und damit auch keinen Wächter.
+                pendingRigRelock = true
+            }
+        } else {
+            // In die Hand genommen: Fokus sofort wieder freigeben, sonst
+            // bleibt die ganze Sitzung auf dem alten Abstand hängen. Eine
+            // offene Bitte zu fixieren ist damit gegenstandslos.
+            pendingRigRelock = false
+            focusTask?.cancel()
+            focusTask = nil
+            releaseFocusOnly()
+            // Der abgebrochene Task kommt nicht mehr dazu, den Zustand
+            // aufzulösen – im Intervallmodus bliebe „Noch nicht scharf"
+            // sonst bis zum nächsten Takt stehen.
+            if rawStatus == .focusing { setStatus(.waitingForWork) }
+        }
+    }
+
+    // MARK: Schärfe
+
+    /// Rohwert (Laplace-Varianz) des aktuellen Sucherbilds.
+    private var sharpRaw: Double = 0
+
+    /// Messlatte: der beste Schärfewert, der in dieser Sitzung bei ruhiger
+    /// Szene gesehen wurde. Steigt sofort, sinkt nur sehr langsam.
+    ///
+    /// Ein gleitendes Fenster wäre hier der naheliegende, aber falsche
+    /// Ansatz: Bleibt das Bild dauerhaft unscharf, fallen die scharfen Werte
+    /// nach ein paar Sekunden heraus, die Messlatte sinkt auf den unscharfen
+    /// Istwert – und das Schärfe-Tor öffnet sich für genau die Bilder, die es
+    /// verhindern soll. Der langsame Zerfall (Halbwertszeit ~35 s) lässt
+    /// echte Motivwechsel zu, ohne den Fehler zu verdecken.
+    private var sharpReference: Double = 0
+    /// Seit wann das Schärfe-Tor ununterbrochen blockiert – Notausstieg,
+    /// falls die Messlatte durch ein strukturreiches Motiv zu hoch steht und
+    /// das neue Motiv sie nie erreichen kann.
+    private var gateBlockedSince: Date?
+    /// Schärfe im Moment des Fixierens – die Messlatte für den Wächter.
+    private var sharpAtLock: Double = 0
+    /// Seit wann das Bild trotz fixiertem Fokus deutlich unschärfer ist.
+    private var blurrySince: Date?
+    /// Zeitpunkt der letzten automatischen Nachfokussierung.
+    private var lastAutoRefocus = Date.distantPast
+    /// Wie oft in dieser Sitzung schon automatisch nachgestellt wurde.
+    private var autoRefocusCount = 0
+    /// Eigene Drossel für den Wechsel der Aufnahmeart – teilt man sie mit dem
+    /// Wächter, verschluckt eine gerade erfolgte Nachfokussierung das
+    /// Fixieren beim Abstellen aufs Stativ, und zwar ersatzlos.
+    private var lastRigRelock = Date.distantPast
+    /// Offene Bitte, nach dem Abstellen aufs Stativ neu zu fixieren.
+    private var pendingRigRelock = false
+    /// Läuft gerade eine Sitzung? Schützt gegen Frames, die nach `stop()`
+    /// noch aus der Kamera-Warteschlange nachrücken.
+    private var isRunning = false
+
+    /// Holt eine gedrosselte Fixierung nach, sobald es passt. Wird aus der
+    /// Analyse gepulst.
+    private func servePendingRigRelock() {
+        guard pendingRigRelock, rig.locksFocus, calibrationSamples == nil,
+              focusTask == nil, currentMotion <= motionThreshold,
+              Date().timeIntervalSince(lastRigRelock) > 5 else { return }
+        pendingRigRelock = false
+        lastRigRelock = Date()
+        setStatus(.focusing)
+        relockFocusOnly()
+    }
+    /// Ist der Fokus gerade eingefroren?
+    private var focusIsLocked = false
+    /// Dieses Gerät kann den Fokus gar nicht fixieren (Simulator, fehlende
+    /// Unterstützung). Dann ist Nachfokussieren sinnlos.
+    private var focusLockUnavailable = false
+
+    /// Unterhalb dieses Rohwerts hat das Motiv schlicht keine Struktur
+    /// (weißes Blatt, glatte Fläche). Dann darf die Schärfeprüfung nicht
+    /// blockieren – sie hätte nichts, woran sie messen könnte.
+    private static let minMeaningfulSharpness: Double = 15
+    /// Ab diesem Anteil am Bestwert gilt der Fokus als „sitzt".
+    private static let lockRatio: Double = 0.88
+    /// Darunter wird kein Bild gespeichert.
+    private static let captureRatio: Double = 0.72
+    /// Darunter greift der Wächter und stellt neu scharf.
+    private static let watchdogRatio: Double = 0.55
+
+    /// Hat das Motiv überhaupt genug Struktur, um Schärfe beurteilen zu können?
+    private var sharpnessIsMeaningful: Bool {
+        sharpReference >= Self.minMeaningfulSharpness
+    }
+
+    /// Ist das Sucherbild scharf genug, um es ins Werk zu legen?
+    var isSharpEnough: Bool {
+        guard sharpnessIsMeaningful else { return true }
+        return sharpRaw >= sharpReference * Self.captureRatio
+    }
+
+    /// Setzt alles zurück, was zur Schärfebeurteilung eines Aufbaus gehört.
+    private func resetSharpnessState() {
+        sharpRaw = 0
+        sharpReference = 0
+        sharpAtLock = 0
+        gateBlockedSince = nil
+        blurrySince = nil
+        focusIsLocked = false
+        autoRefocusCount = 0
+        lastAutoRefocus = .distantPast
+        lastRigRelock = .distantPast
+        pendingRigRelock = false
+        focusLockUnavailable = false
+    }
+
+    /// Nimmt einen Schärfewert auf. `calm` sagt, ob die Szene ruhig genug ist,
+    /// um daraus die Messlatte fortzuschreiben – während Hände im Bild sind,
+    /// misst die Laplace-Varianz deren Struktur, nicht den Fokus.
+    private func noteSharpness(_ value: Double, calm: Bool) {
+        sharpRaw = value
+        // Der Notausstieg des Tores darf nur eine UNUNTERBROCHENE Blockade
+        // messen. Ohne dieses Zurücksetzen bliebe der Zeitstempel über
+        // Arbeitsphasen hinweg stehen und das Ventil würde beim nächsten
+        // unscharfen Moment sofort feuern – und die Messlatte auf Unschärfe
+        // setzen. Genau der Fehler, den das Tor verhindern soll.
+        if !calm || isSharpEnough { gateBlockedSince = nil }
+        guard calm else { return }
+        // steigt sofort, zerfällt langsam (Halbwertszeit ~35 s bei 10 Hz)
+        sharpReference = max(sharpReference * 0.998, value)
+    }
+
+    /// Notausstieg für das Schärfe-Tor: Steht die Messlatte durch ein
+    /// vorheriges, strukturreiches Motiv zu hoch, könnte ein glattes Blatt sie
+    /// nie erreichen – die App würde still gar nichts mehr aufnehmen. Nach
+    /// acht Sekunden Blockade wird die Latte auf das aktuelle Motiv gesetzt.
+    private func releaseGateIfStuck() -> Bool {
+        if gateBlockedSince == nil { gateBlockedSince = Date() }
+        guard let since = gateBlockedSince,
+              Date().timeIntervalSince(since) > 8 else { return false }
+        sharpReference = sharpRaw
+        gateBlockedSince = nil
+        return true
+    }
+
     private var previousGray: [UInt8]?
     private var stableSince: Date?
     private var armed = false            // erst nach erkannter Arbeit wieder auslösen
@@ -120,7 +493,12 @@ final class LiveCaptureController: NSObject, ObservableObject {
     private let videoQueue = DispatchQueue(label: "framefold.livecapture")
     private var onCapture: ((Data) -> Void)?
     private var intervalTask: Task<Void, Never>?
-    private var relockTask: Task<Void, Never>?
+    /// Getrennte Slots: Ein abgebrochener Fokuslauf darf die Belichtung
+    /// nicht mit sich reissen.
+    private var focusTask: Task<Void, Never>?
+    private var exposureTask: Task<Void, Never>?
+    /// Wartet auf Schärfe, nachdem manuell ausgelöst wurde.
+    private var pendingCaptureTask: Task<Void, Never>?
     /// Beginn der laufenden Kalibrierung – für den Sicherheits-Timeout.
     private var calibrationStart: Date?
     /// Seit wann die Szene ununterbrochen zu unruhig zum Auslösen ist.
@@ -166,6 +544,18 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     /// Sauberer Start: Reste einer vorherigen Session verwerfen.
     private func resetSessionState() {
+        isRunning = true
+        // Reste der Vorsitzung abbrechen, bevor die Kamera entriegelt wird:
+        // Ein noch laufender Fokuslauf würde sonst die alte Linsenposition in
+        // die neue Sitzung hineinfrieren.
+        focusTask?.cancel(); focusTask = nil
+        exposureTask?.cancel(); exposureTask = nil
+        pendingCaptureTask?.cancel(); pendingCaptureTask = nil
+        // Zuerst die Hardware entriegeln: Ohne das stünde die Linse in einer
+        // zweiten Sitzung noch auf der fixierten Position der ersten, der
+        // Autofokus meldete sofort „fertig", und die App würde eine womöglich
+        // unscharfe Einstellung erneut einfrieren.
+        resetToContinuous()
         sessionStart = Date()
         exposureInfo = nil
         capturedCount = 0
@@ -179,13 +569,26 @@ final class LiveCaptureController: NSObject, ObservableObject {
         restlessSince = nil
         currentMotion = 0
         hint = nil
-        status = .calibrating
+        setStatus(.calibrating)
         calibrationSamples = []
         calibrationStart = Date()
         armed = false // scharf erst nach der Kalibrierung
+        // Schärfe-Historie gehört zur Sitzung, nicht zum App-Lauf: Ein
+        // Bestwert vom letzten Motiv wäre hier eine falsche Messlatte.
+        resetSharpnessState()
+        focusHint = nil
+        // Jede Sitzung beginnt wieder mit der Sensorerkennung – sonst wirkt
+        // ein einziger Tipp für den Rest des App-Laufs nach, ohne dass man
+        // es sieht. Auch die Aufnahmeart selbst: Controller und Sensor sind
+        // `@StateObject` derselben View und überleben das Sitzungsende. Eine
+        // zweite Sitzung würde sonst als „HAND" starten, obwohl das iPhone
+        // die ganze Zeit auf dem Stativ steht.
+        rigIsAutomatic = true
+        rig = lastMountedSignal ? .tripod : .handheld
     }
 
     func stop() {
+        isRunning = false
         intervalTask?.cancel()
         // Ein laufender Selbstauslöser würde sonst NACH dem Beenden noch ein
         // Bild ins bereits montierte Werk legen.
@@ -193,8 +596,25 @@ final class LiveCaptureController: NSObject, ObservableObject {
         selfTimerTask = nil
         selfTimerCount = nil
         intervalTask = nil
-        relockTask?.cancel()
-        relockTask = nil
+        focusTask?.cancel()
+        focusTask = nil
+        exposureTask?.cancel()
+        exposureTask = nil
+        // Sonst legt ein wartender Auslöser noch ein Bild ins fertige Werk.
+        pendingCaptureTask?.cancel()
+        pendingCaptureTask = nil
+        focusHintTask?.cancel()
+        focusHintTask = nil
+        focusHint = nil
+        // Nachzügler aus der Kamera-Warteschlange dürfen kein Bild mehr ins
+        // bereits montierte Werk legen und keine Kalibrierung neu starten.
+        onCapture = nil
+        latestFrame = nil
+        calibrationSamples = nil
+        calibrationStart = nil
+        armed = false
+        pendingRigRelock = false
+        setStatus(.idle)
         simulatorTask?.cancel()
         simulatorTask = nil
         hint = nil
@@ -247,14 +667,49 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Fixiert Belichtung, Fokus und Weißabgleich für Stop-Motion. Wenn möglich
     /// mit niedriger ISO und entsprechend längerer Belichtungszeit (gleiche
     /// Helligkeit, weniger Rauschen – bei statischem Set unkritisch).
-    private func lockCameraSettings() {
+    /// Friert allein den Fokus ein – nur am Stativ. Aus der Hand ändert sich
+    /// der Abstand zum Werk ständig, ein fixierter Fokus wäre dort nach
+    /// wenigen Sekunden zwangsläufig falsch.
+    private func lockFocusOnly() {
+        guard rig.locksFocus else { return }
+        // Kein Gerät (Simulator) oder keine Unterstützung für `.locked`: Das
+        // ist kein Fehlschlag, den man wiederholen könnte. Ohne diese Marke
+        // liefe der Wächter bis zum Sitzungsende alle zwanzig Sekunden los
+        // und behauptete dabei, die Schärfe breche weg – was schlicht nicht
+        // stimmt.
+        guard let device, device.isFocusModeSupported(.locked) else {
+            focusLockUnavailable = true
+            return
+        }
+        guard (try? device.lockForConfiguration()) != nil else {
+            focusLockUnavailable = true
+            return
+        }
+        device.focusMode = .locked
+        device.unlockForConfiguration()
+        focusIsLocked = true
+        sharpAtLock = sharpRaw
+        blurrySince = nil
+        // Der eine Fall, den ein relatives Schärfemaß prinzipbedingt nicht
+        // erkennen kann: Ist das Bild von der ersten Sekunde an unscharf,
+        // sind Messlatte UND Vergleichswert unscharf, und weder Tor noch
+        // Wächter schlagen an. Fehlende Struktur ist das einzige Anzeichen,
+        // das dann noch übrig ist – typisch, wenn das Werk näher liegt als
+        // die Naheinstellgrenze. Also wenigstens nicht schweigen.
+        if sharpAtLock < Self.minMeaningfulSharpness {
+            setFocusHint("Ich sehe kaum Struktur und kann die Schärfe nicht prüfen. Geh etwas weiter weg oder tippe im Sucher auf dein Werk.")
+        }
+    }
+
+    /// Fixiert Belichtung und Weißabgleich. Läuft bewusst auch dann, wenn der
+    /// Fokus nicht sitzt: Ein unscharfes Bild kann man nachschärfen, eine über
+    /// die ganze Sitzung atmende Belichtung ist im fertigen Film nicht mehr
+    /// zu retten.
+    private func lockExposureAndWhiteBalance() {
         guard let device else { return }
         do {
             try device.lockForConfiguration()
 
-            if device.isFocusModeSupported(.locked) {
-                device.focusMode = .locked
-            }
             if device.isWhiteBalanceModeSupported(.locked) {
                 device.whiteBalanceMode = .locked
             }
@@ -277,9 +732,14 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 }
                 var iso = Float(exposure / duration)
                 iso = min(maxISO, max(minISO, iso))
+                // Im CMTime-Raum klemmen, nicht in Sekunden: Das Runden auf
+                // Mikrosekunden kann sonst knapp unter `minExposureDuration`
+                // landen, und AVFoundation wirft dafür eine Exception.
+                var t = CMTimeMakeWithSeconds(duration, preferredTimescale: 1_000_000)
+                t = CMTimeMaximum(CMTimeMinimum(t, format.maxExposureDuration),
+                                  format.minExposureDuration)
                 device.setExposureModeCustom(
-                    duration: CMTimeMakeWithSeconds(duration, preferredTimescale: 1_000_000),
-                    iso: iso, completionHandler: nil)
+                    duration: t, iso: iso, completionHandler: nil)
                 exposureInfo = Self.exposureLabel(duration: duration, iso: Double(iso))
             } else if device.isExposureModeSupported(.locked) {
                 device.exposureMode = .locked
@@ -298,22 +758,38 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Kalibrierung neu – danach wird automatisch wieder fixiert. Für den Fall,
     /// dass sich Licht oder Aufbau während der Session geändert haben.
     func refixCamera() {
-        relockTask?.cancel()
+        focusTask?.cancel(); focusTask = nil
+        exposureTask?.cancel(); exposureTask = nil
+        // Der Zeitgeber muss mit: Sonst tickt er durch die Neu-Kalibrierung
+        // und den Fokuslauf hindurch weiter und legt drei, vier weiche
+        // Blätter ins Werk. `startIntervalIfNeeded()` startet ihn am Ende
+        // der Kalibrierung ohnehin neu.
+        intervalTask?.cancel(); intervalTask = nil
+        // Ein wartender Auslöser würde sonst sofort losgehen, weil
+        // `resetSharpnessState()` die Messlatte auf null setzt.
+        pendingCaptureTask?.cancel()
+        pendingCaptureTask = nil
+        focusHint = nil
         resetToContinuous()
-        status = .calibrating
+        setStatus(.calibrating)
         calibrationSamples = []
         calibrationStart = Date()
         restlessSince = nil
         hint = nil
         armed = false
+        // „Neu fixieren" ist der Knopf für einen veränderten Aufbau. Die alte
+        // Schärfe-Messlatte gehört zum alten Motiv und würde das Tor sonst
+        // grundlos blockieren.
+        resetSharpnessState()
     }
 
     /// Tippen im Sucher: Fokus- und Belichtungspunkt aufs Werk setzen und die
     /// Kamera neu fixieren. Die Bewegungs-Kalibrierung bleibt bewusst bestehen –
     /// sonst würde jeder Tipp den Auslöser entschärfen.
     func focus(atDevicePoint point: CGPoint) {
+        suppressRigUntil = Date().addingTimeInterval(2.5)
         guard let device else { return }
-        try? device.lockForConfiguration()
+        guard (try? device.lockForConfiguration()) != nil else { return }
         if device.isFocusPointOfInterestSupported {
             device.focusPointOfInterest = point
         }
@@ -326,39 +802,233 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     /// Belichtung/Fokus/Weißabgleich neu einmessen und wieder fixieren –
     /// ohne die Bewegungs-Kalibrierung zu verwerfen.
+    ///
+    /// Fokus und Belichtung laufen in getrennten Tasks. Das ist kein Detail:
+    /// Der Fokus darf lange suchen, die Belichtung ist in gut einer Sekunde
+    /// eingeschwungen. Steckten beide im selben Task, würde ein Abbruch des
+    /// Fokuslaufs (etwa weil das iPhone gerade aufs Stativ kommt) auch die
+    /// Belichtung ungefixiert zurücklassen – und das Set atmet die ganze
+    /// Sitzung lang.
     func relockCamera() {
-        resetToContinuous()
-        relockTask?.cancel()
-        relockTask = Task { [weak self] in
-            // Automatik einschwingen lassen – aber nicht stur eine feste Zeit:
-            // Bei nahen Motiven oder wenig Licht sucht der Autofokus länger,
-            // und wer mitten in der Suche einfriert, hat eine unscharfe Session.
-            await self?.waitUntilAutoSettles()
+        relockExposure()
+        relockFocusOnly()
+    }
+
+    /// Misst Belichtung und Weißabgleich neu ein und fixiert sie wieder.
+    private func relockExposure() {
+        releaseExposureOnly()
+        exposureTask?.cancel()
+        exposureTask = Task { [weak self] in
+            await self?.waitUntilExposureSettles()
             guard let self, !Task.isCancelled else { return }
-            self.lockCameraSettings()
+            self.lockExposureAndWhiteBalance()
         }
     }
 
-    /// Wartet, bis Autofokus und Belichtung wirklich fertig eingeschwungen
-    /// sind (mindestens 0,5 s, höchstens 4 s). Erst danach darf fixiert werden.
-    private func waitUntilAutoSettles() async {
-        try? await Task.sleep(nanoseconds: 500_000_000)
-        guard let device else { return }
-        let deadline = Date().addingTimeInterval(4.0)
-        while Date() < deadline {
-            // Ohne diese Prüfung liefe die Schleife nach einem Abbruch bis zu
-            // vier Sekunden leer auf dem Hauptthread weiter (Task.sleep kehrt
-            // dann sofort zurück).
-            if Task.isCancelled { return }
-            if !device.isAdjustingFocus && !device.isAdjustingExposure {
-                // kurz bestätigen – der Fokus meldet zwischen zwei Suchläufen
-                // manchmal für einen Moment „fertig"
-                try? await Task.sleep(nanoseconds: 250_000_000)
-                if !device.isAdjustingFocus && !device.isAdjustingExposure { return }
+    /// Misst den Fokus neu ein und fixiert ihn wieder – ohne Belichtung und
+    /// Weißabgleich anzufassen.
+    ///
+    /// Der erste Schritt, `releaseFocusOnly()`, ist der wichtigste: Ohne ihn
+    /// stünde die Linse noch auf `.locked` aus einer vorherigen Messung, der
+    /// Autofokus meldete sofort „fertig", und die App würde dieselbe – womöglich
+    /// falsche – Position ein zweites Mal einfrieren. Genau daran krankte die
+    /// zweite Sitzung.
+    private func relockFocusOnly(explainOnce: Bool = false) {
+        releaseFocusOnly()
+        focusTask?.cancel()
+        focusTask = Task { [weak self] in
+            // Automatik einschwingen lassen – aber nicht stur eine feste Zeit:
+            // Bei nahen Motiven oder wenig Licht sucht der Autofokus länger,
+            // und wer mitten in der Suche einfriert, hat eine unscharfe Session.
+            let good = await self?.waitUntilFocusIsGood() ?? false
+            guard let self, !Task.isCancelled else { return }
+            if good {
+                self.lockFocusOnly()
+            } else if self.rig.locksFocus {
+                // Lieber gar nicht fixieren als unscharf fixieren: Der
+                // Autofokus läuft weiter und holt sich das Bild irgendwann.
+                self.focusIsLocked = false
+                self.setFocusHint("Fokus findet nichts Scharfes. Tippe im Sucher auf dein Werk.")
             }
-            try? await Task.sleep(nanoseconds: 100_000_000)
+            if self.rawStatus == .focusing { self.setStatus(.waitingForWork) }
+
+            // Einmal pro App-Leben erklären, wie man nachschärft – der
+            // fixierte Fokus ist sonst nicht zu durchschauen. Nur wenn
+            // wirklich fixiert wurde: Im Simulator und auf Geräten ohne
+            // `.locked` wäre die Aussage schlicht falsch.
+            let key = "didExplainTapFocus"
+            if explainOnce, self.focusIsLocked,
+               !UserDefaults.standard.bool(forKey: key) {
+                UserDefaults.standard.set(true, forKey: key)
+                self.setFocusHint("Scharf gestellt und fixiert. Wirkt es unscharf? Tippe im Sucher auf dein Werk.")
+            }
+            // Slot freigeben – der Wächter erkennt an ihm, ob gerade ein
+            // Fokuslauf unterwegs ist.
+            self.focusTask = nil
         }
     }
+
+    /// Belichtung und Weißabgleich zurück auf Automatik – der Fokus bleibt,
+    /// wo er ist.
+    private func releaseExposureOnly() {
+        exposureInfo = nil
+        guard let device else { return }
+        guard (try? device.lockForConfiguration()) != nil else { return }
+        if device.isExposureModeSupported(.continuousAutoExposure) {
+            device.exposureMode = .continuousAutoExposure
+        }
+        if device.isWhiteBalanceModeSupported(.continuousAutoWhiteBalance) {
+            device.whiteBalanceMode = .continuousAutoWhiteBalance
+        }
+        device.unlockForConfiguration()
+    }
+
+    /// Belichtung schwingt schnell ein – hier reicht die einfache Prüfung.
+    private func waitUntilExposureSettles() async {
+        try? await Task.sleep(nanoseconds: 400_000_000)
+        guard let device else { return }
+        let deadline = Date().addingTimeInterval(2.5)
+        while Date() < deadline {
+            if Task.isCancelled { return }
+            if !device.isAdjustingExposure && !device.isAdjustingWhiteBalance { return }
+            try? await Task.sleep(nanoseconds: 120_000_000)
+        }
+    }
+
+    /// Wartet, bis der Autofokus tatsächlich sein Optimum gefunden hat.
+    ///
+    /// Die frühere Fassung fragte nur, ob der Fokus noch *sucht*. Das reicht
+    /// nicht: Nach dem Umschalten auf Automatik hat er in der ersten halben
+    /// Sekunde oft noch gar nicht begonnen, meldet also „fertig" – und wenn
+    /// in diesem Moment eine Hand durchs Bild wischt, friert die App auf den
+    /// Abstand der Hand ein. Danach ist die ganze Sitzung unscharf.
+    ///
+    /// Deshalb wird jetzt zusätzlich die Bildschärfe gemessen und erst
+    /// fixiert, wenn sie ihren Bestwert nahezu erreicht hat und niemand mehr
+    /// im Bild steht. Gibt `false` zurück, wenn das binnen acht Sekunden
+    /// nicht gelingt – dann bleibt die Automatik lieber an.
+    private func waitUntilFocusIsGood() async -> Bool {
+        // Anlauf: Dem Autofokus Zeit geben, die Suche überhaupt zu beginnen.
+        try? await Task.sleep(nanoseconds: 800_000_000)
+        // Kein Aufnahmegerät (Simulator, kameraloses Gerät) heißt „nichts zu
+        // prüfen" – nicht „fehlgeschlagen". Sonst meldet der Simulator bei
+        // jedem Start fälschlich einen Fokusfehler.
+        guard let device else { return true }
+        let deadline = Date().addingTimeInterval(8.0)
+
+        while Date() < deadline {
+            // Ohne diese Prüfung liefe die Schleife nach einem Abbruch leer
+            // auf dem Hauptthread weiter (Task.sleep kehrt dann sofort zurück).
+            if Task.isCancelled { return false }
+
+            let stillSearching = device.isAdjustingFocus || device.isAdjustingExposure
+            // Solange sich etwas bewegt, misst die Kamera auf etwas, das
+            // gleich wieder weg ist – typischerweise auf die Hand.
+            let sceneIsBusy = currentMotion > max(motionThreshold, 2.0)
+
+            if !stillSearching && !sceneIsBusy {
+                // Kein Kontrast im Motiv? Dann gibt es nichts zu messen, und
+                // wir vertrauen der Kamera.
+                if !sharpnessIsMeaningful { return true }
+                if sharpRaw >= sharpReference * Self.lockRatio {
+                    // Kurz bestätigen: der Fokus meldet zwischen zwei
+                    // Suchläufen manchmal für einen Moment „fertig".
+                    try? await Task.sleep(nanoseconds: 300_000_000)
+                    if Task.isCancelled { return false }
+                    guard !device.isAdjustingFocus else { continue }
+                    if sharpRaw >= sharpReference * Self.lockRatio { return true }
+                }
+            }
+            try? await Task.sleep(nanoseconds: 120_000_000)
+        }
+        return false
+    }
+
+    /// Gibt allein den Fokus wieder frei – Belichtung und Weißabgleich
+    /// bleiben fixiert. Genau das braucht die Aufnahme aus der Hand: gleiche
+    /// Helligkeit über alle Bilder, aber ein Fokus, der dem Abstand folgt.
+    private func releaseFocusOnly() {
+        focusIsLocked = false
+        blurrySince = nil
+        guard let device else { return }
+        guard (try? device.lockForConfiguration()) != nil else { return }
+        if device.isFocusModeSupported(.continuousAutoFocus) {
+            device.focusMode = .continuousAutoFocus
+        }
+        device.unlockForConfiguration()
+    }
+
+    /// Prüft bei fixiertem Fokus, ob die Schärfe weggebrochen ist – etwa weil
+    /// beim Fixieren doch eine Hand im Bild stand oder das Stativ verrückt
+    /// wurde. Gemessen wird gegen den Wert im Moment des Fixierens, nicht
+    /// gegen den gleitenden Bestwert: Der würde nach ein paar Sekunden
+    /// Unschärfe selbst absinken und den Fehler damit verdecken.
+    private func checkFocusWatchdog(motion: Double) {
+        // Während gearbeitet wird, ist das Bild ohnehin verwischt – nur die
+        // ruhige Szene ist ein gültiger Messpunkt.
+        guard motion <= motionThreshold else {
+            blurrySince = nil
+            return
+        }
+        // Der wichtigere der beiden Fälle: Am Stativ sollte der Fokus fixiert
+        // sein, ist es aber nicht – der Versuch ist also gescheitert. Ohne
+        // diesen Zweig gäbe die App nach einem einzigen Fehlschlag für den
+        // Rest der Sitzung auf, und zwar stumm: Der Wächter unten prüft
+        // `focusIsLocked`, der Torpfad ebenso, und der Hinweis verschwindet
+        // nach acht Sekunden.
+        if rig.locksFocus, !focusIsLocked, !focusLockUnavailable,
+           calibrationSamples == nil, focusTask == nil {
+            blurrySince = nil
+            autoRefocus()
+            return
+        }
+        guard focusIsLocked, sharpAtLock >= Self.minMeaningfulSharpness else {
+            blurrySince = nil
+            return
+        }
+        guard sharpRaw < sharpAtLock * Self.watchdogRatio else {
+            blurrySince = nil
+            return
+        }
+        // Bewusst träge: Ein Motivwechsel (der Künstler nimmt ein
+        // strukturreiches Objekt aus dem Bild) senkt die Varianz ebenfalls,
+        // ohne dass am Fokus etwas falsch wäre. Vier Sekunden Nachweis
+        // trennen das vom echten Schärfeverlust.
+        if blurrySince == nil {
+            blurrySince = Date()
+        } else if Date().timeIntervalSince(blurrySince!) > 4.0 {
+            autoRefocus()
+        }
+    }
+
+    /// Der Wächter: Fällt die Schärfe nach dem Fixieren dauerhaft ab, stellt
+    /// die App von selbst neu scharf, statt eine ganze Sitzung zu verlieren.
+    /// Nur der Fokus wird neu gemessen – die Belichtung bleibt, wo sie ist,
+    /// sonst gäbe es mitten im Film einen Helligkeitssprung.
+    private func autoRefocus() {
+        guard rig.locksFocus else { return }
+        // Einen laufenden Versuch nicht abwürgen: Ein Fokuslauf darf fast
+        // neun Sekunden dauern, und gerade im Zielfall (nahes Motiv, wenig
+        // Licht) braucht er sie. Ohne diese Zeile bräche die Reparatur genau
+        // dort ab, wofür sie gebaut wurde.
+        guard focusTask == nil else { return }
+        guard !focusLockUnavailable else { return }
+        // Erst zügig, dann geduldig: Die ersten vier Versuche kommen im
+        // Zehn-Sekunden-Takt (länger als ein Versuch dauern kann), danach
+        // alle zwanzig – aber es hört nie ganz auf. Aufzugeben hieße, den
+        // Rest der Sitzung unscharf aufzuzeichnen.
+        let interval: TimeInterval = autoRefocusCount < 4 ? 10 : 20
+        guard Date().timeIntervalSince(lastAutoRefocus) > interval else { return }
+        if autoRefocusCount >= 4 {
+            setFocusHint("Schärfe bricht immer wieder weg. Tippe im Sucher auf dein Werk.")
+        }
+        lastAutoRefocus = Date()
+        autoRefocusCount += 1
+        blurrySince = nil
+        setStatus(.focusing)
+        relockFocusOnly()
+    }
+
 
     /// „1/100 s · ISO 32" – Belichtungszeit als Bruch, ISO gerundet.
     private static func exposureLabel(duration: Double, iso: Double) -> String {
@@ -371,8 +1041,10 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Belichtung/Fokus/Weißabgleich zurück auf kontinuierliche Automatik.
     private func resetToContinuous() {
         exposureInfo = nil
+        focusIsLocked = false
+        blurrySince = nil
         guard let device else { return }
-        try? device.lockForConfiguration()
+        guard (try? device.lockForConfiguration()) != nil else { return }
         if device.isFocusModeSupported(.continuousAutoFocus) {
             device.focusMode = .continuousAutoFocus
         }
@@ -395,7 +1067,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 let seconds = self?.intervalSeconds ?? 3.0
                 try? await Task.sleep(nanoseconds: UInt64(max(0.5, seconds) * 1_000_000_000))
                 guard let self, !Task.isCancelled else { break }
-                self.captureNow()
+                self.captureNow(userInitiated: false)
             }
         }
     }
@@ -492,6 +1164,10 @@ final class LiveCaptureController: NSObject, ObservableObject {
     }
 
     private func analyze(gray: [UInt8], w: Int, h: Int, fullFrame: CGImage) {
+        // Nach `stop()` treffen noch Frames aus der Kamera-Warteschlange ein
+        // (`stopRunning()` läuft asynchron). Die dürfen weder ein Bild ins
+        // fertige Werk legen noch den Zustand vom Ruhestand wegziehen.
+        guard isRunning else { return }
         var motion = 0.0
         let hadPrevious = previousGray != nil
         if let prev = previousGray, prev.count == gray.count {
@@ -504,9 +1180,24 @@ final class LiveCaptureController: NSObject, ObservableObject {
         let rounded = (motion * 10).rounded() / 10
         if abs(rounded - currentMotion) > 0.05 { currentMotion = rounded }
 
+        // Schärfe auf demselben Graustufen-Puffer messen, der ohnehin für die
+        // Bewegung berechnet wurde – das kostet praktisch nichts und ist die
+        // einzige Größe, die verrät, ob der Fokus wirklich sitzt.
+        // Die Messlatte wird nur bei ruhiger Szene fortgeschrieben: Eine Hand
+        // im Bild bringt eigene Struktur mit und würde sie verfälschen.
+        let calm = hadPrevious && motion <= motionThreshold
+        noteSharpness(Algorithms.laplacianVariance(gray: gray, width: w, height: h),
+                      calm: calm)
+        checkFocusWatchdog(motion: motion)
+        serveRigDetection()
+        servePendingRigRelock()
+        // Puls für den Status-Dämpfer – muss vor jedem vorzeitigen Ausstieg
+        // stehen, sonst friert die Anzeige im Intervallmodus ein.
+        flushPendingStatus()
+
         // Kalibrierphase: Grundrauschen messen, Schwelle automatisch setzen
         if calibrationSamples != nil {
-            status = .calibrating
+            setStatus(.calibrating)
             if hadPrevious { calibrationSamples?.append(motion) }
             // Sicherheits-Timeout: lieber mit weniger Messwerten starten, als
             // ewig in der Kalibrierung hängen zu bleiben.
@@ -519,29 +1210,14 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 calibrationSamples = nil
                 calibrationStart = nil
                 armed = true // erster Frame darf sofort kommen, sobald stabil
-                status = .waitingForWork
+                setStatus(.focusing)
                 // Für Stop-Motion: Belichtung, Fokus und Weißabgleich jetzt
                 // fixieren – die Auto-Regelung würde sonst zwischen den Bildern
                 // nachziehen und das Set „atmen" lassen. Aber erst, wenn der
-                // Autofokus wirklich fertig ist: sonst friert eine unscharfe
-                // Session ein (und die Handerkennung sieht nur noch Matsch).
-                relockTask?.cancel()
-                relockTask = Task { [weak self] in
-                    await self?.waitUntilAutoSettles()
-                    guard let self, !Task.isCancelled else { return }
-                    self.lockCameraSettings()
-                    // Einmal pro App-Leben erklären, wie man nachschärft –
-                    // der fixierte Fokus ist sonst nicht zu durchschauen.
-                    let key = "didExplainTapFocus"
-                    if !UserDefaults.standard.bool(forKey: key) {
-                        UserDefaults.standard.set(true, forKey: key)
-                        self.hint = "Scharf gestellt und fixiert. Wirkt es unscharf? Tippe im Sucher auf dein Werk."
-                        Task { [weak self] in
-                            try? await Task.sleep(nanoseconds: 6_000_000_000)
-                            if self?.hint?.hasPrefix("Scharf gestellt") == true { self?.hint = nil }
-                        }
-                    }
-                }
+                // Autofokus sein Optimum wirklich gefunden hat: sonst friert
+                // eine unscharfe Session ein. Bis dahin wird nichts gespeichert.
+                relockExposure()
+                relockFocusOnly(explainOnce: true)
                 startIntervalIfNeeded()
             }
             return
@@ -554,7 +1230,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
             // Es passiert etwas: scharf stellen auf die nächste Ruhephase
             armed = true
             stableSince = nil
-            status = .working
+            setStatus(.working)
             // Bleibt es dauerhaft unruhig, kommt nie ein Auslöser – sagen,
             // woran es liegt, statt den Nutzer raten zu lassen.
             if restlessSince == nil { restlessSince = Date() }
@@ -564,18 +1240,20 @@ final class LiveCaptureController: NSObject, ObservableObject {
             return
         }
         restlessSince = nil
+        // Nur die Unruhe-Meldung zurücknehmen. Fokus-Hinweise laufen über
+        // `focusHint` und werden hier bewusst nicht angefasst.
         if hint != nil { hint = nil }
 
         // Szene ist ruhig
         guard armed else {
-            if status != .captured { status = .waitingForWork }
+            if rawStatus != .captured { setStatus(.waitingForWork) }
             return
         }
 
         if stableSince == nil { stableSince = Date() }
         let elapsed = Date().timeIntervalSince(stableSince!)
-        status = .stabilizing(min(1.0, elapsed / stableSeconds))
-        guard elapsed >= stableSeconds else { return }
+        setStatus(.stabilizing(min(1.0, elapsed / effectiveStableSeconds)))
+        guard elapsed >= effectiveStableSeconds else { return }
 
         // Stabil genug → Handprüfung (nur jetzt, nicht auf jedem Frame)
         if checkHands, handDetector.containsHands(cgImage: fullFrame, confidence: 0.3) {
@@ -584,6 +1262,18 @@ final class LiveCaptureController: NSObject, ObservableObject {
             return
         }
 
+        // Schärfe-Tor: Ein unscharfes Bild ist im fertigen Film nicht zu
+        // reparieren, ein paar Sekunden Warten dagegen schon. Also lieber
+        // gar nicht auslösen und sagen, woran es liegt.
+        if !isSharpEnough, !releaseGateIfStuck() {
+            setStatus(.focusing)
+            stableSince = Date()
+            // Einmal von selbst nachstellen, statt den Nutzer warten zu lassen.
+            if rig.locksFocus { autoRefocus() }
+            return
+        }
+        gateBlockedSince = nil
+
         // Capture! Duplikate verhindert bereits der Zustandsautomat:
         // ausgelöst wird nur nach erkannter Bewegung ("armed").
         // (Der frühere dHash-Abgleich hat subtile Änderungen fälschlich
@@ -591,9 +1281,60 @@ final class LiveCaptureController: NSObject, ObservableObject {
         capture(frame: fullFrame)
     }
 
-    /// Manueller Auslöser – nimmt den aktuellen Frame sofort auf,
-    /// unabhängig von Bewegung und Handprüfung.
-    func captureNow() {
+    /// Manueller Auslöser – nimmt den aktuellen Frame auf, unabhängig von
+    /// Bewegung und Handprüfung. Ist das Bild unscharf, wird der Druck nicht
+    /// verworfen: Die App stellt neu scharf und löst aus, sobald es sitzt
+    /// (spätestens nach zweieinhalb Sekunden). Ein Tastendruck soll immer ein
+    /// Bild ergeben – nur eben kein unscharfes, wenn es sich vermeiden lässt.
+    func captureNow(userInitiated: Bool = true) {
+        guard latestFrame != nil else { return }
+        // Während der Kalibrierung ist noch nichts eingemessen – ein
+        // automatischer Takt hätte hier nichts, woran er sich orientiert.
+        guard userInitiated || (isRunning && calibrationSamples == nil) else { return }
+        if isSharpEnough {
+            captureLatest()
+            return
+        }
+        // Läuft schon ein Auslöser und wartet auf Schärfe? Dann diesen Druck
+        // verwerfen statt den wartenden abzubrechen – sonst löscht im
+        // Intervallmodus jeder Takt den Vorgänger und es entsteht kein Bild.
+        if let running = pendingCaptureTask, !running.isCancelled { return }
+        setStatus(.focusing)
+        // Sofortige Rückmeldung: Der Druck ist angekommen, auch wenn das Bild
+        // erst gleich entsteht. Nur bei echtem Tastendruck – ein
+        // unbeaufsichtigter Zeitraffer soll das Stativ nicht bei jedem Takt
+        // anstoßen.
+        if userInitiated {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            suppressRigUntil = Date().addingTimeInterval(2.5)
+        }
+        // Nur den Fokus neu messen, und nur wenn die Szene ruhig ist:
+        // Bewegungsunschärfe ist kein Fokusfehler, und ein währenddessen
+        // freigegebener Fokus liefert ein Bild mitten aus der Suche.
+        if focusIsLocked, currentMotion <= motionThreshold { relockFocusOnly() }
+        // Im Intervallmodus nie länger warten als bis zum nächsten Takt.
+        let budget = captureMode == .interval
+            ? min(2.5, max(0.4, intervalSeconds * 0.8))
+            : 2.5
+        pendingCaptureTask = Task { [weak self] in
+            let deadline = Date().addingTimeInterval(budget)
+            while Date() < deadline {
+                if Task.isCancelled { return }
+                try? await Task.sleep(nanoseconds: 100_000_000)
+                guard let self, !Task.isCancelled else { return }
+                if self.isSharpEnough { break }
+            }
+            guard let self, !Task.isCancelled else { return }
+            self.pendingCaptureTask = nil
+            // Ein Tastendruck ergibt immer ein Bild – ein unbeaufsichtigter
+            // Zeitraffer lässt den Takt lieber aus. Ein weiches Blatt im Werk
+            // ist teurer als ein fehlendes.
+            guard userInitiated || self.isSharpEnough else { return }
+            self.captureLatest()
+        }
+    }
+
+    private func captureLatest() {
         guard let frame = latestFrame else { return }
         capture(frame: frame)
     }
@@ -637,7 +1378,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         armed = false
         stableSince = nil
         capturedCount += 1
-        status = .captured
+        setStatus(.captured)
 
         // Spürbar & hörbar: Aldo schaut aufs Werk, nicht aufs Display
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
@@ -655,7 +1396,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // Status nach kurzer Zeit zurücksetzen
         Task {
             try? await Task.sleep(nanoseconds: 800_000_000)
-            if self.status == .captured { self.status = .waitingForWork }
+            if self.rawStatus == .captured { self.setStatus(.waitingForWork) }
         }
     }
 }

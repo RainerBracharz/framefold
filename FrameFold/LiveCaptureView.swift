@@ -416,7 +416,32 @@ struct LiveCaptureView: View {
                 case .tolino:   tolinoHUD
                 }
 
-                statusBadge
+                HStack(spacing: 8) {
+                    statusBadge
+                    // Im Einfach-Modus nur zeigen, wenn die App tatsächlich
+                    // „aus der Hand" erkannt hat – dort ist jedes zusätzliche
+                    // Bedienelement eines zu viel, aber diese Abweichung
+                    // erklärt das Verhalten der Kamera.
+                    // Auch zeigen, sobald die Automatik abgeschaltet ist –
+                    // sonst verschwindet im Einfach-Modus genau der Knopf,
+                    // mit dem man gerade auf „Stativ" gestellt hat, und es
+                    // gibt keinen Weg zurück.
+                    if mode.showsAdvanced || controller.rig == .handheld
+                        || !controller.rigIsAutomatic {
+                        rigBadge
+                    }
+                }
+
+                if let focusHint = controller.focusHint {
+                    Text(focusHint)
+                        .font(Theme.mono(11))
+                        .foregroundStyle(Theme.darkroom)
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(2)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Theme.amber)
+                }
 
                 if let hint = controller.hint {
                     // Im Einfach-Modus sind die Einstellungen unerreichbar –
@@ -469,6 +494,10 @@ struct LiveCaptureView: View {
             UIApplication.shared.isIdleTimerDisabled = true
             recentThumbs = []
             level.start()
+            // Startwert einspeisen: `onChange` feuert nur bei einem Wechsel,
+            // ein von Anfang an gehaltenes iPhone bliebe sonst als „Stativ"
+            // eingestuft.
+            controller.noteDeviceIsMounted(level.looksMounted)
             // Studio-Monitor: externer Bildschirm zeigt ab jetzt dieses Werk
             StudioMonitorHub.shared.register(controller, projectName: project.name)
             // Watch als Fernauslöser: löst aus, ohne das Stativ zu berühren
@@ -491,6 +520,13 @@ struct LiveCaptureView: View {
                     if recentThumbs.count > 6 { recentThumbs.removeFirst() }
                 }
             }
+        }
+        // Der Bewegungssensor entscheidet, ob das iPhone steht oder gehalten
+        // wird – und damit, ob der Fokus fixiert werden darf. Am Stativ ist
+        // ein fester Fokus das Beste, aus der Hand wäre er nach ein paar
+        // Sekunden zwangsläufig falsch.
+        .onChange(of: level.looksMounted) { _, mounted in
+            controller.noteDeviceIsMounted(mounted)
         }
         .onDisappear {
             UIApplication.shared.isIdleTimerDisabled = false
@@ -868,6 +904,10 @@ struct LiveCaptureView: View {
                 Image(systemName: "checkmark").foregroundStyle(Theme.paperOnDark)
             case .working:
                 Image(systemName: "hand.raised.fill").foregroundStyle(Theme.paperOnDark.opacity(0.8))
+            case .focusing:
+                // Amber, weil hier gerade bewusst NICHT ausgelöst wird –
+                // das ist der einzige Zustand, der den Nutzer aufhält.
+                Image(systemName: "camera.metering.spot").foregroundStyle(Theme.amber)
             default:
                 Image(systemName: "eye").foregroundStyle(Theme.paperOnDark.opacity(0.6))
             }
@@ -875,11 +915,42 @@ struct LiveCaptureView: View {
             CatalogLabel(controller.status.label(playful: mode == .basic),
                          color: Theme.paperOnDark,
                          size: mode == .basic ? 12 : 11)
+                // Neben dem Aufnahmeart-Feld wird es auf kleinen Geräten eng.
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .background(Theme.darkroom.opacity(0.75))
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
+    }
+
+    /// Aufnahmeart – die App erkennt sie am Bewegungssensor, ein Tipp
+    /// schaltet um. Steht bewusst neben dem Zustand: Sie entscheidet, ob der
+    /// Fokus eingefroren wird, und das erklärt das Verhalten der Kamera.
+    private var rigBadge: some View {
+        Button {
+            controller.setRig(controller.rig == .tripod ? .handheld : .tripod)
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: controller.rig == .tripod
+                      ? "camera.on.rectangle" : "hand.raised")
+                    .font(.system(size: 10, weight: .semibold))
+                CatalogLabel(controller.rig.shortLabel,
+                             color: Theme.paperOnDark, size: 10)
+            }
+            .foregroundStyle(Theme.paperOnDark.opacity(0.8))
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(Theme.darkroom.opacity(0.75))
+            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(controller.rig == .tripod
+                            ? "Aufnahmeart: Stativ. Tippen für aus der Hand."
+                            : "Aufnahmeart: aus der Hand. Tippen für Stativ.")
+        .accessibilityHint("Am Stativ wird der Fokus fixiert, aus der Hand läuft er mit.")
     }
 }
 
@@ -1013,7 +1084,9 @@ struct LiveSettingsView: View {
 
                 Section {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Auslöse-Wartezeit: \(controller.stableSeconds, specifier: "%.1f") s")
+                        Text(controller.rig == .handheld
+                             ? "Auslöse-Wartezeit: \(controller.stableSeconds, specifier: "%.1f") s (+0,4 s aus der Hand)"
+                             : "Auslöse-Wartezeit: \(controller.stableSeconds, specifier: "%.1f") s")
                             .font(Theme.body)
                         Slider(value: $controller.stableSeconds, in: 0.3...2.5, step: 0.1)
                         Text("So lange muss die Szene ruhig sein, bevor automatisch ausgelöst wird.")

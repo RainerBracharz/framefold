@@ -9,7 +9,7 @@
 [<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="44" />](https://apps.apple.com/at/app/framefold/id6801045603)
 
 [![iOS Build](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml/badge.svg)](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml)
-&nbsp;·&nbsp; **Version 1.1 — live on the App Store** &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; watchOS &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
+&nbsp;·&nbsp; **Live on the App Store** &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; watchOS &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
 
 </div>
 

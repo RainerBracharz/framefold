@@ -94,21 +94,33 @@ enum Algorithms {
     // MARK: Schärfe & Hashing
 
     /// Laplacian-Varianz als Schärfemaß (höher = schärfer).
+    /// Läuft in einem Durchgang ohne Zwischenarray. Das ist nicht Kosmetik:
+    /// Im Live-Sucher wird diese Funktion zehnmal pro Sekunde auf dem
+    /// Hauptthread aufgerufen, und die frühere Fassung allozierte dabei jedes
+    /// Mal rund 350 KB. Das Ergebnis ist dasselbe.
     static func laplacianVariance(gray: [UInt8], width: Int, height: Int) -> Double {
         guard width > 2, height > 2, gray.count == width * height else { return 0 }
-        var values: [Double] = []
-        values.reserveCapacity((width - 2) * (height - 2))
-        for y in 1..<(height - 1) {
-            for x in 1..<(width - 1) {
-                let idx = y * width + x
-                let lap = -4.0 * Double(gray[idx])
-                    + Double(gray[idx - 1]) + Double(gray[idx + 1])
-                    + Double(gray[idx - width]) + Double(gray[idx + width])
-                values.append(lap)
+        var sum = 0.0
+        var sumOfSquares = 0.0
+        var count = 0
+        gray.withUnsafeBufferPointer { p in
+            for y in 1..<(height - 1) {
+                let row = y * width
+                for x in 1..<(width - 1) {
+                    let idx = row + x
+                    let lap = -4.0 * Double(p[idx])
+                        + Double(p[idx - 1]) + Double(p[idx + 1])
+                        + Double(p[idx - width]) + Double(p[idx + width])
+                    sum += lap
+                    sumOfSquares += lap * lap
+                    count += 1
+                }
             }
         }
-        let mean = values.reduce(0, +) / Double(values.count)
-        return values.reduce(0) { $0 + ($1 - mean) * ($1 - mean) } / Double(values.count)
+        guard count > 0 else { return 0 }
+        let n = Double(count)
+        let mean = sum / n
+        return max(0, sumOfSquares / n - mean * mean)
     }
 
     /// dHash (difference hash): 64-Bit-Hash aus 9x8-Verkleinerung.

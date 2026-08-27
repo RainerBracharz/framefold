@@ -1,9 +1,5 @@
-Studio-Monitor: Hängt ein Bildschirm oder Beamer am iPhone, zeigt er nur das Kamerabild mit einer Katalogzeile — ohne Bedienelemente. Ideal, wenn mehrere Leute zusehen sollen, während das iPhone am Stativ steht.
+Schärfe: FrameFold misst jetzt laufend die Bildschärfe. Der Fokus wird erst dann fixiert, wenn er wirklich sitzt — nicht schon, wenn die Kamera aufhört zu suchen. Bricht die Schärfe später weg, stellt die App von selbst neu scharf. Und ein unscharfes Bild landet gar nicht erst im Werk.
 
-Apple Watch: Auslösen und Beenden vom Handgelenk aus, mit Bildzähler und Zustand. Niemand muss mehr das Stativ berühren.
+Zwei Aufnahmearten: Am Stativ bleibt der Fokus fest — das gibt die ruhigsten Bilder. Aus der Hand läuft er mit, weil sich der Abstand zum Werk ständig ändert. Die App erkennt am Bewegungssensor, was gerade zutrifft; ein Tipp auf die Anzeige im Sucher schaltet um.
 
-Ohne Wackeln auslösen: Auslöser gedrückt halten startet einen 3-Sekunden-Countdown. Auch die Lautstärketasten von Kopfhörern und AirPods lösen aus.
-
-Schärfer: Die Kamera fixiert Fokus und Belichtung erst, wenn der Autofokus wirklich fertig ist.
-
-Schneller exportieren: Presets für Story, Quadrat und Galerie stellen alles mit einem Tipp ein — und die App merkt sich deine letzte Wahl.
+Ruhigere Anzeige: Der Zustand im Sucher springt nicht mehr im Sekundentakt hin und her.
