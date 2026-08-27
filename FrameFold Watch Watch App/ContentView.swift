@@ -10,58 +10,50 @@ struct ContentView: View {
     @StateObject private var link = WatchShutter()
 
     var body: some View {
-        ZStack {
-            Theme.darkroom.ignoresSafeArea()
-
-            VStack(spacing: 6) {
-                // Werk und Zustand, klein wie eine Bildunterschrift
-                Text(link.projectName ?? "FrameFold")
-                    .font(.system(size: 13, weight: .medium, design: .serif))
-                    .foregroundStyle(Theme.paperOnDark)
-                    .lineLimit(1)
-
+        NavigationStack {
+            VStack(spacing: 8) {
+                // Der Zustand ist die einzige Schrift – kein App-Name, kein
+                // Werktitel: beides wüsste man ohnehin.
                 Text(link.status.uppercased())
-                    .font(.system(size: 8, weight: .medium))
-                    .tracking(1.4)
+                    .font(.system(size: 9, weight: .medium))
+                    .tracking(1.3)
                     .foregroundStyle(link.isConnected
                                      ? Theme.paperOnDark.opacity(0.55)
                                      : Theme.amber)
-                    .lineLimit(1)
-
-                Spacer(minLength: 2)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
 
                 // Der Auslöser: so groß wie das Zifferblatt hergibt
                 Button {
                     link.shutter()
                 } label: {
                     ZStack {
-                        Circle()
-                            .stroke(Theme.paperOnDark, lineWidth: 3)
-                        Circle()
-                            .fill(Theme.paperOnDark)
-                            .padding(7)
+                        Circle().stroke(Theme.paperOnDark, lineWidth: 3)
+                        Circle().fill(Theme.paperOnDark).padding(7)
                         Text("\(link.count)")
-                            .font(.system(size: 26, weight: .regular, design: .serif))
+                            .font(.system(size: 30, weight: .regular, design: .serif))
                             .foregroundStyle(Theme.darkroom)
                             .contentTransition(.numericText())
                             .animation(.snappy(duration: 0.2), value: link.count)
                     }
                 }
                 .buttonStyle(.plain)
-                .frame(width: 92, height: 92)
+                .frame(width: 96, height: 96)
                 .disabled(!link.isConnected)
-                .opacity(link.isConnected ? 1 : 0.4)
+                .opacity(link.isConnected ? 1 : 0.45)
                 .accessibilityLabel("Auslöser")
                 .accessibilityValue("\(link.count) Bilder")
-
-                Spacer(minLength: 2)
 
                 Button("Fertig") { link.finish() }
                     .font(.system(size: 12, weight: .medium))
                     .tint(Theme.amber)
                     .disabled(!link.isConnected)
             }
-            .padding(.vertical, 4)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Theme.darkroom)
+            // Kein Titel: Wer die App am Handgelenk öffnet, weiß, was sie tut.
+            // Der Werkname stünde nur halb abgeschnitten neben der Uhrzeit.
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
@@ -72,9 +64,11 @@ struct ContentView: View {
 @MainActor
 final class WatchShutter: NSObject, ObservableObject {
     @Published var count = 0
-    @Published var projectName: String?
     @Published var status = "Verbinde…"
     @Published var isConnected = false
+
+    /// Nach dem Ende einer Aufnahme wieder auf Anfang.
+    func reset() { count = 0; status = "Bereit" }
 
     private let session = WCSession.default
 
@@ -127,8 +121,8 @@ extension WatchShutter: WCSessionDelegate {
                              didReceiveMessage message: [String: Any]) {
         Task { @MainActor in
             if let c = message["count"] as? Int { self.count = c }
-            if let p = message["project"] as? String { self.projectName = p }
             if let s = message["status"] as? String { self.status = s }
+            if message["reset"] as? Bool == true { self.reset() }
         }
     }
 }

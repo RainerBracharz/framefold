@@ -33,6 +33,9 @@ struct LiveCaptureView: View {
     @State private var flashOpacity = 0.0
     /// Jubel-Impuls des großen Zählers (Einfach): alle 10 Bilder = 1 s Film.
     @State private var celebratePulse = 1.0
+    /// Merkt einen langen Druck auf den Auslöser, damit das Loslassen nicht
+    /// zusätzlich ein Bild macht (Selbstauslöser läuft dann schon).
+    @State private var didLongPressShutter = false
 
     // Sofort-Ergebnis: nach „Fertig" wird direkt montiert und gezeigt,
     // statt den Nutzer in die Werkliste zurückzuwerfen.
@@ -240,7 +243,7 @@ struct LiveCaptureView: View {
         Task {
             do {
                 let url = try await StopMotionAssembler().assemble(
-                    imageURLs: urls, settings: PipelineSettings()
+                    imageURLs: urls, settings: PipelineSettings.restored()
                 ) { p in Task { @MainActor in assembleProgress = p } }
                 await MainActor.run { resultURL = url; isAssembling = false }
             } catch {
@@ -496,10 +499,18 @@ struct LiveCaptureView: View {
             StudioMonitorHub.shared.unregister(controller)
             WatchLink.shared.onShutter = nil
             WatchLink.shared.onFinish = nil
+            WatchLink.shared.pushSessionEnded()
         }
         .onChange(of: controller.capturedCount) { _, count in
             WatchLink.shared.push(count: count, projectName: project.name,
                                   status: controller.status.label(playful: mode == .basic))
+        }
+        .onChange(of: controller.status) { _, status in
+            // Ohne diesen Kanal stünde am Handgelenk dauerhaft „Bild
+            // aufgenommen", weil der Zähler-Kanal immer denselben Moment trifft.
+            WatchLink.shared.push(count: controller.capturedCount,
+                                  projectName: project.name,
+                                  status: status.label(playful: mode == .basic))
         }
         .onChange(of: refPickerItem) { _, item in
             guard let item else { return }
@@ -576,7 +587,12 @@ struct LiveCaptureView: View {
         // ZStack statt HStack: der Auslöser ist absolut zentriert und kann
         // von unterschiedlich breiten Nachbarn nicht mehr verschoben werden.
         return ZStack {
-            Button { controller.captureNow() } label: {
+            Button {
+                // Nach einem langen Druck läuft der Selbstauslöser – der
+                // Tipp beim Loslassen darf dann nicht zusätzlich auslösen.
+                if didLongPressShutter { didLongPressShutter = false; return }
+                controller.captureNow()
+            } label: {
                 ZStack {
                     Circle().fill(Color.black.opacity(0.25)).frame(width: outer, height: outer)
                     Circle().stroke(Theme.paperOnDark, lineWidth: 3).frame(width: ring, height: ring)
@@ -604,6 +620,7 @@ struct LiveCaptureView: View {
                 // Gedrückt halten = Selbstauslöser: das Wackeln vom Antippen
                 // des Stativs klingt ab, bevor ausgelöst wird.
                 LongPressGesture(minimumDuration: 0.5).onEnded { _ in
+                    didLongPressShutter = true
                     controller.startSelfTimer()
                 }
             )

@@ -168,7 +168,11 @@ final class LiveCaptureController: NSObject, ObservableObject {
     private func resetSessionState() {
         sessionStart = Date()
         exposureInfo = nil
-        capturedCount = 0   // Zähler gilt pro Session, nicht pro App-Lauf
+        capturedCount = 0
+        // Sonst speichert ein sofortiger Auslöser das letzte Bild der
+        // VORHERIGEN Session – und die Zwiebelhaut zeigt das alte Motiv.
+        latestFrame = nil
+        lastCapturedImage = nil   // Zähler gilt pro Session, nicht pro App-Lauf
         firstCapturedImage = nil
         previousGray = nil
         stableSince = nil
@@ -183,6 +187,11 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     func stop() {
         intervalTask?.cancel()
+        // Ein laufender Selbstauslöser würde sonst NACH dem Beenden noch ein
+        // Bild ins bereits montierte Werk legen.
+        selfTimerTask?.cancel()
+        selfTimerTask = nil
+        selfTimerCount = nil
         intervalTask = nil
         relockTask?.cancel()
         relockTask = nil
@@ -289,6 +298,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Kalibrierung neu – danach wird automatisch wieder fixiert. Für den Fall,
     /// dass sich Licht oder Aufbau während der Session geändert haben.
     func refixCamera() {
+        relockTask?.cancel()
         resetToContinuous()
         status = .calibrating
         calibrationSamples = []
@@ -336,6 +346,10 @@ final class LiveCaptureController: NSObject, ObservableObject {
         guard let device else { return }
         let deadline = Date().addingTimeInterval(4.0)
         while Date() < deadline {
+            // Ohne diese Prüfung liefe die Schleife nach einem Abbruch bis zu
+            // vier Sekunden leer auf dem Hauptthread weiter (Task.sleep kehrt
+            // dann sofort zurück).
+            if Task.isCancelled { return }
             if !device.isAdjustingFocus && !device.isAdjustingExposure {
                 // kurz bestätigen – der Fokus meldet zwischen zwei Suchläufen
                 // manchmal für einen Moment „fertig"

@@ -21,6 +21,8 @@ final class StudioMonitorHub: ObservableObject {
     @Published private(set) var isConnected = false
 
     private var windows: [String: UIWindow] = [:]
+    private var didActivate = false
+    private var observers: [NSObjectProtocol] = []
 
     func register(_ controller: LiveCaptureController, projectName: String?) {
         self.controller = controller
@@ -37,22 +39,31 @@ final class StudioMonitorHub: ObservableObject {
     /// Einmal beim App-Start aufrufen – ab dann kümmert sich der Hub selbst
     /// um auftauchende und verschwindende externe Bildschirme.
     func activate() {
-        NotificationCenter.default.addObserver(
+        // Mehrfaches Aufrufen (neue Szene, neu aufgebaute View) würde sonst
+        // doppelte Fenster erzeugen.
+        guard !didActivate else { return }
+        didActivate = true
+
+        // Hängt der Beamer beim App-Start schon dran, ist die Benachrichtigung
+        // längst durch – diese Displays müssen wir selbst einsammeln.
+        for scene in UIApplication.shared.connectedScenes {
+            if let ws = scene as? UIWindowScene,
+               ws.session.role == .windowExternalDisplayNonInteractive {
+                attach(to: ws)
+            }
+        }
+
+        observers.append(NotificationCenter.default.addObserver(
             forName: UIScene.willConnectNotification, object: nil, queue: .main
         ) { note in
             Task { @MainActor in
                 guard let scene = note.object as? UIWindowScene,
                       scene.session.role == .windowExternalDisplayNonInteractive
                 else { return }
-                let window = UIWindow(windowScene: scene)
-                window.rootViewController = UIHostingController(
-                    rootView: StudioMonitorView())
-                window.isHidden = false
-                StudioMonitorHub.shared.windows[scene.session.persistentIdentifier] = window
-                StudioMonitorHub.shared.isConnected = true
+                StudioMonitorHub.shared.attach(to: scene)
             }
-        }
-        NotificationCenter.default.addObserver(
+        })
+        observers.append(NotificationCenter.default.addObserver(
             forName: UIScene.didDisconnectNotification, object: nil, queue: .main
         ) { note in
             Task { @MainActor in
@@ -62,7 +73,18 @@ final class StudioMonitorHub: ObservableObject {
                 StudioMonitorHub.shared.isConnected =
                     !StudioMonitorHub.shared.windows.isEmpty
             }
-        }
+        })
+    }
+
+    /// Ein Fenster auf dem externen Bildschirm öffnen.
+    private func attach(to scene: UIWindowScene) {
+        let id = scene.session.persistentIdentifier
+        guard windows[id] == nil else { return }
+        let window = UIWindow(windowScene: scene)
+        window.rootViewController = UIHostingController(rootView: StudioMonitorView())
+        window.isHidden = false
+        windows[id] = window
+        isConnected = true
     }
 }
 
@@ -146,8 +168,17 @@ private struct MonitorPreview: UIViewRepresentable {
         // Ganzes Bild zeigen (Balken statt Beschnitt) – am Monitor soll
         // nichts vom Werk fehlen.
         view.videoPreviewLayer.videoGravity = .resizeAspect
+        if let conn = view.videoPreviewLayer.connection,
+           conn.isVideoRotationAngleSupported(90) {
+            conn.videoRotationAngle = 90   // wie im Aufnahmeweg (Hochformat)
+        }
         return view
     }
 
-    func updateUIView(_ uiView: CameraPreview.PreviewView, context: Context) {}
+    func updateUIView(_ uiView: CameraPreview.PreviewView, context: Context) {
+        // Wechselt die Session (zweite Aufnahme), muss der Layer nachziehen.
+        if uiView.videoPreviewLayer.session !== session {
+            uiView.videoPreviewLayer.session = session
+        }
+    }
 }

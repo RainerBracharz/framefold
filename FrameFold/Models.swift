@@ -221,6 +221,38 @@ extension PipelineSettings {
         return saved
     }
 
+    /// Feldweise dekodieren: Kommt später eine Einstellung dazu oder ändert
+    /// sich ein Rohwert, gilt für dieses eine Feld der Standard – statt dass
+    /// die ganze gespeicherte Wahl still verlorengeht.
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        let d = PipelineSettings()
+        func v<T: Decodable>(_ key: CodingKeys, _ fallback: T) -> T {
+            (try? c.decodeIfPresent(T.self, forKey: key)) .flatMap { $0 } ?? fallback
+        }
+        self.init()
+        samplingFPS = v(.samplingFPS, d.samplingFPS)
+        analysisWidth = v(.analysisWidth, d.analysisWidth)
+        motionPercentile = v(.motionPercentile, d.motionPercentile)
+        minStillWindowSeconds = v(.minStillWindowSeconds, d.minStillWindowSeconds)
+        removeHands = v(.removeHands, d.removeHands)
+        handConfidence = v(.handConfidence, d.handConfidence)
+        dedupHashThreshold = v(.dedupHashThreshold, d.dedupHashThreshold)
+        outputFPS = v(.outputFPS, d.outputFPS)
+        holdLastFrameSeconds = v(.holdLastFrameSeconds, d.holdLastFrameSeconds)
+        aspect = v(.aspect, d.aspect)
+        exportResolution = v(.exportResolution, d.exportResolution)
+        loopMode = v(.loopMode, d.loopMode)
+        alignFrames = v(.alignFrames, d.alignFrames)
+        interferenzEcho = v(.interferenzEcho, d.interferenzEcho)
+        echoStrength = v(.echoStrength, d.echoStrength)
+        transitionFrames = v(.transitionFrames, d.transitionFrames)
+        transitionStyle = v(.transitionStyle, d.transitionStyle)
+        paperRelief = v(.paperRelief, d.paperRelief)
+        reliefStrength = v(.reliefStrength, d.reliefStrength)
+        printLook = v(.printLook, d.printLook)
+    }
+
     func persist() {
         if let data = try? JSONEncoder().encode(self) {
             UserDefaults.standard.set(data, forKey: Self.storageKey)

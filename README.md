@@ -9,7 +9,7 @@
 [<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="44" />](https://apps.apple.com/at/app/framefold/id6801045603)
 
 [![iOS Build](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml/badge.svg)](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml)
-&nbsp;·&nbsp; **Version 1.0 — live on the App Store** &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
+&nbsp;·&nbsp; **Version 1.1 — live on the App Store** &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; watchOS &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
 
 </div>
 
@@ -72,6 +72,15 @@ that decision is written up here:
   30-day trash, a print-ready contact-sheet PDF and a fold-template PDF.
 - **Exhibition reel.** Several works assembled into one continuous reel with
   catalogue title cards.
+- **Studio monitor.** Plug in a screen or projector (HDMI or AirPlay) and the
+  external display shows the camera feed alone, with a catalogue line — no
+  controls, no HUD. The phone stays on the tripod; everyone in the room watches
+  the work. Without a session running it shows a gallery standby.
+- **Apple Watch remote.** Fire and finish from your wrist, with the frame count
+  and live status on the watch face. Nobody has to touch the tripod.
+- **Shutter without shake.** Hold the shutter for a three-second self-timer, or
+  use the volume buttons on headphones and AirPods — Apple's capture-event API,
+  which also covers cheap Bluetooth camera remotes.
 - **Private by design.** Everything happens on the device. No account, no upload,
   no server, no network requests at all.
 
@@ -133,13 +142,14 @@ images.
 
 | | |
 |---|---|
-| **UI** | SwiftUI (iOS 17+) |
+| **UI** | SwiftUI (iOS 17+), watchOS 10+ companion |
 | **Vision / capture** | AVFoundation, Vision, CoreMotion, Core Image |
 | **On-device ML** | Apple Vision hand-pose; CoreML-ready for a custom RF-DETR model |
 | **Persistence** | File-based projects with JSON manifests |
 | **CI/CD** | GitHub Actions on macOS — builds and runs the test suite on every commit |
 | **Tests** | 60+ unit tests on the pure algorithmic core |
 | **Dependencies** | None. No third-party SDK, no analytics, no crash reporting |
+| **Devices** | iPhone, Apple Watch, plus any external display over HDMI or AirPlay |
 
 ## Build and run
 

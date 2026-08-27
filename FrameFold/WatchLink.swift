@@ -29,6 +29,14 @@ final class WatchLink: NSObject, ObservableObject {
         session.activate()
     }
 
+    /// Session beendet – die Uhr zurücksetzen, statt den letzten Stand
+    /// stehenzulassen.
+    func pushSessionEnded() {
+        guard let session, session.isReachable else { return }
+        session.sendMessage(["reset": true, "count": 0, "status": "Bereit"],
+                            replyHandler: nil, errorHandler: nil)
+    }
+
     /// Zählerstand und Werkname ans Handgelenk melden.
     func push(count: Int, projectName: String?, status: String) {
         guard let session, session.isReachable else { return }

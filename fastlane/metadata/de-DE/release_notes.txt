@@ -1,5 +1,9 @@
-Schärfer: Die Kamera fixiert Fokus und Belichtung erst, wenn der Autofokus wirklich fertig ist — unscharfe Sessions gehören damit der Vergangenheit an. Tipp: Antippen im Sucher stellt jederzeit neu scharf.
+Studio-Monitor: Hängt ein Bildschirm oder Beamer am iPhone, zeigt er nur das Kamerabild mit einer Katalogzeile — ohne Bedienelemente. Ideal, wenn mehrere Leute zusehen sollen, während das iPhone am Stativ steht.
 
-Auslösen ohne Wackeln: Die Lautstärketasten von Kopfhörern oder AirPods lösen die Aufnahme aus, ohne das Stativ zu berühren. Alternativ startet gedrückt halten des Auslösers einen 3-Sekunden-Countdown.
+Apple Watch: Auslösen und Beenden vom Handgelenk aus, mit Bildzähler und Zustand. Niemand muss mehr das Stativ berühren.
 
-Schneller exportieren: Drei Presets — Story (9:16), Quadrat und Galerie (langsam, mit Standbild) — stellen alles mit einem Tipp ein. Und die App merkt sich deine letzte Wahl.
+Ohne Wackeln auslösen: Auslöser gedrückt halten startet einen 3-Sekunden-Countdown. Auch die Lautstärketasten von Kopfhörern und AirPods lösen aus.
+
+Schärfer: Die Kamera fixiert Fokus und Belichtung erst, wenn der Autofokus wirklich fertig ist.
+
+Schneller exportieren: Presets für Story, Quadrat und Galerie stellen alles mit einem Tipp ein — und die App merkt sich deine letzte Wahl.
