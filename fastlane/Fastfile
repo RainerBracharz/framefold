@@ -20,6 +20,20 @@ PROJECT    = "FrameFold.xcodeproj"
 KEY_ID     = "RYCY6P77D7"
 ISSUER_ID  = "2035739a-efc7-450c-8f2f-61f211394113"
 KEY_PATH   = File.expand_path("~/.appstoreconnect/AuthKey_#{KEY_ID}.p8")
+TEAM_ID    = "57TBDSR367"
+
+# Der Export muss ausdrücklich mit einer Distributions-Identität signieren –
+# sonst bleibt es beim Development-Zertifikat und das Paketieren scheitert.
+# Als Methode statt Konstante: gym verändert den Hash und stolpert über
+# eingefrorene Objekte.
+def export_options
+  {
+    signingStyle: "automatic",
+    teamID: TEAM_ID,
+    destination: "export",
+    uploadSymbols: true
+  }
+end
 
 platform :ios do
 
@@ -47,7 +61,11 @@ platform :ios do
   lane :upload do
     api_key = login
     increment_build_number(xcodeproj: PROJECT)
-    build_app(project: PROJECT, scheme: SCHEME, export_method: "app-store")
+    build_app(project: PROJECT, scheme: SCHEME,
+              export_method: "app-store",
+              export_team_id: TEAM_ID,
+              export_options: export_options,
+              xcargs: "-allowProvisioningUpdates")
     upload_to_testflight(api_key: api_key, skip_waiting_for_build_processing: false)
     UI.success("Build ist in App Store Connect.")
   end
@@ -57,14 +75,21 @@ platform :ios do
     api_key = login
 
     increment_build_number(xcodeproj: PROJECT)
-    build_app(project: PROJECT, scheme: SCHEME, export_method: "app-store")
+    build_app(project: PROJECT, scheme: SCHEME,
+              export_method: "app-store",
+              export_team_id: TEAM_ID,
+              export_options: export_options,
+              xcargs: "-allowProvisioningUpdates")
 
     upload_to_app_store(
       api_key: api_key,
       app_identifier: APP_ID,
       # Metadaten kommen aus fastlane/metadata – nur die Release-Notes
       # ändern sich pro Version, alles andere bleibt wie im Store.
-      skip_screenshots: true,
+      # Watch-Screenshots liegen in fastlane/screenshots – Apple verlangt sie,
+      # sobald die App eine Watch-App enthält. Die iPhone-Screenshots im Store
+      # bleiben unangetastet (overwrite: false).
+      skip_screenshots: false,
       skip_metadata: false,
       overwrite_screenshots: false,
       force: true,                       # keine Rückfrage im Browser
