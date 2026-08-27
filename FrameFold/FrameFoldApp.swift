@@ -242,6 +242,11 @@ struct FrameFoldApp: App {
                     .tag(2)
             }
             .environmentObject(projectStore)
+            // Externe Bildschirme (HDMI/AirPlay) zeigen den Studio-Monitor
+            .task {
+                StudioMonitorHub.shared.activate()
+                WatchLink.shared.activate()   // Fernauslöser am Handgelenk
+            }
             // Die Tab-Leiste steht IMMER auf Papier – die schwebende Leiste
             // passt sich sonst dem Inhalt an (dunkel in der Dunkelkammer,
             // hell überm Kamerabild), und keine einzelne Akzentfarbe bleibt

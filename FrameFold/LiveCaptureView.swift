@@ -466,6 +466,13 @@ struct LiveCaptureView: View {
             UIApplication.shared.isIdleTimerDisabled = true
             recentThumbs = []
             level.start()
+            // Studio-Monitor: externer Bildschirm zeigt ab jetzt dieses Werk
+            StudioMonitorHub.shared.register(controller, projectName: project.name)
+            // Watch als Fernauslöser: löst aus, ohne das Stativ zu berühren
+            WatchLink.shared.onShutter = { controller.captureNow() }
+            WatchLink.shared.onFinish = { finishSession(project: project) }
+            WatchLink.shared.push(count: controller.capturedCount,
+                                  projectName: project.name, status: "bereit")
             controller.start { jpegData in
                 if let current = store.projects.first(where: { $0.id == project.id }) {
                     store.appendFrame(jpegData: jpegData, to: current)
@@ -486,6 +493,13 @@ struct LiveCaptureView: View {
             UIApplication.shared.isIdleTimerDisabled = false
             controller.stop()
             level.stop()
+            StudioMonitorHub.shared.unregister(controller)
+            WatchLink.shared.onShutter = nil
+            WatchLink.shared.onFinish = nil
+        }
+        .onChange(of: controller.capturedCount) { _, count in
+            WatchLink.shared.push(count: count, projectName: project.name,
+                                  status: controller.status.label(playful: mode == .basic))
         }
         .onChange(of: refPickerItem) { _, item in
             guard let item else { return }
