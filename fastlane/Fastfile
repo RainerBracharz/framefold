@@ -117,6 +117,62 @@ platform :ios do
     end
   end
 
+  desc "Zeigt, welche Screenshots je Gerätetyp im Store liegen"
+  lane :shots do
+    login
+    require "spaceship"
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
+      key_id: KEY_ID, issuer_id: ISSUER_ID, filepath: KEY_PATH)
+    app = Spaceship::ConnectAPI::App.find(APP_ID)
+
+    app.get_app_store_versions.first(2).each do |v|
+      UI.message("── Version #{v.version_string} (#{v.app_store_state})")
+      v.get_app_store_version_localizations.each do |loc|
+        UI.message("   Sprache #{loc.locale}")
+        sets = loc.get_app_screenshot_sets
+        if sets.empty?
+          UI.important("     keine Screenshot-Sets")
+          next
+        end
+        sets.each do |s|
+          shots = s.app_screenshots || []
+          UI.message("     #{s.screenshot_display_type}: #{shots.size} Bild(er)")
+        end
+      end
+    end
+  end
+
+  desc "Lädt die im Store liegenden Screenshots nach fastlane/store-shots/"
+  lane :pull_shots do
+    login
+    require "spaceship"
+    require "open-uri"
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
+      key_id: KEY_ID, issuer_id: ISSUER_ID, filepath: KEY_PATH)
+    app = Spaceship::ConnectAPI::App.find(APP_ID)
+
+    dir = File.expand_path("store-shots", Dir.pwd)
+    FileUtils.rm_rf(dir); FileUtils.mkdir_p(dir)
+
+    v = app.get_app_store_versions.first
+    UI.message("Version #{v.version_string} (#{v.app_store_state})")
+    v.get_app_store_version_localizations.each do |loc|
+      loc.get_app_screenshot_sets.each do |s|
+        (s.app_screenshots || []).each_with_index do |shot, i|
+          asset = shot.image_asset
+          next UI.important("  #{shot.file_name}: noch keine Vorschau") if asset.nil?
+          url = asset["templateUrl"].to_s
+                    .gsub("{w}", asset["width"].to_s)
+                    .gsub("{h}", asset["height"].to_s)
+                    .gsub("{f}", "png")
+          name = "#{s.screenshot_display_type}-#{format('%02d', i + 1)}.png"
+          File.binwrite(File.join(dir, name), URI.parse(url).read)
+          UI.success("  #{name}  (#{asset['width']}×#{asset['height']})")
+        end
+      end
+    end
+  end
+
   desc "Vollständiger Prüfbericht -> fastlane/bericht.txt"
   lane :check do
     login
