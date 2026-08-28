@@ -53,10 +53,18 @@ that decision is written up here:
   model).
 - **Auto-shutter camera.** Put the phone on a tripod and work. It fires by itself
   whenever your hands leave the frame and the scene settles, then **locks
-  exposure, focus and white balance** so nothing drifts between frames, and snaps
-  the shutter speed to the mains frequency against LED flicker. Tap-to-focus, an
+  exposure and white balance** so nothing drifts between frames, and snaps the
+  shutter speed to the mains frequency against LED flicker. Tap-to-focus, an
   interval trigger, a live motion gauge, spirit level, thirds grid and haptic
   shutter are all there.
+- **Focus that has to earn it.** The app measures image sharpness on every
+  analysed frame and only locks focus once it has actually peaked — not merely
+  once autofocus stops hunting, which is a different thing entirely and the
+  reason an early build could freeze a whole session out of focus. If sharpness
+  collapses later, it refocuses on its own; a frame that isn't sharp never makes
+  it into the work. On a tripod focus stays locked; hand-held it keeps tracking,
+  because the distance to the work changes with every movement. The gyroscope
+  decides which of the two applies, and a tap overrides it.
 - **Onion skin and drift check.** Overlay the previous frame — or the very first
   frame of the session — at adjustable opacity, plus an optional external
   reference image. The screen stays awake for the whole session.
@@ -78,6 +86,11 @@ that decision is written up here:
   the work. Without a session running it shows a gallery standby.
 - **Apple Watch remote.** Fire and finish from your wrist, with the frame count
   and live status on the watch face. Nobody has to touch the tripod.
+
+<div align="center">
+<img src="docs/watch.png" width="820" alt="FrameFold viewfinder on iPhone next to the Apple Watch remote showing the frame count" />
+</div>
+
 - **Shutter without shake.** Hold the shutter for a three-second self-timer, or
   use the volume buttons on headphones and AirPods — Apple's capture-event API,
   which also covers cheap Bluetooth camera remotes.
