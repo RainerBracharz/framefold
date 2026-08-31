@@ -1,0 +1,26 @@
+FrameFold verwandelt ein Video deines Arbeitsprozesses in eine Stopmotion — vollautomatisch und komplett auf deinem iPhone.
+
+Die App findet die ruhigen Momente in deinem Material, verwirft jedes Bild, auf dem deine Hände zu sehen sind, gleicht Verwacklung aus und montiert das Ergebnis. Nichts verlässt dein Gerät: keine Cloud, kein Konto, kein Tracking.
+
+AUTOMATISCHE KAMERA
+iPhone aufs Stativ, arbeiten — FrameFold löst selbst aus, sobald deine Hände aus dem Bild sind und die Szene ruht. Belichtung und Weißabgleich werden fixiert, die Verschlusszeit rastet gegen Kunstlicht-Flackern ein. Mit Zwiebelhaut, Drift-Kontrolle, Intervall-Auslöser und Wasserwaage.
+
+SCHARF, ODER GAR NICHT
+Die App misst laufend die Bildschärfe und fixiert den Fokus erst, wenn er wirklich sitzt. Bricht die Schärfe später weg, stellt sie von selbst neu scharf. Ein unscharfes Bild landet gar nicht erst im Werk. Am Stativ bleibt der Fokus fest, aus der Hand läuft er mit — die App erkennt am Bewegungssensor, was gerade zutrifft.
+
+APPLE WATCH ALS FERNAUSLÖSER
+Auslösen und Beenden vom Handgelenk, mit Bildzähler und Zustand auf dem Zifferblatt. Niemand muss das Stativ berühren. Auch die Lautstärketasten von Kopfhörern und AirPods lösen aus, und ein langer Druck auf den Auslöser startet einen Countdown.
+
+STUDIO-MONITOR
+Hängt ein Bildschirm oder Beamer am iPhone, zeigt er nur das Kamerabild mit einer Katalogzeile — ohne Bedienelemente. Für Kurse und Atelierbesuche: alle sehen zu, das iPhone bleibt unberührt am Stativ.
+
+VIDEO ZU STOPMOTION
+Vorhandenes Video wählen, ruhige Momente werden erkannt, Hände entfernt, Duplikate aussortiert. Vor der Montage prüfst du jedes Bild auf dem Kontaktbogen.
+
+DREI MODI
+Einfach (auswählen, auslösen, fertig — ideal für den Unterricht), Erweitert (Format, Bildrate, Auflösung, Abspielmodus) und ein Atelier-Modus mit Papierrelief, Bild-Echo, Druckbild-Look, Falt-Übergängen, Ausstellungs-Reel und druckfertigen Kontaktbogen- und Faltvorlagen-PDFs.
+
+WERKE STATT DATEIEN
+Projekte sammeln Bilder über beliebig viele Sessions, mit 30-Tage-Papierkorb. Das Ergebnis erscheint als Edition: „Blatt 01–24 · Serie von 24 · datiert 2026".
+
+Entstanden als maßgeschneidertes Werkzeug für den Künstler Aldo Tolino, dessen Arbeit gedruckte Fotografien zu Objekten faltet und wieder fotografiert — Bild, Objekt, Bild.

@@ -105,6 +105,22 @@ platform :ios do
     UI.success("Eingereicht. Freigabe erfolgt danach manuell in App Store Connect.")
   end
 
+  desc "Nur Texte aktualisieren (Beschreibung, Release-Notes) – ohne neues Binary"
+  lane :metadata do
+    api_key = login
+    upload_to_app_store(
+      api_key: api_key,
+      app_identifier: APP_ID,
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      skip_metadata: false,
+      force: true,
+      precheck_include_in_app_purchases: false,
+      submit_for_review: false
+    )
+    UI.success("Texte hochgeladen. Ob Apple sie ohne neue Version übernimmt, zeigt App Store Connect.")
+  end
+
   desc "Status der letzten Einreichung anzeigen"
   lane :status do
     api_key = login
