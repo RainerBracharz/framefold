@@ -142,13 +142,14 @@ def sales_rows(frequency:, report_date:)
        .select { |r| r["Apple Identifier"].to_s == APP_ID }
 end
 
-# Apples Produktcodes, soweit sie für eine kostenlose App vorkommen.
+# Apples Produktcodes, soweit ich sie sicher zuordnen kann. Unbekannte Codes
+# werden bewusst als „Code X“ ausgewiesen statt geraten — eine falsche
+# Beschriftung ist schlimmer als eine fehlende.
 ARTEN = {
   "1"  => "Erstinstallation", "1F" => "Erstinstallation",
   "1T" => "Erstinstallation", "F1" => "Erstinstallation",
   "7"  => "Aktualisierung",   "7F" => "Aktualisierung",
-  "7T" => "Aktualisierung",
-  "3"  => "In-App-Kauf",      "IA1" => "Erstinstallation (Watch)"
+  "7T" => "Aktualisierung"
 }.freeze
 
 def summe(rows) = rows.sum { |r| r["Units"].to_i }
@@ -163,26 +164,39 @@ end
 heute = Date.today
 $stderr.print "Hole Berichte"
 
-# Monatsberichte ab Start – das ergibt die Gesamtsumme ohne 400 Einzelabfragen.
+# Tagesberichte werden zwischengespeichert: Der laufende Monat und das
+# 30-Tage-Fenster überschneiden sich, jeder Tag soll aber nur einmal geholt
+# und nur einmal gezählt werden.
+tage = {}
+hole_tag = lambda do |tag|
+  tage[tag.iso8601] ||= begin
+    $stderr.print "."
+    sales_rows(frequency: "DAILY", report_date: tag.iso8601)
+  end
+end
+
+# Abgeschlossene Monate als Monatsbericht — spart Abfragen. Den laufenden
+# Monat gibt es als Monatsbericht noch nicht: Apple erstellt ihn erst nach
+# Monatsende. Er muss deshalb tageweise dazu, sonst fehlt er in der
+# Gesamtsumme und „letzte 30 Tage“ wäre grösser als „gesamt“.
 alle = []
+monatsanfang = Date.new(heute.year, heute.month, 1)
 monat = Date.new(LAUNCH.year, LAUNCH.month, 1)
-while monat <= heute
+while monat < monatsanfang
   alle.concat(sales_rows(frequency: "MONTHLY", report_date: monat.strftime("%Y-%m")))
   $stderr.print "."
   monat = monat.next_month
 end
+(monatsanfang..heute).each { |t| alle.concat(hole_tag.call(t)) if t >= LAUNCH }
 
-# Der laufende Monat ist als Monatsbericht erst am Monatsende vollständig,
-# deshalb die letzten Tage einzeln nachholen.
-letzte7 = []
 letzte30 = []
-(0..30).each do |back|
+letzte7  = []
+(0..29).each do |back|
   tag = heute - back
   next if tag < LAUNCH
-  rows = sales_rows(frequency: "DAILY", report_date: tag.strftime("%Y-%m-%d"))
+  rows = hole_tag.call(tag)
   letzte30.concat(rows)
   letzte7.concat(rows) if back < 7
-  $stderr.print "."
 end
 $stderr.puts
 
