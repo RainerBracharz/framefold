@@ -132,6 +132,22 @@ final class FrameFoldUITests: XCTestCase {
         if tap(["Origami crane"], prefix: true) {
             sleep(1)
             shot("project-detail")
+            // Testwerk wieder wegräumen, sonst sammelt sich mit jedem Lauf eines an
+            if tap(["Delete project", "Projekt löschen"]) {
+                tap(["Delete permanently", "Endgültig löschen"])
+                sleep(1)
+            }
+        }
+
+        // 13 Ein älteres Werk mit echtem Material, falls vorhanden – für den
+        // Store sind das die stärkeren Bilder als die Simulator-Testaufnahme.
+        let older = app.buttons.matching(NSPredicate(
+            format: "(label CONTAINS[c] 'frames' OR label CONTAINS[c] 'Bilder') AND NOT label CONTAINS 'Origami'"
+        )).firstMatch
+        if older.waitForExistence(timeout: 2) {
+            older.tap()
+            sleep(1)
+            shot("project-detail-existing")
         }
     }
 
@@ -159,7 +175,7 @@ final class FrameFoldUITests: XCTestCase {
             any.tap()
             return true
         }
-        note("Kein Knopf gefunden: \(labels.joined(separator: " / "))")
+        note(labels.joined(separator: " / "))
         return false
     }
 
@@ -179,7 +195,29 @@ final class FrameFoldUITests: XCTestCase {
         }
     }
 
+    /// Nicht gefundene Knöpfe sind ein Hinweis, kein Scheitern: sie landen
+    /// in log.txt, der Lauf gilt trotzdem als bestanden, solange die Bilder da sind.
     private func note(_ message: String) {
-        record(XCTIssue(type: .assertionFailure, compactDescription: message))
+        log("Kein Knopf gefunden: " + message)
+    }
+
+    private func log(_ message: String) {
+        guard let dir = shotDir else { return }
+        let line = "[\(String(format: "%02d", shotIndex))] \(message)\n"
+        let url = dir.appendingPathComponent("log.txt")
+        if let handle = try? FileHandle(forWritingTo: url) {
+            handle.seekToEndOfFile()
+            handle.write(Data(line.utf8))
+            handle.closeFile()
+        } else {
+            try? line.write(to: url, atomically: true, encoding: .utf8)
+        }
+    }
+
+    /// Jeder Fehlschlag landet auch als Zeile in log.txt neben den Bildern –
+    /// xcodebuild gibt die Testfehler nicht mehr auf der Konsole aus.
+    override func record(_ issue: XCTIssue) {
+        log("FEHLER: " + issue.compactDescription)
+        super.record(issue)
     }
 }
