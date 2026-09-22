@@ -19,6 +19,10 @@ reference-pipeline/.venv/
 docs/assets/
 AppStore_Review/
 Beispielausgaben/
+# Marketing-Rohmaterial: veraltete Entwuerfe und Testausgaben. Lag bereits
+# einmal mit einer falsch benannten Datei darin, die nichts im Netz zu suchen
+# hatte — dieser Ordner bleibt grundsaetzlich draussen.
+Marketing_Assets/
 *.mp4
 fftests
 
