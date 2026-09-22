@@ -1,0 +1,26 @@
+FrameFold turns a video of your working process into a stop-motion — automatically, and entirely on your iPhone.
+
+The app finds the calm moments in your footage, drops every frame with your hands in it, compensates for shake and assembles the result. Nothing leaves your device: no cloud, no account, no tracking.
+
+AUTOMATIC CAMERA
+Phone on a tripod, then work — FrameFold fires by itself as soon as your hands leave the frame and the scene settles. Exposure and white balance are locked, and the shutter speed snaps to the mains frequency so artificial light can't streak your frames. With onion skin, drift check, an interval trigger and a spirit level.
+
+SHARP, OR NOT AT ALL
+The app measures image sharpness continuously and only locks focus once it has actually settled. If sharpness drops later, it refocuses on its own. A frame that isn't sharp never makes it into the work. On a tripod focus stays locked; handheld it keeps tracking — the motion sensor decides which applies.
+
+APPLE WATCH AS A REMOTE
+Fire and finish from your wrist, with the frame count and status on the watch face. Nobody has to touch the tripod. The volume buttons on headphones and AirPods fire too, and holding the shutter starts a countdown.
+
+STUDIO MONITOR
+Connect a screen or projector and it shows the camera feed alone, with a catalogue line — no controls. For classes and studio visits: everyone watches, the phone stays untouched on the tripod.
+
+VIDEO TO STOP-MOTION
+Pick an existing video, the calm moments get found, hands removed, duplicates sorted out. You check every frame on the contact sheet before it's assembled.
+
+THREE MODES
+Simple (pick, shoot, done — made for teaching), Advanced (aspect, frame rate, resolution, playback) and a studio mode with paper relief, image echo, print look, fold transitions, an exhibition reel and print-ready contact-sheet and fold-template PDFs.
+
+WORKS, NOT FILES
+Projects collect frames across any number of sessions, with a 30-day trash. The result arrives like an edition: "Sheets 01–24 · Series of 24 · dated 2026".
+
+Built as a bespoke tool for the artist Aldo Tolino, whose work folds printed photographs into objects and photographs them again — image, object, image.
