@@ -195,6 +195,15 @@ struct FrameFoldApp: App {
     @AppStorage("didOnboard") private var didOnboard = false
 
     init() {
+        // UI-Test-Lauf: Erststart herstellen (Onboarding, Kamera-Tipp, Modus).
+        // Als Löschung statt als Startargument-Wert, weil ein Argument-Wert
+        // alles überstimmen würde, was die App danach selbst speichert.
+        if CommandLine.arguments.contains("--ff-fresh-start") {
+            let defaults = UserDefaults.standard
+            for key in ["didOnboard", "didSeeCameraTip", "appMode"] {
+                defaults.removeObject(forKey: key)
+            }
+        }
         AppFonts.register() // Fraunces + Inter aus dem Asset-Katalog registrieren
         // Papier-&-Falz-Erscheinungsbild für Tab- und Navigationsleiste
         let tabAppearance = UITabBarAppearance()

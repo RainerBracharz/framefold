@@ -135,11 +135,11 @@ struct ContentView: View {
         let hour = Calendar.current.component(.hour, from: Date())
         let greeting: String
         switch hour {
-        case 5..<11:  greeting = "Guten Morgen"
-        case 11..<14: greeting = "Hallo"
-        case 14..<18: greeting = "Guten Tag"
-        case 18..<23: greeting = "Guten Abend"
-        default:      greeting = "Gute Nacht"
+        case 5..<11:  greeting = String(localized: "Guten Morgen")
+        case 11..<14: greeting = String(localized: "Hallo")
+        case 14..<18: greeting = String(localized: "Guten Tag")
+        case 18..<23: greeting = String(localized: "Guten Abend")
+        default:      greeting = String(localized: "Gute Nacht")
         }
         let name = artistName.trimmingCharacters(in: .whitespaces)
         return name.isEmpty ? greeting : "\(greeting), \(name)"

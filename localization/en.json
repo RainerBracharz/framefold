@@ -259,5 +259,10 @@
   "Die Bildauswahl läuft automatisch: FrameFold erfasst alle ruhigen Momente und entfernt Bilder mit Händen. Feinschliff machst du danach in der Bildauswahl.": "Frame selection runs by itself: FrameFold catches every calm moment and drops frames with hands in them. You do the fine-tuning afterwards in frame selection.",
   "Alle Werkzeuge sichtbar: Raster, Wasserwaage, Pegel, Daumenkino mit Zurücknehmen, Neu-Fixieren, Referenzbild.": "Every tool visible: grid, spirit level, motion gauge, flip-book strip with undo, re-lock, reference image.",
   "Einfach: nur Auslöser und Fertig. Alles Weitere erscheint ab \"Erweitert\".": "Simple: just the shutter and Done. Everything else appears from \"Advanced\" on.",
-  "Labor-Ansicht: Blattnummer, Sitzungsuhr, fixierte Belichtung, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": "Lab view: sheet number, session clock, locked exposure, readings — and the crease countdown runs in amber around the shutter."
+  "Labor-Ansicht: Blattnummer, Sitzungsuhr, fixierte Belichtung, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": "Lab view: sheet number, session clock, locked exposure, readings — and the crease countdown runs in amber around the shutter.",
+  "Guten Morgen": "Good morning",
+  "Hallo": "Hello",
+  "Guten Tag": "Good afternoon",
+  "Guten Abend": "Good evening",
+  "Gute Nacht": "Good night"
 }
