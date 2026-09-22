@@ -132,7 +132,7 @@ struct OnboardingView: View {
         }
     }
 
-    private func wayRow(icon: String, title: String, text: String) -> some View {
+    private func wayRow(icon: String, title: LocalizedStringResource, text: LocalizedStringResource) -> some View {
         HStack(alignment: .top, spacing: 14) {
             Image(systemName: icon)
                 .font(.system(size: 20))
@@ -154,7 +154,7 @@ struct OnboardingView: View {
         .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
     }
 
-    private func modeChoice(mode: AppMode, title: String, text: String) -> some View {
+    private func modeChoice(mode: AppMode, title: LocalizedStringResource, text: LocalizedStringResource) -> some View {
         let selected = modeRaw == mode.rawValue
         return Button {
             withAnimation(.snappy(duration: 0.18)) { modeRaw = mode.rawValue }

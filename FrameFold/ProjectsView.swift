@@ -113,7 +113,7 @@ struct ProjectsView: View {
 
     private func projectRow(index: Int, project: Project) -> some View {
         HStack(spacing: 14) {
-            CatalogLabel(String(format: "%02d", index + 1), color: Theme.graphite)
+            CatalogLabel(verbatim: String(format: "%02d", index + 1), color: Theme.graphite)
                 .frame(width: 26, alignment: .leading)
 
             // Akzent des Werks
@@ -130,7 +130,7 @@ struct ProjectsView: View {
                 .overlay(Rectangle().stroke(Theme.ink.opacity(0.5), lineWidth: 1))
 
             VStack(alignment: .leading, spacing: 4) {
-                WorkTitle(project.name, size: 17)
+                WorkTitle(verbatim: project.name, size: 17)
                 CatalogLabel("\(project.frameCount) Bilder")
             }
             Spacer()
@@ -254,7 +254,7 @@ struct ProjectDetailView: View {
         .paperStage()
         .toolbar {
             ToolbarItem(placement: .principal) {
-                WorkTitle(currentProject.name, size: 17)
+                WorkTitle(verbatim: currentProject.name, size: 17)
             }
             ToolbarItem(placement: .topBarTrailing) {
                 // Einzelne Frames entfernen ist Grundhygiene – in jedem Modus.
@@ -314,7 +314,7 @@ struct ProjectDetailView: View {
         exportSettings.aspect == .original && exportSettings.outputFPS == 2
     }
 
-    private func presetChip(_ label: String, active: Bool,
+    private func presetChip(_ label: LocalizedStringResource, active: Bool,
                             action: @escaping () -> Void) -> some View {
         Button {
             withAnimation(.snappy(duration: 0.15)) { action() }
@@ -395,7 +395,7 @@ struct ProjectDetailView: View {
                     optionDivider
                     optionRow("Abspielmodus") {
                         Picker("", selection: $exportSettings.loopMode) {
-                            ForEach(LoopMode.allCases) { Text($0.rawValue).tag($0) }
+                            ForEach(LoopMode.allCases) { Text(verbatim: $0.label).tag($0) }
                         }
                     }
                     optionDivider
@@ -440,7 +440,7 @@ struct ProjectDetailView: View {
                             optionDivider
                             optionRow("Übergangsstil") {
                                 Picker("", selection: $exportSettings.transitionStyle) {
-                                    ForEach(TransitionStyle.allCases) { Text($0.rawValue).tag($0) }
+                                    ForEach(TransitionStyle.allCases) { Text(verbatim: $0.label).tag($0) }
                                 }
                             }
                         }
@@ -524,7 +524,7 @@ struct ProjectDetailView: View {
     }
 
     /// Drucksache: kleiner, ruhiger Knopf – ordnet sich dem Export unter.
-    private func pdfButton(title: String, icon: String, disabled: Bool,
+    private func pdfButton(title: LocalizedStringResource, icon: String, disabled: Bool,
                            action: @escaping () -> Void) -> some View {
         Button(action: action) {
             VStack(spacing: 7) {
@@ -563,7 +563,7 @@ struct ProjectDetailView: View {
                 if let result {
                     shareItem = ShareItem(url: result)   // Teilen-Sheet direkt öffnen
                 } else {
-                    errorMessage = "Faltvorlage konnte nicht erstellt werden."
+                    errorMessage = String(localized: "Faltvorlage konnte nicht erstellt werden.")
                 }
             }
         }
@@ -584,7 +584,7 @@ struct ProjectDetailView: View {
                 if let url {
                     shareItem = ShareItem(url: url)   // Teilen-Sheet direkt öffnen
                 } else {
-                    errorMessage = "Kontaktbogen konnte nicht erstellt werden."
+                    errorMessage = String(localized: "Kontaktbogen konnte nicht erstellt werden.")
                 }
             }
         }
@@ -671,9 +671,9 @@ struct ExhibitionSheet: View {
     /// Sagt jederzeit, wo man steht – statt eines stummen, grauen Knopfs.
     private var selectionHint: String {
         switch chosen.count {
-        case 0: return "Mindestens zwei Werke wählen."
-        case 1: return "Ein Werk gewählt – noch mindestens eines."
-        default: return "\(chosen.count) Werke · \(totalFrames) Bilder"
+        case 0: return String(localized: "Mindestens zwei Werke wählen.")
+        case 1: return String(localized: "Ein Werk gewählt – noch mindestens eines.")
+        default: return String(localized: "\(chosen.count) Werke · \(totalFrames) Bilder")
         }
     }
 

@@ -1,0 +1,2759 @@
+{
+  "sourceLanguage": "de",
+  "strings": {
+    "": {
+      "shouldTranslate": false
+    },
+    "%.1f Sekunden · läuft in Schleife": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%.1f seconds · loops"
+          }
+        }
+      }
+    },
+    "%@ mit allen %lld Bildern löschen?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ mit allen %2$lld Bildern löschen?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete %1$@ and all %2$lld frames?"
+          }
+        }
+      }
+    },
+    "%lld": {
+      "shouldTranslate": false
+    },
+    "%lld Bilder": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld frame"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld frames"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld Bilder aufgenommen": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld frame captured"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld frames captured"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld Bilder · Kontaktbogen": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld frame · contact sheet"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld frames · contact sheet"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld Bilder · aus %lld s Video": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld Bilder · aus %2$lld s Video"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld frames · from %2$lld s of video"
+          }
+        }
+      }
+    },
+    "%lld Sekunde%@ Film!": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld Sekunde%2$@ Film!"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld second%2$@ of film!"
+          }
+        }
+      }
+    },
+    "%lld Werke montieren": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Assemble %lld work"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Assemble %lld works"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld Werke · %lld Bilder": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld Werke · %2$lld Bilder"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld works · %2$lld frames"
+          }
+        }
+      }
+    },
+    "%lld mit Händen entfernt · %lld Duplikate": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld mit Händen entfernt · %2$lld Duplikate"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld dropped for hands · %2$lld duplicates"
+          }
+        }
+      }
+    },
+    "%lld von %lld Bildern gewählt": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld von %2$lld Bildern gewählt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld frames selected"
+          }
+        }
+      }
+    },
+    "1 s": {
+      "shouldTranslate": false
+    },
+    "10 fps": {
+      "shouldTranslate": false
+    },
+    "12 fps": {
+      "shouldTranslate": false
+    },
+    "2 fps": {
+      "shouldTranslate": false
+    },
+    "2 fps – sehr langsam": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2 fps — very slow"
+          }
+        }
+      }
+    },
+    "2 s": {
+      "shouldTranslate": false
+    },
+    "3 fps": {
+      "shouldTranslate": false
+    },
+    "3 s": {
+      "shouldTranslate": false
+    },
+    "4 fps": {
+      "shouldTranslate": false
+    },
+    "50 Hz (EU)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "50 Hz (EU)"
+          }
+        }
+      }
+    },
+    "6 fps": {
+      "shouldTranslate": false
+    },
+    "60 Hz (US)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "60 Hz (US)"
+          }
+        }
+      }
+    },
+    "8 fps": {
+      "shouldTranslate": false
+    },
+    "Abbrechen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "Abspielmodus": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Playback"
+          }
+        }
+      }
+    },
+    "Alle Werkzeuge sichtbar: Raster, Wasserwaage, Pegel, Daumenkino mit Zurücknehmen, Neu-Fixieren, Referenzbild.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every tool visible: grid, spirit level, motion gauge, flip-book strip with undo, re-lock, reference image."
+          }
+        }
+      }
+    },
+    "Alle →": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All →"
+          }
+        }
+      }
+    },
+    "Alles dabei — plus die Spezialfeatures: Facetten, Echo, Faltvorlage, Rekursion, Ausstellung.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything, plus the studio effects: facets, echo, fold template, recursion, exhibition."
+          }
+        }
+      }
+    },
+    "Alles zeigen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show all"
+          }
+        }
+      }
+    },
+    "Als Projekt sichern": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save as a project"
+          }
+        }
+      }
+    },
+    "Am Stativ wird der Fokus fixiert, aus der Hand läuft er mit.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On a tripod focus stays locked; handheld it keeps tracking."
+          }
+        }
+      }
+    },
+    "Analysiere Bewegung…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analysing motion…"
+          }
+        }
+      }
+    },
+    "Anhalten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        }
+      }
+    },
+    "Anlegen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create"
+          }
+        }
+      }
+    },
+    "Anlegen & starten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create & start"
+          }
+        }
+      }
+    },
+    "Antippen zum Abwählen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to deselect"
+          }
+        }
+      }
+    },
+    "Arbeit erkannt…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Work detected…"
+          }
+        }
+      }
+    },
+    "Auf diesem Gerät wurde keine Kamera gefunden (z. B. im Simulator). Die Live-Aufnahme braucht ein echtes iPhone. Videos kannst du im Video-Tab trotzdem verarbeiten.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No camera was found on this device (in the Simulator, for instance). Live capture needs a real iPhone. You can still process videos in the Video tab."
+          }
+        }
+      }
+    },
+    "Aufgenommene Bilder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Captured frames"
+          }
+        }
+      }
+    },
+    "Auflösung": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resolution"
+          }
+        }
+      }
+    },
+    "Aufnahme-Einstellungen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture settings"
+          }
+        }
+      }
+    },
+    "Aufnahme-Tipps": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture tips"
+          }
+        }
+      }
+    },
+    "Aufnahmeart: Stativ. Tippen für aus der Hand.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture mode: tripod. Tap for handheld."
+          }
+        }
+      }
+    },
+    "Aufnahmeart: aus der Hand. Tippen für Stativ.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture mode: handheld. Tap for tripod."
+          }
+        }
+      }
+    },
+    "Aus": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        }
+      }
+    },
+    "Aus deiner Arbeit\nwird eine Stopmotion.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your work\nbecomes a stop-motion."
+          }
+        }
+      }
+    },
+    "Aus der Hand": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Handheld"
+          }
+        }
+      }
+    },
+    "Ausgabe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Output"
+          }
+        }
+      }
+    },
+    "Auslöse-Ton": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shutter sound"
+          }
+        }
+      }
+    },
+    "Auslöse-Wartezeit: %.1f s": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shutter delay: %.1f s"
+          }
+        }
+      }
+    },
+    "Auslöse-Wartezeit: %.1f s (+0,4 s aus der Hand)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shutter delay: %.1f s (+0.4 s handheld)"
+          }
+        }
+      }
+    },
+    "Auslöser": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shutter"
+          }
+        }
+      }
+    },
+    "Auslöser & Belichtung": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shutter & exposure"
+          }
+        }
+      }
+    },
+    "Auslöser umschalten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switch shutter mode"
+          }
+        }
+      }
+    },
+    "Auslöser · Bewegung": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shutter · Motion"
+          }
+        }
+      }
+    },
+    "Auslöser · Intervall %.0f s": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shutter · Interval %.0f s"
+          }
+        }
+      }
+    },
+    "Ausstellung": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exhibition"
+          }
+        }
+      }
+    },
+    "Ausstellung erstellen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Build exhibition"
+          }
+        }
+      }
+    },
+    "Ausstellung montieren": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assemble exhibition"
+          }
+        }
+      }
+    },
+    "Ausstellung teilen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share exhibition"
+          }
+        }
+      }
+    },
+    "Auto-Shutter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto-shutter"
+          }
+        }
+      }
+    },
+    "Baue Stopmotion…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Building stop-motion…"
+          }
+        }
+      }
+    },
+    "Bearbeiten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
+          }
+        }
+      }
+    },
+    "Bereit": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready"
+          }
+        }
+      }
+    },
+    "Bereit – arbeite einfach": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready — just work"
+          }
+        }
+      }
+    },
+    "Bewegung": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motion"
+          }
+        }
+      }
+    },
+    "Bewegungs-Toleranz: %.1f": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motion tolerance: %.1f"
+          }
+        }
+      }
+    },
+    "Bild %lld von %lld": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bild %1$lld von %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frame %1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "Bild aufgenommen ✓": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frame captured ✓"
+          }
+        }
+      }
+    },
+    "Bild entfernen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove frame"
+          }
+        }
+      }
+    },
+    "Bild · Objekt · Bild": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image · Object · Image"
+          }
+        }
+      }
+    },
+    "Bild-Echo (Nachbild)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image echo (afterimage)"
+          }
+        }
+      }
+    },
+    "Bildauswahl": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frame selection"
+          }
+        }
+      }
+    },
+    "Bilder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frames"
+          }
+        }
+      }
+    },
+    "Bilder sammeln sich über beliebig viele\nAufnahmen – live oder aus Videos.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frames collect across any number of\nsessions — live or from video."
+          }
+        }
+      }
+    },
+    "Bildrate": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frame rate"
+          }
+        }
+      }
+    },
+    "Blatt %02d": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sheet %02d"
+          }
+        }
+      }
+    },
+    "Blatt %02d · %.1f s": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Blatt %1$02d · %2$.1f s"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sheet %1$02d · %2$.1f s"
+          }
+        }
+      }
+    },
+    "Blatt 01 – %02d": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sheets 01 – %02d"
+          }
+        }
+      }
+    },
+    "Blendet das nächste Bild ein — als Falzkante, als triangulierte Facetten oder als eingewobene Bildstreifen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brings in the next frame — as a crease, as triangulated facets, or as woven strips."
+          }
+        }
+      }
+    },
+    "Blendet das vorherige Bild halbtransparent über den Sucher.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lays the previous frame over the viewfinder, half transparent."
+          }
+        }
+      }
+    },
+    "Das Stopmotion-Video konnte nicht geschrieben werden.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The stop-motion video couldn't be written."
+          }
+        }
+      }
+    },
+    "Das Video ist leer oder konnte nicht gelesen werden.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The video is empty or couldn't be read."
+          }
+        }
+      }
+    },
+    "Das Video konnte nicht geladen werden.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The video couldn't be loaded."
+          }
+        }
+      }
+    },
+    "Das hat leider nicht geklappt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That didn't work."
+          }
+        }
+      }
+    },
+    "Das vorherige Bild schimmert im nächsten leicht nach.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The previous frame lingers faintly in the next."
+          }
+        }
+      }
+    },
+    "Deckkraft: %lld %%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opacity: %lld %%"
+          }
+        }
+      }
+    },
+    "Der runde Knopf löst jederzeit von Hand aus.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The round button fires by hand at any time."
+          }
+        }
+      }
+    },
+    "Die Bildauswahl läuft automatisch: FrameFold erfasst alle ruhigen Momente und entfernt Bilder mit Händen. Feinschliff machst du danach in der Bildauswahl.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frame selection runs by itself: FrameFold catches every calm moment and drops frames with hands in them. You do the fine-tuning afterwards in frame selection."
+          }
+        }
+      }
+    },
+    "Die Bilder wandern in ein Projekt und lassen sich dort mit weiteren Aufnahmen ergänzen und neu exportieren.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The frames move into a project, where you can add more sessions and export again."
+          }
+        }
+      }
+    },
+    "Die ruhigen Momente werden gefunden": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The calm moments get found"
+          }
+        }
+      }
+    },
+    "Direkt aufnehmen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shoot live"
+          }
+        }
+      }
+    },
+    "Drift früh erkennen: Zwiebelhaut anlassen und die Aufnahme ab und zu mit dem ersten Bild vergleichen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spot drift early: leave onion skin on and compare against the first frame now and then."
+          }
+        }
+      }
+    },
+    "Drittel-Raster": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thirds grid"
+          }
+        }
+      }
+    },
+    "Druckbild (Schwarzweiß)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Print look (black and white)"
+          }
+        }
+      }
+    },
+    "Drucken": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Print"
+          }
+        }
+      }
+    },
+    "Dunkelkammer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Darkroom"
+          }
+        }
+      }
+    },
+    "Echo-Stärke: %lld %%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Echo strength: %lld %%"
+          }
+        }
+      }
+    },
+    "Effekte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effects"
+          }
+        }
+      }
+    },
+    "Ein Blatt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One sheet"
+          }
+        }
+      }
+    },
+    "Ein Blatt pro Werk.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One sheet per work."
+          }
+        }
+      }
+    },
+    "Ein Werk gewählt – noch mindestens eines.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One work picked — at least one more to go."
+          }
+        }
+      }
+    },
+    "Ein fertiges Video aus der Mediathek — FrameFold macht den Rest.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A video from your library — FrameFold does the rest."
+          }
+        }
+      }
+    },
+    "Einfach": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Simple"
+          }
+        }
+      }
+    },
+    "Einfach: nur Auslöser und Fertig. Alles Weitere erscheint ab \"Erweitert\".": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Simple: just the shutter and Done. Everything else appears from \"Advanced\" on."
+          }
+        }
+      }
+    },
+    "Einstellungen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "Endgültig löschen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete permanently"
+          }
+        }
+      }
+    },
+    "Erlaube FrameFold den Kamerazugriff unter Einstellungen → FrameFold.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow FrameFold to use the camera in Settings → FrameFold."
+          }
+        }
+      }
+    },
+    "Erneut falten (Rekursion)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fold again (recursion)"
+          }
+        }
+      }
+    },
+    "Erweitert": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Advanced"
+          }
+        }
+      }
+    },
+    "Export": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export"
+          }
+        }
+      }
+    },
+    "Facetten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Facets"
+          }
+        }
+      }
+    },
+    "Faltvorlage": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fold template"
+          }
+        }
+      }
+    },
+    "Faltvorlage konnte nicht erstellt werden.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The fold template couldn't be created."
+          }
+        }
+      }
+    },
+    "Faltvorlage teilen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share fold template"
+          }
+        }
+      }
+    },
+    "Falz": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crease"
+          }
+        }
+      }
+    },
+    "Fehler: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error: %@"
+          }
+        }
+      }
+    },
+    "Fertig": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "Fertig · %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done · %lld"
+          }
+        }
+      }
+    },
+    "Fertig! %lld Bilder": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Done! %lld frame"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Done! %lld frames"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Fokus findet nichts Scharfes. Tippe im Sucher auf dein Werk.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus can't find anything sharp. Tap your work in the viewfinder."
+          }
+        }
+      }
+    },
+    "Format": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aspect"
+          }
+        }
+      }
+    },
+    "Format, Bildrate, Effekte, Faltvorlagen, Ausstellung — die volle Werkstatt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aspect, frame rate, effects, fold templates, exhibition — the full workshop."
+          }
+        }
+      }
+    },
+    "FrameFold": {
+      "shouldTranslate": false
+    },
+    "FrameFold findet die ruhigen Momente und verwirft Bilder, auf denen deine Hände zu sehen sind. Alles bleibt auf dem Gerät.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FrameFold finds the calm moments and drops any frame with your hands in it. Everything stays on the device."
+          }
+        }
+      }
+    },
+    "Galerie": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gallery"
+          }
+        }
+      }
+    },
+    "Gegen erstes Bild (Drift)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Against first frame (drift)"
+          }
+        }
+      }
+    },
+    "Gesichert ✓": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved ✓"
+          }
+        }
+      }
+    },
+    "Gleich geht's los…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nearly there…"
+          }
+        }
+      }
+    },
+    "HAND": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HANDHELD"
+          }
+        }
+      }
+    },
+    "Halt kurz still…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold still a moment…"
+          }
+        }
+      }
+    },
+    "Höher = kleine Wackler und Bildrauschen werden ignoriert. Wenn der Auslöser nie Ruhe findet, diesen Wert erhöhen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Higher = small shakes and sensor noise are ignored. If the shutter never settles, raise this."
+          }
+        }
+      }
+    },
+    "Ich sehe kaum Struktur und kann die Schärfe nicht prüfen. Geh etwas weiter weg oder tippe im Sucher auf dein Werk.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I can barely see any detail, so I can't judge sharpness. Move back a little, or tap your work in the viewfinder."
+          }
+        }
+      }
+    },
+    "Ich warte, bis du weg bist…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I'll wait till you're clear…"
+          }
+        }
+      }
+    },
+    "Im Intervall-Modus löst FrameFold in festem Takt aus – unabhängig von Bewegung.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In interval mode FrameFold fires on a fixed beat, regardless of motion."
+          }
+        }
+      }
+    },
+    "Intervall": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interval"
+          }
+        }
+      }
+    },
+    "Intervall: %.0f s": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interval: %.0f s"
+          }
+        }
+      }
+    },
+    "Jede Facette liegt anders im Licht — als wäre das Bild gefaltet und wieder abfotografiert worden.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each facet catches the light differently — as if the image had been folded and photographed again."
+          }
+        }
+      }
+    },
+    "Kalibriere – kurz ruhig lassen…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calibrating — keep it steady…"
+          }
+        }
+      }
+    },
+    "Kamera": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera"
+          }
+        }
+      }
+    },
+    "Kamera aufs Stativ, automatisch auslösen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera on a tripod, fires by itself"
+          }
+        }
+      }
+    },
+    "Kamera bleibt ruhig: FrameFold sperrt Belichtung und Weißabgleich nach der kurzen Kalibrierung – so driftet zwischen den Bildern nichts. Der Fokus wird am Stativ fixiert, aus der Hand läuft er mit.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera stays calm: after a short calibration FrameFold locks exposure and white balance, so nothing drifts between frames. Focus stays locked on a tripod; handheld it keeps tracking."
+          }
+        }
+      }
+    },
+    "Kamera neu fixieren": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Re-lock camera"
+          }
+        }
+      }
+    },
+    "Kamera startet…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starting camera…"
+          }
+        }
+      }
+    },
+    "Kein Kamerazugriff": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No camera access"
+          }
+        }
+      }
+    },
+    "Keine Kamera verfügbar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No camera available"
+          }
+        }
+      }
+    },
+    "Keine ruhigen Momente gefunden. Das Video ist evtl. sehr kurz oder durchgehend in Bewegung – nimm etwas länger auf oder halte zwischendurch kurz still.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No calm moments found. The video may be very short, or in motion throughout — shoot a little longer, or hold still now and then."
+          }
+        }
+      }
+    },
+    "Keine ruhigen Momente gefunden. Das Video ist evtl. sehr kurz oder durchgehend in Bewegung — schiebe den Regler unten Richtung Mehr Bilder oder nimm etwas länger auf.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No calm moments found. The video may be very short, or in motion throughout — push the slider below towards More frames, or shoot a little longer."
+          }
+        }
+      }
+    },
+    "Keyframes prüfen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Review keyframes"
+          }
+        }
+      }
+    },
+    "Klassische Einstellungen: Format, Bildrate, Abspielmodus, Stabilisierung.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The usual settings: aspect, frame rate, playback, stabilisation."
+          }
+        }
+      }
+    },
+    "Klick!": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click!"
+          }
+        }
+      }
+    },
+    "Kontaktbogen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact sheet"
+          }
+        }
+      }
+    },
+    "Kontaktbogen konnte nicht erstellt werden.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The contact sheet couldn't be created."
+          }
+        }
+      }
+    },
+    "Kontaktbogen teilen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share contact sheet"
+          }
+        }
+      }
+    },
+    "Kurz": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Short"
+          }
+        }
+      }
+    },
+    "Labor-Ansicht: Blattnummer, Sitzungsuhr, fixierte Belichtung, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lab view: sheet number, session clock, locked exposure, readings — and the crease countdown runs in amber around the shutter."
+          }
+        }
+      }
+    },
+    "Lade Video…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading video…"
+          }
+        }
+      }
+    },
+    "Lese Bilder…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading frames…"
+          }
+        }
+      }
+    },
+    "Letztes Bild halten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold last frame"
+          }
+        }
+      }
+    },
+    "Letztes Bild zurücknehmen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo last frame"
+          }
+        }
+      }
+    },
+    "Licht konstant halten: Kunstlicht nutzen, Fenster abdunkeln. Billige LED-/Leuchtstofflampen flackern im Netztakt und streifen einzelne Bilder.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep the light steady: use artificial light, shade the windows. Cheap LED and fluorescent lamps flicker at mains frequency and streak individual frames."
+          }
+        }
+      }
+    },
+    "Live-Einstellungen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live settings"
+          }
+        }
+      }
+    },
+    "Lokal auf diesem Gerät": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local, on this device"
+          }
+        }
+      }
+    },
+    "Los geht's": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get started"
+          }
+        }
+      }
+    },
+    "Los — ich schau zu": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go ahead — I'm watching"
+          }
+        }
+      }
+    },
+    "Lässt sich jederzeit über das Regler-Symbol ändern.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can change this any time from the sliders icon."
+          }
+        }
+      }
+    },
+    "Mehr Bilder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More frames"
+          }
+        }
+      }
+    },
+    "Mehrere Werke,\nein durchlaufendes Reel.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Several works,\none continuous reel."
+          }
+        }
+      }
+    },
+    "Mindestens zwei Werke wählen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick at least two works."
+          }
+        }
+      }
+    },
+    "Modus": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode"
+          }
+        }
+      }
+    },
+    "Moment, wird scharf…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One sec, focusing…"
+          }
+        }
+      }
+    },
+    "Name": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "Name (z. B. Faltung Nr. 12)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name (e.g. Fold no. 12)"
+          }
+        }
+      }
+    },
+    "Netzfrequenz": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mains frequency"
+          }
+        }
+      }
+    },
+    "Neues Projekt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New project"
+          }
+        }
+      }
+    },
+    "Neues Werk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New work"
+          }
+        }
+      }
+    },
+    "Neues Werk anlegen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a new work"
+          }
+        }
+      }
+    },
+    "Nicht auslösen, solange Hände im Bild sind": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don't fire while hands are in frame"
+          }
+        }
+      }
+    },
+    "Nicht bewegen…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don't move…"
+          }
+        }
+      }
+    },
+    "Nimmt sofort ein Bild auf. Sonst löst die Kamera von selbst aus, sobald die Hände aus dem Bild sind.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Takes a frame right away. Otherwise the camera fires by itself once your hands are clear."
+          }
+        }
+      }
+    },
+    "Noch kein Werk – leg eines an, dann kann die Kamera loslegen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No work yet — start one and the camera can go."
+          }
+        }
+      }
+    },
+    "Noch nicht scharf…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not sharp yet…"
+          }
+        }
+      }
+    },
+    "Nochmal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Again"
+          }
+        }
+      }
+    },
+    "Nochmal versuchen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try again"
+          }
+        }
+      }
+    },
+    "Normal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        }
+      }
+    },
+    "Nur das Nötigste: Video wählen → Stopmotion.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Just the essentials: pick a video → stop-motion."
+          }
+        }
+      }
+    },
+    "Nur das Nötigste: auswählen, auslösen, fertig. Empfohlen für den Anfang.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Just the essentials: pick, shoot, done. Recommended to start with."
+          }
+        }
+      }
+    },
+    "Nur wenige Bilder gefunden. Für eine flüssigere Stopmotion den Regler unten Richtung Mehr Bilder schieben oder länger aufnehmen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only a few frames found. For a smoother stop-motion, push the slider towards More frames or shoot longer."
+          }
+        }
+      }
+    },
+    "Ohne Wackeln auslösen: Auslöser gedrückt halten startet einen 3-Sekunden-Countdown. Auch die Lautstärketasten von Kopfhörern oder AirPods lösen aus.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fire without shake: hold the shutter for a three-second countdown. The volume buttons on headphones or AirPods fire too."
+          }
+        }
+      }
+    },
+    "Papierrelief": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paper relief"
+          }
+        }
+      }
+    },
+    "Preset %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset %@"
+          }
+        }
+      }
+    },
+    "Projekt löschen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete project"
+          }
+        }
+      }
+    },
+    "Projekte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Projects"
+          }
+        }
+      }
+    },
+    "Projektname": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Project name"
+          }
+        }
+      }
+    },
+    "Prüfe auf Hände…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking for hands…"
+          }
+        }
+      }
+    },
+    "Quadrat": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Square"
+          }
+        }
+      }
+    },
+    "Reel wird montiert…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assembling the reel…"
+          }
+        }
+      }
+    },
+    "Relief-Stärke: %lld %%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relief strength: %lld %%"
+          }
+        }
+      }
+    },
+    "Ruhig halten…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold steady…"
+          }
+        }
+      }
+    },
+    "Rückwärts": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reverse"
+          }
+        }
+      }
+    },
+    "STATIV": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TRIPOD"
+          }
+        }
+      }
+    },
+    "Scharf gestellt und fixiert. Wirkt es unscharf? Tippe im Sucher auf dein Werk.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focused and locked. Looks soft? Tap your work in the viewfinder."
+          }
+        }
+      }
+    },
+    "Schließen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "Schwarzweiß mit warmem Papierton — wie ein abfotografierter Druck.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Black and white on a warm paper tone — like a print photographed again."
+          }
+        }
+      }
+    },
+    "Schärfe bricht immer wieder weg. Tippe im Sucher auf dein Werk.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sharpness keeps dropping. Tap your work in the viewfinder."
+          }
+        }
+      }
+    },
+    "Serie von %lld · datiert %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Serie von %1$lld · datiert %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Series of %1$lld · dated %2$@"
+          }
+        }
+      }
+    },
+    "Serie von %lld · datiert %@ · Schleife": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Serie von %1$lld · datiert %2$@ · Schleife"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Series of %1$lld · dated %2$@ · looping"
+          }
+        }
+      }
+    },
+    "Sichern": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
+    "So funktioniert die Kamera": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How the camera works"
+          }
+        }
+      }
+    },
+    "So lange muss die Szene ruhig sein, bevor automatisch ausgelöst wird.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How long the scene has to stay calm before the shutter fires."
+          }
+        }
+      }
+    },
+    "Standard erfasst großzügig. Unerwünschte Bilder oben einfach abwählen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The default errs on the generous side. Just deselect what you don't want above."
+          }
+        }
+      }
+    },
+    "Stativ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tripod"
+          }
+        }
+      }
+    },
+    "Stopmotion erstellen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create stop-motion"
+          }
+        }
+      }
+    },
+    "Stopmotion exportieren": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export stop-motion"
+          }
+        }
+      }
+    },
+    "Stopmotion wird montiert…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assembling the stop-motion…"
+          }
+        }
+      }
+    },
+    "Story": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Story"
+          }
+        }
+      }
+    },
+    "Studio-Monitor · bereit": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Studio monitor · ready"
+          }
+        }
+      }
+    },
+    "Sucher": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viewfinder"
+          }
+        }
+      }
+    },
+    "Szene wirkt dauerhaft unruhig. Stativ prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The scene never settles. Check the tripod — or raise the motion tolerance in settings."
+          }
+        }
+      }
+    },
+    "Taste": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Button"
+          }
+        }
+      }
+    },
+    "Teilen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share"
+          }
+        }
+      }
+    },
+    "Vergleichsbild entfernen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove reference image"
+          }
+        }
+      }
+    },
+    "Verstanden": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Got it"
+          }
+        }
+      }
+    },
+    "Verwacklung ausgleichen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compensate for shake"
+          }
+        }
+      }
+    },
+    "Verwebung": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weave"
+          }
+        }
+      }
+    },
+    "Verwerfen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard"
+          }
+        }
+      }
+    },
+    "Video": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Video"
+          }
+        }
+      }
+    },
+    "Video teilen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share video"
+          }
+        }
+      }
+    },
+    "Video wählen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick a video"
+          }
+        }
+      }
+    },
+    "Video wählen —\noder live aufnehmen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick a video —\nor shoot live."
+          }
+        }
+      }
+    },
+    "Vorschau": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview"
+          }
+        }
+      }
+    },
+    "Was falten\nwir heute?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What are we\nfolding today?"
+          }
+        }
+      }
+    },
+    "Was falten wir\nheute?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What are we folding\ntoday?"
+          }
+        }
+      }
+    },
+    "Wasserwaage": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spirit level"
+          }
+        }
+      }
+    },
+    "Weich": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soft"
+          }
+        }
+      }
+    },
+    "Weiter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
+          }
+        }
+      }
+    },
+    "Weiter aufnehmen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep shooting"
+          }
+        }
+      }
+    },
+    "Welches Werk\nnimmst du auf?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which work\nare you shooting?"
+          }
+        }
+      }
+    },
+    "Weniger Bilder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fewer frames"
+          }
+        }
+      }
+    },
+    "Werk anlegen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a work"
+          }
+        }
+      }
+    },
+    "Werk wird montiert…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assembling the work…"
+          }
+        }
+      }
+    },
+    "Wie möchtest du\narbeiten?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How do you want\nto work?"
+          }
+        }
+      }
+    },
+    "Wird gesetzt…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Typesetting…"
+          }
+        }
+      }
+    },
+    "Wird zusammengesetzt…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Putting it together…"
+          }
+        }
+      }
+    },
+    "Woran arbeitest du\nheute?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What are you working on\ntoday?"
+          }
+        }
+      }
+    },
+    "Wähle Keyframes…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Picking keyframes…"
+          }
+        }
+      }
+    },
+    "Zeig's mir!": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show me!"
+          }
+        }
+      }
+    },
+    "Zeigt das erste oder letzte Bild als Überblendung – zum Ausrichten und um Drift zu erkennen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overlays the first or last frame — for lining up and spotting drift."
+          }
+        }
+      }
+    },
+    "Ziehen zum Durchblättern": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag to flip through"
+          }
+        }
+      }
+    },
+    "Zu viel Wackeln – leg das iPhone irgendwo auf oder lehne es an.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too much shake — set the phone down or lean it against something."
+          }
+        }
+      }
+    },
+    "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Recently deleted: restore %lld frame"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Recently deleted: restore %lld frames"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Zuletzt im Atelier": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recently in the studio"
+          }
+        }
+      }
+    },
+    "Zum Schluss": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finally"
+          }
+        }
+      }
+    },
+    "Zurück zur Bildauswahl": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to frame selection"
+          }
+        }
+      }
+    },
+    "Zwei Wege": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two ways"
+          }
+        }
+      }
+    },
+    "Zwiebelhaut": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Onion skin"
+          }
+        }
+      }
+    },
+    "an": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "on"
+          }
+        }
+      }
+    },
+    "aus": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "off"
+          }
+        }
+      }
+    },
+    "gespeichert in %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "saved in %@"
+          }
+        }
+      }
+    },
+    "iPhone aufs Stativ oder ruhig über die Arbeit halten. Arbeite einfach — FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phone on a tripod, or held steady over your work. Just work — FrameFold takes a frame by itself as soon as your hands leave the frame and the scene settles."
+          }
+        }
+      }
+    },
+    "iPhone aufs Stativ, arbeiten. Es löst von selbst aus, sobald deine Hände aus dem Bild sind.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phone on a tripod, then work. It fires by itself as soon as your hands leave the frame."
+          }
+        }
+      }
+    },
+    "iPhone aufs Stativ. FrameFold löst aus, sobald deine Hände aus dem Bild sind.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phone on a tripod. FrameFold fires as soon as your hands leave the frame."
+          }
+        }
+      }
+    },
+    "iPhone nicht berühren: aufs Stativ stellen und den Auto-Shutter arbeiten lassen (oder den runden Knopf).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don't touch the phone: put it on a tripod and let the auto-shutter work (or use the round button)."
+          }
+        }
+      }
+    },
+    "noch %lld für eine Sekunde Film": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld more for a second of film"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld more for a second of film"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Überblendung": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transition"
+          }
+        }
+      }
+    },
+    "Übergangsstil": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transition style"
+          }
+        }
+      }
+    },
+    "Überspringen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.3"
+}

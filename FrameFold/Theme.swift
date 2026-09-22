@@ -459,12 +459,27 @@ struct ModeTabs: View {
 }
 
 /// Gesperrte Mono-Versalien-Zeile, z. B. "23 BLÄTTER · 2026".
+///
+/// Nimmt eine `LocalizedStringResource`, nicht einen `String`. Das ist der
+/// Unterschied zwischen „wird übersetzt" und „bleibt für immer deutsch":
+/// Aus einem String-Parameter zieht Xcode beim Bauen nichts heraus, der Text
+/// verschwände stillschweigend aus dem Katalog. Feste Texte am Aufrufort
+/// ändern sich dadurch nicht — ein Literal wird von selbst zur Resource.
+/// Für bereits fertige Zeichenketten (Namen, Zahlen, berechnete Zeilen) gibt
+/// es `init(verbatim:)`.
 struct CatalogLabel: View {
-    let text: String
+    private let text: String
     var color: Color = Theme.graphite
     var size: CGFloat = 11
 
-    init(_ text: String, color: Color = Theme.graphite, size: CGFloat = 11) {
+    init(_ text: LocalizedStringResource, color: Color = Theme.graphite, size: CGFloat = 11) {
+        self.text = String(localized: text)
+        self.color = color
+        self.size = size
+    }
+
+    /// Für Texte, die nicht übersetzt werden sollen oder schon übersetzt sind.
+    init(verbatim text: String, color: Color = Theme.graphite, size: CGFloat = 11) {
         self.text = text
         self.color = color
         self.size = size
@@ -478,14 +493,22 @@ struct CatalogLabel: View {
     }
 }
 
-/// Werktitel im Katalog-/Buchstil (Serif).
+/// Werktitel im Katalog-/Buchstil (Serif). Gleiche Überlegung wie bei
+/// `CatalogLabel`: Resource statt String, damit die Texte im Katalog landen.
 struct WorkTitle: View {
-    let text: String
+    private let text: String
     var size: CGFloat = 20
     var color: Color = Theme.ink
-    init(_ text: String, size: CGFloat = 20, color: Color = Theme.ink) {
+
+    init(_ text: LocalizedStringResource, size: CGFloat = 20, color: Color = Theme.ink) {
+        self.text = String(localized: text); self.size = size; self.color = color
+    }
+
+    /// Für Werknamen und anderes, was der Nutzer selbst eingegeben hat.
+    init(verbatim text: String, size: CGFloat = 20, color: Color = Theme.ink) {
         self.text = text; self.size = size; self.color = color
     }
+
     var body: some View {
         Text(text)
             .font(Theme.serif(size, .regular))
@@ -557,11 +580,11 @@ struct IconSquare: View {
     private var voiceLabel: String {
         if let label { return label }
         switch icon {
-        case "trash": return "Verwerfen"
-        case "arrow.uturn.backward": return "Letztes Bild zurücknehmen"
-        case "plus": return "Neues Werk anlegen"
-        case "xmark": return "Schließen"
-        default: return "Taste"
+        case "trash": return String(localized: "Verwerfen")
+        case "arrow.uturn.backward": return String(localized: "Letztes Bild zurücknehmen")
+        case "plus": return String(localized: "Neues Werk anlegen")
+        case "xmark": return String(localized: "Schließen")
+        default: return String(localized: "Taste")
         }
     }
 

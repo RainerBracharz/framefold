@@ -248,7 +248,7 @@ struct LiveCaptureView: View {
                 await MainActor.run { resultURL = url; isAssembling = false }
             } catch {
                 await MainActor.run {
-                    resultError = "Das hat leider nicht geklappt."
+                    resultError = String(localized: "Das hat leider nicht geklappt.")
                     isAssembling = false
                 }
             }
@@ -263,15 +263,21 @@ struct LiveCaptureView: View {
 
             VStack(spacing: 6) {
                 // Tolino spricht Katalog: Blätter statt Bilder, Serie statt Zähler
-                Text(mode == .basic ? "Fertig! \(count) Bilder"
-                     : mode == .tolino
-                        ? (count == 1 ? "Ein Blatt" : String(format: "Blatt 01 – %02d", count))
-                        : "\(count) Bilder aufgenommen")
+                // Alle drei Zweige ausdrücklich über String(localized:) —
+                // mischt man hier String und Literal, wählt Swift den
+                // nicht-lokalisierenden Text(String) und die Literale
+                // verschwinden aus dem Katalog.
+                Text(verbatim: mode == .basic
+                        ? String(localized: "Fertig! \(count) Bilder")
+                        : mode == .tolino
+                            ? (count == 1 ? String(localized: "Ein Blatt")
+                                          : String(format: String(localized: "Blatt 01 – %02d"), count))
+                            : String(localized: "\(count) Bilder aufgenommen"))
                     .font(Theme.serifItalic(24))
                     .foregroundStyle(Theme.paperOnDark)
-                CatalogLabel(mode == .tolino
-                    ? "Serie von \(count) · datiert \(String(Calendar.current.component(.year, from: Date()))) · Schleife"
-                    : String(format: "%.1f Sekunden · läuft in Schleife", seconds),
+                CatalogLabel(verbatim: mode == .tolino
+                    ? String(localized: "Serie von \(count) · datiert \(String(Calendar.current.component(.year, from: Date()))) · Schleife")
+                    : String(format: String(localized: "%.1f Sekunden · läuft in Schleife"), seconds),
                              color: Theme.paperOnDark.opacity(0.55), size: 9)
             }
             .padding(.bottom, 18)
@@ -445,10 +451,16 @@ struct LiveCaptureView: View {
 
                 if let hint = controller.hint {
                     // Im Einfach-Modus sind die Einstellungen unerreichbar –
-                    // Hinweise, die dorthin verweisen, brauchen eine einfache
+                    // der Hinweis, der dorthin verweist, braucht eine einfache
                     // Fassung. Alle anderen gelten wörtlich.
-                    Text(mode == .basic && hint.contains("Einstellungen")
-                         ? "Zu viel Wackeln – leg das iPhone irgendwo auf oder lehne es an."
+                    //
+                    // Hier stand bis zur Lokalisierung `hint.contains("Einstellungen")`.
+                    // Das ist eine Prüfung auf ein deutsches Wort in einem Text,
+                    // der übersetzt wird — sie hätte auf Englisch nie mehr
+                    // gegriffen, ohne dass es auffällt. `hint` trägt ohnehin nur
+                    // die eine Unruhe-Meldung, die Prüfung war überflüssig.
+                    Text(verbatim: mode == .basic
+                         ? String(localized: "Zu viel Wackeln – leg das iPhone irgendwo auf oder lehne es an.")
                          : hint)
                         .font(Theme.mono(11))
                         .foregroundStyle(Theme.darkroom)
@@ -727,17 +739,17 @@ struct LiveCaptureView: View {
         let count = controller.capturedCount
         return VStack(spacing: 9) {
             HStack {
-                CatalogLabel(String(format: "Blatt %02d · %.1f s", count, Double(count) / 10.0),
+                CatalogLabel(verbatim: String(format: String(localized: "Blatt %02d · %.1f s"), count, Double(count) / 10.0),
                              color: Theme.amberLight, size: 10)
                 Spacer()
                 if let start = controller.sessionStart {
                     TimelineView(.periodic(from: .now, by: 1)) { ctx in
-                        CatalogLabel(sessionClock(from: start, now: ctx.date),
+                        CatalogLabel(verbatim: sessionClock(from: start, now: ctx.date),
                                      color: Theme.paperOnDark.opacity(0.8), size: 10)
                     }
                 }
                 Spacer()
-                CatalogLabel(controller.exposureInfo ?? "—",
+                CatalogLabel(verbatim: controller.exposureInfo ?? "—",
                              color: Theme.paperOnDark.opacity(0.8), size: 10)
             }
             HStack(spacing: 10) {
@@ -762,9 +774,9 @@ struct LiveCaptureView: View {
                     Image(systemName: controller.captureMode == .motion
                           ? "hand.raised" : "timer")
                         .font(.system(size: 10, weight: .medium))
-                    Text(controller.captureMode == .motion
-                         ? "Auslöser · Bewegung"
-                         : String(format: "Auslöser · Intervall %.0f s",
+                    Text(verbatim: controller.captureMode == .motion
+                         ? String(localized: "Auslöser · Bewegung")
+                         : String(format: String(localized: "Auslöser · Intervall %.0f s"),
                                   controller.intervalSeconds))
                         .font(Theme.caption(9))
                         .tracking(1.4)
@@ -853,7 +865,7 @@ struct LiveCaptureView: View {
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
     }
 
-    private func sucherButton(_ name: String, label: String,
+    private func sucherButton(_ name: String, label: LocalizedStringResource,
                               action: @escaping () -> Void) -> some View {
         Button(action: action) { sucherIcon(name) }
             .accessibilityLabel(label)
@@ -912,7 +924,7 @@ struct LiveCaptureView: View {
                 Image(systemName: "eye").foregroundStyle(Theme.paperOnDark.opacity(0.6))
             }
             // Einfach: einen Tick größer – wird oft aus Entfernung gelesen
-            CatalogLabel(controller.status.label(playful: mode == .basic),
+            CatalogLabel(verbatim: controller.status.label(playful: mode == .basic),
                          color: Theme.paperOnDark,
                          size: mode == .basic ? 12 : 11)
                 // Neben dem Aufnahmeart-Feld wird es auf kleinen Geräten eng.
@@ -937,7 +949,7 @@ struct LiveCaptureView: View {
                 Image(systemName: controller.rig == .tripod
                       ? "camera.on.rectangle" : "hand.raised")
                     .font(.system(size: 10, weight: .semibold))
-                CatalogLabel(controller.rig.shortLabel,
+                CatalogLabel(verbatim: controller.rig.shortLabel,
                              color: Theme.paperOnDark, size: 10)
             }
             .foregroundStyle(Theme.paperOnDark.opacity(0.8))
@@ -1181,7 +1193,9 @@ struct LiveSettingsView: View {
         }
     }
 
-    private func tipRow(_ icon: String, _ text: String) -> some View {
+    /// `LocalizedStringResource` statt `String` — sonst landen die fünf Tipps
+    /// nie im Katalog und bleiben deutsch, obwohl der Rest übersetzt ist.
+    private func tipRow(_ icon: String, _ text: LocalizedStringResource) -> some View {
         HStack(alignment: .top, spacing: 10) {
             Image(systemName: icon)
                 .font(.system(size: 13))

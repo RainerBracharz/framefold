@@ -147,7 +147,8 @@ private struct StudioLiveView: View {
                 }
                 Spacer()
                 CatalogLabel(
-                    String(format: "Blatt %02d", controller.capturedCount),
+                    verbatim: String(format: String(localized: "Blatt %02d"),
+                                     controller.capturedCount),
                     color: Theme.paperOnDark, size: 13)
             }
             .padding(.horizontal, 28)

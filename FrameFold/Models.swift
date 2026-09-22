@@ -89,6 +89,16 @@ enum TransitionStyle: String, CaseIterable, Identifiable, Codable {
     case facet  = "Facetten"    // triangulierte Facetten (nach Tolinos Faltstruktur)
     case weave  = "Verwebung"   // eingewobene Bildstreifen (nach Tolinos Webtechnik)
     var id: String { rawValue }
+
+    /// Anzeigetext getrennt vom Rohwert: Der steckt in gespeicherten
+    /// Einstellungen und darf sich nicht ändern.
+    var label: String {
+        switch self {
+        case .crease: return String(localized: "Falz")
+        case .facet:  return String(localized: "Facetten")
+        case .weave:  return String(localized: "Verwebung")
+        }
+    }
 }
 
 /// Bedien-Modus – blendet Optionen gestaffelt ein, damit man nicht von zu
@@ -101,9 +111,9 @@ enum AppMode: Int, CaseIterable, Identifiable {
     var id: Int { rawValue }
     var label: String {
         switch self {
-        case .basic: return "Einfach"
-        case .advanced: return "Erweitert"
-        case .tolino: return "Aldo Tolino"
+        case .basic: return String(localized: "Einfach")
+        case .advanced: return String(localized: "Erweitert")
+        case .tolino: return "Aldo Tolino"   // Eigenname, bleibt
         }
     }
     /// klassische Einstellungen sichtbar
@@ -142,6 +152,17 @@ enum LoopMode: String, CaseIterable, Identifiable, Codable {
     case reverse = "Rückwärts"
 
     var id: String { rawValue }
+
+    /// Anzeigetext. Getrennt vom Rohwert, weil der in den gespeicherten
+    /// Einstellungen steht — ihn zu übersetzen würde jede bestehende
+    /// Konfiguration unlesbar machen.
+    var label: String {
+        switch self {
+        case .none:      return String(localized: "Normal")
+        case .boomerang: return "Boomerang"   // international gleich
+        case .reverse:   return String(localized: "Rückwärts")
+        }
+    }
 
     /// Wandelt eine Index-Folge 0..<n in die Abspielreihenfolge um.
     func frameOrder(count: Int) -> [Int] {
@@ -193,16 +214,16 @@ enum PipelineStage: Equatable {
 
     var label: String {
         switch self {
-        case .idle: return "Bereit"
-        case .importing: return "Lade Video…"
-        case .sampling: return "Lese Bilder…"
-        case .analyzing: return "Analysiere Bewegung…"
-        case .selectingKeyframes: return "Wähle Keyframes…"
-        case .checkingHands: return "Prüfe auf Hände…"
-        case .reviewing: return "Keyframes prüfen"
-        case .assembling: return "Baue Stopmotion…"
-        case .done: return "Fertig"
-        case .failed(let msg): return "Fehler: \(msg)"
+        case .idle: return String(localized: "Bereit")
+        case .importing: return String(localized: "Lade Video…")
+        case .sampling: return String(localized: "Lese Bilder…")
+        case .analyzing: return String(localized: "Analysiere Bewegung…")
+        case .selectingKeyframes: return String(localized: "Wähle Keyframes…")
+        case .checkingHands: return String(localized: "Prüfe auf Hände…")
+        case .reviewing: return String(localized: "Keyframes prüfen")
+        case .assembling: return String(localized: "Baue Stopmotion…")
+        case .done: return String(localized: "Fertig")
+        case .failed(let msg): return String(localized: "Fehler: \(msg)")
         }
     }
 }

@@ -37,3 +37,6 @@ fastlane/bericht.txt
 
 FrameFold.ipa
 *.dSYM.zip
+
+# Zwischenstand des Lokalisierungs-Exports (wird bei Bedarf neu erzeugt)
+localization/xcloc/

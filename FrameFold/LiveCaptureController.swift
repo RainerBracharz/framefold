@@ -47,22 +47,34 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
         /// Im Einfach-Modus spricht die App wie ein Werkstatt-Kollege,
         /// in den anderen Modi im Katalogton.
+        ///
+        /// Gibt bewusst `String` zurück und nicht `LocalizedStringResource`:
+        /// Der Text geht auch per WatchConnectivity ans Handgelenk, und dort
+        /// muss er schon übersetzt sein. `String(localized:)` löst ihn hier
+        /// auf — und sorgt zugleich dafür, dass Xcode ihn beim Bauen findet.
         func label(playful: Bool) -> String {
             switch self {
             case .idle:
-                return playful ? "Gleich geht's los…" : "Kamera startet…"
+                return playful ? String(localized: "Gleich geht's los…")
+                               : String(localized: "Kamera startet…")
             case .calibrating:
-                return playful ? "Halt kurz still…" : "Kalibriere – kurz ruhig lassen…"
+                return playful ? String(localized: "Halt kurz still…")
+                               : String(localized: "Kalibriere – kurz ruhig lassen…")
             case .focusing:
-                return playful ? "Moment, wird scharf…" : "Noch nicht scharf…"
+                return playful ? String(localized: "Moment, wird scharf…")
+                               : String(localized: "Noch nicht scharf…")
             case .waitingForWork:
-                return playful ? "Los — ich schau zu" : "Bereit – arbeite einfach"
+                return playful ? String(localized: "Los — ich schau zu")
+                               : String(localized: "Bereit – arbeite einfach")
             case .working:
-                return playful ? "Ich warte, bis du weg bist…" : "Arbeit erkannt…"
+                return playful ? String(localized: "Ich warte, bis du weg bist…")
+                               : String(localized: "Arbeit erkannt…")
             case .stabilizing:
-                return playful ? "Nicht bewegen…" : "Ruhig halten…"
+                return playful ? String(localized: "Nicht bewegen…")
+                               : String(localized: "Ruhig halten…")
             case .captured:
-                return playful ? "Klick!" : "Bild aufgenommen ✓"
+                return playful ? String(localized: "Klick!")
+                               : String(localized: "Bild aufgenommen ✓")
             }
         }
 
@@ -243,7 +255,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     enum CaptureMode: Int, CaseIterable, Identifiable {
         case motion, interval
         var id: Int { rawValue }
-        var label: String { self == .motion ? "Bewegung" : "Intervall" }
+        var label: String { self == .motion ? String(localized: "Bewegung") : String(localized: "Intervall") }
     }
     /// Auslöser: Bewegung (Auto-Shutter) oder fester Zeittakt.
     @Published var captureMode: CaptureMode = .motion {
@@ -267,8 +279,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
     enum Rig: Int, CaseIterable, Identifiable {
         case tripod, handheld
         var id: Int { rawValue }
-        var label: String { self == .tripod ? "Stativ" : "Aus der Hand" }
-        var shortLabel: String { self == .tripod ? "STATIV" : "HAND" }
+        var label: String { self == .tripod ? String(localized: "Stativ") : String(localized: "Aus der Hand") }
+        var shortLabel: String { self == .tripod ? String(localized: "STATIV") : String(localized: "HAND") }
         /// Aufschlag auf die eingestellte Ruhezeit. Aus der Hand darf länger
         /// geruht werden – das Zittern der Hand erzeugt sonst nie ein
         /// sauberes Ruhefenster. Bewusst additiv, damit die Einstellung des
@@ -697,7 +709,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // das dann noch übrig ist – typisch, wenn das Werk näher liegt als
         // die Naheinstellgrenze. Also wenigstens nicht schweigen.
         if sharpAtLock < Self.minMeaningfulSharpness {
-            setFocusHint("Ich sehe kaum Struktur und kann die Schärfe nicht prüfen. Geh etwas weiter weg oder tippe im Sucher auf dein Werk.")
+            setFocusHint(String(localized: "Ich sehe kaum Struktur und kann die Schärfe nicht prüfen. Geh etwas weiter weg oder tippe im Sucher auf dein Werk."))
         }
     }
 
@@ -848,7 +860,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 // Lieber gar nicht fixieren als unscharf fixieren: Der
                 // Autofokus läuft weiter und holt sich das Bild irgendwann.
                 self.focusIsLocked = false
-                self.setFocusHint("Fokus findet nichts Scharfes. Tippe im Sucher auf dein Werk.")
+                self.setFocusHint(String(localized: "Fokus findet nichts Scharfes. Tippe im Sucher auf dein Werk."))
             }
             if self.rawStatus == .focusing { self.setStatus(.waitingForWork) }
 
@@ -860,7 +872,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
             if explainOnce, self.focusIsLocked,
                !UserDefaults.standard.bool(forKey: key) {
                 UserDefaults.standard.set(true, forKey: key)
-                self.setFocusHint("Scharf gestellt und fixiert. Wirkt es unscharf? Tippe im Sucher auf dein Werk.")
+                self.setFocusHint(String(localized: "Scharf gestellt und fixiert. Wirkt es unscharf? Tippe im Sucher auf dein Werk."))
             }
             // Slot freigeben – der Wächter erkennt an ihm, ob gerade ein
             // Fokuslauf unterwegs ist.
@@ -1020,7 +1032,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         let interval: TimeInterval = autoRefocusCount < 4 ? 10 : 20
         guard Date().timeIntervalSince(lastAutoRefocus) > interval else { return }
         if autoRefocusCount >= 4 {
-            setFocusHint("Schärfe bricht immer wieder weg. Tippe im Sucher auf dein Werk.")
+            setFocusHint(String(localized: "Schärfe bricht immer wieder weg. Tippe im Sucher auf dein Werk."))
         }
         lastAutoRefocus = Date()
         autoRefocusCount += 1
@@ -1235,7 +1247,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
             // woran es liegt, statt den Nutzer raten zu lassen.
             if restlessSince == nil { restlessSince = Date() }
             if Date().timeIntervalSince(restlessSince!) > 6 {
-                hint = "Szene wirkt dauerhaft unruhig. Stativ prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen."
+                hint = String(localized: "Szene wirkt dauerhaft unruhig. Stativ prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen.")
             }
             return
         }

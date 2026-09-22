@@ -64,11 +64,11 @@ struct ContentView: View {
 @MainActor
 final class WatchShutter: NSObject, ObservableObject {
     @Published var count = 0
-    @Published var status = "Verbinde…"
+    @Published var status = String(localized: "Verbinde…")
     @Published var isConnected = false
 
     /// Nach dem Ende einer Aufnahme wieder auf Anfang.
-    func reset() { count = 0; status = "Bereit" }
+    func reset() { count = 0; status = String(localized: "Bereit") }
 
     private let session = WCSession.default
 
@@ -93,7 +93,7 @@ final class WatchShutter: NSObject, ObservableObject {
 
     private func send(_ payload: [String: Any]) {
         guard session.isReachable else {
-            status = "iPhone nicht erreichbar"
+            status = String(localized: "iPhone nicht erreichbar")
             return
         }
         session.sendMessage(payload, replyHandler: nil, errorHandler: nil)
@@ -106,14 +106,14 @@ extension WatchShutter: WCSessionDelegate {
                              error: Error?) {
         Task { @MainActor in
             self.isConnected = session.isReachable
-            self.status = session.isReachable ? "Bereit" : "Kamera-Tab öffnen"
+            self.status = session.isReachable ? String(localized: "Bereit") : String(localized: "Kamera-Tab öffnen")
         }
     }
 
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
         Task { @MainActor in
             self.isConnected = session.isReachable
-            self.status = session.isReachable ? "Bereit" : "Kamera-Tab öffnen"
+            self.status = session.isReachable ? String(localized: "Bereit") : String(localized: "Kamera-Tab öffnen")
         }
     }
 

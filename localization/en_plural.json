@@ -1,0 +1,31 @@
+{
+  "_hinweis": "Texte, die im Englischen eine Einzahlform brauchen. Deutsch schreibt überall „Bilder\", Englisch verlangt „1 frame\" / „2 frames\". Wichtig: Der ursprüngliche Platzhalter (%lld) bleibt stehen — %arg gilt nur für benannte Ersetzungen, sonst weist Xcode den Katalog zurück.",
+  "%lld Bilder": {
+    "one": "%lld frame",
+    "other": "%lld frames"
+  },
+  "%lld Bilder aufgenommen": {
+    "one": "%lld frame captured",
+    "other": "%lld frames captured"
+  },
+  "Fertig! %lld Bilder": {
+    "one": "Done! %lld frame",
+    "other": "Done! %lld frames"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "one": "%lld frame · contact sheet",
+    "other": "%lld frames · contact sheet"
+  },
+  "%lld Werke montieren": {
+    "one": "Assemble %lld work",
+    "other": "Assemble %lld works"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "one": "Recently deleted: restore %lld frame",
+    "other": "Recently deleted: restore %lld frames"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "one": "%lld more for a second of film",
+    "other": "%lld more for a second of film"
+  }
+}

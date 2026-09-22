@@ -1,6 +1,7 @@
 import SwiftUI
 import PhotosUI
 import AVKit
+import Combine   // Timer.publish(…).autoconnect() — ohne diesen Import warnt der Compiler
 
 struct ContentView: View {
     @Binding var selectedTab: Int
@@ -68,7 +69,7 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: 0) {
                 // 1 – Begrüßung statt Ansage
                 VStack(alignment: .leading, spacing: 10) {
-                    CatalogLabel(greetingLine)
+                    CatalogLabel(verbatim: greetingLine)
                     Text(mode == .basic ? "Was falten wir\nheute?" : "Woran arbeitest du\nheute?")
                         .font(Theme.serifItalic(28))
                         .foregroundStyle(Theme.ink)
@@ -120,7 +121,7 @@ struct ContentView: View {
                 if let movie = try? await newItem.loadTransferable(type: VideoPickerFile.self) {
                     viewModel.process(videoURL: movie.url)
                 } else {
-                    viewModel.stage = .failed("Das Video konnte nicht geladen werden.")
+                    viewModel.stage = .failed(String(localized: "Das Video konnte nicht geladen werden."))
                 }
                 pickerItem = nil
             }
@@ -491,7 +492,7 @@ struct ProcessingView: View {
                            : .easeInOut(duration: 1.1).repeatForever(autoreverses: true),
                            value: pulse)
                 .onAppear { if !reduceMotion { pulse = true } }
-            CatalogLabel(stage.label, color: Theme.ink)
+            CatalogLabel(verbatim: stage.label, color: Theme.ink)
             if let progress {
                 HairlineProgress(value: progress)
                     .padding(.horizontal, 60)
@@ -615,9 +616,9 @@ struct SettingsView: View {
     private var mode: AppMode { AppMode.current(modeRaw) }
     private var modeHint: String {
         switch mode {
-        case .basic: return "Nur das Nötigste: Video wählen → Stopmotion."
-        case .advanced: return "Klassische Einstellungen: Format, Bildrate, Abspielmodus, Stabilisierung."
-        case .tolino: return "Alles dabei — plus die Spezialfeatures: Facetten, Echo, Faltvorlage, Rekursion, Ausstellung."
+        case .basic: return String(localized: "Nur das Nötigste: Video wählen → Stopmotion.")
+        case .advanced: return String(localized: "Klassische Einstellungen: Format, Bildrate, Abspielmodus, Stabilisierung.")
+        case .tolino: return String(localized: "Alles dabei — plus die Spezialfeatures: Facetten, Echo, Faltvorlage, Rekursion, Ausstellung.")
         }
     }
 
@@ -675,7 +676,7 @@ struct SettingsView: View {
                             ForEach(ExportResolution.allCases) { Text($0.rawValue).tag($0) }
                         }
                         Picker("Abspielmodus", selection: $settings.loopMode) {
-                            ForEach(LoopMode.allCases) { Text($0.rawValue).tag($0) }
+                            ForEach(LoopMode.allCases) { Text(verbatim: $0.label).tag($0) }
                         }
                         Toggle("Verwacklung ausgleichen", isOn: $settings.alignFrames)
                     } header: {
@@ -721,7 +722,7 @@ struct SettingsView: View {
                     }
                     if settings.transitionFrames > 0 {
                         Picker("Übergangsstil", selection: $settings.transitionStyle) {
-                            ForEach(TransitionStyle.allCases) { Text($0.rawValue).tag($0) }
+                            ForEach(TransitionStyle.allCases) { Text(verbatim: $0.label).tag($0) }
                         }
                     }
                     Text("Blendet das nächste Bild ein — als Falzkante, als triangulierte Facetten oder als eingewobene Bildstreifen.")
