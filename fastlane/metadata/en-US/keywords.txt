@@ -1,1 +1,1 @@
-timelapse,animation,artist,studio,craft,paper,origami,classroom,teaching,camera,onion,skin,tripod
+timelapse,animation,artist,studio,craft,paper,origami,classroom,teaching,onion,skin,tripod,hands
