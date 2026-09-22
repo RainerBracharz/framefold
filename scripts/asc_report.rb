@@ -142,14 +142,23 @@ def sales_rows(frequency:, report_date:)
        .select { |r| r["Apple Identifier"].to_s == APP_ID }
 end
 
-# Apples Produktcodes, soweit ich sie sicher zuordnen kann. Unbekannte Codes
-# werden bewusst als „Code X“ ausgewiesen statt geraten — eine falsche
-# Beschriftung ist schlimmer als eine fehlende.
+# Apples Produktcodes, vollständig aus der offiziellen Tabelle übernommen:
+# developer.apple.com/help/app-store-connect/reference/reporting/product-type-identifiers
+# Unbekannte Codes erscheinen als „Code X“ — lieber keine Beschriftung als
+# eine falsche.
 ARTEN = {
-  "1"  => "Erstinstallation", "1F" => "Erstinstallation",
-  "1T" => "Erstinstallation", "F1" => "Erstinstallation",
-  "7"  => "Aktualisierung",   "7F" => "Aktualisierung",
-  "7T" => "Aktualisierung"
+  "1"    => "Erstinstallation", "1F"   => "Erstinstallation",
+  "1T"   => "Erstinstallation", "F1"   => "Erstinstallation",
+  "1E"   => "Erstinstallation", "1EP"  => "Erstinstallation",
+  "1EU"  => "Erstinstallation", "1-B"  => "Erstinstallation (Bundle)",
+  "F1-B" => "Erstinstallation (Bundle)",
+  "3"    => "Erneut geladen",   "3F"   => "Erneut geladen",
+  "7"    => "Aktualisierung",   "7F"   => "Aktualisierung",
+  "7T"   => "Aktualisierung",   "F7"   => "Aktualisierung",
+  "IA1"  => "In-App-Kauf",      "IA1-M" => "In-App-Kauf",
+  "FI1"  => "In-App-Kauf",      "IA3"  => "In-App-Kauf (wiederhergestellt)",
+  "IA9"  => "Abo (nicht verlängernd)", "IA9-M" => "Abo (nicht verlängernd)",
+  "IAY"  => "Abo (automatisch)", "IAY-M" => "Abo (automatisch)"
 }.freeze
 
 def summe(rows) = rows.sum { |r| r["Units"].to_i }
