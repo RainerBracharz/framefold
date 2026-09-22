@@ -25,7 +25,16 @@ require "zlib"
 require "stringio"
 require "date"
 
-KEY_ID    = "RYCY6P77D7"
+# Verkaufsberichte brauchen einen Schlüssel mit der Rolle „Finanzen“ oder
+# „Verkauf und Berichte“. Der CI-Schlüssel ist App-Manager und reicht dafür
+# nicht — Apple lässt Rollen nachträglich nicht erweitern, es braucht also
+# einen zweiten Schlüssel. Seine ID kommt aus der Umgebung oder aus
+# ~/.appstoreconnect/report_key_id; fehlt sie, wird der CI-Schlüssel versucht.
+CI_KEY_ID = "RYCY6P77D7"
+KEY_ID    = (ENV["ASC_REPORT_KEY_ID"] || begin
+  p = File.expand_path("~/.appstoreconnect/report_key_id")
+  File.exist?(p) ? File.read(p).strip : nil
+end || CI_KEY_ID)
 ISSUER_ID = "2035739a-efc7-450c-8f2f-61f211394113"
 APP_ID    = "6801045603"
 APP_NAME  = "FrameFold"
@@ -96,6 +105,30 @@ def sales_rows(frequency:, report_date:)
   }, accept: "application/a-gzip")
 
   return [] if code == 404
+
+  # Sofort abbrechen statt dreissigmal gegen dieselbe Wand zu laufen.
+  if code == 401 || code == 403
+    $stderr.puts
+    abort <<~TEXT
+
+      HTTP #{code} — der Schlüssel #{KEY_ID} darf keine Verkaufsberichte lesen.
+
+      Verkaufsberichte brauchen die Rolle „Finanzen“ oder „Verkauf und Berichte“.
+      Der CI-Schlüssel ist App-Manager, und Apple lässt Rollen nachträglich
+      nicht erweitern. Also einen zweiten Schlüssel anlegen:
+
+        App Store Connect → Benutzer und Zugriffsrechte → Integration
+        → App Store Connect-API → Aktiv → „+“
+        Name: FrameFold Reporting, Zugriff: Finanzen
+
+      Die .p8-Datei wird nur einmal zum Download angeboten. Danach:
+
+        mv ~/Downloads/AuthKey_<NEUE_ID>.p8 ~/.appstoreconnect/
+        chmod 600 ~/.appstoreconnect/AuthKey_<NEUE_ID>.p8
+        echo <NEUE_ID> > ~/.appstoreconnect/report_key_id
+    TEXT
+  end
+
   unless code == 200
     warn("  ! #{frequency} #{report_date}: HTTP #{code}")
     return []
