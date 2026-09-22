@@ -1448,6 +1448,16 @@
         }
       }
     },
+    "Interferenz-Echo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interference echo"
+          }
+        }
+      }
+    },
     "Intervall": {
       "localizations": {
         "en": {

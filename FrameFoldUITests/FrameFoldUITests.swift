@@ -24,6 +24,9 @@ final class FrameFoldUITests: XCTestCase {
     private var app: XCUIApplication!
     private var shotDir: URL?
     private var lang = "en"
+    /// FF_MODE=all: im Onboarding „Alles zeigen" wählen – die Store-Bilder
+    /// entstehen in der vollen Werkstatt, die Durchsicht im Einfach-Modus.
+    private var showAll = false
     private var shotIndex = 0
 
     override func setUpWithError() throws {
@@ -31,6 +34,7 @@ final class FrameFoldUITests: XCTestCase {
 
         let env = ProcessInfo.processInfo.environment
         lang = env["FF_LANG"] ?? "en"
+        showAll = env["FF_MODE"] == "all"
         if let dir = env["FF_SHOT_DIR"], !dir.isEmpty {
             let url = URL(fileURLWithPath: dir).appendingPathComponent(lang)
             try? FileManager.default.removeItem(at: url)
@@ -61,6 +65,8 @@ final class FrameFoldUITests: XCTestCase {
         tap(["Next", "Weiter"])
         shot("onboarding-2")
         tap(["Next", "Weiter"])
+        usleep(500_000)   // Kartenwechsel ist animiert; sonst trifft der nächste Tipp die alte Karte
+        if showAll { tap(["Show all", "Alles zeigen"]) }
         shot("onboarding-3")
         tap(["Get started", "Los geht's"])
 
@@ -132,22 +138,49 @@ final class FrameFoldUITests: XCTestCase {
         if tap(["Origami crane"], prefix: true) {
             sleep(1)
             shot("project-detail")
-            // Testwerk wieder wegräumen, sonst sammelt sich mit jedem Lauf eines an
+            // Testwerk wieder wegräumen, sonst sammelt sich mit jedem Lauf eines an.
+            // Der Knopf steht ganz unten – in der vollen Werkstatt außerhalb
+            // des Bildschirms, ein Tipp ins Leere öffnet keine Rückfrage.
+            app.swipeUp(); app.swipeUp(); app.swipeUp()
             if tap(["Delete project", "Projekt löschen"]) {
                 tap(["Delete permanently", "Endgültig löschen"])
                 sleep(1)
+            }
+            // Falls wir noch im Detail stehen: zurück zur Liste
+            if app.navigationBars.buttons.firstMatch.exists,
+               !app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'frames' OR label CONTAINS[c] 'Bilder'")).firstMatch.exists {
+                tap(["Back", "Zurück"], timeout: 1)
             }
         }
 
         // 13 Ein älteres Werk mit echtem Material, falls vorhanden – für den
         // Store sind das die stärkeren Bilder als die Simulator-Testaufnahme.
+        // „Fratze" bevorzugt – 28 echte Bilder, ohne Simulator-Reste –, sonst
+        // das erste Werk, das nicht unser Testwerk ist.
+        let faltung = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Fratze'")).firstMatch
         let older = app.buttons.matching(NSPredicate(
             format: "(label CONTAINS[c] 'frames' OR label CONTAINS[c] 'Bilder') AND NOT label CONTAINS 'Origami'"
         )).firstMatch
-        if older.waitForExistence(timeout: 2) {
-            older.tap()
+        let pick = faltung.waitForExistence(timeout: 2) ? faltung : older
+        if pick.waitForExistence(timeout: 2) {
+            pick.tap()
             sleep(1)
             shot("project-detail-existing")
+            // Ans Ende scrollen: Vorschau, Teilen, Druckoptionen
+            app.swipeUp(); app.swipeUp(); app.swipeUp()
+            sleep(1)
+            shot("project-detail-bottom")
+            // Video montieren: danach stehen Vorschau und „Teilen" im Bild
+            if tap(["Export stop-motion", "Stopmotion exportieren"]) {
+                // Montage abwarten: fertig, sobald „Teilen" auftaucht (max. 60 s)
+                let share = app.buttons.matching(NSPredicate(
+                    format: "label CONTAINS[c] 'share' OR label CONTAINS[c] 'teilen'")).firstMatch
+                _ = share.waitForExistence(timeout: 60)
+                sleep(1)
+                app.swipeUp(); app.swipeUp()
+                sleep(1)
+                shot("project-detail-exported")
+            }
         }
     }
 

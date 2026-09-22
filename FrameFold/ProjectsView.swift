@@ -334,7 +334,7 @@ struct ProjectDetailView: View {
         .accessibilityAddTraits(active ? .isSelected : [])
     }
 
-    private func optionRow<Content: View>(_ label: String,
+    private func optionRow<Content: View>(_ label: LocalizedStringResource,
                                           @ViewBuilder content: () -> Content) -> some View {
         HStack(spacing: 12) {
             Text(label)
