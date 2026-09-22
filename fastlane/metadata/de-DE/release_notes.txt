@@ -1,5 +1,1 @@
-Schärfe: FrameFold misst jetzt laufend die Bildschärfe. Der Fokus wird erst dann fixiert, wenn er wirklich sitzt — nicht schon, wenn die Kamera aufhört zu suchen. Bricht die Schärfe später weg, stellt die App von selbst neu scharf. Und ein unscharfes Bild landet gar nicht erst im Werk.
-
-Zwei Aufnahmearten: Am Stativ bleibt der Fokus fest — das gibt die ruhigsten Bilder. Aus der Hand läuft er mit, weil sich der Abstand zum Werk ständig ändert. Die App erkennt am Bewegungssensor, was gerade zutrifft; ein Tipp auf die Anzeige im Sucher schaltet um.
-
-Ruhigere Anzeige: Der Zustand im Sucher springt nicht mehr im Sekundentakt hin und her.
+FrameFold gibt es jetzt auch auf Englisch — die ganze App, vom ersten Start bis zum Kontaktbogen. Die Sprache folgt der Einstellung deines iPhones; wer Deutsch eingestellt hat, merkt keinen Unterschied.

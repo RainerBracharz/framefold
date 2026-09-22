@@ -1,5 +1,3 @@
-Sharpness: FrameFold now measures image sharpness continuously. Focus is only locked once it has actually settled — not merely once the camera stops hunting. If sharpness drops later, the app refocuses on its own. And a frame that isn't sharp never makes it into the work.
+FrameFold now speaks English — the whole app, from first launch to the contact sheet. The language follows your iPhone's setting.
 
-Two capture modes: On a tripod focus stays locked, which gives the calmest frames. Handheld it keeps tracking, because the distance to your work changes constantly. The motion sensor decides which applies; a tap on the viewfinder switches it.
-
-Calmer display: The status in the viewfinder no longer flickers between states.
+This is the first English release. If a phrase reads oddly somewhere, we'd like to know.
