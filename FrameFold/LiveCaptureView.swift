@@ -1158,7 +1158,7 @@ struct LiveSettingsView: View {
                 Section {
                     tipRow("lightbulb", "Licht konstant halten: Kunstlicht nutzen, Fenster abdunkeln. Billige LED-/Leuchtstofflampen flackern im Netztakt und streifen einzelne Bilder.")
                     tipRow("hand.raised", "iPhone nicht berühren: aufs Stativ stellen und den Auto-Shutter arbeiten lassen (oder den runden Knopf).")
-                    tipRow("lock", "Kamera bleibt fixiert: FrameFold sperrt Belichtung, Fokus und Weißabgleich nach der kurzen Kalibrierung – so driftet zwischen den Bildern nichts.")
+                    tipRow("lock", "Kamera bleibt ruhig: FrameFold sperrt Belichtung und Weißabgleich nach der kurzen Kalibrierung – so driftet zwischen den Bildern nichts. Der Fokus wird am Stativ fixiert, aus der Hand läuft er mit.")
                     tipRow("square.2.layers.3d", "Drift früh erkennen: Zwiebelhaut anlassen und die Aufnahme ab und zu mit dem ersten Bild vergleichen.")
                     tipRow("timer", "Ohne Wackeln auslösen: Auslöser gedrückt halten startet einen 3-Sekunden-Countdown. Auch die Lautstärketasten von Kopfhörern oder AirPods lösen aus.")
                 } header: {
