@@ -8,6 +8,7 @@
 #   1. Versionsnummer in Xcode erhöhen (oder: fastlane bump version:1.0.2)
 #   2. Release-Notes in fastlane/metadata/de-DE/release_notes.txt schreiben
 #   3. fastlane release
+#      (hängt die Einreichung, reicht danach: fastlane submit)
 #
 # Was der Befehl tut: Build-Nummer hochzählen, archivieren, hochladen,
 # Version anlegen, Notes setzen, Build anhängen, zur Prüfung einreichen.
@@ -74,35 +75,81 @@ platform :ios do
   lane :release do
     api_key = login
 
-    increment_build_number(xcodeproj: PROJECT)
+    # Build-Nummer aus App Store Connect statt aus dem Projekt: agvtool las
+    # sonst den Wert des jüngsten Targets (UI-Tests, stand auf 1) und zählte
+    # von dort weiter. So ist die Nummer immer höher als alles Hochgeladene.
+    latest = latest_testflight_build_number(api_key: api_key, app_identifier: APP_ID,
+                                            initial_build_number: 0)
+    increment_build_number(xcodeproj: PROJECT, build_number: latest + 1)
     build_app(project: PROJECT, scheme: SCHEME,
               export_method: "app-store",
               export_team_id: TEAM_ID,
               export_options: export_options,
               xcargs: "-allowProvisioningUpdates")
 
+    # Schritt 1: Build, Texte, Screenshots hochladen – noch nicht einreichen.
+    # Apple muss den Build erst verarbeiten; wer sofort einreicht, bekommt
+    # „The specified pre-release build could not be added".
     upload_to_app_store(
       api_key: api_key,
       app_identifier: APP_ID,
-      # Metadaten kommen aus fastlane/metadata – nur die Release-Notes
-      # ändern sich pro Version, alles andere bleibt wie im Store.
-      # Watch-Screenshots liegen in fastlane/screenshots – Apple verlangt sie,
-      # sobald die App eine Watch-App enthält. Die iPhone-Screenshots im Store
-      # bleiben unangetastet (overwrite: false).
+      # Metadaten kommen aus fastlane/metadata, Screenshots aus
+      # fastlane/screenshots (Watch für de-DE, iPhone für en-US). Was im
+      # Store schon liegt, bleibt unangetastet (overwrite: false).
       skip_screenshots: false,
       skip_metadata: false,
       overwrite_screenshots: false,
       force: true,                       # keine Rückfrage im Browser
       precheck_include_in_app_purchases: false,
-      submit_for_review: true,
       automatic_release: true,           # nach Apples Freigabe sofort im Store
+      submit_for_review: false
+    )
+
+    # Schritt 2: warten, bis der Build verarbeitet ist, dann einreichen.
+    submit
+  end
+
+  desc "Neuesten Build der aktuellen Version einreichen (wartet auf Apples Verarbeitung)"
+  lane :submit do
+    api_key = login
+    require "spaceship"
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
+      key_id: KEY_ID, issuer_id: ISSUER_ID, filepath: KEY_PATH)
+    app = Spaceship::ConnectAPI::App.find(APP_ID)
+    version = get_version_number(xcodeproj: PROJECT, target: SCHEME)
+
+    build = nil
+    60.times do                          # höchstens 30 Minuten
+      build = Spaceship::ConnectAPI::Build.all(app_id: app.id, version: version,
+                                               sort: "-uploadedDate", limit: 1).first
+      state = build&.processing_state
+      UI.message("Build #{version} (#{build&.version || '–'}): #{state || 'noch nicht sichtbar'}")
+      break if state == Spaceship::ConnectAPI::Build::ProcessingState::VALID
+      UI.user_error!("Apple hat den Build zurückgewiesen (#{state}).") if %w[FAILED INVALID].include?(state)
+      sleep 30
+    end
+    unless build&.processing_state == Spaceship::ConnectAPI::Build::ProcessingState::VALID
+      UI.user_error!("Build nach 30 Minuten noch nicht verarbeitet – später `fastlane submit`.")
+    end
+
+    upload_to_app_store(
+      api_key: api_key,
+      app_identifier: APP_ID,
+      app_version: version,
+      build_number: build.version,
+      skip_binary_upload: true,
+      skip_metadata: true,
+      skip_screenshots: true,
+      force: true,
+      precheck_include_in_app_purchases: false,
+      submit_for_review: true,
       submission_information: {
         add_id_info_uses_idfa: false,
         export_compliance_uses_encryption: false,
         content_rights_contains_third_party_content: false
       }
     )
-    UI.success("Eingereicht. Nach Apples Freigabe geht die Version automatisch in den Store.")
+    UI.success("#{version} (#{build.version}) eingereicht. Nach Apples Freigabe geht die Version automatisch in den Store.")
   end
 
   desc "Nur Texte aktualisieren (Beschreibung, Release-Notes) – ohne neues Binary"
