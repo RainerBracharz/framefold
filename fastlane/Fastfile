@@ -118,6 +118,14 @@ platform :ios do
     app = Spaceship::ConnectAPI::App.find(APP_ID)
     version = get_version_number(xcodeproj: PROJECT, target: SCHEME)
 
+    # Schon eingereicht? Dann nichts tun – ein zweiter Build lässt sich an
+    # eine wartende Version nicht mehr hängen, das war der Fehler vom 23.09.
+    current = app.get_app_store_versions(filter: { versionString: version }).first
+    if current && %w[WAITING_FOR_REVIEW IN_REVIEW PENDING_DEVELOPER_RELEASE READY_FOR_SALE].include?(current.app_store_state)
+      UI.success("#{version} steht schon auf #{current.app_store_state} – nichts zu tun.")
+      next
+    end
+
     build = nil
     60.times do                          # höchstens 30 Minuten
       build = Spaceship::ConnectAPI::Build.all(app_id: app.id, version: version,
