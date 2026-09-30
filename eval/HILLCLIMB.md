@@ -41,8 +41,26 @@ Flackern 26 → 0 doppelte Bilder.
 Ohne Handerkennung (`--hands aus`) ändert sich wenig (0,200 → 0,219): die
 Änderungen wirken, wo die Handerkennung ihre Arbeit tut.
 
-## Noch nicht in der App
+## Übernahme in die App
 
-Die Änderungen stecken nur im Python-Nachbau. Vor der Übernahme nach Swift:
-5–10 echte Atelier-Videos als Prüfstein, die das Klettern nie gesehen hat.
-Übernommen wird nur, wenn sie dort nicht schlechter werden.
+Ursprünglich geplant: vor der Übernahme 5–10 echte Atelier-Videos als
+Prüfstein. Stattdessen entschieden mit der Gegenprobe unten. Echte Videos
+bleiben sinnvoll, sobald es welche gibt – als zusätzlicher Testsatz.
+
+## Entscheidung ohne echte Videos (30.09.2026)
+
+Statt auf eigene Aufnahmen zu warten: Gegenprobe an den beiden gerenderten
+Faltvideos (`docs/assets/tolino-quelle.mp4`, `fratzen-quelle.mp4`). Sie haben
+echte Fototexturen und waren am Klettern nicht beteiligt. Ergebnis:
+
+- Tolino: alt 7, neu 8 Bilder. Fratze: alt 21, neu 23 Bilder.
+- Kein Bild fällt weg, drei kommen dazu. Alle drei zeigen sichtbar neue
+  Faltschritte, die der alte 9×8-Fingerabdruck als Duplikat verworfen hatte
+  (Differenzbilder geprüft).
+
+Damit übernommen in die App (Swift): `Algorithms.motionScoreGainCompensated`,
+`Algorithms.maxBlockDifference`, Duplikatprüfung in `ProcessingViewModel`,
+`PipelineSettings.dedupBlockFactor = 0.5`. Gleichheit mit dem Python-Nachbau
+sichern Tests in `linux-tests/main.swift` mit Werten aus `eval/selector.py`.
+
+Die Live-Kamera ist nicht betroffen, sie hat ihre eigene Kalibrierung.

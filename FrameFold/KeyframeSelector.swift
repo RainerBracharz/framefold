@@ -10,6 +10,18 @@ struct KeyframeSelector {
         var endSeconds: Double { frames.last?.seconds ?? 0 }
     }
 
+    /// Die adaptive Bewegungsschwelle dieses Videos. Dient auch als Maßstab
+    /// für Duplikate: Zwei Bilder, die sich weniger unterscheiden als ein
+    /// Bruchteil davon, zeigen denselben Arbeitsstand.
+    static func motionThreshold(
+        frames: [FrameAnalyzer.AnalyzedFrame],
+        settings: PipelineSettings
+    ) -> Double {
+        guard frames.count > 1 else { return 0 }
+        return Algorithms.motionThreshold(
+            scores: frames.dropFirst().map(\.motionScore), percentile: settings.motionPercentile)
+    }
+
     /// Zerlegt die Frame-Folge in Ruhefenster.
     /// Schwelle: Otsu-Split mit Perzentil-Untergrenze (siehe Algorithms) –
     /// verifiziert gegen die Python-Referenz und die Linux-Swift-Tests.

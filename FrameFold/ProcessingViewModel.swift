@@ -171,17 +171,22 @@ final class ProcessingViewModel: ObservableObject {
 
         let chosen = chosenPerWindow.compactMap { $0 }
 
-        // dHash-Dedup benachbarter Keyframes
+        // Duplikate: gegen das zuletzt BEHALTENE Bild, im stärksten von 8×8
+        // Rasterfeldern, Helligkeit ausgeglichen. Maßstab ist die Bewegungs-
+        // schwelle dieses Videos – was darunter bleibt, ist derselbe Stand.
+        // (Vorher dHash 9×8: sah bei kleinem Werk fast nur den Tisch und warf
+        // echte Arbeitsschritte weg. Siehe eval/HILLCLIMB.md.)
+        let dupLimit = settings.dedupBlockFactor
+            * KeyframeSelector.motionThreshold(frames: cachedFrames, settings: settings)
         var deduped: [Double] = []
-        var lastHash: UInt64? = nil
+        var lastGray: [UInt8]? = nil
         for frame in chosen {
-            let hash = Algorithms.dHash(gray: frame.gray, width: frame.w, height: frame.h)
-            if let last = lastHash,
-               Algorithms.hammingDistance(hash, last) < settings.dedupHashThreshold {
+            if let last = lastGray, last.count == frame.gray.count,
+               Algorithms.maxBlockDifference(frame.gray, last, width: frame.w, height: frame.h) < dupLimit {
                 continue
             }
             deduped.append(frame.time)
-            lastHash = hash
+            lastGray = frame.gray
         }
         self.discardedForHands = discardedHands
 

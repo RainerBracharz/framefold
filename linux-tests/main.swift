@@ -299,6 +299,35 @@ let e2eThr = Algorithms.motionThreshold(scores: e2eScores, percentile: 0.35)
 let e2eWindows = Algorithms.stillWindowRanges(motionScores: e2eScores, threshold: e2eThr, minFrames: 3)
 check(e2eWindows.count == 8, "Otsu + Fensterung findet 8/8 Szenen (\(e2eWindows.count))")
 
+// MARK: Helligkeitsausgleich + Rasterfeld-Duplikate (Eval-Runde 1 und 2)
+// Erwartungswerte aus eval/selector.py auf denselben Daten gerechnet –
+// sichert, dass App und Eval dasselbe messen.
+print("medianDifference / motionScoreGainCompensated / maxBlockDifference:")
+let pw = 24, ph = 16
+let pa: [UInt8] = (0..<(pw * ph)).map { UInt8(($0 * 37 + 11) % 251) }
+let pb: [UInt8] = pa.map { UInt8(min(255, Int($0) + 7)) }          // gleichmäßig heller
+func localChange(_ src: [UInt8]) -> [UInt8] {
+    var out = src
+    for y in 4..<6 { for x in 6..<9 { out[y * pw + x] = UInt8(min(255, Int(out[y * pw + x]) + 60)) } }
+    return out
+}
+let pc = localChange(pa)                                            // kleine Falz
+let pd = localChange(pb)                                            // Falz + Helligkeit
+func near(_ x: Double, _ y: Double, _ tol: Double = 1e-4) -> Bool { abs(x - y) < tol }
+check(Algorithms.medianDifference(pb, pa) == 7, "Median erkennt globale Aufhellung um 7")
+check(near(Algorithms.motionScoreGainCompensated(pb, pa), 0.015625),
+      "reine Aufhellung ist (fast) keine Bewegung (\(Algorithms.motionScoreGainCompensated(pb, pa)))")
+check(Algorithms.motionScore(pb, pa) > 6.9, "alter Bewegungswert hielt Aufhellung für Bewegung")
+check(near(Algorithms.motionScoreGainCompensated(pd, pa), 0.8359375), "Falz trotz Aufhellung = Python-Wert")
+check(near(Algorithms.maxBlockDifference(pb, pa, width: pw, height: ph), 0.33333333, 1e-3),
+      "Rasterfeld: Aufhellung allein ist ein Duplikat")
+check(near(Algorithms.maxBlockDifference(pc, pa, width: pw, height: ph), 54.3333333, 1e-3),
+      "Rasterfeld: kleine Falz sticht im stärksten Feld heraus")
+check(near(Algorithms.maxBlockDifference(pd, pa, width: pw, height: ph), 52.5, 1e-3),
+      "Rasterfeld: Falz bleibt sichtbar, auch wenn das Licht wechselt")
+check(Algorithms.maxBlockDifference([1, 2], [1, 2, 3], width: 2, height: 1) == 0, "ungleiche Größe → 0")
+check(PipelineSettings().dedupBlockFactor == 0.5, "Standard-Faktor 0,5 wie im Eval")
+
 print("")
 if failures == 0 {
     print("ALLE TESTS BESTANDEN ✓")

@@ -11,6 +11,70 @@ enum Algorithms {
 
     // MARK: Bewegungsanalyse
 
+    /// Median der vorzeichenbehafteten Differenzen a − b (−255…255), wie
+    /// numpy.median: bei gerader Anzahl das Mittel der beiden mittleren Werte.
+    /// Steht für die globale Helligkeitsänderung zwischen zwei Bildern.
+    static func medianDifference(_ a: [UInt8], _ b: [UInt8]) -> Double {
+        guard a.count == b.count, !a.isEmpty else { return 0 }
+        var hist = [Int](repeating: 0, count: 511)
+        for i in 0..<a.count { hist[Int(a[i]) - Int(b[i]) + 255] += 1 }
+        func kth(_ k: Int) -> Int {
+            var acc = 0
+            for (i, c) in hist.enumerated() {
+                acc += c
+                if acc > k { return i - 255 }
+            }
+            return 0
+        }
+        let n = a.count
+        if n % 2 == 1 { return Double(kth(n / 2)) }
+        return Double(kth(n / 2 - 1) + kth(n / 2)) / 2
+    }
+
+    /// Wie motionScore, aber ohne den globalen Helligkeitsanteil: Flackernde
+    /// LEDs und ziehende Wolken verändern das ganze Bild gleichmäßig und
+    /// ließen eine Ruhephase sonst wie Bewegung aussehen.
+    /// Eval (eval/HILLCLIMB.md, Runde 2): Flackern 26 → 0 doppelte Bilder.
+    static func motionScoreGainCompensated(_ a: [UInt8], _ b: [UInt8]) -> Double {
+        guard a.count == b.count, !a.isEmpty else { return 0 }
+        let m = medianDifference(a, b)
+        var sum = 0.0
+        for i in 0..<a.count { sum += abs(Double(Int(a[i]) - Int(b[i])) - m) }
+        return sum / Double(a.count)
+    }
+
+    /// Größte mittlere Differenz über ein grid × grid-Raster, Helligkeit
+    /// ausgeglichen. Eine neue Falzlinie verändert wenige Felder deutlich –
+    /// im Bildmittel oder in einem 9×8-Fingerabdruck geht sie unter, im
+    /// stärksten Feld nicht.
+    /// Eval (eval/HILLCLIMB.md, Runde 1): kleine Arbeitsschritte 11/40 → 37/40.
+    static func maxBlockDifference(_ a: [UInt8], _ b: [UInt8],
+                                   width: Int, height: Int, grid: Int = 8) -> Double {
+        guard a.count == b.count, a.count == width * height,
+              grid > 0, width >= grid, height >= grid else { return 0 }
+        let m = medianDifference(a, b)
+        var best = 0.0
+        a.withUnsafeBufferPointer { pa in
+            b.withUnsafeBufferPointer { pb in
+                for gy in 0..<grid {
+                    let y0 = gy * height / grid, y1 = (gy + 1) * height / grid
+                    for gx in 0..<grid {
+                        let x0 = gx * width / grid, x1 = (gx + 1) * width / grid
+                        var sum = 0.0
+                        for y in y0..<y1 {
+                            let row = y * width
+                            for x in x0..<x1 {
+                                sum += abs(Double(Int(pa[row + x]) - Int(pb[row + x])) - m)
+                            }
+                        }
+                        best = max(best, sum / Double((y1 - y0) * (x1 - x0)))
+                    }
+                }
+            }
+        }
+        return best
+    }
+
     /// Mittlere absolute Graustufendifferenz zweier gleich großer Bilder.
     static func motionScore(_ a: [UInt8], _ b: [UInt8]) -> Double {
         guard a.count == b.count, !a.isEmpty else { return 0 }

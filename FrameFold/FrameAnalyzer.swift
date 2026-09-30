@@ -59,7 +59,8 @@ final class FrameAnalyzer {
 
             var motion = 0.0
             if let prev = previousGray, prev.count == gray.count {
-                motion = Algorithms.motionScore(gray, prev)
+                // Helligkeit ausgeglichen: Flackern und Wolken sind keine Bewegung.
+                motion = Algorithms.motionScoreGainCompensated(gray, prev)
             }
             previousGray = gray
 

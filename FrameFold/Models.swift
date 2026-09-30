@@ -26,10 +26,13 @@ struct PipelineSettings: Equatable, Codable {
     var removeHands: Bool = true
     /// Konfidenz-Schwelle der Vision-Handerkennung
     var handConfidence: Float = 0.3
-    /// Hamming-Distanz-Schwelle für dHash-Deduplizierung (0–64).
-    /// In Tests mit der Referenzpipeline lagen echte Szenenwechsel bei Distanz 5–8,
-    /// echte Duplikate bei 0–2 → 3 trennt sauber.
+    /// Nicht mehr verwendet (seit 1.4 Rasterfeld-Vergleich, siehe
+    /// dedupBlockFactor). Bleibt, damit gespeicherte Einstellungen lesbar bleiben.
     var dedupHashThreshold: Int = 3
+    /// Duplikat, wenn das stärkste von 8×8 Rasterfeldern sich um weniger als
+    /// dieser Anteil der Bewegungsschwelle unterscheidet. 0,5 aus dem Eval
+    /// (eval/HILLCLIMB.md): trennt feine Falzschritte von echten Duplikaten.
+    var dedupBlockFactor: Double = 0.5
     /// Bildrate des ausgegebenen Stopmotion-Videos.
     /// Niedrige Werte (2–4) sind für kurze Sequenzen gedacht: zehn Bilder
     /// bei 10 fps sind nur eine Sekunde – bei 2 fps fünf.
@@ -259,6 +262,8 @@ extension PipelineSettings {
         removeHands = v(.removeHands, d.removeHands)
         handConfidence = v(.handConfidence, d.handConfidence)
         dedupHashThreshold = v(.dedupHashThreshold, d.dedupHashThreshold)
+        // bewusst NICHT aus dem Speicher: Algorithmus-Parameter, kein Nutzerwunsch
+        dedupBlockFactor = d.dedupBlockFactor
         outputFPS = v(.outputFPS, d.outputFPS)
         holdLastFrameSeconds = v(.holdLastFrameSeconds, d.holdLastFrameSeconds)
         aspect = v(.aspect, d.aspect)
