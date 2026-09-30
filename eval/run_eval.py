@@ -39,6 +39,23 @@ VIDEOS = ROOT / "videos"
 RESULTS = ROOT / "results"
 
 
+def load_split():
+    """Feste, zufällige Aufteilung: pro Szenario 2 von 5 Varianten als Test.
+    Einmal erzeugt, danach nie mehr verändert – sonst sickert der Test ins Training."""
+    path = ROOT / "split.json"
+    if path.exists():
+        return json.loads(path.read_text())
+    rnd = random.Random(20260930)
+    split = {}
+    for p in scenarios.SCENARIOS:
+        seeds = [1, 2, 3, 4, 5]
+        test = set(rnd.sample(seeds, 2))
+        for sd in seeds:
+            split[f"{p.name}_{sd}"] = "test" if sd in test else "train"
+    path.write_text(json.dumps(split, indent=1, sort_keys=True))
+    return split
+
+
 def in_any(t, spans, pad=0.0):
     return any(s["t0"] - pad <= t < s["t1"] + pad for s in spans)
 
@@ -167,6 +184,8 @@ def main():
     ap.add_argument("--regen", action="store_true")
     ap.add_argument("--set", action="append", default=[], help="feld=wert, z. B. motion_percentile=0.5")
     ap.add_argument("--tag", default="baseline")
+    ap.add_argument("--split", choices=["train", "test", "all"], default="all",
+                    help="train: darf beim Klettern gelesen werden; test: nur als Urteil")
     ap.add_argument("--only", default=None, help="nur Videos, deren Name so beginnt")
     ap.add_argument("--hands", choices=["ideal", "aus"], default="ideal",
                     help="ideal: perfekte Handerkennung (obere Schranke für Apple Vision); "
@@ -181,12 +200,16 @@ def main():
     types = {f.name: f.type for f in fields(Settings)}
     for kv in a.set:
         k, v = kv.split("=")
-        setattr(st, k, (int if types[k] in (int, "int") else float)(v))
+        conv = {int: int, "int": int, float: float, "float": float, str: str, "str": str}[types[k]]
+        setattr(st, k, conv(v))
 
     RESULTS.mkdir(exist_ok=True)
     rows = []
+    split = load_split()
     for video in sorted(VIDEOS.glob("*.mp4")):
         if a.only and not video.stem.startswith(a.only):
+            continue
+        if a.split != "all" and split.get(video.stem) != a.split:
             continue
         truth = json.loads(video.with_suffix(".json").read_text())
         hands = None
@@ -203,6 +226,8 @@ def main():
               f"Hand {g['hand']}  unscharf {g['blur']}  Dup {g['dup']}")
         row["thumbs"] = thumbs(video, g["verdicts"])
 
+    if a.split != "all":
+        a.tag = f"{a.tag}.{a.split}"
     out = RESULTS / f"{a.tag}.jsonl"
     with out.open("w") as fh:
         for r in rows:

@@ -157,7 +157,7 @@ def render(p: Params, seed: int, out_dir: Path):
     table = make_table(rng)
     # Werkgröße im Bild variiert mit der Variante: klein (weit weg), mittel,
     # groß (füllt das Bild fast). Alle drei kommen im Atelier vor.
-    size = {1: 110, 2: 170, 3: 230}.get(seed, 150)
+    size = {1: 110, 2: 170, 3: 230, 4: 140, 5: 200}.get(seed, 150)
     sheet = Sheet(cx=W * 0.5, cy=H * 0.55, size=size, angle=rng.uniform(-0.2, 0.2))
 
     # Zeitplan: Ruhe, Griff, Ruhe, Griff ...
@@ -277,7 +277,7 @@ def render(p: Params, seed: int, out_dir: Path):
     return path
 
 
-def generate(out_dir: Path, seeds=(1, 2, 3)):
+def generate(out_dir: Path, seeds=(1, 2, 3, 4, 5)):
     out_dir.mkdir(parents=True, exist_ok=True)
     made = []
     for p in SCENARIOS:
