@@ -1,3 +1,3 @@
-FrameFold now speaks English — the whole app, from first launch to the contact sheet. The language follows your iPhone's setting.
+Finer frame selection: FrameFold now catches small steps too, such as a single new crease. Until now such steps could be dropped as repeats, especially when the work was small in the frame.
 
-This is the first English release. If a phrase reads oddly somewhere, we'd like to know.
+Steadier under artificial light: flickering LED or fluorescent lamps and changing daylight no longer produce duplicate frames.

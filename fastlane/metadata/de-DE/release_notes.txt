@@ -1,1 +1,3 @@
-FrameFold gibt es jetzt auch auf Englisch — die ganze App, vom ersten Start bis zum Kontaktbogen. Die Sprache folgt der Einstellung deines iPhones; wer Deutsch eingestellt hat, merkt keinen Unterschied.
+Feinere Bildauswahl: FrameFold erkennt jetzt auch kleine Arbeitsschritte, etwa eine einzelne neue Falzlinie. Bisher konnten solche Schritte als Wiederholung aussortiert werden, besonders wenn das Werk klein im Bild war.
+
+Ruhiger bei Kunstlicht: Flackernde LED- oder Leuchtstofflampen und wechselndes Tageslicht führen nicht mehr zu doppelten Bildern.
