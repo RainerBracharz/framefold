@@ -40,3 +40,7 @@ FrameFold.ipa
 
 # Zwischenstand des Lokalisierungs-Exports (wird bei Bedarf neu erzeugt)
 localization/xcloc/
+
+# Eval: erzeugte Videos und Ergebnisse (reproduzierbar, siehe eval/README.md)
+eval/videos/
+eval/results/
