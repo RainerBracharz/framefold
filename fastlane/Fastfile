@@ -75,6 +75,22 @@ platform :ios do
   lane :release do
     api_key = login
 
+    # Apple erlaubt nur EINE Version in der Prüfung. Wartet noch eine andere,
+    # benennt deliver sie um, statt eine neue anzulegen (so geschehen am
+    # 02.10.: aus der wartenden 1.5 wurde „2.0" mit dem 1.5-Build). Daher
+    # vorher abbrechen.
+    require "spaceship"
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
+      key_id: KEY_ID, issuer_id: ISSUER_ID, filepath: KEY_PATH)
+    target = get_version_number(xcodeproj: PROJECT, target: SCHEME)
+    busy = Spaceship::ConnectAPI::App.find(APP_ID).get_app_store_versions.find do |v|
+      %w[WAITING_FOR_REVIEW IN_REVIEW].include?(v.app_store_state) && v.version_string != target
+    end
+    if busy
+      UI.user_error!("#{busy.version_string} ist noch in der Prüfung (#{busy.app_store_state}). " \
+                     "Erst abwarten – oder `fastlane resubmit`, um sie durch #{target} zu ersetzen.")
+    end
+
     # Build-Nummer aus App Store Connect statt aus dem Projekt: agvtool las
     # sonst den Wert des jüngsten Targets (UI-Tests, stand auf 1) und zählte
     # von dort weiter. So ist die Nummer immer höher als alles Hochgeladene.
@@ -106,6 +122,38 @@ platform :ios do
     )
 
     # Schritt 2: warten, bis der Build verarbeitet ist, dann einreichen.
+    submit
+  end
+
+  desc "Wartende Einreichung zurückziehen und mit dem neuesten Build dieser Version neu einreichen"
+  lane :resubmit do
+    login
+    require "spaceship"
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
+      key_id: KEY_ID, issuer_id: ISSUER_ID, filepath: KEY_PATH)
+    app = Spaceship::ConnectAPI::App.find(APP_ID)
+    version = get_version_number(xcodeproj: PROJECT, target: SCHEME)
+
+    subs = app.get_review_submissions(
+      filter: { state: "WAITING_FOR_REVIEW,READY_FOR_REVIEW,UNRESOLVED_ISSUES" })
+    if subs.empty?
+      UI.message("Keine wartende Einreichung gefunden.")
+    else
+      subs.each do |sub|
+        sub.cancel_submission
+        UI.success("Einreichung zurückgezogen.")
+      end
+    end
+
+    # Bis die Version wieder bearbeitbar ist, dauert es ein paar Sekunden.
+    20.times do
+      v = app.get_app_store_versions(filter: { versionString: version }).first
+      state = v&.app_store_state
+      UI.message("#{version}: #{state}")
+      break unless %w[WAITING_FOR_REVIEW IN_REVIEW].include?(state)
+      sleep 15
+    end
+
     submit
   end
 
