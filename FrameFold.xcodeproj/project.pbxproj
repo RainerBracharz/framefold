@@ -23,6 +23,8 @@
 		A4C483879CD17FB6351FCFDF /* FrameAligner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856EF7169EBADC9E0A4E3FEB /* FrameAligner.swift */; };
 		AA11F0F0F0F0F0F0F0F0F001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */; };
 		AA22F0F0F0F0F0F0F0F0F101 /* StudioMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA22F0F0F0F0F0F0F0F0F102 /* StudioMonitor.swift */; };
+		BB20F0F0F0F0F0F0F0F0F303 /* LiveLoopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */; };
+		BB20F0F0F0F0F0F0F0F0F301 /* FlipbookRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F302 /* FlipbookRenderer.swift */; };
 		AA33F0F0F0F0F0F0F0F0F201 /* WatchLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA33F0F0F0F0F0F0F0F0F202 /* WatchLink.swift */; };
 		AFAAD6ED30E050C36CB1008E /* CoreMLHandDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F829535D7C9019A39F763DF /* CoreMLHandDetector.swift */; };
 		BD9B7454EB7D37A5500730CA /* ProjectStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AAEDEDE5FC50D5C58EF7D3 /* ProjectStore.swift */; };
@@ -87,6 +89,8 @@
 		9BBC799115617B1A713B60FF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA22F0F0F0F0F0F0F0F0F102 /* StudioMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioMonitor.swift; sourceTree = "<group>"; };
+		BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveLoopView.swift; sourceTree = "<group>"; };
+		BB20F0F0F0F0F0F0F0F0F302 /* FlipbookRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlipbookRenderer.swift; sourceTree = "<group>"; };
 		AA33F0F0F0F0F0F0F0F0F202 /* WatchLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchLink.swift; sourceTree = "<group>"; };
 		ABDB9F45CA291A2DA744E92B /* MotionLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionLevel.swift; sourceTree = "<group>"; };
 		B9C7AEA4E4A264C569DEA9D5 /* KeyframeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyframeSelector.swift; sourceTree = "<group>"; };
@@ -174,6 +178,8 @@
 				6D927AFD3235879AD294246A /* Theme.swift */,
 				AA33F0F0F0F0F0F0F0F0F202 /* WatchLink.swift */,
 				AA22F0F0F0F0F0F0F0F0F102 /* StudioMonitor.swift */,
+				BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */,
+				BB20F0F0F0F0F0F0F0F0F302 /* FlipbookRenderer.swift */,
 				5179CC507784BECC68BB9DEF /* Assets.xcassets */,
 				AA11F0F0F0F0F0F0F0F0F012 /* Localizable.xcstrings */,
 				AA11F0F0F0F0F0F0F0F0F022 /* InfoPlist.xcstrings */,
@@ -346,6 +352,8 @@
 				52A0753942DADBD20392C515 /* Theme.swift in Sources */,
 				AA33F0F0F0F0F0F0F0F0F201 /* WatchLink.swift in Sources */,
 				AA22F0F0F0F0F0F0F0F0F101 /* StudioMonitor.swift in Sources */,
+				BB20F0F0F0F0F0F0F0F0F303 /* LiveLoopView.swift in Sources */,
+				BB20F0F0F0F0F0F0F0F0F301 /* FlipbookRenderer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
