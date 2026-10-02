@@ -84,6 +84,14 @@ that decision is written up here:
   external display shows the camera feed alone, with a catalogue line — no
   controls, no HUD. The phone stays on the tripod; everyone in the room watches
   the work. Without a session running it shows a gallery standby.
+- **The film grows as you work.** From the second frame on, the stop-motion
+  plays as a loop while the session is still running — small in the
+  viewfinder, large on the studio monitor next to the camera feed. Hands at
+  work on one side, the piece they're making on the other.
+- **Flip book.** Every work becomes a print-ready flip book: A4 sheets with
+  cut lines, a binding edge and numbered leaves; short series loop so the
+  little book is thick enough to flip. Image, object, image — and back to
+  object.
 - **Apple Watch remote.** Fire and finish from your wrist, with the frame count
   and live status on the watch face. Nobody has to touch the tripod.
 

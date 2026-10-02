@@ -1,3 +1,5 @@
-FrameFold now speaks French too — the whole app, from first launch to the contact sheet. The language follows your iPhone's setting.
+FrameFold 2.0 — watch it take shape, then hold it in your hands.
 
-Also fixed: the permission prompts for camera and photo library now appear in English, and the seconds counter in the viewfinder reads correctly ("2 seconds of film", not "2 secondn").
+The film grows as you work: while you fold, the stop-motion is already playing as a loop — small in the viewfinder, large on the studio monitor next to the camera feed. Anyone watching sees both at once: the hands at work and the piece they're making.
+
+Flip book: every work becomes a print-ready flip book — A4 sheets with cut lines, a binding edge and numbered leaves. Cut, staple, flip. In every mode, under Print.

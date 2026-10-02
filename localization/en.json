@@ -264,5 +264,13 @@
   "Guten Tag": "Good afternoon",
   "Guten Abend": "Good evening",
   "Gute Nacht": "Good night",
-  "Interferenz-Echo": "Interference echo"
+  "Interferenz-Echo": "Interference echo",
+  "Daumenkino": "Flip book",
+  "Daumenkino teilen": "Share flip book",
+  "Daumenkino konnte nicht erstellt werden.": "The flip book couldn't be created.",
+  "Daumenkino · %lld Blätter": "Flip book · %lld leaves",
+  "Bogen %lld/%lld": "Sheet %1$lld/%2$lld",
+  "Entlang der hellen Linien schneiden · in Reihenfolge stapeln, Blatt 001 oben · an der Bindekante klammern oder leimen · am rechten Rand blättern": "Cut along the light lines · stack in order, leaf 001 on top · staple or glue at the binding edge · flip from the right edge",
+  "Der Film bisher": "The film so far",
+  "Antippen zum Vergrößern": "Tap to enlarge"
 }

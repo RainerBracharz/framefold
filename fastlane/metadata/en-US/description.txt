@@ -11,6 +11,12 @@ The app measures image sharpness continuously and only locks focus once it has a
 APPLE WATCH AS A REMOTE
 Fire and finish from your wrist, with the frame count and status on the watch face. Nobody has to touch the tripod. The volume buttons on headphones and AirPods fire too, and holding the shutter starts a countdown.
 
+THE FILM GROWS AS YOU WORK
+While you work, the stop-motion is already playing as a loop — in the viewfinder and on the studio monitor next to the camera feed.
+
+FLIP BOOK
+Every work becomes a print-ready flip book: A4 sheets with cut lines, a binding edge and numbered leaves. Cut, staple, flip — the film becomes an object again.
+
 STUDIO MONITOR
 Connect a screen or projector and it shows the camera feed alone, with a catalogue line — no controls. For classes and studio visits: everyone watches, the phone stays untouched on the tripod.
 

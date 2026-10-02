@@ -19,6 +19,8 @@ struct LiveCaptureView: View {
     @AppStorage("liveShowGrid") private var showGrid = true
     @AppStorage("liveShowLevel") private var showLevel = true
     @AppStorage("didSeeCameraTip") private var didSeeCameraTip = false
+    /// Live-Loop im Sucher groß oder klein
+    @State private var loopLarge = false
     @AppStorage("liveOnionOpacity") private var onionOpacity: Double = 0.35
     @AppStorage("liveOnionFirst") private var onionFirst: Bool = false
     @State private var referenceImage: UIImage?
@@ -500,6 +502,28 @@ struct LiveCaptureView: View {
                     }
                 }
                 .padding(16)
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            // Live-Loop: Der Film wächst mit jedem Bild – in jedem Modus,
+            // weil genau das der Lohn der Arbeit ist. Antippen vergrößert.
+            if controller.loopFrames.count >= 2 {
+                Button {
+                    withAnimation(.snappy(duration: 0.25)) { loopLarge.toggle() }
+                } label: {
+                    VStack(alignment: .leading, spacing: 4) {
+                        LiveLoopView(frames: controller.loopFrames)
+                            .frame(width: loopLarge ? 200 : 88)
+                            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.6), lineWidth: 1))
+                        CatalogLabel("Der Film bisher", color: Theme.paperOnDark, size: 8)
+                    }
+                    .padding(6)
+                    .background(Theme.darkroom.opacity(0.55))
+                }
+                .buttonStyle(.plain)
+                .padding(16)
+                .accessibilityLabel(Text("Der Film bisher"))
+                .accessibilityHint(Text("Antippen zum Vergrößern"))
             }
         }
         .onAppear {

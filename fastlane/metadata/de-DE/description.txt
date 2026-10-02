@@ -11,6 +11,12 @@ Die App misst laufend die Bildschärfe und fixiert den Fokus erst, wenn er wirkl
 APPLE WATCH ALS FERNAUSLÖSER
 Auslösen und Beenden vom Handgelenk, mit Bildzähler und Zustand auf dem Zifferblatt. Niemand muss das Stativ berühren. Auch die Lautstärketasten von Kopfhörern und AirPods lösen aus, und ein langer Druck auf den Auslöser startet einen Countdown.
 
+DER FILM WÄCHST MIT
+Während du arbeitest, läuft die Stopmotion schon als Schleife — im Sucher und auf dem Studio-Monitor neben dem Kamerabild.
+
+DAUMENKINO
+Jedes Werk wird zum druckfertigen Daumenkino: A4-Bogen mit Schnittlinien, Bindekante und nummerierten Blättern. Ausschneiden, klammern, blättern — aus dem Film wird wieder ein Objekt.
+
 STUDIO-MONITOR
 Hängt ein Bildschirm oder Beamer am iPhone, zeigt er nur das Kamerabild mit einer Katalogzeile — ohne Bedienelemente. Für Kurse und Atelierbesuche: alle sehen zu, das iPhone bleibt unberührt am Stativ.
 

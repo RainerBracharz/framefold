@@ -421,6 +421,63 @@ enum Algorithms {
         return pages
     }
 
+    // MARK: Daumenkino
+
+    /// Ein Blatt des Daumenkinos auf dem Druckbogen: die ganze Schnittfläche,
+    /// darin links die Bindekante (Klammer/Leim) und rechts das Bild.
+    struct FlipbookCell: Equatable {
+        let page: CGRect
+        let binding: CGRect
+        let image: CGRect
+    }
+
+    /// Raster für einen A4-Bogen. Querformatige Bilder in 2 Spalten,
+    /// hochformatige in 3 – so bleibt jedes Blatt griffig groß (rund 6–7 cm
+    /// Bildbreite) und der Bogen trotzdem gut gefüllt. Die Blätter stoßen
+    /// direkt aneinander: ein Schnitt trennt zwei Blätter.
+    static func flipbookLayout(
+        imageAspect: Double,
+        pageWidth: Double, pageHeight: Double,
+        margin: Double, footer: Double,
+        binding: Double = 42, padding: Double = 6
+    ) -> [FlipbookCell] {
+        guard imageAspect > 0 else { return [] }
+        let columns = imageAspect >= 1 ? 2 : 3
+        let usableW = pageWidth - 2 * margin
+        let usableH = pageHeight - 2 * margin - footer
+        let cellW = usableW / Double(columns)
+        let imageW = cellW - binding - 2 * padding
+        guard imageW > 0 else { return [] }
+        let imageH = imageW / imageAspect
+        let cellH = imageH + 2 * padding
+        let rows = Int(usableH / cellH)
+        guard rows > 0 else { return [] }
+        var cells: [FlipbookCell] = []
+        for row in 0..<rows {
+            for col in 0..<columns {
+                let x = margin + Double(col) * cellW
+                let y = margin + Double(row) * cellH
+                cells.append(FlipbookCell(
+                    page: CGRect(x: x, y: y, width: cellW, height: cellH),
+                    binding: CGRect(x: x, y: y, width: binding, height: cellH),
+                    image: CGRect(x: x + binding + padding, y: y + padding,
+                                  width: imageW, height: imageH)))
+            }
+        }
+        return cells
+    }
+
+    /// Reihenfolge der Blätter: zuerst das Deckblatt (nil), dann die Bilder.
+    /// Ein Daumenkino unter etwa 24 Blättern ist zu dünn zum Blättern –
+    /// kurze Serien laufen deshalb mehrmals hintereinander, wie eine Schleife.
+    static func flipbookSequence(frameCount: Int, minimumPages: Int = 24) -> [Int?] {
+        guard frameCount > 0 else { return [] }
+        let rounds = max(1, Int((Double(minimumPages) / Double(frameCount)).rounded(.up)))
+        var seq: [Int?] = [nil]
+        for _ in 0..<rounds { seq += (0..<frameCount).map { Optional($0) } }
+        return seq
+    }
+
     // MARK: Stabilisierung (Verwacklung)
 
     /// Schätzt die Verschiebung zwischen zwei gleich großen Graustufenbildern

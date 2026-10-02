@@ -150,6 +150,8 @@ struct ProjectDetailView: View {
     @State private var errorMessage: String?
     @State private var contactSheetURL: URL?
     @State private var isRenderingSheet = false
+    @State private var flipbookURL: URL?
+    @State private var isRenderingFlipbook = false
     @State private var foldTemplateURL: URL?
     @State private var isRenderingTemplate = false
     @State private var shareItem: ShareItem?
@@ -482,11 +484,26 @@ struct ProjectDetailView: View {
                     .foregroundStyle(Theme.oxblood)
             }
 
-            // Drucksachen – bewusst leiser als der Export, als Paar
-            if mode.showsAdvanced {
-                VStack(alignment: .leading, spacing: 8) {
-                    CatalogLabel("Drucken", size: 9)
-                    HStack(spacing: 8) {
+            // Drucksachen – bewusst leiser als der Export. Das Daumenkino gibt
+            // es in jedem Modus: Es ist das, was Kinder und Kurse mitnehmen.
+            VStack(alignment: .leading, spacing: 8) {
+                CatalogLabel("Drucken", size: 9)
+                HStack(spacing: 8) {
+                    pdfButton(
+                        title: flipbookURL == nil
+                            ? (isRenderingFlipbook ? "Wird gesetzt…" : "Daumenkino")
+                            : "Daumenkino teilen",
+                        icon: "book.pages",
+                        disabled: currentProject.frameCount == 0 || isRenderingFlipbook
+                    ) {
+                        if let flipbookURL {
+                            shareItem = ShareItem(url: flipbookURL)
+                        } else {
+                            renderFlipbook()
+                        }
+                    }
+
+                    if mode.showsAdvanced {
                         pdfButton(
                             title: contactSheetURL == nil
                                 ? (isRenderingSheet ? "Wird gesetzt…" : "Kontaktbogen")
@@ -500,25 +517,31 @@ struct ProjectDetailView: View {
                                 renderContactSheet()
                             }
                         }
+                    }
 
-                        if mode.showsTolino {
-                            pdfButton(
-                                title: foldTemplateURL == nil
-                                    ? (isRenderingTemplate ? "Wird gesetzt…" : "Faltvorlage")
-                                    : "Faltvorlage teilen",
-                                icon: "arrow.triangle.turn.up.right.diamond",
-                                disabled: currentProject.frameCount == 0 || isRenderingTemplate
-                            ) {
-                                if let foldTemplateURL {
-                                    shareItem = ShareItem(url: foldTemplateURL)
-                                } else {
-                                    renderFoldTemplate()
-                                }
+                    if mode.showsTolino {
+                        pdfButton(
+                            title: foldTemplateURL == nil
+                                ? (isRenderingTemplate ? "Wird gesetzt…" : "Faltvorlage")
+                                : "Faltvorlage teilen",
+                            icon: "arrow.triangle.turn.up.right.diamond",
+                            disabled: currentProject.frameCount == 0 || isRenderingTemplate
+                        ) {
+                            if let foldTemplateURL {
+                                shareItem = ShareItem(url: foldTemplateURL)
+                            } else {
+                                renderFoldTemplate()
                             }
                         }
                     }
                 }
-                .padding(.top, 6)
+            }
+            .padding(.top, 6)
+            // Neue oder entfernte Bilder: fertige Drucksachen passen nicht mehr
+            .onChange(of: currentProject.frameCount) { _, _ in
+                flipbookURL = nil
+                contactSheetURL = nil
+                foldTemplateURL = nil
             }
         }
     }
@@ -564,6 +587,26 @@ struct ProjectDetailView: View {
                     shareItem = ShareItem(url: result)   // Teilen-Sheet direkt öffnen
                 } else {
                     errorMessage = String(localized: "Faltvorlage konnte nicht erstellt werden.")
+                }
+            }
+        }
+    }
+
+    private func renderFlipbook() {
+        isRenderingFlipbook = true
+        let urls = store.frameURLs(for: currentProject)
+        let title = currentProject.name
+        let dateText = String(currentProject.createdAtISO.prefix(10))
+
+        Task.detached(priority: .userInitiated) {
+            let url = FlipbookRenderer.render(title: title, dateText: dateText, frameURLs: urls)
+            await MainActor.run {
+                flipbookURL = url
+                isRenderingFlipbook = false
+                if let url {
+                    shareItem = ShareItem(url: url)   // Teilen-Sheet direkt öffnen
+                } else {
+                    errorMessage = String(localized: "Daumenkino konnte nicht erstellt werden.")
                 }
             }
         }

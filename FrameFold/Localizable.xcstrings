@@ -637,6 +637,22 @@
         }
       }
     },
+    "Antippen zum Vergrößern": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to enlarge"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touche pour agrandir"
+          }
+        }
+      }
+    },
     "Arbeit erkannt…": {
       "localizations": {
         "en": {
@@ -1369,6 +1385,28 @@
         }
       }
     },
+    "Bogen %lld/%lld": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bogen %1$lld/%2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sheet %1$lld/%2$lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planche %1$lld/%2$lld"
+          }
+        }
+      }
+    },
     "Das Stopmotion-Video konnte nicht geschrieben werden.": {
       "localizations": {
         "en": {
@@ -1449,6 +1487,70 @@
         }
       }
     },
+    "Daumenkino": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flip book"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Folioscope"
+          }
+        }
+      }
+    },
+    "Daumenkino konnte nicht erstellt werden.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The flip book couldn't be created."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de créer le folioscope."
+          }
+        }
+      }
+    },
+    "Daumenkino teilen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share flip book"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager le folioscope"
+          }
+        }
+      }
+    },
+    "Daumenkino · %lld Blätter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flip book · %lld leaves"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Folioscope · %lld feuillets"
+          }
+        }
+      }
+    },
     "Deckkraft: %lld %%": {
       "localizations": {
         "en": {
@@ -1461,6 +1563,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Opacité : %lld %%"
+          }
+        }
+      }
+    },
+    "Der Film bisher": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The film so far"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le film jusqu’ici"
           }
         }
       }
@@ -1781,6 +1899,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Supprimer définitivement"
+          }
+        }
+      }
+    },
+    "Entlang der hellen Linien schneiden · in Reihenfolge stapeln, Blatt 001 oben · an der Bindekante klammern oder leimen · am rechten Rand blättern": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cut along the light lines · stack in order, leaf 001 on top · staple or glue at the binding edge · flip from the right edge"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Découper le long des traits clairs · empiler dans l’ordre, feuillet 001 dessus · agrafer ou coller côté reliure · feuilleter par le bord droit"
           }
         }
       }

@@ -328,6 +328,31 @@ check(near(Algorithms.maxBlockDifference(pd, pa, width: pw, height: ph), 52.5, 1
 check(Algorithms.maxBlockDifference([1, 2], [1, 2, 3], width: 2, height: 1) == 0, "ungleiche Größe → 0")
 check(PipelineSettings().dedupBlockFactor == 0.5, "Standard-Faktor 0,5 wie im Eval")
 
+// MARK: Daumenkino
+print("flipbookLayout / flipbookSequence:")
+let fbQuer = Algorithms.flipbookLayout(imageAspect: 16.0 / 9.0, pageWidth: 595.2, pageHeight: 841.8,
+                                       margin: 28, footer: 28)
+let fbHoch = Algorithms.flipbookLayout(imageAspect: 9.0 / 16.0, pageWidth: 595.2, pageHeight: 841.8,
+                                       margin: 28, footer: 28)
+check(fbQuer.count >= 10 && fbQuer.count % 2 == 0, "Querformat: 2 Spalten, mindestens 10 Blätter pro Bogen (\(fbQuer.count))")
+check(fbHoch.count >= 6 && fbHoch.count % 3 == 0, "Hochformat: 3 Spalten (\(fbHoch.count))")
+check(fbQuer.allSatisfy { $0.page.maxY <= 841.8 - 28 - 28 + 0.001 && $0.page.maxX <= 595.2 - 28 + 0.001 },
+      "alle Blätter innerhalb von Rand und Fußzeile")
+check(fbQuer.allSatisfy { $0.page.contains($0.image) && $0.page.contains($0.binding) },
+      "Bild und Bindekante liegen im Blatt")
+check(fbQuer.allSatisfy { abs($0.image.width / $0.image.height - 16.0 / 9.0) < 0.001 },
+      "Bildfläche behält das Seitenverhältnis")
+check(fbQuer.allSatisfy { $0.image.width > 150 }, "Bild bleibt griffig groß (> 5 cm)")
+let pairs = zip(fbQuer, fbQuer.dropFirst())
+check(pairs.allSatisfy { !$0.0.page.insetBy(dx: 0.5, dy: 0.5).intersects($0.1.page) }, "Blätter überlappen nicht")
+check(Algorithms.flipbookLayout(imageAspect: 0, pageWidth: 595, pageHeight: 842, margin: 28, footer: 28).isEmpty,
+      "ungültiges Seitenverhältnis → leer")
+let seqKurz = Algorithms.flipbookSequence(frameCount: 10)
+check(seqKurz.first! == nil && seqKurz.count == 31, "10 Bilder → Deckblatt + 3 Runden (\(seqKurz.count))")
+let seqLang = Algorithms.flipbookSequence(frameCount: 40)
+check(seqLang.count == 41 && seqLang.last! == 39, "40 Bilder → Deckblatt + einmal durch")
+check(Algorithms.flipbookSequence(frameCount: 0).isEmpty, "keine Bilder → leer")
+
 print("")
 if failures == 0 {
     print("ALLE TESTS BESTANDEN ✓")

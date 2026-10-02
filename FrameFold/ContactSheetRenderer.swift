@@ -82,9 +82,11 @@ enum ContactSheetRenderer {
         draw(text: title.uppercased(), size: 10, tracking: 2.4,
              color: UIColor(white: 0.09, alpha: 1),
              at: CGPoint(x: margin, y: margin))
-        let meta = "\(frameCount) FRAMES · \(dateText)"
-            + (pageCount > 1 ? " · BOGEN \(page)/\(pageCount)" : "")
-        draw(text: meta, size: 7, tracking: 2.0,
+        let meta = String(localized: "\(frameCount) Bilder") + " · \(dateText)"
+            + (pageCount > 1
+               ? " · " + String(format: String(localized: "Bogen %lld/%lld"), page, pageCount)
+               : "")
+        draw(text: meta.uppercased(), size: 7, tracking: 2.0,
              color: UIColor(white: 0.45, alpha: 1),
              at: CGPoint(x: margin, y: margin + 16))
     }

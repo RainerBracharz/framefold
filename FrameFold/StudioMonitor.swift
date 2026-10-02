@@ -125,17 +125,26 @@ private struct StudioLiveView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            #if targetEnvironment(simulator)
-            if let preview = controller.simulatedPreview {
-                Image(uiImage: preview)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            // Ab dem zweiten Bild steht neben dem Kamerabild der Film, der
+            // gerade entsteht: links die Hände bei der Arbeit, rechts das
+            // Werk, das daraus wird.
+            if controller.loopFrames.count >= 2 {
+                HStack(spacing: 0) {
+                    cameraLayer
+                    Rectangle().fill(Theme.paperOnDark.opacity(0.25)).frame(width: 1)
+                    VStack(spacing: 14) {
+                        LiveLoopView(frames: controller.loopFrames)
+                            .padding(.horizontal, 28)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        CatalogLabel("Der Film bisher",
+                                     color: Theme.paperOnDark.opacity(0.6), size: 12)
+                            .padding(.bottom, 76)
+                    }
+                    .padding(.top, 28)
+                }
+            } else {
+                cameraLayer
             }
-            #else
-            MonitorPreview(session: controller.session)
-                .ignoresSafeArea()
-            #endif
 
             // Katalogzeile wie unter einem gehängten Werk
             HStack(spacing: 14) {
@@ -155,6 +164,23 @@ private struct StudioLiveView: View {
             .padding(.vertical, 16)
             .background(Theme.darkroom.opacity(0.85))
         }
+    }
+}
+
+extension StudioLiveView {
+    @ViewBuilder
+    fileprivate var cameraLayer: some View {
+        #if targetEnvironment(simulator)
+        if let preview = controller.simulatedPreview {
+            Image(uiImage: preview)
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        #else
+        MonitorPreview(session: controller.session)
+            .ignoresSafeArea()
+        #endif
     }
 }
 

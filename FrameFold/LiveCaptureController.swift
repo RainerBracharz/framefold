@@ -199,6 +199,11 @@ final class LiveCaptureController: NSObject, ObservableObject {
     }
     @Published var capturedCount = 0
     @Published var lastCapturedImage: UIImage?   // für Onion-Skin
+    /// Die Bilder dieser Sitzung als kleine JPEGs, in Aufnahmereihenfolge –
+    /// daraus läuft der Live-Loop im Sucher und auf dem Studio-Monitor: Die
+    /// Stopmotion wächst sichtbar mit jedem Bild. Klein gehalten (360 px,
+    /// rund 20 KB pro Bild), damit auch lange Sitzungen kaum Speicher kosten.
+    @Published private(set) var loopFrames: [Data] = []
     @Published var permissionDenied = false
     /// Kein Aufnahmegerät vorhanden (z. B. iOS-Simulator oder Gerät ohne Kamera).
     @Published var cameraUnavailable = false
@@ -575,6 +580,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // VORHERIGEN Session – und die Zwiebelhaut zeigt das alte Motiv.
         latestFrame = nil
         lastCapturedImage = nil   // Zähler gilt pro Session, nicht pro App-Lauf
+        loopFrames = []
         firstCapturedImage = nil
         previousGray = nil
         stableSince = nil
@@ -1384,6 +1390,19 @@ final class LiveCaptureController: NSObject, ObservableObject {
     func revertLastCapture(to previous: UIImage?) {
         lastCapturedImage = previous
         capturedCount = max(0, capturedCount - 1)
+        if !loopFrames.isEmpty { loopFrames.removeLast() }
+    }
+
+    /// Verkleinertes JPEG für den Live-Loop.
+    private static func loopThumbnail(_ image: UIImage, width: CGFloat = 360) -> Data? {
+        guard image.size.width > 0 else { return nil }
+        let size = CGSize(width: width, height: width * image.size.height / image.size.width)
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        let small = UIGraphicsImageRenderer(size: size, format: format).image { _ in
+            image.draw(in: CGRect(origin: .zero, size: size))
+        }
+        return small.jpegData(compressionQuality: 0.7)
     }
 
     private func capture(frame: CGImage) {
@@ -1401,6 +1420,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         let image = UIImage(cgImage: frame)
         lastCapturedImage = image
         if firstCapturedImage == nil { firstCapturedImage = image } // Drift-Referenz
+        if let thumb = Self.loopThumbnail(image) { loopFrames.append(thumb) }
         if let data = image.jpegData(compressionQuality: 0.9) {
             onCapture?(data)
         }
