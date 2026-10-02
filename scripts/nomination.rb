@@ -89,9 +89,10 @@ def api(method, path, body = nil)
 end
 
 def existing
-  # Apple verlangt den Status-Filter ausdrücklich
-  data = api(:get, "/v1/nominations?filter[relatedApps]=#{APP_ID}&filter[state]=DRAFT,SUBMITTED&limit=50")
-  data["data"] || []
+  # Apple verlangt den Status-Filter und nimmt nur einen Wert pro Abfrage
+  %w[DRAFT SUBMITTED].flat_map do |state|
+    api(:get, "/v1/nominations?filter[relatedApps]=#{APP_ID}&filter[state]=#{state}&limit=50")["data"] || []
+  end
 end
 
 def ours
