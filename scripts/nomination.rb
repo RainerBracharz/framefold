@@ -89,7 +89,8 @@ def api(method, path, body = nil)
 end
 
 def existing
-  data = api(:get, "/v1/nominations?filter[relatedApps]=#{APP_ID}&limit=50")
+  # Apple verlangt den Status-Filter ausdrücklich
+  data = api(:get, "/v1/nominations?filter[relatedApps]=#{APP_ID}&filter[state]=DRAFT,SUBMITTED&limit=50")
   data["data"] || []
 end
 
