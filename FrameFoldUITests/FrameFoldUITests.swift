@@ -45,7 +45,7 @@ final class FrameFoldUITests: XCTestCase {
         app = XCUIApplication()
         app.launchArguments = [
             "-AppleLanguages", "(\(lang))",
-            "-AppleLocale", lang == "de" ? "de_AT" : "en_US",
+            "-AppleLocale", ["de": "de_AT", "fr": "fr_FR"][lang] ?? "en_US",
             // Erststart herstellen: Onboarding und Kamera-Tipp sollen mit drauf.
             "--ff-fresh-start",
         ]
@@ -62,37 +62,37 @@ final class FrameFoldUITests: XCTestCase {
     func testWalkthrough() throws {
         // 1–3 Onboarding
         shot("onboarding-1")
-        tap(["Next", "Weiter"])
+        tap(["Next", "Weiter", "Suivant"])
         shot("onboarding-2")
-        tap(["Next", "Weiter"])
+        tap(["Next", "Weiter", "Suivant"])
         usleep(500_000)   // Kartenwechsel ist animiert; sonst trifft der nächste Tipp die alte Karte
-        if showAll { tap(["Show all", "Alles zeigen"]) }
+        if showAll { tap(["Show all", "Alles zeigen", "Tout afficher"]) }
         shot("onboarding-3")
-        tap(["Get started", "Los geht's"])
+        tap(["Get started", "Los geht's", "C’est parti"], prefix: true)
 
         // 4 Video-Tab, Startansicht
         sleep(1)
         shot("video-start")
 
         // 5 Einstellungen (Regler-Symbol oben rechts)
-        if tap(["Settings", "Einstellungen"]) {
+        if tap(["Settings", "Einstellungen", "Réglages"]) {
             sleep(1)
             shot("video-settings")
-            tap(["Done", "Fertig"])
+            tap(["Done", "Fertig", "Terminé"])
         }
 
         // 6 Kamera-Tab: Tipp beim ersten Öffnen
-        tap(["Camera", "Kamera"])
+        tap(["Camera", "Kamera", "Caméra"])
         sleep(1)
         shot("camera-tip")
-        tap(["Got it", "Verstanden"])
+        tap(["Got it", "Verstanden", "Compris"])
 
         // 7 Werk wählen
         sleep(1)
         shot("camera-chooser")
 
         // 8 Neues Werk anlegen → Sucher
-        if tap(["New work", "Neues Werk"]) {
+        if tap(["New work", "Neues Werk", "Nouvelle œuvre"]) {
             let alert = app.alerts.firstMatch
             if alert.waitForExistence(timeout: 3) {
                 let field = alert.textFields.firstMatch
@@ -100,7 +100,7 @@ final class FrameFoldUITests: XCTestCase {
                 field.typeText("Origami crane")
                 shot("camera-new-work")
                 // Alert-Knöpfe hängen in iOS 26 nicht unter dem Alert-Element
-                tap(["Create & start", "Anlegen & starten"])
+                tap(["Create & start", "Anlegen & starten", "Créer et lancer"])
             }
         }
 
@@ -109,28 +109,28 @@ final class FrameFoldUITests: XCTestCase {
         shot("camera-capture")
 
         // 9 Aufnahme-Einstellungen
-        if tap(["Capture settings", "Aufnahme-Einstellungen"]) {
+        if tap(["Capture settings", "Aufnahme-Einstellungen", "Réglages de prise de vue"]) {
             sleep(1)
             shot("camera-settings")
-            tap(["Done", "Fertig"])
+            tap(["Done", "Fertig", "Terminé"])
         }
 
         // Drei Bilder von Hand auslösen, dann abschließen („Done · 3")
         for _ in 0..<3 {
-            tap(["Shutter", "Auslöser"])
+            tap(["Shutter", "Auslöser", "Déclencheur"])
             usleep(700_000)
         }
         sleep(1)
         shot("camera-capture-3")
-        tap(["Done ·", "Fertig ·"], prefix: true)
+        tap(["Done ·", "Fertig ·", "Terminé ·"], prefix: true)
 
         // 10 Ergebnis
         sleep(4)
         shot("camera-result")
-        tap(["Done", "Fertig"])
+        tap(["Done", "Fertig", "Terminé"])
 
         // 11 Projekte-Tab
-        tap(["Projects", "Projekte"])
+        tap(["Projects", "Projekte", "Projets"])
         sleep(1)
         shot("projects")
 
@@ -142,14 +142,14 @@ final class FrameFoldUITests: XCTestCase {
             // Der Knopf steht ganz unten – in der vollen Werkstatt außerhalb
             // des Bildschirms, ein Tipp ins Leere öffnet keine Rückfrage.
             app.swipeUp(); app.swipeUp(); app.swipeUp()
-            if tap(["Delete project", "Projekt löschen"]) {
-                tap(["Delete permanently", "Endgültig löschen"])
+            if tap(["Delete project", "Projekt löschen", "Supprimer le projet"]) {
+                tap(["Delete permanently", "Endgültig löschen", "Supprimer définitivement"])
                 sleep(1)
             }
             // Falls wir noch im Detail stehen: zurück zur Liste
             if app.navigationBars.buttons.firstMatch.exists,
-               !app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'frames' OR label CONTAINS[c] 'Bilder'")).firstMatch.exists {
-                tap(["Back", "Zurück"], timeout: 1)
+               !app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'frames' OR label CONTAINS[c] 'Bilder' OR label CONTAINS[c] 'images'")).firstMatch.exists {
+                tap(["Back", "Zurück", "Retour", "Projets"], timeout: 1)
             }
         }
 
@@ -159,7 +159,7 @@ final class FrameFoldUITests: XCTestCase {
         // das erste Werk, das nicht unser Testwerk ist.
         let faltung = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Fratze'")).firstMatch
         let older = app.buttons.matching(NSPredicate(
-            format: "(label CONTAINS[c] 'frames' OR label CONTAINS[c] 'Bilder') AND NOT label CONTAINS 'Origami'"
+            format: "(label CONTAINS[c] 'frames' OR label CONTAINS[c] 'Bilder' OR label CONTAINS[c] 'images') AND NOT label CONTAINS 'Origami'"
         )).firstMatch
         let pick = faltung.waitForExistence(timeout: 2) ? faltung : older
         if pick.waitForExistence(timeout: 2) {
@@ -171,10 +171,10 @@ final class FrameFoldUITests: XCTestCase {
             sleep(1)
             shot("project-detail-bottom")
             // Video montieren: danach stehen Vorschau und „Teilen" im Bild
-            if tap(["Export stop-motion", "Stopmotion exportieren"]) {
+            if tap(["Export stop-motion", "Stopmotion exportieren", "Exporter le stop motion"]) {
                 // Montage abwarten: fertig, sobald „Teilen" auftaucht (max. 60 s)
                 let share = app.buttons.matching(NSPredicate(
-                    format: "label CONTAINS[c] 'share' OR label CONTAINS[c] 'teilen'")).firstMatch
+                    format: "label CONTAINS[c] 'share' OR label CONTAINS[c] 'teilen' OR label CONTAINS[c] 'partager'")).firstMatch
                 _ = share.waitForExistence(timeout: 60)
                 sleep(1)
                 app.swipeUp(); app.swipeUp()

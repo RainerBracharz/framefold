@@ -11,6 +11,12 @@
             "state": "translated",
             "value": "%.1f seconds · loops"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%.1f secondes · en boucle"
+          }
         }
       }
     },
@@ -26,6 +32,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete %1$@ and all %2$lld frames?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer %1$@ et ses %2$lld images ?"
           }
         }
       }
@@ -52,6 +64,24 @@
               }
             }
           }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld image"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld images"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -70,6 +100,24 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld frames captured"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld image prise"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld images prises"
                 }
               }
             }
@@ -96,6 +144,24 @@
               }
             }
           }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld image · planche contact"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld images · planche contact"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -112,21 +178,69 @@
             "state": "translated",
             "value": "%1$lld frames · from %2$lld s of video"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld images · tirées de %2$lld s de vidéo"
+          }
         }
       }
     },
-    "%lld Sekunde%@ Film!": {
+    "%lld Sekunden Film!": {
       "localizations": {
         "de": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld Sekunde%2$@ Film!"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Sekunde Film!"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Sekunden Film!"
+                }
+              }
+            }
           }
         },
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld second%2$@ of film!"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld second of film!"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld seconds of film!"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld seconde de film !"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld secondes de film !"
+                }
+              }
+            }
           }
         }
       }
@@ -150,6 +264,24 @@
               }
             }
           }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Monter %lld œuvre"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Monter %lld œuvres"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -165,6 +297,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld works · %2$lld frames"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld œuvres · %2$lld images"
           }
         }
       }
@@ -182,6 +320,12 @@
             "state": "translated",
             "value": "%1$lld dropped for hands · %2$lld duplicates"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld retirées (mains) · %2$lld doublons"
+          }
         }
       }
     },
@@ -197,6 +341,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld of %2$lld frames selected"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld images sur %2$lld sélectionnées"
           }
         }
       }
@@ -220,6 +370,12 @@
             "state": "translated",
             "value": "2 fps — very slow"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2 i/s — très lent"
+          }
         }
       }
     },
@@ -242,6 +398,12 @@
             "state": "translated",
             "value": "50 Hz (EU)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "50 Hz (Europe)"
+          }
         }
       }
     },
@@ -254,6 +416,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "60 Hz (US)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "60 Hz (États-Unis)"
           }
         }
       }
@@ -268,6 +436,12 @@
             "state": "translated",
             "value": "Cancel"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler"
+          }
         }
       }
     },
@@ -277,6 +451,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Playback"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lecture"
           }
         }
       }
@@ -288,6 +468,12 @@
             "state": "translated",
             "value": "Every tool visible: grid, spirit level, motion gauge, flip-book strip with undo, re-lock, reference image."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tous les outils visibles : grille, niveau, jauge de mouvement, bande folioscope avec annulation, reverrouillage, image de référence."
+          }
         }
       }
     },
@@ -297,6 +483,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "All →"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout →"
           }
         }
       }
@@ -308,6 +500,12 @@
             "state": "translated",
             "value": "Everything, plus the studio effects: facets, echo, fold template, recursion, exhibition."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout, plus les effets d’atelier : facettes, écho, gabarit de pliage, récursion, exposition."
+          }
         }
       }
     },
@@ -317,6 +515,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Show all"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout afficher"
           }
         }
       }
@@ -328,6 +532,12 @@
             "state": "translated",
             "value": "Save as a project"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer comme projet"
+          }
         }
       }
     },
@@ -337,6 +547,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "On a tripod focus stays locked; handheld it keeps tracking."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sur trépied, la mise au point reste verrouillée ; à main levée, elle suit."
           }
         }
       }
@@ -348,12 +564,24 @@
             "state": "translated",
             "value": "Analysing motion…"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyse du mouvement…"
+          }
         }
       }
     },
     "Anhalten": {
       "localizations": {
         "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Pause"
@@ -368,6 +596,12 @@
             "state": "translated",
             "value": "Create"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créer"
+          }
         }
       }
     },
@@ -377,6 +611,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Create & start"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créer et lancer"
           }
         }
       }
@@ -388,6 +628,12 @@
             "state": "translated",
             "value": "Tap to deselect"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touche pour désélectionner"
+          }
         }
       }
     },
@@ -397,6 +643,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Work detected…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Travail détecté…"
           }
         }
       }
@@ -408,6 +660,12 @@
             "state": "translated",
             "value": "No camera was found on this device (in the Simulator, for instance). Live capture needs a real iPhone. You can still process videos in the Video tab."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun appareil photo trouvé sur cet appareil (dans le simulateur, par exemple). La prise de vue en direct nécessite un vrai iPhone. Tu peux tout de même traiter des vidéos dans l’onglet Vidéo."
+          }
         }
       }
     },
@@ -417,6 +675,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Captured frames"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Images prises"
           }
         }
       }
@@ -428,6 +692,12 @@
             "state": "translated",
             "value": "Resolution"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Résolution"
+          }
         }
       }
     },
@@ -437,6 +707,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Capture settings"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages de prise de vue"
           }
         }
       }
@@ -448,6 +724,12 @@
             "state": "translated",
             "value": "Capture tips"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conseils de prise de vue"
+          }
         }
       }
     },
@@ -457,6 +739,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Capture mode: tripod. Tap for handheld."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode : trépied. Touche pour passer à main levée."
           }
         }
       }
@@ -468,6 +756,12 @@
             "state": "translated",
             "value": "Capture mode: handheld. Tap for tripod."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode : à main levée. Touche pour passer au trépied."
+          }
         }
       }
     },
@@ -477,6 +771,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Off"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Désactivé"
           }
         }
       }
@@ -488,6 +788,12 @@
             "state": "translated",
             "value": "Your work\nbecomes a stop-motion."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton travail\ndevient un stop motion."
+          }
         }
       }
     },
@@ -497,6 +803,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Handheld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À main levée"
           }
         }
       }
@@ -508,6 +820,12 @@
             "state": "translated",
             "value": "Output"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sortie"
+          }
         }
       }
     },
@@ -517,6 +835,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shutter sound"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son du déclencheur"
           }
         }
       }
@@ -528,6 +852,12 @@
             "state": "translated",
             "value": "Shutter delay: %.1f s"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Délai de déclenchement : %.1f s"
+          }
         }
       }
     },
@@ -537,6 +867,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shutter delay: %.1f s (+0.4 s handheld)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Délai de déclenchement : %.1f s (+0,4 s à main levée)"
           }
         }
       }
@@ -548,6 +884,12 @@
             "state": "translated",
             "value": "Shutter"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déclencheur"
+          }
         }
       }
     },
@@ -557,6 +899,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shutter & exposure"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déclencheur et exposition"
           }
         }
       }
@@ -568,6 +916,12 @@
             "state": "translated",
             "value": "Switch shutter mode"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changer de déclencheur"
+          }
         }
       }
     },
@@ -577,6 +931,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shutter · Motion"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déclencheur · Mouvement"
           }
         }
       }
@@ -588,6 +948,12 @@
             "state": "translated",
             "value": "Shutter · Interval %.0f s"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déclencheur · Intervalle %.0f s"
+          }
         }
       }
     },
@@ -597,6 +963,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exhibition"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exposition"
           }
         }
       }
@@ -608,6 +980,12 @@
             "state": "translated",
             "value": "Build exhibition"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créer l’exposition"
+          }
         }
       }
     },
@@ -617,6 +995,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Assemble exhibition"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monter l’exposition"
           }
         }
       }
@@ -628,6 +1012,12 @@
             "state": "translated",
             "value": "Share exhibition"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager l’exposition"
+          }
         }
       }
     },
@@ -637,6 +1027,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Auto-shutter"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déclenchement auto"
           }
         }
       }
@@ -648,6 +1044,12 @@
             "state": "translated",
             "value": "Building stop-motion…"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Création du stop motion…"
+          }
         }
       }
     },
@@ -657,6 +1059,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Edit"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier"
           }
         }
       }
@@ -668,6 +1076,12 @@
             "state": "translated",
             "value": "Ready"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prêt"
+          }
         }
       }
     },
@@ -677,6 +1091,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ready — just work"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prêt — travaille, tout simplement"
           }
         }
       }
@@ -688,6 +1108,12 @@
             "state": "translated",
             "value": "Motion"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mouvement"
+          }
         }
       }
     },
@@ -697,6 +1123,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Motion tolerance: %.1f"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tolérance au mouvement : %.1f"
           }
         }
       }
@@ -714,6 +1146,12 @@
             "state": "translated",
             "value": "Frame %1$lld of %2$lld"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image %1$lld sur %2$lld"
+          }
         }
       }
     },
@@ -723,6 +1161,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Frame captured ✓"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image prise ✓"
           }
         }
       }
@@ -734,6 +1178,12 @@
             "state": "translated",
             "value": "Remove frame"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer l’image"
+          }
         }
       }
     },
@@ -743,6 +1193,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Image · Object · Image"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image · Objet · Image"
           }
         }
       }
@@ -754,6 +1210,12 @@
             "state": "translated",
             "value": "Image echo (afterimage)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écho d’image (persistance)"
+          }
         }
       }
     },
@@ -763,6 +1225,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Frame selection"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélection d’images"
           }
         }
       }
@@ -774,6 +1242,12 @@
             "state": "translated",
             "value": "Frames"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Images"
+          }
         }
       }
     },
@@ -783,6 +1257,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Frames collect across any number of\nsessions — live or from video."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les images s’accumulent sur autant\nde séances que tu veux — en direct ou depuis une vidéo."
           }
         }
       }
@@ -794,6 +1274,12 @@
             "state": "translated",
             "value": "Frame rate"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cadence"
+          }
         }
       }
     },
@@ -803,6 +1289,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sheet %02d"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feuille %02d"
           }
         }
       }
@@ -820,6 +1312,12 @@
             "state": "translated",
             "value": "Sheet %1$02d · %2$.1f s"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feuille %1$02d · %2$.1f s"
+          }
         }
       }
     },
@@ -829,6 +1327,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sheets 01 – %02d"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feuilles 01 – %02d"
           }
         }
       }
@@ -840,6 +1344,12 @@
             "state": "translated",
             "value": "Brings in the next frame — as a crease, as triangulated facets, or as woven strips."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fait apparaître l’image suivante — en pli, en facettes triangulées ou en bandes tissées."
+          }
         }
       }
     },
@@ -849,6 +1359,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lays the previous frame over the viewfinder, half transparent."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Superpose l’image précédente au viseur, en transparence."
           }
         }
       }
@@ -860,6 +1376,12 @@
             "state": "translated",
             "value": "The stop-motion video couldn't be written."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d’écrire la vidéo stop motion."
+          }
         }
       }
     },
@@ -869,6 +1391,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "The video is empty or couldn't be read."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La vidéo est vide ou illisible."
           }
         }
       }
@@ -880,6 +1408,12 @@
             "state": "translated",
             "value": "The video couldn't be loaded."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de charger la vidéo."
+          }
         }
       }
     },
@@ -889,6 +1423,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "That didn't work."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cela n’a pas fonctionné."
           }
         }
       }
@@ -900,6 +1440,12 @@
             "state": "translated",
             "value": "The previous frame lingers faintly in the next."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’image précédente persiste légèrement dans la suivante."
+          }
         }
       }
     },
@@ -909,6 +1455,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Opacity: %lld %%"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opacité : %lld %%"
           }
         }
       }
@@ -920,6 +1472,12 @@
             "state": "translated",
             "value": "The round button fires by hand at any time."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le bouton rond déclenche à la main à tout moment."
+          }
         }
       }
     },
@@ -929,6 +1487,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Frame selection runs by itself: FrameFold catches every calm moment and drops frames with hands in them. You do the fine-tuning afterwards in frame selection."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La sélection se fait toute seule : FrameFold saisit chaque moment calme et écarte les images où l’on voit des mains. Tu peaufines ensuite dans la sélection d’images."
           }
         }
       }
@@ -940,6 +1504,12 @@
             "state": "translated",
             "value": "The frames move into a project, where you can add more sessions and export again."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les images rejoignent un projet, où tu peux ajouter d’autres séances et exporter à nouveau."
+          }
         }
       }
     },
@@ -949,6 +1519,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "The calm moments get found"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les moments calmes sont repérés"
           }
         }
       }
@@ -960,6 +1536,12 @@
             "state": "translated",
             "value": "Shoot live"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filmer en direct"
+          }
         }
       }
     },
@@ -969,6 +1551,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Spot drift early: leave onion skin on and compare against the first frame now and then."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repère vite les dérives : laisse la pelure d’oignon activée et compare de temps en temps avec la première image."
           }
         }
       }
@@ -980,6 +1568,12 @@
             "state": "translated",
             "value": "Thirds grid"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grille des tiers"
+          }
         }
       }
     },
@@ -989,6 +1583,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Print look (black and white)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rendu tirage (noir et blanc)"
           }
         }
       }
@@ -1000,6 +1600,12 @@
             "state": "translated",
             "value": "Print"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imprimer"
+          }
         }
       }
     },
@@ -1009,6 +1615,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Darkroom"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chambre noire"
           }
         }
       }
@@ -1020,6 +1632,12 @@
             "state": "translated",
             "value": "Echo strength: %lld %%"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intensité de l’écho : %lld %%"
+          }
         }
       }
     },
@@ -1029,6 +1647,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Effects"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effets"
           }
         }
       }
@@ -1040,6 +1664,12 @@
             "state": "translated",
             "value": "One sheet"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une feuille"
+          }
         }
       }
     },
@@ -1049,6 +1679,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "One sheet per work."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une feuille par œuvre."
           }
         }
       }
@@ -1060,6 +1696,12 @@
             "state": "translated",
             "value": "One work picked — at least one more to go."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une œuvre choisie — encore une au moins."
+          }
         }
       }
     },
@@ -1070,12 +1712,24 @@
             "state": "translated",
             "value": "A video from your library — FrameFold does the rest."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une vidéo de ta photothèque — FrameFold fait le reste."
+          }
         }
       }
     },
     "Einfach": {
       "localizations": {
         "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Simple"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Simple"
@@ -1090,6 +1744,12 @@
             "state": "translated",
             "value": "Simple: just the shutter and Done. Everything else appears from \"Advanced\" on."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Simple : juste le déclencheur et Terminé. Le reste apparaît à partir du mode « Avancé »."
+          }
         }
       }
     },
@@ -1099,6 +1759,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Settings"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages"
           }
         }
       }
@@ -1110,6 +1776,12 @@
             "state": "translated",
             "value": "Delete permanently"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer définitivement"
+          }
         }
       }
     },
@@ -1119,6 +1791,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Allow FrameFold to use the camera in Settings → FrameFold."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorise l’accès à l’appareil photo dans Réglages → FrameFold."
           }
         }
       }
@@ -1130,6 +1808,12 @@
             "state": "translated",
             "value": "Fold again (recursion)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plier à nouveau (récursion)"
+          }
         }
       }
     },
@@ -1140,12 +1824,24 @@
             "state": "translated",
             "value": "Advanced"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avancé"
+          }
         }
       }
     },
     "Export": {
       "localizations": {
         "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Export"
@@ -1160,6 +1856,12 @@
             "state": "translated",
             "value": "Facets"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Facettes"
+          }
         }
       }
     },
@@ -1169,6 +1871,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fold template"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gabarit de pliage"
           }
         }
       }
@@ -1180,6 +1888,12 @@
             "state": "translated",
             "value": "The fold template couldn't be created."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de créer le gabarit de pliage."
+          }
         }
       }
     },
@@ -1189,6 +1903,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Share fold template"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager le gabarit"
           }
         }
       }
@@ -1200,6 +1920,12 @@
             "state": "translated",
             "value": "Crease"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pli"
+          }
         }
       }
     },
@@ -1209,6 +1935,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Error: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erreur : %@"
           }
         }
       }
@@ -1220,6 +1952,12 @@
             "state": "translated",
             "value": "Done"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminé"
+          }
         }
       }
     },
@@ -1229,6 +1967,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Done · %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminé · %lld"
           }
         }
       }
@@ -1252,6 +1996,24 @@
               }
             }
           }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Terminé ! %lld image"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Terminé ! %lld images"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1261,6 +2023,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Focus can't find anything sharp. Tap your work in the viewfinder."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La mise au point ne trouve rien de net. Touche ton œuvre dans le viseur."
           }
         }
       }
@@ -1272,6 +2040,12 @@
             "state": "translated",
             "value": "Aspect"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Format"
+          }
         }
       }
     },
@@ -1281,6 +2055,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aspect, frame rate, effects, fold templates, exhibition — the full workshop."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Format, cadence, effets, gabarits de pliage, exposition — tout l’atelier."
           }
         }
       }
@@ -1295,6 +2075,12 @@
             "state": "translated",
             "value": "FrameFold finds the calm moments and drops any frame with your hands in it. Everything stays on the device."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FrameFold repère les moments calmes et écarte chaque image où l’on voit tes mains. Tout reste sur l’appareil."
+          }
         }
       }
     },
@@ -1304,6 +2090,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gallery"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Galerie"
           }
         }
       }
@@ -1315,6 +2107,12 @@
             "state": "translated",
             "value": "Against first frame (drift)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Par rapport à la première image (dérive)"
+          }
         }
       }
     },
@@ -1324,6 +2122,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Saved ✓"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistré ✓"
           }
         }
       }
@@ -1335,6 +2139,12 @@
             "state": "translated",
             "value": "Nearly there…"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C’est presque prêt…"
+          }
         }
       }
     },
@@ -1344,6 +2154,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Good night"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bonne nuit"
           }
         }
       }
@@ -1355,6 +2171,12 @@
             "state": "translated",
             "value": "Good evening"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bonsoir"
+          }
         }
       }
     },
@@ -1364,6 +2186,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Good morning"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bonjour"
           }
         }
       }
@@ -1375,6 +2203,12 @@
             "state": "translated",
             "value": "Good afternoon"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bonjour"
+          }
         }
       }
     },
@@ -1384,6 +2218,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "HANDHELD"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MAIN"
           }
         }
       }
@@ -1395,6 +2235,12 @@
             "state": "translated",
             "value": "Hello"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salut"
+          }
         }
       }
     },
@@ -1404,6 +2250,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hold still a moment…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ne bouge plus un instant…"
           }
         }
       }
@@ -1415,6 +2267,12 @@
             "state": "translated",
             "value": "Higher = small shakes and sensor noise are ignored. If the shutter never settles, raise this."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus haut = petites secousses et bruit d’image ignorés. Si le déclencheur ne trouve jamais le calme, augmente cette valeur."
+          }
         }
       }
     },
@@ -1424,6 +2282,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "I can barely see any detail, so I can't judge sharpness. Move back a little, or tap your work in the viewfinder."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je ne vois presque pas de détails et ne peux pas juger la netteté. Recule un peu ou touche ton œuvre dans le viseur."
           }
         }
       }
@@ -1435,6 +2299,12 @@
             "state": "translated",
             "value": "I'll wait till you're clear…"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "J’attends que tu sois sorti du cadre…"
+          }
         }
       }
     },
@@ -1444,6 +2314,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "In interval mode FrameFold fires on a fixed beat, regardless of motion."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En mode intervalle, FrameFold déclenche à rythme fixe, quel que soit le mouvement."
           }
         }
       }
@@ -1455,6 +2331,12 @@
             "state": "translated",
             "value": "Interference echo"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écho d’interférence"
+          }
         }
       }
     },
@@ -1464,6 +2346,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Interval"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervalle"
           }
         }
       }
@@ -1475,6 +2363,12 @@
             "state": "translated",
             "value": "Interval: %.0f s"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervalle : %.0f s"
+          }
         }
       }
     },
@@ -1484,6 +2378,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Each facet catches the light differently — as if the image had been folded and photographed again."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque facette accroche la lumière autrement — comme si l’image avait été pliée puis rephotographiée."
           }
         }
       }
@@ -1495,6 +2395,12 @@
             "state": "translated",
             "value": "Calibrating — keep it steady…"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calibrage — ne bouge pas…"
+          }
         }
       }
     },
@@ -1504,6 +2410,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Camera"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra"
           }
         }
       }
@@ -1515,6 +2427,12 @@
             "state": "translated",
             "value": "Camera on a tripod, fires by itself"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra sur trépied, déclenchement automatique"
+          }
         }
       }
     },
@@ -1524,6 +2442,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Camera stays calm: after a short calibration FrameFold locks exposure and white balance, so nothing drifts between frames. Focus stays locked on a tripod; handheld it keeps tracking."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra stable : après un bref calibrage, FrameFold verrouille l’exposition et la balance des blancs, rien ne dérive d’une image à l’autre. Sur trépied, la mise au point reste verrouillée ; à main levée, elle suit."
           }
         }
       }
@@ -1535,6 +2459,12 @@
             "state": "translated",
             "value": "Re-lock camera"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reverrouiller la caméra"
+          }
         }
       }
     },
@@ -1544,6 +2474,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Starting camera…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Démarrage de la caméra…"
           }
         }
       }
@@ -1555,6 +2491,12 @@
             "state": "translated",
             "value": "No camera access"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas d’accès à l’appareil photo"
+          }
         }
       }
     },
@@ -1564,6 +2506,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No camera available"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun appareil photo disponible"
           }
         }
       }
@@ -1575,6 +2523,12 @@
             "state": "translated",
             "value": "No calm moments found. The video may be very short, or in motion throughout — shoot a little longer, or hold still now and then."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun moment calme trouvé. La vidéo est peut-être très courte ou en mouvement du début à la fin — filme un peu plus longtemps ou marque de petites pauses."
+          }
         }
       }
     },
@@ -1584,6 +2538,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No calm moments found. The video may be very short, or in motion throughout — push the slider below towards More frames, or shoot a little longer."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun moment calme trouvé. La vidéo est peut-être très courte ou en mouvement du début à la fin — pousse le curseur ci-dessous vers « Plus d’images » ou filme un peu plus longtemps."
           }
         }
       }
@@ -1595,6 +2555,12 @@
             "state": "translated",
             "value": "Review keyframes"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifier les images clés"
+          }
         }
       }
     },
@@ -1604,6 +2570,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "The usual settings: aspect, frame rate, playback, stabilisation."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les réglages habituels : format, cadence, lecture, stabilisation."
           }
         }
       }
@@ -1615,6 +2587,12 @@
             "state": "translated",
             "value": "Click!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clic !"
+          }
         }
       }
     },
@@ -1624,6 +2602,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Contact sheet"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planche contact"
           }
         }
       }
@@ -1635,6 +2619,12 @@
             "state": "translated",
             "value": "The contact sheet couldn't be created."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de créer la planche contact."
+          }
         }
       }
     },
@@ -1644,6 +2634,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Share contact sheet"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager la planche contact"
           }
         }
       }
@@ -1655,6 +2651,12 @@
             "state": "translated",
             "value": "Short"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Court"
+          }
         }
       }
     },
@@ -1664,6 +2666,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lab view: sheet number, session clock, locked exposure, readings — and the crease countdown runs in amber around the shutter."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vue labo : numéro de feuille, chrono de séance, exposition verrouillée, mesures — et le compte à rebours du pli tourne en ambre autour du déclencheur."
           }
         }
       }
@@ -1675,6 +2683,12 @@
             "state": "translated",
             "value": "Loading video…"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chargement de la vidéo…"
+          }
         }
       }
     },
@@ -1684,6 +2698,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reading frames…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lecture des images…"
           }
         }
       }
@@ -1695,6 +2715,12 @@
             "state": "translated",
             "value": "Hold last frame"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Figer la dernière image"
+          }
         }
       }
     },
@@ -1704,6 +2730,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Undo last frame"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler la dernière image"
           }
         }
       }
@@ -1715,6 +2747,12 @@
             "state": "translated",
             "value": "Keep the light steady: use artificial light, shade the windows. Cheap LED and fluorescent lamps flicker at mains frequency and streak individual frames."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garde une lumière constante : lumière artificielle, fenêtres occultées. Les LED et néons bon marché scintillent au rythme du secteur et zèbrent certaines images."
+          }
         }
       }
     },
@@ -1724,6 +2762,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Live settings"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages en direct"
           }
         }
       }
@@ -1735,6 +2779,12 @@
             "state": "translated",
             "value": "Local, on this device"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En local, sur cet appareil"
+          }
         }
       }
     },
@@ -1744,6 +2794,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Get started"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C’est parti !"
           }
         }
       }
@@ -1755,6 +2811,12 @@
             "state": "translated",
             "value": "Go ahead — I'm watching"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vas-y — je regarde"
+          }
         }
       }
     },
@@ -1764,6 +2826,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "You can change this any time from the sliders icon."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifiable à tout moment via l’icône des curseurs."
           }
         }
       }
@@ -1775,6 +2843,12 @@
             "state": "translated",
             "value": "More frames"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus d’images"
+          }
         }
       }
     },
@@ -1784,6 +2858,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Several works,\none continuous reel."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plusieurs œuvres,\nun seul film continu."
           }
         }
       }
@@ -1795,12 +2875,24 @@
             "state": "translated",
             "value": "Pick at least two works."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis au moins deux œuvres."
+          }
         }
       }
     },
     "Modus": {
       "localizations": {
         "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Mode"
@@ -1815,6 +2907,12 @@
             "state": "translated",
             "value": "One sec, focusing…"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un instant, mise au point…"
+          }
         }
       }
     },
@@ -1824,6 +2922,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Name"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom"
           }
         }
       }
@@ -1835,6 +2939,12 @@
             "state": "translated",
             "value": "Name (e.g. Fold no. 12)"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom (p. ex. Pliage nº 12)"
+          }
         }
       }
     },
@@ -1844,6 +2954,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mains frequency"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fréquence du secteur"
           }
         }
       }
@@ -1855,6 +2971,12 @@
             "state": "translated",
             "value": "New project"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouveau projet"
+          }
         }
       }
     },
@@ -1864,6 +2986,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "New work"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouvelle œuvre"
           }
         }
       }
@@ -1875,6 +3003,12 @@
             "state": "translated",
             "value": "Start a new work"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créer une œuvre"
+          }
         }
       }
     },
@@ -1884,6 +3018,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Don't fire while hands are in frame"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ne pas déclencher tant que des mains sont dans le cadre"
           }
         }
       }
@@ -1895,6 +3035,12 @@
             "state": "translated",
             "value": "Don't move…"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ne bouge pas…"
+          }
         }
       }
     },
@@ -1904,6 +3050,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Takes a frame right away. Otherwise the camera fires by itself once your hands are clear."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prend une image tout de suite. Sinon, la caméra déclenche toute seule dès que tes mains quittent le cadre."
           }
         }
       }
@@ -1915,6 +3067,12 @@
             "state": "translated",
             "value": "No work yet — start one and the camera can go."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore d’œuvre — crée-en une et la caméra peut démarrer."
+          }
         }
       }
     },
@@ -1924,6 +3082,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Not sharp yet…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore net…"
           }
         }
       }
@@ -1935,6 +3099,12 @@
             "state": "translated",
             "value": "Again"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Encore"
+          }
         }
       }
     },
@@ -1945,12 +3115,24 @@
             "state": "translated",
             "value": "Try again"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réessayer"
+          }
         }
       }
     },
     "Normal": {
       "localizations": {
         "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Normal"
@@ -1965,6 +3147,12 @@
             "state": "translated",
             "value": "Just the essentials: pick a video → stop-motion."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’essentiel : choisir une vidéo → stop motion."
+          }
         }
       }
     },
@@ -1974,6 +3162,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Just the essentials: pick, shoot, done. Recommended to start with."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’essentiel : choisir, déclencher, terminé. Conseillé pour débuter."
           }
         }
       }
@@ -1985,6 +3179,12 @@
             "state": "translated",
             "value": "Only a few frames found. For a smoother stop-motion, push the slider towards More frames or shoot longer."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peu d’images trouvées. Pour un stop motion plus fluide, pousse le curseur vers « Plus d’images » ou filme plus longtemps."
+          }
         }
       }
     },
@@ -1994,6 +3194,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fire without shake: hold the shutter for a three-second countdown. The volume buttons on headphones or AirPods fire too."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déclencher sans bouger : un appui long sur le déclencheur lance un compte à rebours de trois secondes. Les boutons de volume des écouteurs ou des AirPods déclenchent aussi."
           }
         }
       }
@@ -2005,6 +3211,12 @@
             "state": "translated",
             "value": "Paper relief"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relief papier"
+          }
         }
       }
     },
@@ -2014,6 +3226,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Preset %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Préréglage %@"
           }
         }
       }
@@ -2025,6 +3243,12 @@
             "state": "translated",
             "value": "Delete project"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer le projet"
+          }
         }
       }
     },
@@ -2034,6 +3258,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Projects"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Projets"
           }
         }
       }
@@ -2045,6 +3275,12 @@
             "state": "translated",
             "value": "Project name"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom du projet"
+          }
         }
       }
     },
@@ -2054,6 +3290,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Checking for hands…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recherche de mains…"
           }
         }
       }
@@ -2065,6 +3307,12 @@
             "state": "translated",
             "value": "Square"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carré"
+          }
         }
       }
     },
@@ -2074,6 +3322,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Assembling the reel…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Montage du film…"
           }
         }
       }
@@ -2085,6 +3339,12 @@
             "state": "translated",
             "value": "Relief strength: %lld %%"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intensité du relief : %lld %%"
+          }
         }
       }
     },
@@ -2094,6 +3354,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hold steady…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ne bouge pas…"
           }
         }
       }
@@ -2105,6 +3371,12 @@
             "state": "translated",
             "value": "Reverse"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À rebours"
+          }
         }
       }
     },
@@ -2114,6 +3386,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "TRIPOD"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TRÉPIED"
           }
         }
       }
@@ -2125,6 +3403,12 @@
             "state": "translated",
             "value": "Focused and locked. Looks soft? Tap your work in the viewfinder."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mise au point faite et verrouillée. C’est flou ? Touche ton œuvre dans le viseur."
+          }
         }
       }
     },
@@ -2134,6 +3418,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Close"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermer"
           }
         }
       }
@@ -2145,6 +3435,12 @@
             "state": "translated",
             "value": "Black and white on a warm paper tone — like a print photographed again."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noir et blanc sur un ton papier chaud — comme un tirage rephotographié."
+          }
         }
       }
     },
@@ -2154,6 +3450,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sharpness keeps dropping. Tap your work in the viewfinder."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La netteté se perd sans cesse. Touche ton œuvre dans le viseur."
           }
         }
       }
@@ -2171,6 +3473,12 @@
             "state": "translated",
             "value": "Series of %1$lld · dated %2$@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Série de %1$lld · datée %2$@"
+          }
         }
       }
     },
@@ -2187,6 +3495,12 @@
             "state": "translated",
             "value": "Series of %1$lld · dated %2$@ · looping"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Série de %1$lld · datée %2$@ · en boucle"
+          }
         }
       }
     },
@@ -2196,6 +3510,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer"
           }
         }
       }
@@ -2207,6 +3527,12 @@
             "state": "translated",
             "value": "How the camera works"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comment fonctionne la caméra"
+          }
         }
       }
     },
@@ -2216,6 +3542,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "How long the scene has to stay calm before the shutter fires."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée pendant laquelle la scène doit rester calme avant le déclenchement automatique."
           }
         }
       }
@@ -2227,6 +3559,12 @@
             "state": "translated",
             "value": "The default errs on the generous side. Just deselect what you don't want above."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Par défaut, la sélection est généreuse. Désélectionne simplement ci-dessus ce que tu ne veux pas."
+          }
         }
       }
     },
@@ -2236,6 +3574,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tripod"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trépied"
           }
         }
       }
@@ -2247,6 +3591,12 @@
             "state": "translated",
             "value": "Create stop-motion"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créer le stop motion"
+          }
         }
       }
     },
@@ -2256,6 +3606,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Export stop-motion"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exporter le stop motion"
           }
         }
       }
@@ -2267,12 +3623,24 @@
             "state": "translated",
             "value": "Assembling the stop-motion…"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Montage du stop motion…"
+          }
         }
       }
     },
     "Story": {
       "localizations": {
         "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Story"
+          }
+        },
+        "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Story"
@@ -2287,6 +3655,12 @@
             "state": "translated",
             "value": "Studio monitor · ready"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moniteur d’atelier · prêt"
+          }
         }
       }
     },
@@ -2296,6 +3670,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Viewfinder"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viseur"
           }
         }
       }
@@ -2307,6 +3687,12 @@
             "state": "translated",
             "value": "The scene never settles. Check the tripod — or raise the motion tolerance in settings."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La scène ne se stabilise jamais. Vérifie le trépied — ou augmente la tolérance au mouvement dans les réglages."
+          }
         }
       }
     },
@@ -2316,6 +3702,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Button"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bouton"
           }
         }
       }
@@ -2327,6 +3719,12 @@
             "state": "translated",
             "value": "Share"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager"
+          }
         }
       }
     },
@@ -2336,6 +3734,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Remove reference image"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer l’image de référence"
           }
         }
       }
@@ -2347,6 +3751,12 @@
             "state": "translated",
             "value": "Got it"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compris"
+          }
         }
       }
     },
@@ -2356,6 +3766,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Compensate for shake"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compenser les secousses"
           }
         }
       }
@@ -2367,6 +3783,12 @@
             "state": "translated",
             "value": "Weave"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tissage"
+          }
         }
       }
     },
@@ -2376,6 +3798,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Discard"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeter"
           }
         }
       }
@@ -2387,6 +3815,12 @@
             "state": "translated",
             "value": "Video"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vidéo"
+          }
         }
       }
     },
@@ -2396,6 +3830,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Share video"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager la vidéo"
           }
         }
       }
@@ -2407,6 +3847,12 @@
             "state": "translated",
             "value": "Pick a video"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir une vidéo"
+          }
         }
       }
     },
@@ -2416,6 +3862,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pick a video —\nor shoot live."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir une vidéo —\nou filmer en direct."
           }
         }
       }
@@ -2427,6 +3879,12 @@
             "state": "translated",
             "value": "Preview"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperçu"
+          }
         }
       }
     },
@@ -2436,6 +3894,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "What are we\nfolding today?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On plie quoi\naujourd’hui ?"
           }
         }
       }
@@ -2447,6 +3911,12 @@
             "state": "translated",
             "value": "What are we folding\ntoday?"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On plie quoi\naujourd’hui ?"
+          }
         }
       }
     },
@@ -2456,6 +3926,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Spirit level"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau"
           }
         }
       }
@@ -2467,6 +3943,12 @@
             "state": "translated",
             "value": "Soft"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doux"
+          }
         }
       }
     },
@@ -2476,6 +3958,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Next"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivant"
           }
         }
       }
@@ -2487,6 +3975,12 @@
             "state": "translated",
             "value": "Keep shooting"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer"
+          }
         }
       }
     },
@@ -2496,6 +3990,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Which work\nare you shooting?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quelle œuvre\nfilmes-tu ?"
           }
         }
       }
@@ -2507,6 +4007,12 @@
             "state": "translated",
             "value": "Fewer frames"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moins d’images"
+          }
         }
       }
     },
@@ -2516,6 +4022,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start a work"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créer une œuvre"
           }
         }
       }
@@ -2527,6 +4039,12 @@
             "state": "translated",
             "value": "Assembling the work…"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Montage de l’œuvre…"
+          }
         }
       }
     },
@@ -2536,6 +4054,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "How do you want\nto work?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comment veux-tu\ntravailler ?"
           }
         }
       }
@@ -2547,6 +4071,12 @@
             "state": "translated",
             "value": "Typesetting…"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mise en page…"
+          }
         }
       }
     },
@@ -2556,6 +4086,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Putting it together…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assemblage…"
           }
         }
       }
@@ -2567,6 +4103,12 @@
             "state": "translated",
             "value": "What are you working on\ntoday?"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sur quoi travailles-tu\naujourd’hui ?"
+          }
         }
       }
     },
@@ -2576,6 +4118,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Picking keyframes…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choix des images clés…"
           }
         }
       }
@@ -2587,6 +4135,12 @@
             "state": "translated",
             "value": "Show me!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Montre-moi !"
+          }
         }
       }
     },
@@ -2596,6 +4150,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Overlays the first or last frame — for lining up and spotting drift."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Superpose la première ou la dernière image — pour aligner et repérer les dérives."
           }
         }
       }
@@ -2607,6 +4167,12 @@
             "state": "translated",
             "value": "Drag to flip through"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fais glisser pour feuilleter"
+          }
         }
       }
     },
@@ -2616,6 +4182,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Too much shake — set the phone down or lean it against something."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trop de secousses — pose l’iPhone ou appuie-le contre quelque chose."
           }
         }
       }
@@ -2639,6 +4211,24 @@
               }
             }
           }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Supprimées récemment : restaurer %lld image"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Supprimées récemment : restaurer %lld images"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2648,6 +4238,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Recently in the studio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récemment à l’atelier"
           }
         }
       }
@@ -2659,6 +4255,12 @@
             "state": "translated",
             "value": "Finally"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour finir"
+          }
         }
       }
     },
@@ -2668,6 +4270,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back to frame selection"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retour à la sélection d’images"
           }
         }
       }
@@ -2679,6 +4287,12 @@
             "state": "translated",
             "value": "Two ways"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deux façons"
+          }
         }
       }
     },
@@ -2688,6 +4302,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Onion skin"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pelure d’oignon"
           }
         }
       }
@@ -2699,6 +4319,12 @@
             "state": "translated",
             "value": "on"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "activé"
+          }
         }
       }
     },
@@ -2708,6 +4334,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "off"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "désactivé"
           }
         }
       }
@@ -2719,6 +4351,12 @@
             "state": "translated",
             "value": "saved in %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "enregistré dans %@"
+          }
         }
       }
     },
@@ -2728,6 +4366,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Phone on a tripod, or held steady over your work. Just work — FrameFold takes a frame by itself as soon as your hands leave the frame and the scene settles."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone sur trépied, ou tenu bien stable au-dessus de ton travail. Travaille, tout simplement — FrameFold prend une image tout seul dès que tes mains quittent le cadre et que la scène se calme."
           }
         }
       }
@@ -2739,6 +4383,12 @@
             "state": "translated",
             "value": "Phone on a tripod, then work. It fires by itself as soon as your hands leave the frame."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone sur trépied, et au travail. Il déclenche tout seul dès que tes mains quittent le cadre."
+          }
         }
       }
     },
@@ -2749,6 +4399,12 @@
             "state": "translated",
             "value": "Phone on a tripod. FrameFold fires as soon as your hands leave the frame."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone sur trépied. FrameFold déclenche dès que tes mains quittent le cadre."
+          }
         }
       }
     },
@@ -2758,6 +4414,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Don't touch the phone: put it on a tripod and let the auto-shutter work (or use the round button)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ne touche pas l’iPhone : pose-le sur un trépied et laisse faire le déclenchement auto (ou le bouton rond)."
           }
         }
       }
@@ -2781,6 +4443,24 @@
               }
             }
           }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "encore %lld pour une seconde de film"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "encore %lld pour une seconde de film"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2790,6 +4470,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Transition"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fondu"
           }
         }
       }
@@ -2801,6 +4487,12 @@
             "state": "translated",
             "value": "Transition style"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Style de transition"
+          }
         }
       }
     },
@@ -2810,6 +4502,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skip"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passer"
           }
         }
       }

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Trägt die englischen Fassungen in die String Catalogs ein.
+"""Trägt Übersetzungen in die String Catalogs ein.
 
-    python3 scripts/apply_translations.py            # Probelauf, schreibt nichts
-    python3 scripts/apply_translations.py --write    # trägt ein
+    python3 scripts/apply_translations.py                    # Englisch, Probelauf
+    python3 scripts/apply_translations.py --lang fr --write  # Französisch eintragen
 
 Die Kataloge werden von Xcode beim Export mit den deutschen Quelltexten
 gefüllt. Dieses Skript ergänzt je Eintrag die englische Fassung und meldet,
@@ -25,6 +25,7 @@ CATALOGS = [
     ROOT / "FrameFold Watch Watch App" / "Localizable.xcstrings",
 ]
 WRITE = "--write" in sys.argv
+LANG = sys.argv[sys.argv.index("--lang") + 1] if "--lang" in sys.argv else "en"
 
 # Bleiben in jeder Sprache gleich: Zahlen mit Einheit, Eigenname, reine
 # Platzhalter. Werden als „nicht übersetzen" markiert, damit Xcode sie nicht
@@ -42,8 +43,8 @@ def lade(name):
             if not k.startswith("_")}
 
 
-einfach = lade("en.json")
-plural = lade("en_plural.json")
+einfach = lade(f"{LANG}.json")
+plural = lade(f"{LANG}_plural.json")
 
 gesamt = dict(ergaenzt=0, schon=0, neutral=0, fehlt=[])
 genutzt = set()
@@ -67,21 +68,21 @@ for catalog_path in CATALOGS:
             continue
 
         locs = entry.setdefault("localizations", {})
-        if "en" in locs:
+        if LANG in locs:
             gesamt["schon"] += 1
             genutzt.add(key)
             continue
 
         if key in plural:
             formen = plural[key]
-            locs["en"] = {"variations": {"plural": {
+            locs[LANG] = {"variations": {"plural": {
                 form: {"stringUnit": {"state": "translated", "value": wert}}
                 for form, wert in formen.items()
             }}}
             gesamt["ergaenzt"] += 1
             genutzt.add(key)
         elif key in einfach:
-            locs["en"] = {"stringUnit": {"state": "translated",
+            locs[LANG] = {"stringUnit": {"state": "translated",
                                          "value": einfach[key]}}
             gesamt["ergaenzt"] += 1
             genutzt.add(key)
@@ -92,13 +93,13 @@ for catalog_path in CATALOGS:
         catalog_path.write_text(json.dumps(catalog, ensure_ascii=False,
                                            indent=2, sort_keys=True) + "\n")
 
-print(f"englisch ergänzt:   {gesamt['ergaenzt']}")
+print(f"{LANG} ergänzt:        {gesamt['ergaenzt']}")
 print(f"war schon da:       {gesamt['schon']}")
 print(f"neutral markiert:   {gesamt['neutral']}")
 print(f"ohne Übersetzung:   {len(gesamt['fehlt'])}")
 
 if gesamt["fehlt"]:
-    print("\nOhne Übersetzung — gehören nach localization/en.json:")
+    print(f"\nOhne Übersetzung — gehören nach localization/{LANG}.json:")
     for k in sorted(gesamt["fehlt"]):
         print("   " + k.replace("\n", "\\n"))
 

@@ -27,5 +27,9 @@
   "noch %lld für eine Sekunde Film": {
     "one": "%lld more for a second of film",
     "other": "%lld more for a second of film"
+  },
+  "%lld Sekunden Film!": {
+    "one": "%lld second of film!",
+    "other": "%lld seconds of film!"
   }
 }

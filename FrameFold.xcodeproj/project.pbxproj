@@ -31,6 +31,7 @@
 		D53EE5B81BCE0006DC1EE58F /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD6BD598D4F623F37DCAF09 /* Models.swift */; };
 		DA47649F07F31FB474676A5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5179CC507784BECC68BB9DEF /* Assets.xcassets */; };
 		AA11F0F0F0F0F0F0F0F0F013 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F012 /* Localizable.xcstrings */; };
+		AA11F0F0F0F0F0F0F0F0F023 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F022 /* InfoPlist.xcstrings */; };
 		E466B79C40F7AC551AA8FCDF /* ExhibitionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CD31EE9EE75040932168D5 /* ExhibitionBuilder.swift */; };
 		F18E9E67D58704115602C98F /* FrameAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41366FECBE0FAF2939DF1DAD /* FrameAnalyzer.swift */; };
 /* End PBXBuildFile section */
@@ -75,6 +76,7 @@
 		41366FECBE0FAF2939DF1DAD /* FrameAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameAnalyzer.swift; sourceTree = "<group>"; };
 		5179CC507784BECC68BB9DEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA11F0F0F0F0F0F0F0F0F012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		AA11F0F0F0F0F0F0F0F0F022 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		57F57A631B9FBDA6F9338B4C /* HandDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandDetector.swift; sourceTree = "<group>"; };
 		5DD6BD598D4F623F37DCAF09 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		6583ADB31D00356EDCE7FA83 /* ProcessingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingViewModel.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 				AA22F0F0F0F0F0F0F0F0F102 /* StudioMonitor.swift */,
 				5179CC507784BECC68BB9DEF /* Assets.xcassets */,
 				AA11F0F0F0F0F0F0F0F0F012 /* Localizable.xcstrings */,
+				AA11F0F0F0F0F0F0F0F0F022 /* InfoPlist.xcstrings */,
 				AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */,
 			);
 			path = FrameFold;
@@ -273,6 +276,7 @@
 			knownRegions = (
 				de,
 				en,
+				fr,
 				Base,
 			);
 			mainGroup = 97A63A01E61FD439E8760B8E;
@@ -308,6 +312,7 @@
 			files = (
 				DA47649F07F31FB474676A5F /* Assets.xcassets in Resources */,
 				AA11F0F0F0F0F0F0F0F0F013 /* Localizable.xcstrings in Resources */,
+				AA11F0F0F0F0F0F0F0F0F023 /* InfoPlist.xcstrings in Resources */,
 				AA11F0F0F0F0F0F0F0F0F001 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -394,7 +399,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.framefold;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -422,7 +427,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.framefold;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -533,7 +538,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.framefold.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -600,7 +605,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.framefold.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";

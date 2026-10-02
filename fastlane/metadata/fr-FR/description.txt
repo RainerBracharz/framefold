@@ -1,0 +1,26 @@
+FrameFold transforme la vidéo de ton travail en stop motion — automatiquement, et entièrement sur ton iPhone.
+
+L’app repère les moments calmes de ta vidéo, écarte chaque image où l’on voit tes mains, compense les secousses et assemble le résultat. Rien ne quitte ton appareil : pas de cloud, pas de compte, pas de pistage.
+
+CAMÉRA AUTOMATIQUE
+iPhone sur trépied, et au travail — FrameFold déclenche tout seul dès que tes mains quittent le cadre et que la scène se calme. L’exposition et la balance des blancs sont verrouillées, et la vitesse d’obturation se cale sur la fréquence du secteur pour que la lumière artificielle ne zèbre pas tes images. Avec pelure d’oignon, contrôle de dérive, déclenchement à intervalle et niveau.
+
+NET, OU RIEN
+L’app mesure la netteté en continu et ne verrouille la mise au point qu’une fois celle-ci vraiment stable. Si la netteté se perd ensuite, elle refait la mise au point toute seule. Une image floue n’entre jamais dans l’œuvre. Sur trépied, la mise au point reste verrouillée ; à main levée, elle suit — le capteur de mouvement décide.
+
+L’APPLE WATCH COMME TÉLÉCOMMANDE
+Déclenche et termine depuis ton poignet, avec le nombre d’images et l’état sur le cadran. Personne ne touche au trépied. Les boutons de volume des écouteurs et des AirPods déclenchent aussi, et un appui long lance un compte à rebours.
+
+MONITEUR D’ATELIER
+Branche un écran ou un projecteur : il n’affiche que l’image de la caméra, avec une ligne de catalogue — sans commandes. Pour les cours et les visites d’atelier : tout le monde regarde, l’iPhone reste intact sur son trépied.
+
+DE LA VIDÉO AU STOP MOTION
+Choisis une vidéo existante : les moments calmes sont repérés, les mains retirées, les doublons écartés. Tu vérifies chaque image sur la planche contact avant le montage.
+
+TROIS MODES
+Simple (choisir, déclencher, terminé — pensé pour l’enseignement), Avancé (format, cadence, résolution, lecture) et un mode atelier avec relief papier, écho d’image, rendu tirage, transitions pliées, film d’exposition et PDF prêts à imprimer : planche contact et gabarit de pliage.
+
+DES ŒUVRES, PAS DES FICHIERS
+Les projets réunissent les images de toutes tes séances, avec une corbeille de 30 jours. Le résultat se présente comme une édition : « Feuilles 01–24 · Série de 24 · datée 2026 ».
+
+Conçu sur mesure pour l’artiste Aldo Tolino, qui plie des photographies imprimées en objets avant de les photographier à nouveau — image, objet, image.

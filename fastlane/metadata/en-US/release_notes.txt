@@ -1,3 +1,3 @@
-Finer frame selection: FrameFold now catches small steps too, such as a single new crease. Until now such steps could be dropped as repeats, especially when the work was small in the frame.
+FrameFold now speaks French too — the whole app, from first launch to the contact sheet. The language follows your iPhone's setting.
 
-Steadier under artificial light: flickering LED or fluorescent lamps and changing daylight no longer produce duplicate frames.
+Also fixed: the permission prompts for camera and photo library now appear in English, and the seconds counter in the viewfinder reads correctly ("2 seconds of film", not "2 secondn").

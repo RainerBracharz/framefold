@@ -893,7 +893,7 @@ struct LiveCaptureView: View {
                 }
                 .animation(.snappy, value: count)
                 Text(toNext == 0
-                     ? "\(count / 10) Sekunde\(count / 10 == 1 ? "" : "n") Film!"
+                     ? "\(count / 10) Sekunden Film!"
                      : "noch \(toNext) für eine Sekunde Film")
                     .font(Theme.mono(10))
                     .foregroundStyle(Theme.paperOnDark.opacity(0.65))

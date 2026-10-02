@@ -1,0 +1,54 @@
+{
+  "sourceLanguage": "de",
+  "strings": {
+    "NSCameraUsageDescription": {
+      "comment": "Systemdialog beim ersten Öffnen der Kamera",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In live mode, FrameFold takes frames automatically whenever your hands are out of the shot."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En mode direct, FrameFold prend des images automatiquement dès que tes mains sont hors du cadre."
+          }
+        }
+      }
+    },
+    "NSPhotoLibraryAddUsageDescription": {
+      "comment": "Systemdialog beim ersten Sichern in die Fotomediathek",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To save finished stop-motion videos to your photo library."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour enregistrer les vidéos stop motion terminées dans ta photothèque."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.3"
+}

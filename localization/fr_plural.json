@@ -1,0 +1,35 @@
+{
+  "_hinweis": "Französisch: „one“ gilt für 0 und 1.",
+  "%lld Bilder": {
+    "one": "%lld image",
+    "other": "%lld images"
+  },
+  "%lld Bilder aufgenommen": {
+    "one": "%lld image prise",
+    "other": "%lld images prises"
+  },
+  "Fertig! %lld Bilder": {
+    "one": "Terminé ! %lld image",
+    "other": "Terminé ! %lld images"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "one": "%lld image · planche contact",
+    "other": "%lld images · planche contact"
+  },
+  "%lld Werke montieren": {
+    "one": "Monter %lld œuvre",
+    "other": "Monter %lld œuvres"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "one": "Supprimées récemment : restaurer %lld image",
+    "other": "Supprimées récemment : restaurer %lld images"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "one": "encore %lld pour une seconde de film",
+    "other": "encore %lld pour une seconde de film"
+  },
+  "%lld Sekunden Film!": {
+    "one": "%lld seconde de film !",
+    "other": "%lld secondes de film !"
+  }
+}

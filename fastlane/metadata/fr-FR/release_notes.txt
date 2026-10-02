@@ -1,0 +1,3 @@
+FrameFold parle désormais français — toute l’app, du premier lancement à la planche contact. La langue suit le réglage de ton iPhone.
+
+Également : les demandes d’accès à l’appareil photo et à la photothèque sont maintenant traduites.

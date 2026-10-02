@@ -172,7 +172,6 @@
   "%lld Bilder aufgenommen": "%lld frames captured",
   "%lld Bilder · Kontaktbogen": "%lld frames · contact sheet",
   "%lld Bilder · aus %lld s Video": "%1$lld frames · from %2$lld s of video",
-  "%lld Sekunde%@ Film!": "%1$lld second%2$@ of film!",
   "%lld Werke montieren": "Assemble %lld works",
   "%lld Werke · %lld Bilder": "%1$lld works · %2$lld frames",
   "%lld mit Händen entfernt · %lld Duplikate": "%1$lld dropped for hands · %2$lld duplicates",
