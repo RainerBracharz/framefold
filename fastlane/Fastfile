@@ -231,8 +231,9 @@ platform :ios do
     Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
       key_id: KEY_ID, issuer_id: ISSUER_ID, filepath: KEY_PATH)
     app = Spaceship::ConnectAPI::App.find(APP_ID)
-    app.get_app_store_versions.first(3).each do |v|
-      UI.message("#{v.version_string} — #{v.app_store_state}")
+    app.get_app_store_versions(includes: "build").first(3).each do |v|
+      build = v.build ? " · Build #{v.build.version}" : " · kein Build"
+      UI.message("#{v.version_string} — #{v.app_store_state}#{build}")
     end
   end
 
