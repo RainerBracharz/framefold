@@ -24,19 +24,18 @@ ISSUER_ID = "2035739a-efc7-450c-8f2f-61f211394113"
 APP_ID    = "6801045603"
 KEY_PATH  = File.expand_path("~/.appstoreconnect/AuthKey_#{KEY_ID}.p8")
 abort("Schlüssel fehlt: #{KEY_PATH}") unless File.exist?(KEY_PATH)
+# Apple begrenzt Beschreibung und Notiz auf je 1000 Zeichen.
 
 NAME = "FrameFold 2.0 – The film grows as you work"
 
 DESCRIPTION = <<~TEXT.strip
-  FrameFold turns a working session at the craft table into a stop-motion film: it fires by itself whenever the artist's hands leave the frame, keeps only sharp frames, and assembles the result – entirely on-device, no account, no cloud.
+  FrameFold turns a session at the craft table into a stop-motion film. It fires by itself whenever the hands leave the frame and keeps only sharp frames – all on-device, no account, no cloud.
 
-  Version 2.0 adds two things that change how it is used:
+  Version 2.0 adds two things. The film grows as you work: from the second frame on, the stop-motion loops while the session is still running – in the viewfinder, and on a studio monitor next to the live camera. In a class, everyone sees the hands at work and the piece taking shape.
 
-  The film grows as you work. From the second frame on, the stop-motion already plays as a loop while the session is still running – small in the viewfinder, and large on a studio monitor (HDMI or AirPlay) next to the live camera feed. In a class or on a studio visit, everyone sees the hands at work and the piece they are making, side by side.
+  And every work can be printed as a ready-to-cut flip book: A4 sheets with cut lines, a binding edge and numbered leaves. Image, object, image – and back to an object you can hold.
 
-  Flip book. Every work can be printed as a ready-to-cut flip book: A4 sheets with cut lines, a binding edge and numbered leaves. Image, object, image – and back to an object you can hold in your hands.
-
-  FrameFold was built for the Austrian artist Aldo Tolino, who folds printed photographs into objects and photographs them again. Available in English, German and French, with an Apple Watch remote, and support for VoiceOver, larger text and Reduce Motion.
+  Built for Austrian artist Aldo Tolino. In English, German and French, with an Apple Watch remote and VoiceOver support.
 TEXT
 
 NOTES = <<~TEXT.strip
