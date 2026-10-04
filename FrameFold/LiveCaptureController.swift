@@ -1098,6 +1098,31 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Referenz-Testvideo – der Auto-Shutter sollte pro Ruhephase auslösen.
     private func startSimulatedCamera() {
         simulatorTask?.cancel()
+        // Aufnahmen für die App-Vorschau im Store: Statt der Testszene spielt
+        // der Simulator eine vorbereitete Bildfolge ab (JPEGs in FF_SIM_FRAMES,
+        // 10 Bilder/s, in Schleife). Nur im Simulator, nur mit gesetzter Variable.
+        if let dir = ProcessInfo.processInfo.environment["FF_SIM_FRAMES"], !dir.isEmpty,
+           let names = try? FileManager.default.contentsOfDirectory(atPath: dir) {
+            let files = names.filter { $0.hasSuffix(".jpg") }.sorted()
+                .map { URL(fileURLWithPath: dir).appendingPathComponent($0) }
+            if !files.isEmpty {
+                simulatorTask = Task { [weak self] in
+                    var tick = 0
+                    while !Task.isCancelled {
+                        guard let self else { return }
+                        if let img = UIImage(contentsOfFile: files[tick % files.count].path),
+                           let cg = img.cgImage {
+                            self.simulatedPreview = img
+                            let (gray, w, h) = FrameAnalyzer.grayscaleDownsampled(cg, targetWidth: 160)
+                            self.analyze(gray: gray, w: w, h: h, fullFrame: cg)
+                        }
+                        tick += 1
+                        try? await Task.sleep(nanoseconds: 100_000_000)
+                    }
+                }
+                return
+            }
+        }
         simulatorTask = Task { [weak self] in
             var tick = 0
             let stillFrames = 14        // ~1,4 s Ruhe

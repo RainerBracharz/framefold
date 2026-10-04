@@ -49,6 +49,10 @@ final class FrameFoldUITests: XCTestCase {
             // Erststart herstellen: Onboarding und Kamera-Tipp sollen mit drauf.
             "--ff-fresh-start",
         ]
+        // App-Vorschau: Simulator-Kamera spielt die vorbereitete Faltung ab
+        if let frames = env["FF_SIM_FRAMES"], !frames.isEmpty {
+            app.launchEnvironment["FF_SIM_FRAMES"] = frames
+        }
         app.launch()
     }
 
@@ -181,6 +185,99 @@ final class FrameFoldUITests: XCTestCase {
                 sleep(1)
                 shot("project-detail-exported")
             }
+        }
+    }
+
+    // MARK: - App-Vorschau
+
+    /// Ablauf für die Store-Vorschau (scripts/record_preview.sh nimmt dabei den
+    /// Bildschirm auf): Faltung live aufnehmen, Film wächst mit, Ergebnis,
+    /// Daumenkino. Gemächlicher als der Durchgang – hier wird zugeschaut.
+    /// Jeder Schritt landet mit Uhrzeit in events.txt, damit der Schnitt
+    /// die Stellen im Video findet.
+    @MainActor
+    func testPreview() throws {
+        guard ProcessInfo.processInfo.environment["FF_SIM_FRAMES"] != nil else {
+            throw XCTSkip("Nur für die App-Vorschau (FF_SIM_FRAMES fehlt)")
+        }
+        let name = ["de": "Faltung", "fr": "Pliage"][lang] ?? "Fold"
+        mark("launch")
+        tap(["Next", "Weiter", "Suivant"])
+        usleep(400_000)
+        tap(["Next", "Weiter", "Suivant"])
+        usleep(600_000)
+        tap(["Get started", "Los geht's", "C’est parti"], prefix: true)
+        sleep(1)
+        tap(["Camera", "Kamera", "Caméra"])
+        sleep(1)
+        tap(["Got it", "Verstanden", "Compris"])
+        sleep(1)
+        mark("chooser")
+        if tap(["New work", "Neues Werk", "Nouvelle œuvre"]) {
+            let alert = app.alerts.firstMatch
+            if alert.waitForExistence(timeout: 3) {
+                let field = alert.textFields.firstMatch
+                field.tap()
+                field.typeText(name)
+                tap(["Create & start", "Anlegen & starten", "Créer et lancer"])
+            }
+        }
+        mark("camera")
+        sleep(15)
+        if tap(["The film so far", "Der Film bisher", "Le film jusqu’ici"], timeout: 2) {
+            mark("loop-large")
+        }
+        sleep(13)
+        mark("finish")
+        tap(["Done ·", "Fertig ·", "Terminé ·"], prefix: true)
+        sleep(6)
+        mark("result")
+        tap(["Done", "Fertig", "Terminé"])
+        sleep(1)
+        tap(["Projects", "Projekte", "Projets"])
+        sleep(1)
+        mark("projects")
+        if tap([name], prefix: true) {
+            sleep(2)
+            mark("detail")
+            app.swipeUp()
+            sleep(1)
+            app.swipeUp()
+            sleep(1)
+            if tap(["Flip book", "Daumenkino", "Folioscope"]) {
+                mark("flipbook")
+                let share = app.buttons.matching(NSPredicate(
+                    format: "label ==[c] 'Share flip book' OR label ==[c] 'Daumenkino teilen' OR label ==[c] 'Partager le folioscope'")).firstMatch
+                if share.waitForExistence(timeout: 30) {
+                    sleep(1)
+                    mark("flipbook-ready")
+                    share.tap()
+                    sleep(5)
+                    mark("share")
+                    app.swipeDown(velocity: .fast)
+                    sleep(1)
+                }
+            }
+            mark("end")
+            // Aufräumen wie im Durchgang
+            app.swipeUp(); app.swipeUp(); app.swipeUp()
+            if tap(["Delete project", "Projekt löschen", "Supprimer le projet"]) {
+                tap(["Delete permanently", "Endgültig löschen", "Supprimer définitivement"])
+                sleep(1)
+            }
+        }
+    }
+
+    private func mark(_ event: String) {
+        guard let dir = shotDir else { return }
+        let line = String(format: "%.3f %@\n", Date().timeIntervalSince1970, event)
+        let url = dir.appendingPathComponent("events.txt")
+        if let handle = try? FileHandle(forWritingTo: url) {
+            handle.seekToEndOfFile()
+            handle.write(Data(line.utf8))
+            handle.closeFile()
+        } else {
+            try? line.write(to: url, atomically: true, encoding: .utf8)
         }
     }
 
