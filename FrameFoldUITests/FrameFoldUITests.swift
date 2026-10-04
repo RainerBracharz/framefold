@@ -230,9 +230,13 @@ final class FrameFoldUITests: XCTestCase {
         sleep(13)
         mark("finish")
         tap(["Done ·", "Fertig ·", "Terminé ·"], prefix: true)
-        sleep(6)
+        // Ergebnis: Der Film wird erst montiert – auf „Fertig" warten statt raten
+        let doneButton = app.buttons.matching(NSPredicate(
+            format: "label ==[c] 'Done' OR label ==[c] 'Fertig' OR label ==[c] 'Terminé'")).firstMatch
+        _ = doneButton.waitForExistence(timeout: 30)
         mark("result")
-        tap(["Done", "Fertig", "Terminé"])
+        sleep(5)
+        tap(["Done", "Fertig", "Terminé"], timeout: 10)
         sleep(1)
         tap(["Projects", "Projekte", "Projets"])
         sleep(1)
@@ -249,13 +253,8 @@ final class FrameFoldUITests: XCTestCase {
                 let share = app.buttons.matching(NSPredicate(
                     format: "label ==[c] 'Share flip book' OR label ==[c] 'Daumenkino teilen' OR label ==[c] 'Partager le folioscope'")).firstMatch
                 if share.waitForExistence(timeout: 30) {
-                    sleep(1)
                     mark("flipbook-ready")
-                    share.tap()
-                    sleep(5)
-                    mark("share")
-                    app.swipeDown(velocity: .fast)
-                    sleep(1)
+                    sleep(4)
                 }
             }
             mark("end")

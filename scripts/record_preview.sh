@@ -41,19 +41,24 @@ now() { perl -MTime::HiRes=time -e 'printf "%.3f\n", time'; }
 
 for L in "${LANGS[@]}"; do
   echo "── $L ──"
-  rm -f "$OUT/$L.mp4"
-  xcrun simctl io "$UDID" recordVideo --codec=h264 --force "$OUT/$L.mp4" 2>/dev/null &
-  REC=$!
-  sleep 2
-  now > "$OUT/$L-start.txt"
+  rm -f "$OUT/$L.mp4" "$OUT/$L-start.txt"
+  # Startzeit genau dann, wenn simctl wirklich aufnimmt
+  ( xcrun simctl io "$UDID" recordVideo --codec=h264 --force "$OUT/$L.mp4" 2>&1 | while read -r line; do
+      case "$line" in *"Recording started"*) now > "$OUT/$L-start.txt";; esac
+    done ) &
+  sleep 3
+  [ -s "$OUT/$L-start.txt" ] || now > "$OUT/$L-start.txt"   # Meldung kam nicht durch: ungefähr reicht
+  # Kein Parallel-Testen: sonst läuft der Test auf einem Klon und die Aufnahme zeigt den Homescreen
   TEST_RUNNER_FF_LANG=$L TEST_RUNNER_FF_SHOT_DIR="$OUT" TEST_RUNNER_FF_SIM_FRAMES="$FRAMES" \
     xcodebuild test-without-building -scheme FrameFold -destination "id=$UDID" \
-    -derivedDataPath build/preview -only-testing:FrameFoldUITests/FrameFoldUITests/testPreview \
+    -derivedDataPath build/preview -parallel-testing-enabled NO \
+    -only-testing:FrameFoldUITests/FrameFoldUITests/testPreview \
     -quiet || echo "(Test meldet Fehler – Video wird trotzdem behalten, siehe $OUT/$L/log.txt)"
   sleep 1
-  kill -INT $REC; wait $REC 2>/dev/null || true
+  pkill -INT -f "simctl io $UDID recordVideo" || true
+  wait
   echo "→ $OUT/$L.mp4"
 done
 
-xcrun simctl status_bar "$UDID" clear
+xcrun simctl status_bar "$UDID" clear 2>/dev/null || true
 echo "Fertig. Aufnahmen in $OUT"
