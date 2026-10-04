@@ -24,6 +24,8 @@ Beispielausgaben/
 # hatte — dieser Ordner bleibt grundsaetzlich draussen.
 Marketing_Assets/
 *.mp4
+# Ausnahme: der Spot, auf den das README verlinkt
+!docs/spot/*.mp4
 fftests
 
 # fastlane — der API-Schlüssel darf niemals ins Repository

@@ -9,7 +9,7 @@
 [<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="44" />](https://apps.apple.com/app/id6801045603)
 
 [![iOS Build](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml/badge.svg)](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml)
-&nbsp;·&nbsp; **Live on the App Store** &nbsp;·&nbsp; English · Deutsch &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; watchOS &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
+&nbsp;·&nbsp; **Live on the App Store** &nbsp;·&nbsp; English · Deutsch · Français &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; watchOS &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
 
 </div>
 
@@ -20,6 +20,11 @@
 <div align="center">
 <img src="docs/demo.gif" width="320" alt="Made with FrameFold: a print folds itself into facets and back — image, object, image" />
 <br/><sub><em>This demo was made with FrameFold. What else.<br/>Keyframe selection, facet transitions, paper relief and image echo — all rendered by the app's own pipeline.</em></sub>
+</div>
+
+<div align="center">
+<a href="docs/spot/framefold-spot-de.mp4"><img src="docs/spot/poster.jpg" width="640" alt="FrameFold spot: a folded amber paper object, “Du faltest. Sie filmt.” (You fold. It films.)" /></a>
+<br/><sub><em>▶ The 16-second spot for 2.0 (German, with sound): auto-shutter, focus, live loop, studio monitor, Apple Watch, video import, flip book.<br/>Paper fold, animation and modular-synth soundtrack generated in code — no stock footage.</em></sub>
 </div>
 
 ---
