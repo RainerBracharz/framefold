@@ -23,8 +23,8 @@
 </div>
 
 <div align="center">
-<a href="docs/spot/framefold-spot-de.mp4"><img src="docs/spot/poster.jpg" width="640" alt="FrameFold spot: a folded amber paper object, “Du faltest. Sie filmt.” (You fold. It films.)" /></a>
-<br/><sub><em>▶ The 16-second spot for 2.0 (German, with sound): auto-shutter, focus, live loop, studio monitor, Apple Watch, video import, flip book.<br/>Paper fold, animation and modular-synth soundtrack generated in code — no stock footage.</em></sub>
+<a href="docs/spot/framefold-spot-en.mp4"><img src="docs/spot/poster.jpg" width="640" alt="FrameFold spot: a folded amber paper object, “You fold. It films.”" /></a>
+<br/><sub><em>▶ The 16-second spot for 2.0 (with sound): auto-shutter, focus, live loop, studio monitor, Apple Watch, video import, flip book.<br/>Paper fold, animation and modular-synth soundtrack generated in code — no stock footage.</em></sub>
 </div>
 
 ---
