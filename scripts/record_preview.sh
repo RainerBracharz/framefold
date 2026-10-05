@@ -41,9 +41,11 @@ now() { perl -MTime::HiRes=time -e 'printf "%.3f\n", time'; }
 
 for L in "${LANGS[@]}"; do
   echo "── $L ──"
-  rm -f "$OUT/$L.mp4" "$OUT/$L-start.txt"
+  rm -f "$OUT/$L.mp4" "$OUT/$L-start.txt" "$OUT/$L-record.log" "$OUT/$L-xcodebuild.log"
   # Startzeit genau dann, wenn simctl wirklich aufnimmt
+  echo "Simulator-Zustand: $(xcrun simctl list devices | grep "$UDID" | sed 's/.*(\(.*\)).*/\1/')"
   ( xcrun simctl io "$UDID" recordVideo --codec=h264 --force "$OUT/$L.mp4" 2>&1 | while read -r line; do
+      echo "$line" >> "$OUT/$L-record.log"
       case "$line" in *"Recording started"*) now > "$OUT/$L-start.txt";; esac
     done ) &
   sleep 3
@@ -53,11 +55,11 @@ for L in "${LANGS[@]}"; do
     xcodebuild test-without-building -scheme FrameFold -destination "id=$UDID" \
     -derivedDataPath build/preview -parallel-testing-enabled NO \
     -only-testing:FrameFoldUITests/FrameFoldUITests/testPreview \
-    -quiet || echo "(Test meldet Fehler – Video wird trotzdem behalten, siehe $OUT/$L/log.txt)"
+    > "$OUT/$L-xcodebuild.log" 2>&1 || echo "(Test meldet Fehler – Protokoll: $OUT/$L-xcodebuild.log)"
   sleep 1
   pkill -INT -f "simctl io $UDID recordVideo" || true
   wait
-  echo "→ $OUT/$L.mp4"
+  ls -la "$OUT/$L.mp4" 2>/dev/null || echo "!! keine Aufnahme – siehe $OUT/$L-record.log"
 done
 
 xcrun simctl status_bar "$UDID" clear 2>/dev/null || true
