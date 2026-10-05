@@ -1,5 +1,5 @@
-FrameFold 2.0 — sehen, wie es entsteht, und es wieder in die Hand nehmen.
+FrameFold 2.0.1
 
-Der Film wächst mit: Während du arbeitest, läuft die Stopmotion schon als Schleife mit — klein im Sucher, groß auf dem Studio-Monitor neben dem Kamerabild. Wer zusieht, erlebt beides zugleich: die Hände bei der Arbeit und das Werk, das daraus wird.
+Auslöser nach Motivwechsel: Wird aus einem bedruckten Blatt eine glatte, gefaltete Fläche, löst die Kamera am Stativ jetzt sofort wieder aus. Bisher hielt sie das strukturärmere Motiv für unscharf und wartete einige Sekunden.
 
-Daumenkino: Aus jedem Werk wird ein druckfertiges Daumenkino — A4-Bogen mit Schnittlinien, Bindekante und nummerierten Blättern. Ausschneiden, klammern, blättern. In jedem Modus unter „Drucken".
+Dazu ein kurzes Vorschauvideo im App Store.

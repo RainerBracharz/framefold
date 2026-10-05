@@ -486,6 +486,23 @@ final class LiveCaptureController: NSObject, ObservableObject {
         sharpReference = max(sharpReference * 0.998, value)
     }
 
+    /// Motivwechsel statt Unschärfe: Ist der Fokus fixiert – oder lässt er
+    /// sich gar nicht verstellen –, kann sich die Schärfe zwischen zwei
+    /// Ruhephasen nicht ändern, nur das Motiv. Fällt der Messwert nach einer
+    /// Arbeitsphase, ist das neue Motiv schlicht strukturärmer (bedrucktes
+    /// Blatt → glatte, gefaltete Fläche). Dann wird das ruhige Bild zur neuen
+    /// Messlatte, statt acht Sekunden zu warten. Wird nur im Torpfad gefragt,
+    /// also erst nach erkannter Arbeit, abgelaufener Ruhezeit und ohne Hände.
+    /// Aus der Hand (Autofokus läuft) bleibt es beim Warten: Dort kann ein
+    /// niedriger Wert wirklich ein suchender Fokus sein.
+    private func acceptMotifChange() -> Bool {
+        guard focusIsLocked || focusLockUnavailable else { return false }
+        guard focusTask == nil else { return false }     // Fokuslauf läuft gerade
+        sharpReference = sharpRaw
+        gateBlockedSince = nil
+        return true
+    }
+
     /// Notausstieg für das Schärfe-Tor: Steht die Messlatte durch ein
     /// vorheriges, strukturreiches Motiv zu hoch, könnte ein glattes Blatt sie
     /// nie erreichen – die App würde still gar nichts mehr aufnehmen. Nach
@@ -1308,7 +1325,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // Schärfe-Tor: Ein unscharfes Bild ist im fertigen Film nicht zu
         // reparieren, ein paar Sekunden Warten dagegen schon. Also lieber
         // gar nicht auslösen und sagen, woran es liegt.
-        if !isSharpEnough, !releaseGateIfStuck() {
+        if !isSharpEnough, !acceptMotifChange(), !releaseGateIfStuck() {
             setStatus(.focusing)
             stableSince = Date()
             // Einmal von selbst nachstellen, statt den Nutzer warten zu lassen.

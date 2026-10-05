@@ -160,7 +160,24 @@ when "upload"
     upload_file(set["id"], path)
     puts "ok"
   end
-  puts "\nApple verarbeitet die Videos jetzt (einige Minuten). Stand: ruby scripts/app_preview.rb status"
+  # Einreichen geht erst, wenn Apple die Videos verarbeitet hat
+  print "Apple verarbeitet die Videos "
+  done = false
+  40.times do                                           # höchstens 20 Minuten
+    states = locs.values_at(*LOCALES).map do |loc_id|
+      set = preview_set(loc_id)
+      p = previews(set["id"]).find { |x| x.dig("attributes", "fileName") == FILE_NAME }
+      p&.dig("attributes", "assetDeliveryState", "state")
+    end
+    abort "\nApple hat ein Video abgelehnt: #{states.inspect} – Details: ruby scripts/app_preview.rb status" if states.include?("FAILED")
+    if states.all? { |x| x == "COMPLETE" }
+      done = true
+      break
+    end
+    print "."
+    sleep 30
+  end
+  puts(done ? " fertig." : " noch nicht fertig – trotzdem weiter.")
   show_version(v)
 
 else
