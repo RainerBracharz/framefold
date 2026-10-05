@@ -206,7 +206,8 @@ final class FrameFoldUITests: XCTestCase {
         usleep(400_000)
         tap(["Next", "Weiter", "Suivant"])
         usleep(600_000)
-        tap(["Get started", "Los geht's", "C’est parti"], prefix: true)
+        // Apostroph typografisch oder gerade – nur den Anfang vergleichen
+        tap(["Get started", "Los geht", "C’est parti", "C'est parti"], prefix: true)
         sleep(1)
         tap(["Camera", "Kamera", "Caméra"])
         sleep(1)
