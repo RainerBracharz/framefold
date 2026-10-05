@@ -224,11 +224,13 @@ final class FrameFoldUITests: XCTestCase {
             }
         }
         mark("camera")
-        sleep(15)
+        // Die Bildfolge hält jede Faltung ~9,5 s still: Nach einem starken
+        // Motivwechsel gibt das Schärfe-Tor erst nach 8 s frei. 8 Faltungen ≈ 95 s.
+        sleep(40)
         if tap(["The film so far", "Der Film bisher", "Le film jusqu’ici"], timeout: 2) {
             mark("loop-large")
         }
-        sleep(13)
+        sleep(56)
         mark("finish")
         tap(["Done ·", "Fertig ·", "Terminé ·"], prefix: true)
         // Ergebnis: Der Film wird erst montiert – auf „Fertig" warten statt raten
