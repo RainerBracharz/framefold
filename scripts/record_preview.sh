@@ -29,6 +29,11 @@ echo "Simulator: $DEVICE ($UDID)"
 
 xcrun simctl boot "$UDID" 2>/dev/null || true
 xcrun simctl bootstatus "$UDID" -b >/dev/null
+# Aufnehmen geht nur, wenn das Gerät im Fenster zu sehen ist – ein im
+# Hintergrund gestarteter Simulator hat keinen Bildschirm („no video capture port").
+open -b com.apple.dt.Devices --args -CurrentDeviceUDID "$UDID" 2>/dev/null \
+  || open -a Simulator --args -CurrentDeviceUDID "$UDID"
+sleep 6
 xcrun simctl ui "$UDID" appearance light
 xcrun simctl status_bar "$UDID" override --time "9:41" --batteryState charged --batteryLevel 100 \
   --cellularMode active --cellularBars 4 --wifiBars 3 --operatorName ""
