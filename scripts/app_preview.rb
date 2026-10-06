@@ -73,14 +73,14 @@ def localizations(version_id)
     .to_h { |l| [l.dig("attributes", "locale"), l["id"]] }
 end
 
-def preview_set(loc_id, create: false)
+def preview_set(loc_id, create: false, type: PREVIEW)
   sets = api(:get, "/v1/appStoreVersionLocalizations/#{loc_id}/appPreviewSets?limit=50")["data"]
-  set = sets.find { |s| s.dig("attributes", "previewType") == PREVIEW }
+  set = sets.find { |s| s.dig("attributes", "previewType") == type }
   return set if set || !create
 
   api(:post, "/v1/appPreviewSets", { data: {
     type: "appPreviewSets",
-    attributes: { previewType: PREVIEW },
+    attributes: { previewType: type },
     relationships: { appStoreVersionLocalization: { data: { type: "appStoreVersionLocalizations", id: loc_id } } }
   } })["data"]
 end
@@ -114,17 +114,40 @@ def upload_file(set_id, path)
   created["id"]
 end
 
+def screenshot_types(loc_id)
+  api(:get, "/v1/appStoreVersionLocalizations/#{loc_id}/appScreenshotSets?limit=50")["data"]
+    .map { |x| x.dig("attributes", "screenshotDisplayType") }
+end
+
+# Der Store zeigt pro Gerätegröße EIN Set: Screenshots und Vorschau müssen im
+# selben Gerätetyp liegen. Liegen die Screenshots einer Sprache z. B. nur unter
+# 6,5", wird eine Vorschau unter 6,9" auf vielen iPhones nie gezeigt.
+# 886 × 1920 nimmt Apple für 6,9", 6,5" und 6,1" an.
+PREVIEW_FOR = { "APP_IPHONE_67" => "IPHONE_67", "APP_IPHONE_65" => "IPHONE_65",
+                "APP_IPHONE_61" => "IPHONE_61" }.freeze
+
+def target_types(loc_id)
+  types = screenshot_types(loc_id).filter_map { |t| PREVIEW_FOR[t] }
+  (types + [PREVIEW]).uniq
+end
+
 def show_version(v)
   puts "#{v.dig('attributes', 'versionString')} — #{state(v)}"
   localizations(v["id"]).each do |locale, loc_id|
     next unless LOCALES.include?(locale)
-    set = preview_set(loc_id)
-    list = set ? previews(set["id"]) : []
-    desc = list.map do |p|
-      a = p["attributes"]
-      "#{a['fileName']} (#{a.dig('assetDeliveryState', 'state') || '?'})"
+    puts "  #{locale}"
+    puts "    Screenshots: #{screenshot_types(loc_id).join(', ')}"
+    sets = api(:get, "/v1/appStoreVersionLocalizations/#{loc_id}/appPreviewSets?limit=50")["data"]
+    if sets.empty?
+      puts "    Vorschau:    keine"
     end
-    puts "  #{locale.ljust(6)} #{desc.empty? ? '– keine Vorschau' : desc.join(', ')}"
+    sets.each do |set|
+      list = previews(set["id"]).map do |p|
+        a = p["attributes"]
+        "#{a['fileName']} (#{a.dig('assetDeliveryState', 'state') || '?'})"
+      end
+      puts "    Vorschau #{set.dig('attributes', 'previewType')}: #{list.empty? ? 'leer' : list.join(', ')}"
+    end
   end
 end
 
@@ -150,24 +173,28 @@ when "upload"
   locs = localizations(v["id"])
   files.each do |locale, path|
     loc_id = locs[locale] or abort("Sprache #{locale} fehlt an dieser Version.")
-    set = preview_set(loc_id, create: true)
-    # Eigene frühere Vorschau ersetzen, fremde nicht anfassen
-    previews(set["id"]).each do |p|
-      next unless p.dig("attributes", "fileName") == FILE_NAME
-      api(:delete, "/v1/appPreviews/#{p['id']}")
+    target_types(loc_id).each do |ptype|
+      set = preview_set(loc_id, create: true, type: ptype)
+      # Eigene frühere Vorschau ersetzen, fremde nicht anfassen
+      previews(set["id"]).each do |p|
+        next unless p.dig("attributes", "fileName") == FILE_NAME
+        api(:delete, "/v1/appPreviews/#{p['id']}")
+      end
+      print "  #{locale} #{ptype}: lade #{File.size(path) / 1024} KB … "
+      upload_file(set["id"], path)
+      puts "ok"
     end
-    print "  #{locale}: lade #{File.size(path) / 1024} KB … "
-    upload_file(set["id"], path)
-    puts "ok"
   end
   # Einreichen geht erst, wenn Apple die Videos verarbeitet hat
   print "Apple verarbeitet die Videos "
   done = false
   40.times do                                           # höchstens 20 Minuten
-    states = locs.values_at(*LOCALES).map do |loc_id|
-      set = preview_set(loc_id)
-      p = previews(set["id"]).find { |x| x.dig("attributes", "fileName") == FILE_NAME }
-      p&.dig("attributes", "assetDeliveryState", "state")
+    states = locs.values_at(*LOCALES).flat_map do |loc_id|
+      target_types(loc_id).map do |ptype|
+        set = preview_set(loc_id, type: ptype)
+        p = set && previews(set["id"]).find { |x| x.dig("attributes", "fileName") == FILE_NAME }
+        p&.dig("attributes", "assetDeliveryState", "state")
+      end
     end
     abort "\nApple hat ein Video abgelehnt: #{states.inspect} – Details: ruby scripts/app_preview.rb status" if states.include?("FAILED")
     if states.all? { |x| x == "COMPLETE" }
