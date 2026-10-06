@@ -1,5 +1,3 @@
-FrameFold 2.0.1
+FrameFold 2.0.2
 
-Auslöser nach Motivwechsel: Wird aus einem bedruckten Blatt eine glatte, gefaltete Fläche, löst die Kamera am Stativ jetzt sofort wieder aus. Bisher hielt sie das strukturärmere Motiv für unscharf und wartete einige Sekunden.
-
-Dazu ein kurzes Vorschauvideo im App Store.
+Das Vorschauvideo läuft jetzt auch im deutschen App Store, dazu neue Screenshots für große iPhones. An der App selbst ändert sich nichts.

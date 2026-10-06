@@ -1,5 +1,3 @@
-FrameFold 2.0.1
+FrameFold 2.0.2
 
-Déclenchement après un changement de motif : quand une feuille imprimée devient une surface pliée et unie, l’appareil sur trépied déclenche de nouveau tout de suite. Auparavant, il prenait ce motif moins détaillé pour un flou et attendait quelques secondes.
-
-Et une courte vidéo d’aperçu sur l’App Store.
+Mise à jour des visuels de l’App Store. Rien ne change dans l’app.
