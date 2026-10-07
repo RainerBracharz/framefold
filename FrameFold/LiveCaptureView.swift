@@ -395,135 +395,23 @@ struct LiveCaptureView: View {
     /// Bedienleiste strukturell nicht verschwinden.
     private func captureView(project: Project) -> some View {
         GeometryReader { geo in
-        ZStack(alignment: .bottom) {
-            // Feste Größe: sonst macht scaledToFill das Bild breiter als den
-            // Bildschirm – der ganze Stapel wird überbreit und die Bedienung
-            // rutscht seitlich hinaus. Genau das war der alte Fehler.
-            cameraLayer
-                .frame(width: geo.size.width, height: geo.size.height)
-                .clipped()
-                // Kopfhörer-/AirPods-Tasten und BT-Fernbedienungen lösen aus,
-                // ohne das Stativ zu berühren.
-                .background(HardwareShutterBridge { controller.captureNow() })
-
-            // Aufnahme-Blitz über dem Kamerabild, unter der Bedienung
-            if flashOpacity > 0 {
-                Color.white.opacity(flashOpacity)
-                    .frame(width: geo.size.width, height: geo.size.height)
-                    .allowsHitTesting(false)
-            }
-
-            VStack(spacing: 12) {
-                // Drei Gesichter derselben Kamera:
-                //   Einfach     – Spielzeug: großer Zähler, sonst nichts
-                //   Erweitert   – Werkzeug: Pegel + kompakter Stand
-                //   Aldo Tolino – Messinstrument: Labor-HUD mit Zahlen
-                switch mode {
-                case .basic:    bigCounter
-                case .advanced: advancedStatusRow
-                case .tolino:   tolinoHUD
+            // Breites Fenster – das aufgeklappte iPhone Duo oder ein groß
+            // gezogenes iPhone-Mirroring-Fenster: Die Fläche wird wie ein
+            // aufgeschlagenes Heft geteilt. Links die Kamera, rechts der
+            // Film bisher. Auf dem Duo liegt die Trennung genau im Falz.
+            let split = Self.splitsLikeABook(geo.size)
+            let windowWidth = geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing
+            let stageWidth = split
+                ? max(geo.size.width * 0.4, windowWidth / 2 - geo.safeAreaInsets.leading)
+                : geo.size.width
+            HStack(spacing: 0) {
+                captureStage(project: project, size: CGSize(width: stageWidth, height: geo.size.height))
+                    .overlay(alignment: .topLeading) { sucherTools }
+                    .overlay(alignment: .topTrailing) { if !split { loopTile } }
+                if split {
+                    filmPage
+                        .frame(width: geo.size.width - stageWidth, height: geo.size.height)
                 }
-
-                HStack(spacing: 8) {
-                    statusBadge
-                    // Im Einfach-Modus nur zeigen, wenn die App tatsächlich
-                    // „aus der Hand" erkannt hat – dort ist jedes zusätzliche
-                    // Bedienelement eines zu viel, aber diese Abweichung
-                    // erklärt das Verhalten der Kamera.
-                    // Auch zeigen, sobald die Automatik abgeschaltet ist –
-                    // sonst verschwindet im Einfach-Modus genau der Knopf,
-                    // mit dem man gerade auf „Stativ" gestellt hat, und es
-                    // gibt keinen Weg zurück.
-                    if mode.showsAdvanced || controller.rig == .handheld
-                        || !controller.rigIsAutomatic {
-                        rigBadge
-                    }
-                }
-
-                if let focusHint = controller.focusHint {
-                    Text(focusHint)
-                        .font(Theme.mono(11))
-                        .foregroundStyle(Theme.darkroom)
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(2)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 10)
-                        .background(Theme.amber)
-                }
-
-                if let hint = controller.hint {
-                    // Im Einfach-Modus sind die Einstellungen unerreichbar –
-                    // der Hinweis, der dorthin verweist, braucht eine einfache
-                    // Fassung. Alle anderen gelten wörtlich.
-                    //
-                    // Hier stand bis zur Lokalisierung `hint.contains("Einstellungen")`.
-                    // Das ist eine Prüfung auf ein deutsches Wort in einem Text,
-                    // der übersetzt wird — sie hätte auf Englisch nie mehr
-                    // gegriffen, ohne dass es auffällt. `hint` trägt ohnehin nur
-                    // die eine Unruhe-Meldung, die Prüfung war überflüssig.
-                    Text(verbatim: mode == .basic
-                         ? String(localized: "Zu viel Wackeln – leg das iPhone irgendwo auf oder lehne es an.")
-                         : hint)
-                        .font(Theme.mono(11))
-                        .foregroundStyle(Theme.darkroom)
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(2)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 10)
-                        .background(Theme.amber)
-                }
-
-                if mode.showsAdvanced, !recentThumbs.isEmpty {
-                    thumbStrip(project: project)
-                }
-
-                controlRow(project: project)
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 24)
-            .frame(width: geo.size.width)
-        }
-        .frame(width: geo.size.width, height: geo.size.height)
-        .clipped()
-        }
-        .overlay(alignment: .topLeading) {
-            // Werkzeuge erst ab „Erweitert"
-            if mode.showsAdvanced {
-                VStack(spacing: 8) {
-                    sucherButton("camera.metering.center.weighted", label: "Kamera neu fixieren") {
-                        controller.refixCamera()
-                    }
-                    if referenceImage == nil {
-                        PhotosPicker(selection: $refPickerItem, matching: .images) {
-                            sucherIcon("photo")
-                        }
-                    } else {
-                        sucherButton("photo.fill", label: "Vergleichsbild entfernen") { referenceImage = nil }
-                    }
-                }
-                .padding(16)
-            }
-        }
-        .overlay(alignment: .topTrailing) {
-            // Live-Loop: Der Film wächst mit jedem Bild – in jedem Modus,
-            // weil genau das der Lohn der Arbeit ist. Antippen vergrößert.
-            if controller.loopFrames.count >= 2 {
-                Button {
-                    withAnimation(.snappy(duration: 0.25)) { loopLarge.toggle() }
-                } label: {
-                    VStack(alignment: .leading, spacing: 4) {
-                        LiveLoopView(frames: controller.loopFrames)
-                            .frame(width: loopLarge ? 200 : 88)
-                            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.6), lineWidth: 1))
-                        CatalogLabel("Der Film bisher", color: Theme.paperOnDark, size: 8)
-                    }
-                    .padding(6)
-                    .background(Theme.darkroom.opacity(0.55))
-                }
-                .buttonStyle(.plain)
-                .padding(16)
-                .accessibilityLabel(Text("Der Film bisher"))
-                .accessibilityHint(Text("Antippen zum Vergrößern"))
             }
         }
         .onAppear {
@@ -609,6 +497,184 @@ struct LiveCaptureView: View {
             }
         }
     }
+
+    /// Ab wann die Fläche geteilt wird: deutlich breiter als hoch und breit
+    /// genug, dass beide Seiten ein Hochformat-Bild tragen.
+    static func splitsLikeABook(_ size: CGSize) -> Bool {
+        size.width >= 700 && size.width > size.height * 1.15
+    }
+
+    /// Die Kamera-Seite: Kamerabild, darüber Status und Bedienung.
+    private func captureStage(project: Project, size: CGSize) -> some View {
+
+        ZStack(alignment: .bottom) {
+            // Feste Größe: sonst macht scaledToFill das Bild breiter als den
+            // Bildschirm – der ganze Stapel wird überbreit und die Bedienung
+            // rutscht seitlich hinaus. Genau das war der alte Fehler.
+            cameraLayer
+                .frame(width: size.width, height: size.height)
+                .clipped()
+                // Kopfhörer-/AirPods-Tasten und BT-Fernbedienungen lösen aus,
+                // ohne das Stativ zu berühren.
+                .background(HardwareShutterBridge { controller.captureNow() })
+
+            // Aufnahme-Blitz über dem Kamerabild, unter der Bedienung
+            if flashOpacity > 0 {
+                Color.white.opacity(flashOpacity)
+                    .frame(width: size.width, height: size.height)
+                    .allowsHitTesting(false)
+            }
+
+            VStack(spacing: 12) {
+                // Drei Gesichter derselben Kamera:
+                //   Einfach     – Spielzeug: großer Zähler, sonst nichts
+                //   Erweitert   – Werkzeug: Pegel + kompakter Stand
+                //   Aldo Tolino – Messinstrument: Labor-HUD mit Zahlen
+                switch mode {
+                case .basic:    bigCounter
+                case .advanced: advancedStatusRow
+                case .tolino:   tolinoHUD
+                }
+
+                HStack(spacing: 8) {
+                    statusBadge
+                    // Im Einfach-Modus nur zeigen, wenn die App tatsächlich
+                    // „aus der Hand" erkannt hat – dort ist jedes zusätzliche
+                    // Bedienelement eines zu viel, aber diese Abweichung
+                    // erklärt das Verhalten der Kamera.
+                    // Auch zeigen, sobald die Automatik abgeschaltet ist –
+                    // sonst verschwindet im Einfach-Modus genau der Knopf,
+                    // mit dem man gerade auf „Stativ" gestellt hat, und es
+                    // gibt keinen Weg zurück.
+                    if mode.showsAdvanced || controller.rig == .handheld
+                        || !controller.rigIsAutomatic {
+                        rigBadge
+                    }
+                }
+
+                if let focusHint = controller.focusHint {
+                    Text(focusHint)
+                        .font(Theme.mono(11))
+                        .foregroundStyle(Theme.darkroom)
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(2)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Theme.amber)
+                }
+
+                if let hint = controller.hint {
+                    // Im Einfach-Modus sind die Einstellungen unerreichbar –
+                    // der Hinweis, der dorthin verweist, braucht eine einfache
+                    // Fassung. Alle anderen gelten wörtlich.
+                    //
+                    // Hier stand bis zur Lokalisierung `hint.contains("Einstellungen")`.
+                    // Das ist eine Prüfung auf ein deutsches Wort in einem Text,
+                    // der übersetzt wird — sie hätte auf Englisch nie mehr
+                    // gegriffen, ohne dass es auffällt. `hint` trägt ohnehin nur
+                    // die eine Unruhe-Meldung, die Prüfung war überflüssig.
+                    Text(verbatim: mode == .basic
+                         ? String(localized: "Zu viel Wackeln – leg das iPhone irgendwo auf oder lehne es an.")
+                         : hint)
+                        .font(Theme.mono(11))
+                        .foregroundStyle(Theme.darkroom)
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(2)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Theme.amber)
+                }
+
+                if mode.showsAdvanced, !recentThumbs.isEmpty {
+                    thumbStrip(project: project)
+                }
+
+                controlRow(project: project)
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 24)
+            .frame(width: size.width)
+        }
+        .frame(width: size.width, height: size.height)
+        .clipped()
+    }
+
+    /// Werkzeuge oben links im Sucher – erst ab „Erweitert".
+    @ViewBuilder
+    private var sucherTools: some View {
+        // Werkzeuge erst ab „Erweitert"
+        if mode.showsAdvanced {
+            VStack(spacing: 8) {
+                sucherButton("camera.metering.center.weighted", label: "Kamera neu fixieren") {
+                    controller.refixCamera()
+                }
+                if referenceImage == nil {
+                    PhotosPicker(selection: $refPickerItem, matching: .images) {
+                        sucherIcon("photo")
+                    }
+                } else {
+                    sucherButton("photo.fill", label: "Vergleichsbild entfernen") { referenceImage = nil }
+                }
+            }
+            .padding(16)
+        }
+    }
+
+    /// Live-Loop als Kachel im Sucher: Der Film wächst mit jedem Bild – in
+    /// jedem Modus, weil genau das der Lohn der Arbeit ist.
+    @ViewBuilder
+    private var loopTile: some View {
+        // Live-Loop: Der Film wächst mit jedem Bild – in jedem Modus,
+        // weil genau das der Lohn der Arbeit ist. Antippen vergrößert.
+        if controller.loopFrames.count >= 2 {
+            Button {
+                withAnimation(.snappy(duration: 0.25)) { loopLarge.toggle() }
+            } label: {
+                VStack(alignment: .leading, spacing: 4) {
+                    LiveLoopView(frames: controller.loopFrames)
+                        .frame(width: loopLarge ? 200 : 88)
+                        .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.6), lineWidth: 1))
+                    CatalogLabel("Der Film bisher", color: Theme.paperOnDark, size: 8)
+                }
+                .padding(6)
+                .background(Theme.darkroom.opacity(0.55))
+            }
+            .buttonStyle(.plain)
+            .padding(16)
+            .accessibilityLabel(Text("Der Film bisher"))
+            .accessibilityHint(Text("Antippen zum Vergrößern"))
+        }
+    }
+
+    /// Die Film-Seite im geteilten Sucher: der bisherige Film groß, wie die
+    /// rechte Seite eines aufgeschlagenen Hefts.
+    private var filmPage: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            CatalogLabel("Der Film bisher", color: Theme.paperOnDark.opacity(0.7))
+            if controller.loopFrames.isEmpty {
+                Rectangle()
+                    .stroke(Theme.paperOnDark.opacity(0.25), style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                    .aspectRatio(3.0 / 4.0, contentMode: .fit)
+                    .overlay {
+                        FoldMark(size: 34, color: Theme.paperOnDark.opacity(0.35))
+                    }
+            } else {
+                LiveLoopView(frames: controller.loopFrames)
+                    .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.6), lineWidth: 1))
+            }
+            if mode.showsAdvanced {
+                Text(verbatim: lengthHint)
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.paperOnDark.opacity(0.6))
+            }
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Theme.darkroom)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text("Der Film bisher"))
+    }
+
 
     /// Kamerabild samt Überblendungen (Zwiebelhaut, Referenz, Raster, Waage).
     @ViewBuilder

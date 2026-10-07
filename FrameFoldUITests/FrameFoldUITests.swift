@@ -315,7 +315,10 @@ final class FrameFoldUITests: XCTestCase {
         shotIndex += 1
         let file = String(format: "%02d-%@", shotIndex, name)
         usleep(600_000)   // Übergänge ausklingen lassen, sonst halb ausgeblendete Knöpfe
-        let image = XCUIScreen.main.screenshot()
+        // Das Fenster der App statt des Hauptbildschirms: Auf dem iPhone Duo
+        // gibt es zwei Bildschirme, und `XCUIScreen.main` läuft aufgeklappt
+        // in eine Zeitüberschreitung.
+        let image = app.windows.firstMatch.exists ? app.windows.firstMatch.screenshot() : app.screenshot()
 
         let attachment = XCTAttachment(screenshot: image)
         attachment.name = file
