@@ -48,7 +48,7 @@ ATTRIBUTES = {
   type: "APP_ENHANCEMENTS",
   description: DESCRIPTION,
   notes: NOTES,
-  publishStartDate: "2026-10-23T00:00:00Z"   # Verkaufsstart des iPhone Duo,
+  publishStartDate: "2026-10-23T00:00:00Z",   # Verkaufsstart des iPhone Duo
   deviceFamilies: %w[IPHONE APPLE_WATCH],
   locales: %w[en-US de-DE fr-FR],
   supplementalMaterialsUris: [
