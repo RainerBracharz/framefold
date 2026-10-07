@@ -7,6 +7,9 @@ struct OnboardingView: View {
 
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     @State private var page = 0
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    /// Breite Fläche (aufgeklapptes iPhone Duo): Karten als Doppelseite.
+    private var isSpread: Bool { horizontalSizeClass == .regular }
 
     var body: some View {
         ZStack {
@@ -58,6 +61,7 @@ struct OnboardingView: View {
                         withAnimation(.smooth(duration: 0.35)) { page += 1 }
                     }
                     .buttonStyle(InkButtonStyle())
+                    .frame(maxWidth: isSpread ? 360 : .infinity)
                     .padding(.horizontal, 26)
                     .padding(.bottom, 28)
                 }
@@ -67,11 +71,12 @@ struct OnboardingView: View {
 
     // 1 – Was die App macht
     private var cardOne: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        spread {
             FoldedPaperHero(seed: 11, accent: Theme.amber, animatesLight: true)
-                .frame(height: 210)
+                .frame(height: isSpread ? 320 : 210)
                 .overlay(Rectangle().stroke(Theme.ink, lineWidth: 1))
                 .hung()
+        } right: {
             CatalogLabel("Bild · Objekt · Bild")
             Text("Aus deiner Arbeit\nwird eine Stopmotion.")
                 .font(Theme.serifItalic(27))
@@ -88,13 +93,14 @@ struct OnboardingView: View {
 
     // 2 – Die zwei Wege
     private var cardTwo: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        spread {
             CatalogLabel("Zwei Wege")
             Text("Video wählen —\noder live aufnehmen.")
                 .font(Theme.serifItalic(27))
                 .foregroundStyle(Theme.ink)
                 .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
+        } right: {
 
             wayRow(icon: "film",
                    title: "Video wählen",
@@ -107,13 +113,14 @@ struct OnboardingView: View {
 
     // 3 – Modus wählen
     private var cardThree: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        spread {
             CatalogLabel("Zum Schluss")
             Text("Wie möchtest du\narbeiten?")
                 .font(Theme.serifItalic(27))
                 .foregroundStyle(Theme.ink)
                 .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
+        } right: {
 
             modeChoice(mode: .basic,
                        title: "Einfach",
@@ -129,6 +136,26 @@ struct OnboardingView: View {
             Button("Los geht's") { onFinish() }
                 .buttonStyle(InkButtonStyle())
                 .padding(.top, 4)
+        }
+    }
+
+    /// Eine Karte: schmal untereinander, breit als Doppelseite – links und
+    /// rechts des Falzes je eine Hälfte.
+    @ViewBuilder
+    private func spread<L: View, R: View>(@ViewBuilder _ left: () -> L,
+                                           @ViewBuilder right: () -> R) -> some View {
+        if isSpread {
+            HStack(alignment: .center, spacing: 40) {
+                VStack(alignment: .leading, spacing: 16) { left() }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                VStack(alignment: .leading, spacing: 16) { right() }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        } else {
+            VStack(alignment: .leading, spacing: 16) {
+                left()
+                right()
+            }
         }
     }
 

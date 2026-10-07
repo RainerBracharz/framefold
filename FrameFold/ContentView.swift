@@ -4,6 +4,7 @@ import AVKit
 import Combine   // Timer.publish(…).autoconnect() — ohne diesen Import warnt der Compiler
 
 struct ContentView: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Binding var selectedTab: Int
     @StateObject private var viewModel = ProcessingViewModel()
     @EnvironmentObject var store: ProjectStore
@@ -64,39 +65,70 @@ struct ContentView: View {
 
     private var recentProjects: [Project] { Array(store.projects.prefix(4)) }
 
+    /// Breite Fläche (aufgeklapptes iPhone Duo): Die Seite wird wie ein
+    /// aufgeschlagenes Heft gesetzt – links die Werk-Tafel, rechts Gruß,
+    /// Zweitweg und die letzten Werke. Schmal bleibt alles untereinander.
+    private var isSpread: Bool { horizontalSizeClass == .regular }
+
+    private var greetingBlock: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            CatalogLabel(verbatim: greetingLine)
+            Text(mode == .basic ? "Was falten wir\nheute?" : "Woran arbeitest du\nheute?")
+                .font(Theme.serifItalic(28))
+                .foregroundStyle(Theme.ink)
+                .lineSpacing(2)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 24)
+        .padding(.top, 12)
+        .padding(.bottom, 22)
+    }
+
     private var startView: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                // 1 – Begrüßung statt Ansage
-                VStack(alignment: .leading, spacing: 10) {
-                    CatalogLabel(verbatim: greetingLine)
-                    Text(mode == .basic ? "Was falten wir\nheute?" : "Woran arbeitest du\nheute?")
-                        .font(Theme.serifItalic(28))
-                        .foregroundStyle(Theme.ink)
-                        .lineSpacing(2)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 24)
-                .padding(.top, 12)
-                .padding(.bottom, 22)
+                if isSpread {
+                    HStack(alignment: .top, spacing: 0) {
+                        PhotosPicker(selection: $pickerItem, matching: .videos) {
+                            heroPlate
+                        }
+                        .padding(.leading, 24)
+                        .padding(.top, 16)
+                        .frame(maxWidth: .infinity)
 
-                // 2 + 3 – die Werk-Tafel ist der Hauptgriff
-                PhotosPicker(selection: $pickerItem, matching: .videos) {
-                    heroPlate
-                }
-                .padding(.horizontal, 24)
+                        VStack(alignment: .leading, spacing: 0) {
+                            greetingBlock
+                            Button { selectedTab = 1 } label: {
+                                secondaryAction
+                            }
+                            .buttonStyle(.plain)
+                            .padding(.horizontal, 24)
+                            if !recentProjects.isEmpty { recentStrip }
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                } else {
+                    // 1 – Begrüßung statt Ansage
+                    greetingBlock
 
-                // 4 – Zweitweg, leise
-                Button { selectedTab = 1 } label: {
-                    secondaryAction
-                }
-                .buttonStyle(.plain)
-                .padding(.horizontal, 24)
-                .padding(.top, 14)
+                    // 2 + 3 – die Werk-Tafel ist der Hauptgriff
+                    PhotosPicker(selection: $pickerItem, matching: .videos) {
+                        heroPlate
+                    }
+                    .padding(.horizontal, 24)
 
-                // 5 – die Werke als gefaltete Kacheln
-                if !recentProjects.isEmpty { recentStrip }
+                    // 4 – Zweitweg, leise
+                    Button { selectedTab = 1 } label: {
+                        secondaryAction
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 14)
+
+                    // 5 – die Werke als gefaltete Kacheln
+                    if !recentProjects.isEmpty { recentStrip }
+                }
 
                 Spacer(minLength: 26)
             }
@@ -156,7 +188,7 @@ struct ContentView: View {
                 seed: FoldSeed.make(latestProject?.id) &+ foldNudge,
                 accent: latestProject.map { Theme.accent(for: $0.id) } ?? Theme.violet,
                 tilt: lightTilt.offset)
-                .frame(height: 248)
+                .frame(height: isSpread ? 340 : 248)
                 .overlay {
                     // Antippen faltet neu – ein kleines Spielzeug im Einfach-Modus
                     if mode == .basic {

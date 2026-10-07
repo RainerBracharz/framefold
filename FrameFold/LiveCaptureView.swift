@@ -30,6 +30,7 @@ struct LiveCaptureView: View {
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     private var mode: AppMode { AppMode.current(modeRaw) }
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     /// Kurzer weißer Blitz im Sucher bei jeder Aufnahme – sichtbar auch aus
     /// zwei Metern Entfernung, wenn man am Set steht statt am Display.
     @State private var flashOpacity = 0.0
@@ -156,7 +157,13 @@ struct LiveCaptureView: View {
 
     private var projectChooser: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
+            // Breit (aufgeklapptes iPhone Duo) als Doppelseite: links Frage
+            // und „Neues Werk", rechts die Werke.
+            let columns = horizontalSizeClass == .regular
+                ? AnyLayout(HStackLayout(alignment: .top, spacing: 0))
+                : AnyLayout(VStackLayout(alignment: .leading, spacing: 0))
+            columns {
+              VStack(alignment: .leading, spacing: 0) {
                 // Dunkelkammer-Fassung der Begrüßung
                 VStack(alignment: .leading, spacing: 10) {
                     CatalogLabel("Dunkelkammer", color: Theme.paperOnDark.opacity(0.55))
@@ -175,10 +182,15 @@ struct LiveCaptureView: View {
                 .padding(.top, 10)
                 .padding(.bottom, 22)
 
+                if horizontalSizeClass == .regular { newWorkButton }
+              }
+              .frame(maxWidth: .infinity, alignment: .leading)
+
+              VStack(alignment: .leading, spacing: 0) {
                 if store.projects.isEmpty {
                     VStack(spacing: 0) {
                         FoldedPaperHero(seed: 33, accent: Theme.violet, animatesLight: false)
-                            .frame(height: 150)
+                            .frame(height: horizontalSizeClass == .regular ? 260 : 150)
                             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.3), lineWidth: 1))
                         Text("Noch kein Werk – leg eines an, dann kann die Kamera loslegen.")
                             .font(Theme.mono(11.5))
@@ -200,16 +212,12 @@ struct LiveCaptureView: View {
                     .padding(.horizontal, 24)
                 }
 
-                Button {
-                    showNewProject = true
-                } label: {
-                    Label("Neues Werk", systemImage: "plus")
-                }
-                .buttonStyle(DarkPrimaryButtonStyle())
-                .padding(.horizontal, 24)
-                .padding(.top, 16)
+                if horizontalSizeClass != .regular { newWorkButton }
 
                 Spacer(minLength: 24)
+              }
+              .frame(maxWidth: .infinity, alignment: .leading)
+              .padding(.top, horizontalSizeClass == .regular ? 10 : 0)
             }
         }
         .alert("Neues Projekt", isPresented: $showNewProject) {
@@ -221,6 +229,17 @@ struct LiveCaptureView: View {
             }
             Button("Abbrechen", role: .cancel) { newProjectName = "" }
         }
+    }
+
+    private var newWorkButton: some View {
+        Button {
+            showNewProject = true
+        } label: {
+            Label("Neues Werk", systemImage: "plus")
+        }
+        .buttonStyle(DarkPrimaryButtonStyle())
+        .padding(.horizontal, 24)
+        .padding(.top, 16)
     }
 
     // MARK: Sofort-Ergebnis

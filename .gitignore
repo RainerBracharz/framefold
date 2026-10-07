@@ -46,3 +46,6 @@ localization/xcloc/
 # Eval: erzeugte Videos und Ergebnisse (reproduzierbar, siehe eval/README.md)
 eval/videos/
 eval/results/
+
+# Duo-Screenshots: erzeugt, wie fastlane/screenshots nicht im Repository
+fastlane/screenshots-duo
