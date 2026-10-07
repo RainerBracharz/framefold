@@ -26,20 +26,21 @@ KEY_PATH  = File.expand_path("~/.appstoreconnect/AuthKey_#{KEY_ID}.p8")
 abort("Schlüssel fehlt: #{KEY_PATH}") unless File.exist?(KEY_PATH)
 # Apple begrenzt Beschreibung und Notiz auf je 1000 Zeichen.
 
-NAME = "FrameFold 2.0 – The film grows as you work"
+NAME = "FrameFold 2.1 – Folds open on iPhone Duo"
 
 DESCRIPTION = <<~TEXT.strip
   FrameFold turns a session at the craft table into a stop-motion film. It fires by itself whenever the hands leave the frame and keeps only sharp frames – all on-device, no account, no cloud.
 
-  Version 2.0 adds two things. The film grows as you work: from the second frame on, the stop-motion loops while the session is still running – in the viewfinder, and on a studio monitor next to the live camera. In a class, everyone sees the hands at work and the piece taking shape.
+  Version 2.1 is optimized for iPhone Duo. Unfolded, the viewfinder opens like a book: the camera on the left page, the film so far looping on the right, with the split exactly on the fold. Fold the phone mid-session and the capture simply carries on, on either display. An app for artists who fold paper, on a phone that folds.
 
-  And every work can be printed as a ready-to-cut flip book: A4 sheets with cut lines, a binding edge and numbered leaves. Image, object, image – and back to an object you can hold.
+  2.1 also reworks the auto-shutter: it waits until fingertips have left the frame, works in low and flickering light, skips duplicate frames and tells a plainer subject from a real loss of focus.
 
   Built for Austrian artist Aldo Tolino. In English, German and French, with an Apple Watch remote and VoiceOver support.
 TEXT
 
+# „Helpful Details": Apple bittet, die Duo-Optimierung hier zu nennen.
 NOTES = <<~TEXT.strip
-  Made by a one-person studio in Lower Austria. The source code is public, so every claim above can be checked. Flip books and stop-motion loops work well in classrooms – art teachers are a core audience.
+  Optimized for iPhone Duo: built with the iOS 27.1 SDK, tested on both displays and across folding and unfolding in the simulator, with iPhone Duo screenshots in all three languages. Made by a one-person studio in Lower Austria. The source code is public, including the evaluation behind the new auto-shutter.
 TEXT
 
 ATTRIBUTES = {
@@ -47,7 +48,7 @@ ATTRIBUTES = {
   type: "APP_ENHANCEMENTS",
   description: DESCRIPTION,
   notes: NOTES,
-  publishStartDate: "2026-10-06T00:00:00Z",
+  publishStartDate: "2026-10-23T00:00:00Z"   # Verkaufsstart des iPhone Duo,
   deviceFamilies: %w[IPHONE APPLE_WATCH],
   locales: %w[en-US de-DE fr-FR],
   supplementalMaterialsUris: [

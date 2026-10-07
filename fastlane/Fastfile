@@ -15,6 +15,12 @@
 
 default_platform(:ios)
 
+# Für das iPhone Duo muss mit Xcode 27.1 gebaut werden (iOS-27.1-SDK). Solange
+# das noch nicht das Standard-Xcode ist, hier gezielt wählen. Liegt es nicht
+# unter diesem Pfad, baut fastlane mit dem Standard-Xcode wie bisher.
+XCODE_DUO = "/Applications/Xcode-27.1.app/Contents/Developer"
+ENV["DEVELOPER_DIR"] = XCODE_DUO if File.directory?(XCODE_DUO) && ENV["DEVELOPER_DIR"].to_s.empty?
+
 APP_ID     = "com.bracharz.framefold"
 SCHEME     = "FrameFold"
 PROJECT    = "FrameFold.xcodeproj"
@@ -126,6 +132,12 @@ platform :ios do
     # und wartet, bis Apple sie verarbeitet hat. Ohne Videos: nichts tun.
     previews = Dir[File.expand_path("previews/*/framefold-preview.mp4", __dir__)]
     sh("ruby", File.expand_path("../scripts/app_preview.rb", __dir__), "upload") unless previews.empty?
+
+    # Schritt 2b: Screenshots für das iPhone Duo, falls vorbereitet. deliver
+    # kennt den Gerätetyp noch nicht – scripts/duo_screenshots.rb lädt sie
+    # über die API.
+    duo_shots = Dir[File.expand_path("screenshots-duo/*/*/duo-*.png", __dir__)]
+    sh("ruby", File.expand_path("../scripts/duo_screenshots.rb", __dir__), "upload") unless duo_shots.empty?
 
     # Schritt 3: warten, bis der Build verarbeitet ist, dann einreichen.
     submit
