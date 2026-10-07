@@ -1,5 +1,7 @@
 # Eval der Bildauswahl
 
+> Für den Auto-Auslöser der Live-Kamera gibt es ein eigenes Eval: [LIVE.md](LIVE.md).
+
 Misst, wie gut FrameFold aus einem Arbeitsvideo die richtigen Bilder wählt:
 genau eins pro Arbeitsschritt, ohne Hand, scharf, ohne Duplikate.
 
