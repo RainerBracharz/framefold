@@ -328,6 +328,26 @@ check(near(Algorithms.maxBlockDifference(pd, pa, width: pw, height: ph), 52.5, 1
 check(Algorithms.maxBlockDifference([1, 2], [1, 2, 3], width: 2, height: 1) == 0, "ungleiche Größe → 0")
 check(PipelineSettings().dedupBlockFactor == 0.5, "Standard-Faktor 0,5 wie im Eval")
 
+// MARK: Kantenschärfe (Live-Eval, eval/LIVE.md)
+// Erwartungswerte aus eval/live_controller.py auf denselben Daten.
+print("edgeAcutance:")
+var stepImg = [UInt8](repeating: 40, count: pw * ph)
+var lowImg = [UInt8](repeating: 100, count: pw * ph)
+for y in 0..<ph { for x in 12..<pw { stepImg[y * pw + x] = 200; lowImg[y * pw + x] = 120 } }
+var rampImg = stepImg
+for y in 0..<ph {
+    rampImg[y * pw + 10] = 72; rampImg[y * pw + 11] = 104
+    rampImg[y * pw + 12] = 136; rampImg[y * pw + 13] = 168
+}
+check(near(Algorithms.edgeAcutance(gray: pa, width: pw, height: ph), 8.487015724, 1e-4), "Muster = Python-Wert")
+check(near(Algorithms.edgeAcutance(gray: stepImg, width: pw, height: ph), 2.0), "harte Kante → 2,0")
+check(near(Algorithms.edgeAcutance(gray: lowImg, width: pw, height: ph), 2.0),
+      "gleiche Kante mit einem Achtel Kontrast → unverändert 2,0")
+check(near(Algorithms.edgeAcutance(gray: rampImg, width: pw, height: ph), 0.5), "weiche Kante → 0,5")
+check(Algorithms.edgeAcutance(gray: [UInt8](repeating: 7, count: pw * ph), width: pw, height: ph) == 0,
+      "glatte Fläche → 0")
+check(Algorithms.edgeAcutance(gray: [1, 2], width: 2, height: 1) == 0, "zu klein → 0")
+
 // MARK: Daumenkino
 print("flipbookLayout / flipbookSequence:")
 let fbQuer = Algorithms.flipbookLayout(imageAspect: 16.0 / 9.0, pageWidth: 595.2, pageHeight: 841.8,

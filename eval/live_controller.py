@@ -62,15 +62,23 @@ def edge_acutance(gray, top=0.005):
     stärksten Kanten das Verhältnis von Krümmung (Laplace) zu Steigung
     (Gradient). Eine scharfe Kante ist steil UND schmal; Unschärfe macht sie
     breiter, das Verhältnis sinkt. Ein glatteres Motiv hat weniger und
-    schwächere Kanten, aber gleich schmale – das Verhältnis bleibt."""
+    schwächere Kanten, aber gleich schmale – das Verhältnis bleibt.
+    Gleiche Rechnung wie `Algorithms.edgeAcutance` in der App: nur Pixel mit
+    vollständiger 3 × 3-Umgebung, alle mit Gradient ≥ dem n-t-größten."""
     g = gray.astype(np.float32)
+    if g.shape[0] <= 6 or g.shape[1] <= 6:
+        return 0.0
     gx = cv2.Sobel(g, cv2.CV_32F, 1, 0, ksize=3) / 8
     gy = cv2.Sobel(g, cv2.CV_32F, 0, 1, ksize=3) / 8
-    grad = np.hypot(gx, gy).ravel()
-    lap = cv2.dilate(np.abs(cv2.Laplacian(g, cv2.CV_32F, ksize=1)), np.ones((3, 3), np.uint8)).ravel()
+    grad = np.hypot(gx, gy)[2:-2, 2:-2].ravel()
+    lap = np.abs(cv2.Laplacian(g, cv2.CV_32F, ksize=1))[1:-1, 1:-1]
+    lapd = cv2.dilate(lap, np.ones((3, 3), np.uint8), borderType=cv2.BORDER_CONSTANT, borderValue=0)[1:-1, 1:-1].ravel()
     n = max(8, int(grad.size * top))
-    idx = np.argpartition(grad, -n)[-n:]
-    return float(np.median(lap[idx] / np.maximum(grad[idx], 1e-3)))
+    cut = np.partition(grad, -n)[-n]
+    if cut <= 0:
+        return 0.0
+    sel = grad >= cut
+    return float(np.median(lapd[sel] / np.maximum(grad[sel], 1e-3)))
 
 
 def max_block_diff(a, b, grid):

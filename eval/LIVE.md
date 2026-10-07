@@ -88,9 +88,17 @@ Gewählte Einstellung:
 - Nicht nachgebaut: Intervallmodus, manueller Auslöser, Wechsel
   Stativ/Hand mitten in der Sitzung.
 
-## Noch nicht in der App
+## In der App seit 2.1
 
-Die Änderungen stehen nur in `live_controller.py`. Für die App wären es:
-`Algorithms.maxBlockDifference` gegen das Vorbild statt `motionScore` (am
-Stativ), ein Kantenmaß neben `laplacianVariance`, zwei Zeilen in
-`acceptMotifChange()` und der Vergleich mit dem letzten Bild vor `capture()`.
+- `LiveCaptureController.motionValue`: am Stativ `Algorithms.maxBlockDifference`
+  gegen das Vorbild, aus der Hand `motionScoreGainCompensated`. Beide Maße
+  werden eingemessen, beim Wechsel Stativ/Hand tauscht die Schwelle.
+- `Algorithms.edgeAcutance` (mit Paritätstest in `linux-tests/main.swift`)
+  als Gegenprobe in `acceptMotifChange()`, das jetzt auch `sharpAtLock` setzt.
+- Vergleich mit dem zuletzt abgelegten Bild vor `capture()`.
+
+Im Simulator geprüft: Der Vorschau-Test läuft mit der Faltfolge (bedruckt →
+glatt) bis zum Daumenkino, die Bilder sind ohne Hand. Der Debug-Build
+rechnet das Kantenmaß unoptimiert (53 ms statt 1,8 ms je Bild); die
+Simulator-Kamera läuft dadurch langsamer und liefert in derselben Zeit
+6 statt 8 Bilder. Für eine neue App-Vorschau also länger aufnehmen.

@@ -1,3 +1,8 @@
-FrameFold 2.0.2
+FrameFold 2.1
 
-Updated App Store media. Nothing changes in the app itself.
+The auto-shutter on a tripod has been reworked from the ground up.
+
+• Slow hands: the camera now waits until your fingertips have left the frame, too.
+• Low light and flickering lamps: your moves are detected reliably, no more missing frames.
+• No duplicate frames: a reach that changes nothing, or a passing shadow, no longer fires the shutter.
+• Focus: the camera now tells a plainer subject from a real loss of focus. It fires right away for the first and refocuses for the second.

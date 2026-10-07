@@ -245,8 +245,13 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     /// Sekunden Stabilität bis zum Auto-Shutter (live änderbar)
     @Published var stableSeconds: Double = 0.8
-    /// Bewegungsschwelle (mittlere Graustufendifferenz, 0–255; live änderbar)
+    /// Bewegungsschwelle (Graustufendifferenz, 0–255; live änderbar). Am
+    /// Stativ gemessen im stärksten Rasterfeld, aus der Hand im Bildmittel –
+    /// siehe `motionValue(_:_:width:height:for:)`.
     @Published var motionThreshold: Double = 2.0
+    /// Eingemessene Schwelle je Aufnahmeart. Die beiden Bewegungsmaße haben
+    /// verschiedene Größenordnungen; beim Wechsel Stativ/Hand wird getauscht.
+    private var thresholdByRig: [Rig: Double] = [:]
     /// Handprüfung aktiv (live änderbar)
     @Published var checkHands = true
     /// Aktueller Bewegungswert (für den Pegel im Sucher)
@@ -352,7 +357,21 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     private func apply(rig new: Rig) {
         let wasHandheld = rig == .handheld
+        // Jede Aufnahmeart hat ihr eigenes Bewegungsmaß und damit ihre
+        // eigene Schwelle. Die aktuelle merken (der Nutzer kann sie
+        // verstellt haben), die der neuen Art einsetzen.
+        if let samples = calibrationSamples {
+            // Mitten im Einmessen: Die beiden Messreihen tauschen die Rollen.
+            calibrationSamples = calibrationSamplesOther
+            calibrationSamplesOther = samples
+        } else {
+            thresholdByRig[rig] = motionThreshold
+            if let known = thresholdByRig[new] { motionThreshold = known }
+        }
         rig = new
+        // Das Vorbild bleibt, aber der nächste Bewegungswert stammt aus dem
+        // anderen Maß – eine laufende Ruhephase beginnt neu.
+        stableSince = nil
         if new.locksFocus {
             // Wieder abgestellt: einmal sauber scharfstellen und fixieren.
             // Gedrosselt wie der Wächter – wer sich übers Stativ beugt und es
@@ -394,6 +413,17 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// verhindern soll. Der langsame Zerfall (Halbwertszeit ~35 s) lässt
     /// echte Motivwechsel zu, ohne den Fehler zu verdecken.
     private var sharpReference: Double = 0
+    /// Kantenschärfe des aktuellen Sucherbilds und ihr Bestwert bei ruhiger
+    /// Szene (`Algorithms.edgeAcutance`). Zweite Meinung für den
+    /// Motivwechsel: Die Laplace-Varianz oben fällt bei einem glatteren Motiv
+    /// genauso wie bei echtem Fokusverlust, die Kantenschärfe nur bei
+    /// letzterem.
+    private var acutRaw: Double = 0
+    private var acutReference: Double = 0
+    /// Ab diesem Anteil am Bestwert gelten die Kanten als scharf geblieben.
+    /// Eval (eval/LIVE.md): 0,6 lässt Unschärfe durch, 0,8 hält echte
+    /// Motivwechsel auf.
+    private static let acutanceRatio: Double = 0.7
     /// Seit wann das Schärfe-Tor ununterbrochen blockiert – Notausstieg,
     /// falls die Messlatte durch ein strukturreiches Motiv zu hoch steht und
     /// das neue Motiv sie nie erreichen kann.
@@ -460,6 +490,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
         sharpRaw = 0
         sharpReference = 0
         sharpAtLock = 0
+        acutRaw = 0
+        acutReference = 0
         gateBlockedSince = nil
         blurrySince = nil
         focusIsLocked = false
@@ -473,8 +505,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Nimmt einen Schärfewert auf. `calm` sagt, ob die Szene ruhig genug ist,
     /// um daraus die Messlatte fortzuschreiben – während Hände im Bild sind,
     /// misst die Laplace-Varianz deren Struktur, nicht den Fokus.
-    private func noteSharpness(_ value: Double, calm: Bool) {
+    private func noteSharpness(_ value: Double, acutance: Double, calm: Bool) {
         sharpRaw = value
+        acutRaw = acutance
         // Der Notausstieg des Tores darf nur eine UNUNTERBROCHENE Blockade
         // messen. Ohne dieses Zurücksetzen bliebe der Zeitstempel über
         // Arbeitsphasen hinweg stehen und das Ventil würde beim nächsten
@@ -484,6 +517,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         guard calm else { return }
         // steigt sofort, zerfällt langsam (Halbwertszeit ~35 s bei 10 Hz)
         sharpReference = max(sharpReference * 0.998, value)
+        acutReference = max(acutReference * 0.998, acutance)
     }
 
     /// Motivwechsel statt Unschärfe: Ist der Fokus fixiert – oder lässt er
@@ -495,11 +529,25 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// also erst nach erkannter Arbeit, abgelaufener Ruhezeit und ohne Hände.
     /// Aus der Hand (Autofokus läuft) bleibt es beim Warten: Dort kann ein
     /// niedriger Wert wirklich ein suchender Fokus sein.
+    ///
+    /// Seit 2.1 mit Gegenprobe: Auch bei fixiertem Fokus kann das Bild
+    /// wirklich unscharf werden – das Werk wächst der Kamera entgegen oder
+    /// wird verschoben. Dann sind die Kanten breiter geworden, und die
+    /// Abkürzung gilt nicht; Tor und Wächter übernehmen wie vor 2.0.1.
     private func acceptMotifChange() -> Bool {
         guard focusIsLocked || focusLockUnavailable else { return false }
         guard focusTask == nil else { return false }     // Fokuslauf läuft gerade
+        guard acutRaw >= acutReference * Self.acutanceRatio else { return false }
         sharpReference = sharpRaw
+        acutReference = acutRaw
         gateBlockedSince = nil
+        // Auch die Messlatte des Wächters gehört zum alten Motiv. Bliebe sie
+        // stehen, stellte er vier Sekunden später grundlos neu scharf und
+        // hielte die nächsten Bilder auf.
+        if focusIsLocked {
+            sharpAtLock = sharpRaw
+            blurrySince = nil
+        }
         return true
     }
 
@@ -517,12 +565,42 @@ final class LiveCaptureController: NSObject, ObservableObject {
     }
 
     private var previousGray: [UInt8]?
+    /// Analysebild zum letzten Sucherbild und zum zuletzt abgelegten Bild –
+    /// für den Vergleich „hat sich seit dem letzten Klick etwas verändert?".
+    private var latestGray: [UInt8]?
+    private var lastCapturedGray: [UInt8]?
     private var stableSince: Date?
     private var armed = false            // erst nach erkannter Arbeit wieder auslösen
     private var latestFrame: CGImage?    // für den manuellen Auslöser
     /// Auto-Kalibrierung: sammelt beim Start ~2 s Bewegungswerte der ruhigen
     /// Szene und setzt die Schwelle auf das Dreifache des Grundrauschens.
     private var calibrationSamples: [Double]? = nil
+    /// Dieselben Bilder im Maß der jeweils anderen Aufnahmeart, damit ein
+    /// Wechsel Stativ/Hand mitten in der Sitzung eine passende Schwelle hat.
+    private var calibrationSamplesOther: [Double] = []
+
+    /// Bewegung zwischen zwei Analysebildern, Helligkeit ausgeglichen
+    /// (Flackern und Wolken sind keine Bewegung).
+    ///
+    /// Am Stativ zählt das stärkste von 8 × 8 Rasterfeldern: Eine langsame
+    /// Hand am Bildrand oder ein Griff bei wenig Licht verändert wenige
+    /// Felder deutlich, geht im Bildmittel aber unter – die App löste dann
+    /// mit Fingerspitzen im Bild aus oder erkannte den Griff gar nicht.
+    /// Aus der Hand zittert jedes Feld, dort bleibt das Bildmittel.
+    /// Eval (eval/LIVE.md): F1 0,75 → 0,99.
+    private static func motionValue(_ a: [UInt8], _ b: [UInt8],
+                                    width: Int, height: Int, for rig: Rig) -> Double {
+        rig == .tripod
+            ? Algorithms.maxBlockDifference(a, b, width: width, height: height)
+            : Algorithms.motionScoreGainCompensated(a, b)
+    }
+
+    /// Schwelle aus dem Grundrauschen: das Dreifache des Medians.
+    private static func threshold(from samples: [Double]) -> Double {
+        let sorted = samples.sorted()
+        let median = sorted.isEmpty ? 1.0 : sorted[sorted.count / 2]
+        return min(8.0, max(1.0, (median * 3 * 2).rounded() / 2))
+    }
     private var handDetector: HandDetecting = HandDetectorFactory.make()
     private let videoQueue = DispatchQueue(label: "framefold.livecapture")
     private var onCapture: ((Data) -> Void)?
@@ -600,12 +678,16 @@ final class LiveCaptureController: NSObject, ObservableObject {
         loopFrames = []
         firstCapturedImage = nil
         previousGray = nil
+        latestGray = nil
+        lastCapturedGray = nil
+        thresholdByRig = [:]
         stableSince = nil
         restlessSince = nil
         currentMotion = 0
         hint = nil
         setStatus(.calibrating)
         calibrationSamples = []
+        calibrationSamplesOther = []
         calibrationStart = Date()
         armed = false // scharf erst nach der Kalibrierung
         // Schärfe-Historie gehört zur Sitzung, nicht zum App-Lauf: Ein
@@ -808,6 +890,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
         resetToContinuous()
         setStatus(.calibrating)
         calibrationSamples = []
+        calibrationSamplesOther = []
+        thresholdByRig = [:]
         calibrationStart = Date()
         restlessSince = nil
         hint = nil
@@ -1229,11 +1313,18 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // fertige Werk legen noch den Zustand vom Ruhestand wegziehen.
         guard isRunning else { return }
         var motion = 0.0
+        var motionOther = 0.0
         let hadPrevious = previousGray != nil
+        let otherRig: Rig = rig == .tripod ? .handheld : .tripod
         if let prev = previousGray, prev.count == gray.count {
-            motion = Algorithms.motionScore(gray, prev)
+            motion = Self.motionValue(gray, prev, width: w, height: h, for: rig)
+            // Das zweite Maß wird nur zum Einmessen gebraucht.
+            if calibrationSamples != nil {
+                motionOther = Self.motionValue(gray, prev, width: w, height: h, for: otherRig)
+            }
         }
         previousGray = gray
+        latestGray = gray
         latestFrame = fullFrame
         // Gerundet und nur bei echter Änderung veröffentlichen – sonst
         // zeichnet SwiftUI den ganzen Sucher zehnmal pro Sekunde neu.
@@ -1246,7 +1337,10 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // Die Messlatte wird nur bei ruhiger Szene fortgeschrieben: Eine Hand
         // im Bild bringt eigene Struktur mit und würde sie verfälschen.
         let calm = hadPrevious && motion <= motionThreshold
+        // Die Kantenschärfe wird nur bei ruhiger Szene gebraucht (Messlatte
+        // und Torpfad) – während der Arbeit spart das die Rechnung.
         noteSharpness(Algorithms.laplacianVariance(gray: gray, width: w, height: h),
+                      acutance: calm ? Algorithms.edgeAcutance(gray: gray, width: w, height: h) : acutRaw,
                       calm: calm)
         checkFocusWatchdog(motion: motion)
         serveRigDetection()
@@ -1258,16 +1352,20 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // Kalibrierphase: Grundrauschen messen, Schwelle automatisch setzen
         if calibrationSamples != nil {
             setStatus(.calibrating)
-            if hadPrevious { calibrationSamples?.append(motion) }
+            if hadPrevious {
+                calibrationSamples?.append(motion)
+                calibrationSamplesOther.append(motionOther)
+            }
             // Sicherheits-Timeout: lieber mit weniger Messwerten starten, als
             // ewig in der Kalibrierung hängen zu bleiben.
             let enough = (calibrationSamples?.count ?? 0) >= 20
             let timedOut = calibrationStart.map { Date().timeIntervalSince($0) > 4.0 } ?? false
             if enough || timedOut {
-                let samples = (calibrationSamples ?? []).sorted()
-                let median = samples.isEmpty ? 1.0 : samples[samples.count / 2]
-                motionThreshold = min(8.0, max(1.0, (median * 3 * 2).rounded() / 2))
+                motionThreshold = Self.threshold(from: calibrationSamples ?? [])
+                thresholdByRig = [rig: motionThreshold,
+                                  otherRig: Self.threshold(from: calibrationSamplesOther)]
                 calibrationSamples = nil
+                calibrationSamplesOther = []
                 calibrationStart = nil
                 armed = true // erster Frame darf sofort kommen, sobald stabil
                 setStatus(.focusing)
@@ -1334,12 +1432,30 @@ final class LiveCaptureController: NSObject, ObservableObject {
         }
         gateBlockedSince = nil
 
-        // Capture! Duplikate verhindert bereits der Zustandsautomat:
-        // ausgelöst wird nur nach erkannter Bewegung ("armed").
-        // (Der frühere dHash-Abgleich hat subtile Änderungen fälschlich
-        // als Duplikat verworfen und den Auslöser dauerhaft blockiert.)
+        // Bewegung allein ist noch kein Arbeitsschritt: Ein Griff, der nichts
+        // verändert, oder ein Schatten, der durchzieht, hinterlässt dasselbe
+        // Bild – im Film wäre es ein Ruckler. Verglichen wird mit dem zuletzt
+        // abgelegten Bild im stärksten Rasterfeld; eine neue Falzlinie sticht
+        // dort heraus. (Der frühere dHash-Abgleich an dieser Stelle hat
+        // subtile Änderungen als Duplikat verworfen und den Auslöser
+        // blockiert; dieses Maß erkennt sie – eval/HILLCLIMB.md, Runde 1.)
+        // Eval (eval/LIVE.md): Duplikate 20 → 5.
+        if let last = lastCapturedGray, last.count == gray.count,
+           Algorithms.maxBlockDifference(gray, last, width: w, height: h)
+            < Self.duplicateFactor * motionThreshold {
+            armed = false
+            stableSince = nil
+            setStatus(.waitingForWork)
+            return
+        }
+
         capture(frame: fullFrame)
     }
+
+    /// Unter diesem Anteil der Bewegungsschwelle gilt ein Bild als Duplikat
+    /// des zuletzt abgelegten. Derselbe Faktor wie in der Video-Auswahl
+    /// (`PipelineSettings.dedupBlockFactor`).
+    private static let duplicateFactor: Double = 0.5
 
     /// Manueller Auslöser – nimmt den aktuellen Frame auf, unabhängig von
     /// Bewegung und Handprüfung. Ist das Bild unscharf, wird der Druck nicht
@@ -1431,6 +1547,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Nimmt den letzten Frame zurück (Undo im Thumbnail-Streifen).
     func revertLastCapture(to previous: UIImage?) {
         lastCapturedImage = previous
+        // Das Vergleichsbild gehört zum zurückgenommenen Bild. Ohne es darf
+        // derselbe Zustand noch einmal aufgenommen werden.
+        lastCapturedGray = nil
         capturedCount = max(0, capturedCount - 1)
         if !loopFrames.isEmpty { loopFrames.removeLast() }
     }
@@ -1450,6 +1569,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     private func capture(frame: CGImage) {
         armed = false
         stableSince = nil
+        lastCapturedGray = latestGray
         capturedCount += 1
         setStatus(.captured)
 

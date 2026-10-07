@@ -1,3 +1,8 @@
-FrameFold 2.0.2
+FrameFold 2.1
 
-Mise à jour des visuels de l’App Store. Rien ne change dans l’app.
+Le déclencheur automatique sur trépied a été entièrement revu.
+
+• Mains lentes : l’appareil attend désormais que le bout de tes doigts ait aussi quitté le cadre.
+• Faible lumière et lampes qui scintillent : tes gestes sont détectés de façon fiable, plus d’images perdues.
+• Plus de doublons : un geste qui ne change rien ou une ombre qui passe ne déclenche plus.
+• Netteté : l’appareil distingue maintenant un motif plus uni d’une vraie perte de mise au point. Dans le premier cas il déclenche tout de suite, dans le second il refait d’abord la mise au point.

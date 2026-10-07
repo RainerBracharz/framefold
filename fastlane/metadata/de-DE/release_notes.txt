@@ -1,3 +1,8 @@
-FrameFold 2.0.2
+FrameFold 2.1
 
-Das Vorschauvideo läuft jetzt auch im deutschen App Store, dazu neue Screenshots für große iPhones. An der App selbst ändert sich nichts.
+Der Auto-Auslöser am Stativ ist gründlich überarbeitet.
+
+• Langsame Hände: Die Kamera wartet jetzt, bis auch die Fingerspitzen aus dem Bild sind.
+• Wenig Licht und flackernde Lampen: Griffe werden zuverlässig erkannt, es gehen keine Bilder mehr verloren.
+• Keine doppelten Bilder: Ein Griff, der nichts verändert, oder ein Schatten löst nicht mehr aus.
+• Schärfe: Die Kamera unterscheidet jetzt zwischen einem glatteren Motiv und echtem Schärfeverlust. Beim ersten löst sie sofort aus, beim zweiten stellt sie erst neu scharf.

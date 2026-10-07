@@ -187,6 +187,64 @@ enum Algorithms {
         return max(0, sumOfSquares / n - mean * mean)
     }
 
+    /// Kantenschärfe, unabhängig von Kontrast und Strukturmenge: an den
+    /// stärksten Kanten das Verhältnis von Krümmung (Laplace) zu Steigung
+    /// (Gradient). Eine scharfe Kante ist steil und schmal; Unschärfe macht
+    /// sie breiter, das Verhältnis sinkt. Ein glatteres Motiv hat weniger und
+    /// schwächere Kanten, aber gleich schmale – das Verhältnis bleibt.
+    /// Damit lässt sich trennen, was die Laplace-Varianz nicht trennen kann:
+    /// „Motiv hat weniger Struktur" von „Fokus stimmt nicht mehr".
+    /// Eval (eval/LIVE.md): unscharfe Bilder nach Fokusverlust 16 → 0.
+    /// Gleiche Rechnung wie `edge_acutance` in eval/live_controller.py.
+    static func edgeAcutance(gray: [UInt8], width: Int, height: Int, top: Double = 0.005) -> Double {
+        guard width > 6, height > 6, gray.count == width * height else { return 0 }
+        var lap = [Float](repeating: 0, count: width * height)
+        var grad = [Float](repeating: 0, count: width * height)
+        gray.withUnsafeBufferPointer { p in
+            for y in 1..<(height - 1) {
+                let row = y * width
+                for x in 1..<(width - 1) {
+                    let i = row + x
+                    let l = Float(p[i - 1]), r = Float(p[i + 1])
+                    let u = Float(p[i - width]), d = Float(p[i + width])
+                    let ul = Float(p[i - width - 1]), ur = Float(p[i - width + 1])
+                    let dl = Float(p[i + width - 1]), dr = Float(p[i + width + 1])
+                    lap[i] = abs(-4 * Float(p[i]) + l + r + u + d)
+                    let gx = ((ur + 2 * r + dr) - (ul + 2 * l + dl)) / 8
+                    let gy = ((dl + 2 * d + dr) - (ul + 2 * u + ur)) / 8
+                    grad[i] = (gx * gx + gy * gy).squareRoot()
+                }
+            }
+        }
+        // Nur Pixel, deren 3 × 3-Umgebung vollständig berechnet ist.
+        var candidates = [Float]()
+        candidates.reserveCapacity((width - 4) * (height - 4))
+        for y in 2..<(height - 2) {
+            for x in 2..<(width - 2) { candidates.append(grad[y * width + x]) }
+        }
+        let n = max(8, Int(Double(candidates.count) * top))
+        guard candidates.count >= n else { return 0 }
+        candidates.sort(by: >)
+        let cut = candidates[n - 1]
+        guard cut > 0 else { return 0 }          // völlig glatte Fläche
+        var ratios = [Float]()
+        for y in 2..<(height - 2) {
+            for x in 2..<(width - 2) {
+                let i = y * width + x
+                guard grad[i] >= cut else { continue }
+                var m: Float = 0
+                for dy in -1...1 {
+                    for dx in -1...1 { m = max(m, lap[i + dy * width + dx]) }
+                }
+                ratios.append(m / max(grad[i], 1e-3))
+            }
+        }
+        ratios.sort()
+        let c = ratios.count
+        guard c > 0 else { return 0 }
+        return c % 2 == 1 ? Double(ratios[c / 2]) : Double(ratios[c / 2 - 1] + ratios[c / 2]) / 2
+    }
+
     /// dHash (difference hash): 64-Bit-Hash aus 9x8-Verkleinerung.
     static func dHash(gray: [UInt8], width: Int, height: Int) -> UInt64 {
         guard width > 0, height > 0, gray.count == width * height else { return 0 }
