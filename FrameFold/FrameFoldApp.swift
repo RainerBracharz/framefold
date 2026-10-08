@@ -217,7 +217,11 @@ struct OnboardingView: View {
 @main
 struct FrameFoldApp: App {
     @StateObject private var projectStore = ProjectStore()
+    #if targetEnvironment(simulator)
+    @State private var selectedTab = ProcessInfo.processInfo.environment["FF_AUTOSTART"] == "1" ? 1 : 0
+    #else
     @State private var selectedTab = 0
+    #endif
     /// Erststart: einmaliger Onboarding-Flow, der auch den Modus setzt.
     @AppStorage("didOnboard") private var didOnboard = false
 

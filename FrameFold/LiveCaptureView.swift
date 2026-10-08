@@ -31,6 +31,10 @@ struct LiveCaptureView: View {
     private var mode: AppMode { AppMode.current(modeRaw) }
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    /// iPhone Duo: Film auf dem Außendisplay – vom Nutzer abschaltbar, und ob
+    /// das System dort gerade etwas zeigen kann.
+    @AppStorage("liveOuterDisplay") private var outerDisplayOn = true
+    @State private var outerDisplayAvailable = false
     /// Kurzer weißer Blitz im Sucher bei jeder Aufnahme – sichtbar auch aus
     /// zwei Metern Entfernung, wenn man am Set steht statt am Display.
     @State private var flashOpacity = 0.0
@@ -77,6 +81,17 @@ struct LiveCaptureView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Theme.darkroom.ignoresSafeArea())
+            #if targetEnvironment(simulator)
+            // Nur im Simulator: mit FF_AUTOSTART direkt in die Aufnahme – für
+            // Layout-Prüfungen in Stellungen, in denen sich der Simulator
+            // nicht bedienen lässt (aufgeklapptes iPhone Duo).
+            .onAppear {
+                if ProcessInfo.processInfo.environment["FF_AUTOSTART"] == "1", targetProject == nil {
+                    didSeeCameraTip = true
+                    targetProject = store.projects.first ?? store.createProject(name: "Faltung")
+                }
+            }
+            #endif
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     WorkTitle("Kamera", size: 17, color: Theme.paperOnDark)
@@ -99,7 +114,8 @@ struct LiveCaptureView: View {
             .tint(Theme.ink)
             .sheet(isPresented: $showSettings) {
                 LiveSettingsView(controller: controller,
-                                 showGrid: $showGrid, showLevel: $showLevel)
+                                 showGrid: $showGrid, showLevel: $showLevel,
+                                 outerDisplayAvailable: outerDisplayAvailable)
             }
             .overlay {
                 // Einmaliger, überspringbarer Tipp beim ersten Öffnen
@@ -419,20 +435,50 @@ struct LiveCaptureView: View {
             // aufgeschlagenes Heft geteilt. Links die Kamera, rechts der
             // Film bisher. Auf dem Duo liegt die Trennung genau im Falz.
             let split = Self.splitsLikeABook(geo.size)
-            let windowWidth = geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing
-            let stageWidth = split
-                ? max(geo.size.width * 0.4, windowWidth / 2 - geo.safeAreaInsets.leading)
-                : geo.size.width
-            HStack(spacing: 0) {
-                captureStage(project: project, size: CGSize(width: stageWidth, height: geo.size.height))
-                    .overlay(alignment: .topLeading) { sucherTools }
-                    .overlay(alignment: .topTrailing) { if !split { loopTile } }
-                if split {
+            if Duo.arranges(geo, wide: split) {
+                // iPhone Duo (iOS 27.1): Das System ordnet Kamera und Film um
+                // den Falz an – nebeneinander, wenn das Gerät quer liegt,
+                // übereinander, wenn es halb aufgeklappt wie ein Laptop steht.
+                FoldArrangement {
+                    GeometryReader { stage in
+                        captureStage(project: project, size: stage.size)
+                            .overlay(alignment: .topLeading) { sucherTools }
+                    }
+                } secondary: {
                     filmPage
-                        .frame(width: geo.size.width - stageWidth, height: geo.size.height)
+                }
+            } else {
+                // Ohne diese Schnittstelle (iPhone Mirroring, ältere Systeme)
+                // teilt die eigene Rechnung eine breite Fläche in der Mitte.
+                let windowWidth = geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing
+                let stageWidth = split
+                    ? max(geo.size.width * 0.4, windowWidth / 2 - geo.safeAreaInsets.leading)
+                    : geo.size.width
+                HStack(spacing: 0) {
+                    captureStage(project: project, size: CGSize(width: stageWidth, height: geo.size.height),
+                                 trailingBleed: split ? 0 : geo.safeAreaInsets.trailing)
+                        .overlay(alignment: .topLeading) { sucherTools }
+                        .overlay(alignment: .topTrailing) { if !split { loopTile } }
+                    if split {
+                        filmPage
+                            .frame(width: geo.size.width - stageWidth, height: geo.size.height)
+                    }
                 }
             }
         }
+        // Außendisplay des iPhone Duo: zeigt zum Tisch hin den bisherigen Film.
+        .duoOuterDisplay(isOn: $outerDisplayOn, available: $outerDisplayAvailable) {
+            OuterDisplayFilm(controller: controller, playful: mode == .basic)
+        }
+        #if targetEnvironment(simulator)
+        // Der Simulator hat keine Kamera, das System zeigt dort nie etwas
+        // außen. Mit FF_OUTER_PREVIEW lässt sich der Inhalt trotzdem ansehen.
+        .overlay {
+            if ProcessInfo.processInfo.environment["FF_OUTER_PREVIEW"] == "1" {
+                OuterDisplayFilm(controller: controller, playful: mode == .basic)
+            }
+        }
+        #endif
         .onAppear {
             UIApplication.shared.isIdleTimerDisabled = true
             recentThumbs = []
@@ -524,19 +570,20 @@ struct LiveCaptureView: View {
     }
 
     /// Die Kamera-Seite: Kamerabild, darüber Status und Bedienung.
-    private func captureStage(project: Project, size: CGSize) -> some View {
-
-        ZStack(alignment: .bottom) {
-            // Feste Größe: sonst macht scaledToFill das Bild breiter als den
-            // Bildschirm – der ganze Stapel wird überbreit und die Bedienung
-            // rutscht seitlich hinaus. Genau das war der alte Fehler.
-            cameraLayer
-                .frame(width: size.width, height: size.height)
-                .clipped()
-                // Kopfhörer-/AirPods-Tasten und BT-Fernbedienungen lösen aus,
-                // ohne das Stativ zu berühren.
-                .background(HardwareShutterBridge { controller.captureNow() })
-
+    ///
+    /// `trailingBleed`: so weit läuft das Kamerabild rechts über die Seite
+    /// hinaus – unter die senkrechte Leiste des zugeklappten iPhone Duo. Die
+    /// Bedienung bleibt innerhalb der Seite.
+    private func captureStage(project: Project, size: CGSize, trailingBleed: CGFloat = 0) -> some View {
+        // Liegt die Kamera-Seite quer (halb aufgeklapptes Duo, obere Hälfte),
+        // würde das hochkante Kamerabild beim Füllen oben und unten mehr als
+        // die Hälfte verlieren – man sähe nicht mehr, was aufgenommen wird.
+        // Dann steht das Bild vollständig in der Mitte, im Verhältnis 3:4.
+        let landscapePage = size.width > size.height
+        let cameraSize = landscapePage
+            ? CGSize(width: size.height * 0.75, height: size.height)
+            : CGSize(width: size.width + trailingBleed, height: size.height)
+        return ZStack(alignment: .bottom) {
             // Aufnahme-Blitz über dem Kamerabild, unter der Bedienung
             if flashOpacity > 0 {
                 Color.white.opacity(flashOpacity)
@@ -614,8 +661,22 @@ struct LiveCaptureView: View {
             .padding(.bottom, 24)
             .frame(width: size.width)
         }
-        .frame(width: size.width, height: size.height)
+        // Unten ausrichten: Seit das Kamerabild nicht mehr im Stapel liegt,
+        // bestimmt allein die Bedienung seine Höhe.
+        .frame(width: size.width, height: size.height, alignment: .bottom)
         .clipped()
+        // Das Kamerabild liegt als Hintergrund hinter der Seite statt in ihr:
+        // So kann es über den Rand hinauslaufen, ohne dass die Bedienung
+        // mitwandert. Feste Größe und eigener Beschnitt bleiben – sonst macht
+        // scaledToFill das Bild breiter als den Bildschirm.
+        .background(alignment: landscapePage ? .center : .leading) {
+            cameraLayer
+                .frame(width: cameraSize.width, height: cameraSize.height)
+                .clipped()
+                // Kopfhörer-/AirPods-Tasten und BT-Fernbedienungen lösen aus,
+                // ohne das Stativ zu berühren.
+                .background(HardwareShutterBridge { controller.captureNow() })
+        }
     }
 
     /// Werkzeuge oben links im Sucher – erst ab „Erweitert".
@@ -1167,6 +1228,10 @@ struct LiveSettingsView: View {
     @ObservedObject var controller: LiveCaptureController
     @Binding var showGrid: Bool
     @Binding var showLevel: Bool
+    /// iPhone Duo, aufgeklappt bei laufender Aufnahme: Nur dann gibt es ein
+    /// Außendisplay, für das der Schalter etwas bewirkt.
+    var outerDisplayAvailable = false
+    @AppStorage("liveOuterDisplay") private var outerDisplayOn = true
     @Environment(\.dismiss) private var dismiss
     @AppStorage("liveOnionOpacity") private var onionOpacity: Double = 0.35
     @AppStorage("liveOnionFirst") private var onionFirst: Bool = false
@@ -1193,6 +1258,19 @@ struct LiveSettingsView: View {
                     CatalogLabel("Modus")
                 }
                 .listRowBackground(Theme.paperShade.opacity(0.5))
+
+                if outerDisplayAvailable {
+                Section {
+                    Toggle("Film auf dem Außendisplay", isOn: $outerDisplayOn)
+                        .font(Theme.body)
+                    Text("Aufgeklappt zeigt das iPhone Duo den bisherigen Film außen – zum Tisch hin.")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Theme.graphite)
+                } header: {
+                    CatalogLabel("iPhone Duo")
+                }
+                .listRowBackground(Theme.paperShade.opacity(0.5))
+                }
 
                 if mode.showsAdvanced {
                 Section {

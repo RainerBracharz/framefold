@@ -24,6 +24,7 @@
 		AA11F0F0F0F0F0F0F0F0F001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */; };
 		AA22F0F0F0F0F0F0F0F0F101 /* StudioMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA22F0F0F0F0F0F0F0F0F102 /* StudioMonitor.swift */; };
 		BB20F0F0F0F0F0F0F0F0F303 /* LiveLoopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */; };
+		BB20F0F0F0F0F0F0F0F0F305 /* DuoSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */; };
 		BB20F0F0F0F0F0F0F0F0F301 /* FlipbookRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F302 /* FlipbookRenderer.swift */; };
 		AA33F0F0F0F0F0F0F0F0F201 /* WatchLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA33F0F0F0F0F0F0F0F0F202 /* WatchLink.swift */; };
 		AFAAD6ED30E050C36CB1008E /* CoreMLHandDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F829535D7C9019A39F763DF /* CoreMLHandDetector.swift */; };
@@ -90,6 +91,7 @@
 		AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA22F0F0F0F0F0F0F0F0F102 /* StudioMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioMonitor.swift; sourceTree = "<group>"; };
 		BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveLoopView.swift; sourceTree = "<group>"; };
+		BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuoSupport.swift; sourceTree = "<group>"; };
 		BB20F0F0F0F0F0F0F0F0F302 /* FlipbookRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlipbookRenderer.swift; sourceTree = "<group>"; };
 		AA33F0F0F0F0F0F0F0F0F202 /* WatchLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchLink.swift; sourceTree = "<group>"; };
 		ABDB9F45CA291A2DA744E92B /* MotionLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionLevel.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				AA33F0F0F0F0F0F0F0F0F202 /* WatchLink.swift */,
 				AA22F0F0F0F0F0F0F0F0F102 /* StudioMonitor.swift */,
 				BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */,
+				BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */,
 				BB20F0F0F0F0F0F0F0F0F302 /* FlipbookRenderer.swift */,
 				5179CC507784BECC68BB9DEF /* Assets.xcassets */,
 				AA11F0F0F0F0F0F0F0F0F012 /* Localizable.xcstrings */,
@@ -353,6 +356,7 @@
 				AA33F0F0F0F0F0F0F0F0F201 /* WatchLink.swift in Sources */,
 				AA22F0F0F0F0F0F0F0F0F101 /* StudioMonitor.swift in Sources */,
 				BB20F0F0F0F0F0F0F0F0F303 /* LiveLoopView.swift in Sources */,
+				BB20F0F0F0F0F0F0F0F0F305 /* DuoSupport.swift in Sources */,
 				BB20F0F0F0F0F0F0F0F0F301 /* FlipbookRenderer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

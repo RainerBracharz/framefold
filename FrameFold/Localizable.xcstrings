@@ -707,6 +707,22 @@
         }
       }
     },
+    "Aufgeklappt zeigt das iPhone Duo den bisherigen Film außen – zum Tisch hin.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unfolded, iPhone Duo shows the film so far on the outside – facing the table."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déplié, l’iPhone Duo affiche le film en cours à l’extérieur, côté table."
+          }
+        }
+      }
+    },
     "Aufgenommene Bilder": {
       "localizations": {
         "en": {
@@ -2169,6 +2185,22 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "Film auf dem Außendisplay": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Film on the outer display"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Film sur l’écran extérieur"
           }
         }
       }
@@ -4537,6 +4569,9 @@
           }
         }
       }
+    },
+    "iPhone Duo": {
+      "shouldTranslate": false
     },
     "iPhone aufs Stativ oder ruhig über die Arbeit halten. Arbeite einfach — FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.": {
       "localizations": {
