@@ -1,8 +1,8 @@
-FrameFold 2.1
+FrameFold 2.2
 
-The auto-shutter on a tripod has been reworked from the ground up.
+More for iPhone Duo.
 
-• Slow hands: the camera now waits until your fingertips have left the frame, too.
-• Low light and flickering lamps: your moves are detected reliably, no more missing frames.
-• No duplicate frames: a reach that changes nothing, or a passing shadow, no longer fires the shutter.
-• Focus: the camera now tells a plainer subject from a real loss of focus. It fires right away for the first and refocuses for the second.
+• Film on the outer display: with the Duo unfolded and a session running, the outside shows the film so far, the frame count and what the camera is doing. You can turn it off in the capture settings.
+• Viewfinder around the fold: unfolded in landscape, the camera and the film sit left and right of the fold – flat or half open.
+• Folded shut, the camera image now runs all the way under the side bar.
+• Two labels in the viewfinder now appear in English and French, too.

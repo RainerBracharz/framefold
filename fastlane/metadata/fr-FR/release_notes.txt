@@ -1,8 +1,8 @@
-FrameFold 2.1
+FrameFold 2.2
 
-Le déclencheur automatique sur trépied a été entièrement revu.
+Encore plus pour l’iPhone Duo.
 
-• Mains lentes : l’appareil attend désormais que le bout de tes doigts ait aussi quitté le cadre.
-• Faible lumière et lampes qui scintillent : tes gestes sont détectés de façon fiable, plus d’images perdues.
-• Plus de doublons : un geste qui ne change rien ou une ombre qui passe ne déclenche plus.
-• Netteté : l’appareil distingue maintenant un motif plus uni d’une vraie perte de mise au point. Dans le premier cas il déclenche tout de suite, dans le second il refait d’abord la mise au point.
+• Le film sur l’écran extérieur : quand le Duo est déplié et qu’une séance est en cours, l’extérieur affiche le film en cours, le nombre d’images et l’état de l’appareil. Désactivable dans les réglages de prise de vue.
+• Viseur autour du pli : déplié en paysage, l’appareil et le film se placent à gauche et à droite du pli – à plat ou à moitié ouvert.
+• Replié, l’image de l’appareil se prolonge désormais sous la barre latérale.
+• Deux indications du viseur s’affichent maintenant aussi en anglais et en français.

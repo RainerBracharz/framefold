@@ -1,8 +1,8 @@
-FrameFold 2.1
+FrameFold 2.2
 
-Der Auto-Auslöser am Stativ ist gründlich überarbeitet.
+Mehr für das iPhone Duo.
 
-• Langsame Hände: Die Kamera wartet jetzt, bis auch die Fingerspitzen aus dem Bild sind.
-• Wenig Licht und flackernde Lampen: Griffe werden zuverlässig erkannt, es gehen keine Bilder mehr verloren.
-• Keine doppelten Bilder: Ein Griff, der nichts verändert, oder ein Schatten löst nicht mehr aus.
-• Schärfe: Die Kamera unterscheidet jetzt zwischen einem glatteren Motiv und echtem Schärfeverlust. Beim ersten löst sie sofort aus, beim zweiten stellt sie erst neu scharf.
+• Film auf dem Außendisplay: Ist das Duo aufgeklappt und die Aufnahme läuft, zeigt es außen den bisherigen Film, den Zähler und den Stand der Kamera. In den Aufnahme-Einstellungen abschaltbar.
+• Sucher um den Falz: Quer aufgeklappt stehen Kamera und Film links und rechts des Falzes – flach und halb aufgeklappt.
+• Zugeklappt läuft das Kamerabild bis unter die seitliche Leiste.
+• Zwei Angaben im Sucher erscheinen jetzt auch auf Englisch und Französisch.
