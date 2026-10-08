@@ -35,6 +35,8 @@ struct LiveCaptureView: View {
     /// das System dort gerade etwas zeigen kann.
     @AppStorage("liveOuterDisplay") private var outerDisplayOn = true
     @State private var outerDisplayAvailable = false
+    /// Steht die Film-Seite gerade neben der Kamera? Sonst zeigt der Sucher die Kachel.
+    @State private var filmPageVisible = false
     /// Kurzer weißer Blitz im Sucher bei jeder Aufnahme – sichtbar auch aus
     /// zwei Metern Entfernung, wenn man am Set steht statt am Display.
     @State private var flashOpacity = 0.0
@@ -429,39 +431,42 @@ struct LiveCaptureView: View {
     /// verschachtelten Stapel, keine Layout-Prioritäten: so kann die
     /// Bedienleiste strukturell nicht verschwinden.
     private func captureView(project: Project) -> some View {
-        GeometryReader { geo in
-            // Breites Fenster – das aufgeklappte iPhone Duo oder ein groß
-            // gezogenes iPhone-Mirroring-Fenster: Die Fläche wird wie ein
-            // aufgeschlagenes Heft geteilt. Links die Kamera, rechts der
-            // Film bisher. Auf dem Duo liegt die Trennung genau im Falz.
-            let split = Self.splitsLikeABook(geo.size)
-            if Duo.arranges(geo, wide: split) {
-                // iPhone Duo (iOS 27.1): Das System ordnet Kamera und Film um
-                // den Falz an – nebeneinander, wenn das Gerät quer liegt,
-                // übereinander, wenn es halb aufgeklappt wie ein Laptop steht.
+        Group {
+            if Duo.canArrange, horizontalSizeClass == .regular {
+                // iPhone Duo aufgeklappt (iOS 27.1): Das System ordnet Kamera
+                // und Film um den Falz an. Quer liegen sie nebeneinander wie
+                // ein aufgeschlagenes Heft; hochkant steht die Kamera allein,
+                // der Film läuft dann als Kachel im Sucher.
                 FoldArrangement {
                     GeometryReader { stage in
                         captureStage(project: project, size: stage.size)
                             .overlay(alignment: .topLeading) { sucherTools }
+                            .overlay(alignment: .topTrailing) { if !filmPageVisible { loopTile } }
                     }
                 } secondary: {
                     filmPage
+                        .onAppear { filmPageVisible = true }
+                        .onDisappear { filmPageVisible = false }
                 }
             } else {
-                // Ohne diese Schnittstelle (iPhone Mirroring, ältere Systeme)
-                // teilt die eigene Rechnung eine breite Fläche in der Mitte.
-                let windowWidth = geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing
-                let stageWidth = split
-                    ? max(geo.size.width * 0.4, windowWidth / 2 - geo.safeAreaInsets.leading)
-                    : geo.size.width
-                HStack(spacing: 0) {
-                    captureStage(project: project, size: CGSize(width: stageWidth, height: geo.size.height),
-                                 trailingBleed: split ? 0 : geo.safeAreaInsets.trailing)
-                        .overlay(alignment: .topLeading) { sucherTools }
-                        .overlay(alignment: .topTrailing) { if !split { loopTile } }
-                    if split {
-                        filmPage
-                            .frame(width: geo.size.width - stageWidth, height: geo.size.height)
+                GeometryReader { geo in
+                    // Ohne diese Schnittstelle (iPhone Mirroring, ältere
+                    // Systeme) teilt die eigene Rechnung eine breite Fläche
+                    // in der Mitte: links die Kamera, rechts der Film bisher.
+                    let split = Self.splitsLikeABook(geo.size)
+                    let windowWidth = geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing
+                    let stageWidth = split
+                        ? max(geo.size.width * 0.4, windowWidth / 2 - geo.safeAreaInsets.leading)
+                        : geo.size.width
+                    HStack(spacing: 0) {
+                        captureStage(project: project, size: CGSize(width: stageWidth, height: geo.size.height),
+                                     trailingBleed: split ? 0 : geo.safeAreaInsets.trailing)
+                            .overlay(alignment: .topLeading) { sucherTools }
+                            .overlay(alignment: .topTrailing) { if !split { loopTile } }
+                        if split {
+                            filmPage
+                                .frame(width: geo.size.width - stageWidth, height: geo.size.height)
+                        }
                     }
                 }
             }

@@ -10,22 +10,27 @@ import SwiftUI
 /// beim Übersetzen ab. Deshalb zusätzlich `#if canImport(SwiftUI, _version:)`
 /// – 8.0.85 ist die SwiftUI-Fassung aus Xcode 27.1.
 enum Duo {
-    /// Soll der Sucher als Anordnung aus Kamera und Film gesetzt werden?
-    /// Ja, wenn die Fläche breit ist (aufgeklappt, quer) oder wenn der Falz
-    /// gerade durch die Fläche läuft (halb aufgeklappt): Dann gehört auf
-    /// jede Seite des Falzes eine eigene Ansicht statt einer, die er teilt.
-    static func arranges(_ geo: GeometryProxy, wide: Bool) -> Bool {
+    /// Gibt es Apples Anordnung um den Falz (`ArrangementView`, iOS 27.1)?
+    ///
+    /// Sie darf nicht in einem `GeometryReader` stecken: Im aufgeklappten
+    /// Querformat drehte sich das Layout dann endlos im Kreis und die App
+    /// blieb weiß. Deshalb entscheidet der Sucher über die Größenklasse und
+    /// setzt die Anordnung als äußerste Ansicht.
+    static var canArrange: Bool {
+        #if targetEnvironment(simulator)
+        if ProcessInfo.processInfo.environment["FF_NO_ARRANGE"] == "1" { return false }
+        #endif
         #if canImport(SwiftUI, _version: "8.0.85")
-        if #available(iOS 27.1, *) {
-            return wide || !geo.reservedRegions(kind: .division).isEmpty
-        }
+        if #available(iOS 27.1, *) { return true }
         #endif
         return false
     }
 }
 
 /// Kamera und Film um den Falz herum: nebeneinander, wenn die Fläche breiter
-/// als hoch ist, sonst übereinander. Das System legt die Grenze in den Falz.
+/// als hoch ist – das System legt die Grenze in den Falz. Ist sie höher als
+/// breit, steht die Kamera allein; ihr hochkantes Bild braucht dort die
+/// ganze Fläche.
 struct FoldArrangement<Primary: View, Secondary: View>: View {
     @ViewBuilder var primary: () -> Primary
     @ViewBuilder var secondary: () -> Secondary
@@ -34,7 +39,7 @@ struct FoldArrangement<Primary: View, Secondary: View>: View {
         #if canImport(SwiftUI, _version: "8.0.85")
         if #available(iOS 27.1, *) {
             ArrangementView(primary: primary, secondary: secondary)
-                .arrangementViewStyle(.split)
+                .arrangementViewStyle(.split.axes(.horizontal))
         } else {
             fallback
         }
@@ -43,7 +48,7 @@ struct FoldArrangement<Primary: View, Secondary: View>: View {
         #endif
     }
 
-    /// Wird nur erreicht, wenn `Duo.arranges` falsch liegt – der Vollständigkeit halber.
+    /// Wird nur erreicht, wenn `Duo.canArrange` falsch liegt – der Vollständigkeit halber.
     private var fallback: some View {
         HStack(spacing: 0) {
             primary()
