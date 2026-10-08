@@ -8,7 +8,8 @@
 #
 # Bilder: fastlane/screenshots-duo/{innen,aussen}/<locale>/duo-*.png
 #   innen   2853 × 2007 (aufgeklappt, Querformat)
-#   aussen  1398 × 2034 (zugeklappt, Hochformat)
+#   aussen  1398 × 2034 (zugeklappt, Hochformat; duo-aussen-4 ist der Film auf dem
+#           Außendisplay bei aufgeklapptem Gerät)
 # Erzeugt mit dem UI-Test `testWalkthrough` im Duo-Simulator (Xcode 27.1).
 #
 # fastlane deliver kennt den Gerätetyp APP_IPHONE_DUO noch nicht – deshalb
@@ -85,8 +86,10 @@ end
 
 DUO_TYPE = "APP_IPHONE_DUO"
 # Reihenfolge im Store: zuerst das, was es nur auf dem Duo gibt – der
-# geteilte Sucher –, dann der Rest innen, dann das Außendisplay.
-ORDER = %w[innen/%s/duo-innen-2.png innen/%s/duo-innen-1.png innen/%s/duo-innen-3.png
+# geteilte Sucher und der Film auf dem Außendisplay –, dann der Rest innen,
+# dann das zugeklappte Gerät.
+ORDER = %w[innen/%s/duo-innen-2.png aussen/%s/duo-aussen-4.png
+           innen/%s/duo-innen-1.png innen/%s/duo-innen-3.png
            aussen/%s/duo-aussen-2.png aussen/%s/duo-aussen-1.png aussen/%s/duo-aussen-3.png].freeze
 
 def files_for(locale)
