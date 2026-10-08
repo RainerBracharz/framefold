@@ -905,8 +905,7 @@ struct LiveCaptureView: View {
                 .accessibilityLabel("Auslöser umschalten")
                 .accessibilityValue(controller.captureMode == .motion
                                     ? "Bewegung"
-                                    : String(format: "Intervall, alle %.0f Sekunden",
-                                             controller.intervalSeconds))
+                                    : String(localized: "Intervall, alle \(Int(controller.intervalSeconds.rounded())) Sekunden"))
             }
             .buttonStyle(.plain)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -962,7 +961,10 @@ struct LiveCaptureView: View {
     /// „48 Bilder · ~4,8 s bei 10 fps" – gibt ein Gefühl für die Werk-Länge.
     private var lengthHint: String {
         let secs = Double(currentCount) / 10.0
-        return String(format: "%d Bilder · ~%.1f s bei 10 fps", currentCount, secs)
+        // Über den Katalog und mit dem Dezimalzeichen der Sprache – die
+        // frühere `String(format:)`-Fassung blieb in jeder Sprache deutsch.
+        let seconds = secs.formatted(.number.precision(.fractionLength(1)))
+        return String(localized: "\(currentCount) Bilder · ~\(seconds) s bei 10 fps")
     }
 
     private func sucherIcon(_ name: String) -> some View {

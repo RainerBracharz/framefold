@@ -227,7 +227,12 @@ final class FrameFoldUITests: XCTestCase {
         // Die Bildfolge hält jede Faltung ~9,5 s still: Nach einem starken
         // Motivwechsel gibt das Schärfe-Tor erst nach 8 s frei. 8 Faltungen ≈ 95 s.
         sleep(40)
-        if tap(["The film so far", "Der Film bisher", "Le film jusqu’ici"], timeout: 2) {
+        // Im geteilten Sucher (iPhone Duo aufgeklappt) gibt es keine Kachel
+        // zum Antippen – der Film steht dort ohnehin groß daneben.
+        let loopTile = app.buttons.matching(NSPredicate(
+            format: "label ==[c] 'The film so far' OR label ==[c] 'Der Film bisher' OR label ==[c] 'Le film jusqu’ici'")).firstMatch
+        if loopTile.waitForExistence(timeout: 2), loopTile.isHittable {
+            loopTile.tap()
             mark("loop-large")
         }
         sleep(56)

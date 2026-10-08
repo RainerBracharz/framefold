@@ -187,6 +187,28 @@
         }
       }
     },
+    "%lld Bilder · ~%@ s bei 10 fps": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld Bilder · ~%2$@ s bei 10 fps"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld frames · ~%2$@ s at 10 fps"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld images · ~%2$@ s à 10 fps"
+          }
+        }
+      }
+    },
     "%lld Sekunden Film!": {
       "localizations": {
         "de": {
@@ -2486,6 +2508,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Intervalle"
+          }
+        }
+      }
+    },
+    "Intervall, alle %lld Sekunden": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Intervall, alle %lld Sekunden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interval, every %lld seconds"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervalle, toutes les %lld secondes"
           }
         }
       }

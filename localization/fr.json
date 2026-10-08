@@ -265,5 +265,7 @@
   "Bogen %lld/%lld": "Planche %1$lld/%2$lld",
   "Entlang der hellen Linien schneiden · in Reihenfolge stapeln, Blatt 001 oben · an der Bindekante klammern oder leimen · am rechten Rand blättern": "Découper le long des traits clairs · empiler dans l’ordre, feuillet 001 dessus · agrafer ou coller côté reliure · feuilleter par le bord droit",
   "Der Film bisher": "Le film jusqu’ici",
-  "Antippen zum Vergrößern": "Touche pour agrandir"
+  "Antippen zum Vergrößern": "Touche pour agrandir",
+  "%lld Bilder · ~%@ s bei 10 fps": "%1$lld images · ~%2$@ s à 10 fps",
+  "Intervall, alle %lld Sekunden": "Intervalle, toutes les %lld secondes"
 }
