@@ -22,19 +22,19 @@
 		A3DE04E07922CC8BB966001C /* LiveCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C12FBC1940CDA6F9C95797 /* LiveCaptureView.swift */; };
 		A4C483879CD17FB6351FCFDF /* FrameAligner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856EF7169EBADC9E0A4E3FEB /* FrameAligner.swift */; };
 		AA11F0F0F0F0F0F0F0F0F001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */; };
+		AA11F0F0F0F0F0F0F0F0F013 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F012 /* Localizable.xcstrings */; };
+		AA11F0F0F0F0F0F0F0F0F023 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F022 /* InfoPlist.xcstrings */; };
 		AA22F0F0F0F0F0F0F0F0F101 /* StudioMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA22F0F0F0F0F0F0F0F0F102 /* StudioMonitor.swift */; };
-		BB20F0F0F0F0F0F0F0F0F303 /* LiveLoopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */; };
-		BB20F0F0F0F0F0F0F0F0F305 /* DuoSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */; };
-		BB20F0F0F0F0F0F0F0F0F301 /* FlipbookRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F302 /* FlipbookRenderer.swift */; };
 		AA33F0F0F0F0F0F0F0F0F201 /* WatchLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA33F0F0F0F0F0F0F0F0F202 /* WatchLink.swift */; };
 		AFAAD6ED30E050C36CB1008E /* CoreMLHandDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F829535D7C9019A39F763DF /* CoreMLHandDetector.swift */; };
+		BB20F0F0F0F0F0F0F0F0F301 /* FlipbookRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F302 /* FlipbookRenderer.swift */; };
+		BB20F0F0F0F0F0F0F0F0F303 /* LiveLoopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */; };
+		BB20F0F0F0F0F0F0F0F0F305 /* DuoSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */; };
 		BD9B7454EB7D37A5500730CA /* ProjectStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AAEDEDE5FC50D5C58EF7D3 /* ProjectStore.swift */; };
 		C7A97BD0A2F98F786140AD56 /* StopMotionAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC7761875A3A3F18126E58 /* StopMotionAssembler.swift */; };
 		CA1B4BCA304055720042CB0A /* FrameFold Watch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = CA1B4BC0304055700042CB0A /* FrameFold Watch Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D53EE5B81BCE0006DC1EE58F /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD6BD598D4F623F37DCAF09 /* Models.swift */; };
 		DA47649F07F31FB474676A5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5179CC507784BECC68BB9DEF /* Assets.xcassets */; };
-		AA11F0F0F0F0F0F0F0F0F013 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F012 /* Localizable.xcstrings */; };
-		AA11F0F0F0F0F0F0F0F0F023 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F022 /* InfoPlist.xcstrings */; };
 		E466B79C40F7AC551AA8FCDF /* ExhibitionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CD31EE9EE75040932168D5 /* ExhibitionBuilder.swift */; };
 		F18E9E67D58704115602C98F /* FrameAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41366FECBE0FAF2939DF1DAD /* FrameAnalyzer.swift */; };
 /* End PBXBuildFile section */
@@ -78,8 +78,6 @@
 		37A16ED755D49527D84B6FFE /* ContactSheetRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSheetRenderer.swift; sourceTree = "<group>"; };
 		41366FECBE0FAF2939DF1DAD /* FrameAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameAnalyzer.swift; sourceTree = "<group>"; };
 		5179CC507784BECC68BB9DEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AA11F0F0F0F0F0F0F0F0F012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		AA11F0F0F0F0F0F0F0F0F022 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		57F57A631B9FBDA6F9338B4C /* HandDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandDetector.swift; sourceTree = "<group>"; };
 		5DD6BD598D4F623F37DCAF09 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		6583ADB31D00356EDCE7FA83 /* ProcessingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingViewModel.swift; sourceTree = "<group>"; };
@@ -89,13 +87,15 @@
 		86AC7761875A3A3F18126E58 /* StopMotionAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopMotionAssembler.swift; sourceTree = "<group>"; };
 		9BBC799115617B1A713B60FF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		AA11F0F0F0F0F0F0F0F0F012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		AA11F0F0F0F0F0F0F0F0F022 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		AA22F0F0F0F0F0F0F0F0F102 /* StudioMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioMonitor.swift; sourceTree = "<group>"; };
-		BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveLoopView.swift; sourceTree = "<group>"; };
-		BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuoSupport.swift; sourceTree = "<group>"; };
-		BB20F0F0F0F0F0F0F0F0F302 /* FlipbookRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlipbookRenderer.swift; sourceTree = "<group>"; };
 		AA33F0F0F0F0F0F0F0F0F202 /* WatchLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchLink.swift; sourceTree = "<group>"; };
 		ABDB9F45CA291A2DA744E92B /* MotionLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionLevel.swift; sourceTree = "<group>"; };
 		B9C7AEA4E4A264C569DEA9D5 /* KeyframeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyframeSelector.swift; sourceTree = "<group>"; };
+		BB20F0F0F0F0F0F0F0F0F302 /* FlipbookRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlipbookRenderer.swift; sourceTree = "<group>"; };
+		BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveLoopView.swift; sourceTree = "<group>"; };
+		BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuoSupport.swift; sourceTree = "<group>"; };
 		C3C12FBC1940CDA6F9C95797 /* LiveCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCaptureView.swift; sourceTree = "<group>"; };
 		CA1B4BC0304055700042CB0A /* FrameFold Watch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FrameFold Watch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAFAD9B13062D0F900D357C7 /* FrameFoldUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrameFoldUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,8 +106,28 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		CA1B4BC1304055700042CB0A /* FrameFold Watch Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "FrameFold Watch Watch App"; sourceTree = "<group>"; };
-		CAFAD9B23062D0F900D357C7 /* FrameFoldUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = FrameFoldUITests; sourceTree = "<group>"; };
+		CA1B4BC1304055700042CB0A /* FrameFold Watch Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = "FrameFold Watch Watch App";
+			sourceTree = "<group>";
+		};
+		CAFAD9B23062D0F900D357C7 /* FrameFoldUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = FrameFoldUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,8 +270,6 @@
 				CAFAD9B23062D0F900D357C7 /* FrameFoldUITests */,
 			);
 			name = FrameFoldUITests;
-			packageProductDependencies = (
-			);
 			productName = FrameFoldUITests;
 			productReference = CAFAD9B13062D0F900D357C7 /* FrameFoldUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -396,12 +414,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "FrameFold/FrameFold-Mac.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 57TBDSR367;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FrameFold/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -412,11 +432,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.framefold;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "FrameFold/FrameFold-Mac.entitlements";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,6";
@@ -427,12 +445,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "FrameFold/FrameFold-Mac-Debug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 57TBDSR367;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FrameFold/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -443,11 +463,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.framefold;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "FrameFold/FrameFold-Mac-Debug.entitlements";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,6";
@@ -557,7 +575,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.2.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.framefold.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -624,7 +642,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.2.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.framefold.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -683,7 +701,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.2.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.FrameFoldUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -738,7 +756,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.2.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.FrameFoldUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -82,6 +82,24 @@
               }
             }
           }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Bild"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Bilder"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -122,6 +140,24 @@
               }
             }
           }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Bild aufgenommen"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Bilder aufgenommen"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -158,6 +194,24 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld images · planche contact"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Bild · Kontaktbogen"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Bilder · Kontaktbogen"
                 }
               }
             }
@@ -300,6 +354,24 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "Monter %lld œuvres"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Werk montieren"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Werke montieren"
                 }
               }
             }
@@ -2234,6 +2306,24 @@
               }
             }
           }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Fertig! %lld Bild"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Fertig! %lld Bilder"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2611,21 +2701,57 @@
     "Intervall, alle %lld Sekunden": {
       "localizations": {
         "de": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Intervall, alle %lld Sekunden"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Intervall, jede Sekunde"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Intervall, alle %lld Sekunden"
+                }
+              }
+            }
           }
         },
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Interval, every %lld seconds"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Interval, every second"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Interval, every %lld seconds"
+                }
+              }
+            }
           }
         },
         "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Intervalle, toutes les %lld secondes"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Intervalle, chaque seconde"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Intervalle, toutes les %lld secondes"
+                }
+              }
+            }
           }
         }
       }
@@ -4755,6 +4881,24 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "Supprimées récemment : restaurer %lld images"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Zuletzt gelöscht: %lld Bild wiederherstellen"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Zuletzt gelöscht: %lld Bilder wiederherstellen"
                 }
               }
             }

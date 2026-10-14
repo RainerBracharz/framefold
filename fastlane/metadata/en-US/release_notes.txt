@@ -1,8 +1,10 @@
-FrameFold 2.2
+FrameFold 2.2.1
 
-More for iPhone Duo.
+Your works are safer.
 
-• Film on the outer display: with the Duo unfolded and a session running, the outside shows the film so far, the frame count and what the camera is doing. You can turn it off in the capture settings.
-• Viewfinder around the fold: unfolded in landscape, the camera and the film sit left and right of the fold – flat or half open.
-• Folded shut, the camera image now runs all the way under the side bar.
-• Two labels in the viewfinder now appear in English and French, too.
+• Trash: removed frames now truly stay restorable for 30 days – in older works, too.
+• Swiping in the project list asks before a work is deleted.
+• Contact sheet: after removing a frame, every tile shows the right image again.
+• Discard and undo only affect the frames of the current session.
+• Works are saved more safely. If a frame can't be saved, FrameFold tells you.
+• The start screen greets you without a name.

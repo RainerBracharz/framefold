@@ -41,6 +41,24 @@
               }
             }
           }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Bild"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Bilder"
+                }
+              }
+            }
+          }
         }
       }
     },

@@ -31,5 +31,9 @@
   "%lld Sekunden Film!": {
     "one": "%lld seconde de film !",
     "other": "%lld secondes de film !"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "one": "Intervalle, chaque seconde",
+    "other": "Intervalle, toutes les %lld secondes"
   }
 }

@@ -1,8 +1,10 @@
-FrameFold 2.2
+FrameFold 2.2.1
 
-Encore plus pour l’iPhone Duo.
+Tes œuvres sont mieux protégées.
 
-• Le film sur l’écran extérieur : quand le Duo est déplié et qu’une séance est en cours, l’extérieur affiche le film en cours, le nombre d’images et l’état de l’appareil. Désactivable dans les réglages de prise de vue.
-• Viseur autour du pli : déplié en paysage, l’appareil et le film se placent à gauche et à droite du pli – à plat ou à moitié ouvert.
-• Replié, l’image de l’appareil se prolonge désormais sous la barre latérale.
-• Deux indications du viseur s’affichent maintenant aussi en anglais et en français.
+• Corbeille : les images retirées restent vraiment récupérables pendant 30 jours – y compris dans les œuvres plus anciennes.
+• Un balayage dans la liste des projets demande confirmation avant de supprimer une œuvre.
+• Planche contact : après le retrait d’une image, chaque vignette affiche à nouveau la bonne image.
+• Jeter et annuler ne concernent plus que les images de la séance en cours.
+• Les œuvres sont enregistrées de façon plus sûre. Si une image ne peut pas être enregistrée, FrameFold te le dit.
+• L’écran d’accueil te salue sans prénom.
