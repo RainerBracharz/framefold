@@ -28,6 +28,7 @@ KEY_ID     = "RYCY6P77D7"
 ISSUER_ID  = "2035739a-efc7-450c-8f2f-61f211394113"
 KEY_PATH   = File.expand_path("~/.appstoreconnect/AuthKey_#{KEY_ID}.p8")
 TEAM_ID    = "57TBDSR367"
+ASC_APP_ID = "6801045603"   # öffentliche App-Store-Nummer; der Mac-Upload braucht sie
 
 # Der Export muss ausdrücklich mit einer Distributions-Identität signieren –
 # sonst bleibt es beim Development-Zertifikat und das Paketieren scheitert.
@@ -104,7 +105,7 @@ platform :ios do
     current = get_build_number(xcodeproj: PROJECT).to_i
     increment_build_number(xcodeproj: PROJECT, build_number: [latest + 1, current].max)
     pkg = mac_pkg
-    upload_to_testflight(api_key: api_key, app_platform: "osx", pkg: pkg,
+    upload_to_testflight(api_key: api_key, app_platform: "osx", pkg: pkg, apple_id: ASC_APP_ID,
                          skip_waiting_for_build_processing: true)
     UI.success("Mac-Build ist in App Store Connect.")
   end
