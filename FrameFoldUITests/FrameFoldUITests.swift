@@ -8,7 +8,7 @@
 //
 //  Aufruf (Sprache und Zielordner kommen per Umgebung, Vorgabe: en / Attachments):
 //
-//    TEST_RUNNER_FF_LANG=en TEST_RUNNER_FF_SHOT_DIR=$HOME/Desktop/ff-shots \
+//    TEST_RUNNER_FF_LANG=en TEST_RUNNER_FF_SHOT_DIR=$HOME/Desktop/05_Projekte/ff-shots \
 //    xcodebuild test -scheme FrameFold -destination 'id=<SIMULATOR-UDID>' \
 //      -only-testing:FrameFoldUITests
 //
