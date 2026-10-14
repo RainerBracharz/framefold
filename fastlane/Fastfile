@@ -134,6 +134,41 @@ platform :ios do
     UI.success("Mac-Texte und -Screenshots sind in App Store Connect.")
   end
 
+  desc "Mac-Version mit dem jüngsten gültigen Mac-Build einreichen"
+  lane :mac_submit do
+    api_key = login
+    require "spaceship"
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
+      key_id: KEY_ID, issuer_id: ISSUER_ID, filepath: KEY_PATH)
+    app = Spaceship::ConnectAPI::App.find(APP_ID)
+    version = get_version_number(xcodeproj: PROJECT, target: SCHEME)
+    build = Spaceship::ConnectAPI::Build.all(app_id: app.id, version: version, platform: "MAC_OS",
+                                             sort: "-uploadedDate", limit: 1).first
+    unless build&.processing_state == Spaceship::ConnectAPI::Build::ProcessingState::VALID
+      UI.user_error!("Kein gültiger Mac-Build für #{version} (#{build&.processing_state || 'keiner'}).")
+    end
+    upload_to_app_store(
+      api_key: api_key,
+      app_identifier: APP_ID,
+      platform: "osx",
+      app_version: version,
+      build_number: build.version,
+      skip_binary_upload: true,
+      skip_metadata: true,
+      skip_screenshots: true,
+      skip_app_version_update: true,
+      force: true,
+      precheck_include_in_app_purchases: false,
+      submit_for_review: true,
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        export_compliance_uses_encryption: false,
+        content_rights_contains_third_party_content: false
+      }
+    )
+    UI.success("Mac #{version} (#{build.version}) eingereicht.")
+  end
+
   desc "Kompletter Release: bauen, hochladen, Version anlegen, einreichen"
   lane :release do
     api_key = login
