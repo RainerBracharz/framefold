@@ -1411,7 +1411,13 @@ struct CameraPreview: UIViewRepresentable {
     func makeUIView(context: Context) -> PreviewView {
         let view = PreviewView()
         view.videoPreviewLayer.session = session
+        #if targetEnvironment(macCatalyst)
+        // Am Mac liefert die Kamera Querformat in ein frei großes Fenster:
+        // ganzes Bild zeigen, sonst fehlt am Rand ein Teil des Tisches.
+        view.videoPreviewLayer.videoGravity = .resizeAspect
+        #else
         view.videoPreviewLayer.videoGravity = .resizeAspectFill
+        #endif
         let tap = UITapGestureRecognizer(
             target: context.coordinator,
             action: #selector(Coordinator.handleTap(_:)))

@@ -740,6 +740,36 @@ final class LiveCaptureController: NSObject, ObservableObject {
         }
     }
 
+    #if targetEnvironment(macCatalyst) && DEBUG
+    static func camLog(_ text: String) {
+        let line = "\(Date()) \(text)\n"
+        let url = URL(fileURLWithPath: "/tmp/framefold-cam.log")
+        if let h = try? FileHandle(forWritingTo: url) { h.seekToEndOfFile(); h.write(Data(line.utf8)); h.closeFile() }
+        else { try? line.write(to: url, atomically: true, encoding: .utf8) }
+    }
+    #else
+    static func camLog(_ text: String) {}
+    #endif
+
+    /// Die Kamera, die aufnimmt. Am iPhone die Rückkamera. Am Mac zuerst eine
+    /// angeschlossene USB-Kamera – typischerweise eine Dokumentenkamera, die
+    /// von oben auf den Tisch blickt –, dann ein iPhone als Kamera
+    /// (Continuity Camera), zuletzt die eingebaute.
+    static func captureDevice() -> AVCaptureDevice? {
+        #if targetEnvironment(macCatalyst)
+        let preferred: [AVCaptureDevice.DeviceType] = [.external, .continuityCamera, .builtInWideAngleCamera]
+        let found = AVCaptureDevice.DiscoverySession(deviceTypes: preferred, mediaType: .video,
+                                                     position: .unspecified).devices
+        Self.camLog("gefunden: " + found.map { "\($0.localizedName) [\($0.deviceType.rawValue)] connected=\($0.isConnected)" }.joined(separator: " | "))
+        for type in preferred {
+            if let device = found.first(where: { $0.deviceType == type }) { return device }
+        }
+        return found.first
+        #else
+        return AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+        #endif
+    }
+
     /// Baut die Capture-Session auf. Gibt `false` zurück, wenn kein
     /// Aufnahmegerät verfügbar ist (Simulator/kameraloses Gerät).
     @discardableResult
@@ -750,9 +780,19 @@ final class LiveCaptureController: NSObject, ObservableObject {
         if !session.inputs.isEmpty, !session.outputs.isEmpty { return true }
 
         session.beginConfiguration()
+        #if !targetEnvironment(macCatalyst)
         session.sessionPreset = .hd1920x1080
+        #endif
 
-        guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
+        #if targetEnvironment(macCatalyst)
+        let probe = Self.captureDevice()
+        Self.camLog("gewählt: " + (probe?.localizedName ?? "keine"))
+        if let probe {
+            do { let i = try AVCaptureDeviceInput(device: probe); Self.camLog("input ok, canAdd=\(session.canAddInput(i))") }
+            catch { Self.camLog("input Fehler: \(error)") }
+        }
+        #endif
+        guard let device = Self.captureDevice(),
               let input = try? AVCaptureDeviceInput(device: device),
               session.canAddInput(input) else {
             session.commitConfiguration()
@@ -760,6 +800,12 @@ final class LiveCaptureController: NSObject, ObservableObject {
         }
         session.addInput(input)
         self.device = device
+        #if targetEnvironment(macCatalyst)
+        // Am Mac prüft die Sitzung die Auflösung gegen die angeschlossene
+        // Kamera: erst die Kamera, dann die Auflösung. Umgekehrt lehnt sie die
+        // Kamera ab. Nicht jede USB-Kamera kann Full HD – dann die beste.
+        session.sessionPreset = session.canSetSessionPreset(.hd1920x1080) ? .hd1920x1080 : .high
+        #endif
 
         let output = AVCaptureVideoDataOutput()
         output.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
@@ -773,10 +819,14 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // Hochformat erzwingen: der Sensor liefert Querformat. Ohne diese
         // Rotation sind Zwiebelhaut, gespeicherte Frames und das fertige
         // Video um 90° gedreht – genau der gemeldete Fehler.
+        // Am Mac nicht: Eine Dokumentenkamera über dem Tisch liefert ihr Bild
+        // so, wie es auf dem Tisch liegt.
+        #if !targetEnvironment(macCatalyst)
         if let conn = output.connection(with: .video),
            conn.isVideoRotationAngleSupported(90) {
             conn.videoRotationAngle = 90
         }
+        #endif
         session.commitConfiguration()
         return true
     }
