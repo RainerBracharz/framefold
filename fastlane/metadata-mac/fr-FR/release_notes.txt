@@ -1,0 +1,5 @@
+FrameFold 2.2 – désormais aussi sur Mac.
+
+• Stop motion depuis ton bureau : une caméra document regarde la table d’en haut, et FrameFold déclenche dès que tes mains quittent le cadre.
+• Choix de la caméra dans les réglages : caméra USB, iPhone comme webcam ou caméra intégrée – modifiable en pleine séance.
+• La barre d’espace comme déclencheur.

@@ -626,14 +626,17 @@ final class LiveCaptureController: NSObject, ObservableObject {
         self.onCapture = onCapture
         cameraUnavailable = false   // jeder Start beginnt unbelastet
 
-        #if targetEnvironment(simulator)
+#if targetEnvironment(simulator) || (targetEnvironment(macCatalyst) && DEBUG)
         // Im Simulator gibt es keine Kamera – wir speisen synthetische Frames
         // ein (Ruhephasen + „Hand"-Bewegung), damit der komplette Live-Ablauf
         // testbar ist: Kalibrierung, Auto-Shutter, Zähler, Ergebnis.
-        resetSessionState()
-        startSimulatedCamera()
-        return
-        #else
+        if Platform.simulatedCamera {
+            resetSessionState()
+            startSimulatedCamera()
+            return
+        }
+        #endif
+        #if !targetEnvironment(simulator)
         Task {
             let granted = await AVCaptureDevice.requestAccess(for: .video)
             guard granted else {
@@ -1280,7 +1283,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     // MARK: Simulator-Kamera (nur im Simulator einkompiliert)
 
-    #if targetEnvironment(simulator)
+    #if targetEnvironment(simulator) || (targetEnvironment(macCatalyst) && DEBUG)
     /// Erzeugt 10 Frames/s: ein Papierquadrat wandert in Schritten über den
     /// Tisch, dazwischen fährt eine „Hand" ins Bild. Dieselbe Struktur wie das
     /// Referenz-Testvideo – der Auto-Shutter sollte pro Ruhephase auslösen.

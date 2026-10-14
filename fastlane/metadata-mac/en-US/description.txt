@@ -1,0 +1,29 @@
+FrameFold turns your work at the table into a stop-motion — automatically, and entirely on your Mac.
+
+A camera looks down at the table while you fold, draw, arrange. FrameFold fires by itself as soon as your hands leave the frame and the scene settles. Nothing leaves your Mac: no cloud, no account, no tracking.
+
+CAMERA ABOVE THE TABLE
+Works best with a document camera looking straight down at the table — FrameFold picks a connected USB camera on its own. An iPhone as a webcam or the built-in camera can be chosen too. With onion skin, drift check and an interval trigger; the space bar fires by hand.
+
+SHARP, OR NOT AT ALL
+The app measures image sharpness continuously. A frame that isn't sharp never makes it into the work. Where the camera allows, FrameFold holds exposure and white balance so nothing flickers between frames.
+
+THE FILM GROWS AS YOU WORK
+While you work, the stop-motion is already playing as a loop next to the camera feed.
+
+FLIP BOOK
+Every work becomes a print-ready flip book: A4 sheets with cut lines, a binding edge and numbered leaves. Cut, staple, flip — the film becomes an object again.
+
+VIDEO TO STOP-MOTION
+Pick an existing video, the calm moments get found, hands removed, duplicates sorted out. You check every frame on the contact sheet before it's assembled.
+
+THREE MODES
+Simple (pick, shoot, done — made for teaching), Advanced (aspect, frame rate, resolution, playback) and a studio mode with paper relief, image echo, print look, fold transitions, an exhibition reel and print-ready contact-sheet and fold-template PDFs.
+
+WORKS, NOT FILES
+Projects collect frames across any number of sessions, with a 30-day trash. The result arrives like an edition: "Sheets 01–24 · Series of 24 · dated 2026".
+
+ON IPHONE TOO
+FrameFold is also available for iPhone — there with a tripod, Apple Watch as a remote and a studio monitor.
+
+Built as a bespoke tool for the artist Aldo Tolino, whose work folds printed photographs into objects and photographs them again — image, object, image.

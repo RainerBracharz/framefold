@@ -293,7 +293,7 @@ struct ContentView: View {
                 Text("Direkt aufnehmen")
                     .font(Theme.caption(13)).tracking(1.6).textCase(.uppercase)
                     .foregroundStyle(Theme.ink)
-                Text("Kamera aufs Stativ, automatisch auslösen")
+                Text(Platform.isMac ? "Kamera über dem Tisch, automatisch auslösen" : "Kamera aufs Stativ, automatisch auslösen")
                     .font(Theme.mono(10)).foregroundStyle(Theme.graphite)
             }
             Spacer()

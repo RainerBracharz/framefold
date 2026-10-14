@@ -83,17 +83,16 @@ struct LiveCaptureView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Theme.darkroom.ignoresSafeArea())
-            #if targetEnvironment(simulator)
-            // Nur im Simulator: mit FF_AUTOSTART direkt in die Aufnahme – für
-            // Layout-Prüfungen in Stellungen, in denen sich der Simulator
-            // nicht bedienen lässt (aufgeklapptes iPhone Duo).
+            // Nur im Simulator und in der Mac-Testfassung: mit FF_AUTOSTART
+            // direkt in die Aufnahme – für Layout-Prüfungen in Stellungen, in
+            // denen sich der Simulator nicht bedienen lässt (aufgeklapptes
+            // iPhone Duo), und für Store-Screenshots.
             .onAppear {
-                if ProcessInfo.processInfo.environment["FF_AUTOSTART"] == "1", targetProject == nil {
+                if Platform.autostart, targetProject == nil {
                     didSeeCameraTip = true
                     targetProject = store.projects.first ?? store.createProject(name: "Faltung")
                 }
             }
-            #endif
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     WorkTitle("Kamera", size: 17, color: Theme.paperOnDark)
@@ -598,7 +597,30 @@ struct LiveCaptureView: View {
         let cameraSize = landscapePage
             ? CGSize(width: size.height * 0.75, height: size.height)
             : CGSize(width: size.width + trailingBleed, height: size.height)
-        return ZStack(alignment: .bottom) {
+        if Platform.isMac {
+            // Am Mac stehen Kamerabild und Bedienung untereinander: Das
+            // Querformat der Dokumentenkamera passt ganz auf die Seite, und
+            // nichts liegt über dem Werk.
+            // Beide Seiten beginnen auf derselben Höhe – links die Kamera,
+            // rechts der Film, wie ein aufgeschlagenes Heft.
+            return AnyView(VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 10) {
+                    CatalogLabel("Kamera", color: Theme.paperOnDark.opacity(0.7))
+                    cameraLayer
+                        .aspectRatio(16.0 / 9.0, contentMode: .fit)
+                        .overlay {
+                            if flashOpacity > 0 {
+                                Color.white.opacity(flashOpacity).allowsHitTesting(false)
+                            }
+                        }
+                }
+                .padding(20)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                stageControls(project: project, width: size.width)
+            }
+            .frame(width: size.width, height: size.height))
+        }
+        return AnyView(ZStack(alignment: .bottom) {
             // Aufnahme-Blitz über dem Kamerabild, unter der Bedienung
             if flashOpacity > 0 {
                 Color.white.opacity(flashOpacity)
@@ -606,79 +628,7 @@ struct LiveCaptureView: View {
                     .allowsHitTesting(false)
             }
 
-            VStack(spacing: 12) {
-                // Drei Gesichter derselben Kamera:
-                //   Einfach     – Spielzeug: großer Zähler, sonst nichts
-                //   Erweitert   – Werkzeug: Pegel + kompakter Stand
-                //   Aldo Tolino – Messinstrument: Labor-HUD mit Zahlen
-                switch mode {
-                case .basic:    bigCounter
-                case .advanced: advancedStatusRow
-                case .tolino:   tolinoHUD
-                }
-
-                HStack(spacing: 8) {
-                    statusBadge
-                    // Im Einfach-Modus nur zeigen, wenn die App tatsächlich
-                    // „aus der Hand" erkannt hat – dort ist jedes zusätzliche
-                    // Bedienelement eines zu viel, aber diese Abweichung
-                    // erklärt das Verhalten der Kamera.
-                    // Auch zeigen, sobald die Automatik abgeschaltet ist –
-                    // sonst verschwindet im Einfach-Modus genau der Knopf,
-                    // mit dem man gerade auf „Stativ" gestellt hat, und es
-                    // gibt keinen Weg zurück.
-                    // Am Mac gibt es keine Aufnahmeart: Die Kamera steht immer.
-                    if !Platform.isMac,
-                       mode.showsAdvanced || controller.rig == .handheld
-                        || !controller.rigIsAutomatic {
-                        rigBadge
-                    }
-                }
-
-                if let focusHint = controller.focusHint {
-                    Text(focusHint)
-                        .font(Theme.mono(11))
-                        .foregroundStyle(Theme.darkroom)
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(2)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 10)
-                        .background(Theme.amber)
-                }
-
-                if let hint = controller.hint {
-                    // Im Einfach-Modus sind die Einstellungen unerreichbar –
-                    // der Hinweis, der dorthin verweist, braucht eine einfache
-                    // Fassung. Alle anderen gelten wörtlich.
-                    //
-                    // Hier stand bis zur Lokalisierung `hint.contains("Einstellungen")`.
-                    // Das ist eine Prüfung auf ein deutsches Wort in einem Text,
-                    // der übersetzt wird — sie hätte auf Englisch nie mehr
-                    // gegriffen, ohne dass es auffällt. `hint` trägt ohnehin nur
-                    // die eine Unruhe-Meldung, die Prüfung war überflüssig.
-                    Text(verbatim: mode == .basic
-                         ? (Platform.isMac
-                            ? String(localized: "Zu viel Bewegung – steht die Kamera wirklich fest?")
-                            : String(localized: "Zu viel Wackeln – leg das iPhone irgendwo auf oder lehne es an."))
-                         : hint)
-                        .font(Theme.mono(11))
-                        .foregroundStyle(Theme.darkroom)
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(2)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 10)
-                        .background(Theme.amber)
-                }
-
-                if mode.showsAdvanced, !recentThumbs.isEmpty {
-                    thumbStrip(project: project)
-                }
-
-                controlRow(project: project)
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 24)
-            .frame(width: size.width)
+            stageControls(project: project, width: size.width)
         }
         // Unten ausrichten: Seit das Kamerabild nicht mehr im Stapel liegt,
         // bestimmt allein die Bedienung seine Höhe.
@@ -695,7 +645,85 @@ struct LiveCaptureView: View {
                 // Kopfhörer-/AirPods-Tasten und BT-Fernbedienungen lösen aus,
                 // ohne das Stativ zu berühren.
                 .background(HardwareShutterBridge { controller.captureNow() })
+        })
+    }
+
+    /// Status und Bedienung der Kamera-Seite.
+    @ViewBuilder
+    private func stageControls(project: Project, width: CGFloat) -> some View {
+        VStack(spacing: 12) {
+            // Drei Gesichter derselben Kamera:
+            //   Einfach     – Spielzeug: großer Zähler, sonst nichts
+            //   Erweitert   – Werkzeug: Pegel + kompakter Stand
+            //   Aldo Tolino – Messinstrument: Labor-HUD mit Zahlen
+            switch mode {
+            case .basic:    bigCounter
+            case .advanced: advancedStatusRow
+            case .tolino:   tolinoHUD
+            }
+
+            HStack(spacing: 8) {
+                statusBadge
+                // Im Einfach-Modus nur zeigen, wenn die App tatsächlich
+                // „aus der Hand" erkannt hat – dort ist jedes zusätzliche
+                // Bedienelement eines zu viel, aber diese Abweichung
+                // erklärt das Verhalten der Kamera.
+                // Auch zeigen, sobald die Automatik abgeschaltet ist –
+                // sonst verschwindet im Einfach-Modus genau der Knopf,
+                // mit dem man gerade auf „Stativ" gestellt hat, und es
+                // gibt keinen Weg zurück.
+                // Am Mac gibt es keine Aufnahmeart: Die Kamera steht immer.
+                if !Platform.isMac,
+                   mode.showsAdvanced || controller.rig == .handheld
+                    || !controller.rigIsAutomatic {
+                    rigBadge
+                }
+            }
+
+            if let focusHint = controller.focusHint {
+                Text(focusHint)
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.darkroom)
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(2)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .background(Theme.amber)
+            }
+
+            if let hint = controller.hint {
+                // Im Einfach-Modus sind die Einstellungen unerreichbar –
+                // der Hinweis, der dorthin verweist, braucht eine einfache
+                // Fassung. Alle anderen gelten wörtlich.
+                //
+                // Hier stand bis zur Lokalisierung `hint.contains("Einstellungen")`.
+                // Das ist eine Prüfung auf ein deutsches Wort in einem Text,
+                // der übersetzt wird — sie hätte auf Englisch nie mehr
+                // gegriffen, ohne dass es auffällt. `hint` trägt ohnehin nur
+                // die eine Unruhe-Meldung, die Prüfung war überflüssig.
+                Text(verbatim: mode == .basic
+                     ? (Platform.isMac
+                        ? String(localized: "Zu viel Bewegung – steht die Kamera wirklich fest?")
+                        : String(localized: "Zu viel Wackeln – leg das iPhone irgendwo auf oder lehne es an."))
+                     : hint)
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.darkroom)
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(2)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .background(Theme.amber)
+            }
+
+            if mode.showsAdvanced, !recentThumbs.isEmpty {
+                thumbStrip(project: project)
+            }
+
+            controlRow(project: project)
         }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 24)
+        .frame(width: width)
     }
 
     /// Werkzeuge oben links im Sucher – erst ab „Erweitert".
@@ -754,7 +782,7 @@ struct LiveCaptureView: View {
             if controller.loopFrames.isEmpty {
                 Rectangle()
                     .stroke(Theme.paperOnDark.opacity(0.25), style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                    .aspectRatio(3.0 / 4.0, contentMode: .fit)
+                    .aspectRatio(Platform.isMac ? 16.0 / 9.0 : 3.0 / 4.0, contentMode: .fit)
                     .overlay {
                         FoldMark(size: 34, color: Theme.paperOnDark.opacity(0.35))
                     }
@@ -769,7 +797,8 @@ struct LiveCaptureView: View {
             }
         }
         .padding(20)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity,
+               alignment: Platform.isMac ? .top : .center)
         .background(Theme.darkroom)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Text("Der Film bisher"))
@@ -780,17 +809,20 @@ struct LiveCaptureView: View {
     @ViewBuilder
     private var cameraLayer: some View {
         ZStack {
-            #if targetEnvironment(simulator)
-            if let sim = controller.simulatedPreview {
-                Image(uiImage: sim).resizable().scaledToFill()
+            if Platform.simulatedCamera {
+                if let sim = controller.simulatedPreview {
+                    Image(uiImage: sim).resizable()
+                        .aspectRatio(contentMode: Platform.isMac ? .fit : .fill)
+                } else {
+                    Theme.darkroom
+                }
             } else {
-                Theme.darkroom
+                #if !targetEnvironment(simulator)
+                CameraPreview(session: controller.session) { devicePoint in
+                    controller.focus(atDevicePoint: devicePoint)
+                }
+                #endif
             }
-            #else
-            CameraPreview(session: controller.session) { devicePoint in
-                controller.focus(atDevicePoint: devicePoint)
-            }
-            #endif
 
             if onionSkin,
                let ghost = onionFirst ? controller.firstCapturedImage : controller.lastCapturedImage {

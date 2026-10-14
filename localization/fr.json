@@ -286,5 +286,6 @@
   "Dokumentenkamera mit Fokus-Schalter: auf Einzelfokus (S) stellen und einmal scharfstellen – sonst stellt sie bei jeder Hand im Bild neu scharf. Helligkeit und Weißabgleich lassen sich meist mit der App des Herstellers fest einstellen.": "Caméra de documents avec sélecteur de mise au point : passe en mise au point unique (S) et fais la mise au point une fois – sinon elle refait le point à chaque main dans le cadre. La luminosité et la balance des blancs se règlent en général de façon fixe dans l’app du fabricant.",
   "Labor-Ansicht: Blattnummer, Sitzungsuhr, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": "Vue labo : numéro de feuille, chrono de séance, mesures — et le compte à rebours du pli tourne en ambre autour du déclencheur.",
   "Keine Kamera angeschlossen.": "Aucune caméra branchée.",
-  "Ideal ist eine Dokumentenkamera, die senkrecht von oben auf den Tisch blickt. Eine angesteckte USB-Kamera wählt FrameFold von selbst.": "L'idéal est une caméra document qui regarde la table à la verticale. FrameFold choisit de lui-même une caméra USB branchée."
+  "Ideal ist eine Dokumentenkamera, die senkrecht von oben auf den Tisch blickt. Eine angesteckte USB-Kamera wählt FrameFold von selbst.": "L'idéal est une caméra document qui regarde la table à la verticale. FrameFold choisit de lui-même une caméra USB branchée.",
+  "Kamera über dem Tisch, automatisch auslösen": "Caméra au-dessus de la table, déclenchement automatique"
 }

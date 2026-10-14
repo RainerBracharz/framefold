@@ -12,6 +12,37 @@ enum Platform {
         return false
         #endif
     }()
+
+    /// Ersatzkamera mit synthetischen Bildern: immer im Simulator, in der
+    /// Mac-Testfassung nur mit gesetztem FF_SIM_FRAMES – für Store-Screenshots
+    /// ohne echte Kamera (und ohne jemanden zu filmen).
+    static let simulatedCamera: Bool = {
+        #if targetEnvironment(simulator)
+        return true
+        #elseif targetEnvironment(macCatalyst) && DEBUG
+        return !(ProcessInfo.processInfo.environment["FF_SIM_FRAMES"] ?? "").isEmpty
+        #else
+        return false
+        #endif
+    }()
+
+    /// Start-Tab für Store-Screenshots (FF_TAB=0/1/2), sonst nil.
+    static let startTab: Int? = {
+        #if targetEnvironment(simulator) || (targetEnvironment(macCatalyst) && DEBUG)
+        return ProcessInfo.processInfo.environment["FF_TAB"].flatMap { Int($0) }
+        #else
+        return nil
+        #endif
+    }()
+
+    /// Direkt in die Aufnahme springen (Layout-Prüfung, Screenshots).
+    static let autostart: Bool = {
+        #if targetEnvironment(simulator) || (targetEnvironment(macCatalyst) && DEBUG)
+        return ProcessInfo.processInfo.environment["FF_AUTOSTART"] == "1"
+        #else
+        return false
+        #endif
+    }()
 }
 
 /// Alles, was nur das iPhone Duo betrifft, an einer Stelle – samt der

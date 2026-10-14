@@ -1,0 +1,5 @@
+FrameFold 2.2 – jetzt auch für den Mac.
+
+• Stopmotion vom Schreibtisch: Eine Dokumentenkamera blickt von oben auf den Tisch, FrameFold löst aus, sobald deine Hände aus dem Bild sind.
+• Kamerawahl in den Einstellungen: USB-Kamera, iPhone als Kamera oder eingebaute Kamera – wechselbar mitten in der Aufnahme.
+• Leertaste als Auslöser.

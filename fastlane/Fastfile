@@ -110,6 +110,30 @@ platform :ios do
     UI.success("Mac-Build ist in App Store Connect.")
   end
 
+  # Texte und Screenshots der Mac-Version. Untertitel und Name teilt sich der
+  # Mac mit dem iPhone – darum liegen in metadata-mac bewusst keine.
+  # Screenshots (2880×1800) erzeugt die Debug-Fassung mit Ersatzkamera:
+  # FF_SIM_FRAMES, FF_AUTOSTART, FF_TAB, FF_WINDOW=1440x900.
+  desc "Mac-Texte und -Screenshots hochladen (ohne Einreichung)"
+  lane :mac_metadata do
+    api_key = login
+    upload_to_app_store(
+      api_key: api_key,
+      app_identifier: APP_ID,
+      platform: "osx",
+      app_version: get_version_number(xcodeproj: PROJECT, target: SCHEME),
+      metadata_path: "./fastlane/metadata-mac",
+      screenshots_path: "./fastlane/screenshots-mac",
+      overwrite_screenshots: true,
+      skip_binary_upload: true,
+      skip_app_version_update: true,
+      force: true,
+      precheck_include_in_app_purchases: false,
+      submit_for_review: false
+    )
+    UI.success("Mac-Texte und -Screenshots sind in App Store Connect.")
+  end
+
   desc "Kompletter Release: bauen, hochladen, Version anlegen, einreichen"
   lane :release do
     api_key = login

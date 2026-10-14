@@ -2710,6 +2710,22 @@
         }
       }
     },
+    "Kamera über dem Tisch, automatisch auslösen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera above the table, fires by itself"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra au-dessus de la table, déclenchement automatique"
+          }
+        }
+      }
+    },
     "Kamera": {
       "localizations": {
         "en": {

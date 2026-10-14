@@ -446,7 +446,7 @@
 				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bracharz.framefold;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "FrameFold/FrameFold-Mac.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "FrameFold/FrameFold-Mac-Debug.entitlements";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
