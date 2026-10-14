@@ -17,7 +17,7 @@ brew install fastlane
 ## Ein Update veröffentlichen
 
 ```
-cd ~/Desktop/framefold
+cd ~/Desktop/05_Projekte/framefold
 
 # 1. Neue Versionsnummer setzen
 fastlane bump version:1.0.2

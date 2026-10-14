@@ -6,13 +6,14 @@
 #   scripts/record_preview.sh              # de en fr
 #   scripts/record_preview.sh en           # nur eine Sprache
 #
-# Ergebnis: ~/Desktop/framefold-spot/preview-raw/<sprache>.mp4 (+ Zeitmarken)
+# Ergebnis: ../framefold-spot/preview-raw/<sprache>.mp4 (+ Zeitmarken) – der Spot-Ordner
+# liegt neben dem Repository.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 if [ $# -gt 0 ]; then LANGS=("$@"); else LANGS=(de en fr); fi
 DEVICE="iPhone 17 Pro Max"
-SPOT="$HOME/Desktop/framefold-spot"
+SPOT="$(cd .. && pwd)/framefold-spot"   # neben dem Repository (cd oben steht schon im Repo)
 OUT="$SPOT/preview-raw"
 FRAMES=/tmp/ff-simframes            # Simulator-Apps dürfen nicht auf den Schreibtisch
 mkdir -p "$OUT"
