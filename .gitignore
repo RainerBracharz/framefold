@@ -49,3 +49,6 @@ eval/results/
 
 # Duo-Screenshots: erzeugt, wie fastlane/screenshots nicht im Repository
 fastlane/screenshots-duo
+
+# Laufzeitprofile aus Debug-Starts
+*.profraw
