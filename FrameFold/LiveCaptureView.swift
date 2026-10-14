@@ -1287,6 +1287,10 @@ struct LiveSettingsView: View {
                 }
                 .listRowBackground(Theme.paperShade.opacity(0.5))
 
+                #if targetEnvironment(macCatalyst)
+                MacCameraSection(controller: controller)
+                #endif
+
                 if outerDisplayAvailable {
                 Section {
                     Toggle("Film auf dem Außendisplay", isOn: $outerDisplayOn)
@@ -1513,3 +1517,44 @@ struct HardwareShutterBridge: UIViewRepresentable {
 
     func updateUIView(_ uiView: UIView, context: Context) {}
 }
+
+#if targetEnvironment(macCatalyst)
+/// Kamerawahl am Mac: Dort hängen oft mehrere Kameras – die eingebaute, ein
+/// iPhone über Continuity Camera und die Dokumentenkamera über dem Tisch.
+/// Steckt man eine Kamera an oder ab, aktualisiert sich die Liste.
+private struct MacCameraSection: View {
+    @ObservedObject var controller: LiveCaptureController
+    @State private var cameras: [AVCaptureDevice] = []
+
+    var body: some View {
+        Section {
+            if cameras.isEmpty {
+                Text("Keine Kamera angeschlossen.")
+                    .font(Theme.body)
+            } else {
+                Picker("Kamera", selection: Binding(
+                    get: { controller.currentCameraID ?? cameras.first?.uniqueID ?? "" },
+                    set: { controller.switchCamera(to: $0) })) {
+                    ForEach(cameras, id: \.uniqueID) { camera in
+                        Text(verbatim: camera.localizedName).tag(camera.uniqueID)
+                    }
+                }
+                .font(Theme.body)
+            }
+            Text("Ideal ist eine Dokumentenkamera, die senkrecht von oben auf den Tisch blickt. Eine angesteckte USB-Kamera wählt FrameFold von selbst.")
+                .font(.system(size: 12))
+                .foregroundStyle(Theme.graphite)
+        } header: {
+            CatalogLabel("Kamera")
+        }
+        .listRowBackground(Theme.paperShade.opacity(0.5))
+        .onAppear(perform: reload)
+        .onReceive(NotificationCenter.default.publisher(for: AVCaptureDevice.wasConnectedNotification)) { _ in reload() }
+        .onReceive(NotificationCenter.default.publisher(for: AVCaptureDevice.wasDisconnectedNotification)) { _ in reload() }
+    }
+
+    private func reload() {
+        cameras = LiveCaptureController.availableCameras()
+    }
+}
+#endif

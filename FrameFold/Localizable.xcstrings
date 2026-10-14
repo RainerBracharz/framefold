@@ -2678,6 +2678,38 @@
         }
       }
     },
+    "Keine Kamera angeschlossen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No camera connected."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune caméra branchée."
+          }
+        }
+      }
+    },
+    "Ideal ist eine Dokumentenkamera, die senkrecht von oben auf den Tisch blickt. Eine angesteckte USB-Kamera wählt FrameFold von selbst.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A document camera looking straight down at the table works best. FrameFold picks a connected USB camera on its own."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'idéal est une caméra document qui regarde la table à la verticale. FrameFold choisit de lui-même une caméra USB branchée."
+          }
+        }
+      }
+    },
     "Kamera": {
       "localizations": {
         "en": {

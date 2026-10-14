@@ -751,17 +751,20 @@ final class LiveCaptureController: NSObject, ObservableObject {
     static func camLog(_ text: String) {}
     #endif
 
-    /// Die Kamera, die aufnimmt. Am iPhone die Rückkamera. Am Mac zuerst eine
-    /// angeschlossene USB-Kamera – typischerweise eine Dokumentenkamera, die
-    /// von oben auf den Tisch blickt –, dann ein iPhone als Kamera
-    /// (Continuity Camera), zuletzt die eingebaute.
+    /// Die Kamera, die aufnimmt. Am iPhone die Rückkamera. Am Mac die in den
+    /// Einstellungen gewählte, sonst zuerst eine angeschlossene USB-Kamera –
+    /// typischerweise eine Dokumentenkamera, die von oben auf den Tisch
+    /// blickt –, dann ein iPhone als Kamera (Continuity Camera), zuletzt die
+    /// eingebaute.
     static func captureDevice() -> AVCaptureDevice? {
         #if targetEnvironment(macCatalyst)
-        let preferred: [AVCaptureDevice.DeviceType] = [.external, .continuityCamera, .builtInWideAngleCamera]
-        let found = AVCaptureDevice.DiscoverySession(deviceTypes: preferred, mediaType: .video,
-                                                     position: .unspecified).devices
-        Self.camLog("gefunden: " + found.map { "\($0.localizedName) [\($0.deviceType.rawValue)] connected=\($0.isConnected)" }.joined(separator: " | "))
-        for type in preferred {
+        let found = availableCameras()
+        Self.camLog("gefunden: " + found.map { "\($0.localizedName) [\($0.deviceType.rawValue)]" }.joined(separator: " | "))
+        if let chosen = UserDefaults.standard.string(forKey: cameraKey),
+           let device = found.first(where: { $0.uniqueID == chosen }) {
+            return device
+        }
+        for type in macCameraTypes {
             if let device = found.first(where: { $0.deviceType == type }) { return device }
         }
         return found.first
@@ -769,6 +772,46 @@ final class LiveCaptureController: NSObject, ObservableObject {
         return AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
         #endif
     }
+
+    #if targetEnvironment(macCatalyst)
+    /// Merkt sich die gewählte Kamera über ihre eindeutige Kennung. Ist sie
+    /// beim nächsten Start nicht angesteckt, greift die Reihenfolge oben.
+    static let cameraKey = "macCameraID"
+    private static let macCameraTypes: [AVCaptureDevice.DeviceType] = [.external, .continuityCamera, .builtInWideAngleCamera]
+
+    static func availableCameras() -> [AVCaptureDevice] {
+        AVCaptureDevice.DiscoverySession(deviceTypes: macCameraTypes, mediaType: .video,
+                                         position: .unspecified).devices
+            .filter(\.isConnected)
+    }
+
+    /// Kennung der Kamera, die gerade aufnimmt (für die Auswahl in den
+    /// Einstellungen).
+    var currentCameraID: String? { device?.uniqueID }
+
+    /// Wechselt mitten in der Sitzung die Kamera. Die Bewegungs-Kalibrierung
+    /// gehört zum alten Bild und wird neu gemessen.
+    func switchCamera(to id: String) {
+        UserDefaults.standard.set(id, forKey: Self.cameraKey)
+        guard id != device?.uniqueID, !session.inputs.isEmpty,
+              let next = Self.availableCameras().first(where: { $0.uniqueID == id }),
+              let input = try? AVCaptureDeviceInput(device: next) else { return }
+        session.beginConfiguration()
+        let old = session.inputs
+        old.forEach(session.removeInput)
+        guard session.canAddInput(input) else {
+            old.forEach { if session.canAddInput($0) { session.addInput($0) } }
+            session.commitConfiguration()
+            return
+        }
+        session.addInput(input)
+        session.sessionPreset = session.canSetSessionPreset(.hd1920x1080) ? .hd1920x1080 : .high
+        session.commitConfiguration()
+        device = next
+        objectWillChange.send()
+        if isRunning { refixCamera() }
+    }
+    #endif
 
     /// Baut die Capture-Session auf. Gibt `false` zurück, wenn kein
     /// Aufnahmegerät verfügbar ist (Simulator/kameraloses Gerät).
@@ -784,14 +827,6 @@ final class LiveCaptureController: NSObject, ObservableObject {
         session.sessionPreset = .hd1920x1080
         #endif
 
-        #if targetEnvironment(macCatalyst)
-        let probe = Self.captureDevice()
-        Self.camLog("gewählt: " + (probe?.localizedName ?? "keine"))
-        if let probe {
-            do { let i = try AVCaptureDeviceInput(device: probe); Self.camLog("input ok, canAdd=\(session.canAddInput(i))") }
-            catch { Self.camLog("input Fehler: \(error)") }
-        }
-        #endif
         guard let device = Self.captureDevice(),
               let input = try? AVCaptureDeviceInput(device: device),
               session.canAddInput(input) else {

@@ -291,5 +291,7 @@
   "Szene wirkt dauerhaft unruhig. Kamerahalterung prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen.": "The scene never settles. Check the camera mount — or raise the motion tolerance in settings.",
   "Fokus findet nichts Scharfes. Liegt das Werk im Bildfeld der Kamera?": "Focus can't find anything sharp. Is your work within the camera's view?",
   "Dokumentenkamera mit Fokus-Schalter: auf Einzelfokus (S) stellen und einmal scharfstellen – sonst stellt sie bei jeder Hand im Bild neu scharf. Helligkeit und Weißabgleich lassen sich meist mit der App des Herstellers fest einstellen.": "Document camera with a focus switch: set it to single focus (S) and focus once – otherwise it refocuses every time a hand enters the frame. Brightness and white balance can usually be fixed in the maker's app.",
-  "Labor-Ansicht: Blattnummer, Sitzungsuhr, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": "Lab view: sheet number, session clock, readings — and the crease countdown runs in amber around the shutter."
+  "Labor-Ansicht: Blattnummer, Sitzungsuhr, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": "Lab view: sheet number, session clock, readings — and the crease countdown runs in amber around the shutter.",
+  "Keine Kamera angeschlossen.": "No camera connected.",
+  "Ideal ist eine Dokumentenkamera, die senkrecht von oben auf den Tisch blickt. Eine angesteckte USB-Kamera wählt FrameFold von selbst.": "A document camera looking straight down at the table works best. FrameFold picks a connected USB camera on its own."
 }
