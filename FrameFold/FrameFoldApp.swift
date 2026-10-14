@@ -288,6 +288,13 @@ struct FrameFoldApp: App {
             .task {
                 StudioMonitorHub.shared.activate()
                 WatchLink.shared.activate()   // Fernauslöser am Handgelenk
+                #if targetEnvironment(macCatalyst)
+                // Kleiner gezogen, quetscht sich der Sucher neben der
+                // Seitenleiste auf Briefmarkengröße.
+                for case let scene as UIWindowScene in UIApplication.shared.connectedScenes {
+                    scene.sizeRestrictions?.minimumSize = CGSize(width: 820, height: 620)
+                }
+                #endif
             }
             // Die Tab-Leiste steht IMMER auf Papier – die schwebende Leiste
             // passt sich sonst dem Inhalt an (dunkel in der Dunkelkammer,

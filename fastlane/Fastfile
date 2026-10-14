@@ -77,6 +77,38 @@ platform :ios do
     UI.success("Build ist in App Store Connect.")
   end
 
+  # Die Mac-Fassung (Mac Catalyst) teilt sich Bundle-ID und App-Eintrag mit
+  # dem iPhone – ein Kauf, zwei Plattformen. Gebaut wird ein signiertes .pkg
+  # für den Mac App Store.
+  private_lane :mac_pkg do |options|
+    build_app(project: PROJECT, scheme: SCHEME,
+              catalyst_platform: "macos",
+              export_method: "app-store",
+              export_team_id: TEAM_ID,
+              export_options: export_options.merge(destination: "export"),
+              output_directory: "build/mac-release",
+              xcargs: "-allowProvisioningUpdates")
+  end
+
+  desc "Mac-Fassung nur lokal bauen und signieren (lädt nichts hoch)"
+  lane :mac_build do
+    mac_pkg
+    UI.success("Paket liegt in build/mac-release.")
+  end
+
+  desc "Mac-Fassung bauen und nach TestFlight hochladen (ohne Einreichung)"
+  lane :mac_upload do
+    api_key = login
+    latest = latest_testflight_build_number(api_key: api_key, app_identifier: APP_ID,
+                                            platform: "osx", initial_build_number: 0)
+    current = get_build_number(xcodeproj: PROJECT).to_i
+    increment_build_number(xcodeproj: PROJECT, build_number: [latest + 1, current].max)
+    pkg = mac_pkg
+    upload_to_testflight(api_key: api_key, app_platform: "osx", pkg: pkg,
+                         skip_waiting_for_build_processing: true)
+    UI.success("Mac-Build ist in App Store Connect.")
+  end
+
   desc "Kompletter Release: bauen, hochladen, Version anlegen, einreichen"
   lane :release do
     api_key = login
