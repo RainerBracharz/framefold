@@ -134,13 +134,17 @@ struct LiveCaptureView: View {
             VStack(spacing: 18) {
                 FoldMark(size: 44, color: Theme.paperOnDark)
                 CatalogLabel("So funktioniert die Kamera", color: Theme.paperOnDark)
-                Text("iPhone aufs Stativ oder ruhig über die Arbeit halten. Arbeite einfach — FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.")
+                Text(Platform.isMac
+                     ? "Kamera fest über dem Tisch, etwa eine Dokumentenkamera. Arbeite einfach — FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht."
+                     : "iPhone aufs Stativ oder ruhig über die Arbeit halten. Arbeite einfach — FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.")
                     .font(Theme.mono(12))
                     .foregroundStyle(Theme.paperOnDark.opacity(0.85))
                     .multilineTextAlignment(.center)
                     .lineSpacing(3)
                     .padding(.horizontal, 34)
-                Text("Der runde Knopf löst jederzeit von Hand aus.")
+                Text(Platform.isMac
+                     ? "Der runde Knopf oder die Leertaste löst jederzeit von Hand aus."
+                     : "Der runde Knopf löst jederzeit von Hand aus.")
                     .font(Theme.mono(11))
                     .foregroundStyle(Theme.paperOnDark.opacity(0.6))
                     .multilineTextAlignment(.center)
@@ -162,7 +166,9 @@ struct LiveCaptureView: View {
         VStack(spacing: 16) {
             FoldMark(size: 40, color: Theme.paperOnDark)
             CatalogLabel("Keine Kamera verfügbar", color: Theme.paperOnDark)
-            Text("Auf diesem Gerät wurde keine Kamera gefunden (z. B. im Simulator). Die Live-Aufnahme braucht ein echtes iPhone. Videos kannst du im Video-Tab trotzdem verarbeiten.")
+            Text(Platform.isMac
+                 ? "Keine Kamera gefunden. Schließ eine USB-Kamera an – etwa eine Dokumentenkamera über dem Tisch – oder nimm dein iPhone als Kamera. Videos kannst du im Video-Tab trotzdem verarbeiten."
+                 : "Auf diesem Gerät wurde keine Kamera gefunden (z. B. im Simulator). Die Live-Aufnahme braucht ein echtes iPhone. Videos kannst du im Video-Tab trotzdem verarbeiten.")
                 .font(.system(size: 13))
                 .foregroundStyle(Theme.paperOnDark.opacity(0.7))
                 .multilineTextAlignment(.center)
@@ -190,7 +196,9 @@ struct LiveCaptureView: View {
                         .foregroundStyle(Theme.paperOnDark)
                         .lineSpacing(2)
                         .fixedSize(horizontal: false, vertical: true)
-                    Text("iPhone aufs Stativ. FrameFold löst aus, sobald deine Hände aus dem Bild sind.")
+                    Text(Platform.isMac
+                         ? "Kamera über den Tisch. FrameFold löst aus, sobald deine Hände aus dem Bild sind."
+                         : "iPhone aufs Stativ. FrameFold löst aus, sobald deine Hände aus dem Bild sind.")
                         .font(Theme.mono(11.5))
                         .foregroundStyle(Theme.paperOnDark.opacity(0.6))
                         .lineSpacing(3)
@@ -584,7 +592,9 @@ struct LiveCaptureView: View {
         // würde das hochkante Kamerabild beim Füllen oben und unten mehr als
         // die Hälfte verlieren – man sähe nicht mehr, was aufgenommen wird.
         // Dann steht das Bild vollständig in der Mitte, im Verhältnis 3:4.
-        let landscapePage = size.width > size.height
+        // Am Mac zeigt die Vorschau ohnehin das ganze Bild (Querformat der
+        // USB-Kamera) – dort keine 3:4-Box.
+        let landscapePage = !Platform.isMac && size.width > size.height
         let cameraSize = landscapePage
             ? CGSize(width: size.height * 0.75, height: size.height)
             : CGSize(width: size.width + trailingBleed, height: size.height)
@@ -617,7 +627,9 @@ struct LiveCaptureView: View {
                     // sonst verschwindet im Einfach-Modus genau der Knopf,
                     // mit dem man gerade auf „Stativ" gestellt hat, und es
                     // gibt keinen Weg zurück.
-                    if mode.showsAdvanced || controller.rig == .handheld
+                    // Am Mac gibt es keine Aufnahmeart: Die Kamera steht immer.
+                    if !Platform.isMac,
+                       mode.showsAdvanced || controller.rig == .handheld
                         || !controller.rigIsAutomatic {
                         rigBadge
                     }
@@ -645,7 +657,9 @@ struct LiveCaptureView: View {
                     // gegriffen, ohne dass es auffällt. `hint` trägt ohnehin nur
                     // die eine Unruhe-Meldung, die Prüfung war überflüssig.
                     Text(verbatim: mode == .basic
-                         ? String(localized: "Zu viel Wackeln – leg das iPhone irgendwo auf oder lehne es an.")
+                         ? (Platform.isMac
+                            ? String(localized: "Zu viel Bewegung – steht die Kamera wirklich fest?")
+                            : String(localized: "Zu viel Wackeln – leg das iPhone irgendwo auf oder lehne es an."))
                          : hint)
                         .font(Theme.mono(11))
                         .foregroundStyle(Theme.darkroom)
@@ -690,7 +704,8 @@ struct LiveCaptureView: View {
         // Werkzeuge erst ab „Erweitert"
         if mode.showsAdvanced {
             VStack(spacing: 8) {
-                sucherButton("camera.metering.center.weighted", label: "Kamera neu fixieren") {
+                sucherButton("camera.metering.center.weighted",
+                             label: Platform.isMac ? "Kamera neu einmessen" : "Kamera neu fixieren") {
                     controller.refixCamera()
                 }
                 if referenceImage == nil {
@@ -779,15 +794,15 @@ struct LiveCaptureView: View {
 
             if onionSkin,
                let ghost = onionFirst ? controller.firstCapturedImage : controller.lastCapturedImage {
-                Image(uiImage: ghost).resizable().scaledToFill()
+                Image(uiImage: ghost).resizable().aspectRatio(contentMode: Platform.isMac ? .fit : .fill)
                     .opacity(onionOpacity).allowsHitTesting(false)
             }
             if let referenceImage {
-                Image(uiImage: referenceImage).resizable().scaledToFill()
+                Image(uiImage: referenceImage).resizable().aspectRatio(contentMode: Platform.isMac ? .fit : .fill)
                     .opacity(onionOpacity * 0.9).allowsHitTesting(false)
             }
             if mode.showsAdvanced, showGrid { ThirdsGrid().allowsHitTesting(false) }
-            if mode.showsAdvanced, showLevel {
+            if mode.showsAdvanced, showLevel, !Platform.isMac {
                 BubbleLevel(gx: level.gx, gy: level.gy, isLevel: level.isLevel)
                     .allowsHitTesting(false)
             }
@@ -847,6 +862,10 @@ struct LiveCaptureView: View {
                     controller.startSelfTimer()
                 }
             )
+            #if targetEnvironment(macCatalyst)
+            // Am Mac löst auch die Leertaste aus – ohne die Kamera zu berühren.
+            .keyboardShortcut(.space, modifiers: [])
+            #endif
             .accessibilityLabel("Auslöser")
             .accessibilityHint("Nimmt sofort ein Bild auf. Sonst löst die Kamera von selbst aus, sobald die Hände aus dem Bild sind.")
 
@@ -1254,7 +1273,11 @@ struct LiveSettingsView: View {
                     Text(mode == .basic
                          ? "Einfach: nur Auslöser und Fertig. Alles Weitere erscheint ab \"Erweitert\"."
                          : mode.showsTolino
-                         ? "Labor-Ansicht: Blattnummer, Sitzungsuhr, fixierte Belichtung, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser."
+                         ? (Platform.isMac
+                            ? "Labor-Ansicht: Blattnummer, Sitzungsuhr, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser."
+                            : "Labor-Ansicht: Blattnummer, Sitzungsuhr, fixierte Belichtung, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.")
+                         : Platform.isMac
+                         ? "Alle Werkzeuge sichtbar: Raster, Pegel, Daumenkino mit Zurücknehmen, Neu-Einmessen, Referenzbild."
                          : "Alle Werkzeuge sichtbar: Raster, Wasserwaage, Pegel, Daumenkino mit Zurücknehmen, Neu-Fixieren, Referenzbild.")
                         .font(Theme.mono(11))
                         .foregroundStyle(Theme.graphite)
@@ -1281,8 +1304,10 @@ struct LiveSettingsView: View {
                 Section {
                     Toggle("Drittel-Raster", isOn: $showGrid)
                         .font(Theme.body)
-                    Toggle("Wasserwaage", isOn: $showLevel)
-                        .font(Theme.body)
+                    if !Platform.isMac {
+                        Toggle("Wasserwaage", isOn: $showLevel)
+                            .font(Theme.body)
+                    }
                 } header: {
                     CatalogLabel("Sucher")
                 }
@@ -1330,7 +1355,9 @@ struct LiveSettingsView: View {
                         }
                     }
                     // Netzfrequenz ist Labor-Wissen – erst im Tolino-Modus zeigen
-                    if mode.showsTolino {
+                    // Am Mac regelt die Kamera die Belichtung selbst – die
+                    // Netzfrequenz hätte nichts, worauf sie wirken könnte.
+                    if mode.showsTolino, !Platform.isMac {
                         Picker("Netzfrequenz", selection: $controller.mainsHz) {
                             Text("50 Hz (EU)").tag(50)
                             Text("60 Hz (US)").tag(60)
@@ -1363,10 +1390,18 @@ struct LiveSettingsView: View {
 
                 Section {
                     tipRow("lightbulb", "Licht konstant halten: Kunstlicht nutzen, Fenster abdunkeln. Billige LED-/Leuchtstofflampen flackern im Netztakt und streifen einzelne Bilder.")
-                    tipRow("hand.raised", "iPhone nicht berühren: aufs Stativ stellen und den Auto-Shutter arbeiten lassen (oder den runden Knopf).")
-                    tipRow("lock", "Kamera bleibt ruhig: FrameFold sperrt Belichtung und Weißabgleich nach der kurzen Kalibrierung – so driftet zwischen den Bildern nichts. Der Fokus wird am Stativ fixiert, aus der Hand läuft er mit.")
+                    if Platform.isMac {
+                        tipRow("hand.raised", "Kamera nicht berühren: fest über dem Tisch montieren und den Auto-Shutter arbeiten lassen (oder den runden Knopf).")
+                        tipRow("lock", "Licht ruhig halten: Gleichmäßiges Kunstlicht ohne Sonne hält den Film ruhig. Wo die Kamera es erlaubt, sperrt FrameFold Belichtung und Weißabgleich.")
+                        tipRow("scope", "Dokumentenkamera mit Fokus-Schalter: auf Einzelfokus (S) stellen und einmal scharfstellen – sonst stellt sie bei jeder Hand im Bild neu scharf. Helligkeit und Weißabgleich lassen sich meist mit der App des Herstellers fest einstellen.")
+                    } else {
+                        tipRow("hand.raised", "iPhone nicht berühren: aufs Stativ stellen und den Auto-Shutter arbeiten lassen (oder den runden Knopf).")
+                        tipRow("lock", "Kamera bleibt ruhig: FrameFold sperrt Belichtung und Weißabgleich nach der kurzen Kalibrierung – so driftet zwischen den Bildern nichts. Der Fokus wird am Stativ fixiert, aus der Hand läuft er mit.")
+                    }
                     tipRow("square.2.layers.3d", "Drift früh erkennen: Zwiebelhaut anlassen und die Aufnahme ab und zu mit dem ersten Bild vergleichen.")
-                    tipRow("timer", "Ohne Wackeln auslösen: Auslöser gedrückt halten startet einen 3-Sekunden-Countdown. Auch die Lautstärketasten von Kopfhörern oder AirPods lösen aus.")
+                    tipRow("timer", Platform.isMac
+                           ? "Ohne Wackeln auslösen: Auslöser gedrückt halten startet einen 3-Sekunden-Countdown. Die Leertaste löst ebenfalls aus."
+                           : "Ohne Wackeln auslösen: Auslöser gedrückt halten startet einen 3-Sekunden-Countdown. Auch die Lautstärketasten von Kopfhörern oder AirPods lösen aus.")
                 } header: {
                     CatalogLabel("Aufnahme-Tipps")
                 }

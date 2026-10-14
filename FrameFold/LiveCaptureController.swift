@@ -1017,7 +1017,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 // Lieber gar nicht fixieren als unscharf fixieren: Der
                 // Autofokus läuft weiter und holt sich das Bild irgendwann.
                 self.focusIsLocked = false
-                self.setFocusHint(String(localized: "Fokus findet nichts Scharfes. Tippe im Sucher auf dein Werk."))
+                self.setFocusHint(Platform.isMac
+                    ? String(localized: "Fokus findet nichts Scharfes. Liegt das Werk im Bildfeld der Kamera?")
+                    : String(localized: "Fokus findet nichts Scharfes. Tippe im Sucher auf dein Werk."))
             }
             if self.rawStatus == .focusing { self.setStatus(.waitingForWork) }
 
@@ -1443,7 +1445,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
             // woran es liegt, statt den Nutzer raten zu lassen.
             if restlessSince == nil { restlessSince = Date() }
             if Date().timeIntervalSince(restlessSince!) > 6 {
-                hint = String(localized: "Szene wirkt dauerhaft unruhig. Stativ prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen.")
+                hint = Platform.isMac
+                    ? String(localized: "Szene wirkt dauerhaft unruhig. Kamerahalterung prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen.")
+                    : String(localized: "Szene wirkt dauerhaft unruhig. Stativ prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen.")
             }
             return
         }

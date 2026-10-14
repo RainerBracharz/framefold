@@ -269,5 +269,20 @@
   "%lld Bilder · ~%@ s bei 10 fps": "%1$lld images · ~%2$@ s à 10 fps",
   "Intervall, alle %lld Sekunden": "Intervalle, toutes les %lld secondes",
   "Film auf dem Außendisplay": "Film sur l’écran extérieur",
-  "Aufgeklappt zeigt das iPhone Duo den bisherigen Film außen – zum Tisch hin.": "Déplié, l’iPhone Duo affiche le film en cours à l’extérieur, côté table."
+  "Aufgeklappt zeigt das iPhone Duo den bisherigen Film außen – zum Tisch hin.": "Déplié, l’iPhone Duo affiche le film en cours à l’extérieur, côté table.",
+  "Kamera über den Tisch, arbeiten. Es löst von selbst aus, sobald deine Hände aus dem Bild sind.": "Caméra au-dessus de la table, et au travail. Elle déclenche toute seule dès que tes mains quittent le cadre.",
+  "Kamera fest über dem Tisch, etwa eine Dokumentenkamera. Arbeite einfach — FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.": "Caméra fixée au-dessus de la table, par exemple une caméra de documents. Travaille, tout simplement — FrameFold prend une image tout seul dès que tes mains quittent le cadre et que la scène se calme.",
+  "Der runde Knopf oder die Leertaste löst jederzeit von Hand aus.": "Le bouton rond ou la barre d’espace déclenche à la main à tout moment.",
+  "Keine Kamera gefunden. Schließ eine USB-Kamera an – etwa eine Dokumentenkamera über dem Tisch – oder nimm dein iPhone als Kamera. Videos kannst du im Video-Tab trotzdem verarbeiten.": "Aucune caméra trouvée. Branche une caméra USB – par exemple une caméra de documents au-dessus de la table – ou utilise ton iPhone comme caméra. Tu peux tout de même traiter des vidéos dans l’onglet Vidéo.",
+  "Kamera über den Tisch. FrameFold löst aus, sobald deine Hände aus dem Bild sind.": "Caméra au-dessus de la table. FrameFold déclenche dès que tes mains quittent le cadre.",
+  "Zu viel Bewegung – steht die Kamera wirklich fest?": "Trop de mouvement — la caméra est-elle bien fixée ?",
+  "Kamera neu einmessen": "Réétalonner la caméra",
+  "Alle Werkzeuge sichtbar: Raster, Pegel, Daumenkino mit Zurücknehmen, Neu-Einmessen, Referenzbild.": "Tous les outils visibles : grille, jauge de mouvement, bande folioscope avec annulation, réétalonnage, image de référence.",
+  "Kamera nicht berühren: fest über dem Tisch montieren und den Auto-Shutter arbeiten lassen (oder den runden Knopf).": "Ne touche pas la caméra : fixe-la bien au-dessus de la table et laisse faire le déclenchement auto (ou le bouton rond).",
+  "Licht ruhig halten: Gleichmäßiges Kunstlicht ohne Sonne hält den Film ruhig. Wo die Kamera es erlaubt, sperrt FrameFold Belichtung und Weißabgleich.": "Garde une lumière stable : une lumière artificielle régulière, sans soleil, garde le film calme. Quand la caméra le permet, FrameFold verrouille l’exposition et la balance des blancs.",
+  "Ohne Wackeln auslösen: Auslöser gedrückt halten startet einen 3-Sekunden-Countdown. Die Leertaste löst ebenfalls aus.": "Déclencher sans bouger : un appui long sur le déclencheur lance un compte à rebours de trois secondes. La barre d’espace déclenche aussi.",
+  "Szene wirkt dauerhaft unruhig. Kamerahalterung prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen.": "La scène ne se stabilise jamais. Vérifie le support de la caméra — ou augmente la tolérance au mouvement dans les réglages.",
+  "Fokus findet nichts Scharfes. Liegt das Werk im Bildfeld der Kamera?": "La mise au point ne trouve rien de net. Ton œuvre est-elle dans le champ de la caméra ?",
+  "Dokumentenkamera mit Fokus-Schalter: auf Einzelfokus (S) stellen und einmal scharfstellen – sonst stellt sie bei jeder Hand im Bild neu scharf. Helligkeit und Weißabgleich lassen sich meist mit der App des Herstellers fest einstellen.": "Caméra de documents avec sélecteur de mise au point : passe en mise au point unique (S) et fais la mise au point une fois – sinon elle refait le point à chaque main dans le cadre. La luminosité et la balance des blancs se règlent en général de façon fixe dans l’app du fabricant.",
+  "Labor-Ansicht: Blattnummer, Sitzungsuhr, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": "Vue labo : numéro de feuille, chrono de séance, mesures — et le compte à rebours du pli tourne en ambre autour du déclencheur."
 }

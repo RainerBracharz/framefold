@@ -1,5 +1,19 @@
 import SwiftUI
 
+/// Läuft FrameFold gerade als Mac-App (Mac Catalyst)? Dort nimmt eine Kamera
+/// über dem Tisch auf – meist eine Dokumentenkamera –, und alles, was ein
+/// iPhone in der Hand oder auf dem Stativ voraussetzt, entfällt: Lagesensor,
+/// Wasserwaage, Aufnahmeart, Apple Watch, Lautstärketasten.
+enum Platform {
+    static let isMac: Bool = {
+        #if targetEnvironment(macCatalyst)
+        return true
+        #else
+        return false
+        #endif
+    }()
+}
+
 /// Alles, was nur das iPhone Duo betrifft, an einer Stelle – samt der
 /// Vorkehrungen, damit derselbe Code auch mit älteren SDKs baut und auf
 /// älteren Systemen läuft.

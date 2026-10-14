@@ -276,5 +276,20 @@
   "%lld Bilder · ~%@ s bei 10 fps": "%1$lld frames · ~%2$@ s at 10 fps",
   "Intervall, alle %lld Sekunden": "Interval, every %lld seconds",
   "Film auf dem Außendisplay": "Film on the outer display",
-  "Aufgeklappt zeigt das iPhone Duo den bisherigen Film außen – zum Tisch hin.": "Unfolded, iPhone Duo shows the film so far on the outside – facing the table."
+  "Aufgeklappt zeigt das iPhone Duo den bisherigen Film außen – zum Tisch hin.": "Unfolded, iPhone Duo shows the film so far on the outside – facing the table.",
+  "Kamera über den Tisch, arbeiten. Es löst von selbst aus, sobald deine Hände aus dem Bild sind.": "Camera above the table, then work. It fires by itself as soon as your hands leave the frame.",
+  "Kamera fest über dem Tisch, etwa eine Dokumentenkamera. Arbeite einfach — FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.": "Camera fixed above the table – a document camera, for instance. Just work — FrameFold takes a frame by itself as soon as your hands leave the frame and the scene settles.",
+  "Der runde Knopf oder die Leertaste löst jederzeit von Hand aus.": "The round button or the space bar fires by hand at any time.",
+  "Keine Kamera gefunden. Schließ eine USB-Kamera an – etwa eine Dokumentenkamera über dem Tisch – oder nimm dein iPhone als Kamera. Videos kannst du im Video-Tab trotzdem verarbeiten.": "No camera found. Connect a USB camera – a document camera above the table, for instance – or use your iPhone as a camera. You can still process videos in the Video tab.",
+  "Kamera über den Tisch. FrameFold löst aus, sobald deine Hände aus dem Bild sind.": "Camera above the table. FrameFold fires as soon as your hands leave the frame.",
+  "Zu viel Bewegung – steht die Kamera wirklich fest?": "Too much movement — is the camera really fixed?",
+  "Kamera neu einmessen": "Re-measure camera",
+  "Alle Werkzeuge sichtbar: Raster, Pegel, Daumenkino mit Zurücknehmen, Neu-Einmessen, Referenzbild.": "Every tool visible: grid, motion gauge, flip-book strip with undo, re-measure, reference image.",
+  "Kamera nicht berühren: fest über dem Tisch montieren und den Auto-Shutter arbeiten lassen (oder den runden Knopf).": "Don't touch the camera: mount it firmly above the table and let the auto-shutter work (or use the round button).",
+  "Licht ruhig halten: Gleichmäßiges Kunstlicht ohne Sonne hält den Film ruhig. Wo die Kamera es erlaubt, sperrt FrameFold Belichtung und Weißabgleich.": "Keep the light steady: even artificial light without sunshine keeps the film calm. Where the camera allows it, FrameFold locks exposure and white balance.",
+  "Ohne Wackeln auslösen: Auslöser gedrückt halten startet einen 3-Sekunden-Countdown. Die Leertaste löst ebenfalls aus.": "Fire without shake: hold the shutter for a three-second countdown. The space bar fires too.",
+  "Szene wirkt dauerhaft unruhig. Kamerahalterung prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen.": "The scene never settles. Check the camera mount — or raise the motion tolerance in settings.",
+  "Fokus findet nichts Scharfes. Liegt das Werk im Bildfeld der Kamera?": "Focus can't find anything sharp. Is your work within the camera's view?",
+  "Dokumentenkamera mit Fokus-Schalter: auf Einzelfokus (S) stellen und einmal scharfstellen – sonst stellt sie bei jeder Hand im Bild neu scharf. Helligkeit und Weißabgleich lassen sich meist mit der App des Herstellers fest einstellen.": "Document camera with a focus switch: set it to single focus (S) and focus once – otherwise it refocuses every time a hand enters the frame. Brightness and white balance can usually be fixed in the maker's app.",
+  "Labor-Ansicht: Blattnummer, Sitzungsuhr, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": "Lab view: sheet number, session clock, readings — and the crease countdown runs in amber around the shutter."
 }

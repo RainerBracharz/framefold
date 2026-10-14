@@ -483,6 +483,22 @@
         }
       }
     },
+    "Alle Werkzeuge sichtbar: Raster, Pegel, Daumenkino mit Zurücknehmen, Neu-Einmessen, Referenzbild.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every tool visible: grid, motion gauge, flip-book strip with undo, re-measure, reference image."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tous les outils visibles : grille, jauge de mouvement, bande folioscope avec annulation, réétalonnage, image de référence."
+          }
+        }
+      }
+    },
     "Alle Werkzeuge sichtbar: Raster, Wasserwaage, Pegel, Daumenkino mit Zurücknehmen, Neu-Fixieren, Referenzbild.": {
       "localizations": {
         "en": {
@@ -1637,6 +1653,22 @@
         }
       }
     },
+    "Der runde Knopf oder die Leertaste löst jederzeit von Hand aus.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The round button or the space bar fires by hand at any time."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le bouton rond ou la barre d’espace déclenche à la main à tout moment."
+          }
+        }
+      }
+    },
     "Die Bildauswahl läuft automatisch: FrameFold erfasst alle ruhigen Momente und entfernt Bilder mit Händen. Feinschliff machst du danach in der Bildauswahl.": {
       "localizations": {
         "en": {
@@ -1697,6 +1729,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Filmer en direct"
+          }
+        }
+      }
+    },
+    "Dokumentenkamera mit Fokus-Schalter: auf Einzelfokus (S) stellen und einmal scharfstellen – sonst stellt sie bei jeder Hand im Bild neu scharf. Helligkeit und Weißabgleich lassen sich meist mit der App des Herstellers fest einstellen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Document camera with a focus switch: set it to single focus (S) and focus once – otherwise it refocuses every time a hand enters the frame. Brightness and white balance can usually be fixed in the maker's app."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra de documents avec sélecteur de mise au point : passe en mise au point unique (S) et fais la mise au point une fois – sinon elle refait le point à chaque main dans le cadre. La luminosité et la balance des blancs se règlent en général de façon fixe dans l’app du fabricant."
           }
         }
       }
@@ -2205,6 +2253,22 @@
         }
       }
     },
+    "Fokus findet nichts Scharfes. Liegt das Werk im Bildfeld der Kamera?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus can't find anything sharp. Is your work within the camera's view?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La mise au point ne trouve rien de net. Ton œuvre est-elle dans le champ de la caméra ?"
+          }
+        }
+      }
+    },
     "Fokus findet nichts Scharfes. Tippe im Sucher auf dein Werk.": {
       "localizations": {
         "en": {
@@ -2662,6 +2726,38 @@
         }
       }
     },
+    "Kamera fest über dem Tisch, etwa eine Dokumentenkamera. Arbeite einfach — FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera fixed above the table – a document camera, for instance. Just work — FrameFold takes a frame by itself as soon as your hands leave the frame and the scene settles."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra fixée au-dessus de la table, par exemple une caméra de documents. Travaille, tout simplement — FrameFold prend une image tout seul dès que tes mains quittent le cadre et que la scène se calme."
+          }
+        }
+      }
+    },
+    "Kamera neu einmessen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Re-measure camera"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réétalonner la caméra"
+          }
+        }
+      }
+    },
     "Kamera neu fixieren": {
       "localizations": {
         "en": {
@@ -2674,6 +2770,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reverrouiller la caméra"
+          }
+        }
+      }
+    },
+    "Kamera nicht berühren: fest über dem Tisch montieren und den Auto-Shutter arbeiten lassen (oder den runden Knopf).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don't touch the camera: mount it firmly above the table and let the auto-shutter work (or use the round button)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ne touche pas la caméra : fixe-la bien au-dessus de la table et laisse faire le déclenchement auto (ou le bouton rond)."
           }
         }
       }
@@ -2694,6 +2806,38 @@
         }
       }
     },
+    "Kamera über den Tisch, arbeiten. Es löst von selbst aus, sobald deine Hände aus dem Bild sind.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera above the table, then work. It fires by itself as soon as your hands leave the frame."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra au-dessus de la table, et au travail. Elle déclenche toute seule dès que tes mains quittent le cadre."
+          }
+        }
+      }
+    },
+    "Kamera über den Tisch. FrameFold löst aus, sobald deine Hände aus dem Bild sind.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera above the table. FrameFold fires as soon as your hands leave the frame."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra au-dessus de la table. FrameFold déclenche dès que tes mains quittent le cadre."
+          }
+        }
+      }
+    },
     "Kein Kamerazugriff": {
       "localizations": {
         "en": {
@@ -2706,6 +2850,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pas d’accès à l’appareil photo"
+          }
+        }
+      }
+    },
+    "Keine Kamera gefunden. Schließ eine USB-Kamera an – etwa eine Dokumentenkamera über dem Tisch – oder nimm dein iPhone als Kamera. Videos kannst du im Video-Tab trotzdem verarbeiten.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No camera found. Connect a USB camera – a document camera above the table, for instance – or use your iPhone as a camera. You can still process videos in the Video tab."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune caméra trouvée. Branche une caméra USB – par exemple une caméra de documents au-dessus de la table – ou utilise ton iPhone comme caméra. Tu peux tout de même traiter des vidéos dans l’onglet Vidéo."
           }
         }
       }
@@ -2870,6 +3030,22 @@
         }
       }
     },
+    "Labor-Ansicht: Blattnummer, Sitzungsuhr, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lab view: sheet number, session clock, readings — and the crease countdown runs in amber around the shutter."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vue labo : numéro de feuille, chrono de séance, mesures — et le compte à rebours du pli tourne en ambre autour du déclencheur."
+          }
+        }
+      }
+    },
     "Labor-Ansicht: Blattnummer, Sitzungsuhr, fixierte Belichtung, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": {
       "localizations": {
         "en": {
@@ -2962,6 +3138,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Garde une lumière constante : lumière artificielle, fenêtres occultées. Les LED et néons bon marché scintillent au rythme du secteur et zèbrent certaines images."
+          }
+        }
+      }
+    },
+    "Licht ruhig halten: Gleichmäßiges Kunstlicht ohne Sonne hält den Film ruhig. Wo die Kamera es erlaubt, sperrt FrameFold Belichtung und Weißabgleich.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep the light steady: even artificial light without sunshine keeps the film calm. Where the camera allows it, FrameFold locks exposure and white balance."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garde une lumière stable : une lumière artificielle régulière, sans soleil, garde le film calme. Quand la caméra le permet, FrameFold verrouille l’exposition et la balance des blancs."
           }
         }
       }
@@ -3410,6 +3602,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Déclencher sans bouger : un appui long sur le déclencheur lance un compte à rebours de trois secondes. Les boutons de volume des écouteurs ou des AirPods déclenchent aussi."
+          }
+        }
+      }
+    },
+    "Ohne Wackeln auslösen: Auslöser gedrückt halten startet einen 3-Sekunden-Countdown. Die Leertaste löst ebenfalls aus.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fire without shake: hold the shutter for a three-second countdown. The space bar fires too."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déclencher sans bouger : un appui long sur le déclencheur lance un compte à rebours de trois secondes. La barre d’espace déclenche aussi."
           }
         }
       }
@@ -3886,6 +4094,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Viseur"
+          }
+        }
+      }
+    },
+    "Szene wirkt dauerhaft unruhig. Kamerahalterung prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The scene never settles. Check the camera mount — or raise the motion tolerance in settings."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La scène ne se stabilise jamais. Vérifie le support de la caméra — ou augmente la tolérance au mouvement dans les réglages."
           }
         }
       }
@@ -4382,6 +4606,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fais glisser pour feuilleter"
+          }
+        }
+      }
+    },
+    "Zu viel Bewegung – steht die Kamera wirklich fest?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too much movement — is the camera really fixed?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trop de mouvement — la caméra est-elle bien fixée ?"
           }
         }
       }

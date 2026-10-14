@@ -29,8 +29,15 @@ final class ProjectStore: ObservableObject {
     private let root: URL
 
     init() {
-        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        root = docs.appendingPathComponent("Projects", isDirectory: true)
+        #if targetEnvironment(macCatalyst)
+        // Am Mac ist „Dokumente" der Ordner des Nutzers, nicht der der App –
+        // dort hat ein Ordner namens „Projects" nichts verloren.
+        let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("FrameFold", isDirectory: true)
+        #else
+        let base = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        #endif
+        root = base.appendingPathComponent("Projects", isDirectory: true)
         try? FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         reload()
         purgeOldTrash()

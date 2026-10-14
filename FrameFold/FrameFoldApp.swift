@@ -107,7 +107,9 @@ struct OnboardingView: View {
                    text: "Ein fertiges Video aus der Mediathek — FrameFold macht den Rest.")
             wayRow(icon: "camera",
                    title: "Direkt aufnehmen",
-                   text: "iPhone aufs Stativ, arbeiten. Es löst von selbst aus, sobald deine Hände aus dem Bild sind.")
+                   text: Platform.isMac
+                       ? "Kamera über den Tisch, arbeiten. Es löst von selbst aus, sobald deine Hände aus dem Bild sind."
+                       : "iPhone aufs Stativ, arbeiten. Es löst von selbst aus, sobald deine Hände aus dem Bild sind.")
         }
     }
 
