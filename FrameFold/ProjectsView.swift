@@ -9,6 +9,8 @@ struct ProjectsView: View {
     @State private var newProjectName = ""
     @State private var showNewProject = false
     @State private var showExhibition = false
+    /// Werk, das per Wischen gelöscht werden soll – erst nach Rückfrage.
+    @State private var pendingDelete: Project?
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
 
     var body: some View {
@@ -48,14 +50,28 @@ struct ProjectsView: View {
                             .listRowBackground(Theme.paper)
                             .listRowSeparatorTint(Theme.hairline)
                         }
+                        // Wischen löscht endgültig – darum dieselbe
+                        // Rückfrage wie in der Werkansicht.
                         .onDelete { offsets in
-                            for index in offsets {
-                                store.delete(store.projects[index])
+                            if let index = offsets.first, store.projects.indices.contains(index) {
+                                pendingDelete = store.projects[index]
                             }
                         }
                     }
                     .listStyle(.plain)
                     .scrollContentBackground(.hidden)
+                    .confirmationDialog(
+                        pendingDelete.map { Text("\($0.name) mit allen \($0.frameCount) Bildern löschen?") } ?? Text(verbatim: ""),
+                        isPresented: Binding(get: { pendingDelete != nil },
+                                             set: { if !$0 { pendingDelete = nil } }),
+                        titleVisibility: .visible
+                    ) {
+                        Button("Endgültig löschen", role: .destructive) {
+                            if let project = pendingDelete { store.delete(project) }
+                            pendingDelete = nil
+                        }
+                        Button("Abbrechen", role: .cancel) { pendingDelete = nil }
+                    }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -177,7 +193,10 @@ struct ProjectDetailView: View {
             .padding(.top, 12)
 
             LazyVGrid(columns: columns, spacing: 2) {
-                ForEach(Array(store.frameURLs(for: currentProject).enumerated()), id: \.offset) { index, url in
+                // Identität über die Datei, nicht die Position: Sonst behält
+                // eine Zelle nach dem Entfernen ihr altes Bild, und der nächste
+                // Tipp löscht ein Bild, das gar nicht zu sehen war.
+                ForEach(Array(store.frameURLs(for: currentProject).enumerated()), id: \.element) { index, url in
                     FrameThumbnail(url: url)
                         // Nummerierte Zelle wie im gedruckten Kontaktbogen
                         .overlay(alignment: .bottomLeading) {
@@ -683,7 +702,7 @@ struct FrameThumbnail: View {
         .aspectRatio(1, contentMode: .fill)
         .clipped()
         .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
-        .task {
+        .task(id: url) {
             if image == nil, let data = try? Data(contentsOf: url),
                let full = UIImage(data: data) {
                 let size = CGSize(width: 180, height: 180)

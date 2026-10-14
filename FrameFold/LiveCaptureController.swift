@@ -1646,6 +1646,14 @@ final class LiveCaptureController: NSObject, ObservableObject {
         if !loopFrames.isEmpty { loopFrames.removeLast() }
     }
 
+    /// Ein aufgenommenes Bild ließ sich nicht speichern: zurücknehmen und
+    /// melden, damit Zähler und Werk nicht auseinanderlaufen.
+    func reportSaveFailure(previous: UIImage?) {
+        revertLastCapture(to: previous)
+        setFocusHint(String(localized: "Das Bild konnte nicht gespeichert werden. Ist der Speicher voll?"))
+        scheduleFocusHintClear()
+    }
+
     /// Verkleinertes JPEG für den Live-Loop.
     private static func loopThumbnail(_ image: UIImage, width: CGFloat = 360) -> Data? {
         guard image.size.width > 0 else { return nil }

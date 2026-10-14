@@ -62,6 +62,11 @@ enum Duo {
     /// blieb weiß. Deshalb entscheidet der Sucher über die Größenklasse und
     /// setzt die Anordnung als äußerste Ansicht.
     static var canArrange: Bool {
+        // Unter Mac Catalyst gilt `#available(iOS 27.1, *)` auch für
+        // macOS 27.1 – ohne diesen Riegel nähme der Mac dann den Duo-Sucher.
+        #if targetEnvironment(macCatalyst)
+        return false
+        #else
         #if targetEnvironment(simulator)
         if ProcessInfo.processInfo.environment["FF_NO_ARRANGE"] == "1" { return false }
         #endif
@@ -69,6 +74,7 @@ enum Duo {
         if #available(iOS 27.1, *) { return true }
         #endif
         return false
+        #endif
     }
 }
 
@@ -114,7 +120,9 @@ extension View {
     @ViewBuilder
     func duoOuterDisplay<Content: View>(isOn: Binding<Bool>, available: Binding<Bool>,
                                         @ViewBuilder content: @escaping () -> Content) -> some View {
-        #if canImport(SwiftUI, _version: "8.0.85")
+        // Am Mac gibt es kein Außendisplay – und `#available(iOS 27.1, *)`
+        // wäre dort ab macOS 27.1 wahr.
+        #if canImport(SwiftUI, _version: "8.0.85") && !targetEnvironment(macCatalyst)
         if #available(iOS 27.1, *) {
             self.sceneAccessory {
                 CameraCaptureAccessory(isEnabled: isOn, content: content)

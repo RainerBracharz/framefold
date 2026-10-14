@@ -11,7 +11,6 @@ struct ContentView: View {
     @State private var pickerItem: PhotosPickerItem?
     @State private var showSettings = false
     @State private var homeIn = false
-    @AppStorage("artistName") private var artistName = "Aldo"
     /// Neigungs-Licht: das Galerielicht folgt der Hand (CoreMotion).
     @StateObject private var lightTilt = LightTilt()
     /// Das Faltbild ist ein Spielzeug: antippen faltet es neu.
@@ -173,8 +172,8 @@ struct ContentView: View {
         case 18..<23: greeting = String(localized: "Guten Abend")
         default:      greeting = String(localized: "Gute Nacht")
         }
-        let name = artistName.trimmingCharacters(in: .whitespaces)
-        return name.isEmpty ? greeting : "\(greeting), \(name)"
+        // Ohne Namen: Die App begrüßt jeden, der sie öffnet.
+        return greeting
     }
 
     private var latestProject: Project? { store.projects.first }

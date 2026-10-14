@@ -287,5 +287,7 @@
   "Labor-Ansicht: Blattnummer, Sitzungsuhr, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": "Vue labo : numéro de feuille, chrono de séance, mesures — et le compte à rebours du pli tourne en ambre autour du déclencheur.",
   "Keine Kamera angeschlossen.": "Aucune caméra branchée.",
   "Ideal ist eine Dokumentenkamera, die senkrecht von oben auf den Tisch blickt. Eine angesteckte USB-Kamera wählt FrameFold von selbst.": "L'idéal est une caméra document qui regarde la table à la verticale. FrameFold choisit de lui-même une caméra USB branchée.",
-  "Kamera über dem Tisch, automatisch auslösen": "Caméra au-dessus de la table, déclenchement automatique"
+  "Kamera über dem Tisch, automatisch auslösen": "Caméra au-dessus de la table, déclenchement automatique",
+  "Wiederhergestelltes Werk": "Œuvre récupérée",
+  "Das Bild konnte nicht gespeichert werden. Ist der Speicher voll?": "L’image n’a pas pu être enregistrée. Le stockage est-il plein ?"
 }

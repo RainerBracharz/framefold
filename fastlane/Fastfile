@@ -169,6 +169,30 @@ platform :ios do
     UI.success("Mac #{version} (#{build.version}) eingereicht.")
   end
 
+  desc "Wartende Mac-Einreichung zurückziehen und mit dem jüngsten Mac-Build neu einreichen"
+  lane :mac_resubmit do
+    login
+    require "spaceship"
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
+      key_id: KEY_ID, issuer_id: ISSUER_ID, filepath: KEY_PATH)
+    app = Spaceship::ConnectAPI::App.find(APP_ID)
+    version = get_version_number(xcodeproj: PROJECT, target: SCHEME)
+    subs = app.get_review_submissions(
+      filter: { state: "WAITING_FOR_REVIEW,READY_FOR_REVIEW,UNRESOLVED_ISSUES", platform: "MAC_OS" })
+    subs.each do |sub|
+      sub.cancel_submission
+      UI.success("Mac-Einreichung zurückgezogen.")
+    end
+    20.times do
+      v = app.get_app_store_versions(filter: { versionString: version, platform: "MAC_OS" }).first
+      state = v&.app_store_state
+      UI.message("Mac #{version}: #{state}")
+      break unless %w[WAITING_FOR_REVIEW IN_REVIEW].include?(state)
+      sleep 15
+    end
+    mac_submit
+  end
+
   desc "Kompletter Release: bauen, hochladen, Version anlegen, einreichen"
   lane :release do
     api_key = login
@@ -181,7 +205,8 @@ platform :ios do
     Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
       key_id: KEY_ID, issuer_id: ISSUER_ID, filepath: KEY_PATH)
     target = get_version_number(xcodeproj: PROJECT, target: SCHEME)
-    busy = Spaceship::ConnectAPI::App.find(APP_ID).get_app_store_versions.find do |v|
+    # Nur iOS: Eine Mac-Version in Prüfung blockiert das iPhone-Release nicht.
+    busy = Spaceship::ConnectAPI::App.find(APP_ID).get_app_store_versions(filter: { platform: "IOS" }).find do |v|
       %w[WAITING_FOR_REVIEW IN_REVIEW].include?(v.app_store_state) && v.version_string != target
     end
     if busy
@@ -244,8 +269,9 @@ platform :ios do
     app = Spaceship::ConnectAPI::App.find(APP_ID)
     version = get_version_number(xcodeproj: PROJECT, target: SCHEME)
 
+    # Nur iOS – eine laufende Mac-Einreichung bleibt unberührt.
     subs = app.get_review_submissions(
-      filter: { state: "WAITING_FOR_REVIEW,READY_FOR_REVIEW,UNRESOLVED_ISSUES" })
+      filter: { state: "WAITING_FOR_REVIEW,READY_FOR_REVIEW,UNRESOLVED_ISSUES", platform: "IOS" })
     if subs.empty?
       UI.message("Keine wartende Einreichung gefunden.")
     else
@@ -257,7 +283,7 @@ platform :ios do
 
     # Bis die Version wieder bearbeitbar ist, dauert es ein paar Sekunden.
     20.times do
-      v = app.get_app_store_versions(filter: { versionString: version }).first
+      v = app.get_app_store_versions(filter: { versionString: version, platform: "IOS" }).first
       state = v&.app_store_state
       UI.message("#{version}: #{state}")
       break unless %w[WAITING_FOR_REVIEW IN_REVIEW].include?(state)
@@ -278,7 +304,7 @@ platform :ios do
 
     # Schon eingereicht? Dann nichts tun – ein zweiter Build lässt sich an
     # eine wartende Version nicht mehr hängen, das war der Fehler vom 23.09.
-    current = app.get_app_store_versions(filter: { versionString: version }).first
+    current = app.get_app_store_versions(filter: { versionString: version, platform: "IOS" }).first
     if current && %w[WAITING_FOR_REVIEW IN_REVIEW PENDING_DEVELOPER_RELEASE READY_FOR_SALE].include?(current.app_store_state)
       UI.success("#{version} steht schon auf #{current.app_store_state} – nichts zu tun.")
       next
@@ -286,7 +312,7 @@ platform :ios do
 
     build = nil
     60.times do                          # höchstens 30 Minuten
-      build = Spaceship::ConnectAPI::Build.all(app_id: app.id, version: version,
+      build = Spaceship::ConnectAPI::Build.all(app_id: app.id, version: version, platform: "IOS",
                                                sort: "-uploadedDate", limit: 1).first
       state = build&.processing_state
       UI.message("Build #{version} (#{build&.version || '–'}): #{state || 'noch nicht sichtbar'}")

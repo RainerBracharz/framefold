@@ -40,7 +40,25 @@ final class ProjectStore: ObservableObject {
         root = base.appendingPathComponent("Projects", isDirectory: true)
         try? FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         reload()
+        stampLegacyTrashOnce()
         purgeOldTrash()
+    }
+
+    /// Bis 2.2 behielten Bilder im Papierkorb ihr Aufnahmedatum – die
+    /// 30-Tage-Frist wäre für ältere Werke sofort abgelaufen. Einmalig
+    /// beginnt sie für alles, was schon im Papierkorb liegt, jetzt.
+    private func stampLegacyTrashOnce() {
+        let key = "trashStampedOnce"
+        guard !UserDefaults.standard.bool(forKey: key) else { return }
+        for project in projects {
+            let trashDir = directory(for: project).appendingPathComponent("trash", isDirectory: true)
+            for filename in project.trashFilenames ?? [] {
+                try? FileManager.default.setAttributes(
+                    [.modificationDate: Date()],
+                    ofItemAtPath: trashDir.appendingPathComponent(filename).path)
+            }
+        }
+        UserDefaults.standard.set(true, forKey: key)
     }
 
     // MARK: Laden & Speichern
@@ -51,11 +69,30 @@ final class ProjectStore: ObservableObject {
         projects = dirs.compactMap { dir in
             guard let data = try? Data(contentsOf: dir.appendingPathComponent("manifest.json")),
                   let project = try? JSONDecoder().decode(Project.self, from: data) else {
-                return nil
+                return Self.recoverProject(in: dir)
             }
             return project
         }
         .sorted { $0.createdAtISO > $1.createdAtISO }
+    }
+
+    /// Fehlt das Manifest oder ist es unlesbar, liegen die Bilder trotzdem
+    /// noch im Ordner. Statt das Werk stillschweigend zu verlieren, wird es
+    /// aus den Bilddateien wieder zusammengesetzt.
+    private static func recoverProject(in dir: URL) -> Project? {
+        guard let id = UUID(uuidString: dir.lastPathComponent),
+              let names = try? FileManager.default.contentsOfDirectory(atPath: dir.path) else { return nil }
+        let frames = names.filter { $0.hasSuffix(".jpg") }.sorted()
+        guard !frames.isEmpty else { return nil }
+        let created = (try? FileManager.default.attributesOfItem(atPath: dir.path)[.creationDate] as? Date) ?? Date()
+        let project = Project(
+            id: id, name: String(localized: "Wiederhergestelltes Werk"),
+            createdAtISO: ISO8601DateFormatter().string(from: created),
+            frameFilenames: frames, trashFilenames: nil, nextFrameNumber: nil)
+        if let data = try? JSONEncoder().encode(project) {
+            try? data.write(to: dir.appendingPathComponent("manifest.json"), options: .atomic)
+        }
+        return project
     }
 
     private func directory(for project: Project) -> URL {
@@ -66,7 +103,9 @@ final class ProjectStore: ObservableObject {
         let dir = directory(for: project)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         if let data = try? JSONEncoder().encode(project) {
-            try? data.write(to: dir.appendingPathComponent("manifest.json"))
+            // Atomar: Bricht die App mitten im Schreiben ab (Akku, Absturz),
+            // bleibt das alte Manifest stehen statt eines halben.
+            try? data.write(to: dir.appendingPathComponent("manifest.json"), options: .atomic)
         }
         // Nur das eine Projekt im Speicher aktualisieren. Das frühere
         // reload() las nach JEDEM aufgenommenen Bild sämtliche Manifeste
@@ -114,8 +153,11 @@ final class ProjectStore: ObservableObject {
         save(updated)
     }
 
-    /// Hängt ein Bild als neuen Frame an (Live-Capture).
-    func appendFrame(jpegData: Data, to project: Project) {
+    /// Hängt ein Bild als neuen Frame an (Live-Capture). Gibt den
+    /// Dateinamen zurück – oder nil, wenn das Bild nicht gespeichert werden
+    /// konnte (etwa weil der Speicher voll ist).
+    @discardableResult
+    func appendFrame(jpegData: Data, to project: Project) -> String? {
         var updated = project
         let number = nextNumber(for: updated)
         let filename = String(format: "%06d.jpg", number)
@@ -126,7 +168,19 @@ final class ProjectStore: ObservableObject {
             updated.frameFilenames.append(filename)
             updated.nextFrameNumber = number + 1
             save(updated)
-        } catch { }
+            return filename
+        } catch {
+            return nil
+        }
+    }
+
+    /// Verschiebt genau diese Frames in den Papierkorb – für Verwerfen und
+    /// Zurücknehmen einer Sitzung, damit nie Bilder älterer Sitzungen
+    /// mitgehen.
+    func removeFrames(named filenames: [String], from project: Project) {
+        let offsets = IndexSet(project.frameFilenames.indices.filter { filenames.contains(project.frameFilenames[$0]) })
+        guard !offsets.isEmpty else { return }
+        removeFrames(at: offsets, from: project)
     }
 
     /// Verschiebt Frames in den Papierkorb (30 Tage wiederherstellbar).
@@ -140,9 +194,13 @@ final class ProjectStore: ObservableObject {
         for index in offsets {
             guard updated.frameFilenames.indices.contains(index) else { continue }
             let filename = updated.frameFilenames[index]
+            let target = trashDir.appendingPathComponent(filename)
             try? FileManager.default.moveItem(
-                at: dir.appendingPathComponent(filename),
-                to: trashDir.appendingPathComponent(filename))
+                at: dir.appendingPathComponent(filename), to: target)
+            // Die 30 Tage zählen ab dem Entfernen. Verschieben behält das
+            // Aufnahmedatum der Datei – ohne neuen Zeitstempel wären Bilder
+            // älterer Werke beim nächsten Start endgültig gelöscht.
+            try? FileManager.default.setAttributes([.modificationDate: Date()], ofItemAtPath: target.path)
             trash.append(filename)
         }
         updated.frameFilenames.remove(atOffsets: offsets)

@@ -2726,6 +2726,38 @@
         }
       }
     },
+    "Wiederhergestelltes Werk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recovered work"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Œuvre récupérée"
+          }
+        }
+      }
+    },
+    "Das Bild konnte nicht gespeichert werden. Ist der Speicher voll?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The image couldn't be saved. Is the storage full?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’image n’a pas pu être enregistrée. Le stockage est-il plein ?"
+          }
+        }
+      }
+    },
     "Kamera": {
       "localizations": {
         "en": {

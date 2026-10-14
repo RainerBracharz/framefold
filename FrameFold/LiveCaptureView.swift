@@ -55,7 +55,10 @@ struct LiveCaptureView: View {
     @State private var resultError: String?
     @State private var resultShare: ShareItem?
     /// Wie viele Frames die letzte Session beigetragen hat – für „Verwerfen".
-    @State private var lastSessionCount = 0
+    /// Dateinamen der Bilder dieser Sitzung – Verwerfen und Zurücknehmen
+    /// treffen genau diese, nie Bilder älterer Sitzungen.
+    @State private var sessionFiles: [String] = []
+    @State private var lastSessionFiles: [String] = []
 
     var body: some View {
         NavigationStack {
@@ -275,7 +278,7 @@ struct LiveCaptureView: View {
         controller.stop()
         level.stop()
         let captured = controller.capturedCount
-        lastSessionCount = captured
+        lastSessionFiles = sessionFiles
         targetProject = nil
         guard captured > 0 else { return }   // Abbruch ohne Bilder
 
@@ -389,12 +392,11 @@ struct LiveCaptureView: View {
     /// 30-Tage-Papierkorb) und startet direkt eine neue Aufnahme.
     private func discardSession(project: Project) {
         if let current = store.projects.first(where: { $0.id == project.id }),
-           lastSessionCount > 0, current.frameCount >= lastSessionCount {
-            let range = (current.frameCount - lastSessionCount)..<current.frameCount
-            store.removeFrames(at: IndexSet(integersIn: range), from: current)
+           !lastSessionFiles.isEmpty {
+            store.removeFrames(named: lastSessionFiles, from: current)
         }
         resultURL = nil
-        lastSessionCount = 0
+        lastSessionFiles = []
         finishedProject = nil
         targetProject = project   // ohne Umweg zurück in den Sucher
     }
@@ -494,6 +496,7 @@ struct LiveCaptureView: View {
         .onAppear {
             UIApplication.shared.isIdleTimerDisabled = true
             recentThumbs = []
+            sessionFiles = []
             level.start()
             // Startwert einspeisen: `onChange` feuert nur bei einem Wechsel,
             // ein von Anfang an gehaltenes iPhone bliebe sonst als „Stativ"
@@ -507,9 +510,14 @@ struct LiveCaptureView: View {
             WatchLink.shared.push(count: controller.capturedCount,
                                   projectName: project.name, status: "bereit")
             controller.start { jpegData in
-                if let current = store.projects.first(where: { $0.id == project.id }) {
-                    store.appendFrame(jpegData: jpegData, to: current)
+                guard let current = store.projects.first(where: { $0.id == project.id }),
+                      let filename = store.appendFrame(jpegData: jpegData, to: current) else {
+                    // Nicht gespeichert (Speicher voll?): Zähler und Film
+                    // zurücknehmen und es sagen, statt still Bilder zu verlieren.
+                    controller.reportSaveFailure(previous: recentThumbs.last)
+                    return
                 }
+                sessionFiles.append(filename)
                 if let image = UIImage(data: jpegData) {
                     // Klein rechnen: Vollauflösung im Daumenkino zwingt SwiftUI,
                     // bei jedem Update sechs 1080p-Bilder zu skalieren.
@@ -1062,9 +1070,10 @@ struct LiveCaptureView: View {
         }
     }
     private func undoLastFrame(project: Project) {
-        if let current = store.projects.first(where: { $0.id == project.id }),
-           current.frameCount > 0 {
-            store.removeFrames(at: IndexSet(integer: current.frameCount - 1), from: current)
+        // Nur Bilder dieser Sitzung – nie eins aus einer früheren.
+        guard let filename = sessionFiles.popLast() else { return }
+        if let current = store.projects.first(where: { $0.id == project.id }) {
+            store.removeFrames(named: [filename], from: current)
         }
         if !recentThumbs.isEmpty { recentThumbs.removeLast() }
         controller.revertLastCapture(to: recentThumbs.last)

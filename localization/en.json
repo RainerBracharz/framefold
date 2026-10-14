@@ -294,5 +294,7 @@
   "Labor-Ansicht: Blattnummer, Sitzungsuhr, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": "Lab view: sheet number, session clock, readings — and the crease countdown runs in amber around the shutter.",
   "Keine Kamera angeschlossen.": "No camera connected.",
   "Ideal ist eine Dokumentenkamera, die senkrecht von oben auf den Tisch blickt. Eine angesteckte USB-Kamera wählt FrameFold von selbst.": "A document camera looking straight down at the table works best. FrameFold picks a connected USB camera on its own.",
-  "Kamera über dem Tisch, automatisch auslösen": "Camera above the table, fires by itself"
+  "Kamera über dem Tisch, automatisch auslösen": "Camera above the table, fires by itself",
+  "Wiederhergestelltes Werk": "Recovered work",
+  "Das Bild konnte nicht gespeichert werden. Ist der Speicher voll?": "The image couldn't be saved. Is the storage full?"
 }
