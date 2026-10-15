@@ -29,20 +29,39 @@ final class WatchLink: NSObject, ObservableObject {
         session.activate()
     }
 
+    /// Letzter Stand – wird beim Wiederverbinden erneut geschickt und liegt
+    /// als Application Context bereit, falls die Watch-App erst später öffnet.
+    private var lastPayload: [String: Any] = ["active": false, "count": 0]
+
     /// Session beendet – die Uhr zurücksetzen, statt den letzten Stand
-    /// stehenzulassen.
+    /// stehenzulassen. `active: false` sagt der Watch, dass ihr Auslöser
+    /// gerade ins Leere ginge.
     func pushSessionEnded() {
-        guard let session, session.isReachable else { return }
-        session.sendMessage(["reset": true, "count": 0, "status": "Bereit"],
-                            replyHandler: nil, errorHandler: nil)
+        send(["reset": true, "active": false, "count": 0,
+              "status": String(localized: "Kamera-Tab am iPhone öffnen")])
     }
 
-    /// Zählerstand und Werkname ans Handgelenk melden.
+    /// Zählerstand und Werkname ans Handgelenk melden – nur, solange der
+    /// Sucher läuft (`active`).
     func push(count: Int, projectName: String?, status: String) {
-        guard let session, session.isReachable else { return }
-        var payload: [String: Any] = ["count": count, "status": status]
+        var payload: [String: Any] = ["active": true, "count": count, "status": status]
         if let projectName { payload["project"] = projectName }
-        session.sendMessage(payload, replyHandler: nil, errorHandler: nil)
+        send(payload)
+    }
+
+    private func send(_ payload: [String: Any]) {
+        lastPayload = payload
+        guard let session, session.activationState == .activated else { return }
+        try? session.updateApplicationContext(payload)
+        if session.isReachable {
+            session.sendMessage(payload, replyHandler: nil, errorHandler: nil)
+        }
+    }
+
+    /// Nach dem Wiederverbinden den aktuellen Stand nachschicken – sonst
+    /// zeigt die Uhr „0" und „Bereit", auch mitten in einer Sitzung.
+    fileprivate func resend() {
+        send(lastPayload)
     }
 }
 
@@ -58,9 +77,29 @@ extension WatchLink: WCSessionDelegate {
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
         Task { @MainActor in
             WatchLink.shared.isReachable = session.isReachable
+            if session.isReachable { WatchLink.shared.resend() }
         }
     }
 
+    /// Befehl mit Rückmeldung: Die Watch erfährt, ob wirklich ausgelöst
+    /// wurde – sonst klickte sie, auch wenn am iPhone kein Sucher offen ist.
+    nonisolated func session(_ session: WCSession,
+                             didReceiveMessage message: [String: Any],
+                             replyHandler: @escaping ([String: Any]) -> Void) {
+        let command = message["command"] as? String
+        Task { @MainActor in
+            let link = WatchLink.shared
+            let handler: (() -> Void)? = switch command {
+            case "shutter": link.onShutter
+            case "finish": link.onFinish
+            default: nil
+            }
+            handler?()
+            replyHandler(["ok": handler != nil])
+        }
+    }
+
+    // Ältere Watch-Fassungen schicken ohne Rückmeldung.
     nonisolated func session(_ session: WCSession,
                              didReceiveMessage message: [String: Any]) {
         Task { @MainActor in

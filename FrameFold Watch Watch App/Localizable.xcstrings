@@ -110,6 +110,38 @@
         }
       }
     },
+    "FrameFold am iPhone öffnen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open FrameFold on iPhone"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre FrameFold sur l’iPhone"
+          }
+        }
+      }
+    },
+    "Kamera-Tab am iPhone öffnen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the camera tab on iPhone"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre l’onglet Caméra sur l’iPhone"
+          }
+        }
+      }
+    },
     "Kamera-Tab öffnen": {
       "localizations": {
         "en": {
@@ -122,6 +154,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ouvrir l’onglet Caméra"
+          }
+        }
+      }
+    },
+    "Nicht ausgelöst – iPhone prüfen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not fired – check the iPhone"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas déclenché – vérifie l’iPhone"
           }
         }
       }

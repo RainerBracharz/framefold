@@ -572,7 +572,8 @@ struct LiveCaptureView: View {
             WatchLink.shared.onShutter = { controller.captureNow() }
             WatchLink.shared.onFinish = { finishSession(project: project) }
             WatchLink.shared.push(count: controller.capturedCount,
-                                  projectName: project.name, status: "bereit")
+                                  projectName: project.name,
+                                  status: controller.status.label(playful: mode == .basic))
             controller.start { jpegData in
                 guard let current = store.projects.first(where: { $0.id == project.id }),
                       let filename = store.appendFrame(jpegData: jpegData, to: current) else {

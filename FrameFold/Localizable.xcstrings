@@ -3060,6 +3060,22 @@
         }
       }
     },
+    "Kamera-Tab am iPhone öffnen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the camera tab on iPhone"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre l’onglet Caméra sur l’iPhone"
+          }
+        }
+      }
+    },
     "Keine Kamera angeschlossen.": {
       "localizations": {
         "en": {
