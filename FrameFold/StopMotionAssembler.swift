@@ -179,23 +179,41 @@ final class StopMotionAssembler {
         var lastComposed: CGImage? = nil
         let echo = settings.interferenzEcho ? max(0, min(0.5, settings.echoStrength)) : 0
 
-        for (position, step) in steps.enumerated() {
-            var baseImage = try await image(at: step.baseIndex)
-            var overlayImage: CGImage? = nil
-            if let overlayIndex = step.overlayIndex {
-                overlayImage = try await image(at: overlayIndex)
-            }
-
-            // Alignment nur auf echten Keyframes fortschreiben (nicht auf Blenden).
-            // Stufe 1: Homographie (korrigiert auch Verdrehung/Neigung),
-            // Stufe 2: Verschiebungs-Fallback per Block-Matching.
-            var offset: CGPoint = .zero
-            if step.overlayIndex == nil, let aligner {
-                if let warped = aligner.warp(baseImage) {
-                    baseImage = warped
+        // Ausgerichtete Bilder pro Index. Die Ausrichtung bezieht sich immer
+        // auf das erste Bild, das Ergebnis hängt also nur vom Bild selbst ab –
+        // so lassen sich auch beide Bilder einer Überblendung ausrichten.
+        // Früher geschah das nur für Keyframes: Die Blenden dazwischen lagen
+        // unausgerichtet, und das Bild sprang zu Beginn und Ende jeder Blende.
+        // Stufe 1: Homographie (korrigiert auch Verdrehung/Neigung),
+        // Stufe 2: Verschiebungs-Fallback per Block-Matching.
+        var alignedCache: [Int: (image: CGImage, offset: CGPoint)] = [:]
+        func aligned(at index: Int) async throws -> (image: CGImage, offset: CGPoint) {
+            if let hit = alignedCache[index] { return hit }
+            let raw = try await image(at: index)
+            var result = (image: raw, offset: CGPoint.zero)
+            if let aligner {
+                if let warped = aligner.warp(raw) {
+                    result.image = warped
                 } else {
-                    offset = aligner.register(baseImage)
+                    result.offset = aligner.register(raw)
                 }
+            }
+            // Basis und Überblendbild genügen – lange Filme bleiben klein.
+            if alignedCache.count > 2 { alignedCache.removeAll() }
+            alignedCache[index] = result
+            return result
+        }
+
+        for (position, step) in steps.enumerated() {
+            let base = try await aligned(at: step.baseIndex)
+            let baseImage = base.image
+            let offset = base.offset
+            var overlayImage: CGImage? = nil
+            var overlayOffset: CGPoint = .zero
+            if let overlayIndex = step.overlayIndex {
+                let overlay = try await aligned(at: overlayIndex)
+                overlayImage = overlay.image
+                overlayOffset = overlay.offset
             }
 
             guard let pixelBuffer = Self.renderStep(
@@ -206,7 +224,7 @@ final class StopMotionAssembler {
                 printLook: settings.printLook,
                 cropRect: cropRect, referenceWidth: firstImage.width, referenceHeight: firstImage.height,
                 width: width, height: height, scale: renderScale,
-                offset: offset, pool: adaptor.pixelBufferPool,
+                offset: offset, overlayOffset: overlayOffset, pool: adaptor.pixelBufferPool,
                 composedOut: &lastComposed) else { continue }
 
             try await waitUntilReady()
@@ -282,7 +300,7 @@ final class StopMotionAssembler {
         reliefFacets: [Algorithms.Facet], reliefStrength: Double, printLook: Bool,
         cropRect: CGRect, referenceWidth: Int, referenceHeight: Int,
         width: Int, height: Int, scale: CGFloat,
-        offset: CGPoint, pool: CVPixelBufferPool?,
+        offset: CGPoint, overlayOffset: CGPoint = .zero, pool: CVPixelBufferPool?,
         composedOut: inout CGImage?
     ) -> CVPixelBuffer? {
         var buffer: CVPixelBuffer?
@@ -316,7 +334,7 @@ final class StopMotionAssembler {
         // andere Größe (Video plus Live-Aufnahmen, zwei Kameras am Mac, die
         // Titelkarte im Reel), füllt es den Rahmen stattdessen für sich –
         // sonst erschiene es verschoben oder winzig in einer Ecke.
-        func drawRect(for image: CGImage) -> CGRect {
+        func drawRect(for image: CGImage, offset: CGPoint) -> CGRect {
             if image.width == referenceWidth && image.height == referenceHeight {
                 return CGRect(
                     x: (-cropRect.minX + offset.x) * scale,
@@ -347,7 +365,7 @@ final class StopMotionAssembler {
             context.setAlpha(CGFloat(1 - echoStrength))
             context.beginTransparencyLayer(auxiliaryInfo: nil)
         }
-        context.draw(base, in: drawRect(for: base))
+        context.draw(base, in: drawRect(for: base, offset: offset))
 
         // 3) Übergang: Overlay aufdecken – als Falzkante oder als Facetten.
         if let overlay, revealProgress > 0 {
@@ -364,7 +382,7 @@ final class StopMotionAssembler {
                 clip.closeSubpath()
                 context.addPath(clip)
                 context.clip()
-                context.draw(overlay, in: drawRect(for: overlay))
+                context.draw(overlay, in: drawRect(for: overlay, offset: overlayOffset))
                 context.restoreGState()
                 // Falzlicht: helle Falzkante + Schlagschatten dahinter
                 // (Licht von links oben, wie in Tolinos Aufnahmen)
@@ -382,7 +400,7 @@ final class StopMotionAssembler {
             case .facet:
                 // Triangulierte Facetten klappen diagonal gestaffelt um
                 // (Geometrie wurde einmalig in write() berechnet).
-                let od = drawRect(for: overlay)
+                let od = drawRect(for: overlay, offset: overlayOffset)
                 for f in facets {
                     let a = Algorithms.facetAlpha(phase: f.phase, progress: revealProgress)
                     if a <= 0 { continue }
@@ -409,7 +427,7 @@ final class StopMotionAssembler {
             case .weave:
                 // Der nächste Frame wird als Streifen "eingewoben" – abwechselnd
                 // von oben und unten, gestaffelt (nach Tolinos Webtechnik).
-                let od = drawRect(for: overlay)
+                let od = drawRect(for: overlay, offset: overlayOffset)
                 let bufferH = Double(height)
                 for strip in weave {
                     let reveal = Algorithms.weaveReveal(phase: strip.phase, progress: revealProgress)

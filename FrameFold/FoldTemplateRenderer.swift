@@ -24,10 +24,10 @@ enum FoldTemplateRenderer {
 
                 // Kopfzeile
                 drawText(title.uppercased(), size: 11, tracking: 2.4,
-                         color: UIColor(white: 0.09, alpha: 1),
+                         color: UIColor.ffInk,
                          at: CGPoint(x: margin, y: margin))
                 drawText("FALTVORLAGE · ENTLANG DER GESTRICHELTEN LINIEN FALTEN",
-                         size: 7, tracking: 2.0, color: UIColor(white: 0.45, alpha: 1),
+                         size: 7, tracking: 2.0, color: UIColor.ffGraphite,
                          at: CGPoint(x: margin, y: margin + 16))
 
                 // Bildbereich (unter der Kopfzeile), Seitenverhältnis wahren

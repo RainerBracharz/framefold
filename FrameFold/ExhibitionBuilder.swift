@@ -50,11 +50,11 @@ enum ExhibitionBuilder {
         return renderer.image { ctx in
             let cg = ctx.cgContext
             // Galeriewand
-            UIColor(red: 0.957, green: 0.953, blue: 0.945, alpha: 1).setFill()
+            UIColor.ffPaper.setFill()
             cg.fill(CGRect(origin: .zero, size: size))
 
-            let ink = UIColor(red: 0.067, green: 0.063, blue: 0.063, alpha: 1)
-            let graphite = UIColor(red: 0.29, green: 0.28, blue: 0.26, alpha: 1)
+            let ink = UIColor.ffInk
+            let graphite = UIColor.ffGraphite
 
             // Werktitel (Serif, zentriert)
             let para = NSMutableParagraphStyle(); para.alignment = .center
@@ -65,10 +65,9 @@ enum ExhibitionBuilder {
             let titleRect = CGRect(x: 80, y: size.height/2 - 170, width: size.width - 160, height: 320)
             NSAttributedString(string: title, attributes: titleAttr).draw(in: titleRect)
 
-            // Spektralbalken
+            // Falzbalken in Amber, wie der Falz in der App
             let bar = CGRect(x: size.width/2 - 90, y: size.height/2 + 150, width: 180, height: 8)
-            let colors = [UIColor(red:0.42,green:0.36,blue:0.91,alpha:1).cgColor,
-                          UIColor(red:0.13,green:0.83,blue:0.78,alpha:1).cgColor]
+            let colors = [UIColor.ffAmberLight.cgColor, UIColor.ffAmber.cgColor]
             if let grad = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
                                      colors: colors as CFArray, locations: [0,1]) {
                 cg.saveGState(); cg.addRect(bar); cg.clip()
@@ -80,7 +79,8 @@ enum ExhibitionBuilder {
             // Jahr (Mono, gesperrt)
             let yearPara = NSMutableParagraphStyle(); yearPara.alignment = .center
             let yearAttr: [NSAttributedString.Key: Any] = [
-                .font: UIFont.monospacedSystemFont(ofSize: 30, weight: .medium),
+                .font: UIFont(name: "Inter-Medium", size: 30)
+                    ?? UIFont.monospacedSystemFont(ofSize: 30, weight: .medium),
                 .foregroundColor: graphite, .kern: 6, .paragraphStyle: yearPara
             ]
             NSAttributedString(string: year.uppercased(), attributes: yearAttr)
@@ -89,6 +89,8 @@ enum ExhibitionBuilder {
     }
 
     private static func serifFont(_ size: CGFloat, weight: UIFont.Weight) -> UIFont {
+        // Die Schrift der App; die System-Serif nur, falls Fraunces fehlt.
+        if let fraunces = UIFont(name: "Fraunces-Regular", size: size) { return fraunces }
         let base = UIFont.systemFont(ofSize: size, weight: weight)
         if let d = base.fontDescriptor.withDesign(.serif) {
             return UIFont(descriptor: d, size: size)

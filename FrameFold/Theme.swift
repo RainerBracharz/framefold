@@ -707,3 +707,16 @@ extension View {
     /// Alias (Rückwärtskompatibilität).
     func paperStage() -> some View { galleryStage() }
 }
+
+/// Dieselben Farben für alles, was gezeichnet statt angezeigt wird:
+/// Titelkarte des Reels, Kontaktbogen, Daumenkino und Faltvorlage. Vorher
+/// hatten diese eigene Grautöne – und die Titelkarte noch die alte
+/// Neon-Palette, die das Designsystem ausdrücklich ausschließt.
+extension UIColor {
+    static let ffPaper = UIColor(Theme.paper)
+    static let ffInk = UIColor(Theme.ink)
+    static let ffGraphite = UIColor(Theme.graphite)
+    static let ffHairline = UIColor(Theme.hairline)
+    static let ffAmber = UIColor(Theme.amber)
+    static let ffAmberLight = UIColor(Theme.amberLight)
+}

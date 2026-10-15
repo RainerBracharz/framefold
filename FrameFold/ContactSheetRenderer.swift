@@ -54,14 +54,14 @@ enum ContactSheetRenderer {
                         }
                         // Haarlinienrahmen wie im Kontaktbogen der App
                         let cg = ctx.cgContext
-                        cg.setStrokeColor(UIColor(white: 0.72, alpha: 1).cgColor)
+                        cg.setStrokeColor(UIColor.ffGraphite.withAlphaComponent(0.5).cgColor)
                         cg.setLineWidth(0.5)
                         cg.stroke(rect)
 
                         // Frame-Nummer unter der Zelle
                         let numText = String(format: "%03d", frameIndex)
                         draw(text: numText, size: 6, tracking: 1.2,
-                             color: UIColor(white: 0.45, alpha: 1),
+                             color: UIColor.ffGraphite,
                              at: CGPoint(x: rect.minX + 1, y: rect.maxY + 2))
                     }
                 }
@@ -80,14 +80,14 @@ enum ContactSheetRenderer {
     ) {
         // Kopfzeile im Katalog-Stil
         draw(text: title.uppercased(), size: 10, tracking: 2.4,
-             color: UIColor(white: 0.09, alpha: 1),
+             color: UIColor.ffInk,
              at: CGPoint(x: margin, y: margin))
         let meta = String(localized: "\(frameCount) Bilder") + " · \(dateText)"
             + (pageCount > 1
                ? " · " + String(format: String(localized: "Bogen %lld/%lld"), page, pageCount)
                : "")
         draw(text: meta.uppercased(), size: 7, tracking: 2.0,
-             color: UIColor(white: 0.45, alpha: 1),
+             color: UIColor.ffGraphite,
              at: CGPoint(x: margin, y: margin + 16))
     }
 

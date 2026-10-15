@@ -16,9 +16,9 @@ enum FlipbookRenderer {
     private static let margin: Double = 28
     private static let footer: Double = 28
 
-    private static let ink = UIColor(white: 0.09, alpha: 1)
-    private static let graphite = UIColor(white: 0.45, alpha: 1)
-    private static let hairline = UIColor(white: 0.72, alpha: 1)
+    private static let ink = UIColor.ffInk
+    private static let graphite = UIColor.ffGraphite
+    private static let hairline = UIColor.ffGraphite.withAlphaComponent(0.5)
 
     static func render(title: String, dateText: String, frameURLs: [URL]) -> URL? {
         guard let first = frameURLs.first,
