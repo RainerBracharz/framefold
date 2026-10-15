@@ -288,5 +288,13 @@
   "Ideal ist eine Dokumentenkamera, die senkrecht von oben auf den Tisch blickt. Eine angesteckte USB-Kamera wählt FrameFold von selbst.": "L'idéal est une caméra document qui regarde la table à la verticale. FrameFold choisit de lui-même une caméra USB branchée.",
   "Kamera über dem Tisch, automatisch auslösen": "Caméra au-dessus de la table, déclenchement automatique",
   "Wiederhergestelltes Werk": "Œuvre récupérée",
-  "Das Bild konnte nicht gespeichert werden. Ist der Speicher voll?": "L’image n’a pas pu être enregistrée. Le stockage est-il plein ?"
+  "Das Bild konnte nicht gespeichert werden. Ist der Speicher voll?": "L’image n’a pas pu être enregistrée. Le stockage est-il plein ?",
+  "Einstellungen öffnen": "Ouvrir les réglages",
+  "Erlaube FrameFold den Kamerazugriff unter Systemeinstellungen → Datenschutz & Sicherheit → Kamera.": "Autorise FrameFold à utiliser la caméra dans Réglages Système → Confidentialité et sécurité → Caméra.",
+  "Erneut suchen": "Chercher à nouveau",
+  "Video aus einer Datei wählen …": "Choisir un fichier vidéo …",
+  "Video öffnen …": "Ouvrir une vidéo …",
+  "Aufnahme": "Prise de vue",
+  "Sichern …": "Enregistrer …",
+  "Drucken …": "Imprimer …"
 }

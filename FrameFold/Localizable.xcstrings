@@ -843,6 +843,22 @@
         }
       }
     },
+    "Aufnahme": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capture"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prise de vue"
+          }
+        }
+      }
+    },
     "Aufnahme-Einstellungen": {
       "localizations": {
         "en": {
@@ -1885,6 +1901,22 @@
         }
       }
     },
+    "Drucken …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Print …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imprimer …"
+          }
+        }
+      }
+    },
     "Dunkelkammer": {
       "localizations": {
         "en": {
@@ -2045,6 +2077,22 @@
         }
       }
     },
+    "Einstellungen öffnen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir les réglages"
+          }
+        }
+      }
+    },
     "Endgültig löschen": {
       "localizations": {
         "en": {
@@ -2093,6 +2141,22 @@
         }
       }
     },
+    "Erlaube FrameFold den Kamerazugriff unter Systemeinstellungen → Datenschutz & Sicherheit → Kamera.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow FrameFold to use the camera in System Settings → Privacy & Security → Camera."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorise FrameFold à utiliser la caméra dans Réglages Système → Confidentialité et sécurité → Caméra."
+          }
+        }
+      }
+    },
     "Erneut falten (Rekursion)": {
       "localizations": {
         "en": {
@@ -2105,6 +2169,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plier à nouveau (récursion)"
+          }
+        }
+      }
+    },
+    "Erneut suchen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search again"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chercher à nouveau"
           }
         }
       }
@@ -2848,6 +2928,54 @@
           "stringUnit": {
             "state": "translated",
             "value": "Caméra au-dessus de la table, déclenchement automatique"
+          }
+        }
+      }
+    },
+    "Sichern …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer …"
+          }
+        }
+      }
+    },
+    "Video aus einer Datei wählen …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a video file …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un fichier vidéo …"
+          }
+        }
+      }
+    },
+    "Video öffnen …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Video …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir une vidéo …"
           }
         }
       }

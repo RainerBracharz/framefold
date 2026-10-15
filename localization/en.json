@@ -295,5 +295,13 @@
   "Ideal ist eine Dokumentenkamera, die senkrecht von oben auf den Tisch blickt. Eine angesteckte USB-Kamera wählt FrameFold von selbst.": "A document camera looking straight down at the table works best. FrameFold picks a connected USB camera on its own.",
   "Kamera über dem Tisch, automatisch auslösen": "Camera above the table, fires by itself",
   "Wiederhergestelltes Werk": "Recovered work",
-  "Das Bild konnte nicht gespeichert werden. Ist der Speicher voll?": "The image couldn't be saved. Is the storage full?"
+  "Das Bild konnte nicht gespeichert werden. Ist der Speicher voll?": "The image couldn't be saved. Is the storage full?",
+  "Einstellungen öffnen": "Open Settings",
+  "Erlaube FrameFold den Kamerazugriff unter Systemeinstellungen → Datenschutz & Sicherheit → Kamera.": "Allow FrameFold to use the camera in System Settings → Privacy & Security → Camera.",
+  "Erneut suchen": "Search again",
+  "Video aus einer Datei wählen …": "Choose a video file …",
+  "Video öffnen …": "Open Video …",
+  "Aufnahme": "Capture",
+  "Sichern …": "Save …",
+  "Drucken …": "Print …"
 }

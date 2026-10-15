@@ -318,5 +318,42 @@ struct FrameFoldApp: App {
                 }
             }
         }
+        .commands { menuCommands }
+    }
+
+    /// Menüleiste und Tastenkürzel (am Mac, an iPad-/iPhone-Tastaturen).
+    /// „Neues Fenster" fällt bewusst weg: Ein zweites Fenster bekäme eine
+    /// zweite Kamera-Sitzung auf dieselbe Kamera.
+    @CommandsBuilder
+    private var menuCommands: some Commands {
+        CommandGroup(replacing: .newItem) {
+            Button("Neues Werk") { show(tab: 2, then: .ffNewWork) }
+                .keyboardShortcut("n")
+            Button("Video öffnen …") { show(tab: 0, then: .ffOpenVideoFile) }
+                .keyboardShortcut("o")
+        }
+        CommandMenu("Aufnahme") {
+            Button("Fertig") { post(.ffFinishSession) }
+                .keyboardShortcut(.return, modifiers: .command)
+            Button("Letztes Bild zurücknehmen") { post(.ffUndoLastFrame) }
+                .keyboardShortcut(.delete, modifiers: .command)
+        }
+        CommandGroup(before: .toolbar) {
+            Divider()
+            Button("Video") { selectedTab = 0 }.keyboardShortcut("1")
+            Button("Kamera") { selectedTab = 1 }.keyboardShortcut("2")
+            Button("Projekte") { selectedTab = 2 }.keyboardShortcut("3")
+        }
+    }
+
+    private func post(_ name: Notification.Name) {
+        NotificationCenter.default.post(name: name, object: nil)
+    }
+
+    /// Erst den Tab zeigen, dann den Befehl schicken – die Ansicht muss
+    /// erschienen sein, um ihn zu empfangen.
+    private func show(tab: Int, then name: Notification.Name) {
+        selectedTab = tab
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { post(name) }
     }
 }

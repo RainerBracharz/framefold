@@ -67,11 +67,23 @@ struct LiveCaptureView: View {
                     VStack(spacing: 16) {
                         FoldMark(size: 40, color: Theme.paperOnDark)
                         CatalogLabel("Kein Kamerazugriff", color: Theme.paperOnDark)
-                        Text("Erlaube FrameFold den Kamerazugriff unter Einstellungen → FrameFold.")
+                        Text(Platform.isMac
+                             ? "Erlaube FrameFold den Kamerazugriff unter Systemeinstellungen → Datenschutz & Sicherheit → Kamera."
+                             : "Erlaube FrameFold den Kamerazugriff unter Einstellungen → FrameFold.")
                             .font(.system(size: 13))
                             .foregroundStyle(Theme.paperOnDark.opacity(0.7))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 40)
+                        Button("Einstellungen öffnen") { openCameraSettings() }
+                            .buttonStyle(DarkSecondaryButtonStyle())
+                            .padding(.top, 4)
+                    }
+                    // Zurück aus den Einstellungen: Ist der Zugriff jetzt da,
+                    // geht es ohne Neustart weiter.
+                    .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                        if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
+                            controller.permissionDenied = false
+                        }
                     }
                 } else if controller.cameraUnavailable {
                     cameraUnavailableView
@@ -176,7 +188,21 @@ struct LiveCaptureView: View {
                 .multilineTextAlignment(.center)
                 .lineSpacing(2)
                 .padding(.horizontal, 40)
+            // Eine angesteckte Kamera wird am Mac von selbst erkannt; der
+            // Knopf hilft, wenn das System sie nicht gemeldet hat.
+            Button("Erneut suchen") { controller.cameraUnavailable = false }
+                .buttonStyle(DarkSecondaryButtonStyle())
+                .padding(.top, 4)
         }
+    }
+
+    private func openCameraSettings() {
+        #if targetEnvironment(macCatalyst)
+        let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Camera")
+        #else
+        let url = URL(string: UIApplication.openSettingsURLString)
+        #endif
+        if let url { UIApplication.shared.open(url) }
     }
 
     // MARK: Projektwahl
@@ -495,6 +521,9 @@ struct LiveCaptureView: View {
         #endif
         .onAppear {
             UIApplication.shared.isIdleTimerDisabled = true
+            // Am Mac wirkt der Idle-Timer nicht – dort hält eine Aktivität
+            // Bildschirm und Rechner während der Aufnahme wach.
+            SessionWakeLock.shared.begin()
             recentThumbs = []
             sessionFiles = []
             level.start()
@@ -537,8 +566,15 @@ struct LiveCaptureView: View {
         .onChange(of: level.looksMounted) { _, mounted in
             controller.noteDeviceIsMounted(mounted)
         }
+        .onReceive(NotificationCenter.default.publisher(for: .ffFinishSession)) { _ in
+            finishSession(project: project)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .ffUndoLastFrame)) { _ in
+            undoLastFrame(project: project)
+        }
         .onDisappear {
             UIApplication.shared.isIdleTimerDisabled = false
+            SessionWakeLock.shared.end()
             controller.stop()
             level.stop()
             StudioMonitorHub.shared.unregister(controller)
@@ -1599,3 +1635,26 @@ private struct MacCameraSection: View {
     }
 }
 #endif
+
+/// Hält den Mac während einer Aufnahme wach (Ruhezustand und Bildschirm-
+/// sperre würden die Kamera-Sitzung beenden). Am iPhone ohne Wirkung – dort
+/// erledigt das `isIdleTimerDisabled`.
+@MainActor
+final class SessionWakeLock {
+    static let shared = SessionWakeLock()
+    private var activity: NSObjectProtocol?
+
+    func begin() {
+        #if targetEnvironment(macCatalyst)
+        guard activity == nil else { return }
+        activity = ProcessInfo.processInfo.beginActivity(
+            options: [.idleDisplaySleepDisabled, .idleSystemSleepDisabled, .userInitiated],
+            reason: "Stopmotion-Aufnahme läuft")
+        #endif
+    }
+
+    func end() {
+        if let activity { ProcessInfo.processInfo.endActivity(activity) }
+        activity = nil
+    }
+}

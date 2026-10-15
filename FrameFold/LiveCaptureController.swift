@@ -34,6 +34,13 @@ private final class CaptureFrameGate: @unchecked Sendable {
 @MainActor
 final class LiveCaptureController: NSObject, ObservableObject {
 
+    override init() {
+        super.init()
+        #if targetEnvironment(macCatalyst)
+        observeCameraChanges()
+        #endif
+    }
+
     enum Status: Equatable {
         case idle
         case calibrating          // misst 2 s das Grundrauschen der Szene
@@ -797,15 +804,21 @@ final class LiveCaptureController: NSObject, ObservableObject {
     func switchCamera(to id: String) {
         UserDefaults.standard.set(id, forKey: Self.cameraKey)
         guard id != device?.uniqueID, !session.inputs.isEmpty,
-              let next = Self.availableCameras().first(where: { $0.uniqueID == id }),
-              let input = try? AVCaptureDeviceInput(device: next) else { return }
+              let next = Self.availableCameras().first(where: { $0.uniqueID == id }) else { return }
+        attach(next)
+    }
+
+    /// Ersetzt den Kamera-Eingang der laufenden Sitzung.
+    @discardableResult
+    private func attach(_ next: AVCaptureDevice) -> Bool {
+        guard let input = try? AVCaptureDeviceInput(device: next) else { return false }
         session.beginConfiguration()
         let old = session.inputs
         old.forEach(session.removeInput)
         guard session.canAddInput(input) else {
             old.forEach { if session.canAddInput($0) { session.addInput($0) } }
             session.commitConfiguration()
-            return
+            return false
         }
         session.addInput(input)
         session.sessionPreset = session.canSetSessionPreset(.hd1920x1080) ? .hd1920x1080 : .high
@@ -813,6 +826,52 @@ final class LiveCaptureController: NSObject, ObservableObject {
         device = next
         objectWillChange.send()
         if isRunning { refixCamera() }
+        return true
+    }
+
+    /// Am Mac kommen und gehen Kameras: Die Dokumentenkamera wird oft erst
+    /// nach dem Start angesteckt, ein USB-Kabel kann sich lösen.
+    private func observeCameraChanges() {
+        let center = NotificationCenter.default
+        center.addObserver(forName: AVCaptureDevice.wasConnectedNotification, object: nil, queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated { self?.cameraConnected() }
+        }
+        center.addObserver(forName: AVCaptureDevice.wasDisconnectedNotification, object: nil, queue: .main) { [weak self] note in
+            let gone = (note.object as? AVCaptureDevice)?.uniqueID
+            MainActor.assumeIsolated { self?.cameraDisconnected(uniqueID: gone) }
+        }
+    }
+
+    private func cameraConnected() {
+        // Vorher keine Kamera: Hinweis wegnehmen – der Sucher startet beim
+        // Erscheinen neu und findet die neue Kamera selbst.
+        if cameraUnavailable {
+            cameraUnavailable = false
+            return
+        }
+        // Die gewählte Kamera ist zurück: wieder auf sie wechseln.
+        if let chosen = UserDefaults.standard.string(forKey: Self.cameraKey),
+           chosen != device?.uniqueID,
+           let back = Self.availableCameras().first(where: { $0.uniqueID == chosen }),
+           !session.inputs.isEmpty {
+            attach(back)
+        }
+    }
+
+    private func cameraDisconnected(uniqueID: String?) {
+        guard let current = device, uniqueID == nil || uniqueID == current.uniqueID else { return }
+        // Auf die nächstbeste Kamera ausweichen; die gewählte bleibt gemerkt
+        // und kommt zurück, sobald sie wieder angesteckt ist.
+        let fallback = Self.availableCameras().first { $0.uniqueID != current.uniqueID }
+        if let fallback, attach(fallback) { return }
+        // Keine Kamera mehr: Sitzung beenden und es sagen, statt mit
+        // eingefrorenem Bild weiterzulaufen.
+        session.beginConfiguration()
+        session.inputs.forEach(session.removeInput)
+        session.commitConfiguration()
+        device = nil
+        stop()
+        cameraUnavailable = true
     }
     #endif
 
@@ -844,6 +903,13 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // Kamera ab. Nicht jede USB-Kamera kann Full HD – dann die beste.
         session.sessionPreset = session.canSetSessionPreset(.hd1920x1080) ? .hd1920x1080 : .high
         #endif
+
+        // Ausgang schon vorhanden (Kamera wurde abgezogen und kommt wieder):
+        // nur den Eingang neu setzen.
+        if !session.outputs.isEmpty {
+            session.commitConfiguration()
+            return true
+        }
 
         let output = AVCaptureVideoDataOutput()
         output.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]

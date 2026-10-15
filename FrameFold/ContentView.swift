@@ -1,6 +1,7 @@
 import SwiftUI
 import PhotosUI
 import AVKit
+import UniformTypeIdentifiers
 import Combine   // Timer.publish(…).autoconnect() — ohne diesen Import warnt der Compiler
 
 struct ContentView: View {
@@ -9,6 +10,8 @@ struct ContentView: View {
     @StateObject private var viewModel = ProcessingViewModel()
     @EnvironmentObject var store: ProjectStore
     @State private var pickerItem: PhotosPickerItem?
+    /// Mac: Videos liegen meist im Finder, nicht in Fotos.
+    @State private var showFileImporter = false
     @State private var showSettings = false
     @State private var homeIn = false
     /// Neigungs-Licht: das Galerielicht folgt der Hand (CoreMotion).
@@ -103,6 +106,7 @@ struct ContentView: View {
                             }
                             .buttonStyle(.plain)
                             .padding(.horizontal, 24)
+                            if Platform.isMac { fileImportLink }
                             if !recentProjects.isEmpty { recentStrip }
                         }
                         .frame(maxWidth: .infinity)
@@ -124,6 +128,7 @@ struct ContentView: View {
                     .buttonStyle(.plain)
                     .padding(.horizontal, 24)
                     .padding(.top, 14)
+                    if Platform.isMac { fileImportLink }
 
                     // 5 – die Werke als gefaltete Kacheln
                     if !recentProjects.isEmpty { recentStrip }
@@ -143,6 +148,22 @@ struct ContentView: View {
             lightTilt.start()
         }
         .onDisappear { lightTilt.stop() }
+        .fileImporter(isPresented: $showFileImporter,
+                      allowedContentTypes: [.movie, .video]) { result in
+            if case .success(let url) = result { importVideoFile(url) }
+        }
+        // Mac: Video aus dem Finder aufs Fenster ziehen
+        .onDrop(of: [.movie], isTargeted: nil) { providers in
+            guard let provider = providers.first else { return false }
+            provider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { url, _ in
+                guard let url, let copy = Self.copyToTemporary(url) else { return }
+                Task { @MainActor in viewModel.process(videoURL: copy) }
+            }
+            return true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .ffOpenVideoFile)) { _ in
+            showFileImporter = true
+        }
         .onChange(of: pickerItem) { _, newItem in
             guard let newItem else { return }
             // Sofort Feedback zeigen – das Kopieren des Videos aus der
@@ -156,6 +177,42 @@ struct ContentView: View {
                 }
                 pickerItem = nil
             }
+        }
+    }
+
+    // MARK: Video aus einer Datei (Mac)
+
+    private var fileImportLink: some View {
+        Button { showFileImporter = true } label: {
+            Label("Video aus einer Datei wählen …", systemImage: "folder")
+                .font(Theme.mono(12))
+                .foregroundStyle(Theme.graphite)
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal, 24)
+        .padding(.top, 10)
+    }
+
+    private func importVideoFile(_ url: URL) {
+        let scoped = url.startAccessingSecurityScopedResource()
+        defer { if scoped { url.stopAccessingSecurityScopedResource() } }
+        guard let copy = Self.copyToTemporary(url) else {
+            viewModel.stage = .failed(String(localized: "Das Video konnte nicht geladen werden."))
+            return
+        }
+        viewModel.process(videoURL: copy)
+    }
+
+    /// Eigene Kopie im temporären Ordner: Die Original-Datei darf die App
+    /// nur kurz lesen (Sandbox), die Analyse braucht sie länger.
+    nonisolated static func copyToTemporary(_ url: URL) -> URL? {
+        let dest = FileManager.default.temporaryDirectory
+            .appendingPathComponent("import-\(UUID().uuidString).\(url.pathExtension.isEmpty ? "mov" : url.pathExtension)")
+        do {
+            try FileManager.default.copyItem(at: url, to: dest)
+            return dest
+        } catch {
+            return nil
         }
     }
 
@@ -791,4 +848,12 @@ struct SettingsView: View {
 
 #Preview {
     ContentView(selectedTab: .constant(0)).environmentObject(ProjectStore())
+}
+
+extension Notification.Name {
+    /// Menübefehle am Mac (FrameFoldApp `.commands`) an die Ansichten.
+    static let ffOpenVideoFile = Notification.Name("ffOpenVideoFile")
+    static let ffNewWork = Notification.Name("ffNewWork")
+    static let ffFinishSession = Notification.Name("ffFinishSession")
+    static let ffUndoLastFrame = Notification.Name("ffUndoLastFrame")
 }

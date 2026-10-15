@@ -76,6 +76,9 @@ struct ProjectsView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .paperStage()
+            .onReceive(NotificationCenter.default.publisher(for: .ffNewWork)) { _ in
+                showNewProject = true
+            }
             .navigationDestination(for: UUID.self) { id in
                 if let project = store.projects.first(where: { $0.id == id }) {
                     ProjectDetailView(project: project)
@@ -1025,7 +1028,78 @@ struct ShareItem: Identifiable {
 struct ActivityView: UIViewControllerRepresentable {
     let items: [Any]
     func makeUIViewController(context: Context) -> UIActivityViewController {
+        #if targetEnvironment(macCatalyst)
+        // Das Teilen-Menü am Mac kennt weder „Sichern" noch „Drucken" – für
+        // ein druckfertiges Daumenkino und Filme, die in den Finder sollen,
+        // sind das aber die naheliegenden Wege.
+        let urls = items.compactMap { $0 as? URL }
+        var extra: [UIActivity] = [SaveFileActivity(urls: urls)]
+        if urls.contains(where: { $0.pathExtension.lowercased() == "pdf" }) {
+            extra.append(PrintFileActivity(urls: urls))
+        }
+        return UIActivityViewController(activityItems: items, applicationActivities: extra)
+        #else
         UIActivityViewController(activityItems: items, applicationActivities: nil)
+        #endif
     }
     func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
 }
+
+#if targetEnvironment(macCatalyst)
+/// „Sichern …": öffnet den Sichern-Dialog und legt eine Kopie ab.
+///
+/// Der Dialog hängt am Fenster, nicht am Teilen-Menü: Das Menü schließt sich
+/// beim Antippen und nähme einen daran hängenden Dialog gleich mit.
+final class SaveFileActivity: UIActivity {
+    private let urls: [URL]
+    init(urls: [URL]) { self.urls = urls }
+
+    override var activityTitle: String? { String(localized: "Sichern …") }
+    override var activityImage: UIImage? { UIImage(systemName: "square.and.arrow.down") }
+    override var activityType: UIActivity.ActivityType? { .init("com.bracharz.framefold.save") }
+    override func canPerform(withActivityItems activityItems: [Any]) -> Bool { !urls.isEmpty }
+
+    override func perform() {
+        let urls = self.urls
+        activityDidFinish(true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            let picker = UIDocumentPickerViewController(forExporting: urls, asCopy: true)
+            UIApplication.shared.topViewController?.present(picker, animated: true)
+        }
+    }
+}
+
+extension UIApplication {
+    /// Oberster sichtbarer Controller des aktiven Fensters.
+    var topViewController: UIViewController? {
+        let window = connectedScenes.compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows).first(where: \.isKeyWindow)
+        var top = window?.rootViewController
+        while let presented = top?.presentedViewController, !presented.isBeingDismissed {
+            top = presented
+        }
+        return top
+    }
+}
+
+/// „Drucken …" für die PDF-Vorlagen (Daumenkino, Kontaktbogen, Faltvorlage).
+final class PrintFileActivity: UIActivity {
+    private let urls: [URL]
+    init(urls: [URL]) { self.urls = urls }
+
+    override var activityTitle: String? { String(localized: "Drucken …") }
+    override var activityImage: UIImage? { UIImage(systemName: "printer") }
+    override var activityType: UIActivity.ActivityType? { .init("com.bracharz.framefold.print") }
+    override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
+        urls.contains { UIPrintInteractionController.canPrint($0) }
+    }
+
+    override func perform() {
+        let controller = UIPrintInteractionController.shared
+        controller.printingItems = urls.filter { UIPrintInteractionController.canPrint($0) }
+        controller.present(animated: true) { [weak self] _, completed, _ in
+            self?.activityDidFinish(completed)
+        }
+    }
+}
+#endif
