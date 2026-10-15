@@ -31,6 +31,17 @@
       <Testables>
          <TestableReference
             skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "CBFAD9B03062D0F900D357C7"
+               BuildableName = "FrameFoldTests.xctest"
+               BlueprintName = "FrameFoldTests"
+               ReferencedContainer = "container:FrameFold.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"

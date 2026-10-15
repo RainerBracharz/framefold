@@ -2,7 +2,7 @@ name: iOS Build
 
 on:
   push:
-    branches: [main]
+    branches: [main, mac-catalyst]
   workflow_dispatch:
 
 permissions:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    name: Logik-Tests + iOS-Build
+    name: Logik-Tests, Speicher-Tests, iOS- und Mac-Build
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -37,6 +37,34 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             build 2>&1 | tee /tmp/build.log
 
+      - name: Mac-Build (Mac Catalyst, ohne Signing)
+        if: always()
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project FrameFold.xcodeproj \
+            -scheme FrameFold \
+            -destination 'generic/platform=macOS,variant=Mac Catalyst' \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            build 2>&1 | tee /tmp/build-mac.log
+
+      # Projektspeicher (Papierkorb, Verwerfen, Wiederherstellen): hier geht
+      # es um die Werke der Nutzer. Läuft als Mac-Catalyst-Test – das braucht
+      # keinen Simulator, nur eine Ad-hoc-Signatur.
+      - name: Speicher-Tests (ProjectStore)
+        if: always()
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project FrameFold.xcodeproj \
+            -scheme FrameFold \
+            -destination 'platform=macOS,variant=Mac Catalyst' \
+            -only-testing:FrameFoldTests \
+            CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
+            2>&1 | tee /tmp/unit-tests.log | grep -E "Test Case|Executed|error:|TEST (SUCCEEDED|FAILED)"
+
       - name: Ergebnis in ci-results-Branch veröffentlichen
         if: always()
         run: |
@@ -46,6 +74,12 @@ jobs:
           echo "run=$GITHUB_RUN_NUMBER" >> /tmp/ci-out/STATUS.txt
           cp /tmp/xcode-version.txt /tmp/ci-out/ 2>/dev/null || true
           cp /tmp/tests-compile.log /tmp/tests-run.log /tmp/ci-out/ 2>/dev/null || true
+          if [ -f /tmp/build-mac.log ]; then
+            grep -E "error:" /tmp/build-mac.log > /tmp/ci-out/build-mac-errors.txt || true
+          fi
+          if [ -f /tmp/unit-tests.log ]; then
+            grep -E "Test Case|Executed|error:|TEST (SUCCEEDED|FAILED)" /tmp/unit-tests.log > /tmp/ci-out/unit-tests.txt || true
+          fi
           if [ -f /tmp/build.log ]; then
             grep -E "error:|warning:" /tmp/build.log > /tmp/ci-out/build-errors.txt || true
             tail -c 150000 /tmp/build.log > /tmp/ci-out/build-tail.log

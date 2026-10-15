@@ -27,8 +27,9 @@ final class ProjectStore: ObservableObject {
     @Published private(set) var projects: [Project] = []
 
     private let root: URL
+    private let defaults: UserDefaults
 
-    init() {
+    convenience init() {
         #if targetEnvironment(macCatalyst)
         // Am Mac ist „Dokumente" der Ordner des Nutzers, nicht der der App –
         // dort hat ein Ordner namens „Projects" nichts verloren.
@@ -37,7 +38,13 @@ final class ProjectStore: ObservableObject {
         #else
         let base = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         #endif
-        root = base.appendingPathComponent("Projects", isDirectory: true)
+        self.init(root: base.appendingPathComponent("Projects", isDirectory: true))
+    }
+
+    /// Eigener Ordner – für Tests, die nicht an echte Werke dürfen.
+    init(root: URL, defaults: UserDefaults = .standard) {
+        self.root = root
+        self.defaults = defaults
         try? FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         reload()
         stampLegacyTrashOnce()
@@ -49,7 +56,7 @@ final class ProjectStore: ObservableObject {
     /// beginnt sie für alles, was schon im Papierkorb liegt, jetzt.
     private func stampLegacyTrashOnce() {
         let key = "trashStampedOnce"
-        guard !UserDefaults.standard.bool(forKey: key) else { return }
+        guard !defaults.bool(forKey: key) else { return }
         for project in projects {
             let trashDir = directory(for: project).appendingPathComponent("trash", isDirectory: true)
             for filename in project.trashFilenames ?? [] {
@@ -58,7 +65,7 @@ final class ProjectStore: ObservableObject {
                     ofItemAtPath: trashDir.appendingPathComponent(filename).path)
             }
         }
-        UserDefaults.standard.set(true, forKey: key)
+        defaults.set(true, forKey: key)
     }
 
     // MARK: Laden & Speichern
