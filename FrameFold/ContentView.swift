@@ -244,7 +244,9 @@ struct ContentView: View {
                 seed: FoldSeed.make(latestProject?.id) &+ foldNudge,
                 accent: latestProject.map { Theme.accent(for: $0.id) } ?? Theme.violet,
                 tilt: lightTilt.offset)
-                .frame(height: isSpread ? 340 : 248)
+                // Am Mac ist das Fenster groß – eine iPhone-hohe Tafel ließe
+                // die untere Hälfte leer.
+                .frame(height: Platform.isMac ? 500 : isSpread ? 340 : 248)
                 .overlay {
                     // Antippen faltet neu – ein kleines Spielzeug im Einfach-Modus
                     if mode == .basic {

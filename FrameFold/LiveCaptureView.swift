@@ -502,7 +502,9 @@ struct LiveCaptureView: View {
     /// Bedienleiste strukturell nicht verschwinden.
     private func captureView(project: Project) -> some View {
         Group {
-            if Duo.canArrange, horizontalSizeClass == .regular {
+            if Platform.isMac {
+                macCaptureView(project: project)
+            } else if Duo.canArrange, horizontalSizeClass == .regular {
                 // iPhone Duo aufgeklappt (iOS 27.1): Das System ordnet Kamera
                 // und Film um den Falz an. Quer liegen sie nebeneinander wie
                 // ein aufgeschlagenes Heft; hochkant steht die Kamera allein,
@@ -696,29 +698,6 @@ struct LiveCaptureView: View {
         let cameraSize = landscapePage
             ? CGSize(width: size.height * 0.75, height: size.height)
             : CGSize(width: size.width + trailingBleed, height: size.height)
-        if Platform.isMac {
-            // Am Mac stehen Kamerabild und Bedienung untereinander: Das
-            // Querformat der Dokumentenkamera passt ganz auf die Seite, und
-            // nichts liegt über dem Werk.
-            // Beide Seiten beginnen auf derselben Höhe – links die Kamera,
-            // rechts der Film, wie ein aufgeschlagenes Heft.
-            return AnyView(VStack(spacing: 0) {
-                VStack(alignment: .leading, spacing: 10) {
-                    CatalogLabel("Kamera", color: Theme.paperOnDark.opacity(0.7))
-                    cameraLayer
-                        .aspectRatio(16.0 / 9.0, contentMode: .fit)
-                        .overlay {
-                            if flashOpacity > 0 {
-                                Color.white.opacity(flashOpacity).allowsHitTesting(false)
-                            }
-                        }
-                }
-                .padding(20)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                stageControls(project: project, width: size.width)
-            }
-            .frame(width: size.width, height: size.height))
-        }
         return AnyView(ZStack(alignment: .bottom) {
             // Aufnahme-Blitz über dem Kamerabild, unter der Bedienung
             if flashOpacity > 0 {
@@ -745,6 +724,40 @@ struct LiveCaptureView: View {
                 // ohne das Stativ zu berühren.
                 .background(HardwareShutterBridge { controller.captureNow() })
         })
+    }
+
+    /// Am Mac: oben Kamera und Film als zwei gleich hohe Seiten, darunter die
+    /// Bedienung über die ganze Breite – ohne Leerfläche unter dem Film und
+    /// ohne dass etwas über dem Werk liegt. Das Querformat der
+    /// Dokumentenkamera passt ganz auf die Seite.
+    private func macCaptureView(project: Project) -> some View {
+        GeometryReader { geo in
+            let pageWidth = geo.size.width / 2
+            let pageHeight = (pageWidth - 40) * 9 / 16 + 62   // Bild + Beschriftung + Ränder
+            VStack(spacing: 0) {
+                HStack(alignment: .top, spacing: 0) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        CatalogLabel("Kamera", color: Theme.paperOnDark.opacity(0.7))
+                        cameraLayer
+                            .aspectRatio(16.0 / 9.0, contentMode: .fit)
+                            .overlay {
+                                if flashOpacity > 0 {
+                                    Color.white.opacity(flashOpacity).allowsHitTesting(false)
+                                }
+                            }
+                            .overlay(alignment: .topLeading) { sucherTools }
+                    }
+                    .padding(20)
+                    .frame(width: pageWidth, height: pageHeight, alignment: .top)
+                    filmPage
+                        .frame(width: pageWidth, height: pageHeight, alignment: .top)
+                }
+                // Bedienung als ruhige Mitte, „Fertig" nicht am Fensterrand
+                stageControls(project: project, width: min(620, geo.size.width))
+                Spacer(minLength: 0)
+            }
+            .frame(width: geo.size.width, height: geo.size.height, alignment: .top)
+        }
     }
 
     /// Status und Bedienung der Kamera-Seite.
