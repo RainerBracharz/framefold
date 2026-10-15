@@ -555,6 +555,22 @@
         }
       }
     },
+    "Alle %lld Werke zeigen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show all %lld works"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher les %lld œuvres"
+          }
+        }
+      }
+    },
     "Alle Werkzeuge sichtbar: Raster, Pegel, Daumenkino mit Zurücknehmen, Neu-Einmessen, Referenzbild.": {
       "localizations": {
         "en": {
@@ -679,6 +695,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Analyse du mouvement…"
+          }
+        }
+      }
+    },
+    "Anderes Video wählen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose another video"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir une autre vidéo"
           }
         }
       }
@@ -2932,6 +2964,22 @@
         }
       }
     },
+    "Mit der Kamera weiterarbeiten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue with the camera"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer avec la caméra"
+          }
+        }
+      }
+    },
     "Sichern …": {
       "localizations": {
         "en": {
@@ -2976,6 +3024,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ouvrir une vidéo …"
+          }
+        }
+      }
+    },
+    "Werk %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Work %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Œuvre %lld"
           }
         }
       }

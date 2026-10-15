@@ -121,9 +121,12 @@ final class ProjectStore: ObservableObject {
 
     // MARK: API
 
+    /// Leerer Name: Statt still nichts zu tun, bekommt das Werk eine Nummer.
     func createProject(name: String) -> Project {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         let project = Project(
-            id: UUID(), name: name,
+            id: UUID(),
+            name: trimmed.isEmpty ? String(localized: "Werk \(projects.count + 1)") : trimmed,
             createdAtISO: ISO8601DateFormatter().string(from: Date()),
             frameFilenames: [],
             trashFilenames: nil,

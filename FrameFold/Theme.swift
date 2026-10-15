@@ -529,6 +529,7 @@ struct InkButtonStyle: ButtonStyle {
             .frame(maxWidth: fullWidth ? .infinity : nil)
             .padding(.horizontal, fullWidth ? 0 : 22)
             .background(Theme.ink.opacity(configuration.isPressed ? 0.72 : 1))
+            .modifier(DimWhenDisabled())
     }
 }
 
@@ -545,6 +546,7 @@ struct DarkPrimaryButtonStyle: ButtonStyle {
             .frame(maxWidth: fullWidth ? .infinity : nil)
             .padding(.horizontal, fullWidth ? 0 : 18)
             .background(Theme.paperOnDark.opacity(configuration.isPressed ? 0.78 : 1))
+            .modifier(DimWhenDisabled())
     }
 }
 
@@ -561,6 +563,7 @@ struct DarkSecondaryButtonStyle: ButtonStyle {
             .frame(maxWidth: fullWidth ? .infinity : nil)
             .padding(.horizontal, fullWidth ? 0 : 18)
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+            .modifier(DimWhenDisabled())
     }
 }
 
@@ -608,6 +611,15 @@ struct IconSquare: View {
     }
 }
 
+/// Gesperrte Knöpfe sichtbar zurücknehmen – sonst sähe ein Knopf, der
+/// nichts tut, genauso aus wie einer, der etwas tut.
+struct DimWhenDisabled: ViewModifier {
+    @Environment(\.isEnabled) private var isEnabled
+    func body(content: Content) -> some View {
+        content.opacity(isEnabled ? 1 : 0.4)
+    }
+}
+
 /// Sekundäraktion: Haarlinien-Rahmen auf der Wand.
 struct HairlineButtonStyle: ButtonStyle {
     var fullWidth = true
@@ -622,6 +634,7 @@ struct HairlineButtonStyle: ButtonStyle {
             .padding(.horizontal, fullWidth ? 0 : 22)
             .background(configuration.isPressed ? Theme.paperShade : Theme.paper)
             .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+            .modifier(DimWhenDisabled())
     }
 }
 

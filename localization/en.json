@@ -303,5 +303,9 @@
   "Video öffnen …": "Open Video …",
   "Aufnahme": "Capture",
   "Sichern …": "Save …",
-  "Drucken …": "Print …"
+  "Drucken …": "Print …",
+  "Werk %lld": "Work %lld",
+  "Alle %lld Werke zeigen": "Show all %lld works",
+  "Mit der Kamera weiterarbeiten": "Continue with the camera",
+  "Anderes Video wählen": "Choose another video"
 }

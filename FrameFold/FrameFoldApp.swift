@@ -280,6 +280,10 @@ struct FrameFoldApp: App {
                     .tag(2)
             }
             .environmentObject(projectStore)
+            // „Mit der Kamera weiterarbeiten" aus der Werkansicht
+            .onReceive(NotificationCenter.default.publisher(for: .ffContinueWork)) { _ in
+                selectedTab = 1
+            }
             // Externe Bildschirme (HDMI/AirPlay) zeigen den Studio-Monitor
             .task {
                 StudioMonitorHub.shared.activate()

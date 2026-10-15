@@ -296,5 +296,9 @@
   "Video öffnen …": "Ouvrir une vidéo …",
   "Aufnahme": "Prise de vue",
   "Sichern …": "Enregistrer …",
-  "Drucken …": "Imprimer …"
+  "Drucken …": "Imprimer …",
+  "Werk %lld": "Œuvre %lld",
+  "Alle %lld Werke zeigen": "Afficher les %lld œuvres",
+  "Mit der Kamera weiterarbeiten": "Continuer avec la caméra",
+  "Anderes Video wählen": "Choisir une autre vidéo"
 }

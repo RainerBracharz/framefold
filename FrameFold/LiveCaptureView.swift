@@ -12,6 +12,7 @@ struct LiveCaptureView: View {
     @State private var targetProject: Project?
     @State private var onionSkin = true
     @State private var showNewProject = false
+    @State private var showAllWorks = false
     @State private var newProjectName = ""
     @State private var showSettings = false
     @State private var recentThumbs: [UIImage] = []
@@ -107,10 +108,20 @@ struct LiveCaptureView: View {
                     didSeeCameraTip = true
                     targetProject = store.projects.first ?? store.createProject(name: "Faltung")
                 }
+                // „Mit der Kamera weiterarbeiten", bevor dieser Tab je offen war
+                if let id = ContinueWork.pending { continueWork(id) }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .ffContinueWork)) { note in
+                if let id = note.object as? UUID { continueWork(id) }
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    WorkTitle("Kamera", size: 17, color: Theme.paperOnDark)
+                    // Im Sucher steht das Werk, in das gerade aufgenommen wird.
+                    if let targetProject {
+                        WorkTitle(verbatim: targetProject.name, size: 17, color: Theme.paperOnDark)
+                    } else {
+                        WorkTitle("Kamera", size: 17, color: Theme.paperOnDark)
+                    }
                 }
                 // Ein Ausstieg reicht: der Fertig-Knopf unten. Oben bleibt
                 // nur das Regler-Symbol – wie in allen anderen Tabs.
@@ -123,6 +134,9 @@ struct LiveCaptureView: View {
                 }
             }
             .toolbarBackground(Theme.darkroom, for: .navigationBar)
+            // Sichtbarer Hintergrund: Erst dann folgt die Statusleiste dem
+            // dunklen Schema – sonst stünden Uhrzeit und Akku dunkel auf dunkel.
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
             // Die App-weite Akzentfarbe ist auf diesem Tab hell (für die
             // dunkle Tab-Leiste) – System-Dialoge erben sie und wären hell
@@ -140,6 +154,15 @@ struct LiveCaptureView: View {
                 }
             }
         }
+    }
+
+    private func continueWork(_ id: UUID) {
+        ContinueWork.pending = nil
+        guard let project = store.projects.first(where: { $0.id == id }),
+              targetProject?.id != project.id else { return }
+        finishedProject = nil
+        resultURL = nil
+        targetProject = project
     }
 
     private var cameraTip: some View {
@@ -256,9 +279,22 @@ struct LiveCaptureView: View {
                     .padding(.horizontal, 24)
                 } else {
                     VStack(spacing: 10) {
-                        ForEach(store.projects.prefix(4)) { project in
+                        // Die vier jüngsten Werke, auf Wunsch alle – ältere
+                        // Werke sollen sich live weiterführen lassen.
+                        ForEach(showAllWorks ? store.projects : Array(store.projects.prefix(4))) { project in
                             Button { targetProject = project } label: {
                                 darkProjectRow(project)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        if store.projects.count > 4 && !showAllWorks {
+                            Button { showAllWorks = true } label: {
+                                Text("Alle \(store.projects.count) Werke zeigen")
+                                    .font(Theme.caption(11))
+                                    .tracking(1.4)
+                                    .textCase(.uppercase)
+                                    .foregroundStyle(Theme.paperOnDark.opacity(0.8))
+                                    .frame(maxWidth: .infinity, minHeight: 44)
                             }
                             .buttonStyle(.plain)
                         }
@@ -274,10 +310,9 @@ struct LiveCaptureView: View {
               .padding(.top, horizontalSizeClass == .regular ? 10 : 0)
             }
         }
-        .alert("Neues Projekt", isPresented: $showNewProject) {
+        .alert("Neues Werk", isPresented: $showNewProject) {
             TextField("Name", text: $newProjectName)
             Button("Anlegen & starten") {
-                guard !newProjectName.isEmpty else { return }
                 targetProject = store.createProject(name: newProjectName)
                 newProjectName = ""
             }
@@ -575,8 +610,15 @@ struct LiveCaptureView: View {
         .onDisappear {
             UIApplication.shared.isIdleTimerDisabled = false
             SessionWakeLock.shared.end()
-            controller.stop()
-            level.stop()
+            // Tab gewechselt, während Bilder im Sucher stehen: die Sitzung
+            // abschließen statt sie stillschweigend zurückzusetzen. Zurück im
+            // Kamera-Tab wartet dann das Ergebnis mit „Weiter aufnehmen".
+            if targetProject?.id == project.id, controller.capturedCount > 0 {
+                finishSession(project: project)
+            } else {
+                controller.stop()
+                level.stop()
+            }
             StudioMonitorHub.shared.unregister(controller)
             WatchLink.shared.onShutter = nil
             WatchLink.shared.onFinish = nil
@@ -1657,4 +1699,11 @@ final class SessionWakeLock {
         if let activity { ProcessInfo.processInfo.endActivity(activity) }
         activity = nil
     }
+}
+
+/// Werk, das in der Kamera fortgesetzt werden soll – falls der Kamera-Tab
+/// die Nachricht verpasst, weil er noch nie offen war.
+@MainActor
+enum ContinueWork {
+    static var pending: UUID?
 }

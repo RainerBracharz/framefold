@@ -302,7 +302,12 @@ struct ContentView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach(recentProjects) { project in
-                        Button { selectedTab = 2 } label: {
+                        // Direkt in dieses Werk, nicht bloß in die Liste
+                        Button {
+                            OpenWork.pending = project.id
+                            selectedTab = 2
+                            NotificationCenter.default.post(name: .ffOpenWork, object: project.id)
+                        } label: {
                             foldedTile(project)
                         }
                         .buttonStyle(.plain)
@@ -372,7 +377,7 @@ struct ContentView: View {
                 .foregroundStyle(Theme.ink)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
-            Button("Nochmal versuchen") { viewModel.stage = .idle }
+            Button("Anderes Video wählen") { viewModel.stage = .idle }
                 .buttonStyle(HairlineButtonStyle(fullWidth: false))
         }
     }
@@ -687,7 +692,7 @@ struct ResultView: View {
         .alert("Als Projekt sichern", isPresented: $showSaveToProject) {
             TextField("Projektname", text: $saveProjectName)
             Button("Sichern") {
-                guard let url = sourceVideoURL, !saveProjectName.isEmpty else { return }
+                guard let url = sourceVideoURL else { return }
                 let project = store.createProject(name: saveProjectName)
                 savedProjectID = project.id
                 saveProjectName = ""
@@ -856,4 +861,15 @@ extension Notification.Name {
     static let ffNewWork = Notification.Name("ffNewWork")
     static let ffFinishSession = Notification.Name("ffFinishSession")
     static let ffUndoLastFrame = Notification.Name("ffUndoLastFrame")
+    /// Werk in der Kamera fortsetzen (object: die UUID des Werks).
+    static let ffContinueWork = Notification.Name("ffContinueWork")
+    /// Werk in der Projektliste öffnen (object: die UUID des Werks).
+    static let ffOpenWork = Notification.Name("ffOpenWork")
+}
+
+/// Werk, das der Projekte-Tab öffnen soll – falls er die Nachricht verpasst,
+/// weil er noch nie offen war.
+@MainActor
+enum OpenWork {
+    static var pending: UUID?
 }

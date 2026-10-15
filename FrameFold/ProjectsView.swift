@@ -12,9 +12,10 @@ struct ProjectsView: View {
     /// Werk, das per Wischen gelöscht werden soll – erst nach Rückfrage.
     @State private var pendingDelete: Project?
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
+    @State private var path: [UUID] = []
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             Group {
                 if store.projects.isEmpty {
                     // Leeres Blatt als Einladung – nicht bloß ein Hinweistext
@@ -79,6 +80,12 @@ struct ProjectsView: View {
             .onReceive(NotificationCenter.default.publisher(for: .ffNewWork)) { _ in
                 showNewProject = true
             }
+            .onReceive(NotificationCenter.default.publisher(for: .ffOpenWork)) { note in
+                if let id = note.object as? UUID { open(id) }
+            }
+            .onAppear {
+                if let id = OpenWork.pending { open(id) }
+            }
             .navigationDestination(for: UUID.self) { id in
                 if let project = store.projects.first(where: { $0.id == id }) {
                     ProjectDetailView(project: project)
@@ -115,10 +122,9 @@ struct ProjectsView: View {
                 }
             }
             .toolbarBackground(Theme.paper, for: .navigationBar)
-            .alert("Neues Projekt", isPresented: $showNewProject) {
+            .alert("Neues Werk", isPresented: $showNewProject) {
                 TextField("Name (z. B. Faltung Nr. 12)", text: $newProjectName)
                 Button("Anlegen") {
-                    guard !newProjectName.isEmpty else { return }
                     _ = store.createProject(name: newProjectName)
                     newProjectName = ""
                 }
@@ -128,6 +134,12 @@ struct ProjectsView: View {
                 ExhibitionSheet()
             }
         }
+    }
+
+    private func open(_ id: UUID) {
+        OpenWork.pending = nil
+        guard store.projects.contains(where: { $0.id == id }) else { return }
+        path = [id]
     }
 
     private func projectRow(index: Int, project: Project) -> some View {
@@ -500,6 +512,15 @@ struct ProjectDetailView: View {
                     .buttonStyle(InkButtonStyle())
                     .disabled(currentProject.frameCount == 0)
             }
+            // Aus der Werkansicht direkt in die Kamera – sonst führt kein Weg
+            // zurück zur Live-Aufnahme dieses Werks.
+            Button {
+                ContinueWork.pending = currentProject.id
+                NotificationCenter.default.post(name: .ffContinueWork, object: currentProject.id)
+            } label: {
+                Label("Mit der Kamera weiterarbeiten", systemImage: "camera")
+            }
+            .buttonStyle(HairlineButtonStyle())
             if let errorMessage {
                 Text(errorMessage)
                     .font(Theme.mono(11))
