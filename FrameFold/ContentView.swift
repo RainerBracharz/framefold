@@ -468,7 +468,7 @@ struct ReviewView: View {
                     .padding(.top, 12)
 
                 LazyVGrid(columns: columns, spacing: 2) {
-                    ForEach(viewModel.reviewFrames) { frame in
+                    ForEach(Array(viewModel.reviewFrames.enumerated()), id: \.element.id) { index, frame in
                         Button {
                             viewModel.toggleFrame(frame.id)
                         } label: {
@@ -494,6 +494,10 @@ struct ReviewView: View {
                             }
                         }
                         .buttonStyle(.plain)
+                        // VoiceOver: welches Bild, und ob es in den Film kommt
+                        .accessibilityLabel(Text("Bild \(index + 1) von \(viewModel.reviewFrames.count)"))
+                        .accessibilityAddTraits(frame.selected ? .isSelected : [])
+                        .accessibilityHint(Text("Doppeltippen nimmt das Bild in den Film auf oder heraus."))
                     }
                 }
                 .padding(.horizontal, 12)

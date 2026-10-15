@@ -233,8 +233,12 @@ struct ProjectDetailView: View {
                                         .foregroundStyle(Theme.paper)
                                         .padding(6)
                                         .background(Theme.ink)
+                                        // Größere Trefferfläche als das Symbol
+                                        .frame(minWidth: 44, minHeight: 44, alignment: .topTrailing)
+                                        .contentShape(Rectangle())
                                 }
                                 .padding(4)
+                                .accessibilityLabel(Text("Bild \(index + 1) entfernen"))
                             }
                         }
                         .contextMenu {
@@ -284,10 +288,18 @@ struct ProjectDetailView: View {
                     .frame(maxWidth: .infinity)
                     .overlay(Rectangle().stroke(Theme.oxblood.opacity(0.45), lineWidth: 1))
             }
+            // Ohne eigenen Stil legt Catalyst einen grauen, gerundeten
+            // System-Hintergrund darunter – ein doppelter Rahmen.
+            .buttonStyle(.plain)
             .padding(.horizontal, 20)
             .padding(.bottom, 24)
         }
         .paperStage()
+        #if targetEnvironment(macCatalyst)
+        // Am Mac erscheint ein `.principal`-Titel nicht – ohne diesen stünde
+        // im Fenster nur „FrameFold" statt des Werks.
+        .navigationTitle(currentProject.name)
+        #endif
         .toolbar {
             ToolbarItem(placement: .principal) {
                 WorkTitle(verbatim: currentProject.name, size: 17)

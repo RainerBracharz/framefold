@@ -42,6 +42,22 @@
         }
       }
     },
+    "%@ Sekunden · läuft in Schleife": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ seconds · loops"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ secondes · en boucle"
+          }
+        }
+      }
+    },
     "%lld": {
       "shouldTranslate": false
     },
@@ -237,6 +253,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld images · tirées de %2$lld s de vidéo"
+          }
+        }
+      }
+    },
+    "%lld Bilder · ~%@ s bei %lld fps": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld frames · ~%2$@ s at %3$lld fps"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld images · ~%2$@ s à %3$lld fps"
           }
         }
       }
@@ -1323,6 +1355,38 @@
         }
       }
     },
+    "Bild %lld aufgenommen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frame %lld captured"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image %lld prise"
+          }
+        }
+      }
+    },
+    "Bild %lld entfernen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove frame %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer l’image %lld"
+          }
+        }
+      }
+    },
     "Bild %lld von %lld": {
       "localizations": {
         "de": {
@@ -1507,6 +1571,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Feuille %1$02d · %2$.1f s"
+          }
+        }
+      }
+    },
+    "Blatt %02d · %@ s": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sheet %1$02d · %2$@ s"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feuille %1$02d · %2$@ s"
           }
         }
       }
@@ -1865,6 +1945,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Caméra de documents avec sélecteur de mise au point : passe en mise au point unique (S) et fais la mise au point une fois – sinon elle refait le point à chaque main dans le cadre. La luminosité et la balance des blancs se règlent en général de façon fixe dans l’app du fabricant."
+          }
+        }
+      }
+    },
+    "Doppeltippen nimmt das Bild in den Film auf oder heraus.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Double-tap to add the frame to the film or take it out."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touche deux fois pour ajouter l’image au film ou l’en retirer."
           }
         }
       }

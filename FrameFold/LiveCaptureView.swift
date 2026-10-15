@@ -367,7 +367,7 @@ struct LiveCaptureView: View {
 
     private func resultView(project: Project) -> some View {
         let count = store.projects.first(where: { $0.id == project.id })?.frameCount ?? 0
-        let seconds = Double(count) / 10.0
+        let seconds = secondsText(count)
         return VStack(spacing: 0) {
             Spacer(minLength: 16)
 
@@ -387,7 +387,7 @@ struct LiveCaptureView: View {
                     .foregroundStyle(Theme.paperOnDark)
                 CatalogLabel(verbatim: mode == .tolino
                     ? String(localized: "Serie von \(count) · datiert \(String(Calendar.current.component(.year, from: Date()))) · Schleife")
-                    : String(format: String(localized: "%.1f Sekunden · läuft in Schleife"), seconds),
+                    : String(localized: "\(seconds) Sekunden · läuft in Schleife"),
                              color: Theme.paperOnDark.opacity(0.55), size: 9)
             }
             .padding(.bottom, 18)
@@ -601,7 +601,19 @@ struct LiveCaptureView: View {
         .onChange(of: level.looksMounted) { _, mounted in
             controller.noteDeviceIsMounted(mounted)
         }
-        .onReceive(NotificationCenter.default.publisher(for: .ffFinishSession)) { _ in
+.onChange(of: controller.capturedCount) { old, new in
+            // VoiceOver: Wer nicht aufs Display schaut, hört die Auslösung.
+            if new > old {
+                AccessibilityNotification.Announcement(String(localized: "Bild \(new) aufgenommen")).post()
+            }
+        }
+        .onChange(of: controller.focusHint) { _, hint in
+            if let hint { AccessibilityNotification.Announcement(hint).post() }
+        }
+        .onChange(of: controller.hint) { _, hint in
+            if let hint { AccessibilityNotification.Announcement(hint).post() }
+        }
+                .onReceive(NotificationCenter.default.publisher(for: .ffFinishSession)) { _ in
             finishSession(project: project)
         }
         .onReceive(NotificationCenter.default.publisher(for: .ffUndoLastFrame)) { _ in
@@ -652,7 +664,7 @@ struct LiveCaptureView: View {
                 withAnimation(.easeOut(duration: 0.28)) { flashOpacity = 0 }
             }
             // Jubel im Einfach-Modus: jede volle Filmsekunde federt der Zähler
-            if mode == .basic, new % 10 == 0, !reduceMotion {
+            if mode == .basic, new % filmFPS == 0, !reduceMotion {
                 celebratePulse = 1.22
                 withAnimation(.spring(response: 0.4, dampingFraction: 0.45)) {
                     celebratePulse = 1.0
@@ -1035,7 +1047,7 @@ struct LiveCaptureView: View {
             MotionGauge(motion: controller.currentMotion,
                         threshold: controller.motionThreshold)
                 .frame(width: 150, height: 10)
-            Text(String(format: "%d · %.1f s", count, Double(count) / 10.0))
+            Text(verbatim: "\(count) · \(secondsText(count)) s")
                 .font(Theme.mono(11, .medium))
                 .foregroundStyle(Theme.paperOnDark)
                 .padding(.horizontal, 10)
@@ -1051,7 +1063,7 @@ struct LiveCaptureView: View {
         let count = controller.capturedCount
         return VStack(spacing: 9) {
             HStack {
-                CatalogLabel(verbatim: String(format: String(localized: "Blatt %02d · %.1f s"), count, Double(count) / 10.0),
+                CatalogLabel(verbatim: String(format: String(localized: "Blatt %02d · %@ s"), count, secondsText(count)),
                              color: Theme.amberLight, size: 10)
                 Spacer()
                 if let start = controller.sessionStart {
@@ -1107,7 +1119,7 @@ struct LiveCaptureView: View {
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel("Auslöser umschalten")
                 .accessibilityValue(controller.captureMode == .motion
-                                    ? "Bewegung"
+                                    ? String(localized: "Bewegung")
                                     : String(localized: "Intervall, alle \(Int(controller.intervalSeconds.rounded())) Sekunden"))
             }
             .buttonStyle(.plain)
@@ -1164,11 +1176,20 @@ struct LiveCaptureView: View {
 
     /// „48 Bilder · ~4,8 s bei 10 fps" – gibt ein Gefühl für die Werk-Länge.
     private var lengthHint: String {
-        let secs = Double(currentCount) / 10.0
         // Über den Katalog und mit dem Dezimalzeichen der Sprache – die
         // frühere `String(format:)`-Fassung blieb in jeder Sprache deutsch.
-        let seconds = secs.formatted(.number.precision(.fractionLength(1)))
-        return String(localized: "\(currentCount) Bilder · ~\(seconds) s bei 10 fps")
+        let seconds = secondsText(currentCount)
+        return String(localized: "\(currentCount) Bilder · ~\(seconds) s bei \(filmFPS) fps")
+    }
+
+    /// Bilder pro Sekunde des fertigen Films – eingestellt im Video-Tab,
+    /// gilt auch für das Ergebnis der Kamera. Der Sucher rechnete früher
+    /// fest mit 10 und lag bei anderer Einstellung daneben.
+    private var filmFPS: Int { max(1, Int(PipelineSettings.restored().outputFPS)) }
+
+    /// Filmlänge mit dem Dezimalzeichen der Sprache („4,8").
+    private func secondsText(_ count: Int) -> String {
+        (Double(count) / Double(filmFPS)).formatted(.number.precision(.fractionLength(1)))
     }
 
     private func sucherIcon(_ name: String) -> some View {
@@ -1189,7 +1210,8 @@ struct LiveCaptureView: View {
     /// Großer Zähler mit fühlbarem Fortschritt: 10 Bilder = 1 Sekunde Film.
     private var bigCounter: some View {
         let count = controller.capturedCount
-        let toNext = (10 - (count % 10)) % 10
+        let fps = filmFPS
+        let toNext = (fps - (count % fps)) % fps
         return VStack(spacing: 4) {
             Text("\(count)")
                 .font(Theme.serif(58, .regular))
@@ -1197,24 +1219,30 @@ struct LiveCaptureView: View {
                 .contentTransition(.numericText())
                 .animation(.snappy(duration: 0.25), value: count)
                 .scaleEffect(celebratePulse)   // federt bei jeder vollen Filmsekunde
-            CatalogLabel("Bilder", color: Theme.paperOnDark.opacity(0.7), size: 9)
+            CatalogLabel("Bilder", color: Theme.paperOnDark.opacity(0.85), size: 10)
 
             if count > 0 {
                 ZStack(alignment: .leading) {
                     Rectangle().fill(Theme.paperOnDark.opacity(0.2))
                         .frame(width: 130, height: 3)
                     Rectangle().fill(Theme.amber)
-                        .frame(width: 130 * CGFloat(count % 10 == 0 ? 10 : count % 10) / 10, height: 3)
+                        .frame(width: 130 * CGFloat(count % fps == 0 ? fps : count % fps) / CGFloat(fps), height: 3)
                 }
                 .animation(.snappy, value: count)
                 Text(toNext == 0
-                     ? "\(count / 10) Sekunden Film!"
+                     ? "\(count / fps) Sekunden Film!"
                      : "noch \(toNext) für eine Sekunde Film")
                     .font(Theme.mono(10))
-                    .foregroundStyle(Theme.paperOnDark.opacity(0.65))
+                    .foregroundStyle(Theme.paperOnDark.opacity(0.85))
             }
         }
         .padding(.bottom, 6)
+        // Am iPhone liegt der Zähler auf dem Kamerabild – über hellem Papier
+        // wäre Amber unlesbar. Eine dunkle Platte wie beim Status hält ihn
+        // lesbar. Am Mac steht er unter dem Bild und braucht sie nicht.
+        .padding(.horizontal, Platform.isMac ? 0 : 18)
+        .padding(.top, Platform.isMac ? 0 : 8)
+        .background(Platform.isMac ? Color.clear : Theme.darkroom.opacity(0.72))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Aufgenommene Bilder")
         .accessibilityValue("\(count)")
