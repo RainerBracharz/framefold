@@ -32,7 +32,11 @@ final class FrameAnalyzer {
         generator.requestedTimeToleranceAfter = .zero
         generator.maximumSize = CGSize(width: settings.analysisWidth * 2, height: settings.analysisWidth * 2)
 
-        let step = 1.0 / settings.samplingFPS
+        // Höchstens ~4000 Proben: Jede hält ein kleines Graustufenbild
+        // (~45 KB) im Speicher. Eine halbstündige Aufnahme mit 10 Proben/s
+        // käme sonst auf rund 800 MB. Lange Videos werden dünner abgetastet –
+        // Ruhephasen dauern ohnehin Sekunden.
+        let step = max(1.0 / settings.samplingFPS, duration / 4000)
         var times: [CMTime] = []
         var t = 0.0
         while t < duration {
@@ -50,6 +54,7 @@ final class FrameAnalyzer {
         let progressStride = max(1, total / 50) // UI nicht mit Updates fluten
         var index = 0
         for await result in generator.images(for: times) {
+            try Task.checkCancellation()
             index += 1
             guard case .success(requestedTime: let requested, image: let cgImage, actualTime: _) = result else {
                 continue

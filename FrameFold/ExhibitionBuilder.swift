@@ -42,7 +42,11 @@ enum ExhibitionBuilder {
     // MARK: Titelkarte
 
     private static func titleCard(title: String, year: String, size: CGSize) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: size)
+        // Maßstab 1: Die Titelkarte soll genau `size` Pixel groß sein, nicht
+        // das Dreifache in Bildschirm-Auflösung.
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
         return renderer.image { ctx in
             let cg = ctx.cgContext
             // Galeriewand

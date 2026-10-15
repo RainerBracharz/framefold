@@ -40,17 +40,30 @@ enum FlipbookRenderer {
             .appendingPathComponent("daumenkino-\(UUID().uuidString).pdf")
         let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: pageSize))
 
-        // Bilder nur einmal dekodieren, auch wenn die Serie mehrfach durchläuft;
-        // dabei auf Druckgröße verkleinern, sonst wird das PDF unnötig schwer.
+        // Auf Druckgröße verkleinern (sonst wird das PDF unnötig schwer) –
+        // mit Maßstab 1: Der Standard-Renderer rechnet in Bildschirm-Auflösung,
+        // auf einem 3x-iPhone wären das über 50 MB pro Bild. Zwischenspeichern
+        // nur, wenn die Serie mehrfach durchläuft (kurze Serien); lange Serien
+        // kommen ohne Speicher aus, jedes Bild wird genau einmal gebraucht.
+        let repeats = sequence.compactMap { $0 }.count > frameURLs.count
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        let target = CGSize(width: 900, height: 900 / aspect)
         var cache: [Int: UIImage] = [:]
         func image(_ i: Int) -> UIImage? {
             if let hit = cache[i] { return hit }
-            guard let full = UIImage(contentsOfFile: frameURLs[i].path) else { return nil }
-            let target = CGSize(width: 900, height: 900 / aspect)
-            let scaled = UIGraphicsImageRenderer(size: target).image { _ in
-                full.draw(in: CGRect(origin: .zero, size: target))
+            guard let full = UIImage(contentsOfFile: frameURLs[i].path),
+                  full.size.width > 0, full.size.height > 0 else { return nil }
+            // Füllend statt verzerrt: Bilder mit anderem Seitenverhältnis als
+            // das erste (Video plus Live-Aufnahmen) werden beschnitten.
+            let fill = max(target.width / full.size.width, target.height / full.size.height)
+            let drawn = CGSize(width: full.size.width * fill, height: full.size.height * fill)
+            let scaled = UIGraphicsImageRenderer(size: target, format: format).image { _ in
+                full.draw(in: CGRect(x: (target.width - drawn.width) / 2,
+                                     y: (target.height - drawn.height) / 2,
+                                     width: drawn.width, height: drawn.height))
             }
-            cache[i] = scaled
+            if repeats { cache[i] = scaled }
             return scaled
         }
 
@@ -63,8 +76,10 @@ enum FlipbookRenderer {
                     for cell in cells {
                         guard leaf < sequence.count else { break }
                         if let frame = sequence[leaf] {
-                            if let img = image(frame) {
-                                img.draw(in: cell.image)
+                            autoreleasepool {
+                                if let img = image(frame) {
+                                    img.draw(in: cell.image)
+                                }
                             }
                             cg.setStrokeColor(hairline.cgColor)
                             cg.setLineWidth(0.3)

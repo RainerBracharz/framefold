@@ -39,7 +39,7 @@ struct ContentView: View {
                 case .failed(let message):
                     errorView(message)
                 default:
-                    ProcessingView(stage: viewModel.stage)
+                    ProcessingView(stage: viewModel.stage, onCancel: { viewModel.cancel() })
                 }
             }
             .paperStage()
@@ -500,6 +500,8 @@ struct VideoPickerFile: Transferable {
 
 struct ProcessingView: View {
     let stage: PipelineStage
+    /// Lange Videos dauern – jederzeit abbrechen können.
+    var onCancel: (() -> Void)? = nil
     @State private var pulse = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -531,6 +533,11 @@ struct ProcessingView: View {
                 ProgressView().tint(Theme.ink)
             }
             CatalogLabel("Lokal auf diesem Gerät")
+            if let onCancel, stage != .importing {
+                Button("Abbrechen", action: onCancel)
+                    .buttonStyle(InkButtonStyle(fullWidth: false))
+                    .padding(.top, 8)
+            }
             Spacer()
         }
     }

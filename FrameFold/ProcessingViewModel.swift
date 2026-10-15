@@ -40,6 +40,10 @@ final class ProcessingViewModel: ObservableObject {
     private var thumbCache: [Int: UIImage] = [:]    // Zeit (ms) → Vorschaubild
     private var discardedForHands = 0
     private var recomputeTask: Task<Void, Never>?
+    /// Laufende Analyse oder Montage – abbrechbar, und ein neuer Lauf
+    /// beendet den alten, statt dass dessen Ergebnis später alles überschreibt.
+    private var workTask: Task<Void, Never>?
+    private var runID = 0
 
     var selectedCount: Int { reviewFrames.filter(\.selected).count }
 
@@ -54,19 +58,45 @@ final class ProcessingViewModel: ObservableObject {
         handCache = [:]
         thumbCache = [:]
 
-        Task {
+        let id = startRun()
+        workTask = Task {
             do {
                 let asset = AVURLAsset(url: videoURL)
-                self.cachedAsset = asset
-                self.cachedFrames = try await analyzer.analyze(asset: asset, settings: settings) { p in
-                    Task { @MainActor in self.stage = .analyzing(progress: p) }
+                let frames = try await analyzer.analyze(asset: asset, settings: settings) { p in
+                    Task { @MainActor in if self.runID == id { self.stage = .analyzing(progress: p) } }
                 }
+                guard self.runID == id else { return }
+                self.cachedAsset = asset
+                self.cachedFrames = frames
                 try await self.computeCandidates(reportProgress: true)
+                guard self.runID == id, !Task.isCancelled else { return }
                 self.stage = .reviewing
+            } catch is CancellationError {
+                // abgebrochen – `cancel()` hat den Zustand schon gesetzt
             } catch {
-                self.stage = .failed(error.localizedDescription)
+                if self.runID == id { self.stage = .failed(error.localizedDescription) }
             }
         }
+    }
+
+    /// Neuer Lauf: den alten beenden und eine frische Kennung vergeben.
+    private func startRun() -> Int {
+        workTask?.cancel()
+        recomputeTask?.cancel()
+        runID += 1
+        return runID
+    }
+
+    /// Abbrechen-Knopf: Eine Analyse führt zurück zum Start, eine Montage
+    /// zurück zur Bildauswahl (die Analyse bleibt erhalten).
+    func cancel() {
+        let wasAssembling: Bool
+        if case .assembling = stage { wasAssembling = true } else { wasAssembling = false }
+        workTask?.cancel()
+        recomputeTask?.cancel()
+        runID += 1
+        isRecomputing = false
+        stage = wasAssembling && !reviewFrames.isEmpty ? .reviewing : .idle
     }
 
     // MARK: Phase 2 – Kandidaten aus dem Cache (bei Regleränderung erneut)
@@ -131,6 +161,7 @@ final class ProcessingViewModel: ObservableObject {
                     needCheck.sort { $0.time < $1.time }
                     let resolvedSoFar = totalWindows - pending.count
                     let checkCount = needCheck.count
+                    let id = runID
                     let detected = await BatchFrameDecoder.detectHands(
                         asset: asset, times: needCheck.map(\.time),
                         detector: handDetector, confidence: settings.handConfidence
@@ -139,7 +170,10 @@ final class ProcessingViewModel: ObservableObject {
                         let overall = (Double(resolvedSoFar) + p * Double(checkCount))
                             / Double(totalWindows)
                         Task { @MainActor in
-                            self.stage = .checkingHands(progress: min(1, overall))
+                            // Nach einem Abbruch nicht zurück in die Fortschrittsanzeige
+                            if self.runID == id {
+                                self.stage = .checkingHands(progress: min(1, overall))
+                            }
                         }
                     }
                     if Task.isCancelled { return }
@@ -218,13 +252,15 @@ final class ProcessingViewModel: ObservableObject {
         let discarded = discardedForHands
         stage = .assembling(progress: 0)
 
-        Task {
+        let id = startRun()
+        workTask = Task {
             do {
                 let outputURL = try await assembler.assemble(
                     asset: asset, keyframeTimes: times, settings: settings
                 ) { p in
-                    Task { @MainActor in self.stage = .assembling(progress: p) }
+                    Task { @MainActor in if self.runID == id { self.stage = .assembling(progress: p) } }
                 }
+                guard self.runID == id else { return }
                 self.result = PipelineResult(
                     keyframeTimes: times,
                     outputURL: outputURL,
@@ -232,8 +268,9 @@ final class ProcessingViewModel: ObservableObject {
                     discardedForHands: discarded,
                     discardedAsDuplicates: 0)
                 self.stage = .done
+            } catch is CancellationError {
             } catch {
-                self.stage = .failed(error.localizedDescription)
+                if self.runID == id { self.stage = .failed(error.localizedDescription) }
             }
         }
     }

@@ -131,8 +131,19 @@ final class StopMotionAssembler {
 
         guard writer.canAdd(input) else { throw PipelineError.exportFailed }
         writer.add(input)
-        writer.startWriting()
+        guard writer.startWriting() else { throw PipelineError.exportFailed }
         writer.startSession(atSourceTime: .zero)
+
+        // Wartet, bis der Encoder wieder Daten annimmt. Scheitert der Writer
+        // (Speicher voll, Encoder-Fehler), bliebe `isReadyForMoreMediaData`
+        // für immer falsch – darum abbrechen statt endlos zu warten.
+        func waitUntilReady() async throws {
+            while !input.isReadyForMoreMediaData {
+                if writer.status == .failed { throw PipelineError.exportFailed }
+                try Task.checkCancellation()
+                try await Task.sleep(nanoseconds: 10_000_000)
+            }
+        }
 
         let frameDuration = CMTime(value: 1, timescale: settings.outputFPS)
         let aligner = settings.alignFrames ? FrameAligner() : nil
@@ -193,15 +204,16 @@ final class StopMotionAssembler {
                 transitionStyle: settings.transitionStyle, facets: facets, weave: weave,
                 reliefFacets: reliefFacets, reliefStrength: settings.reliefStrength,
                 printLook: settings.printLook,
-                cropRect: cropRect, width: width, height: height, scale: renderScale,
+                cropRect: cropRect, referenceWidth: firstImage.width, referenceHeight: firstImage.height,
+                width: width, height: height, scale: renderScale,
                 offset: offset, pool: adaptor.pixelBufferPool,
                 composedOut: &lastComposed) else { continue }
 
-            while !input.isReadyForMoreMediaData {
-                try await Task.sleep(nanoseconds: 10_000_000)
-            }
+            try await waitUntilReady()
             let presentationTime = CMTimeMultiply(frameDuration, multiplier: Int32(position))
-            adaptor.append(pixelBuffer, withPresentationTime: presentationTime)
+            guard adaptor.append(pixelBuffer, withPresentationTime: presentationTime) else {
+                throw PipelineError.exportFailed
+            }
             progress(Double(position + 1) / Double(steps.count))
         }
 
@@ -211,9 +223,7 @@ final class StopMotionAssembler {
         let holdFrames = Int((settings.holdLastFrameSeconds * Double(settings.outputFPS)).rounded())
         if holdFrames > 0, let finalImage = lastComposed {
             for i in 0..<holdFrames {
-                while !input.isReadyForMoreMediaData {
-                    try await Task.sleep(nanoseconds: 10_000_000)
-                }
+                try await waitUntilReady()
                 guard let buffer = Self.buffer(from: finalImage,
                                                width: width, height: height,
                                                pool: adaptor.pixelBufferPool) else { break }
@@ -270,7 +280,8 @@ final class StopMotionAssembler {
         transitionStyle: TransitionStyle, facets: [Algorithms.Facet],
         weave: [Algorithms.WeaveStrip],
         reliefFacets: [Algorithms.Facet], reliefStrength: Double, printLook: Bool,
-        cropRect: CGRect, width: Int, height: Int, scale: CGFloat,
+        cropRect: CGRect, referenceWidth: Int, referenceHeight: Int,
+        width: Int, height: Int, scale: CGFloat,
         offset: CGPoint, pool: CVPixelBufferPool?,
         composedOut: inout CGImage?
     ) -> CVPixelBuffer? {
@@ -300,14 +311,30 @@ final class StopMotionAssembler {
 
         // Bild so zeichnen, dass cropRect (plus Alignment-Offset) den Buffer
         // füllt – skaliert auf die Ausgabegröße
+        //
+        // Ausschnitt und Maßstab stammen vom ersten Bild. Hat ein Bild eine
+        // andere Größe (Video plus Live-Aufnahmen, zwei Kameras am Mac, die
+        // Titelkarte im Reel), füllt es den Rahmen stattdessen für sich –
+        // sonst erschiene es verschoben oder winzig in einer Ecke.
         func drawRect(for image: CGImage) -> CGRect {
-            CGRect(
-                x: (-cropRect.minX + offset.x) * scale,
-                y: (-(CGFloat(image.height) - cropRect.maxY) + offset.y) * scale,
-                width: CGFloat(image.width) * scale,
-                height: CGFloat(image.height) * scale)
+            if image.width == referenceWidth && image.height == referenceHeight {
+                return CGRect(
+                    x: (-cropRect.minX + offset.x) * scale,
+                    y: (-(CGFloat(image.height) - cropRect.maxY) + offset.y) * scale,
+                    width: CGFloat(image.width) * scale,
+                    height: CGFloat(image.height) * scale)
+            }
+            let fill = max(CGFloat(width) / CGFloat(max(1, image.width)),
+                           CGFloat(height) / CGFloat(max(1, image.height)))
+            let w = CGFloat(image.width) * fill, h = CGFloat(image.height) * fill
+            return CGRect(x: (CGFloat(width) - w) / 2 + offset.x * scale,
+                          y: (CGFloat(height) - h) / 2 + offset.y * scale,
+                          width: w, height: h)
         }
         let bufferRect = CGRect(x: 0, y: 0, width: width, height: height)
+        // Puffer aus dem Pool tragen noch das vorige Bild – erst leeren.
+        context.setFillColor(CGColor(gray: 0, alpha: 1))
+        context.fill(bufferRect)
 
         // 1) Echo-Grundlage: vorheriger Output-Frame
         let useEcho = echoStrength > 0 && previousComposed != nil
