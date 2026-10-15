@@ -207,6 +207,22 @@ when "upload"
   puts(done ? " fertig." : " noch nicht fertig – trotzdem weiter.")
   show_version(v)
 
+when "remove"
+  # Apple hat die gerahmten Vorschauen am 15.10.2026 abgelehnt (Guideline
+  # 2.3.4: nur reine Bildschirmaufnahmen der App). Entfernt sie von der
+  # bearbeitbaren Version, bis neue, rahmenlose Videos fertig sind.
+  v = versions.find { |x| EDITABLE.include?(state(x)) } or abort("Keine bearbeitbare Version.")
+  puts "Version #{v.dig('attributes', 'versionString')} (#{state(v)})"
+  localizations(v["id"]).each do |locale, loc_id|
+    api(:get, "/v1/appStoreVersionLocalizations/#{loc_id}/appPreviewSets?limit=50")["data"].each do |set|
+      previews(set["id"]).each do |p|
+        api(:delete, "/v1/appPreviews/#{p['id']}")
+        puts "  #{locale} #{set.dig('attributes', 'previewType')}: #{p.dig('attributes', 'fileName')} entfernt"
+      end
+    end
+  end
+  show_version(v)
+
 else
-  puts "Aufruf: ruby scripts/app_preview.rb status | upload"
+  puts "Aufruf: ruby scripts/app_preview.rb status | upload | remove"
 end

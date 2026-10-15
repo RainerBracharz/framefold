@@ -247,6 +247,11 @@ platform :ios do
     # Schritt 2: App-Vorschau (Video) anhängen, falls vorbereitet. deliver
     # kann keine Videos – das übernimmt scripts/app_preview.rb über die API
     # und wartet, bis Apple sie verarbeitet hat. Ohne Videos: nichts tun.
+    # Achtung: Die gerahmten Vorschauen (App-Bild verkleinert im iPhone-Rahmen,
+    # Text darüber) hat Apple am 15.10.2026 abgelehnt (Guideline 2.3.4). Sie
+    # liegen jetzt in previews-gerahmt-abgelehnt/ und werden nicht mehr
+    # hochgeladen. Neue Videos: reine Bildschirmaufnahmen, Text nur als
+    # Einblendung über dem App-Bild.
     previews = Dir[File.expand_path("previews/*/framefold-preview.mp4", __dir__)]
     sh("ruby", File.expand_path("../scripts/app_preview.rb", __dir__), "upload") unless previews.empty?
 
