@@ -693,8 +693,8 @@ struct ResultView: View {
             }
         }
         .padding(.vertical)
-        .alert("Als Projekt sichern", isPresented: $showSaveToProject) {
-            TextField("Projektname", text: $saveProjectName)
+        .alert("Als Werk sichern", isPresented: $showSaveToProject) {
+            TextField("Name des Werks", text: $saveProjectName)
             Button("Sichern") {
                 guard let url = sourceVideoURL else { return }
                 let project = store.createProject(name: saveProjectName)
@@ -707,7 +707,7 @@ struct ResultView: View {
             }
             Button("Abbrechen", role: .cancel) { saveProjectName = "" }
         } message: {
-            Text("Die Bilder wandern in ein Projekt und lassen sich dort mit weiteren Aufnahmen ergänzen und neu exportieren.")
+            Text("Die Bilder wandern in ein neues Werk und lassen sich dort mit weiteren Aufnahmen ergänzen und neu exportieren.")
         }
     }
 }

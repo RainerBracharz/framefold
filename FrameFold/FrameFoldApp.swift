@@ -128,7 +128,7 @@ struct OnboardingView: View {
                        title: "Einfach",
                        text: "Nur das Nötigste: auswählen, auslösen, fertig. Empfohlen für den Anfang.")
             modeChoice(mode: .tolino,
-                       title: "Alles zeigen",
+                       title: "Atelier",
                        text: "Format, Bildrate, Effekte, Faltvorlagen, Ausstellung — die volle Werkstatt.")
 
             Text("Lässt sich jederzeit über das Regler-Symbol ändern.")
@@ -276,7 +276,7 @@ struct FrameFoldApp: App {
                 ProjectsView()
                     .toolbarBackground(Theme.paper, for: .tabBar)
                     .toolbarBackground(.visible, for: .tabBar)
-                    .tabItem { Label("Projekte", systemImage: "folder") }
+                    .tabItem { Label("Werke", systemImage: "folder") }
                     .tag(2)
             }
             .environmentObject(projectStore)
@@ -346,7 +346,7 @@ struct FrameFoldApp: App {
             Divider()
             Button("Video") { selectedTab = 0 }.keyboardShortcut("1")
             Button("Kamera") { selectedTab = 1 }.keyboardShortcut("2")
-            Button("Projekte") { selectedTab = 2 }.keyboardShortcut("3")
+            Button("Werke") { selectedTab = 2 }.keyboardShortcut("3")
         }
     }
 

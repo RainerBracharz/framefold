@@ -300,5 +300,11 @@
   "Werk %lld": "Œuvre %lld",
   "Alle %lld Werke zeigen": "Afficher les %lld œuvres",
   "Mit der Kamera weiterarbeiten": "Continuer avec la caméra",
-  "Anderes Video wählen": "Choisir une autre vidéo"
+  "Anderes Video wählen": "Choisir une autre vidéo",
+  "Atelier": "Atelier",
+  "Werke": "Œuvres",
+  "Werk löschen": "Supprimer l’œuvre",
+  "Als Werk sichern": "Enregistrer comme œuvre",
+  "Name des Werks": "Nom de l’œuvre",
+  "Die Bilder wandern in ein neues Werk und lassen sich dort mit weiteren Aufnahmen ergänzen und neu exportieren.": "Les images rejoignent une nouvelle œuvre, où tu peux ajouter d’autres séances et exporter à nouveau."
 }

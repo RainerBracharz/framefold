@@ -93,7 +93,7 @@ struct ProjectsView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    WorkTitle("Projekte", size: 17)
+                    WorkTitle("Werke", size: 17)
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     if store.projects.count >= 2 && AppMode.current(modeRaw).showsTolino {
@@ -279,7 +279,7 @@ struct ProjectDetailView: View {
             Button(role: .destructive) {
                 showDeleteProject = true
             } label: {
-                Text("Projekt löschen")
+                Text("Werk löschen")
                     .font(Theme.caption(12))
                     .tracking(1.6)
                     .textCase(.uppercase)

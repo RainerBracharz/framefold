@@ -307,5 +307,11 @@
   "Werk %lld": "Work %lld",
   "Alle %lld Werke zeigen": "Show all %lld works",
   "Mit der Kamera weiterarbeiten": "Continue with the camera",
-  "Anderes Video wählen": "Choose another video"
+  "Anderes Video wählen": "Choose another video",
+  "Atelier": "Studio",
+  "Werke": "Works",
+  "Werk löschen": "Delete work",
+  "Als Werk sichern": "Save as a work",
+  "Name des Werks": "Name of the work",
+  "Die Bilder wandern in ein neues Werk und lassen sich dort mit weiteren Aufnahmen ergänzen und neu exportieren.": "The frames move into a new work, where you can add more sessions and export again."
 }

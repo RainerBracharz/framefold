@@ -699,6 +699,22 @@
         }
       }
     },
+    "Als Werk sichern": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save as a work"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer comme œuvre"
+          }
+        }
+      }
+    },
     "Am Stativ wird der Fokus fixiert, aus der Hand läuft er mit.": {
       "localizations": {
         "en": {
@@ -839,6 +855,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Travail détecté…"
+          }
+        }
+      }
+    },
+    "Atelier": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Studio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atelier"
           }
         }
       }
@@ -1881,6 +1913,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "La sélection se fait toute seule : FrameFold saisit chaque moment calme et écarte les images où l’on voit des mains. Tu peaufines ensuite dans la sélection d’images."
+          }
+        }
+      }
+    },
+    "Die Bilder wandern in ein neues Werk und lassen sich dort mit weiteren Aufnahmen ergänzen und neu exportieren.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The frames move into a new work, where you can add more sessions and export again."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les images rejoignent une nouvelle œuvre, où tu peux ajouter d’autres séances et exporter à nouveau."
           }
         }
       }
@@ -3076,6 +3124,22 @@
         }
       }
     },
+    "Name des Werks": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name of the work"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom de l’œuvre"
+          }
+        }
+      }
+    },
     "Sichern …": {
       "localizations": {
         "en": {
@@ -3136,6 +3200,38 @@
           "stringUnit": {
             "state": "translated",
             "value": "Œuvre %lld"
+          }
+        }
+      }
+    },
+    "Werk löschen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete work"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer l’œuvre"
+          }
+        }
+      }
+    },
+    "Werke": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Works"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Œuvres"
           }
         }
       }

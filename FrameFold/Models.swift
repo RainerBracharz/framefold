@@ -116,7 +116,7 @@ enum AppMode: Int, CaseIterable, Identifiable {
         switch self {
         case .basic: return String(localized: "Einfach")
         case .advanced: return String(localized: "Erweitert")
-        case .tolino: return "Aldo Tolino"   // Eigenname, bleibt
+        case .tolino: return String(localized: "Atelier")
         }
     }
     /// klassische Einstellungen sichtbar
