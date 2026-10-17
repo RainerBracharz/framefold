@@ -1,0 +1,40 @@
+2026-10-17 06:03:20.320934+0000 FrameFold[6084:21905] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-17 06:03:20.324517+0000 FrameFold[6084:21926] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-17 06:03:20.327086+0000 FrameFold[6084:21926] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-17 06:03:20.341125+0000 FrameFold[6084:21905] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-17 06:03:20.341162+0000 FrameFold[6084:21905] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-17 06:03:20.372393+0000 FrameFold[6084:21926] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-17 06:03:20.373014+0000 FrameFold[6084:21926] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+Test Case '-[FrameFoldTests.AssemblerTests testBlendFramesAreAligned]' started.
+Test Case '-[FrameFoldTests.AssemblerTests testBlendFramesAreAligned]' passed (0.977 seconds).
+Test Case '-[FrameFoldTests.AssemblerTests testImageOfDifferentSizeFillsFrame]' started.
+Test Case '-[FrameFoldTests.AssemblerTests testImageOfDifferentSizeFillsFrame]' passed (0.255 seconds).
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.232 (1.234) seconds
+Test Case '-[FrameFoldTests.ProjectStoreTests testAppendFramePersistsAcrossReload]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testAppendFramePersistsAcrossReload]' passed (0.212 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testDeleteRemovesWholeProject]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testDeleteRemovesWholeProject]' passed (0.208 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testEmptyNameGetsNumberedName]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testEmptyNameGetsNumberedName]' passed (0.210 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testFrameNumbersDoNotCollideAfterRemoval]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testFrameNumbersDoNotCollideAfterRemoval]' passed (0.217 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testLegacyTrashIsStampedOnceBeforePurge]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testLegacyTrashIsStampedOnceBeforePurge]' passed (0.155 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testMissingManifestIsRecoveredFromImages]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testMissingManifestIsRecoveredFromImages]' passed (0.212 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testPurgeRemovesOnlyTrashOlderThan30Days]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testPurgeRemovesOnlyTrashOlderThan30Days]' passed (0.213 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testRemoveFramesNamedIgnoresUnknownNames]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testRemoveFramesNamedIgnoresUnknownNames]' passed (0.213 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testRemoveFramesNamedTouchesOnlyThoseFrames]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testRemoveFramesNamedTouchesOnlyThoseFrames]' passed (0.213 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testRestoreTrashKeepsCaptureOrder]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testRestoreTrashKeepsCaptureOrder]' passed (0.217 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testTrashedFrameGetsFreshTimestamp]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testTrashedFrameGetsFreshTimestamp]' passed (0.211 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testTruncatedManifestIsRecoveredFromImages]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testTruncatedManifestIsRecoveredFromImages]' passed (0.175 seconds).
+	 Executed 12 tests, with 0 failures (0 unexpected) in 2.456 (2.461) seconds
+	 Executed 14 tests, with 0 failures (0 unexpected) in 3.688 (3.696) seconds
+	 Executed 14 tests, with 0 failures (0 unexpected) in 3.688 (3.697) seconds
+** TEST SUCCEEDED **
