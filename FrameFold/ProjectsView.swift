@@ -1168,11 +1168,15 @@ final class PrintFileActivity: UIActivity {
         urls.contains { UIPrintInteractionController.canPrint($0) }
     }
 
+    /// Wie bei „Sichern …": erst das Teilen-Menü schließen, dann drucken –
+    /// sonst nimmt das Menü den Druckdialog beim Schließen mit.
     override func perform() {
-        let controller = UIPrintInteractionController.shared
-        controller.printingItems = urls.filter { UIPrintInteractionController.canPrint($0) }
-        controller.present(animated: true) { [weak self] _, completed, _ in
-            self?.activityDidFinish(completed)
+        let items = urls.filter { UIPrintInteractionController.canPrint($0) }
+        activityDidFinish(true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            let controller = UIPrintInteractionController.shared
+            controller.printingItems = items
+            controller.present(animated: true)
         }
     }
 }
