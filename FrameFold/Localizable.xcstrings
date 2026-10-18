@@ -1585,6 +1585,22 @@
         }
       }
     },
+    "Bilder noch einmal auswählen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose frames again"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir à nouveau les images"
+          }
+        }
+      }
+    },
     "Bilder sammeln sich über beliebig viele\nAufnahmen – live oder aus Videos.": {
       "localizations": {
         "en": {
@@ -1597,6 +1613,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Les images s’accumulent sur autant\nde séances que tu veux — en direct ou depuis une vidéo."
+          }
+        }
+      }
+    },
+    "Bilder sichern": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save frames"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer les images"
           }
         }
       }
@@ -1961,6 +1993,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "La sélection se fait toute seule : FrameFold saisit chaque moment calme et écarte les images où l’on voit des mains. Tu peaufines ensuite dans la sélection d’images."
+          }
+        }
+      }
+    },
+    "Die Bilder kommen ans Ende des Werks und lassen sich dort mit weiteren Aufnahmen ergänzen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The frames go to the end of the work, where you can add more sessions."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les images s’ajoutent à la fin de l’œuvre, où tu peux ajouter d’autres séances."
           }
         }
       }
@@ -3264,6 +3312,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nom de l’œuvre"
+          }
+        }
+      }
+    },
+    "Neues Werk anlegen …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create a new work …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créer une nouvelle œuvre …"
           }
         }
       }
@@ -5468,6 +5532,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Trop de secousses — pose l’iPhone ou appuie-le contre quelque chose."
+          }
+        }
+      }
+    },
+    "Zu „%@“ hinzufügen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add to “%@”"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter à « %@ »"
           }
         }
       }

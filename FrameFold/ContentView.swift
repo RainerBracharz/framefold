@@ -631,6 +631,8 @@ struct ResultView: View {
     @State private var savedProjectID: UUID?
     /// Läuft der Import noch? Erst danach gilt das Werk als gesichert.
     @State private var isSaving = false
+    /// Auswahl „neues oder vorhandenes Werk"
+    @State private var showSaveChoice = false
     /// Nicht alle Bilder ließen sich übernehmen – das soll man erfahren.
     @State private var saveWarning: String?
 
@@ -681,7 +683,9 @@ struct ResultView: View {
                             .buttonStyle(HairlineButtonStyle())
                             .disabled(true)
                     } else {
-                        Button("Sichern") { showSaveToProject = true }
+                        Button("Sichern") {
+                            if store.projects.isEmpty { showSaveToProject = true } else { showSaveChoice = true }
+                        }
                             .buttonStyle(InkButtonStyle())
                     }
                 }
@@ -706,6 +710,18 @@ struct ResultView: View {
                     }
                     .buttonStyle(HairlineButtonStyle())
                     .padding(.horizontal, 24)
+                } else {
+                    // Auch im Einfach-Modus: ein Bild abwählen, ohne alles zu
+                    // verwerfen und neu zu analysieren. Leise, als Textlink.
+                    Button {
+                        onReprocess()
+                    } label: {
+                        Label("Bilder noch einmal auswählen", systemImage: "square.grid.3x3")
+                            .font(Theme.mono(12))
+                            .foregroundStyle(Theme.graphite)
+                            .frame(minHeight: 44)
+                    }
+                    .buttonStyle(.plain)
                 }
 
                 if mode.showsTolino {
@@ -719,28 +735,44 @@ struct ResultView: View {
             }
         }
         .padding(.vertical)
+        // Wohin mit den Bildern? Neues Werk oder ein vorhandenes ergänzen –
+        // so lassen sich Video und Live-Aufnahmen in einem Werk sammeln.
+        .confirmationDialog("Bilder sichern", isPresented: $showSaveChoice, titleVisibility: .visible) {
+            Button("Neues Werk anlegen …") { showSaveToProject = true }
+            ForEach(store.projects.prefix(6)) { project in
+                Button("Zu „\(project.name)“ hinzufügen") { save(into: project) }
+            }
+            Button("Abbrechen", role: .cancel) { }
+        } message: {
+            Text("Die Bilder kommen ans Ende des Werks und lassen sich dort mit weiteren Aufnahmen ergänzen.")
+        }
         .alert("Als Werk sichern", isPresented: $showSaveToProject) {
             TextField("Name des Werks", text: $saveProjectName)
             Button("Sichern") {
-                guard let url = sourceVideoURL else { return }
                 let project = store.createProject(name: saveProjectName)
-                savedProjectID = project.id
                 saveProjectName = ""
-                isSaving = true
-                saveWarning = nil
-                Task {
-                    let saved = await store.importKeyframes(
-                        from: url, times: result.keyframeTimes, into: project)
-                    isSaving = false
-                    let wanted = result.keyframeTimes.count
-                    if saved < wanted {
-                        saveWarning = String(localized: "\(saved) von \(wanted) Bildern gesichert – die übrigen ließen sich nicht lesen.")
-                    }
-                }
+                save(into: project)
             }
             Button("Abbrechen", role: .cancel) { saveProjectName = "" }
         } message: {
             Text("Die Bilder wandern in ein neues Werk und lassen sich dort mit weiteren Aufnahmen ergänzen und neu exportieren.")
+        }
+    }
+
+    /// Bilder des Videos ans Ende von `project` – neu oder vorhanden.
+    private func save(into project: Project) {
+        guard let url = sourceVideoURL else { return }
+        savedProjectID = project.id
+        isSaving = true
+        saveWarning = nil
+        Task {
+            let saved = await store.importKeyframes(
+                from: url, times: result.keyframeTimes, into: project)
+            isSaving = false
+            let wanted = result.keyframeTimes.count
+            if saved < wanted {
+                saveWarning = String(localized: "\(saved) von \(wanted) Bildern gesichert – die übrigen ließen sich nicht lesen.")
+            }
         }
     }
 }

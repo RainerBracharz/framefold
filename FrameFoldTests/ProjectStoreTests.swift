@@ -239,3 +239,51 @@ final class ProjectStoreTests: XCTestCase {
         XCTAssertTrue(makeStore().projects.isEmpty)
     }
 }
+
+@MainActor
+final class ImportIntoExistingWorkTests: XCTestCase {
+
+    /// Ein Video in ein Werk importieren, das schon Live-Bilder hat: Die
+    /// Video-Bilder kommen ans Ende, nichts wird ersetzt.
+    func testVideoFramesAppendToExistingWork() async throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("ff-import-tests-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let suite = "ff-import-tests-\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let store = ProjectStore(root: root, defaults: defaults)
+
+        // Zwei vorhandene Bilder
+        let project = store.createProject(name: "Gemischt")
+        store.appendFrame(jpegData: Data([0xFF, 0xD8, 1, 0xFF, 0xD9]), to: project)
+        store.appendFrame(jpegData: Data([0xFF, 0xD8, 2, 0xFF, 0xD9]), to: store.projects[0])
+
+        // Ein kurzes Video aus drei Bildern (2 fps → 1,5 s)
+        func image(_ color: UIColor) throws -> URL {
+            let format = UIGraphicsImageRendererFormat(); format.scale = 1
+            let img = UIGraphicsImageRenderer(size: CGSize(width: 320, height: 240), format: format).image { ctx in
+                color.setFill(); ctx.fill(CGRect(x: 0, y: 0, width: 320, height: 240))
+            }
+            let url = root.appendingPathComponent("\(UUID().uuidString).jpg")
+            try XCTUnwrap(img.jpegData(compressionQuality: 0.9)).write(to: url)
+            return url
+        }
+        var settings = PipelineSettings()
+        settings.outputFPS = 2
+        settings.alignFrames = false
+        settings.loopMode = .none
+        let video = try await StopMotionAssembler().assemble(
+            imageURLs: [try image(.red), try image(.green), try image(.blue)], settings: settings) { _ in }
+        defer { try? FileManager.default.removeItem(at: video) }
+
+        let saved = await store.importKeyframes(from: video, times: [0.25, 0.75, 1.25],
+                                                into: store.projects.first { $0.id == project.id }!)
+
+        XCTAssertEqual(saved, 3)
+        let after = try XCTUnwrap(store.projects.first { $0.id == project.id })
+        XCTAssertEqual(after.frameCount, 5)
+        XCTAssertEqual(Array(after.frameFilenames.prefix(2)), ["000000.jpg", "000001.jpg"],
+                       "Vorhandene Bilder bleiben vorne")
+    }
+}
