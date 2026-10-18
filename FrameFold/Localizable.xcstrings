@@ -2093,6 +2093,22 @@
         }
       }
     },
+    "Druckvorlagen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Print templates"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modèles à imprimer"
+          }
+        }
+      }
+    },
     "Dunkelkammer": {
       "localizations": {
         "en": {

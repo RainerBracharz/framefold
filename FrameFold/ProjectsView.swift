@@ -543,7 +543,9 @@ struct ProjectDetailView: View {
             // Drucksachen – bewusst leiser als der Export. Das Daumenkino gibt
             // es in jedem Modus: Es ist das, was Kinder und Kurse mitnehmen.
             VStack(alignment: .leading, spacing: 8) {
-                CatalogLabel("Drucken", size: 9)
+                // Vorlagen zum Ausdrucken – gedruckt wird erst nach dem
+                // Teilen (am Mac: „Drucken …" im Teilen-Menü).
+                CatalogLabel("Druckvorlagen", size: 9)
                 HStack(spacing: 8) {
                     pdfButton(
                         title: flipbookURL == nil
@@ -742,11 +744,7 @@ struct FrameThumbnail: View {
         .task(id: url) {
             if image == nil, let data = try? Data(contentsOf: url),
                let full = UIImage(data: data) {
-                let size = CGSize(width: 180, height: 180)
-                let renderer = UIGraphicsImageRenderer(size: size)
-                image = renderer.image { _ in
-                    full.draw(in: CGRect(origin: .zero, size: size))
-                }
+                image = full.filled(to: CGSize(width: 180, height: 180))
             }
         }
     }

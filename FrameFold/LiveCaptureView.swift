@@ -591,10 +591,8 @@ struct LiveCaptureView: View {
                 if let image = UIImage(data: jpegData) {
                     // Klein rechnen: Vollauflösung im Daumenkino zwingt SwiftUI,
                     // bei jedem Update sechs 1080p-Bilder zu skalieren.
-                    let target = CGSize(width: 132, height: 176)
-                    let thumb = UIGraphicsImageRenderer(size: target).image { _ in
-                        image.draw(in: CGRect(origin: .zero, size: target))
-                    }
+                    // Seitenverhältnis bleibt – der Streifen schneidet selbst zu.
+                    let thumb = image.scaledToFit(maxSide: 176)
                     recentThumbs.append(thumb)
                     if recentThumbs.count > 6 { recentThumbs.removeFirst() }
                 }
