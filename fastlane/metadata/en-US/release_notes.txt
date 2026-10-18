@@ -1,10 +1,11 @@
-FrameFold 2.2.1
+FrameFold 2.3
 
-Your works are safer.
+Tidied up and fine-tuned.
 
-• Trash: removed frames now truly stay restorable for 30 days – in older works, too.
-• Swiping in the project list asks before a work is deleted.
-• Contact sheet: after removing a frame, every tile shows the right image again.
-• Discard and undo only affect the frames of the current session.
-• Works are saved more safely. If a frame can't be saved, FrameFold tells you.
-• The start screen greets you without a name.
+• "Works" and "Studio": the tab is now called Works, the third mode Studio.
+• Continue with the camera: from any work straight back to the viewfinder; the camera can now list all your works.
+• Switching tabs during a session finishes it instead of resetting it.
+• Apple Watch: the shutter is only active while the iPhone viewfinder is open, and confirms every frame.
+• Transitions stay steady with shake correction; frames of different sizes fill the frame.
+• Flip book and exhibition reel in the app's colours; the flip book needs far less memory.
+• Long videos can be cancelled; easier-to-read counter, VoiceOver announcements when a frame is taken.

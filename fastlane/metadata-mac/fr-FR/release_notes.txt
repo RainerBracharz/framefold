@@ -1,5 +1,9 @@
-FrameFold 2.2 – désormais aussi sur Mac.
+FrameFold 2.3 pour Mac
 
-• Stop motion depuis ton bureau : une caméra document regarde la table d’en haut, et FrameFold déclenche dès que tes mains quittent le cadre.
-• Choix de la caméra dans les réglages : caméra USB, iPhone comme webcam ou caméra intégrée – modifiable en pleine séance.
-• La barre d’espace comme déclencheur.
+• Menus et raccourcis : ⌘N nouvelle œuvre, ⌘O ouvrir une vidéo, ⌘↩ terminé, ⌘⌫ annuler la dernière image, ⌘1–3 pour les sections.
+• Ouvre des vidéos directement depuis le Finder ou glisse-les sur la fenêtre.
+• Enregistre ou imprime folioscopes et films depuis le menu de partage.
+• Branche une caméra quand tu veux : FrameFold la reconnaît seul et passe à la suivante si elle est débranchée.
+• Le Mac reste éveillé pendant la séance.
+• Nouvelle disposition : caméra et film côte à côte, commandes en dessous.
+• Et tout ce qui vient de l’iPhone : « Œuvres » et « Atelier », transitions plus stables, film d’exposition aux couleurs de l’app.

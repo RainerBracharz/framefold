@@ -1,5 +1,9 @@
-FrameFold 2.2 – jetzt auch für den Mac.
+FrameFold 2.3 für den Mac
 
-• Stopmotion vom Schreibtisch: Eine Dokumentenkamera blickt von oben auf den Tisch, FrameFold löst aus, sobald deine Hände aus dem Bild sind.
-• Kamerawahl in den Einstellungen: USB-Kamera, iPhone als Kamera oder eingebaute Kamera – wechselbar mitten in der Aufnahme.
-• Leertaste als Auslöser.
+• Menü und Tastenkürzel: ⌘N neues Werk, ⌘O Video öffnen, ⌘↩ Fertig, ⌘⌫ letztes Bild zurück, ⌘1–3 für die Bereiche.
+• Videos direkt aus dem Finder öffnen oder aufs Fenster ziehen.
+• Daumenkino und Filme sichern oder drucken – direkt aus dem Teilen-Menü.
+• Kamera anstecken, wann du willst: FrameFold erkennt sie von selbst und wechselt beim Abziehen auf die nächste.
+• Der Mac bleibt während der Aufnahme wach.
+• Neues Layout: Kamera und Film nebeneinander, die Bedienung darunter.
+• Dazu alles aus der iPhone-Fassung: „Werke" und „Atelier", ruhigere Überblendungen, Ausstellungs-Reel im Farbklang der App.

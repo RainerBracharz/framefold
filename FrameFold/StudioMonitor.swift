@@ -112,7 +112,7 @@ struct StudioMonitorView: View {
                 .font(Theme.serif(34, .light))
                 .foregroundStyle(Theme.paperOnDark)
             CatalogLabel("Studio-Monitor · bereit",
-                         color: Theme.paperOnDark.opacity(0.5), size: 12)
+                         color: Theme.paperOnDark.opacity(0.65), size: 12)
         }
     }
 }

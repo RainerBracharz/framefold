@@ -84,7 +84,7 @@ struct ContentView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 24)
         .padding(.top, 12)
-        .padding(.bottom, 22)
+        .padding(.bottom, 24)
     }
 
     private var startView: some View {
@@ -127,7 +127,7 @@ struct ContentView: View {
                     }
                     .buttonStyle(.plain)
                     .padding(.horizontal, 24)
-                    .padding(.top, 14)
+                    .padding(.top, 16)
                     if Platform.isMac { fileImportLink }
 
                     // 5 – die Werke als gefaltete Kacheln
@@ -190,7 +190,7 @@ struct ContentView: View {
         }
         .buttonStyle(.plain)
         .padding(.horizontal, 24)
-        .padding(.top, 10)
+        .padding(.top, 12)
     }
 
     private func importVideoFile(_ url: URL) {
@@ -265,7 +265,7 @@ struct ContentView: View {
                         .font(Theme.caption(15)).tracking(1.8).textCase(.uppercase)
                         .foregroundStyle(Theme.paper)
                     Text("Die ruhigen Momente werden gefunden")
-                        .font(Theme.mono(10.5))
+                        .font(Theme.mono(11))
                         .foregroundStyle(Theme.paper.opacity(0.70))
                 }
                 Spacer()
@@ -318,7 +318,7 @@ struct ContentView: View {
                 .padding(.horizontal, 24)
             }
         }
-        .padding(.top, 30)
+        .padding(.top, 32)
     }
 
     /// Ein Werk als gefaltete Kachel mit farbiger Werkkante.
@@ -340,7 +340,7 @@ struct ContentView: View {
                 .lineLimit(1)
                 .padding(.top, 8)
             CatalogLabel("\(project.frameCount) Bilder", size: 9)
-                .padding(.top, 3)
+                .padding(.top, 4)
         }
         .frame(width: 126)
     }
@@ -361,11 +361,11 @@ struct ContentView: View {
             }
             Spacer()
             Image(systemName: "arrow.right")
-                .font(.system(size: 13))
+                .font(Theme.mono(12))
                 .foregroundStyle(Theme.graphite)
         }
-        .padding(.horizontal, 22)
-        .padding(.vertical, 17)
+        .padding(.horizontal, 24)
+        .padding(.vertical, 16)
         .frame(maxWidth: .infinity)
         .background(Theme.paper)
         .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
@@ -523,11 +523,11 @@ struct ReviewView: View {
                             .font(Theme.mono(11))
                             .foregroundStyle(Theme.graphite)
                     }
-                    .padding(14)
+                    .padding(16)
                     .background(Theme.paperShade.opacity(0.5))
                     .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
                     .padding(.horizontal, 20)
-                    .padding(.top, 14)
+                    .padding(.top, 16)
                 }
             }
 

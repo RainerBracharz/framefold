@@ -1,10 +1,11 @@
-FrameFold 2.2.1
+FrameFold 2.3
 
-Mehr Sicherheit für deine Werke.
+Aufgeräumt und feiner abgestimmt.
 
-• Papierkorb: Entfernte Bilder bleiben jetzt wirklich 30 Tage wiederherstellbar – auch bei älteren Werken.
-• Ein Wisch in der Projektliste fragt nach, bevor ein Werk gelöscht wird.
-• Kontaktbogen: Nach dem Entfernen eines Bilds zeigt jede Kachel wieder das richtige Bild.
-• Verwerfen und Zurücknehmen betreffen nur noch die Bilder der aktuellen Aufnahme.
-• Werke werden sicherer gespeichert. Lässt sich ein Bild nicht sichern, sagt FrameFold Bescheid.
-• Die Startseite begrüßt dich ohne Namen, und „1 Bild" heißt jetzt auch so.
+• „Werke" und „Atelier": Der Tab heißt jetzt Werke, der dritte Modus Atelier.
+• Mit der Kamera weiterarbeiten: aus jedem Werk direkt zurück in den Sucher; die Kamera zeigt auf Wunsch alle Werke.
+• Wechselst du während der Aufnahme den Tab, wird die Sitzung abgeschlossen statt zurückgesetzt.
+• Apple Watch: Der Auslöser ist nur aktiv, wenn am iPhone der Sucher läuft, und bestätigt jedes Bild.
+• Überblendungen bleiben beim Verwacklungsausgleich ruhig; Bilder unterschiedlicher Größe füllen den Rahmen.
+• Daumenkino und Ausstellungs-Reel im Farbklang der App; das Daumenkino braucht viel weniger Speicher.
+• Lange Videos lassen sich abbrechen; besser lesbarer Zähler, VoiceOver-Ansagen beim Auslösen.

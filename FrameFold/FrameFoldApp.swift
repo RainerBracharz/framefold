@@ -29,7 +29,7 @@ struct OnboardingView: View {
                             .foregroundStyle(Theme.graphite)
                     }
                 }
-                .padding(.horizontal, 26)
+                .padding(.horizontal, 24)
                 .padding(.top, 20)
 
                 Spacer(minLength: 12)
@@ -41,7 +41,7 @@ struct OnboardingView: View {
                     default: cardThree
                     }
                 }
-                .padding(.horizontal, 26)
+                .padding(.horizontal, 24)
 
                 Spacer()
 
@@ -53,8 +53,8 @@ struct OnboardingView: View {
                             .frame(width: i == page ? 22 : 10, height: 2)
                     }
                 }
-                .padding(.horizontal, 26)
-                .padding(.bottom, 14)
+                .padding(.horizontal, 24)
+                .padding(.bottom, 16)
 
                 if page < 2 {
                     Button("Weiter") {
@@ -62,7 +62,7 @@ struct OnboardingView: View {
                     }
                     .buttonStyle(InkButtonStyle())
                     .frame(maxWidth: isSpread ? 360 : .infinity)
-                    .padding(.horizontal, 26)
+                    .padding(.horizontal, 24)
                     .padding(.bottom, 28)
                 }
             }
@@ -79,12 +79,12 @@ struct OnboardingView: View {
         } right: {
             CatalogLabel("Bild · Objekt · Bild")
             Text("Aus deiner Arbeit\nwird eine Stopmotion.")
-                .font(Theme.serifItalic(27))
+                .font(Theme.serifItalic(28))
                 .foregroundStyle(Theme.ink)
                 .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
             Text("FrameFold findet die ruhigen Momente und verwirft Bilder, auf denen deine Hände zu sehen sind. Alles bleibt auf dem Gerät.")
-                .font(Theme.mono(12.5))
+                .font(Theme.mono(13))
                 .foregroundStyle(Theme.graphite)
                 .lineSpacing(3)
                 .fixedSize(horizontal: false, vertical: true)
@@ -96,7 +96,7 @@ struct OnboardingView: View {
         spread {
             CatalogLabel("Zwei Wege")
             Text("Video wählen —\noder live aufnehmen.")
-                .font(Theme.serifItalic(27))
+                .font(Theme.serifItalic(28))
                 .foregroundStyle(Theme.ink)
                 .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
@@ -118,7 +118,7 @@ struct OnboardingView: View {
         spread {
             CatalogLabel("Zum Schluss")
             Text("Wie möchtest du\narbeiten?")
-                .font(Theme.serifItalic(27))
+                .font(Theme.serifItalic(28))
                 .foregroundStyle(Theme.ink)
                 .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
@@ -172,7 +172,7 @@ struct OnboardingView: View {
                     .font(Theme.caption(13)).tracking(1.5).textCase(.uppercase)
                     .foregroundStyle(Theme.ink)
                 Text(text)
-                    .font(Theme.mono(11.5))
+                    .font(Theme.mono(12))
                     .foregroundStyle(Theme.graphite)
                     .lineSpacing(2)
                     .fixedSize(horizontal: false, vertical: true)
@@ -194,7 +194,7 @@ struct OnboardingView: View {
                         .font(Theme.caption(13)).tracking(1.5).textCase(.uppercase)
                         .foregroundStyle(selected ? Theme.paper : Theme.ink)
                     Text(text)
-                        .font(Theme.mono(11.5))
+                        .font(Theme.mono(12))
                         .foregroundStyle(selected ? Theme.paper.opacity(0.75) : Theme.graphite)
                         .lineSpacing(2)
                         .fixedSize(horizontal: false, vertical: true)

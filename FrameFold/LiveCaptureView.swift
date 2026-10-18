@@ -71,7 +71,7 @@ struct LiveCaptureView: View {
                         Text(Platform.isMac
                              ? "Erlaube FrameFold den Kamerazugriff unter Systemeinstellungen → Datenschutz & Sicherheit → Kamera."
                              : "Erlaube FrameFold den Kamerazugriff unter Einstellungen → FrameFold.")
-                            .font(.system(size: 13))
+                            .font(Theme.mono(12))
                             .foregroundStyle(Theme.paperOnDark.opacity(0.7))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 40)
@@ -178,7 +178,7 @@ struct LiveCaptureView: View {
                     .foregroundStyle(Theme.paperOnDark.opacity(0.85))
                     .multilineTextAlignment(.center)
                     .lineSpacing(3)
-                    .padding(.horizontal, 34)
+                    .padding(.horizontal, 32)
                 Text(Platform.isMac
                      ? "Der runde Knopf oder die Leertaste löst jederzeit von Hand aus."
                      : "Der runde Knopf löst jederzeit von Hand aus.")
@@ -191,10 +191,10 @@ struct LiveCaptureView: View {
                     Text("Verstanden")
                         .font(Theme.caption(12)).tracking(2.2).textCase(.uppercase)
                         .foregroundStyle(Theme.darkroom)
-                        .padding(.vertical, 14).padding(.horizontal, 40)
+                        .padding(.vertical, 16).padding(.horizontal, 40)
                         .background(Theme.paperOnDark)
                 }
-                .padding(.top, 6)
+                .padding(.top, 8)
             }
         }
     }
@@ -206,7 +206,7 @@ struct LiveCaptureView: View {
             Text(Platform.isMac
                  ? "Keine Kamera gefunden. Schließ eine USB-Kamera an – etwa eine Dokumentenkamera über dem Tisch – oder nimm dein iPhone als Kamera. Videos kannst du im Video-Tab trotzdem verarbeiten."
                  : "Auf diesem Gerät wurde keine Kamera gefunden (z. B. im Simulator). Die Live-Aufnahme braucht ein echtes iPhone. Videos kannst du im Video-Tab trotzdem verarbeiten.")
-                .font(.system(size: 13))
+                .font(Theme.mono(12))
                 .foregroundStyle(Theme.paperOnDark.opacity(0.7))
                 .multilineTextAlignment(.center)
                 .lineSpacing(2)
@@ -241,23 +241,23 @@ struct LiveCaptureView: View {
               VStack(alignment: .leading, spacing: 0) {
                 // Dunkelkammer-Fassung der Begrüßung
                 VStack(alignment: .leading, spacing: 10) {
-                    CatalogLabel("Dunkelkammer", color: Theme.paperOnDark.opacity(0.55))
+                    CatalogLabel("Dunkelkammer", color: Theme.paperOnDark.opacity(0.7))
                     Text(mode == .basic ? "Was falten\nwir heute?" : "Welches Werk\nnimmst du auf?")
-                        .font(Theme.serifItalic(26))
+                        .font(Theme.serifItalic(28))
                         .foregroundStyle(Theme.paperOnDark)
                         .lineSpacing(2)
                         .fixedSize(horizontal: false, vertical: true)
                     Text(Platform.isMac
                          ? "Kamera über den Tisch. FrameFold löst aus, sobald deine Hände aus dem Bild sind."
                          : "iPhone aufs Stativ. FrameFold löst aus, sobald deine Hände aus dem Bild sind.")
-                        .font(Theme.mono(11.5))
+                        .font(Theme.mono(12))
                         .foregroundStyle(Theme.paperOnDark.opacity(0.6))
                         .lineSpacing(3)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.horizontal, 24)
-                .padding(.top, 10)
-                .padding(.bottom, 22)
+                .padding(.top, 12)
+                .padding(.bottom, 24)
 
                 if horizontalSizeClass == .regular { newWorkButton }
               }
@@ -270,7 +270,7 @@ struct LiveCaptureView: View {
                             .frame(height: horizontalSizeClass == .regular ? 260 : 150)
                             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.3), lineWidth: 1))
                         Text("Noch kein Werk – leg eines an, dann kann die Kamera loslegen.")
-                            .font(Theme.mono(11.5))
+                            .font(Theme.mono(12))
                             .foregroundStyle(Theme.paperOnDark.opacity(0.6))
                             .multilineTextAlignment(.center)
                             .lineSpacing(3)
@@ -388,9 +388,9 @@ struct LiveCaptureView: View {
                 CatalogLabel(verbatim: mode == .tolino
                     ? String(localized: "Serie von \(count) · datiert \(String(Calendar.current.component(.year, from: Date()))) · Schleife")
                     : String(localized: "\(seconds) Sekunden · läuft in Schleife"),
-                             color: Theme.paperOnDark.opacity(0.55), size: 9)
+                             color: Theme.paperOnDark.opacity(0.7), size: 10)
             }
-            .padding(.bottom, 18)
+            .padding(.bottom, 16)
 
             if isAssembling {
                 VStack(spacing: 12) {
@@ -440,11 +440,11 @@ struct LiveCaptureView: View {
                     .buttonStyle(DarkSecondaryButtonStyle())
                 }
                 CatalogLabel("gespeichert in \(project.name)",
-                             color: Theme.paperOnDark.opacity(0.45), size: 8)
+                             color: Theme.paperOnDark.opacity(0.65), size: 10)
                     .padding(.top, 2)
             }
             .padding(.horizontal, 20)
-            .padding(.bottom, 22)
+            .padding(.bottom, 24)
         }
         .sheet(item: $resultShare) { item in ActivityView(items: [item.url]) }
     }
@@ -482,12 +482,12 @@ struct LiveCaptureView: View {
                     .foregroundStyle(Theme.paperOnDark)
                     .lineLimit(1)
                 CatalogLabel("\(project.frameCount) Bilder",
-                             color: Theme.paperOnDark.opacity(0.55), size: 9)
+                             color: Theme.paperOnDark.opacity(0.7), size: 10)
             }
             Spacer()
             Image(systemName: "arrow.right")
-                .font(.system(size: 13))
-                .foregroundStyle(Theme.paperOnDark.opacity(0.5))
+                .font(Theme.mono(12))
+                .foregroundStyle(Theme.paperOnDark.opacity(0.65))
         }
         .padding(12)
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.28), lineWidth: 1))
@@ -798,8 +798,8 @@ struct LiveCaptureView: View {
                     .foregroundStyle(Theme.darkroom)
                     .multilineTextAlignment(.center)
                     .lineSpacing(2)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 10)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
                     .background(Theme.amber)
             }
 
@@ -822,8 +822,8 @@ struct LiveCaptureView: View {
                     .foregroundStyle(Theme.darkroom)
                     .multilineTextAlignment(.center)
                     .lineSpacing(2)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 10)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
                     .background(Theme.amber)
             }
 
@@ -874,9 +874,9 @@ struct LiveCaptureView: View {
                     LiveLoopView(frames: controller.loopFrames)
                         .frame(width: loopLarge ? 200 : 88)
                         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.6), lineWidth: 1))
-                    CatalogLabel("Der Film bisher", color: Theme.paperOnDark, size: 8)
+                    CatalogLabel("Der Film bisher", color: Theme.paperOnDark, size: 9)
                 }
-                .padding(6)
+                .padding(8)
                 .background(Theme.darkroom.opacity(0.55))
             }
             .buttonStyle(.plain)
@@ -1038,7 +1038,7 @@ struct LiveCaptureView: View {
                         .tracking(1.8)
                         .textCase(.uppercase)
                         .foregroundStyle(Theme.darkroom)
-                        .padding(.horizontal, 18)
+                        .padding(.horizontal, 16)
                         .frame(height: 48)
                         .background(Theme.paperOnDark)
                         .overlay(alignment: .topLeading) {
@@ -1064,8 +1064,8 @@ struct LiveCaptureView: View {
             Text(verbatim: "\(count) · \(secondsText(count)) s")
                 .font(Theme.mono(11, .medium))
                 .foregroundStyle(Theme.paperOnDark)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
                 .background(Theme.darkroom.opacity(0.6))
         }
     }
@@ -1122,8 +1122,8 @@ struct LiveCaptureView: View {
                 }
                 .foregroundStyle(controller.captureMode == .interval
                                  ? Theme.darkroom : Theme.paperOnDark.opacity(0.85))
-                .padding(.vertical, 6)
-                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
+                .padding(.horizontal, 12)
                 .background(controller.captureMode == .interval
                             ? Theme.amberLight : Color.clear)
                 .overlay(Rectangle().stroke(
@@ -1139,8 +1139,8 @@ struct LiveCaptureView: View {
             .buttonStyle(.plain)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 11)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .background(Theme.darkroom.opacity(0.75))
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
     }
@@ -1250,7 +1250,7 @@ struct LiveCaptureView: View {
                     .foregroundStyle(Theme.paperOnDark.opacity(0.85))
             }
         }
-        .padding(.bottom, 6)
+        .padding(.bottom, 8)
         // Am iPhone liegt der Zähler auf dem Kamerabild – über hellem Papier
         // wäre Amber unlesbar. Eine dunkle Platte wie beim Status hält ihn
         // lesbar. Am Mac steht er unter dem Bild und braucht sie nicht.
@@ -1289,7 +1289,7 @@ struct LiveCaptureView: View {
                 .minimumScaleFactor(0.7)
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 10)
+        .padding(.vertical, 12)
         .background(Theme.darkroom.opacity(0.75))
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
     }
@@ -1311,7 +1311,7 @@ struct LiveCaptureView: View {
             }
             .foregroundStyle(Theme.paperOnDark.opacity(0.8))
             .padding(.horizontal, 12)
-            .padding(.vertical, 10)
+            .padding(.vertical, 12)
             .background(Theme.darkroom.opacity(0.75))
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
         }
@@ -1457,7 +1457,7 @@ struct LiveSettingsView: View {
                     Toggle("Film auf dem Außendisplay", isOn: $outerDisplayOn)
                         .font(Theme.body)
                     Text("Aufgeklappt zeigt das iPhone Duo den bisherigen Film außen – zum Tisch hin.")
-                        .font(.system(size: 12))
+                        .font(Theme.mono(11))
                         .foregroundStyle(Theme.graphite)
                 } header: {
                     CatalogLabel("iPhone Duo")
@@ -1486,7 +1486,7 @@ struct LiveSettingsView: View {
                             .font(Theme.body)
                         Slider(value: $controller.stableSeconds, in: 0.3...2.5, step: 0.1)
                         Text("So lange muss die Szene ruhig sein, bevor automatisch ausgelöst wird.")
-                            .font(.system(size: 12))
+                            .font(Theme.mono(11))
                             .foregroundStyle(Theme.graphite)
                     }
                     VStack(alignment: .leading, spacing: 6) {
@@ -1494,7 +1494,7 @@ struct LiveSettingsView: View {
                             .font(Theme.body)
                         Slider(value: $controller.motionThreshold, in: 0.5...8.0, step: 0.5)
                         Text("Höher = kleine Wackler und Bildrauschen werden ignoriert. Wenn der Auslöser nie Ruhe findet, diesen Wert erhöhen.")
-                            .font(.system(size: 12))
+                            .font(Theme.mono(11))
                             .foregroundStyle(Theme.graphite)
                     }
                     Toggle("Nicht auslösen, solange Hände im Bild sind", isOn: $controller.checkHands)
@@ -1515,7 +1515,7 @@ struct LiveSettingsView: View {
                                 .font(Theme.body)
                             Slider(value: $controller.intervalSeconds, in: 1...30, step: 1)
                             Text("Im Intervall-Modus löst FrameFold in festem Takt aus – unabhängig von Bewegung.")
-                                .font(.system(size: 12))
+                                .font(Theme.mono(11))
                                 .foregroundStyle(Theme.graphite)
                         }
                     }
@@ -1544,7 +1544,7 @@ struct LiveSettingsView: View {
                             .font(Theme.body)
                         Slider(value: $onionOpacity, in: 0.1...0.8, step: 0.05)
                         Text("Zeigt das erste oder letzte Bild als Überblendung – zum Ausrichten und um Drift zu erkennen.")
-                            .font(.system(size: 12))
+                            .font(Theme.mono(11))
                             .foregroundStyle(Theme.graphite)
                     }
                 } header: {
@@ -1592,11 +1592,11 @@ struct LiveSettingsView: View {
     private func tipRow(_ icon: String, _ text: LocalizedStringResource) -> some View {
         HStack(alignment: .top, spacing: 10) {
             Image(systemName: icon)
-                .font(.system(size: 13))
+                .font(Theme.mono(12))
                 .foregroundStyle(Theme.ink)
                 .frame(width: 18)
             Text(text)
-                .font(.system(size: 12.5))
+                .font(Theme.mono(11))
                 .foregroundStyle(Theme.graphite)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -1703,7 +1703,7 @@ private struct MacCameraSection: View {
                 .font(Theme.body)
             }
             Text("Ideal ist eine Dokumentenkamera, die senkrecht von oben auf den Tisch blickt. Eine angesteckte USB-Kamera wählt FrameFold von selbst.")
-                .font(.system(size: 12))
+                .font(Theme.mono(11))
                 .foregroundStyle(Theme.graphite)
         } header: {
             CatalogLabel("Kamera")

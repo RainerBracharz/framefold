@@ -24,7 +24,7 @@ final class FrameFoldUITests: XCTestCase {
     private var app: XCUIApplication!
     private var shotDir: URL?
     private var lang = "en"
-    /// FF_MODE=all: im Onboarding „Alles zeigen" wählen – die Store-Bilder
+    /// FF_MODE=all: im Onboarding „Atelier" wählen – die Store-Bilder
     /// entstehen in der vollen Werkstatt, die Durchsicht im Einfach-Modus.
     private var showAll = false
     private var shotIndex = 0
@@ -70,7 +70,7 @@ final class FrameFoldUITests: XCTestCase {
         shot("onboarding-2")
         tap(["Next", "Weiter", "Suivant"])
         usleep(500_000)   // Kartenwechsel ist animiert; sonst trifft der nächste Tipp die alte Karte
-        if showAll { tap(["Show all", "Alles zeigen", "Tout afficher"]) }
+        if showAll { tap(["Studio", "Atelier"]) }
         shot("onboarding-3")
         tap(["Get started", "Los geht's", "C’est parti"], prefix: true)
 
@@ -134,7 +134,7 @@ final class FrameFoldUITests: XCTestCase {
         tap(["Done", "Fertig", "Terminé"])
 
         // 11 Projekte-Tab
-        tap(["Projects", "Projekte", "Projets"])
+        tap(["Works", "Werke", "Œuvres"])
         sleep(1)
         shot("projects")
 
@@ -146,7 +146,7 @@ final class FrameFoldUITests: XCTestCase {
             // Der Knopf steht ganz unten – in der vollen Werkstatt außerhalb
             // des Bildschirms, ein Tipp ins Leere öffnet keine Rückfrage.
             app.swipeUp(); app.swipeUp(); app.swipeUp()
-            if tap(["Delete project", "Projekt löschen", "Supprimer le projet"]) {
+            if tap(["Delete work", "Werk löschen", "Supprimer l’œuvre"]) {
                 tap(["Delete permanently", "Endgültig löschen", "Supprimer définitivement"])
                 sleep(1)
             }
@@ -246,7 +246,7 @@ final class FrameFoldUITests: XCTestCase {
         sleep(5)
         tap(["Done", "Fertig", "Terminé"], timeout: 10)
         sleep(1)
-        tap(["Projects", "Projekte", "Projets"])
+        tap(["Works", "Werke", "Œuvres"])
         sleep(1)
         mark("projects")
         if tap([name], prefix: true) {
@@ -268,7 +268,7 @@ final class FrameFoldUITests: XCTestCase {
             mark("end")
             // Aufräumen wie im Durchgang
             app.swipeUp(); app.swipeUp(); app.swipeUp()
-            if tap(["Delete project", "Projekt löschen", "Supprimer le projet"]) {
+            if tap(["Delete work", "Werk löschen", "Supprimer l’œuvre"]) {
                 tap(["Delete permanently", "Endgültig löschen", "Supprimer définitivement"])
                 sleep(1)
             }

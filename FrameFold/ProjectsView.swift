@@ -39,7 +39,7 @@ struct ProjectsView: View {
                             Text("Werk anlegen")
                         }
                         .buttonStyle(InkButtonStyle(fullWidth: false))
-                        .padding(.top, 22)
+                        .padding(.top, 24)
                         Spacer(minLength: 20)
                     }
                 } else {
@@ -102,7 +102,7 @@ struct ProjectsView: View {
                         Button { showExhibition = true } label: {
                             HStack(spacing: 5) {
                                 Image(systemName: "film.stack")
-                                    .font(.system(size: 13))
+                                    .font(Theme.mono(12))
                                 Text("Ausstellung")
                                     .font(Theme.caption(10))
                                     .tracking(1.2)
@@ -216,12 +216,12 @@ struct ProjectDetailView: View {
                         // Nummerierte Zelle wie im gedruckten Kontaktbogen
                         .overlay(alignment: .bottomLeading) {
                             Text(String(format: "%02d", index + 1))
-                                .font(Theme.mono(8.5, .medium))
+                                .font(Theme.mono(9, .medium))
                                 .foregroundStyle(Theme.paperOnDark)
                                 .padding(.horizontal, 4)
                                 .padding(.vertical, 2)
                                 .background(Theme.ink.opacity(0.72))
-                                .padding(5)
+                                .padding(4)
                         }
                         .overlay(alignment: .topTrailing) {
                             if isEditingFrames {
@@ -231,7 +231,7 @@ struct ProjectDetailView: View {
                                     Image(systemName: "xmark")
                                         .font(.system(size: 11, weight: .bold))
                                         .foregroundStyle(Theme.paper)
-                                        .padding(6)
+                                        .padding(8)
                                         .background(Theme.ink)
                                         // Größere Trefferfläche als das Symbol
                                         .frame(minWidth: 44, minHeight: 44, alignment: .topTrailing)
@@ -251,7 +251,7 @@ struct ProjectDetailView: View {
                 }
             }
             .padding(.horizontal, 12)
-            .padding(.top, 6)
+            .padding(.top, 8)
 
             // Papierkorb: entfernte Frames sind 30 Tage wiederherstellbar
             if currentProject.trashCount > 0 {
@@ -269,7 +269,7 @@ struct ProjectDetailView: View {
                         .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
                 }
                 .padding(.horizontal, 20)
-                .padding(.top, 10)
+                .padding(.top, 12)
             }
 
             exportSection
@@ -284,7 +284,7 @@ struct ProjectDetailView: View {
                     .tracking(1.6)
                     .textCase(.uppercase)
                     .foregroundStyle(Theme.oxblood)
-                    .padding(.vertical, 14)
+                    .padding(.vertical, 16)
                     .frame(maxWidth: .infinity)
                     .overlay(Rectangle().stroke(Theme.oxblood.opacity(0.45), lineWidth: 1))
             }
@@ -373,7 +373,7 @@ struct ProjectDetailView: View {
                 .textCase(.uppercase)
                 .foregroundStyle(active ? Theme.paper : Theme.ink)
                 .padding(.horizontal, 12)
-                .padding(.vertical, 7)
+                .padding(.vertical, 8)
                 .background(active ? Theme.ink : Theme.paper)
                 .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
         }
@@ -431,7 +431,7 @@ struct ProjectDetailView: View {
                     }
                     Spacer()
                 }
-                .padding(.bottom, 10)
+                .padding(.bottom, 12)
 
                 // Beschriftete Zeilen: links wofür, rechts der Wert
                 VStack(spacing: 0) {
@@ -495,7 +495,7 @@ struct ProjectDetailView: View {
                     }
                 }
             }
-            .padding(14)
+            .padding(16)
             .background(Theme.paperShade.opacity(0.5))
             .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
             }
@@ -591,7 +591,7 @@ struct ProjectDetailView: View {
                     }
                 }
             }
-            .padding(.top, 6)
+            .padding(.top, 8)
             // Neue oder entfernte Bilder: fertige Drucksachen passen nicht mehr
             .onChange(of: currentProject.frameCount) { _, _ in
                 flipbookURL = nil
@@ -614,7 +614,7 @@ struct ProjectDetailView: View {
                     .foregroundStyle(Theme.ink)
                     .multilineTextAlignment(.center)
             }
-            .padding(.vertical, 14)
+            .padding(.vertical, 16)
             .frame(maxWidth: .infinity)
             .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
         }
@@ -825,13 +825,13 @@ struct ExhibitionSheet: View {
                         .lineSpacing(2)
                         .fixedSize(horizontal: false, vertical: true)
                     Text(selectionHint)
-                        .font(Theme.mono(11.5))
+                        .font(Theme.mono(12))
                         .foregroundStyle(Theme.graphite)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 20)
                 .padding(.top, 12)
-                .padding(.bottom, 18)
+                .padding(.bottom, 16)
 
                 ScrollView {
                     LazyVStack(spacing: 10) {
@@ -1002,7 +1002,7 @@ struct LoopingVideoPreview: View {
                         .shadow(radius: 2)
                 }
                 .padding(.horizontal, 8)
-                .padding(.bottom, 7)
+                .padding(.bottom, 8)
             }
         }
     }

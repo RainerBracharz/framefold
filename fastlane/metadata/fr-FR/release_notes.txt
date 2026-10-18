@@ -1,10 +1,11 @@
-FrameFold 2.2.1
+FrameFold 2.3
 
-Tes œuvres sont mieux protégées.
+Rangé et affiné.
 
-• Corbeille : les images retirées restent vraiment récupérables pendant 30 jours – y compris dans les œuvres plus anciennes.
-• Un balayage dans la liste des projets demande confirmation avant de supprimer une œuvre.
-• Planche contact : après le retrait d’une image, chaque vignette affiche à nouveau la bonne image.
-• Jeter et annuler ne concernent plus que les images de la séance en cours.
-• Les œuvres sont enregistrées de façon plus sûre. Si une image ne peut pas être enregistrée, FrameFold te le dit.
-• L’écran d’accueil te salue sans prénom.
+• « Œuvres » et « Atelier » : l’onglet s’appelle désormais Œuvres, le troisième mode Atelier.
+• Continuer avec la caméra : depuis chaque œuvre, retour direct au viseur ; la caméra peut afficher toutes tes œuvres.
+• Changer d’onglet pendant une séance la termine au lieu de la réinitialiser.
+• Apple Watch : le déclencheur n’est actif que si le viseur est ouvert sur l’iPhone, et confirme chaque image.
+• Les transitions restent stables avec la stabilisation ; les images de tailles différentes remplissent le cadre.
+• Folioscope et film d’exposition aux couleurs de l’app ; le folioscope demande beaucoup moins de mémoire.
+• Les longues vidéos peuvent être annulées ; compteur plus lisible, annonces VoiceOver à chaque prise.

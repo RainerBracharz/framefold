@@ -109,6 +109,10 @@ enum Theme {
         }
     }
 
+    // Schriftgrößen in ganzen Punkten, keine halben Stufen: 9 · 10 · 11 ·
+    // 12 · 13 · 15 · 17 · 19–24 · 28 · 34 · 58. Text auf der Dunkelkammer
+    // nicht unter 10 pt und mit mindestens 0,6 Deckkraft. Abstände auf dem
+    // 4-Punkt-Raster (4 · 8 · 12 · 16 · 20 · 24 · 28 · 32 · 40).
     static func serif(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
         let light: Set<Font.Weight> = [.ultraLight, .thin, .light]
         let ps = light.contains(weight) ? "Fraunces-Light" : "Fraunces-Regular"
@@ -447,7 +451,7 @@ struct ModeTabs: View {
                     Text(m.label)
                         .font(Theme.caption(11)).tracking(1.1).textCase(.uppercase)
                         .foregroundStyle(modeRaw == m.rawValue ? Theme.paper : Theme.ink)
-                        .padding(.vertical, 11)
+                        .padding(.vertical, 12)
                         .frame(maxWidth: .infinity)
                         .background(modeRaw == m.rawValue ? Theme.ink : Color.clear)
                 }
@@ -525,7 +529,7 @@ struct InkButtonStyle: ButtonStyle {
             .tracking(2.2)
             .textCase(.uppercase)
             .foregroundStyle(Theme.paper)
-            .padding(.vertical, 15)
+            .padding(.vertical, 16)
             .frame(maxWidth: fullWidth ? .infinity : nil)
             .padding(.horizontal, fullWidth ? 0 : 22)
             .background(Theme.ink.opacity(configuration.isPressed ? 0.72 : 1))
@@ -542,7 +546,7 @@ struct DarkPrimaryButtonStyle: ButtonStyle {
             .tracking(1.5)
             .textCase(.uppercase)
             .foregroundStyle(Theme.darkroom)
-            .padding(.vertical, 13)
+            .padding(.vertical, 12)
             .frame(maxWidth: fullWidth ? .infinity : nil)
             .padding(.horizontal, fullWidth ? 0 : 18)
             .background(Theme.paperOnDark.opacity(configuration.isPressed ? 0.78 : 1))
@@ -559,7 +563,7 @@ struct DarkSecondaryButtonStyle: ButtonStyle {
             .tracking(1.5)
             .textCase(.uppercase)
             .foregroundStyle(Theme.paperOnDark.opacity(configuration.isPressed ? 0.6 : 1))
-            .padding(.vertical, 13)
+            .padding(.vertical, 12)
             .frame(maxWidth: fullWidth ? .infinity : nil)
             .padding(.horizontal, fullWidth ? 0 : 18)
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
@@ -629,7 +633,7 @@ struct HairlineButtonStyle: ButtonStyle {
             .tracking(2.2)
             .textCase(.uppercase)
             .foregroundStyle(Theme.ink)
-            .padding(.vertical, 15)
+            .padding(.vertical, 16)
             .frame(maxWidth: fullWidth ? .infinity : nil)
             .padding(.horizontal, fullWidth ? 0 : 22)
             .background(configuration.isPressed ? Theme.paperShade : Theme.paper)
@@ -674,7 +678,7 @@ struct HairlineProgress: View {
 struct EditionFrame: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .padding(10)
+            .padding(12)
             .background(Theme.paper)
             .overlay(Rectangle().stroke(Theme.ink, lineWidth: 1))
             .overlay(
