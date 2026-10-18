@@ -1,11 +1,11 @@
-FrameFold 2.3
+FrameFold 2.3.1
 
-Rangé et affiné.
+Une prise de vue plus fluide, vidéos et séances en direct réunies dans une même œuvre.
 
-• « Œuvres » et « Atelier » : l’onglet s’appelle désormais Œuvres, le troisième mode Atelier.
-• Continuer avec la caméra : depuis chaque œuvre, retour direct au viseur ; la caméra peut afficher toutes tes œuvres.
-• Changer d’onglet pendant une séance la termine au lieu de la réinitialiser.
-• Apple Watch : le déclencheur n’est actif que si le viseur est ouvert sur l’iPhone, et confirme chaque image.
-• Les transitions restent stables avec la stabilisation ; les images de tailles différentes remplissent le cadre.
-• Folioscope et film d’exposition aux couleurs de l’app ; le folioscope demande beaucoup moins de mémoire.
-• Les longues vidéos peuvent être annulées ; compteur plus lisible, annonces VoiceOver à chaque prise.
+• Ajouter une vidéo à une œuvre : « Enregistrer » propose de créer une nouvelle œuvre ou d’ajouter les images à une œuvre existante.
+• « Choisir à nouveau les images » aussi en mode Simple – retirer une image sans tout réanalyser.
+• Annuler : un bouton dédié en mode Simple ; la pelure d’oignon montre ensuite l’image précédente.
+• La prise de vue reste fluide au déclenchement ; la détection des mains tourne en arrière-plan.
+• Renommer et supprimer une œuvre par un appui long ; la planche contact se charge plus vite.
+• Les réglages de prise de vue sont conservés ; la boucle du film dans le viseur suit la cadence du film terminé.
+• Meilleure prise en charge de VoiceOver ; dates des PDF au format de ta langue.

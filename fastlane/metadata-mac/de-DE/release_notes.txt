@@ -1,9 +1,10 @@
-FrameFold 2.3 für den Mac
+FrameFold 2.3.1 für den Mac
 
-• Menü und Tastenkürzel: ⌘N neues Werk, ⌘O Video öffnen, ⌘↩ Fertig, ⌘⌫ letztes Bild zurück, ⌘1–3 für die Bereiche.
-• Videos direkt aus dem Finder öffnen oder aufs Fenster ziehen.
-• Daumenkino und Filme sichern oder drucken – direkt aus dem Teilen-Menü.
-• Kamera anstecken, wann du willst: FrameFold erkennt sie von selbst und wechselt beim Abziehen auf die nächste.
-• Der Mac bleibt während der Aufnahme wach.
-• Neues Layout: Kamera und Film nebeneinander, die Bedienung darunter.
-• Dazu alles aus der iPhone-Fassung: „Werke" und „Atelier", ruhigere Überblendungen, Ausstellungs-Reel im Farbklang der App.
+Flüssiger aufnehmen, Videos und Live-Aufnahmen in einem Werk sammeln.
+
+• Video zu einem Werk hinzufügen: „Sichern" fragt, ob ein neues Werk entsteht oder die Bilder an ein vorhandenes angehängt werden.
+• „Bilder noch einmal auswählen" auch im Einfach-Modus – ein Bild abwählen, ohne alles neu zu analysieren.
+• Zurücknehmen (⌘⌫) wartet, bis das letzte Bild abgelegt ist; danach zeigt die Zwiebelhaut wieder das vorige Bild.
+• Die Aufnahme bleibt beim Auslösen flüssig, die Prüfung auf Hände läuft im Hintergrund.
+• Werke umbenennen und löschen per Rechtsklick; der Kontaktbogen lädt schneller.
+• Aufnahme-Einstellungen bleiben erhalten; bessere VoiceOver-Unterstützung.

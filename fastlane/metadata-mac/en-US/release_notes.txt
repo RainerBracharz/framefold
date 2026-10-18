@@ -1,9 +1,10 @@
-FrameFold 2.3 for Mac
+FrameFold 2.3.1 for Mac
 
-• Menus and shortcuts: ⌘N new work, ⌘O open video, ⌘↩ done, ⌘⌫ undo last frame, ⌘1–3 for the sections.
-• Open videos straight from the Finder or drag them onto the window.
-• Save or print flip books and films right from the share menu.
-• Plug in a camera whenever you like: FrameFold picks it up on its own and switches to the next one if it's unplugged.
-• Your Mac stays awake during a session.
-• New layout: camera and film side by side, controls below.
-• Plus everything from the iPhone version: "Works" and "Studio", steadier transitions, exhibition reel in the app's colours.
+Smoother capture, and videos and live sessions together in one work.
+
+• Add a video to a work: "Save" asks whether to start a new work or append the frames to an existing one.
+• "Choose frames again" now in Simple mode too – drop a frame without analysing everything again.
+• Undo (⌘⌫) waits until the last frame is stored; afterwards the onion skin shows the previous frame again.
+• Capture stays smooth when the shutter fires; the hand check runs in the background.
+• Rename and delete works with a right-click; the contact sheet loads faster.
+• Capture settings are remembered; better VoiceOver support.

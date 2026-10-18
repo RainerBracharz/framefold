@@ -1,11 +1,11 @@
-FrameFold 2.3
+FrameFold 2.3.1
 
-Tidied up and fine-tuned.
+Smoother capture, and videos and live sessions together in one work.
 
-• "Works" and "Studio": the tab is now called Works, the third mode Studio.
-• Continue with the camera: from any work straight back to the viewfinder; the camera can now list all your works.
-• Switching tabs during a session finishes it instead of resetting it.
-• Apple Watch: the shutter is only active while the iPhone viewfinder is open, and confirms every frame.
-• Transitions stay steady with shake correction; frames of different sizes fill the frame.
-• Flip book and exhibition reel in the app's colours; the flip book needs far less memory.
-• Long videos can be cancelled; easier-to-read counter, VoiceOver announcements when a frame is taken.
+• Add a video to a work: "Save" asks whether to start a new work or append the frames to an existing one.
+• "Choose frames again" now in Simple mode too – drop a frame without analysing everything again.
+• Undo: its own button in Simple mode; afterwards the onion skin shows the previous frame again.
+• Capture stays smooth when the shutter fires; the hand check runs in the background.
+• Rename and delete works with a long press; the contact sheet loads faster.
+• Capture settings are remembered; the film loop in the viewfinder plays at the finished film's speed.
+• Better VoiceOver support; dates in PDFs follow your language.
