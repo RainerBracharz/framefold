@@ -30,6 +30,10 @@
 		BB20F0F0F0F0F0F0F0F0F301 /* FlipbookRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F302 /* FlipbookRenderer.swift */; };
 		BB20F0F0F0F0F0F0F0F0F303 /* LiveLoopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */; };
 		BB20F0F0F0F0F0F0F0F0F305 /* DuoSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */; };
+		BB20F0F0F0F0F0F0F0F0F316 /* LiveCaptureController+Simulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */; };
+		BB20F0F0F0F0F0F0F0F0F314 /* LiveCaptureController+MacCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F315 /* LiveCaptureController+MacCamera.swift */; };
+		BB20F0F0F0F0F0F0F0F0F312 /* LiveSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F313 /* LiveSettingsView.swift */; };
+		BB20F0F0F0F0F0F0F0F0F310 /* LiveCaptureParts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F311 /* LiveCaptureParts.swift */; };
 		BD9B7454EB7D37A5500730CA /* ProjectStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AAEDEDE5FC50D5C58EF7D3 /* ProjectStore.swift */; };
 		C7A97BD0A2F98F786140AD56 /* StopMotionAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC7761875A3A3F18126E58 /* StopMotionAssembler.swift */; };
 		CA1B4BCA304055720042CB0A /* FrameFold Watch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = CA1B4BC0304055700042CB0A /* FrameFold Watch Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -103,6 +107,10 @@
 		BB20F0F0F0F0F0F0F0F0F302 /* FlipbookRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlipbookRenderer.swift; sourceTree = "<group>"; };
 		BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveLoopView.swift; sourceTree = "<group>"; };
 		BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuoSupport.swift; sourceTree = "<group>"; };
+		BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+Simulator.swift"; sourceTree = "<group>"; };
+		BB20F0F0F0F0F0F0F0F0F315 /* LiveCaptureController+MacCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+MacCamera.swift"; sourceTree = "<group>"; };
+		BB20F0F0F0F0F0F0F0F0F313 /* LiveSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSettingsView.swift; sourceTree = "<group>"; };
+		BB20F0F0F0F0F0F0F0F0F311 /* LiveCaptureParts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCaptureParts.swift; sourceTree = "<group>"; };
 		C3C12FBC1940CDA6F9C95797 /* LiveCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCaptureView.swift; sourceTree = "<group>"; };
 		CA1B4BC0304055700042CB0A /* FrameFold Watch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FrameFold Watch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAFAD9B13062D0F900D357C7 /* FrameFoldUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrameFoldUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -230,6 +238,10 @@
 				AA22F0F0F0F0F0F0F0F0F102 /* StudioMonitor.swift */,
 				BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */,
 				BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */,
+				BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */,
+				BB20F0F0F0F0F0F0F0F0F315 /* LiveCaptureController+MacCamera.swift */,
+				BB20F0F0F0F0F0F0F0F0F313 /* LiveSettingsView.swift */,
+				BB20F0F0F0F0F0F0F0F0F311 /* LiveCaptureParts.swift */,
 				BB20F0F0F0F0F0F0F0F0F302 /* FlipbookRenderer.swift */,
 				5179CC507784BECC68BB9DEF /* Assets.xcassets */,
 				AA11F0F0F0F0F0F0F0F0F012 /* Localizable.xcstrings */,
@@ -436,6 +448,10 @@
 				AA22F0F0F0F0F0F0F0F0F101 /* StudioMonitor.swift in Sources */,
 				BB20F0F0F0F0F0F0F0F0F303 /* LiveLoopView.swift in Sources */,
 				BB20F0F0F0F0F0F0F0F0F305 /* DuoSupport.swift in Sources */,
+				BB20F0F0F0F0F0F0F0F0F316 /* LiveCaptureController+Simulator.swift in Sources */,
+				BB20F0F0F0F0F0F0F0F0F314 /* LiveCaptureController+MacCamera.swift in Sources */,
+				BB20F0F0F0F0F0F0F0F0F312 /* LiveSettingsView.swift in Sources */,
+				BB20F0F0F0F0F0F0F0F0F310 /* LiveCaptureParts.swift in Sources */,
 				BB20F0F0F0F0F0F0F0F0F301 /* FlipbookRenderer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

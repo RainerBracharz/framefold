@@ -249,7 +249,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     let session = AVCaptureSession()
     /// Aktuelles Aufnahmegerät – zum Fixieren von Belichtung/Fokus/Weißabgleich.
-    private var device: AVCaptureDevice?
+    var device: AVCaptureDevice?
 
     /// Sekunden Stabilität bis zum Auto-Shutter (live änderbar)
     @Published var stableSeconds: Double = Stored.double("liveStableSeconds", 0.8) {
@@ -462,7 +462,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     private var pendingRigRelock = false
     /// Läuft gerade eine Sitzung? Schützt gegen Frames, die nach `stop()`
     /// noch aus der Kamera-Warteschlange nachrücken.
-    private var isRunning = false
+    private(set) var isRunning = false
 
     /// Holt eine gedrosselte Fixierung nach, sobald es passt. Wird aus der
     /// Analyse gepulst.
@@ -643,7 +643,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Seit wann die Szene ununterbrochen zu unruhig zum Auslösen ist.
     private var restlessSince: Date?
     /// Simulator-Kamera: Task und aktuelles Vorschaubild.
-    private var simulatorTask: Task<Void, Never>?
+    var simulatorTask: Task<Void, Never>?
     /// Im Simulator statt des Kamerabilds angezeigt (nil auf echten Geräten).
     @Published var simulatedPreview: UIImage?
 
@@ -804,98 +804,6 @@ final class LiveCaptureController: NSObject, ObservableObject {
         return AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
         #endif
     }
-
-    #if targetEnvironment(macCatalyst)
-    /// Merkt sich die gewählte Kamera über ihre eindeutige Kennung. Ist sie
-    /// beim nächsten Start nicht angesteckt, greift die Reihenfolge oben.
-    static let cameraKey = "macCameraID"
-    private static let macCameraTypes: [AVCaptureDevice.DeviceType] = [.external, .continuityCamera, .builtInWideAngleCamera]
-
-    static func availableCameras() -> [AVCaptureDevice] {
-        AVCaptureDevice.DiscoverySession(deviceTypes: macCameraTypes, mediaType: .video,
-                                         position: .unspecified).devices
-            .filter(\.isConnected)
-    }
-
-    /// Kennung der Kamera, die gerade aufnimmt (für die Auswahl in den
-    /// Einstellungen).
-    var currentCameraID: String? { device?.uniqueID }
-
-    /// Wechselt mitten in der Sitzung die Kamera. Die Bewegungs-Kalibrierung
-    /// gehört zum alten Bild und wird neu gemessen.
-    func switchCamera(to id: String) {
-        UserDefaults.standard.set(id, forKey: Self.cameraKey)
-        guard id != device?.uniqueID, !session.inputs.isEmpty,
-              let next = Self.availableCameras().first(where: { $0.uniqueID == id }) else { return }
-        attach(next)
-    }
-
-    /// Ersetzt den Kamera-Eingang der laufenden Sitzung.
-    @discardableResult
-    private func attach(_ next: AVCaptureDevice) -> Bool {
-        guard let input = try? AVCaptureDeviceInput(device: next) else { return false }
-        session.beginConfiguration()
-        let old = session.inputs
-        old.forEach(session.removeInput)
-        guard session.canAddInput(input) else {
-            old.forEach { if session.canAddInput($0) { session.addInput($0) } }
-            session.commitConfiguration()
-            return false
-        }
-        session.addInput(input)
-        session.sessionPreset = session.canSetSessionPreset(.hd1920x1080) ? .hd1920x1080 : .high
-        session.commitConfiguration()
-        device = next
-        objectWillChange.send()
-        if isRunning { refixCamera() }
-        return true
-    }
-
-    /// Am Mac kommen und gehen Kameras: Die Dokumentenkamera wird oft erst
-    /// nach dem Start angesteckt, ein USB-Kabel kann sich lösen.
-    private func observeCameraChanges() {
-        let center = NotificationCenter.default
-        center.addObserver(forName: AVCaptureDevice.wasConnectedNotification, object: nil, queue: .main) { [weak self] _ in
-            MainActor.assumeIsolated { self?.cameraConnected() }
-        }
-        center.addObserver(forName: AVCaptureDevice.wasDisconnectedNotification, object: nil, queue: .main) { [weak self] note in
-            let gone = (note.object as? AVCaptureDevice)?.uniqueID
-            MainActor.assumeIsolated { self?.cameraDisconnected(uniqueID: gone) }
-        }
-    }
-
-    private func cameraConnected() {
-        // Vorher keine Kamera: Hinweis wegnehmen – der Sucher startet beim
-        // Erscheinen neu und findet die neue Kamera selbst.
-        if cameraUnavailable {
-            cameraUnavailable = false
-            return
-        }
-        // Die gewählte Kamera ist zurück: wieder auf sie wechseln.
-        if let chosen = UserDefaults.standard.string(forKey: Self.cameraKey),
-           chosen != device?.uniqueID,
-           let back = Self.availableCameras().first(where: { $0.uniqueID == chosen }),
-           !session.inputs.isEmpty {
-            attach(back)
-        }
-    }
-
-    private func cameraDisconnected(uniqueID: String?) {
-        guard let current = device, uniqueID == nil || uniqueID == current.uniqueID else { return }
-        // Auf die nächstbeste Kamera ausweichen; die gewählte bleibt gemerkt
-        // und kommt zurück, sobald sie wieder angesteckt ist.
-        let fallback = Self.availableCameras().first { $0.uniqueID != current.uniqueID }
-        if let fallback, attach(fallback) { return }
-        // Keine Kamera mehr: Sitzung beenden und es sagen, statt mit
-        // eingefrorenem Bild weiterzulaufen.
-        session.beginConfiguration()
-        session.inputs.forEach(session.removeInput)
-        session.commitConfiguration()
-        device = nil
-        stop()
-        cameraUnavailable = true
-    }
-    #endif
 
     /// Baut die Capture-Session auf. Gibt `false` zurück, wenn kein
     /// Aufnahmegerät verfügbar ist (Simulator/kameraloses Gerät).
@@ -1369,110 +1277,6 @@ final class LiveCaptureController: NSObject, ObservableObject {
         }
     }
 
-    // MARK: Simulator-Kamera (nur im Simulator einkompiliert)
-
-    #if targetEnvironment(simulator) || (targetEnvironment(macCatalyst) && DEBUG)
-    /// Erzeugt 10 Frames/s: ein Papierquadrat wandert in Schritten über den
-    /// Tisch, dazwischen fährt eine „Hand" ins Bild. Dieselbe Struktur wie das
-    /// Referenz-Testvideo – der Auto-Shutter sollte pro Ruhephase auslösen.
-    private func startSimulatedCamera() {
-        simulatorTask?.cancel()
-        // Aufnahmen für die App-Vorschau im Store: Statt der Testszene spielt
-        // der Simulator eine vorbereitete Bildfolge ab (JPEGs in FF_SIM_FRAMES,
-        // 10 Bilder/s, in Schleife). Nur im Simulator, nur mit gesetzter Variable.
-        if let dir = ProcessInfo.processInfo.environment["FF_SIM_FRAMES"], !dir.isEmpty,
-           let names = try? FileManager.default.contentsOfDirectory(atPath: dir) {
-            let files = names.filter { $0.hasSuffix(".jpg") }.sorted()
-                .map { URL(fileURLWithPath: dir).appendingPathComponent($0) }
-            if !files.isEmpty {
-                simulatorTask = Task { [weak self] in
-                    var tick = 0
-                    while !Task.isCancelled {
-                        guard let self else { return }
-                        if let img = UIImage(contentsOfFile: files[tick % files.count].path),
-                           let cg = img.cgImage {
-                            self.simulatedPreview = img
-                            let (gray, w, h) = FrameAnalyzer.grayscaleDownsampled(cg, targetWidth: 160)
-                            self.analyze(gray: gray, w: w, h: h, fullFrame: cg)
-                        }
-                        tick += 1
-                        try? await Task.sleep(nanoseconds: 100_000_000)
-                    }
-                }
-                return
-            }
-        }
-        simulatorTask = Task { [weak self] in
-            var tick = 0
-            let stillFrames = 14        // ~1,4 s Ruhe
-            let moveFrames = 6          // ~0,6 s Bewegung
-            let cycle = stillFrames + moveFrames
-            while !Task.isCancelled {
-                guard let self else { return }
-                let step = tick / cycle
-                let inCycle = tick % cycle
-                let moving = inCycle >= stillFrames
-                let progress = moving ? Double(inCycle - stillFrames) / Double(moveFrames) : 0
-                if let cg = Self.makeSimulatedFrame(step: step, moving: moving, progress: progress) {
-                    self.simulatedPreview = UIImage(cgImage: cg)
-                    let (gray, w, h) = FrameAnalyzer.grayscaleDownsampled(cg, targetWidth: 160)
-                    self.analyze(gray: gray, w: w, h: h, fullFrame: cg)
-                }
-                tick += 1
-                try? await Task.sleep(nanoseconds: 100_000_000)
-            }
-        }
-    }
-
-    /// Zeichnet einen synthetischen Atelier-Frame (640×360).
-    private static func makeSimulatedFrame(step: Int, moving: Bool, progress: Double) -> CGImage? {
-        let w = 640, h = 360
-        guard let ctx = CGContext(data: nil, width: w, height: h, bitsPerComponent: 8,
-                                  bytesPerRow: 0, space: CGColorSpaceCreateDeviceRGB(),
-                                  bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
-        else { return nil }
-
-        // Tisch
-        ctx.setFillColor(red: 0.91, green: 0.86, blue: 0.78, alpha: 1)
-        ctx.fill(CGRect(x: 0, y: 0, width: w, height: h))
-        ctx.setFillColor(red: 0.69, green: 0.63, blue: 0.55, alpha: 1)
-        ctx.fill(CGRect(x: 0, y: 0, width: w, height: 60))
-
-        // Papierquadrat wandert in 8 Schritten
-        let positions = (0..<8).map { 40.0 + Double($0) * 70.0 }
-        let from = positions[step % positions.count]
-        let to = positions[(step + 1) % positions.count]
-        let x = moving ? from + (to - from) * progress : from
-
-        ctx.setFillColor(red: 0.98, green: 0.97, blue: 0.95, alpha: 1)
-        ctx.fill(CGRect(x: x, y: 150, width: 80, height: 80))
-        ctx.setStrokeColor(red: 0.35, green: 0.33, blue: 0.30, alpha: 1)
-        ctx.setLineWidth(2)
-        ctx.stroke(CGRect(x: x, y: 150, width: 80, height: 80))
-        ctx.move(to: CGPoint(x: x, y: 150))
-        ctx.addLine(to: CGPoint(x: x + 80, y: 230))
-        ctx.strokePath()
-
-        // „Hand" nur während der Bewegung
-        if moving {
-            let hy = 60 + 150 * sin(Double.pi * progress)
-            ctx.setFillColor(red: 0.85, green: 0.66, blue: 0.55, alpha: 1)
-            ctx.fillEllipse(in: CGRect(x: x + 10, y: hy, width: 70, height: 70))
-            ctx.fill(CGRect(x: x + 30, y: 0, width: 34, height: hy))
-        }
-
-        // Sensorrauschen, damit die Bewegung nie exakt null ist
-        for _ in 0..<220 {
-            ctx.setFillColor(red: .random(in: 0...1), green: .random(in: 0...1),
-                             blue: .random(in: 0...1), alpha: 0.05)
-            ctx.fill(CGRect(x: .random(in: 0...Double(w)), y: .random(in: 0...Double(h)),
-                            width: 2, height: 2))
-        }
-        return ctx.makeImage()
-    }
-    #endif
-
-    // MARK: Frame-Verarbeitung (auf videoQueue, UI-Updates via MainActor)
 
     nonisolated private func process(pixelBuffer: CVPixelBuffer) {
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
@@ -1485,7 +1289,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         }
     }
 
-    private func analyze(gray: [UInt8], w: Int, h: Int, fullFrame: CGImage) {
+    func analyze(gray: [UInt8], w: Int, h: Int, fullFrame: CGImage) {
         // Nach `stop()` treffen noch Frames aus der Kamera-Warteschlange ein
         // (`stopRunning()` läuft asynchron). Die dürfen weder ein Bild ins
         // fertige Werk legen noch den Zustand vom Ruhestand wegziehen.
