@@ -19,6 +19,16 @@ struct Project: Identifiable, Codable {
     var nextFrameNumber: Int?
 
     var frameCount: Int { frameFilenames.count }
+
+    /// Anlagedatum im Format der Sprache und in der eigenen Zeitzone
+    /// („18. Okt. 2026") – vorher das rohe ISO-Datum in UTC, das nachts einen
+    /// Tag danebenlag.
+    var createdDateText: String {
+        guard let date = ISO8601DateFormatter().date(from: createdAtISO) else {
+            return String(createdAtISO.prefix(10))
+        }
+        return date.formatted(date: .abbreviated, time: .omitted)
+    }
     var trashCount: Int { trashFilenames?.count ?? 0 }
 }
 
@@ -310,10 +320,13 @@ final class ProjectStore: ObservableObject {
 
     /// Sichert die Keyframes eines verarbeiteten Videos als Projekt-Session
     /// (volle Auflösung, nacheinander – speicherschonend).
+    /// Gibt zurück, wie viele Bilder tatsächlich im Werk gelandet sind.
+    @discardableResult
     func importKeyframes(
         from videoURL: URL, times: [Double],
         into project: Project
-    ) async {
+    ) async -> Int {
+        var saved = 0
         let asset = AVURLAsset(url: videoURL)
         let generator = AVAssetImageGenerator(asset: asset)
         generator.appliesPreferredTrackTransform = true
@@ -326,11 +339,13 @@ final class ProjectStore: ObservableObject {
             if let data = UIImage(cgImage: cgImage).jpegData(compressionQuality: 0.9) {
                 // save() in appendFrame aktualisiert das Projekt im Speicher;
                 // Projekt-Objekt jeweils frisch holen:
-                if let current = projects.first(where: { $0.id == project.id }) {
-                    appendFrame(jpegData: data, to: current)
+                if let current = projects.first(where: { $0.id == project.id }),
+                   appendFrame(jpegData: data, to: current) != nil {
+                    saved += 1
                 }
             }
         }
+        return saved
     }
 }
 

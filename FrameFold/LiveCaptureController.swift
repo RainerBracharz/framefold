@@ -30,7 +30,8 @@ private final class CaptureFrameGate: @unchecked Sendable {
 /// Zustandsautomat pro Kameraframe (~10 Analysen/s):
 ///   Bewegung hoch ODER Hände sichtbar  → "arbeitet" (armed = true)
 ///   danach Szene stabil für N Sekunden → Frame aufnehmen, wenn er sich
-///   vom letzten Capture unterscheidet (dHash) → warten auf nächste Aktion
+///   vom letzten Capture unterscheidet (stärkstes von 8×8 Rasterfeldern,
+///   siehe eval/HILLCLIMB.md) → warten auf nächste Aktion
 @MainActor
 final class LiveCaptureController: NSObject, ObservableObject {
 
@@ -1746,6 +1747,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
         lastCapturedGray = nil
         capturedCount = max(0, capturedCount - 1)
         if !loopFrames.isEmpty { loopFrames.removeLast() }
+        // Das erste Bild zurückgenommen: Es taugt nicht mehr als
+        // Drift-Referenz – das nächste ausgelöste tritt an seine Stelle.
+        if capturedCount == 0 { firstCapturedImage = nil }
     }
 
     /// Ein aufgenommenes Bild ließ sich nicht speichern: zurücknehmen und

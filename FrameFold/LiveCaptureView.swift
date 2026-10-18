@@ -1025,6 +1025,19 @@ struct LiveCaptureView: View {
             .accessibilityHint("Nimmt sofort ein Bild auf. Sonst löst die Kamera von selbst aus, sobald die Hände aus dem Bild sind.")
 
             HStack {
+                // Einfach-Modus: großes „Ups, weg damit" – das Daumenkino mit
+                // dem Zurücknehmen-Knopf gibt es dort nicht.
+                if mode == .basic, !sessionFiles.isEmpty {
+                    Button { undoLastFrame(project: project) } label: {
+                        Image(systemName: "arrow.uturn.backward")
+                            .font(.system(size: 19, weight: .medium))
+                            .foregroundStyle(Theme.paperOnDark)
+                            .frame(width: 48, height: 48)
+                            .background(Color.black.opacity(0.35))
+                            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.4), lineWidth: 1))
+                    }
+                    .accessibilityLabel("Letztes Bild zurücknehmen")
+                }
                 if mode.showsAdvanced {
                     Button { onionSkin.toggle() } label: {
                         Image(systemName: "square.2.layers.3d")
@@ -1185,13 +1198,31 @@ struct LiveCaptureView: View {
         }
     }
     private func undoLastFrame(project: Project) {
+        // Erst warten, bis das zuletzt ausgelöste Bild abgelegt ist – es wird
+        // im Hintergrund kodiert. Sonst träfe das Zurücknehmen das vorletzte.
+        Task {
+            await controller.flushCaptures()
+            removeLastSessionFrame(project: project)
+        }
+    }
+
+    private func removeLastSessionFrame(project: Project) {
         // Nur Bilder dieser Sitzung – nie eins aus einer früheren.
         guard let filename = sessionFiles.popLast() else { return }
         if let current = store.projects.first(where: { $0.id == project.id }) {
             store.removeFrames(named: [filename], from: current)
         }
         if !recentThumbs.isEmpty { recentThumbs.removeLast() }
-        controller.revertLastCapture(to: recentThumbs.last)
+        // Zwiebelhaut wieder auf das vorige Bild in voller Größe – vorher
+        // zeigte sie danach nur das Briefmarken-Vorschaubild.
+        var previous: UIImage? = recentThumbs.last
+        if let name = sessionFiles.last,
+           let current = store.projects.first(where: { $0.id == project.id }),
+           let url = store.frameURLs(for: current).first(where: { $0.lastPathComponent == name }),
+           let full = UIImage(contentsOfFile: url.path) {
+            previous = full
+        }
+        controller.revertLastCapture(to: previous)
     }
 
     private var currentCount: Int {
@@ -1415,6 +1446,9 @@ struct MotionGauge: View {
             }
         }
         .animation(.linear(duration: 0.1), value: motion)
+        .accessibilityElement()
+        .accessibilityLabel(Text("Bewegung im Bild"))
+        .accessibilityValue(motion <= threshold ? Text("ruhig") : Text("unruhig"))
     }
 }
 

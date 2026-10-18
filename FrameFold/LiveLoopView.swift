@@ -9,7 +9,9 @@ import UIKit
 struct LiveLoopView: View {
     let frames: [Data]
     /// Abspieltempo der Schleife in Bildern pro Sekunde
-    var fps: Double = 8
+    /// Tempo des fertigen Films (Einstellung „Bildrate") – vorher fest 8,
+    /// dann wirkte die Schleife im Sucher anders als das Ergebnis.
+    var fps: Double = Double(PipelineSettings.restored().outputFPS)
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 

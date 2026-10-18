@@ -61,6 +61,22 @@
     "%lld": {
       "shouldTranslate": false
     },
+    "%lld %%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld %%"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld %%"
+          }
+        }
+      }
+    },
     "%lld Bilder": {
       "localizations": {
         "en": {
@@ -353,6 +369,22 @@
         }
       }
     },
+    "%lld von %lld Bildern gesichert – die übrigen ließen sich nicht lesen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld frames saved – the rest could not be read."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld images sur %2$lld enregistrées – les autres étaient illisibles."
+          }
+        }
+      }
+    },
     "%lld Werke montieren": {
       "localizations": {
         "en": {
@@ -582,7 +614,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lecture"
+            "value": "Mode de lecture"
           }
         }
       }
@@ -886,7 +918,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucun appareil photo trouvé sur cet appareil (dans le simulateur, par exemple). La prise de vue en direct nécessite un vrai iPhone. Tu peux tout de même traiter des vidéos dans l’onglet Vidéo."
+            "value": "Aucune caméra trouvée sur cet appareil (dans le simulateur, par exemple). La prise de vue en direct nécessite un vrai iPhone. Tu peux tout de même traiter des vidéos dans l’onglet Vidéo."
           }
         }
       }
@@ -1367,6 +1399,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mouvement"
+          }
+        }
+      }
+    },
+    "Bewegung im Bild": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motion in the frame"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mouvement dans l’image"
           }
         }
       }
@@ -2328,7 +2376,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Autorise l’accès à l’appareil photo dans Réglages → FrameFold."
+            "value": "Autorise l’accès à la caméra dans Réglages → FrameFold."
           }
         }
       }
@@ -2615,6 +2663,22 @@
         }
       }
     },
+    "Film-Vorschau": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Film preview"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperçu du film"
+          }
+        }
+      }
+    },
     "Fokus findet nichts Scharfes. Liegt das Werk im Bildfeld der Kamera?": {
       "localizations": {
         "en": {
@@ -2675,6 +2739,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Format, cadence, effets, gabarits de pliage, exposition — tout l’atelier."
+          }
+        }
+      }
+    },
+    "Fortschritt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progress"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progression"
           }
         }
       }
@@ -3140,6 +3220,22 @@
         }
       }
     },
+    "Keine ruhigen Momente gefunden. Halte beim Filmen zwischendurch kurz still – oder nimm etwas länger auf.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No calm moments found. Hold still for a moment now and then while filming – or record a little longer."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun moment calme trouvé. Reste immobile un instant de temps en temps pendant le tournage – ou filme un peu plus longtemps."
+          }
+        }
+      }
+    },
     "Mit der Kamera weiterarbeiten": {
       "localizations": {
         "en": {
@@ -3172,6 +3268,38 @@
         }
       }
     },
+    "Nur wenige Bilder gefunden. Halte beim Filmen öfter kurz still, dann werden es mehr.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only a few frames found. Pause more often while filming and there will be more."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peu d’images trouvées. Fais plus souvent une courte pause pendant le tournage, il y en aura davantage."
+          }
+        }
+      }
+    },
+    "ruhig": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "still"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "calme"
+          }
+        }
+      }
+    },
     "Sichern …": {
       "localizations": {
         "en": {
@@ -3184,6 +3312,54 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enregistrer …"
+          }
+        }
+      }
+    },
+    "Umbenennen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renommer"
+          }
+        }
+      }
+    },
+    "Umbenennen …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renommer …"
+          }
+        }
+      }
+    },
+    "unruhig": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moving"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "agité"
           }
         }
       }
@@ -3248,6 +3424,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Supprimer l’œuvre"
+          }
+        }
+      }
+    },
+    "Werk umbenennen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename work"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renommer l’œuvre"
           }
         }
       }
@@ -3471,7 +3663,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pas d’accès à l’appareil photo"
+            "value": "Pas d’accès à la caméra"
           }
         }
       }
@@ -3503,7 +3695,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucun appareil photo disponible"
+            "value": "Aucune caméra disponible"
           }
         }
       }
@@ -4063,7 +4255,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ne bouge pas…"
+            "value": "Reste immobile…"
           }
         }
       }
@@ -4859,7 +5051,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jeter"
+            "value": "Supprimer"
           }
         }
       }
@@ -5035,7 +5227,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continuer"
+            "value": "Continuer la prise de vue"
           }
         }
       }
@@ -5132,6 +5324,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mise en page…"
+          }
+        }
+      }
+    },
+    "Wird gesichert …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrement …"
           }
         }
       }

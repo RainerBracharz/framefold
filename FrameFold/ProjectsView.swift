@@ -11,6 +11,8 @@ struct ProjectsView: View {
     @State private var showExhibition = false
     /// Werk, das per Wischen gelöscht werden soll – erst nach Rückfrage.
     @State private var pendingDelete: Project?
+    @State private var renaming: Project?
+    @State private var renameText = ""
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     @State private var path: [UUID] = []
 
@@ -48,6 +50,16 @@ struct ProjectsView: View {
                             NavigationLink(value: project.id) {
                                 projectRow(index: index, project: project)
                             }
+                            // Rechtsklick am Mac, langes Drücken am iPhone
+                            .contextMenu {
+                                Button {
+                                    renameText = project.name
+                                    renaming = project
+                                } label: { Label("Umbenennen …", systemImage: "pencil") }
+                                Button(role: .destructive) {
+                                    pendingDelete = project
+                                } label: { Label("Werk löschen", systemImage: "trash") }
+                            }
                             .listRowBackground(Theme.paper)
                             .listRowSeparatorTint(Theme.hairline)
                         }
@@ -61,6 +73,16 @@ struct ProjectsView: View {
                     }
                     .listStyle(.plain)
                     .scrollContentBackground(.hidden)
+                    .alert("Werk umbenennen", isPresented: Binding(get: { renaming != nil },
+                                                                 set: { if !$0 { renaming = nil } })) {
+                        TextField("Name", text: $renameText)
+                        Button("Umbenennen") {
+                            let name = renameText.trimmingCharacters(in: .whitespacesAndNewlines)
+                            if let project = renaming, !name.isEmpty { store.rename(project, to: name) }
+                            renaming = nil
+                        }
+                        Button("Abbrechen", role: .cancel) { renaming = nil }
+                    }
                     .confirmationDialog(
                         pendingDelete.map { Text("\($0.name) mit allen \($0.frameCount) Bildern löschen?") } ?? Text(verbatim: ""),
                         isPresented: Binding(get: { pendingDelete != nil },
@@ -474,7 +496,7 @@ struct ProjectDetailView: View {
                     }
                     if mode.showsTolino {
                         optionDivider
-                        optionRow("Interferenz-Echo") {
+                        optionRow("Bild-Echo (Nachbild)") {
                             Toggle("", isOn: $exportSettings.interferenzEcho)
                         }
                         optionDivider
@@ -654,7 +676,7 @@ struct ProjectDetailView: View {
         isRenderingFlipbook = true
         let urls = store.frameURLs(for: currentProject)
         let title = currentProject.name
-        let dateText = String(currentProject.createdAtISO.prefix(10))
+        let dateText = currentProject.createdDateText
 
         Task.detached(priority: .userInitiated) {
             let url = FlipbookRenderer.render(title: title, dateText: dateText, frameURLs: urls)
@@ -674,7 +696,7 @@ struct ProjectDetailView: View {
         isRenderingSheet = true
         let urls = store.frameURLs(for: currentProject)
         let title = currentProject.name
-        let dateText = String(currentProject.createdAtISO.prefix(10))
+        let dateText = currentProject.createdDateText
 
         Task.detached(priority: .userInitiated) {
             let url = ContactSheetRenderer.render(
@@ -938,6 +960,9 @@ struct LoopingVideoPreview: View {
     @State private var playFPS: Double = 10
     @State private var isScrubbing = false
     @State private var isLoading = true
+    /// „Bewegung reduzieren": kein Endlos-Abspielen – das Bild steht, und
+    /// man blättert selbst (Ziehen oder VoiceOver: auf/ab wischen).
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         GeometryReader { geo in
@@ -974,7 +999,18 @@ struct LoopingVideoPreview: View {
             // Publisher wurde bei jedem Render neu aufgebaut.
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: UInt64(1_000_000_000 / max(1, playFPS)))
-                if !isScrubbing, frames.count > 1 { index = (index + 1) % frames.count }
+                if !isScrubbing, !reduceMotion, frames.count > 1 { index = (index + 1) % frames.count }
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Film-Vorschau"))
+        .accessibilityValue(Text("Bild \(index + 1) von \(max(1, frames.count))"))
+        .accessibilityAdjustableAction { direction in
+            guard !frames.isEmpty else { return }
+            switch direction {
+            case .increment: index = min(frames.count - 1, index + 1)
+            case .decrement: index = max(0, index - 1)
+            @unknown default: break
             }
         }
     }

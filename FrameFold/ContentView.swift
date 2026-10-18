@@ -435,7 +435,13 @@ struct ReviewView: View {
                     HStack(alignment: .top, spacing: 10) {
                         Image(systemName: "exclamationmark.triangle")
                             .foregroundStyle(Theme.amber)
-                        Text(viewModel.reviewFrames.isEmpty
+                        // Der Regler „Mehr Bilder" erscheint erst ab „Erweitert" –
+                        // im Einfach-Modus darf der Hinweis ihn nicht nennen.
+                        Text(mode == .basic
+                             ? (viewModel.reviewFrames.isEmpty
+                                ? "Keine ruhigen Momente gefunden. Halte beim Filmen zwischendurch kurz still – oder nimm etwas länger auf."
+                                : "Nur wenige Bilder gefunden. Halte beim Filmen öfter kurz still, dann werden es mehr.")
+                             : viewModel.reviewFrames.isEmpty
                              ? "Keine ruhigen Momente gefunden. Das Video ist evtl. sehr kurz oder durchgehend in Bewegung — schiebe den Regler unten Richtung Mehr Bilder oder nimm etwas länger auf."
                              : "Nur wenige Bilder gefunden. Für eine flüssigere Stopmotion den Regler unten Richtung Mehr Bilder schieben oder länger aufnehmen.")
                             .font(Theme.mono(11))
@@ -623,6 +629,10 @@ struct ResultView: View {
     @State private var showSaveToProject = false
     @State private var saveProjectName = ""
     @State private var savedProjectID: UUID?
+    /// Läuft der Import noch? Erst danach gilt das Werk als gesichert.
+    @State private var isSaving = false
+    /// Nicht alle Bilder ließen sich übernehmen – das soll man erfahren.
+    @State private var saveWarning: String?
 
     /// Als „gesichert" gilt nur, solange das Zielprojekt noch existiert –
     /// so verschwindet der Haken, wenn das Projekt gelöscht wurde.
@@ -645,14 +655,28 @@ struct ResultView: View {
                 if mode != .basic || result.discardedForHands + result.discardedAsDuplicates > 0 {
                     CatalogLabel("\(result.discardedForHands) mit Händen entfernt · \(result.discardedAsDuplicates) Duplikate")
                 }
-                CatalogLabel("Serie von \(result.keyframeTimes.count) · datiert \(String(Calendar.current.component(.year, from: Date())))", size: 9)
+                // Katalogsprache nur im Atelier – im Einfach-Modus ist sie Jargon.
+                if mode.showsTolino {
+                    CatalogLabel("Serie von \(result.keyframeTimes.count) · datiert \(String(Calendar.current.component(.year, from: Date())))", size: 9)
+                }
+            }
+
+            if let saveWarning {
+                Text(saveWarning)
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.oxblood)
+                    .multilineTextAlignment(.center)
             }
 
             // Primärzeile: Sichern schützt das Werk, Teilen trägt es hinaus –
             // beide stark. Verwerfen ist destruktiv → Mistkübel, nicht Balken.
             HStack(spacing: 10) {
                 if sourceVideoURL != nil {
-                    if savedToProject {
+                    if isSaving {
+                        Button("Wird gesichert …") {}
+                            .buttonStyle(HairlineButtonStyle())
+                            .disabled(true)
+                    } else if savedToProject {
                         Button("Gesichert ✓") {}
                             .buttonStyle(HairlineButtonStyle())
                             .disabled(true)
@@ -702,9 +726,16 @@ struct ResultView: View {
                 let project = store.createProject(name: saveProjectName)
                 savedProjectID = project.id
                 saveProjectName = ""
+                isSaving = true
+                saveWarning = nil
                 Task {
-                    await store.importKeyframes(
+                    let saved = await store.importKeyframes(
                         from: url, times: result.keyframeTimes, into: project)
+                    isSaving = false
+                    let wanted = result.keyframeTimes.count
+                    if saved < wanted {
+                        saveWarning = String(localized: "\(saved) von \(wanted) Bildern gesichert – die übrigen ließen sich nicht lesen.")
+                    }
                 }
             }
             Button("Abbrechen", role: .cancel) { saveProjectName = "" }

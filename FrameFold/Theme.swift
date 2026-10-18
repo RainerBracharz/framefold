@@ -456,6 +456,9 @@ struct ModeTabs: View {
                         .background(modeRaw == m.rawValue ? Theme.ink : Color.clear)
                 }
                 .buttonStyle(.plain)
+                // Die Auswahl zeigt sich nur über die Umkehrung der Farben –
+                // VoiceOver muss sie gesagt bekommen.
+                .accessibilityAddTraits(modeRaw == m.rawValue ? .isSelected : [])
             }
         }
         .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
@@ -670,6 +673,9 @@ struct HairlineProgress: View {
             }
         }
         .frame(height: 3)
+        .accessibilityElement()
+        .accessibilityLabel(Text("Fortschritt"))
+        .accessibilityValue(Text("\(Int((max(0, min(1, value)) * 100).rounded())) %"))
     }
 }
 
