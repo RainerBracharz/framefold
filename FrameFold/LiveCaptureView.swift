@@ -146,6 +146,9 @@ struct LiveCaptureView: View {
                 LiveSettingsView(controller: controller,
                                  showGrid: $showGrid, showLevel: $showLevel,
                                  outerDisplayAvailable: outerDisplayAvailable)
+                    // Der Tab läuft im dunklen Modus (Statusleiste); die
+                    // Einstellungen bleiben Papier wie überall sonst.
+                    .preferredColorScheme(.light)
             }
             .overlay {
                 // Einmaliger, überspringbarer Tipp beim ersten Öffnen

@@ -318,7 +318,11 @@ struct FrameFoldApp: App {
             // Schriften wachsen mit „Größerer Text" mit; nach oben begrenzt,
             // damit Sucher-HUD und Kontaktbogen nicht auseinanderfallen.
             .dynamicTypeSize(...DynamicTypeSize.accessibility3)
-            .preferredColorScheme(.light) // Galeriewand, konsistent im Atelier
+            // Galeriewand, konsistent im Atelier – außer in der Dunkelkammer:
+            // Dort brauchen Uhrzeit und Akku in der Statusleiste helle Schrift,
+            // sonst stehen sie dunkel auf dunkel. Sheets und Dialoge setzen
+            // für sich wieder hell (siehe LiveCaptureView).
+            .preferredColorScheme(selectedTab == 1 && didOnboard ? .dark : .light)
             .overlay {
                 if !didOnboard {
                     OnboardingView { didOnboard = true }

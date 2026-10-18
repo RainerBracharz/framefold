@@ -194,7 +194,7 @@ platform :ios do
   end
 
   desc "Kompletter Release: bauen, hochladen, Version anlegen, einreichen"
-  lane :release do
+  lane :release do |options|
     api_key = login
 
     # Apple erlaubt nur EINE Version in der Prüfung. Wartet noch eine andere,
@@ -233,11 +233,13 @@ platform :ios do
       api_key: api_key,
       app_identifier: APP_ID,
       # Metadaten kommen aus fastlane/metadata, Screenshots aus
-      # fastlane/screenshots (Watch für de-DE, iPhone für en-US). Was im
-      # Store schon liegt, bleibt unangetastet (overwrite: false).
+      # fastlane/screenshots (iPhone 6,9" in allen drei Sprachen, Watch für
+      # de-DE). `fastlane release overwrite_shots:true` ersetzt, was im Store
+      # liegt – nötig, wenn die Bilder neu sind (2.3: „Werke", ohne alte
+      # Aldo-Motive). Duo-Bilder lädt Schritt 2b danach wieder hoch.
       skip_screenshots: false,
       skip_metadata: false,
-      overwrite_screenshots: false,
+      overwrite_screenshots: [true, "true"].include?(options[:overwrite_shots]),
       force: true,                       # keine Rückfrage im Browser
       precheck_include_in_app_purchases: false,
       automatic_release: true,           # nach Apples Freigabe sofort im Store

@@ -33,6 +33,7 @@ fftests
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
+fastlane/screenshots-alt-2.2
 fastlane/test_output
 fastlane/README.md
 fastlane/bericht.txt
