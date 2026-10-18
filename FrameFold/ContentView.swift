@@ -146,6 +146,10 @@ struct ContentView: View {
                 else { withAnimation(.smooth(duration: 0.55)) { homeIn = true } }
             }
             lightTilt.start()
+            if let url = Platform.testVideo, viewModel.stage == .idle, viewModel.lastVideoURL == nil,
+               let copy = Self.copyToTemporary(url) {
+                viewModel.process(videoURL: copy)
+            }
         }
         .onDisappear { lightTilt.stop() }
         .fileImporter(isPresented: $showFileImporter,

@@ -45,6 +45,17 @@ enum Platform {
         #endif
     }()
 
+    /// Dieses Video gleich beim Start verarbeiten (FF_VIDEO=<Pfad>) – für
+    /// UI-Tests des Video-Ablaufs, ohne die Fotomediathek zu bedienen.
+    static let testVideo: URL? = {
+        #if targetEnvironment(simulator) || (targetEnvironment(macCatalyst) && DEBUG)
+        guard let path = ProcessInfo.processInfo.environment["FF_VIDEO"], !path.isEmpty else { return nil }
+        return URL(fileURLWithPath: path)
+        #else
+        return nil
+        #endif
+    }()
+
     /// Direkt in die Aufnahme springen (Layout-Prüfung, Screenshots).
     static let autostart: Bool = {
         #if targetEnvironment(simulator) || (targetEnvironment(macCatalyst) && DEBUG)

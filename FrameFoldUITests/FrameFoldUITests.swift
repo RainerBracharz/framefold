@@ -53,6 +53,10 @@ final class FrameFoldUITests: XCTestCase {
         if let frames = env["FF_SIM_FRAMES"], !frames.isEmpty {
             app.launchEnvironment["FF_SIM_FRAMES"] = frames
         }
+        // Video-Ablauf: dieses Video verarbeitet die App gleich beim Start
+        if let video = env["FF_VIDEO"], !video.isEmpty {
+            app.launchEnvironment["FF_VIDEO"] = video
+        }
         app.launch()
     }
 
@@ -186,6 +190,94 @@ final class FrameFoldUITests: XCTestCase {
                 shot("project-detail-exported")
             }
         }
+    }
+
+    // MARK: - Video-Ablauf
+
+    /// Video → Bilder → Rückweg zur Auswahl → ein Bild abwählen → als neues
+    /// Werk sichern → noch einmal in dasselbe Werk sichern → Werk prüfen und
+    /// wieder löschen. Läuft nur mit FF_VIDEO (scripts/make_test_video.py),
+    /// auf Deutsch (FF_LANG=de).
+    @MainActor
+    func testVideoFlows() throws {
+        guard ProcessInfo.processInfo.environment["FF_VIDEO"] != nil else {
+            throw XCTSkip("FF_VIDEO nicht gesetzt")
+        }
+        tap(["Weiter"]); tap(["Weiter"]); usleep(500_000)
+        tap(["Los geht's"], prefix: true)
+
+        // Analyse: im Einfach-Modus erst die Bildauswahl, dann der Film
+        let showMe = app.buttons.matching(label("Zeig's mir!")).firstMatch
+        XCTAssertTrue(showMe.waitForExistence(timeout: 90), "Bildauswahl erscheint nicht")
+        let total = selectedCount().1
+        XCTAssertGreaterThanOrEqual(total, 3, "zu wenig Bilder erkannt")
+        shot("video-review")
+        showMe.tap()
+        XCTAssertTrue(app.buttons.matching(label("Sichern")).firstMatch.waitForExistence(timeout: 60), "kein Ergebnis")
+        shot("video-result")
+
+        // Rückweg: Bild 1 abwählen, neu bauen
+        XCTAssertTrue(tap(["Bilder noch einmal auswählen"]), "Rückweg fehlt")
+        XCTAssertTrue(showMe.waitForExistence(timeout: 10), "Bildauswahl kommt nicht zurück")
+        tap(["Bild 1 von \(total)"])
+        let chosen = selectedCount().0
+        XCTAssertEqual(chosen, total - 1, "Abwählen wirkt nicht")
+        showMe.tap()
+        let resultLabel = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH[c] %@", "\(chosen) Bilder")).firstMatch
+        XCTAssertTrue(resultLabel.waitForExistence(timeout: 60), "Film hat nicht \(chosen) Bilder")
+        shot("video-result-fewer")
+
+        // Als neues Werk sichern
+        tap(["Sichern"])
+        tap(["Neues Werk anlegen …"], timeout: 2)          // nur wenn es schon Werke gibt
+        let alert = app.alerts.firstMatch
+        XCTAssertTrue(alert.waitForExistence(timeout: 3), "Namensabfrage fehlt")
+        let field = alert.textFields.firstMatch
+        field.tap(); field.typeText("Videotest")
+        shot("video-save-name")
+        tapLast("Sichern")
+        XCTAssertTrue(app.buttons.matching(label("Gesichert ✓")).firstMatch.waitForExistence(timeout: 20), "nicht gesichert")
+
+        // Noch einmal: in das vorhandene Werk
+        XCTAssertTrue(tap(["Bilder noch einmal auswählen"]))
+        XCTAssertTrue(showMe.waitForExistence(timeout: 10))
+        showMe.tap()
+        XCTAssertTrue(tap(["Sichern"], timeout: 60))
+        shot("video-save-choice")
+        XCTAssertTrue(tap(["Zu „Videotest“ hinzufügen"]), "vorhandenes Werk nicht angeboten")
+        XCTAssertTrue(app.buttons.matching(label("Gesichert ✓")).firstMatch.waitForExistence(timeout: 20))
+
+        // Werk prüfen: doppelt so viele Bilder
+        tap(["Werke"])
+        let work = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Videotest'")).firstMatch
+        XCTAssertTrue(work.waitForExistence(timeout: 5), "Werk fehlt in der Liste")
+        XCTAssertTrue(work.label.localizedCaseInsensitiveContains("\(2 * chosen) Bilder"),
+                      "Werk hat nicht \(2 * chosen) Bilder: \(work.label)")
+        shot("video-work-list")
+        work.tap()
+        sleep(1)
+        shot("video-work-detail")
+        app.swipeUp(); app.swipeUp(); app.swipeUp()
+        if tap(["Werk löschen"]) { tap(["Endgültig löschen"]) }
+    }
+
+    private func label(_ text: String) -> NSPredicate {
+        NSPredicate(format: "label ==[c] %@", text)
+    }
+
+    /// „N von M Bildern gewählt" aus der Bildauswahl lesen.
+    private func selectedCount() -> (Int, Int) {
+        let el = app.staticTexts.matching(NSPredicate(format: "label CONTAINS[c] 'Bildern gewählt'")).firstMatch
+        guard el.waitForExistence(timeout: 5) else { return (0, 0) }
+        let nums = el.label.split(whereSeparator: { !$0.isNumber }).compactMap { Int($0) }
+        return nums.count >= 2 ? (nums[0], nums[1]) : (0, 0)
+    }
+
+    /// Bei gleichnamigen Knöpfen (Ergebnis und Alert) den zuletzt
+    /// eingeblendeten treffen.
+    private func tapLast(_ text: String) {
+        let all = app.buttons.matching(label(text)).allElementsBoundByIndex.filter(\.isHittable)
+        all.last?.tap()
     }
 
     // MARK: - App-Vorschau
