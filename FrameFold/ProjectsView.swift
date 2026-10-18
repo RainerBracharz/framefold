@@ -85,6 +85,7 @@ struct ProjectsView: View {
             }
             .onAppear {
                 if let id = OpenWork.pending { open(id) }
+                else if Platform.openFirstWork, path.isEmpty, let first = store.projects.first { open(first.id) }
             }
             .navigationDestination(for: UUID.self) { id in
                 if let project = store.projects.first(where: { $0.id == id }) {

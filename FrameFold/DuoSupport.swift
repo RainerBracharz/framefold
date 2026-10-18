@@ -35,6 +35,16 @@ enum Platform {
         #endif
     }()
 
+    /// Erstes Werk gleich öffnen (FF_OPEN_WORK=1) – Store-Screenshots der
+    /// Werkansicht ohne Klick.
+    static let openFirstWork: Bool = {
+        #if targetEnvironment(simulator) || (targetEnvironment(macCatalyst) && DEBUG)
+        return ProcessInfo.processInfo.environment["FF_OPEN_WORK"] == "1"
+        #else
+        return false
+        #endif
+    }()
+
     /// Direkt in die Aufnahme springen (Layout-Prüfung, Screenshots).
     static let autostart: Bool = {
         #if targetEnvironment(simulator) || (targetEnvironment(macCatalyst) && DEBUG)
