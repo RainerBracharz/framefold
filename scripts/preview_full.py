@@ -48,7 +48,7 @@ TEXT = {
 CUTS = [("camera", 1.5, 6.0, 0),
         ("loop-large", -0.3, 4.0, 1),
         ("finish", -5.0, 5.0, 1),
-        ("result", -0.3, 4.5, 2),
+        ("result", 4.0, 4.5, 2),            # erst wenn der Film fertig montiert ist
         ("flipbook", -0.3, 1.6, 3), ("flipbook-ready", 0.8, 2.6, 3)]
 
 
