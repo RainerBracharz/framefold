@@ -684,6 +684,15 @@ final class LiveCaptureController: NSObject, ObservableObject {
         #endif
     }
 
+    #if targetEnvironment(simulator) || (targetEnvironment(macCatalyst) && DEBUG)
+    /// Für Unit-Tests: Sitzung ohne Kamera starten – die Bilder liefert der
+    /// Test selbst über `analyze`.
+    func startWithoutCamera(onCapture: @escaping (Data) -> Void) {
+        self.onCapture = onCapture
+        resetSessionState()
+    }
+    #endif
+
     /// Sauberer Start: Reste einer vorherigen Session verwerfen.
     private func resetSessionState() {
         isRunning = true
