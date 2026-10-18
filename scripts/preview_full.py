@@ -36,11 +36,11 @@ AMBER = (217, 155, 43)
 
 TEXT = {
     "de": ["Du arbeitest.\nSie löst von selbst aus.", "Der Film wächst mit.", "Fertig: deine Stopmotion.",
-           "Jedes Werk als Daumenkino."],
+           "Jedes Bild auf einen Blick."],
     "en": ["You work.\nIt shoots by itself.", "The film grows as you go.", "Done: your stop motion.",
-           "Every work as a flip book."],
+           "Every frame at a glance."],
     "fr": ["Tu travailles.\nElle déclenche seule.", "Le film grandit avec toi.", "Terminé : ton stop motion.",
-           "Chaque œuvre en folioscope."],
+           "Toutes les images d’un coup d’œil."],
 }
 
 # Schnittliste: (Ereignis, Versatz s, Länge s, Textnummer) – wie die
@@ -48,8 +48,8 @@ TEXT = {
 CUTS = [("camera", 1.5, 6.0, 0),
         ("loop-large", -0.3, 4.0, 1),
         ("finish", -5.0, 5.0, 1),
-        ("result", 4.0, 4.5, 2),            # erst wenn der Film fertig montiert ist
-        ("flipbook", -0.3, 1.6, 3), ("flipbook-ready", 0.8, 2.6, 3)]
+        ("result", 4.9, 1.9, 2),            # nur solange der fertige Film läuft
+        ("detail", 0.6, 4.2, 3)]                 # Kontaktbogen; kein Teilen-Fenster des Systems
 
 
 def font(name, size):
