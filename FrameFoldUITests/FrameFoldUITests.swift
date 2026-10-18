@@ -153,7 +153,7 @@ final class FrameFoldUITests: XCTestCase {
             // Falls wir noch im Detail stehen: zurück zur Liste
             if app.navigationBars.buttons.firstMatch.exists,
                !app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'frames' OR label CONTAINS[c] 'Bilder' OR label CONTAINS[c] 'images'")).firstMatch.exists {
-                tap(["Back", "Zurück", "Retour", "Projets"], timeout: 1)
+                tap(["Back", "Zurück", "Retour", "Œuvres"], timeout: 1)
             }
         }
 

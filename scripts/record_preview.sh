@@ -17,7 +17,13 @@ SPOT="$(cd .. && pwd)/framefold-spot"   # neben dem Repository (cd oben steht sc
 OUT="$SPOT/preview-raw"
 FRAMES=/tmp/ff-simframes            # Simulator-Apps dürfen nicht auf den Schreibtisch
 mkdir -p "$OUT"
-rm -rf "$FRAMES" && cp -R "$SPOT/simframes" "$FRAMES"
+# Bildfolge der Simulator-Kamera: aus dem Spot-Ordner, sonst neu erzeugen
+# (preview/simframes.py braucht faltung.npy, siehe faltung.py).
+if [ -d "$SPOT/simframes" ]; then
+  rm -rf "$FRAMES" && cp -R "$SPOT/simframes" "$FRAMES"
+elif [ ! -d "$FRAMES" ] || [ -z "$(ls "$FRAMES")" ]; then
+  eval/.venv/bin/python "$SPOT/preview/simframes.py" "$FRAMES"
+fi
 
 UDID=$(xcrun simctl list devices available -j | python3 -c "
 import json, sys
