@@ -45,6 +45,18 @@ final class ProcessingViewModel: ObservableObject {
     private var workTask: Task<Void, Never>?
     private var runID = 0
 
+    /// Fortschritt eines Laufs übernehmen – aber nur, solange er noch
+    /// arbeitet. Die Meldungen kommen verzögert auf dem MainActor an; eine
+    /// verspätete setzte sonst ein fertiges Ergebnis oder die Bildauswahl
+    /// zurück auf „Baue Stopmotion …", und die App schien zu hängen.
+    private func report(_ progress: PipelineStage, run id: Int) {
+        guard runID == id else { return }
+        switch stage {
+        case .idle, .reviewing, .done, .failed: return
+        default: stage = progress
+        }
+    }
+
     var selectedCount: Int { reviewFrames.filter(\.selected).count }
 
     // MARK: Phase 1 – Analyse (einmal pro Video)
@@ -63,7 +75,7 @@ final class ProcessingViewModel: ObservableObject {
             do {
                 let asset = AVURLAsset(url: videoURL)
                 let frames = try await analyzer.analyze(asset: asset, settings: settings) { p in
-                    Task { @MainActor in if self.runID == id { self.stage = .analyzing(progress: p) } }
+                    Task { @MainActor in self.report(.analyzing(progress: p), run: id) }
                 }
                 guard self.runID == id else { return }
                 self.cachedAsset = asset
@@ -170,10 +182,7 @@ final class ProcessingViewModel: ObservableObject {
                         let overall = (Double(resolvedSoFar) + p * Double(checkCount))
                             / Double(totalWindows)
                         Task { @MainActor in
-                            // Nach einem Abbruch nicht zurück in die Fortschrittsanzeige
-                            if self.runID == id {
-                                self.stage = .checkingHands(progress: min(1, overall))
-                            }
+                            self.report(.checkingHands(progress: min(1, overall)), run: id)
                         }
                     }
                     if Task.isCancelled { return }
@@ -258,7 +267,7 @@ final class ProcessingViewModel: ObservableObject {
                 let outputURL = try await assembler.assemble(
                     asset: asset, keyframeTimes: times, settings: settings
                 ) { p in
-                    Task { @MainActor in if self.runID == id { self.stage = .assembling(progress: p) } }
+                    Task { @MainActor in self.report(.assembling(progress: p), run: id) }
                 }
                 guard self.runID == id else { return }
                 self.result = PipelineResult(
