@@ -60,6 +60,8 @@ struct LiveCaptureView: View {
     /// treffen genau diese, nie Bilder älterer Sitzungen.
     @State private var sessionFiles: [String] = []
     @State private var lastSessionFiles: [String] = []
+    /// Laufende Montage des Sofort-Ergebnisses – eine neue ersetzt sie.
+    @State private var assembleTask: Task<Void, Never>?
 
     var body: some View {
         NavigationStack {
@@ -352,13 +354,21 @@ struct LiveCaptureView: View {
         isAssembling = true
         assembleProgress = 0
 
-        let urls = store.frameURLs(for: store.projects.first(where: { $0.id == project.id }) ?? project)
-        Task {
+        // Eine noch laufende Montage (frühere Sitzung) ist überholt.
+        assembleTask?.cancel()
+        assembleTask = Task {
+            // Erst alle ausgelösten Bilder ablegen lassen – sie werden im
+            // Hintergrund kodiert, das letzte könnte sonst fehlen.
+            await controller.flushCaptures()
+            lastSessionFiles = sessionFiles
+            let urls = store.frameURLs(for: store.projects.first(where: { $0.id == project.id }) ?? project)
             do {
                 let url = try await StopMotionAssembler().assemble(
                     imageURLs: urls, settings: PipelineSettings.restored()
                 ) { p in Task { @MainActor in assembleProgress = p } }
+                guard !Task.isCancelled else { return }
                 await MainActor.run { resultURL = url; isAssembling = false }
+            } catch is CancellationError {
             } catch {
                 await MainActor.run {
                     resultError = String(localized: "Das hat leider nicht geklappt.")
@@ -1493,7 +1503,9 @@ struct LiveSettingsView: View {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Bewegungs-Toleranz: \(controller.motionThreshold, specifier: "%.1f")")
                             .font(Theme.body)
-                        Slider(value: $controller.motionThreshold, in: 0.5...8.0, step: 0.5)
+                        Slider(value: Binding(get: { controller.motionThreshold },
+                                              set: { controller.setUserMotionThreshold($0) }),
+                               in: 0.5...8.0, step: 0.5)
                         Text("Höher = kleine Wackler und Bildrauschen werden ignoriert. Wenn der Auslöser nie Ruhe findet, diesen Wert erhöhen.")
                             .font(Theme.mono(11))
                             .foregroundStyle(Theme.graphite)

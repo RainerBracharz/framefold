@@ -1,6 +1,7 @@
 import Foundation
 import AVFoundation
 import UIKit
+import ImageIO
 
 /// Ein Projekt = ein Werk von Aldo, dokumentiert über beliebig viele
 /// Sessions (Live-Capture oder Video-Import). Frames liegen als JPEGs
@@ -49,6 +50,32 @@ final class ProjectStore: ObservableObject {
         reload()
         stampLegacyTrashOnce()
         purgeOldTrash()
+        Self.cleanTemporaryFiles()
+    }
+
+    /// Zwischendateien der App (Video-Importe, Exporte, PDFs, Titelkarten)
+    /// räumt niemand sonst zeitnah weg – importierte Videos sind ganze
+    /// Kopien, das wuchs auf Gigabyte. Beim Start fliegt alles, was älter
+    /// als einen Tag ist; frische Dateien (etwa ein gerade geteilter Film)
+    /// bleiben. Nur eigene Präfixe, im Hintergrund.
+    nonisolated static func cleanTemporaryFiles(olderThan age: TimeInterval = 24 * 3600) {
+        let prefixes = ["import-", "framefold-", "daumenkino-", "kontaktbogen-",
+                        "faltvorlage-", "titlecard-", "ff-"]
+        Task.detached(priority: .utility) {
+            removeOldFiles(in: FileManager.default.temporaryDirectory, prefixes: prefixes, olderThan: age)
+        }
+    }
+
+    /// Kern des Aufräumens, eigenständig testbar: entfernt in `dir` nur
+    /// Einträge mit einem der Präfixe, die älter als `age` sind.
+    nonisolated static func removeOldFiles(in dir: URL, prefixes: [String], olderThan age: TimeInterval) {
+        let fm = FileManager.default
+        let cutoff = Date().addingTimeInterval(-age)
+        let items = (try? fm.contentsOfDirectory(at: dir, includingPropertiesForKeys: [.contentModificationDateKey])) ?? []
+        for url in items where prefixes.contains(where: { url.lastPathComponent.hasPrefix($0) }) {
+            let date = (try? url.resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate
+            if let date, date < cutoff { try? fm.removeItem(at: url) }
+        }
     }
 
     /// Bis 2.2 behielten Bilder im Papierkorb ihr Aufnahmedatum – die
@@ -276,14 +303,7 @@ final class ProjectStore: ObservableObject {
     func thumbnail(for project: Project) -> UIImage? {
         if let cached = thumbnailCache[project.id] { return cached }
         guard let first = frameURLs(for: project).first,
-              let data = try? Data(contentsOf: first),
-              let full = UIImage(data: data) else { return nil }
-        let maxSide: CGFloat = 320
-        let scale = min(1, maxSide / max(full.size.width, full.size.height))
-        let size = CGSize(width: full.size.width * scale, height: full.size.height * scale)
-        let small = UIGraphicsImageRenderer(size: size).image { _ in
-            full.draw(in: CGRect(origin: .zero, size: size))
-        }
+              let small = UIImage.thumbnail(at: first, maxPixelSize: 640) else { return nil }
         thumbnailCache[project.id] = small
         return small
     }
@@ -315,6 +335,20 @@ final class ProjectStore: ObservableObject {
 }
 
 extension UIImage {
+    /// Liest eine kleine Vorschau direkt aus der Bilddatei, ohne das volle
+    /// Foto zu dekodieren – deutlich schneller und sparsamer, wenn ein
+    /// Kontaktbogen Hunderte Kacheln zeigt. Thread-sicher.
+    nonisolated static func thumbnail(at url: URL, maxPixelSize: Int) -> UIImage? {
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: maxPixelSize,
+        ]
+        guard let cg = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) else { return nil }
+        return UIImage(cgImage: cg)
+    }
+
     /// Verkleinert, ohne zu verzerren: Die längere Seite wird `maxSide`.
     func scaledToFit(maxSide: CGFloat) -> UIImage {
         let scale = min(1, maxSide / max(size.width, size.height, 1))

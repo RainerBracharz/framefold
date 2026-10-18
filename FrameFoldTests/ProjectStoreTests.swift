@@ -208,6 +208,27 @@ final class ProjectStoreTests: XCTestCase {
         XCTAssertEqual(reloaded.projects.first { $0.id == project.id }?.frameCount, 1)
     }
 
+    func testTemporaryCleanupRemovesOnlyOldOwnFiles() throws {
+        let dir = root.appendingPathComponent("tmp", isDirectory: true)
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        func file(_ name: String, daysOld: Double) throws -> URL {
+            let url = dir.appendingPathComponent(name)
+            try Data([1]).write(to: url)
+            try FileManager.default.setAttributes(
+                [.modificationDate: Date().addingTimeInterval(-daysOld * 24 * 3600)], ofItemAtPath: url.path)
+            return url
+        }
+        let oldImport = try file("import-a.mov", daysOld: 3)
+        let freshExport = try file("framefold-b.mp4", daysOld: 0)
+        let foreignOld = try file("fremd.mov", daysOld: 9)
+
+        ProjectStore.removeOldFiles(in: dir, prefixes: ["import-", "framefold-"], olderThan: 24 * 3600)
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: oldImport.path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: freshExport.path), "Frische Dateien bleiben")
+        XCTAssertTrue(FileManager.default.fileExists(atPath: foreignOld.path), "Fremde Dateien bleiben")
+    }
+
     func testDeleteRemovesWholeProject() {
         let store = makeStore()
         let project = store.createProject(name: "A")

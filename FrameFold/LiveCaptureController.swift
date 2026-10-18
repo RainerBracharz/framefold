@@ -251,7 +251,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
     private var device: AVCaptureDevice?
 
     /// Sekunden Stabilität bis zum Auto-Shutter (live änderbar)
-    @Published var stableSeconds: Double = 0.8
+    @Published var stableSeconds: Double = Stored.double("liveStableSeconds", 0.8) {
+        didSet { Stored.set(stableSeconds, "liveStableSeconds") }
+    }
     /// Bewegungsschwelle (Graustufendifferenz, 0–255; live änderbar). Am
     /// Stativ gemessen im stärksten Rasterfeld, aus der Hand im Bildmittel –
     /// siehe `motionValue(_:_:width:height:for:)`.
@@ -260,7 +262,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// verschiedene Größenordnungen; beim Wechsel Stativ/Hand wird getauscht.
     private var thresholdByRig: [Rig: Double] = [:]
     /// Handprüfung aktiv (live änderbar)
-    @Published var checkHands = true
+    @Published var checkHands = Stored.bool("liveCheckHands", true) {
+        didSet { Stored.set(checkHands, "liveCheckHands") }
+    }
     /// Aktueller Bewegungswert (für den Pegel im Sucher)
     @Published var currentMotion: Double = 0
     /// Nach dem Fixieren: „1/100 s · ISO 32" – Labor-Anzeige im Tolino-Modus.
@@ -279,11 +283,17 @@ final class LiveCaptureController: NSObject, ObservableObject {
         didSet { startIntervalIfNeeded() }
     }
     /// Intervall in Sekunden für den Zeitraffer-Auslöser.
-    @Published var intervalSeconds: Double = 3.0
+    @Published var intervalSeconds: Double = Stored.double("liveIntervalSeconds", 3.0) {
+        didSet { Stored.set(intervalSeconds, "liveIntervalSeconds") }
+    }
     /// Netzfrequenz für flackerarme Belichtungszeiten (50 Hz / 60 Hz).
-    @Published var mainsHz: Int = 50
+    @Published var mainsHz: Int = Stored.int("liveMainsHz", 50) {
+        didSet { Stored.set(mainsHz, "liveMainsHz") }
+    }
     /// Auslöse-Ton (Verschlussgeräusch) abspielen.
-    @Published var playShutterSound = true
+    @Published var playShutterSound = Stored.bool("livePlayShutterSound", true) {
+        didSet { Stored.set(playShutterSound, "livePlayShutterSound") }
+    }
     /// Erster Frame der Session – als Drift-Referenz im Onion-Skin.
     @Published var firstCapturedImage: UIImage?
 
@@ -609,6 +619,15 @@ final class LiveCaptureController: NSObject, ObservableObject {
         return min(8.0, max(1.0, (median * 3 * 2).rounded() / 2))
     }
     private var handDetector: HandDetecting = HandDetectorFactory.make()
+    /// Handprüfung läuft abseits des Hauptthreads – Vision auf einem
+    /// Full-HD-Bild kostete dort bei jeder Auslösung spürbar Zeit im Sucher.
+    private var handCheckTask: Task<Void, Never>?
+    /// Ergebnis der letzten Prüfung: Zeitpunkt, zu dem das geprüfte Bild
+    /// aufgenommen wurde, und ob Hände darauf waren.
+    private var handCheckResult: (frameDate: Date, hands: Bool)?
+    /// Hält die Reihenfolge der Bilder ein, während JPEG-Kodierung und
+    /// Verkleinern im Hintergrund laufen.
+    private var encodeTask: Task<Void, Never>?
     private let videoQueue = DispatchQueue(label: "framefold.livecapture")
     private var onCapture: ((Data) -> Void)?
     private var intervalTask: Task<Void, Never>?
@@ -673,6 +692,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
         focusTask?.cancel(); focusTask = nil
         exposureTask?.cancel(); exposureTask = nil
         pendingCaptureTask?.cancel(); pendingCaptureTask = nil
+        handCheckTask?.cancel(); handCheckTask = nil
+        handCheckResult = nil
         // Zuerst die Hardware entriegeln: Ohne das stünde die Linse in einer
         // zweiten Sitzung noch auf der fixierten Position der ersten, der
         // Autofokus meldete sofort „fertig", und die App würde eine womöglich
@@ -1517,7 +1538,11 @@ final class LiveCaptureController: NSObject, ObservableObject {
             let enough = (calibrationSamples?.count ?? 0) >= 20
             let timedOut = calibrationStart.map { Date().timeIntervalSince($0) > 4.0 } ?? false
             if enough || timedOut {
-                motionThreshold = Self.threshold(from: calibrationSamples ?? [])
+                // Hat der Nutzer die Toleranz erhöht (der Unruhe-Hinweis rät
+                // dazu), gilt sie als Untergrenze – vorher überschrieb jede
+                // Kalibrierung seine Einstellung wieder.
+                motionThreshold = max(Self.threshold(from: calibrationSamples ?? []),
+                                      Stored.double("liveMotionToleranceFloor", 0))
                 thresholdByRig = [rig: motionThreshold,
                                   otherRig: Self.threshold(from: calibrationSamplesOther)]
                 calibrationSamples = nil
@@ -1571,11 +1596,22 @@ final class LiveCaptureController: NSObject, ObservableObject {
         setStatus(.stabilizing(min(1.0, elapsed / effectiveStableSeconds)))
         guard elapsed >= effectiveStableSeconds else { return }
 
-        // Stabil genug → Handprüfung (nur jetzt, nicht auf jedem Frame)
-        if checkHands, handDetector.containsHands(cgImage: fullFrame, confidence: 0.3) {
-            // Hände liegen ruhig im Bild → weiter warten
-            stableSince = Date()
-            return
+        // Stabil genug → Handprüfung (nur jetzt, nicht auf jedem Frame).
+        // Sie läuft im Hintergrund auf einem verkleinerten Bild; ausgelöst
+        // wird erst, wenn ihr Ergebnis da ist und das geprüfte Bild aus der
+        // laufenden Ruhephase stammt.
+        if checkHands {
+            guard let result = handCheckResult, let since = stableSince,
+                  result.frameDate >= since else {
+                startHandCheck(fullFrame)
+                return
+            }
+            handCheckResult = nil
+            if result.hands {
+                // Hände liegen ruhig im Bild → weiter warten
+                stableSince = Date()
+                return
+            }
         }
 
         // Schärfe-Tor: Ein unscharfes Bild ist im fertigen Film nicht zu
@@ -1721,7 +1757,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     }
 
     /// Verkleinertes JPEG für den Live-Loop.
-    private static func loopThumbnail(_ image: UIImage, width: CGFloat = 360) -> Data? {
+    nonisolated private static func loopThumbnail(_ image: UIImage, width: CGFloat = 360) -> Data? {
         guard image.size.width > 0 else { return nil }
         let size = CGSize(width: width, height: width * image.size.height / image.size.width)
         let format = UIGraphicsImageRendererFormat()
@@ -1732,8 +1768,51 @@ final class LiveCaptureController: NSObject, ObservableObject {
         return small.jpegData(compressionQuality: 0.7)
     }
 
+    /// Wartet, bis alle ausgelösten Bilder kodiert und abgegeben sind –
+    /// vor dem Montieren, sonst fehlte das zuletzt ausgelöste Bild.
+    func flushCaptures() async {
+        await encodeTask?.value
+    }
+
+    /// Toleranz-Regler in den Einstellungen: wirkt sofort und bleibt als
+    /// Untergrenze für spätere Kalibrierungen erhalten.
+    func setUserMotionThreshold(_ value: Double) {
+        motionThreshold = value
+        Stored.set(value, "liveMotionToleranceFloor")
+    }
+
+    /// Startet die Handprüfung im Hintergrund, falls nicht schon eine läuft.
+    private func startHandCheck(_ frame: CGImage) {
+        guard handCheckTask == nil else { return }
+        let detector = handDetector
+        let frameDate = Date()
+        handCheckTask = Task { [weak self] in
+            let hands = await Task.detached(priority: .userInitiated) {
+                // Vision rechnet intern ohnehin klein – 640 px Breite genügen
+                // und sparen das Umrechnen des vollen Bildes.
+                detector.containsHands(cgImage: Self.downscaled(frame, width: 640) ?? frame,
+                                       confidence: 0.3)
+            }.value
+            guard let self else { return }
+            self.handCheckTask = nil
+            self.handCheckResult = (frameDate, hands)
+        }
+    }
+
+    nonisolated private static func downscaled(_ image: CGImage, width: Int) -> CGImage? {
+        guard image.width > width else { return image }
+        let height = Int(Double(image.height) * Double(width) / Double(image.width))
+        guard let ctx = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
+                                  bytesPerRow: 0, space: CGColorSpaceCreateDeviceRGB(),
+                                  bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue) else { return nil }
+        ctx.interpolationQuality = .medium
+        ctx.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+        return ctx.makeImage()
+    }
+
     private func capture(frame: CGImage) {
         armed = false
+        handCheckResult = nil
         stableSince = nil
         lastCapturedGray = latestGray
         capturedCount += 1
@@ -1748,9 +1827,21 @@ final class LiveCaptureController: NSObject, ObservableObject {
         let image = UIImage(cgImage: frame)
         lastCapturedImage = image
         if firstCapturedImage == nil { firstCapturedImage = image } // Drift-Referenz
-        if let thumb = Self.loopThumbnail(image) { loopFrames.append(thumb) }
-        if let data = image.jpegData(compressionQuality: 0.9) {
-            onCapture?(data)
+        // JPEG-Kodierung und Film-Vorschau im Hintergrund, in fester
+        // Reihenfolge (jedes Bild wartet auf das vorige) – vorher lief beides
+        // auf dem Hauptthread und ließ den Sucher bei jeder Auslösung stocken.
+        let previous = encodeTask
+        // Ziel jetzt festhalten: Ein „Fertig" direkt nach der Auslösung setzt
+        // `onCapture` zurück – das Bild soll trotzdem ins Werk.
+        let deliver = onCapture
+        encodeTask = Task { [weak self] in
+            await previous?.value
+            let (data, thumb) = await Task.detached(priority: .userInitiated) {
+                (image.jpegData(compressionQuality: 0.9), Self.loopThumbnail(image))
+            }.value
+            guard let self else { return }
+            if let thumb { self.loopFrames.append(thumb) }
+            if let data { deliver?(data) }
         }
 
         // Status nach kurzer Zeit zurücksetzen
@@ -1771,5 +1862,22 @@ extension LiveCaptureController: AVCaptureVideoDataOutputSampleBufferDelegate {
         guard CaptureFrameGate.shared.allow(interval: 0.1),
               let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         process(pixelBuffer: pixelBuffer)
+    }
+}
+
+/// Aufnahme-Einstellungen über Neustarts hinweg – vorher standen Wartezeit,
+/// Intervall, Ton und Netzfrequenz nach jedem Start wieder auf Standard.
+enum Stored {
+    static func double(_ key: String, _ fallback: Double) -> Double {
+        UserDefaults.standard.object(forKey: key) as? Double ?? fallback
+    }
+    static func int(_ key: String, _ fallback: Int) -> Int {
+        UserDefaults.standard.object(forKey: key) as? Int ?? fallback
+    }
+    static func bool(_ key: String, _ fallback: Bool) -> Bool {
+        UserDefaults.standard.object(forKey: key) as? Bool ?? fallback
+    }
+    static func set(_ value: Any, _ key: String) {
+        UserDefaults.standard.set(value, forKey: key)
     }
 }

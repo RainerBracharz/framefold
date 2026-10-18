@@ -742,10 +742,13 @@ struct FrameThumbnail: View {
         .clipped()
         .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
         .task(id: url) {
-            if image == nil, let data = try? Data(contentsOf: url),
-               let full = UIImage(data: data) {
-                image = full.filled(to: CGSize(width: 180, height: 180))
-            }
+            guard image == nil else { return }
+            // Abseits des Hauptthreads und nur so groß wie nötig dekodieren –
+            // vorher wurde jedes volle Foto im Hauptthread geladen, und der
+            // Kontaktbogen ruckelte beim Scrollen.
+            image = await Task.detached(priority: .userInitiated) {
+                UIImage.thumbnail(at: url, maxPixelSize: 540)?.filled(to: CGSize(width: 180, height: 180))
+            }.value
         }
     }
 }
@@ -1030,6 +1033,9 @@ struct LoopingVideoPreview: View {
         // ~350 MB Arbeitsspeicher; 180 à 480 px reichen für die Vorschau.
         let total = max(1, min(Int((seconds * rate).rounded()), 180))
         let step = seconds / Double(total)
+        // Ausgedünnt muss auch langsamer laufen – sonst wirkte ein
+        // 60-Sekunden-Film in der Vorschau wie 18 Sekunden.
+        playFPS = Double(total) / seconds
         let times = (0..<total).map {
             CMTime(seconds: Double($0) * step + step / 2, preferredTimescale: 600)
         }
