@@ -206,51 +206,65 @@ final class FrameFoldUITests: XCTestCase {
         tap(["Weiter"]); tap(["Weiter"]); usleep(500_000)
         tap(["Los geht's"], prefix: true)
 
-        // Analyse: im Einfach-Modus erst die Bildauswahl, dann der Film
+        // Analyse: im Einfach-Modus erst die Bildauswahl, dann der Film.
+        // Jeder Schritt prüft seine Wirkung und tippt notfalls nach: Die
+        // Filmvorschau läuft ständig, unter Last verschluckt der Simulator
+        // gelegentlich einen Tipp.
         let showMe = app.buttons.matching(label("Zeig's mir!")).firstMatch
+        let save = app.buttons.matching(label("Sichern")).firstMatch
+        let saved = app.buttons.matching(label("Gesichert ✓")).firstMatch
+        let again = app.buttons.matching(label("Bilder noch einmal auswählen")).firstMatch
         XCTAssertTrue(showMe.waitForExistence(timeout: 90), "Bildauswahl erscheint nicht")
         let total = selectedCount().1
         XCTAssertGreaterThanOrEqual(total, 3, "zu wenig Bilder erkannt")
         shot("video-review")
-        showMe.tap()
-        XCTAssertTrue(app.buttons.matching(label("Sichern")).firstMatch.waitForExistence(timeout: 60), "kein Ergebnis")
+        XCTAssertTrue(step(showMe, until: save, wait: 30), "kein Ergebnis")
         shot("video-result")
 
         // Rückweg: Bild 1 abwählen, neu bauen
-        XCTAssertTrue(tap(["Bilder noch einmal auswählen"]), "Rückweg fehlt")
-        XCTAssertTrue(showMe.waitForExistence(timeout: 10), "Bildauswahl kommt nicht zurück")
-        tap(["Bild 1 von \(total)"])
+        XCTAssertTrue(step(again, until: showMe), "Bildauswahl kommt nicht zurück")
+        let first = app.buttons.matching(label("Bild 1 von \(total)")).firstMatch
+        for _ in 0..<3 where selectedCount().0 == total {
+            if first.waitForExistence(timeout: 3) { first.tap() }
+            usleep(800_000)
+        }
         let chosen = selectedCount().0
         XCTAssertEqual(chosen, total - 1, "Abwählen wirkt nicht")
-        showMe.tap()
-        let resultLabel = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH[c] %@", "\(chosen) Bilder")).firstMatch
-        XCTAssertTrue(resultLabel.waitForExistence(timeout: 60), "Film hat nicht \(chosen) Bilder")
+        let fewer = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH[c] %@", "\(chosen) Bilder")).firstMatch
+        XCTAssertTrue(step(showMe, until: fewer, wait: 30), "Film hat nicht \(chosen) Bilder")
         shot("video-result-fewer")
 
-        // Als neues Werk sichern
-        tap(["Sichern"])
-        tap(["Neues Werk anlegen …"], timeout: 2)          // nur wenn es schon Werke gibt
+        // Als neues Werk sichern – eindeutiger Name, falls ein früherer Lauf
+        // sein Testwerk nicht mehr wegräumen konnte
+        let name = "Videotest \(Int(Date().timeIntervalSince1970) % 100_000)"
         let alert = app.alerts.firstMatch
-        XCTAssertTrue(alert.waitForExistence(timeout: 3), "Namensabfrage fehlt")
+        let newWork = app.buttons.matching(NSPredicate(format: "label BEGINSWITH[c] %@", "Neues Werk anlegen")).firstMatch
+        for _ in 0..<3 where !alert.exists {
+            if save.waitForExistence(timeout: 3) { save.tap() }
+            // Gibt es schon Werke, kommt erst die Auswahl
+            if newWork.waitForExistence(timeout: 2) { newWork.tap() }
+            _ = alert.waitForExistence(timeout: 3)
+        }
+        XCTAssertTrue(alert.exists, "Namensabfrage fehlt")
         let field = alert.textFields.firstMatch
-        field.tap(); field.typeText("Videotest")
+        field.tap(); field.typeText(name)
         shot("video-save-name")
         tapLast("Sichern")
-        XCTAssertTrue(app.buttons.matching(label("Gesichert ✓")).firstMatch.waitForExistence(timeout: 20), "nicht gesichert")
+        XCTAssertTrue(saved.waitForExistence(timeout: 20), "nicht gesichert")
 
         // Noch einmal: in das vorhandene Werk
-        XCTAssertTrue(tap(["Bilder noch einmal auswählen"]))
-        XCTAssertTrue(showMe.waitForExistence(timeout: 10))
-        showMe.tap()
-        XCTAssertTrue(tap(["Sichern"], timeout: 60))
+        XCTAssertTrue(step(again, until: showMe), "Bildauswahl kommt nach dem Sichern nicht zurück")
+        XCTAssertTrue(step(showMe, until: save, wait: 30), "kein zweites Ergebnis")
+        let addTo = app.buttons.matching(label("Zu „\(name)“ hinzufügen")).firstMatch
+        XCTAssertTrue(step(save, until: addTo), "vorhandenes Werk nicht angeboten")
         shot("video-save-choice")
-        XCTAssertTrue(tap(["Zu „Videotest“ hinzufügen"]), "vorhandenes Werk nicht angeboten")
-        XCTAssertTrue(app.buttons.matching(label("Gesichert ✓")).firstMatch.waitForExistence(timeout: 20))
+        XCTAssertTrue(step(addTo, until: saved, wait: 20), "nicht ins vorhandene Werk gesichert")
 
         // Werk prüfen: doppelt so viele Bilder
-        tap(["Werke"])
-        let work = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Videotest'")).firstMatch
-        XCTAssertTrue(work.waitForExistence(timeout: 5), "Werk fehlt in der Liste")
+        let worksTab = app.tabBars.buttons["Werke"]
+        let work = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", name)).firstMatch
+        if !step(worksTab, until: work) { shot("video-work-missing") }
+        XCTAssertTrue(work.exists, "Werk fehlt in der Liste")
         XCTAssertTrue(work.label.localizedCaseInsensitiveContains("\(2 * chosen) Bilder"),
                       "Werk hat nicht \(2 * chosen) Bilder: \(work.label)")
         shot("video-work-list")
@@ -259,6 +273,17 @@ final class FrameFoldUITests: XCTestCase {
         shot("video-work-detail")
         app.swipeUp(); app.swipeUp(); app.swipeUp()
         if tap(["Werk löschen"]) { tap(["Endgültig löschen"]) }
+    }
+
+    /// Tippt `button`, bis `target` erscheint – höchstens dreimal.
+    @discardableResult
+    private func step(_ button: XCUIElement, until target: XCUIElement, wait: TimeInterval = 5) -> Bool {
+        for _ in 0..<3 {
+            if target.exists { return true }
+            if button.waitForExistence(timeout: 5), button.isHittable { button.tap() }
+            if target.waitForExistence(timeout: wait) { return true }
+        }
+        return target.exists
     }
 
     private func label(_ text: String) -> NSPredicate {
