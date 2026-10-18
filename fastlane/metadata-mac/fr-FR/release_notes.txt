@@ -8,3 +8,4 @@ Une prise de vue plus fluide, vidéos et séances en direct réunies dans une m�
 • La prise de vue reste fluide au déclenchement ; la détection des mains tourne en arrière-plan.
 • Renommer et supprimer une œuvre par clic droit ; la planche contact se charge plus vite.
 • Les réglages de prise de vue sont conservés ; meilleure prise en charge de VoiceOver.
+• Corrigé : après la création d’un film, l’affichage revenait parfois sur « Création du stop motion… ».

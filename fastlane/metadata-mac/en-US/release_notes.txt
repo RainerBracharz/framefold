@@ -8,3 +8,4 @@ Smoother capture, and videos and live sessions together in one work.
 • Capture stays smooth when the shutter fires; the hand check runs in the background.
 • Rename and delete works with a right-click; the contact sheet loads faster.
 • Capture settings are remembered; better VoiceOver support.
+• Fixed: after a film was made, the screen could jump back to “Building stop-motion…”.

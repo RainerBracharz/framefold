@@ -9,3 +9,4 @@ Flüssiger aufnehmen, Videos und Live-Aufnahmen in einem Werk sammeln.
 • Werke umbenennen und löschen per langem Drücken; der Kontaktbogen lädt schneller.
 • Aufnahme-Einstellungen bleiben erhalten; die Film-Schleife im Sucher läuft im Tempo des fertigen Films.
 • Bessere VoiceOver-Unterstützung, Datum im PDF im Format deiner Sprache.
+• Behoben: Nach dem Erstellen eines Films sprang die Anzeige gelegentlich zurück auf „Baue Stopmotion…“.

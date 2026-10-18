@@ -8,3 +8,4 @@ Flüssiger aufnehmen, Videos und Live-Aufnahmen in einem Werk sammeln.
 • Die Aufnahme bleibt beim Auslösen flüssig, die Prüfung auf Hände läuft im Hintergrund.
 • Werke umbenennen und löschen per Rechtsklick; der Kontaktbogen lädt schneller.
 • Aufnahme-Einstellungen bleiben erhalten; bessere VoiceOver-Unterstützung.
+• Behoben: Nach dem Erstellen eines Films sprang die Anzeige gelegentlich zurück auf „Baue Stopmotion…“.

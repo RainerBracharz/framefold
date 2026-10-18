@@ -9,3 +9,4 @@ Une prise de vue plus fluide, vidéos et séances en direct réunies dans une m�
 • Renommer et supprimer une œuvre par un appui long ; la planche contact se charge plus vite.
 • Les réglages de prise de vue sont conservés ; la boucle du film dans le viseur suit la cadence du film terminé.
 • Meilleure prise en charge de VoiceOver ; dates des PDF au format de ta langue.
+• Corrigé : après la création d’un film, l’affichage revenait parfois sur « Création du stop motion… ».

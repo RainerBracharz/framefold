@@ -9,3 +9,4 @@ Smoother capture, and videos and live sessions together in one work.
 • Rename and delete works with a long press; the contact sheet loads faster.
 • Capture settings are remembered; the film loop in the viewfinder plays at the finished film's speed.
 • Better VoiceOver support; dates in PDFs follow your language.
+• Fixed: after a film was made, the screen could jump back to “Building stop-motion…”.
