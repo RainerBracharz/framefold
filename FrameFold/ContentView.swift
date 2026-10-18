@@ -45,6 +45,8 @@ struct ContentView: View {
                     ProcessingView(stage: viewModel.stage, onCancel: { viewModel.cancel() })
                 }
             }
+            // Papier übers ganze Fenster, auch wenn der Inhalt schmaler ist (Mac)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .paperStage()
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -400,7 +402,8 @@ struct ReviewView: View {
     @State private var previewIndex = 0
     private let previewTimer = Timer.publish(every: 1.0/8.0, on: .main, in: .common).autoconnect()
 
-    private let columns = [GridItem(.adaptive(minimum: 76), spacing: 2)]
+    // Am Mac ist das Fenster breit: größere Kacheln statt einer langen Reihe Briefmarken
+    private let columns = [GridItem(.adaptive(minimum: Platform.isMac ? 150 : 76), spacing: 2)]
 
     private var selectedThumbs: [UIImage] {
         viewModel.reviewFrames.filter(\.selected).compactMap(\.thumbnail)
@@ -554,6 +557,7 @@ struct ReviewView: View {
                     viewModel.stage = .idle
                 }
             }
+            .frame(maxWidth: Platform.isMac ? 560 : .infinity)   // am Mac keine fensterbreiten Balken
             .padding(.horizontal, 24)
             .padding(.vertical, 12)
         }
@@ -702,6 +706,7 @@ struct ResultView: View {
                     onReset()
                 }
             }
+            .frame(maxWidth: Platform.isMac ? 560 : .infinity)
             .padding(.horizontal, 24)
 
             // Leise Extras je nach Modus
