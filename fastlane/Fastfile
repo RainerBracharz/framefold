@@ -326,8 +326,10 @@ platform :ios do
     version = get_version_number(xcodeproj: PROJECT, target: SCHEME)
 
     # Nur iOS – eine laufende Mac-Einreichung bleibt unberührt.
+    # READY_FOR_REVIEW (angefangen, nie abgeschickt) lässt sich nicht
+    # zurückziehen – die nimmt `submit` einfach weiter, solange sie leer ist.
     subs = app.get_review_submissions(
-      filter: { state: "WAITING_FOR_REVIEW,READY_FOR_REVIEW,UNRESOLVED_ISSUES", platform: "IOS" })
+      filter: { state: "WAITING_FOR_REVIEW,UNRESOLVED_ISSUES", platform: "IOS" })
     if subs.empty?
       UI.message("Keine wartende Einreichung gefunden.")
     else
