@@ -18,13 +18,13 @@
 </div>
 
 <div align="center">
-<img src="docs/demo.gif" width="320" alt="Made with FrameFold: a print folds itself into facets and back — image, object, image" />
-<br/><sub><em>This demo was made with FrameFold. What else.<br/>Keyframe selection, facet transitions, paper relief and image echo — all rendered by the app's own pipeline.</em></sub>
+<img src="docs/demo.gif" width="320" alt="A square sheet with the FrameFold mark folds into an amber envelope and back — image, object, image" />
+<br/><sub><em>The fold from the spot, in stop-motion rhythm: image, object, image.<br/>Paper and fold generated in code — the same sequence feeds the simulator camera for the App Store preview.</em></sub>
 </div>
 
 <div align="center">
 <a href="docs/spot/framefold-spot-en.mp4"><img src="docs/spot/poster.jpg" width="640" alt="FrameFold spot: a folded amber paper object, “You fold. It films.”" /></a>
-<br/><sub><em>▶ The 16-second spot for 2.0 (with sound): auto-shutter, focus, live loop, studio monitor, Apple Watch, video import, flip book.<br/>Paper fold, animation and modular-synth soundtrack generated in code — no stock footage.</em></sub>
+<br/><sub><em>▶ The 16-second spot for 2.3 (with sound): auto-shutter, focus, live loop, Mac with a document camera, Apple Watch, video import, flip book.<br/>Paper fold, animation and modular-synth soundtrack generated in code — no stock footage.</em></sub>
 </div>
 
 ---
