@@ -671,7 +671,8 @@ platform :ios do
 
     when "place"
       # Kopf: freigegebenes Video vor Bild. Suche: immer das Bild.
-      version = Spaceship::ConnectAPI::App.find(APP_ID).get_app_store_versions
+      # Nur iPhone/iPad – Creative Assets gibt es für die Mac-Fassung nicht.
+      version = Spaceship::ConnectAPI::App.find(APP_ID).get_app_store_versions(filter: { platform: "IOS" })
                   .find { |v| v.app_store_state == "READY_FOR_SALE" }
       UI.user_error!("Keine Version im Verkauf") unless version
       approved = assets.call.select { |a| a["attributes"]["state"] == "APPROVED" }
