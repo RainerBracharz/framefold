@@ -593,9 +593,20 @@ platform :ios do
     lang_of = { "de" => "de-DE", "en" => "en-US", "fr" => "fr-FR" }
     library = api.call(:get, "/v1/apps/#{ASC_APP_ID}/assetLibrary")["data"]
     lib_id = library["id"]
-    images = lambda do
-      api.call(:get, "/v1/appAssetLibraries/#{lib_id}/images?filter[category]=CREATIVE_ASSETS&limit=50")["data"]
+    # Bilder (Universal 16:9, Kopf + Suche) und Videos (21:9, nur Kopf)
+    kinds = {
+      "png" => { res: "appAssetLibraryImages", list: "images", rel: "image",
+                 item: "appAssetLibraryImage", glob: "creative-universal-*.png" },
+      "mp4" => { res: "appAssetLibraryVideos", list: "videos", rel: "video",
+                 item: "appAssetLibraryVideo", glob: "framefold-header-*-21x9.mp4" }
+    }
+    assets = lambda do
+      kinds.flat_map do |ext, k|
+        api.call(:get, "/v1/appAssetLibraries/#{lib_id}/#{k[:list]}?filter[category]=CREATIVE_ASSETS&limit=50")["data"]
+          .map { |a| a.merge("kind" => ext) }
+      end
     end
+    lang_in = ->(a) { a["attributes"]["fileName"][/-(de|en|fr)[-.]/, 1] }
 
     case options[:step].to_s
     when "probe"
@@ -603,76 +614,91 @@ platform :ios do
       ref = api.call(:get, "/v1/appAssetLibraryRefData")
       File.write("/tmp/ff-asset-refdata.json", JSON.pretty_generate(ref))
       UI.message("Vorgaben gesichert: /tmp/ff-asset-refdata.json")
-      images.call.each { |i| UI.message("#{i["attributes"]["fileName"]} — #{i["attributes"]["state"]} (#{i["id"]})") }
+      assets.call.each { |a| UI.message("#{a["attributes"]["fileName"]} — #{a["attributes"]["state"]} (#{a["id"]})") }
 
     when "upload"
-      present = images.call.map { |i| i["attributes"]["fileName"] }
-      Dir[File.expand_path("creative-assets/creative-universal-*.png", __dir__)].sort.each do |file|
-        name = File.basename(file)
-        if present.include?(name)
-          UI.message("schon da: #{name}")
-          next
+      present = assets.call.map { |a| a["attributes"]["fileName"] }
+      kinds.each do |ext, k|
+        Dir[File.expand_path("creative-assets/#{k[:glob]}", __dir__)].sort.each do |file|
+          name = File.basename(file)
+          next UI.message("schon da: #{name}") if present.include?(name)
+          bytes = File.binread(file)
+          attrs = { fileName: name, fileSize: bytes.bytesize, category: "CREATIVE_ASSETS",
+                    referenceName: "FrameFold #{ext == "mp4" ? "Kopfvideo" : "Universal"} #{name[/-(de|en|fr)[-.]/, 1].upcase}" }
+          attrs[:previewFrameTimeCode] = "00:00:15:00" if ext == "mp4"     # Signet am Schluss
+          reserved = api.call(:post, "/v1/#{k[:res]}", { data: { type: k[:res], attributes: attrs,
+            relationships: { assetLibrary: { data: { type: "appAssetLibraries", id: lib_id } } } } })["data"]
+          reserved["attributes"]["uploadOperations"].each do |op|
+            uri = URI(op["url"])
+            req = Net::HTTP.const_get(op["method"].capitalize).new(uri)
+            op["requestHeaders"].each { |h| req[h["name"]] = h["value"] }
+            req.body = bytes.byteslice(op["offset"], op["length"])
+            res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |h| h.request(req) }
+            UI.user_error!("Upload #{name} → #{res.code}") unless res.code.start_with?("2")
+          end
+          api.call(:patch, "/v1/#{k[:res]}/#{reserved["id"]}",
+                   { data: { type: k[:res], id: reserved["id"], attributes: { uploaded: true } } })
+          UI.success("hochgeladen: #{name} (#{reserved["id"]})")
         end
-        bytes = File.binread(file)
-        reserved = api.call(:post, "/v1/appAssetLibraryImages", { data: {
-          type: "appAssetLibraryImages",
-          attributes: { fileName: name, fileSize: bytes.bytesize, category: "CREATIVE_ASSETS",
-                        referenceName: "FrameFold Universal #{name[/-(\w\w)\.png/, 1].upcase}" },
-          relationships: { assetLibrary: { data: { type: "appAssetLibraries", id: lib_id } } } } })["data"]
-        reserved["attributes"]["uploadOperations"].each do |op|
-          uri = URI(op["url"])
-          req = Net::HTTP.const_get(op["method"].capitalize).new(uri)
-          op["requestHeaders"].each { |h| req[h["name"]] = h["value"] }
-          req.body = bytes.byteslice(op["offset"], op["length"])
-          res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |h| h.request(req) }
-          UI.user_error!("Upload #{name} → #{res.code}") unless res.code.start_with?("2")
-        end
-        api.call(:patch, "/v1/appAssetLibraryImages/#{reserved["id"]}",
-                 { data: { type: "appAssetLibraryImages", id: reserved["id"], attributes: { uploaded: true } } })
-        UI.success("hochgeladen: #{name} (#{reserved["id"]})")
       end
-      30.times do
-        states = images.call.map { |i| i["attributes"]["state"] }
+      60.times do
+        states = assets.call.map { |a| a["attributes"]["state"] }
         UI.message("Zustände: #{states.join(", ")}")
         break unless states.include?("UPLOAD_COMPLETE") || states.include?("AWAITING_UPLOAD")
         sleep 10
       end
-      images.call.each do |i|
-        a = i["attributes"]
-        UI.message("#{a["fileName"]} — #{a["state"]} · spec #{a["specId"]}#{a["stateDetails"] ? " · #{a["stateDetails"]}" : ""}")
+      assets.call.each do |a|
+        at = a["attributes"]
+        UI.message("#{at["fileName"]} — #{at["state"]} · spec #{at["specId"]}#{at["stateDetails"] ? " · #{at["stateDetails"]}" : ""}")
       end
 
     when "submit"
-      ready = images.call.select { |i| i["attributes"]["state"] == "PREPARE_FOR_SUBMISSION" }
+      ready = assets.call.select { |a| a["attributes"]["state"] == "PREPARE_FOR_SUBMISSION" }
       UI.user_error!("Nichts zum Einreichen") if ready.empty?
       sub = api.call(:post, "/v1/reviewSubmissions", { data: { type: "reviewSubmissions",
         attributes: { platform: "IOS" },
         relationships: { app: { data: { type: "apps", id: ASC_APP_ID } } } } })["data"]
-      ready.each do |i|
+      ready.each do |a|
+        k = kinds[a["kind"]]
         api.call(:post, "/v1/reviewSubmissionItems", { data: { type: "reviewSubmissionItems",
           relationships: { reviewSubmission: { data: { type: "reviewSubmissions", id: sub["id"] } },
-                           appAssetLibraryImage: { data: { type: "appAssetLibraryImages", id: i["id"] } } } } })
-        UI.message("in die Einreichung: #{i["attributes"]["fileName"]}")
+                           k[:item] => { data: { type: k[:res], id: a["id"] } } } } })
+        UI.message("in die Einreichung: #{a["attributes"]["fileName"]}")
       end
       api.call(:patch, "/v1/reviewSubmissions/#{sub["id"]}",
                { data: { type: "reviewSubmissions", id: sub["id"], attributes: { submitted: true } } })
       UI.success("Eingereicht (#{sub["id"]})")
 
     when "place"
+      # Kopf: freigegebenes Video vor Bild. Suche: immer das Bild.
       version = Spaceship::ConnectAPI::App.find(APP_ID).get_app_store_versions
                   .find { |v| v.app_store_state == "READY_FOR_SALE" }
       UI.user_error!("Keine Version im Verkauf") unless version
-      locs = version.get_app_store_version_localizations
-      images.call.select { |i| i["attributes"]["state"] == "APPROVED" }.each do |i|
-        lang = i["attributes"]["fileName"][/-(\w\w)\.png/, 1]
-        loc = locs.find { |l| l.locale == lang_of[lang] }
-        next UI.important("keine Sprache #{lang} in #{version.version_string}") unless loc
-        %w[PRODUCT_PAGE_HEADER_ASSET APP_STORE_SEARCH_RESULTS_ASSET].each do |type|
+      approved = assets.call.select { |a| a["attributes"]["state"] == "APPROVED" }
+      version.get_app_store_version_localizations.each do |loc|
+        lang = lang_of.key(loc.locale)
+        mine = approved.select { |a| lang_in.(a) == lang }
+        wanted = {
+          "PRODUCT_PAGE_HEADER_ASSET" => mine.find { |a| a["kind"] == "mp4" } || mine.find { |a| a["kind"] == "png" },
+          "APP_STORE_SEARCH_RESULTS_ASSET" => mine.find { |a| a["kind"] == "png" }
+        }
+        wanted.each do |type, asset|
+          next unless asset
+          k = kinds[asset["kind"]]
+          current = api.call(:get, "/v1/appStoreVersionLocalizations/#{loc.id}/placements?filter[placementType]=#{type}&include=image,video")["data"]
+          if current.any? { |p| p.dig("relationships", k[:rel], "data", "id") == asset["id"] }
+            UI.message("#{type} #{loc.locale}: schon #{asset["attributes"]["fileName"]}")
+            next
+          end
+          current.each do |p|
+            api.call(:delete, "/v1/appAssetLibraryPlacements/#{p["id"]}")
+            UI.message("#{type} #{loc.locale}: alte Platzierung entfernt")
+          end
           api.call(:post, "/v1/appAssetLibraryPlacements", { data: { type: "appAssetLibraryPlacements",
             attributes: { placementType: type, placementGroup: options[:group] || "DEFAULT_PROFILE" },
-            relationships: { image: { data: { type: "appAssetLibraryImages", id: i["id"] } },
+            relationships: { k[:rel] => { data: { type: k[:res], id: asset["id"] } },
                              appStoreVersionLocalization: { data: { type: "appStoreVersionLocalizations", id: loc.id } } } } })
-          UI.success("#{type} → #{loc.locale} (#{version.version_string})")
+          UI.success("#{type} → #{loc.locale} (#{version.version_string}): #{asset["attributes"]["fileName"]}")
         end
       end
     else
