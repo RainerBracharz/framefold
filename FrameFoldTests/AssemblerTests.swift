@@ -112,6 +112,7 @@ final class AssemblerTests: XCTestCase {
         s.holdLastFrameSeconds = 0
         s.aspect = .original
         s.outputFPS = 2
+        s.deflicker = false
         return s
     }
 
@@ -188,5 +189,26 @@ final class AssemblerTests: XCTestCase {
         XCTAssertGreaterThan(rgb(first, first.width / 2, first.height / 2).r, 0.6, "Bild 1 rot")
         let third = try XCTUnwrap(CGImageSourceCreateImageAtIndex(source, 2, nil))
         XCTAssertGreaterThan(rgb(third, third.width / 2, third.height / 2).b, 0.6, "Bild 3 blau")
+    }
+
+    /// Flimmerausgleich: Ein zu helles Bild zwischen gleich hellen wird auf
+    /// deren Helligkeit gezogen; ohne Ausgleich bleibt es hell.
+    func testDeflickerEvensOutBrightnessJump() async throws {
+        let grays: [CGFloat] = [0.5, 0.5, 0.62, 0.5, 0.5]
+        let urls = try grays.enumerated().map { i, g in
+            try save(solid(UIColor(white: g, alpha: 1), width: 640, height: 480), "g\(i).jpg")
+        }
+        var settings = baseSettings()
+        settings.deflicker = true
+        let evened = try await StopMotionAssembler().assemble(imageURLs: urls, settings: settings) { _ in }
+        settings.deflicker = false
+        let raw = try await StopMotionAssembler().assemble(imageURLs: urls, settings: settings) { _ in }
+
+        // 2 fps: Bild 3 läuft von 1,0 bis 1,5 s
+        let fixed = rgb(try await frame(evened, at: 1.25), 320, 240).g
+        let neighbour = rgb(try await frame(evened, at: 0.25), 320, 240).g
+        let original = rgb(try await frame(raw, at: 1.25), 320, 240).g
+        XCTAssertGreaterThan(original - neighbour, 0.08, "ohne Ausgleich ist Bild 3 deutlich heller")
+        XCTAssertLessThan(abs(fixed - neighbour), 0.03, "mit Ausgleich gleich hell wie die Nachbarn (\(fixed) vs. \(neighbour))")
     }
 }

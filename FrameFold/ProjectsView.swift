@@ -494,6 +494,10 @@ struct ProjectDetailView: View {
                     optionRow("Verwacklung ausgleichen") {
                         Toggle("", isOn: $exportSettings.alignFrames)
                     }
+                    optionDivider
+                    optionRow("Flimmern ausgleichen") {
+                        Toggle("", isOn: $exportSettings.deflicker)
+                    }
                     if mode.showsTolino {
                         optionDivider
                         optionRow("Bild-Echo (Nachbild)") {

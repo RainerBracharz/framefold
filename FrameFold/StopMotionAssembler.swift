@@ -1,5 +1,6 @@
 import Foundation
 import AVFoundation
+import CoreImage
 import CoreVideo
 import ImageIO
 import UniformTypeIdentifiers
@@ -166,12 +167,31 @@ final class StopMotionAssembler {
             ? Algorithms.facetPlan(width: Double(width), height: Double(height), cols: 6, rows: 6)
             : []
 
+        // Flimmerausgleich: die Helligkeit jedes Bildes einmal messen und
+        // daraus je Bild einen Faktor bestimmen (Median der Nachbarn).
+        var gains = [Double](repeating: 1, count: frameCount)
+        if settings.deflicker, frameCount >= 3 {
+            var lumas: [Double] = []
+            lumas.reserveCapacity(frameCount)
+            for i in 0..<frameCount {
+                try Task.checkCancellation()
+                let img = i == order[0] ? firstImage : try await frameProvider(i)
+                lumas.append(Self.meanLuma(img))
+            }
+            gains = Algorithms.deflickerGains(lumas)
+        }
+        func corrected(_ img: CGImage, _ index: Int) -> CGImage {
+            let gain = gains[index]
+            guard abs(gain - 1) > 0.01 else { return img }
+            return Self.applyGain(img, gain) ?? img
+        }
+
         // Kleiner Frame-Cache (Basis + Overlay), damit lange Videos nicht
         // komplett im Speicher liegen. Der erste Frame ist schon geladen.
-        var cache: [Int: CGImage] = [order[0]: firstImage]
+        var cache: [Int: CGImage] = [order[0]: corrected(firstImage, order[0])]
         func image(at index: Int) async throws -> CGImage {
             if let cached = cache[index] { return cached }
-            let img = try await frameProvider(index)
+            let img = corrected(try await frameProvider(index), index)
             if cache.count > 3 { cache.removeAll() }
             cache[index] = img
             return img
@@ -539,6 +559,36 @@ private final class SequentialFrameSource {
         window = window.filter { $0.key >= index - 1 }
         guard let image = window[index] else { throw PipelineError.exportFailed }
         return image
+    }
+}
+
+// MARK: - Flimmerausgleich
+
+extension StopMotionAssembler {
+    private static let gainContext = CIContext(options: [.cacheIntermediates: false])
+
+    /// Mittlere Helligkeit (0…1) auf einem 32 × 32-Graubild – schnell genug,
+    /// um jedes Bild eines langen Films einmal zu messen.
+    static func meanLuma(_ image: CGImage) -> Double {
+        let side = 32
+        var px = [UInt8](repeating: 0, count: side * side)
+        guard let ctx = CGContext(data: &px, width: side, height: side, bitsPerComponent: 8,
+                                  bytesPerRow: side, space: CGColorSpaceCreateDeviceGray(),
+                                  bitmapInfo: CGImageAlphaInfo.none.rawValue) else { return 0.5 }
+        ctx.interpolationQuality = .low
+        ctx.draw(image, in: CGRect(x: 0, y: 0, width: side, height: side))
+        return Double(px.reduce(0) { $0 + Int($1) }) / Double(px.count) / 255
+    }
+
+    /// Hellt ein Bild um `gain` (gemessen im sRGB-Wert) auf oder ab. Core
+    /// Image rechnet linear – daher die Belichtung um 2,2 × log₂(gain).
+    static func applyGain(_ image: CGImage, _ gain: Double) -> CGImage? {
+        let input = CIImage(cgImage: image)
+        guard let filter = CIFilter(name: "CIExposureAdjust") else { return nil }
+        filter.setValue(input, forKey: kCIInputImageKey)
+        filter.setValue(2.2 * log2(gain), forKey: kCIInputEVKey)
+        guard let output = filter.outputImage else { return nil }
+        return gainContext.createCGImage(output, from: input.extent)
     }
 }
 

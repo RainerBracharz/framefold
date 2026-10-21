@@ -373,6 +373,16 @@ let seqLang = Algorithms.flipbookSequence(frameCount: 40)
 check(seqLang.count == 41 && seqLang.last! == 39, "40 Bilder → Deckblatt + einmal durch")
 check(Algorithms.flipbookSequence(frameCount: 0).isEmpty, "keine Bilder → leer")
 
+// MARK: deflickerGains
+let flick = Algorithms.deflickerGains([0.50, 0.50, 0.60, 0.50, 0.50])
+check(abs(flick[2] - 0.5 / 0.6) < 1e-9, "Ausreißer wird auf den Median gezogen (\(flick[2]))")
+check(flick[0] == 1 && flick[4] == 1, "ruhige Bilder bleiben unverändert")
+let ramp = Algorithms.deflickerGains([0.2, 0.3, 0.4, 0.5, 0.6, 0.7])
+check(ramp[2] == 1 && ramp[3] == 1, "langsamer Lichtwechsel bleibt erhalten")
+check(Algorithms.deflickerGains([0.5, 0.9, 0.5, 0.5, 0.5])[1] == 0.8, "Faktor nach unten begrenzt")
+check(Algorithms.deflickerGains([0.5, 0.01, 0.5])[1] == 1, "fast schwarz bleibt unberührt")
+check(Algorithms.deflickerGains([0.5, 0.6]) == [1, 1], "unter drei Bildern kein Ausgleich")
+
 print("")
 if failures == 0 {
     print("ALLE TESTS BESTANDEN ✓")

@@ -68,6 +68,9 @@ struct PipelineSettings: Equatable, Codable {
     /// Druckbild: Schwarzweiß mit warmem Papierton – wie Tolinos
     /// abfotografierte Drucke
     var printLook: Bool = false
+    /// Flimmern ausgleichen: Helligkeit von Bild zu Bild angleichen
+    /// (Tageslicht, Wolken, Raumlicht). Langsame Lichtwechsel bleiben.
+    var deflicker: Bool = true
 }
 
 /// Auflösung des exportierten Videos (maximale Kantenlänge).
@@ -277,6 +280,7 @@ extension PipelineSettings {
         paperRelief = v(.paperRelief, d.paperRelief)
         reliefStrength = v(.reliefStrength, d.reliefStrength)
         printLook = v(.printLook, d.printLook)
+        deflicker = v(.deflicker, d.deflicker)
     }
 
     func persist() {

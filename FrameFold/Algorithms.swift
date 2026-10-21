@@ -617,4 +617,23 @@ enum Algorithms {
             return CGRect(x: 0, y: (h - newH) / 2, width: w, height: newH)
         }
     }
+
+    // MARK: Flimmerausgleich
+
+    /// Helligkeits-Faktoren gegen Flimmern: Jedes Bild wird auf den Median
+    /// seiner Nachbarn (± `radius` Bilder) gezogen. Langsame Lichtwechsel
+    /// bleiben, das Zucken von Bild zu Bild (Wolken, Netzbrummen, Auto-
+    /// Belichtung) verschwindet. `lumas`: mittlere Helligkeit je Bild (0…1).
+    /// Faktoren auf 0,8…1,25 begrenzt; sehr dunkle Bilder bleiben unberührt.
+    static func deflickerGains(_ lumas: [Double], radius: Int = 2,
+                               minGain: Double = 0.8, maxGain: Double = 1.25) -> [Double] {
+        guard lumas.count >= 3 else { return Array(repeating: 1, count: lumas.count) }
+        return lumas.indices.map { i in
+            let window = lumas[max(0, i - radius)...min(lumas.count - 1, i + radius)].sorted()
+            let target = window[window.count / 2]
+            let l = lumas[i]
+            guard l > 0.02, target > 0.02 else { return 1 }
+            return min(maxGain, max(minGain, target / l))
+        }
+    }
 }

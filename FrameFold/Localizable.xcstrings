@@ -5994,6 +5994,23 @@
           }
         }
       }
+    },
+    "Flimmern ausgleichen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reduce flicker"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réduire le scintillement"
+          }
+        }
+      }
     }
   },
   "version": "1.3"

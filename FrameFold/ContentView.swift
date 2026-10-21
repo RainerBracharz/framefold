@@ -859,6 +859,7 @@ struct SettingsView: View {
                             ForEach(LoopMode.allCases) { Text(verbatim: $0.label).tag($0) }
                         }
                         Toggle("Verwacklung ausgleichen", isOn: $settings.alignFrames)
+                        Toggle("Flimmern ausgleichen", isOn: $settings.deflicker)
                     } header: {
                         CatalogLabel("Ausgabe")
                     }
