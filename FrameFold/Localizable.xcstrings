@@ -5892,6 +5892,108 @@
           }
         }
       }
+    },
+    "Auslösen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take frame"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déclencher"
+          }
+        }
+      }
+    },
+    "Zurücknehmen (Fernbedienung)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo (remote)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler (télécommande)"
+          }
+        }
+      }
+    },
+    "Als GIF teilen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share as GIF"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager en GIF"
+          }
+        }
+      }
+    },
+    "GIF wird erstellt …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Making GIF …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Création du GIF …"
+          }
+        }
+      }
+    },
+    "GIF ließ sich nicht erstellen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t make the GIF"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de créer le GIF"
+          }
+        }
+      }
+    },
+    "Für Messenger und Präsentationen, die kein Video abspielen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For messengers and slides that don’t play video."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour les messageries et présentations qui ne lisent pas les vidéos."
+          }
+        }
+      }
     }
   },
   "version": "1.3"

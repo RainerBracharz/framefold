@@ -539,6 +539,7 @@ struct ProjectDetailView: View {
                     Text("Video teilen")
                 }
                 .buttonStyle(InkButtonStyle())
+                GIFShareButton(videoURL: exportURL)
                 // Kein „Neu exportieren": ändern sich Einstellungen oder
                 // Frames, verfällt das Video ohnehin und der Export-Knopf
                 // kehrt von selbst zurück.
@@ -1089,6 +1090,40 @@ struct LoopingVideoPreview: View {
         frames = loaded
         index = 0
         isLoading = false
+    }
+}
+
+/// „Als GIF teilen“: macht aus dem fertigen Film ein endlos laufendes GIF
+/// und öffnet das Teilen-Menü – leise als Textlink unter dem Film.
+struct GIFShareButton: View {
+    let videoURL: URL
+    @State private var isMaking = false
+    @State private var failed = false
+    @State private var item: ShareItem?
+
+    var body: some View {
+        Button {
+            isMaking = true
+            failed = false
+            Task {
+                let url = try? await GIFMaker.make(from: videoURL)
+                isMaking = false
+                if let url { item = ShareItem(url: url) } else { failed = true }
+            }
+        } label: {
+            Label(isMaking ? "GIF wird erstellt …"
+                  : failed ? "GIF ließ sich nicht erstellen" : "Als GIF teilen",
+                  systemImage: "rectangle.stack")
+                .font(Theme.mono(12))
+                .foregroundStyle(failed ? Theme.oxblood : Theme.graphite)
+                .frame(minHeight: 44)
+        }
+        .buttonStyle(.plain)
+        .disabled(isMaking)
+        .accessibilityHint("Für Messenger und Präsentationen, die kein Video abspielen.")
+        .sheet(item: $item) { item in
+            ActivityView(items: [item.url])
+        }
     }
 }
 

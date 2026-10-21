@@ -1,6 +1,8 @@
 import Foundation
 import AVFoundation
 import CoreVideo
+import ImageIO
+import UniformTypeIdentifiers
 import UIKit
 
 /// Baut aus Keyframes das Stopmotion-Video.
@@ -537,5 +539,58 @@ private final class SequentialFrameSource {
         window = window.filter { $0.key >= index - 1 }
         guard let image = window[index] else { throw PipelineError.exportFailed }
         return image
+    }
+}
+
+// MARK: - GIF
+
+/// Macht aus dem fertigen Film ein endlos laufendes GIF – für Messenger,
+/// Schulplattformen und Präsentationen, die kein Video abspielen. Aus dem
+/// Film statt aus den Einzelbildern, damit Format, Ausrichtung,
+/// Überblendungen und Abspielmodus genau stimmen.
+enum GIFMaker {
+    /// Längste Seite in Pixeln, höchstens so viele Bilder pro Sekunde und
+    /// insgesamt: hält die Datei bei langen Filmen handlich.
+    static let maxSide: CGFloat = 640
+    static let maxFPS: Double = 15
+    static let maxFrames = 400
+
+    static func make(from videoURL: URL) async throws -> URL {
+        let asset = AVURLAsset(url: videoURL)
+        guard let track = try await asset.loadTracks(withMediaType: .video).first else {
+            throw PipelineError.exportFailed
+        }
+        let duration = try await asset.load(.duration).seconds
+        let nominal = Double(try await track.load(.nominalFrameRate))
+        var fps = min(nominal > 0 ? nominal : 10, maxFPS)
+        if duration * fps > Double(maxFrames) { fps = Double(maxFrames) / duration }
+        let count = max(1, Int((duration * fps).rounded(.down)))
+
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        generator.maximumSize = CGSize(width: maxSide, height: maxSide)
+        generator.requestedTimeToleranceBefore = CMTime(value: 1, timescale: 600)
+        generator.requestedTimeToleranceAfter = CMTime(value: 1, timescale: 600)
+
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("framefold-\(UUID().uuidString.prefix(8)).gif")
+        guard let dest = CGImageDestinationCreateWithURL(url as CFURL, UTType.gif.identifier as CFString, count, nil) else {
+            throw PipelineError.exportFailed
+        }
+        CGImageDestinationSetProperties(dest, [
+            kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFLoopCount: 0]
+        ] as CFDictionary)
+        let frameProps = [kCGImagePropertyGIFDictionary: [
+            kCGImagePropertyGIFDelayTime: 1.0 / fps,
+            kCGImagePropertyGIFUnclampedDelayTime: 1.0 / fps
+        ]] as CFDictionary
+        for i in 0..<count {
+            try Task.checkCancellation()
+            let time = CMTime(seconds: (Double(i) + 0.5) / fps, preferredTimescale: 600)
+            let image = try await generator.image(at: time).image
+            CGImageDestinationAddImage(dest, image, frameProps)
+        }
+        guard CGImageDestinationFinalize(dest) else { throw PipelineError.exportFailed }
+        return url
     }
 }

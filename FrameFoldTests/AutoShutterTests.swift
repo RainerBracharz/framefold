@@ -47,7 +47,7 @@ final class AutoShutterTests: XCTestCase {
 
     /// Ruhe – Bewegung – Ruhe …: nach dem Einmessen ein Bild je Ruhephase.
     func testOneCapturePerStillPhase() async {
-        let still = 25, move = 6, cycle = still + move, cycles = 6
+        let still = 30, move = 6, cycle = still + move, cycles = 6   // 3 s Ruhe: Luft für langsame Testrechner
         var phaseStarts: [Date] = []
         let start = Date()
         await feed(cycle * cycles) { i in

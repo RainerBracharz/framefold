@@ -346,10 +346,17 @@ struct FrameFoldApp: App {
                 .keyboardShortcut("o")
         }
         CommandMenu("Aufnahme") {
+            // „Bild ab/auf“: die Vor-/Zurück-Tasten jeder Präsentations-
+            // Fernbedienung – auslösen und zurücknehmen, ohne Kamera oder
+            // Tisch zu berühren (Klassenzimmer, Dokumentenkamera).
+            Button("Auslösen") { post(.ffCaptureNow) }
+                .keyboardShortcut(.pageDown, modifiers: [])
             Button("Fertig") { post(.ffFinishSession) }
                 .keyboardShortcut(.return, modifiers: .command)
             Button("Letztes Bild zurücknehmen") { post(.ffUndoLastFrame) }
                 .keyboardShortcut(.delete, modifiers: .command)
+            Button("Zurücknehmen (Fernbedienung)") { post(.ffUndoLastFrame) }
+                .keyboardShortcut(.pageUp, modifiers: [])
         }
         CommandGroup(before: .toolbar) {
             Divider()

@@ -633,6 +633,11 @@ struct LiveCaptureView: View {
         .onReceive(NotificationCenter.default.publisher(for: .ffUndoLastFrame)) { _ in
             undoLastFrame(project: project)
         }
+        // Menü „Aufnahme → Auslösen“ bzw. „Bild ab“ einer Fernbedienung –
+        // nur, solange der Sucher läuft.
+        .onReceive(NotificationCenter.default.publisher(for: .ffCaptureNow)) { _ in
+            if controller.isRunning { controller.captureNow() }
+        }
         .onDisappear {
             UIApplication.shared.isIdleTimerDisabled = false
             SessionWakeLock.shared.end()

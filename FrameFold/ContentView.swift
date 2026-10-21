@@ -709,6 +709,8 @@ struct ResultView: View {
             .frame(maxWidth: Platform.isMac ? 560 : .infinity)
             .padding(.horizontal, 24)
 
+            GIFShareButton(videoURL: result.outputURL)
+
             // Leise Extras je nach Modus
             if sourceVideoURL != nil {
                 if mode.showsAdvanced {
@@ -939,6 +941,7 @@ extension Notification.Name {
     static let ffNewWork = Notification.Name("ffNewWork")
     static let ffFinishSession = Notification.Name("ffFinishSession")
     static let ffUndoLastFrame = Notification.Name("ffUndoLastFrame")
+    static let ffCaptureNow = Notification.Name("ffCaptureNow")
     /// Werk in der Kamera fortsetzen (object: die UUID des Werks).
     static let ffContinueWork = Notification.Name("ffContinueWork")
     /// Werk in der Projektliste öffnen (object: die UUID des Werks).

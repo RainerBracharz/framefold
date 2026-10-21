@@ -9,6 +9,7 @@
 
 import XCTest
 import AVFoundation
+import ImageIO
 import UIKit
 @testable import FrameFold
 
@@ -163,5 +164,29 @@ final class AssemblerTests: XCTestCase {
         XCTAssertLessThan(keyframe, unaligned * 0.7, "Keyframe B sollte ausgerichtet sein")
         XCTAssertLessThan(blended, keyframe + 0.02,
                           "Die Blende sollte so gut ausgerichtet sein wie der Keyframe (\(blended) vs. \(keyframe))")
+    }
+
+    /// GIF aus dem fertigen Film: Endlosschleife, ein Bild je Filmbild, die
+    /// Farben in der richtigen Reihenfolge, längste Seite höchstens 640 px.
+    func testGIFFromFilm() async throws {
+        let frames = try [UIColor.red, .green, .blue, .white].enumerated().map { i, c in
+            try save(solid(c, width: 1080, height: 1440), "\(i).jpg")
+        }
+        var settings = baseSettings()
+        settings.outputFPS = 4
+        let film = try await StopMotionAssembler().assemble(imageURLs: frames, settings: settings) { _ in }
+
+        let gif = try await GIFMaker.make(from: film)
+        let source = try XCTUnwrap(CGImageSourceCreateWithURL(gif as CFURL, nil))
+        XCTAssertEqual(CGImageSourceGetCount(source), 4, "ein GIF-Bild je Filmbild")
+        let props = CGImageSourceCopyProperties(source, nil) as? [CFString: Any]
+        let loop = (props?[kCGImagePropertyGIFDictionary] as? [CFString: Any])?[kCGImagePropertyGIFLoopCount] as? Int
+        XCTAssertEqual(loop, 0, "GIF soll endlos laufen")
+
+        let first = try XCTUnwrap(CGImageSourceCreateImageAtIndex(source, 0, nil))
+        XCTAssertLessThanOrEqual(max(first.width, first.height), 640)
+        XCTAssertGreaterThan(rgb(first, first.width / 2, first.height / 2).r, 0.6, "Bild 1 rot")
+        let third = try XCTUnwrap(CGImageSourceCreateImageAtIndex(source, 2, nil))
+        XCTAssertGreaterThan(rgb(third, third.width / 2, third.height / 2).b, 0.6, "Bild 3 blau")
     }
 }
