@@ -97,6 +97,25 @@ final class ProjectStoreTests: XCTestCase {
         XCTAssertEqual(Set(after.trashFilenames ?? []), [s1, s2])
     }
 
+    /// „Neu aufnehmen“: Das neue Bild steht an der Stelle des alten, das
+    /// alte liegt im Papierkorb, die Bildzahl bleibt.
+    func testReplaceFrameKeepsPosition() throws {
+        let store = makeStore()
+        let project = store.createProject(name: "A")
+        let a = store.appendFrame(jpegData: jpeg(1), to: current(store, project))!
+        let b = store.appendFrame(jpegData: jpeg(2), to: current(store, project))!
+        let c = store.appendFrame(jpegData: jpeg(3), to: current(store, project))!
+
+        let new = try XCTUnwrap(store.replaceFrame(named: b, jpegData: jpeg(9), in: current(store, project)))
+
+        let after = current(store, project)
+        XCTAssertEqual(after.frameFilenames, [a, new, c])
+        XCTAssertEqual(after.trashFilenames ?? [], [b])
+        let urls = store.frameURLs(for: after)
+        XCTAssertEqual(try Data(contentsOf: urls[1]), jpeg(9), "neues Bild an Stelle 2")
+        XCTAssertNil(store.replaceFrame(named: "gibt-es-nicht.jpg", jpegData: jpeg(5), in: after))
+    }
+
     func testRemoveFramesNamedIgnoresUnknownNames() {
         let store = makeStore()
         let project = store.createProject(name: "A")

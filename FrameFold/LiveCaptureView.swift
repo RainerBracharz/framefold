@@ -10,6 +10,8 @@ struct LiveCaptureView: View {
     @EnvironmentObject var store: ProjectStore
     @StateObject private var controller = LiveCaptureController()
     @State private var targetProject: Project?
+    /// FF_AUTOSTART (Simulator/Mac-Debug) greift nur beim ersten Erscheinen.
+    private static var autostarted = false
     @State private var onionSkin = true
     @State private var showNewProject = false
     @State private var showAllWorks = false
@@ -59,6 +61,10 @@ struct LiveCaptureView: View {
     /// Dateinamen der Bilder dieser Sitzung – Verwerfen und Zurücknehmen
     /// treffen genau diese, nie Bilder älterer Sitzungen.
     @State private var sessionFiles: [String] = []
+    /// „Neu aufnehmen“: dieses Bild ersetzt das nächste ausgelöste; die
+    /// Zwiebelhaut zeigt es zum Ausrichten.
+    @State private var retake: RetakeFrame.Target?
+    @State private var retakeGhost: UIImage?
     @State private var lastSessionFiles: [String] = []
     /// Laufende Montage des Sofort-Ergebnisses – eine neue ersetzt sie.
     @State private var assembleTask: Task<Void, Never>?
@@ -106,7 +112,8 @@ struct LiveCaptureView: View {
             // denen sich der Simulator nicht bedienen lässt (aufgeklapptes
             // iPhone Duo), und für Store-Screenshots.
             .onAppear {
-                if Platform.autostart, targetProject == nil {
+                if Platform.autostart, !Self.autostarted, targetProject == nil {
+                    Self.autostarted = true   // nur einmal je Start (Test-Schalter)
                     didSeeCameraTip = true
                     targetProject = store.projects.first ?? store.createProject(name: "Faltung")
                 }
@@ -163,11 +170,56 @@ struct LiveCaptureView: View {
 
     private func continueWork(_ id: UUID) {
         ContinueWork.pending = nil
-        guard let project = store.projects.first(where: { $0.id == id }),
-              targetProject?.id != project.id else { return }
+        adoptRetake(for: id)
+        guard let project = store.projects.first(where: { $0.id == id }) else { return }
+        // Auch wenn noch das Ergebnis desselben Werks offen ist: zurück in
+        // den Sucher – sonst blieb „Weiterarbeiten“ bzw. „Neu aufnehmen“
+        // auf dem Ergebnisbildschirm hängen.
         finishedProject = nil
         resultURL = nil
-        targetProject = project
+        if targetProject?.id != project.id { targetProject = project }
+    }
+
+    /// Übernimmt eine Bitte „Neu aufnehmen“ aus dem Kontaktbogen.
+    private func adoptRetake(for id: UUID) {
+        guard let target = RetakeFrame.pending, target.project == id,
+              let project = store.projects.first(where: { $0.id == id }) else { return }
+        RetakeFrame.pending = nil
+        RetakeFrame.active = target
+        retake = target
+        retakeGhost = store.frameURLs(for: project)
+            .first { $0.lastPathComponent == target.filename }
+            .flatMap { UIImage(contentsOfFile: $0.path) }
+    }
+
+    /// Ersetzen-Modus beenden; nach dem Ersetzen zurück ins Werk – ohne
+    /// Sitzungsende mit Montage: Das ersetzte Bild ist kein neues Bild.
+    private func endRetake(openWork id: UUID?) {
+        RetakeFrame.active = nil
+        retake = nil
+        retakeGhost = nil
+        if let id {
+            controller.stop()
+            level.stop()
+            targetProject = nil
+            OpenWork.pending = id
+            NotificationCenter.default.post(name: .ffOpenWork, object: id)
+        }
+    }
+
+    /// Hinweis im Ersetzen-Modus: welches Bild, und wie man abbricht.
+    private func retakeBanner(project: Project) -> some View {
+        let number = (retake.flatMap { project.frameFilenames.firstIndex(of: $0.filename) } ?? 0) + 1
+        return VStack(spacing: 0) {
+            Text("Bild \(number) neu aufnehmen – das nächste Bild ersetzt es.")
+                .font(Theme.mono(11))
+                .foregroundStyle(Theme.darkroom)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(Theme.amber)
+        .accessibilityElement(children: .contain)
     }
 
     private var cameraTip: some View {
@@ -341,6 +393,7 @@ struct LiveCaptureView: View {
     /// Beendet die Session und montiert das Ergebnis gleich – der Lohn der
     /// Arbeit soll unmittelbar zu sehen sein, nicht drei Tipps entfernt.
     private func finishSession(project: Project) {
+        if retake != nil { endRetake(openWork: nil) }   // „Abbrechen“ im Ersetzen-Modus
         controller.stop()
         level.stop()
         let captured = controller.capturedCount
@@ -590,6 +643,18 @@ struct LiveCaptureView: View {
                                   projectName: project.name,
                                   status: controller.status.label(playful: mode == .basic))
             controller.start { jpegData in
+                // „Neu aufnehmen“: ersetzen statt anhängen, dann zurück ins Werk
+                if let target = RetakeFrame.active, target.project == project.id {
+                    RetakeFrame.active = nil
+                    guard let current = store.projects.first(where: { $0.id == project.id }),
+                          store.replaceFrame(named: target.filename, jpegData: jpegData, in: current) != nil else {
+                        controller.reportSaveFailure(previous: recentThumbs.last)
+                        endRetake(openWork: nil)
+                        return
+                    }
+                    endRetake(openWork: project.id)
+                    return
+                }
                 guard let current = store.projects.first(where: { $0.id == project.id }),
                       let filename = store.appendFrame(jpegData: jpegData, to: current) else {
                     // Nicht gespeichert (Speicher voll?): Zähler und Film
@@ -646,6 +711,10 @@ struct LiveCaptureView: View {
         .onDisappear {
             UIApplication.shared.isIdleTimerDisabled = false
             SessionWakeLock.shared.end()
+            // Den Ersetzen-Modus hier NICHT beenden: Beim Wechsel in den Modus
+            // tauscht SwiftUI die Ansicht aus und meldet dabei auch ein
+            // Verschwinden. Er endet beim Ersetzen, bei „Abbrechen“/„Fertig“;
+            // wer den Tab verlässt, findet beim Zurückkommen den Hinweis vor.
             // Tab gewechselt, während Bilder im Sucher stehen: die Sitzung
             // abschließen statt sie stillschweigend zurückzusetzen. Zurück im
             // Kamera-Tab wartet dann das Ergebnis mit „Weiter aufnehmen".
@@ -848,6 +917,10 @@ struct LiveCaptureView: View {
                     .background(Theme.amber)
             }
 
+            if retake != nil {
+                retakeBanner(project: project)
+            }
+
             if controller.cameraShifted {
                 shiftBanner
             }
@@ -994,8 +1067,8 @@ struct LiveCaptureView: View {
                 #endif
             }
 
-            if onionSkin,
-               let ghost = onionFirst ? controller.firstCapturedImage : controller.lastCapturedImage {
+            if onionSkin || retakeGhost != nil,
+               let ghost = retakeGhost ?? (onionFirst ? controller.firstCapturedImage : controller.lastCapturedImage) {
                 Image(uiImage: ghost).resizable().aspectRatio(contentMode: Platform.isMac ? .fit : .fill)
                     .opacity(onionOpacity).allowsHitTesting(false)
             }

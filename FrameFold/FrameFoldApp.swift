@@ -289,6 +289,10 @@ struct FrameFoldApp: App {
             .onReceive(NotificationCenter.default.publisher(for: .ffContinueWork)) { _ in
                 selectedTab = 1
             }
+            // Ein Bild wurde neu aufgenommen: zurück ins Werk
+            .onReceive(NotificationCenter.default.publisher(for: .ffOpenWork)) { _ in
+                selectedTab = 2
+            }
             // Externe Bildschirme (HDMI/AirPlay) zeigen den Studio-Monitor
             .task {
                 StudioMonitorHub.shared.activate()

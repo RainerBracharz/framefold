@@ -6079,6 +6079,40 @@
           }
         }
       }
+    },
+    "Neu aufnehmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retake"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reprendre"
+          }
+        }
+      }
+    },
+    "Bild %lld neu aufnehmen – das nächste Bild ersetzt es.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retaking frame %lld – the next frame replaces it."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reprise de l’image %lld – la prochaine image la remplace."
+          }
+        }
+      }
     }
   },
   "version": "1.3"

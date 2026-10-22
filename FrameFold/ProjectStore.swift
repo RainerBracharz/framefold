@@ -221,6 +221,34 @@ final class ProjectStore: ObservableObject {
         }
     }
 
+    /// Ersetzt ein Bild an seiner Stelle („Neu aufnehmen“). Das alte wandert
+    /// in den Papierkorb (30 Tage wiederherstellbar). Gibt den neuen
+    /// Dateinamen zurück – oder nil, wenn das alte Bild nicht mehr im Werk
+    /// ist oder das neue nicht gespeichert werden konnte.
+    @discardableResult
+    func replaceFrame(named old: String, jpegData: Data, in project: Project) -> String? {
+        guard let index = project.frameFilenames.firstIndex(of: old) else { return nil }
+        var updated = project
+        let number = nextNumber(for: updated)
+        let filename = String(format: "%06d.jpg", number)
+        let dir = directory(for: updated)
+        do {
+            try jpegData.write(to: dir.appendingPathComponent(filename))
+        } catch {
+            return nil
+        }
+        let trashDir = dir.appendingPathComponent("trash", isDirectory: true)
+        try? FileManager.default.createDirectory(at: trashDir, withIntermediateDirectories: true)
+        let target = trashDir.appendingPathComponent(old)
+        try? FileManager.default.moveItem(at: dir.appendingPathComponent(old), to: target)
+        try? FileManager.default.setAttributes([.modificationDate: Date()], ofItemAtPath: target.path)
+        updated.trashFilenames = (updated.trashFilenames ?? []) + [old]
+        updated.frameFilenames[index] = filename
+        updated.nextFrameNumber = number + 1
+        save(updated)
+        return filename
+    }
+
     /// Verschiebt genau diese Frames in den Papierkorb – für Verwerfen und
     /// Zurücknehmen einer Sitzung, damit nie Bilder älterer Sitzungen
     /// mitgehen.

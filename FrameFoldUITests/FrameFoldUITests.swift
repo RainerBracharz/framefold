@@ -53,6 +53,8 @@ final class FrameFoldUITests: XCTestCase {
         if let frames = env["FF_SIM_FRAMES"], !frames.isEmpty {
             app.launchEnvironment["FF_SIM_FRAMES"] = frames
         }
+        // Direkt in den Sucher (Neu-aufnehmen-Test)
+        if env["FF_AUTOSTART"] == "1" { app.launchEnvironment["FF_AUTOSTART"] = "1" }
         // Video-Ablauf: dieses Video verarbeitet die App gleich beim Start
         if let video = env["FF_VIDEO"], !video.isEmpty {
             app.launchEnvironment["FF_VIDEO"] = video
@@ -273,6 +275,64 @@ final class FrameFoldUITests: XCTestCase {
         shot("video-work-detail")
         app.swipeUp(); app.swipeUp(); app.swipeUp()
         if tap(["Werk löschen"]) { tap(["Endgültig löschen"]) }
+    }
+
+    // MARK: - Neu aufnehmen
+
+    /// Drei Bilder aufnehmen, im Werk Bild 2 lange drücken → „Neu aufnehmen“
+    /// → im Sucher steht der Hinweis → auslösen → zurück im Werk, gleiche
+    /// Bildzahl. Läuft nur mit FF_AUTOSTART=1, auf Deutsch.
+    @MainActor
+    func testRetakeFrame() throws {
+        guard ProcessInfo.processInfo.environment["FF_AUTOSTART"] == "1" else {
+            throw XCTSkip("FF_AUTOSTART nicht gesetzt")
+        }
+        tap(["Weiter"]); tap(["Weiter"]); usleep(500_000)
+        tap(["Los geht's"], prefix: true)
+        let shutter = app.buttons.matching(label("Auslöser")).firstMatch
+        XCTAssertTrue(shutter.waitForExistence(timeout: 15), "Sucher erscheint nicht")
+        for _ in 0..<3 { shutter.tap(); usleep(900_000) }
+        // Sitzung wirklich beenden: „Fertig · 3“ → Ergebnis → „Fertig“
+        let done = app.buttons.matching(NSPredicate(format: "label BEGINSWITH[c] 'Fertig ·'")).firstMatch
+        // „Nochmal“ gibt es nur auf dem Ergebnisbildschirm
+        let again = app.buttons.matching(label("Nochmal")).firstMatch
+        XCTAssertTrue(step(done, until: again, wait: 30), "kein Ergebnis nach der Aufnahme")
+        tapLast("Fertig")
+        // Erst im Werke-Tab suchen: Die Werkauswahl der Kamera hat auch
+        // einen Knopf „Faltung“ – der startet eine neue Aufnahme.
+        let works = app.tabBars.buttons["Werke"]
+        let worksList = app.buttons.matching(label("Neues Werk anlegen")).firstMatch   // nur in der Werkliste
+        XCTAssertTrue(step(works, until: worksList), "Werke-Tab öffnet nicht")
+        let work = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Faltung'")).firstMatch
+        XCTAssertTrue(work.waitForExistence(timeout: 5), "Werk fehlt")
+        let countBefore = work.label
+        work.tap()
+        // Die Bildnummer meldet sich je nach Lauf als Text oder als Element
+        let cell = app.descendants(matching: .any).matching(label("02")).firstMatch
+        if !cell.waitForExistence(timeout: 8) { shot("retake-sheet-missing") }
+        XCTAssertTrue(cell.exists, "Bild 2 fehlt im Kontaktbogen")
+        // Mitten aufs Bild drücken (die Nummer sitzt unten links)
+        cell.coordinate(withNormalizedOffset: CGVector(dx: 2.5, dy: -2.5)).press(forDuration: 1.5)
+        shot("retake-menu")
+        XCTAssertTrue(tap(["Neu aufnehmen"]), "Menüeintrag fehlt")
+        let banner = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH[c] 'Bild 2 neu aufnehmen'")).firstMatch
+        XCTAssertTrue(banner.waitForExistence(timeout: 10), "Hinweis im Sucher fehlt")
+        shot("retake-viewfinder")
+        // Die Automatik darf das Bild auch selbst ersetzen – sonst von Hand
+        if shutter.exists, shutter.isHittable { shutter.tap() }
+        // „Bearbeiten“ gibt es nur in der Werkansicht – der Titel „Faltung“
+        // steht auch über dem Sucher.
+        let edit = app.buttons.matching(label("Bearbeiten")).firstMatch
+        XCTAssertTrue(edit.waitForExistence(timeout: 15), "nicht zurück im Werk")
+        sleep(1)
+        shot("retake-back-in-work")
+        app.navigationBars.buttons.firstMatch.tap()
+        XCTAssertTrue(worksList.waitForExistence(timeout: 5))
+        XCTAssertTrue(work.waitForExistence(timeout: 5))
+        XCTAssertEqual(work.label, countBefore, "Bildzahl hat sich verändert")
+        work.tap()
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Zuletzt gelöscht'")).firstMatch
+            .waitForExistence(timeout: 5), "altes Bild nicht im Papierkorb")
     }
 
     /// Tippt `button`, bis `target` erscheint – höchstens dreimal.

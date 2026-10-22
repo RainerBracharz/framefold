@@ -6,3 +6,4 @@ Steadier films and a new way to share.
 • Share as GIF: below every finished film – an endlessly looping GIF for messengers, school platforms and slides that don’t play video.
 • Shoot with a presenter remote: “Page Down” takes a frame, “Page Up” takes it back – camera and table stay untouched. Also in the Capture menu.
 • Camera moved? If the background sits differently than in the first frame, FrameFold tells you and can show the first frame to line things up again.
+• Retake a single frame: right-click it in the contact sheet and choose “Retake” – the next frame replaces exactly this one, in place. The old one stays in the trash for 30 days.

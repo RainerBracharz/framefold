@@ -265,6 +265,16 @@ struct ProjectDetailView: View {
                             }
                         }
                         .contextMenu {
+                            // Genau dieses Bild noch einmal aufnehmen – es
+                            // behält seinen Platz im Film.
+                            Button {
+                                RetakeFrame.pending = .init(project: currentProject.id,
+                                                            filename: url.lastPathComponent)
+                                ContinueWork.pending = currentProject.id
+                                NotificationCenter.default.post(name: .ffContinueWork, object: currentProject.id)
+                            } label: {
+                                Label("Neu aufnehmen", systemImage: "camera.rotate")
+                            }
                             Button(role: .destructive) {
                                 store.removeFrames(at: IndexSet(integer: index), from: currentProject)
                             } label: {

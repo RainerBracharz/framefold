@@ -197,3 +197,18 @@ final class SessionWakeLock {
 enum ContinueWork {
     static var pending: UUID?
 }
+
+/// „Neu aufnehmen“ aus dem Kontaktbogen: welches Bild welches Werks das
+/// nächste ausgelöste Bild ersetzt. `pending` trägt die Bitte in den
+/// Kamera-Tab, `active` gilt, solange der Sucher auf das Bild wartet.
+@MainActor
+enum RetakeFrame {
+    struct Target: Equatable {
+        let project: UUID
+        let filename: String
+    }
+    static var pending: Target?
+    static var active: Target?
+}
+
+
