@@ -5,3 +5,4 @@ Steadier films and a new way to share.
 • Reduce flicker: when exporting, FrameFold evens out brightness from frame to frame – clouds, room light or auto exposure no longer make the film flicker. Slow changes in light stay. On by default, can be turned off in the export settings.
 • Share as GIF: below every finished film – an endlessly looping GIF for messengers, school platforms and slides that don’t play video.
 • Shoot with a presenter remote: “Page Down” takes a frame, “Page Up” takes it back – camera and table stay untouched. Also in the Capture menu.
+• Camera moved? If the background sits differently than in the first frame, FrameFold tells you and can show the first frame to line things up again.

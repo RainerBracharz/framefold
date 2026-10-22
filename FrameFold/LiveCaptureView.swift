@@ -627,6 +627,11 @@ struct LiveCaptureView: View {
         .onChange(of: controller.hint) { _, hint in
             if let hint { AccessibilityNotification.Announcement(hint).post() }
         }
+        .onChange(of: controller.cameraShifted) { _, shifted in
+            if shifted {
+                AccessibilityNotification.Announcement(String(localized: "Kamera verrutscht? Der Hintergrund liegt anders als beim ersten Bild.")).post()
+            }
+        }
                 .onReceive(NotificationCenter.default.publisher(for: .ffFinishSession)) { _ in
             finishSession(project: project)
         }
@@ -843,6 +848,10 @@ struct LiveCaptureView: View {
                     .background(Theme.amber)
             }
 
+            if controller.cameraShifted {
+                shiftBanner
+            }
+
             if mode.showsAdvanced, !recentThumbs.isEmpty {
                 thumbStrip(project: project)
             }
@@ -852,6 +861,39 @@ struct LiveCaptureView: View {
         .padding(.horizontal, 20)
         .padding(.bottom, 24)
         .frame(width: width)
+    }
+
+    /// „Kamera verrutscht?“ – der Rand liegt anders als beim ersten Bild.
+    /// Das erste Bild einblenden hilft beim Zurückschieben; „Passt so“
+    /// übernimmt die neue Position, wenn sie gewollt ist.
+    private var shiftBanner: some View {
+        VStack(spacing: 8) {
+            Text(Platform.isMac
+                 ? "Kamera verrutscht? Der Hintergrund liegt anders als beim ersten Bild."
+                 : "Stativ verrutscht? Der Hintergrund liegt anders als beim ersten Bild.")
+                .font(Theme.mono(11))
+                .foregroundStyle(Theme.darkroom)
+                .multilineTextAlignment(.center)
+                .lineSpacing(2)
+            HStack(spacing: 16) {
+                if !(onionSkin && onionFirst) {
+                    Button("Erstes Bild einblenden") {
+                        onionSkin = true
+                        onionFirst = true
+                    }
+                }
+                Button("Passt so") {
+                    controller.acceptCameraPosition()
+                }
+            }
+            .font(Theme.mono(11, .semibold))
+            .foregroundStyle(Theme.darkroom)
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(Theme.amber)
+        .accessibilityElement(children: .contain)
     }
 
     /// Werkzeuge oben links im Sucher – erst ab „Erweitert".

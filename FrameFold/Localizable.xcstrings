@@ -6011,6 +6011,74 @@
           }
         }
       }
+    },
+    "Kamera verrutscht? Der Hintergrund liegt anders als beim ersten Bild.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera moved? The background sits differently than in the first frame."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La caméra a bougé ? L’arrière-plan n’est plus placé comme sur la première image."
+          }
+        }
+      }
+    },
+    "Stativ verrutscht? Der Hintergrund liegt anders als beim ersten Bild.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tripod moved? The background sits differently than in the first frame."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le trépied a bougé ? L’arrière-plan n’est plus placé comme sur la première image."
+          }
+        }
+      }
+    },
+    "Erstes Bild einblenden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show first frame"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher la première image"
+          }
+        }
+      }
+    },
+    "Passt so": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It’s fine"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C’est bon"
+          }
+        }
+      }
     }
   },
   "version": "1.3"

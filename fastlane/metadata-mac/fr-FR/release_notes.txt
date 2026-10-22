@@ -5,3 +5,4 @@ Des films plus stables et une nouvelle façon de partager.
 • Réduire le scintillement : à l’export, FrameFold égalise la luminosité d’une image à l’autre – nuages, lumière de la pièce ou exposition automatique ne font plus scintiller le film. Les changements de lumière lents restent. Activé par défaut, désactivable dans les réglages d’export.
 • Partager en GIF : sous chaque film terminé – un GIF en boucle pour les messageries, plateformes scolaires et présentations qui ne lisent pas les vidéos.
 • Déclencher avec une télécommande de présentation : « Page suivante » prend une image, « Page précédente » l’annule – caméra et table restent intactes. Aussi dans le menu Prise de vue.
+• La caméra a bougé ? Si l’arrière-plan n’est plus placé comme sur la première image, FrameFold le signale et peut afficher la première image pour réaligner.

@@ -383,6 +383,30 @@ check(Algorithms.deflickerGains([0.5, 0.9, 0.5, 0.5, 0.5])[1] == 0.8, "Faktor na
 check(Algorithms.deflickerGains([0.5, 0.01, 0.5])[1] == 1, "fast schwarz bleibt unberührt")
 check(Algorithms.deflickerGains([0.5, 0.6]) == [1, 1], "unter drei Bildern kein Ausgleich")
 
+// MARK: borderShift (Kamera verrutscht)
+do {
+    let w = 160, h = 120
+    func scene(shift: Int, centre: UInt8) -> [UInt8] {
+        // strukturierter Rand (Tisch), einheitliche Mitte (Werk)
+        var px = [UInt8](repeating: 0, count: w * h)
+        for y in 0..<h { for x in 0..<w {
+            let sx = x - shift
+            px[y * w + x] = UInt8(((sx / 7 + y / 9) % 2 == 0 ? 60 : 190) &+ UInt8((sx * 3 + y * 5) & 31))
+        } }
+        for y in 30..<90 { for x in 40..<120 { px[y * w + x] = centre } }
+        return px
+    }
+    let ref = scene(shift: 0, centre: 120)
+    check(Algorithms.borderShift(reference: ref, current: ref, width: w, height: h) == nil, "gleiches Bild → kein Verrutschen")
+    let werk = scene(shift: 0, centre: 230)
+    check(Algorithms.borderShift(reference: ref, current: werk, width: w, height: h) == nil, "nur die Mitte verändert → kein Verrutschen")
+    let moved = scene(shift: 4, centre: 120)
+    let s = Algorithms.borderShift(reference: ref, current: moved, width: w, height: h)
+    check(s != nil && s!.dx == 4 && s!.dy == 0, "Kamera 4 px verschoben → erkannt (\(String(describing: s)))")
+    let brighter = ref.map { UInt8(min(255, Int($0) + 25)) }
+    check(Algorithms.borderShift(reference: ref, current: brighter, width: w, height: h) == nil, "nur heller → kein Verrutschen")
+}
+
 print("")
 if failures == 0 {
     print("ALLE TESTS BESTANDEN ✓")

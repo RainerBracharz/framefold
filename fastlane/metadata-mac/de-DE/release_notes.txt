@@ -5,3 +5,4 @@ Ruhigere Filme und ein neuer Weg zum Teilen.
 • Flimmern ausgleichen: Beim Export gleicht FrameFold die Helligkeit von Bild zu Bild an – Wolken, Raumlicht oder eine nachregelnde Belichtung zucken nicht mehr. Langsame Lichtwechsel bleiben. Standardmäßig an, abschaltbar in den Export-Einstellungen.
 • Als GIF teilen: Unter jedem fertigen Film – ein endlos laufendes GIF für Messenger, Schulplattformen und Präsentationen, die kein Video abspielen.
 • Auslösen per Fernbedienung: „Bild ab“ einer Präsentations-Fernbedienung nimmt ein Bild auf, „Bild auf“ nimmt es zurück – Kamera und Tisch bleiben unberührt. Auch im Menü „Aufnahme“.
+• Kamera verrutscht? Liegt der Hintergrund anders als beim ersten Bild, sagt FrameFold Bescheid und blendet auf Wunsch das erste Bild zum Ausrichten ein.

@@ -16,10 +16,14 @@ final class AutoShutterTests: XCTestCase {
 
     private var controller: LiveCaptureController!
     private var captureTimes: [Date] = []
+    /// Nummer des eingespeisten Bildes, bei dem ausgelöst wurde – unabhängig
+    /// davon, wie lange das Speichern danach dauert.
+    private var captureFrames: [Int] = []
 
     override func setUp() async throws {
         controller = LiveCaptureController()
         captureTimes = []
+        captureFrames = []
         controller.startWithoutCamera { [weak self] _ in
             Task { @MainActor in self?.captureTimes.append(Date()) }
         }
@@ -37,7 +41,9 @@ final class AutoShutterTests: XCTestCase {
             let s = scene(i)
             if let cg = LiveCaptureController.makeSimulatedFrame(step: s.step, moving: s.moving, progress: s.progress) {
                 let (gray, w, h) = FrameAnalyzer.grayscaleDownsampled(cg, targetWidth: 160)
+                let before = controller.capturedCount
                 controller.analyze(gray: gray, w: w, h: h, fullFrame: cg)
+                if controller.capturedCount > before { captureFrames.append(i) }
             }
             try? await Task.sleep(nanoseconds: 100_000_000)
         }
@@ -48,11 +54,8 @@ final class AutoShutterTests: XCTestCase {
     /// Ruhe – Bewegung – Ruhe …: nach dem Einmessen ein Bild je Ruhephase.
     func testOneCapturePerStillPhase() async {
         let still = 30, move = 6, cycle = still + move, cycles = 6   // 3 s Ruhe: Luft für langsame Testrechner
-        var phaseStarts: [Date] = []
-        let start = Date()
         await feed(cycle * cycles) { i in
             let inCycle = i % cycle
-            if inCycle == 0 { phaseStarts.append(start.addingTimeInterval(Double(i) / 10)) }
             let moving = inCycle >= still
             return (i / cycle, moving, moving ? Double(inCycle - still) / Double(move) : 0)
         }
@@ -61,10 +64,11 @@ final class AutoShutterTests: XCTestCase {
                                     "zu wenig ausgelöst: \(captureTimes.count) bei \(cycles) Ruhephasen")
         XCTAssertLessThanOrEqual(captureTimes.count, cycles,
                                  "zu oft ausgelöst: \(captureTimes.count) bei \(cycles) Ruhephasen")
-        // Nie zweimal in derselben Ruhephase
-        let gaps = zip(captureTimes.dropFirst(), captureTimes).map { $0.timeIntervalSince($1) }
-        XCTAssertTrue(gaps.allSatisfy { $0 > Double(still) / 10 * 0.8 },
-                      "zwei Aufnahmen zu dicht hintereinander: \(gaps)")
+        // Nie zweimal in derselben Ruhephase, nie während der Bewegung
+        let phases = captureFrames.map { $0 / cycle }
+        XCTAssertEqual(Set(phases).count, phases.count, "zwei Aufnahmen in einer Ruhephase: Bilder \(captureFrames)")
+        XCTAssertTrue(captureFrames.allSatisfy { $0 % cycle < still },
+                      "Aufnahme während der Bewegung: Bilder \(captureFrames)")
     }
 
     /// Ständige Bewegung: nichts auslösen.

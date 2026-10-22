@@ -636,4 +636,50 @@ enum Algorithms {
             return min(maxGain, max(minGain, target / l))
         }
     }
+
+    // MARK: Kamera verrutscht?
+
+    /// Hat sich die Kamera gegenüber dem ersten Bild verschoben? Verglichen
+    /// wird nur der Bildrand (äußere `margin`-Anteile) – dort liegen Tisch und
+    /// Hintergrund, während sich das Werk in der Mitte verändern soll.
+    /// Liefert (dx, dy) nur, wenn eine Verschiebung den Rand eindeutig besser
+    /// erklärt als „nichts bewegt" (Restfehler unter `clarity` × Fehler ohne
+    /// Verschiebung); sonst nil. Gleichmäßige Lichtwechsel ändern beide
+    /// Fehler gleich und lösen nichts aus.
+    static func borderShift(reference: [UInt8], current: [UInt8],
+                            width: Int, height: Int, maxShift: Int = 8,
+                            margin: Double = 0.2, clarity: Double = 0.6) -> (dx: Int, dy: Int)? {
+        guard width > 4 * maxShift, height > 4 * maxShift,
+              reference.count == width * height, current.count == width * height else { return nil }
+        let mx = Int(Double(width) * margin), my = Int(Double(height) * margin)
+        func inBorder(_ x: Int, _ y: Int) -> Bool {
+            x < mx || x >= width - mx || y < my || y >= height - my
+        }
+        func score(_ sx: Int, _ sy: Int) -> Double {
+            var sum = 0, n = 0
+            var y = maxShift
+            while y < height - maxShift {
+                var x = maxShift
+                while x < width - maxShift {
+                    if inBorder(x, y) {
+                        sum += abs(Int(reference[y * width + x]) - Int(current[(y + sy) * width + x + sx]))
+                        n += 1
+                    }
+                    x += 2
+                }
+                y += 2
+            }
+            return n > 0 ? Double(sum) / Double(n) : 0
+        }
+        let still = score(0, 0)
+        var best = (dx: 0, dy: 0), bestScore = still
+        for sy in -maxShift...maxShift {
+            for sx in -maxShift...maxShift where sx != 0 || sy != 0 {
+                let sc = score(sx, sy)
+                if sc < bestScore { bestScore = sc; best = (sx, sy) }
+            }
+        }
+        guard best.dx != 0 || best.dy != 0, still > 1, bestScore < still * clarity else { return nil }
+        return best
+    }
 }

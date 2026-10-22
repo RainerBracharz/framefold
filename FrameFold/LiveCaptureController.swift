@@ -586,7 +586,15 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Analysebild zum letzten Sucherbild und zum zuletzt abgelegten Bild –
     /// für den Vergleich „hat sich seit dem letzten Klick etwas verändert?".
     private var latestGray: [UInt8]?
+    private var latestGrayWidth = 0
     private var lastCapturedGray: [UInt8]?
+    /// Graubild des ersten Bildes der Sitzung – Bezug für „Kamera verrutscht?“.
+    private var firstGray: [UInt8]?
+    /// Wie oft in Folge der Rand gegenüber dem ersten Bild verschoben lag.
+    private var shiftStrikes = 0
+    /// Kamera oder Stativ haben sich gegenüber dem ersten Bild bewegt – der
+    /// Sucher bietet an, das erste Bild zum Ausrichten einzublenden.
+    @Published private(set) var cameraShifted = false
     private var stableSince: Date?
     private var armed = false            // erst nach erkannter Arbeit wieder auslösen
     private var latestFrame: CGImage?    // für den manuellen Auslöser
@@ -721,6 +729,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
         previousGray = nil
         latestGray = nil
         lastCapturedGray = nil
+        firstGray = nil
+        shiftStrikes = 0
+        cameraShifted = false
         thresholdByRig = [:]
         stableSince = nil
         restlessSince = nil
@@ -1316,6 +1327,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         }
         previousGray = gray
         latestGray = gray
+        latestGrayWidth = w
         latestFrame = fullFrame
         // Gerundet und nur bei echter Änderung veröffentlichen – sonst
         // zeichnet SwiftUI den ganzen Sucher zehnmal pro Sekunde neu.
@@ -1562,7 +1574,41 @@ final class LiveCaptureController: NSObject, ObservableObject {
         if !loopFrames.isEmpty { loopFrames.removeLast() }
         // Das erste Bild zurückgenommen: Es taugt nicht mehr als
         // Drift-Referenz – das nächste ausgelöste tritt an seine Stelle.
-        if capturedCount == 0 { firstCapturedImage = nil }
+        if capturedCount == 0 {
+            firstCapturedImage = nil
+            firstGray = nil
+            shiftStrikes = 0
+            cameraShifted = false
+        }
+    }
+
+    /// Nach jedem ausgelösten Bild: Liegt der Rand (Tisch, Hintergrund)
+    /// gegenüber dem ersten Bild verschoben? Zweimal in Folge um mindestens
+    /// 2 % der Bildbreite – dann ist die Kamera wohl angestoßen worden. Nur
+    /// am Stativ und am Mac: Aus der Hand verschiebt sich das Bild ohnehin.
+    private func checkCameraShift() {
+        guard let gray = latestGray, latestGrayWidth > 0, gray.count % latestGrayWidth == 0 else { return }
+        guard let first = firstGray, first.count == gray.count else {
+            firstGray = gray
+            return
+        }
+        guard rig == .tripod || Platform.isMac else { return }
+        let w = latestGrayWidth
+        if let shift = Algorithms.borderShift(reference: first, current: gray, width: w, height: gray.count / w),
+           max(abs(shift.dx), abs(shift.dy)) >= max(2, w / 50) {
+            shiftStrikes += 1
+            if shiftStrikes >= 2 { cameraShifted = true }
+        } else {
+            shiftStrikes = 0
+            cameraShifted = false
+        }
+    }
+
+    /// „Passt so“: Die neue Kameraposition ist gewollt und wird zum Bezug.
+    func acceptCameraPosition() {
+        firstGray = latestGray
+        shiftStrikes = 0
+        cameraShifted = false
     }
 
     /// Ein aufgenommenes Bild ließ sich nicht speichern: zurücknehmen und
@@ -1632,6 +1678,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         handCheckResult = nil
         stableSince = nil
         lastCapturedGray = latestGray
+        checkCameraShift()
         capturedCount += 1
         setStatus(.captured)
 
