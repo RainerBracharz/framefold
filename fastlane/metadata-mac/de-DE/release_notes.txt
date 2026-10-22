@@ -1,11 +1,7 @@
-FrameFold 2.3.1 für den Mac
+FrameFold 2.4 für den Mac
 
-Flüssiger aufnehmen, Videos und Live-Aufnahmen in einem Werk sammeln.
+Ruhigere Filme und ein neuer Weg zum Teilen.
 
-• Video zu einem Werk hinzufügen: „Sichern" fragt, ob ein neues Werk entsteht oder die Bilder an ein vorhandenes angehängt werden.
-• „Bilder noch einmal auswählen" auch im Einfach-Modus – ein Bild abwählen, ohne alles neu zu analysieren.
-• Zurücknehmen (⌘⌫) wartet, bis das letzte Bild abgelegt ist; danach zeigt die Zwiebelhaut wieder das vorige Bild.
-• Die Aufnahme bleibt beim Auslösen flüssig, die Prüfung auf Hände läuft im Hintergrund.
-• Werke umbenennen und löschen per Rechtsklick; der Kontaktbogen lädt schneller.
-• Aufnahme-Einstellungen bleiben erhalten; bessere VoiceOver-Unterstützung.
-• Behoben: Nach dem Erstellen eines Films sprang die Anzeige gelegentlich zurück auf „Baue Stopmotion…“.
+• Flimmern ausgleichen: Beim Export gleicht FrameFold die Helligkeit von Bild zu Bild an – Wolken, Raumlicht oder eine nachregelnde Belichtung zucken nicht mehr. Langsame Lichtwechsel bleiben. Standardmäßig an, abschaltbar in den Export-Einstellungen.
+• Als GIF teilen: Unter jedem fertigen Film – ein endlos laufendes GIF für Messenger, Schulplattformen und Präsentationen, die kein Video abspielen.
+• Auslösen per Fernbedienung: „Bild ab“ einer Präsentations-Fernbedienung nimmt ein Bild auf, „Bild auf“ nimmt es zurück – Kamera und Tisch bleiben unberührt. Auch im Menü „Aufnahme“.

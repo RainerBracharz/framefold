@@ -1,11 +1,7 @@
-FrameFold 2.3.1 pour Mac
+FrameFold 2.4 pour Mac
 
-Une prise de vue plus fluide, vidéos et séances en direct réunies dans une même œuvre.
+Des films plus stables et une nouvelle façon de partager.
 
-• Ajouter une vidéo à une œuvre : « Enregistrer » propose de créer une nouvelle œuvre ou d’ajouter les images à une œuvre existante.
-• « Choisir à nouveau les images » aussi en mode Simple – retirer une image sans tout réanalyser.
-• Annuler (⌘⌫) attend que la dernière image soit enregistrée ; la pelure d’oignon montre ensuite l’image précédente.
-• La prise de vue reste fluide au déclenchement ; la détection des mains tourne en arrière-plan.
-• Renommer et supprimer une œuvre par clic droit ; la planche contact se charge plus vite.
-• Les réglages de prise de vue sont conservés ; meilleure prise en charge de VoiceOver.
-• Corrigé : après la création d’un film, l’affichage revenait parfois sur « Création du stop motion… ».
+• Réduire le scintillement : à l’export, FrameFold égalise la luminosité d’une image à l’autre – nuages, lumière de la pièce ou exposition automatique ne font plus scintiller le film. Les changements de lumière lents restent. Activé par défaut, désactivable dans les réglages d’export.
+• Partager en GIF : sous chaque film terminé – un GIF en boucle pour les messageries, plateformes scolaires et présentations qui ne lisent pas les vidéos.
+• Déclencher avec une télécommande de présentation : « Page suivante » prend une image, « Page précédente » l’annule – caméra et table restent intactes. Aussi dans le menu Prise de vue.

@@ -1,12 +1,6 @@
-FrameFold 2.3.1
+FrameFold 2.4
 
-Flüssiger aufnehmen, Videos und Live-Aufnahmen in einem Werk sammeln.
+Ruhigere Filme und ein neuer Weg zum Teilen.
 
-• Video zu einem Werk hinzufügen: „Sichern" fragt, ob ein neues Werk entsteht oder die Bilder an ein vorhandenes angehängt werden.
-• „Bilder noch einmal auswählen" auch im Einfach-Modus – ein Bild abwählen, ohne alles neu zu analysieren.
-• Zurücknehmen: eigener Knopf im Einfach-Modus; danach zeigt die Zwiebelhaut wieder das vorige Bild.
-• Die Aufnahme bleibt beim Auslösen flüssig, die Prüfung auf Hände läuft im Hintergrund.
-• Werke umbenennen und löschen per langem Drücken; der Kontaktbogen lädt schneller.
-• Aufnahme-Einstellungen bleiben erhalten; die Film-Schleife im Sucher läuft im Tempo des fertigen Films.
-• Bessere VoiceOver-Unterstützung, Datum im PDF im Format deiner Sprache.
-• Behoben: Nach dem Erstellen eines Films sprang die Anzeige gelegentlich zurück auf „Baue Stopmotion…“.
+• Flimmern ausgleichen: Beim Export gleicht FrameFold die Helligkeit von Bild zu Bild an – Wolken, Raumlicht oder eine nachregelnde Belichtung zucken nicht mehr. Langsame Lichtwechsel bleiben. Standardmäßig an, abschaltbar in den Export-Einstellungen.
+• Als GIF teilen: Unter jedem fertigen Film – ein endlos laufendes GIF für Messenger, Schulplattformen und Präsentationen, die kein Video abspielen.

@@ -1,11 +1,7 @@
-FrameFold 2.3.1 for Mac
+FrameFold 2.4 for Mac
 
-Smoother capture, and videos and live sessions together in one work.
+Steadier films and a new way to share.
 
-• Add a video to a work: "Save" asks whether to start a new work or append the frames to an existing one.
-• "Choose frames again" now in Simple mode too – drop a frame without analysing everything again.
-• Undo (⌘⌫) waits until the last frame is stored; afterwards the onion skin shows the previous frame again.
-• Capture stays smooth when the shutter fires; the hand check runs in the background.
-• Rename and delete works with a right-click; the contact sheet loads faster.
-• Capture settings are remembered; better VoiceOver support.
-• Fixed: after a film was made, the screen could jump back to “Building stop-motion…”.
+• Reduce flicker: when exporting, FrameFold evens out brightness from frame to frame – clouds, room light or auto exposure no longer make the film flicker. Slow changes in light stay. On by default, can be turned off in the export settings.
+• Share as GIF: below every finished film – an endlessly looping GIF for messengers, school platforms and slides that don’t play video.
+• Shoot with a presenter remote: “Page Down” takes a frame, “Page Up” takes it back – camera and table stay untouched. Also in the Capture menu.

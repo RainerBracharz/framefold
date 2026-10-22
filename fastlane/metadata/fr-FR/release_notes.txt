@@ -1,12 +1,6 @@
-FrameFold 2.3.1
+FrameFold 2.4
 
-Une prise de vue plus fluide, vidéos et séances en direct réunies dans une même œuvre.
+Des films plus stables et une nouvelle façon de partager.
 
-• Ajouter une vidéo à une œuvre : « Enregistrer » propose de créer une nouvelle œuvre ou d’ajouter les images à une œuvre existante.
-• « Choisir à nouveau les images » aussi en mode Simple – retirer une image sans tout réanalyser.
-• Annuler : un bouton dédié en mode Simple ; la pelure d’oignon montre ensuite l’image précédente.
-• La prise de vue reste fluide au déclenchement ; la détection des mains tourne en arrière-plan.
-• Renommer et supprimer une œuvre par un appui long ; la planche contact se charge plus vite.
-• Les réglages de prise de vue sont conservés ; la boucle du film dans le viseur suit la cadence du film terminé.
-• Meilleure prise en charge de VoiceOver ; dates des PDF au format de ta langue.
-• Corrigé : après la création d’un film, l’affichage revenait parfois sur « Création du stop motion… ».
+• Réduire le scintillement : à l’export, FrameFold égalise la luminosité d’une image à l’autre – nuages, lumière de la pièce ou exposition automatique ne font plus scintiller le film. Les changements de lumière lents restent. Activé par défaut, désactivable dans les réglages d’export.
+• Partager en GIF : sous chaque film terminé – un GIF en boucle pour les messageries, plateformes scolaires et présentations qui ne lisent pas les vidéos.
