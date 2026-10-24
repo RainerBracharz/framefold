@@ -1,0 +1,4 @@
+2026-10-24 15:22:27.000 appintentsmetadataprocessor[1918:9689] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+/Users/runner/work/framefold/framefold/FrameFold/LiveCaptureController.swift:890:24: warning: capture of 'conn' with non-Sendable type 'AVCaptureConnection?' in a '@Sendable' closure
+/Users/runner/work/framefold/framefold/FrameFold/LiveCaptureController.swift:2:1: warning: add '@preconcurrency' to suppress 'Sendable'-related warnings from module 'AVFoundation'
+2026-10-24 15:23:13.819 appintentsmetadataprocessor[2952:12499] warning: Metadata extraction skipped. No AppIntents.framework dependency found.

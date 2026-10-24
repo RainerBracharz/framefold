@@ -1,0 +1,71 @@
+2026-10-24 15:25:29.194764+0000 FrameFold[6747:23186] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-24 15:25:29.200914+0000 FrameFold[6747:23188] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-24 15:25:29.200955+0000 FrameFold[6747:23188] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-24 15:25:29.232746+0000 FrameFold[6747:23162] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-24 15:25:29.233461+0000 FrameFold[6747:23162] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-24 15:25:29.236549+0000 FrameFold[6747:23188] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-24 15:25:29.236703+0000 FrameFold[6747:23188] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+Test Case '-[FrameFoldTests.AssemblerTests testAudioTrackIsAddedAndTrimmed]' started.
+Test Case '-[FrameFoldTests.AssemblerTests testAudioTrackIsAddedAndTrimmed]' passed (1.873 seconds).
+Test Case '-[FrameFoldTests.AssemblerTests testBlendFramesAreAligned]' started.
+Test Case '-[FrameFoldTests.AssemblerTests testBlendFramesAreAligned]' passed (1.018 seconds).
+Test Case '-[FrameFoldTests.AssemblerTests testDeflickerEvensOutBrightnessJump]' started.
+Test Case '-[FrameFoldTests.AssemblerTests testDeflickerEvensOutBrightnessJump]' passed (0.587 seconds).
+Test Case '-[FrameFoldTests.AssemblerTests testGIFFromFilm]' started.
+Test Case '-[FrameFoldTests.AssemblerTests testGIFFromFilm]' passed (1.086 seconds).
+Test Case '-[FrameFoldTests.AssemblerTests testImageOfDifferentSizeFillsFrame]' started.
+Test Case '-[FrameFoldTests.AssemblerTests testImageOfDifferentSizeFillsFrame]' passed (0.496 seconds).
+	 Executed 5 tests, with 0 failures (0 unexpected) in 5.060 (5.065) seconds
+Test Case '-[FrameFoldTests.AutoShutterTests testNoCaptureWhileMoving]' started.
+Test Case '-[FrameFoldTests.AutoShutterTests testNoCaptureWhileMoving]' passed (10.323 seconds).
+Test Case '-[FrameFoldTests.AutoShutterTests testOneCapturePerStillPhase]' started.
+Test Case '-[FrameFoldTests.AutoShutterTests testOneCapturePerStillPhase]' passed (29.528 seconds).
+Test Case '-[FrameFoldTests.AutoShutterTests testStillSceneCapturesAtMostOnce]' started.
+Test Case '-[FrameFoldTests.AutoShutterTests testStillSceneCapturesAtMostOnce]' passed (11.328 seconds).
+	 Executed 3 tests, with 0 failures (0 unexpected) in 51.178 (51.183) seconds
+Test Case '-[FrameFoldTests.CameraShiftTests testNoWarningWhenOnlyTheWorkChanges]' started.
+Test Case '-[FrameFoldTests.CameraShiftTests testNoWarningWhenOnlyTheWorkChanges]' passed (32.071 seconds).
+Test Case '-[FrameFoldTests.CameraShiftTests testWarnsWhenCameraIsBumped]' started.
+Test Case '-[FrameFoldTests.CameraShiftTests testWarnsWhenCameraIsBumped]' passed (31.851 seconds).
+	 Executed 2 tests, with 0 failures (0 unexpected) in 63.922 (63.926) seconds
+Test Case '-[FrameFoldTests.ImportIntoExistingWorkTests testVideoFramesAppendToExistingWork]' started.
+Test Case '-[FrameFoldTests.ImportIntoExistingWorkTests testVideoFramesAppendToExistingWork]' passed (0.289 seconds).
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.289 (0.290) seconds
+Test Case '-[FrameFoldTests.ProjectStoreTests testAppendFramePersistsAcrossReload]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testAppendFramePersistsAcrossReload]' passed (0.235 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testAudioIsCopiedReplacedAndRemoved]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testAudioIsCopiedReplacedAndRemoved]' passed (0.237 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testDeleteRemovesWholeProject]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testDeleteRemovesWholeProject]' passed (0.213 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testDuplicateInsertsCopyBehindOriginal]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testDuplicateInsertsCopyBehindOriginal]' passed (0.220 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testEmptyNameGetsNumberedName]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testEmptyNameGetsNumberedName]' passed (0.139 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testFrameNumbersDoNotCollideAfterRemoval]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testFrameNumbersDoNotCollideAfterRemoval]' passed (0.222 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testLegacyTrashIsStampedOnceBeforePurge]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testLegacyTrashIsStampedOnceBeforePurge]' passed (0.221 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testMissingManifestIsRecoveredFromImages]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testMissingManifestIsRecoveredFromImages]' passed (0.225 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testMoveFrameClampsAtEnds]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testMoveFrameClampsAtEnds]' passed (0.217 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testPurgeRemovesOnlyTrashOlderThan30Days]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testPurgeRemovesOnlyTrashOlderThan30Days]' passed (0.218 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testRemoveFramesNamedIgnoresUnknownNames]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testRemoveFramesNamedIgnoresUnknownNames]' passed (0.217 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testRemoveFramesNamedTouchesOnlyThoseFrames]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testRemoveFramesNamedTouchesOnlyThoseFrames]' passed (0.223 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testReplaceFrameKeepsPosition]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testReplaceFrameKeepsPosition]' passed (0.224 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testRestoreTrashKeepsCaptureOrder]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testRestoreTrashKeepsCaptureOrder]' passed (0.224 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testTemporaryCleanupRemovesOnlyOldOwnFiles]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testTemporaryCleanupRemovesOnlyOldOwnFiles]' passed (0.221 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testTrashedFrameGetsFreshTimestamp]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testTrashedFrameGetsFreshTimestamp]' passed (0.233 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testTruncatedManifestIsRecoveredFromImages]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testTruncatedManifestIsRecoveredFromImages]' passed (0.232 seconds).
+	 Executed 17 tests, with 0 failures (0 unexpected) in 3.721 (3.731) seconds
+	 Executed 28 tests, with 0 failures (0 unexpected) in 124.170 (124.198) seconds
+	 Executed 28 tests, with 0 failures (0 unexpected) in 124.170 (124.200) seconds
+** TEST SUCCEEDED **
