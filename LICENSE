@@ -19,6 +19,11 @@ Artworks, photographs, series titles, and the creative process depicted or refer
 in connection with this project belong to the artist Aldo Tolino and may not be
 reproduced, redistributed, or reused in any form without his separate permission.
 
+Exception: The lesson plan in docs/unterricht/ is licensed separately under the
+Creative Commons Attribution 4.0 International License (CC BY 4.0); see
+docs/unterricht/LICENSE. This exception covers only the text of that folder, not
+the app, its source code, or any other part of this repository.
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
 PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT

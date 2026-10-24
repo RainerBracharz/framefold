@@ -73,3 +73,4 @@ Datenschutzerklärung: <https://www.bracharz.com/framefold-datenschutz/>
 - Quellcode (einsehbar): <https://github.com/RainerBracharz/framefold>
 - Anleitung zur App: [ANLEITUNG.md](../../ANLEITUNG.md)
 
+Dieser Entwurf steht unter [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.de): Er darf frei verwendet, angepasst und weitergegeben werden, mit Namensnennung „Rainer Bracharz“ (siehe [LICENSE](LICENSE)).
