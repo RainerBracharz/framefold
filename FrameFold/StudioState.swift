@@ -101,7 +101,7 @@ struct StudioSettings: Codable, Equatable {
     private static let key = "studioSettings"
 
     static func restored() -> StudioSettings {
-        guard let data = UserDefaults.standard.data(forKey: key),
+        guard let data = StudioDefaults.store.data(forKey: key),
               let settings = try? JSONDecoder().decode(StudioSettings.self, from: data) else {
             return StudioSettings()
         }
@@ -110,7 +110,7 @@ struct StudioSettings: Codable, Equatable {
 
     func persist() {
         if let data = try? JSONEncoder().encode(self) {
-            UserDefaults.standard.set(data, forKey: Self.key)
+            StudioDefaults.store.set(data, forKey: Self.key)
         }
     }
 }
@@ -238,4 +238,25 @@ func studioLoupeRect(imageSize: CGSize, center: CGPoint, zoom: Int, aspect: Doub
     let x = min(max(0, center.x * imageSize.width - w / 2), imageSize.width - w)
     let y = min(max(0, center.y * imageSize.height - h / 2), imageSize.height - h)
     return CGRect(x: x, y: y, width: w, height: h).integral
+}
+
+/// Wo das Studio seine Einstellungen ablegt. Testläufe der Mac-Fassung
+/// (FF_STORE_ROOT) teilen den Datenordner mit der installierten App – sie
+/// bekommen eigene Einstellungen, damit nichts davon in der echten App landet.
+enum StudioDefaults {
+    static let store: UserDefaults = {
+        #if DEBUG
+        let env = ProcessInfo.processInfo.environment
+        if let root = env["FF_STORE_ROOT"], !root.isEmpty,
+           let suite = UserDefaults(suiteName: "com.bracharz.framefold.studio-test") {
+            // Einmal aufräumen, was frühere Testläufe in die echten
+            // Einstellungen geschrieben haben.
+            if env["FF_RESET_STUDIO"] == "1" {
+                for key in ["studioSettings", "studioWatchFolder"] { UserDefaults.standard.removeObject(forKey: key) }
+            }
+            return suite
+        }
+        #endif
+        return .standard
+    }()
 }

@@ -39,7 +39,7 @@ final class StudioFolderWatch: ObservableObject {
         folderName = url.lastPathComponent
         #if targetEnvironment(macCatalyst)
         if let data = try? url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil) {
-            UserDefaults.standard.set(data, forKey: Self.bookmarkKey)
+            StudioDefaults.store.set(data, forKey: Self.bookmarkKey)
         }
         #endif
     }
@@ -49,7 +49,7 @@ final class StudioFolderWatch: ObservableObject {
         releaseFolder()
         folder = nil
         folderName = nil
-        UserDefaults.standard.removeObject(forKey: Self.bookmarkKey)
+        StudioDefaults.store.removeObject(forKey: Self.bookmarkKey)
     }
 
     /// Beobachten beginnen: Was schon im Ordner liegt, bleibt draußen.
@@ -130,7 +130,7 @@ final class StudioFolderWatch: ObservableObject {
 
     private func restoreBookmark() {
         #if targetEnvironment(macCatalyst)
-        guard let data = UserDefaults.standard.data(forKey: Self.bookmarkKey) else { return }
+        guard let data = StudioDefaults.store.data(forKey: Self.bookmarkKey) else { return }
         var stale = false
         guard let url = try? URL(resolvingBookmarkData: data, options: .withSecurityScope,
                                  relativeTo: nil, bookmarkDataIsStale: &stale) else { return }

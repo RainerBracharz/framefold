@@ -301,19 +301,23 @@ struct StudioView: View {
     /// sieht man, welche Stellung jetzt dran ist.
     @ViewBuilder
     private var dialogueHUD: some View {
-        if settings.dialogueHUD, let project, let entries = project.dialogue, !entries.isEmpty {
-            let frame = (frameOnViewer ?? urls.count) + 1
+        let frame = (frameOnViewer ?? urls.count) + 1
+        let current: [(String, DialogueEntry)] = settings.dialogueHUD
+            ? (project?.characters ?? []).compactMap { name in
+                DialogueReading.current(in: project?.dialogue ?? [], frame: frame, character: name).map { (name, $0) }
+            }
+            : []
+        // Erst zeigen, wenn mindestens eine Figur hier schon eine Mundform hat
+        if !current.isEmpty {
             HStack(spacing: 12) {
-                ForEach(project.characters, id: \.self) { name in
-                    if let entry = DialogueReading.current(in: entries, frame: frame, character: name) {
-                        HStack(spacing: 6) {
-                            MouthShape(phoneme: entry.phoneme).frame(width: 34, height: 22)
-                            VStack(alignment: .leading, spacing: 1) {
-                                Text(verbatim: name.uppercased()).font(Theme.mono(9, .medium))
-                                    .foregroundStyle(Theme.paperOnDark.opacity(0.7))
-                                Text(verbatim: entry.phoneme.label + (entry.frame == frame ? (entry.word.map { " »\($0)«" } ?? "") : ""))
-                                    .font(Theme.mono(12, .bold)).foregroundStyle(Theme.amber)
-                            }
+                ForEach(current, id: \.0) { name, entry in
+                    HStack(spacing: 6) {
+                        MouthShape(phoneme: entry.phoneme).frame(width: 34, height: 22)
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(verbatim: name.uppercased()).font(Theme.mono(9, .medium))
+                                .foregroundStyle(Theme.paperOnDark.opacity(0.7))
+                            Text(verbatim: entry.phoneme.label + (entry.frame == frame ? (entry.word.map { " »\($0)«" } ?? "") : ""))
+                                .font(Theme.mono(12, .bold)).foregroundStyle(Theme.amber)
                         }
                     }
                 }
@@ -936,7 +940,9 @@ struct StudioView: View {
                     store.replaceDialogue(of: kv[1], with: DialogueReading.entries(
                         for: words, character: kv[1], fps: fps, offsetFrames: 2), in: project)
                 }
-            case "loupe": settings.loupe = true; settings.loupeZoom = Int(kv[1]) ?? 4
+            case "loupe":
+                settings.loupe = kv[1] != "0"
+                if let zoom = Int(kv[1]), [2, 4, 8].contains(zoom) { settings.loupeZoom = zoom }
             case "watch":
                 folderWatch.choose(URL(fileURLWithPath: kv[1], isDirectory: true))
                 folderWatch.start { image, data in controller.commit(frame: image, originalData: data) }
