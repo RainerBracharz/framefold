@@ -115,7 +115,11 @@ that decision is written up here:
   clipping views, aspect masks, safe areas and grids, an image-or-movie
   reference layer with chroma key, a draggable timeline with loop marks and
   per-frame notes, frame averaging, capture blackout, test shots, scheduled
-  time-lapse, ProRes and image-sequence export — all on the keyboard.
+  time-lapse, ProRes and image-sequence export — all on the keyboard. Sound
+  works like a studio too: multiple tracks with start frame and level, a
+  waveform under the timeline, synced playback and per-frame scrubbing, and
+  an X-sheet for dialogue reading with Preston Blair mouth shapes — words can
+  be recognised on-device and laid onto frames automatically.
   Guide and key map: [docs/studio](docs/studio/README.md).
 - **For the classroom.** A two-lesson plan (German) with timings, roles and a
   privacy summary: [docs/unterricht](docs/unterricht/README.md).

@@ -48,6 +48,30 @@
           }
         }
       }
+    },
+    "NSSpeechRecognitionUsageDescription": {
+      "comment": "Systemdialog beim ersten „Wörter erkennen“ im X-Sheet",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Im Studio erkennt FrameFold gesprochene Wörter einer Tonspur – nur auf dem Gerät –, um Mundformen den Bildern zuzuordnen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the Studio, FrameFold recognises spoken words in an audio track – on the device only – to match mouth shapes to frames."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dans le Studio, FrameFold reconnaît les mots d’une piste audio – uniquement sur l’appareil – pour associer les formes de bouche aux images."
+          }
+        }
+      }
     }
   },
   "version": "1.3"

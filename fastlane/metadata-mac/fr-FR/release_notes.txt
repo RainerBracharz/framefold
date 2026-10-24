@@ -3,6 +3,7 @@ FrameFold 2.6
 Le Studio – et le son.
 
 • Studio : dès le mode Avancé, la caméra devient un espace de travail pro – timeline à glisser, bascule entre direct et prises, pelure d’oignon sur plusieurs images, vues différence et exposition, masques de format, grilles, image ou film de référence avec incrustation, notes par image, moyenne contre le bruit, time-lapse avec heure de début et de fin. Tout au clavier aussi (menu Studio).
+• Le son comme en studio : plusieurs pistes avec image de départ et niveau, forme d’onde dans la timeline, son à la lecture et en parcourant. Lecture des dialogues dans la feuille d’exposition avec formes de bouche par personnage – FrameFold peut reconnaître les mots lui-même, uniquement sur l’appareil.
 • Export en ProRes ou en séquence d’images (PNG, TIFF, JPEG).
 • Musique ou son : choisis un fichier audio dans la vue de l’œuvre – il accompagne le film exporté.
 • Jusqu’à 24 images par seconde : 15 et 24 fps pour un mouvement fluide.

@@ -22,6 +22,31 @@ struct Project: Identifiable, Codable {
     /// Notizen zu Bildnummern (1-basiert, wie im X-Sheet) – erscheinen im
     /// Studio, wenn genau dieses Bild als nächstes aufgenommen wird.
     var notes: [String: String]?
+    /// Weitere Tonspuren (Studio) mit Einsatzbild und Lautstärke
+    var audioTracks: [AudioTrack]?
+    /// Dialog-Lesen: Mundformen je Bild und Figur
+    var dialogue: [DialogueEntry]?
+
+    /// Alle Tonspuren – die einfache Musikspur aus der Werkansicht zählt
+    /// als erste, mit Einsatz bei Bild 1.
+    var allAudioTracks: [AudioTrack] {
+        var tracks = audioTracks ?? []
+        if let audioFilename {
+            tracks.insert(AudioTrack(id: Self.legacyTrackID, name: String(localized: "Musik"),
+                                     filename: audioFilename), at: 0)
+        }
+        return tracks
+    }
+    static let legacyTrackID = UUID(uuidString: "00000000-0000-0000-0000-00000000F01D")!
+
+    /// Figuren, für die es Dialog-Einträge gibt, in der Reihenfolge des Auftretens.
+    var characters: [String] {
+        var seen: [String] = []
+        for entry in (dialogue ?? []).sorted(by: { $0.frame < $1.frame }) where !seen.contains(entry.character) {
+            seen.append(entry.character)
+        }
+        return seen
+    }
 
     func note(forFrame number: Int) -> String? { notes?[String(number)] }
 
@@ -146,7 +171,7 @@ final class ProjectStore: ObservableObject {
         let project = Project(
             id: id, name: String(localized: "Wiederhergestelltes Werk"),
             createdAtISO: ISO8601DateFormatter().string(from: created),
-            frameFilenames: frames, trashFilenames: nil, nextFrameNumber: nil, audioFilename: nil, notes: nil)
+            frameFilenames: frames, trashFilenames: nil, nextFrameNumber: nil, audioFilename: nil, notes: nil, audioTracks: nil, dialogue: nil)
         if let data = try? JSONEncoder().encode(project) {
             try? data.write(to: dir.appendingPathComponent("manifest.json"), options: .atomic)
         }
@@ -190,7 +215,9 @@ final class ProjectStore: ObservableObject {
             trashFilenames: nil,
             nextFrameNumber: 0,
             audioFilename: nil,
-            notes: nil)
+            notes: nil,
+            audioTracks: nil,
+            dialogue: nil)
         save(project)
         return project
     }
@@ -305,6 +332,81 @@ final class ProjectStore: ObservableObject {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         notes[String(number)] = trimmed.isEmpty ? nil : trimmed
         updated.notes = notes.isEmpty ? nil : notes
+        save(updated)
+    }
+
+    // MARK: Tonspuren (Studio)
+
+    /// Nimmt eine Audiodatei als weitere Tonspur auf (Kopie im Werkordner).
+    @discardableResult
+    func addAudioTrack(from source: URL, startFrame: Int = 0, to project: Project) -> AudioTrack? {
+        let scoped = source.startAccessingSecurityScopedResource()
+        defer { if scoped { source.stopAccessingSecurityScopedResource() } }
+        let ext = source.pathExtension.isEmpty ? "m4a" : source.pathExtension.lowercased()
+        let filename = "spur-\(UUID().uuidString.prefix(8)).\(ext)"
+        do {
+            try FileManager.default.copyItem(at: source, to: directory(for: project).appendingPathComponent(filename))
+        } catch {
+            return nil
+        }
+        let track = AudioTrack(name: source.deletingPathExtension().lastPathComponent,
+                               filename: filename, startFrame: startFrame)
+        var updated = project
+        updated.audioTracks = (updated.audioTracks ?? []) + [track]
+        save(updated)
+        return track
+    }
+
+    /// Einsatz, Lautstärke oder Stumm einer Spur ändern. Die einfache
+    /// Musikspur wird dabei zur gewöhnlichen Spur.
+    func updateAudioTrack(_ track: AudioTrack, in project: Project) {
+        var updated = project
+        if track.id == Project.legacyTrackID {
+            var promoted = track
+            promoted.id = UUID()
+            updated.audioFilename = nil
+            updated.audioTracks = [promoted] + (updated.audioTracks ?? [])
+        } else if let i = updated.audioTracks?.firstIndex(where: { $0.id == track.id }) {
+            updated.audioTracks?[i] = track
+        }
+        save(updated)
+    }
+
+    func removeAudioTrack(_ track: AudioTrack, from project: Project) {
+        if track.id == Project.legacyTrackID { removeAudio(from: project); return }
+        var updated = project
+        updated.audioTracks?.removeAll { $0.id == track.id }
+        if updated.audioTracks?.isEmpty == true { updated.audioTracks = nil }
+        try? FileManager.default.removeItem(at: directory(for: project).appendingPathComponent(track.filename))
+        save(updated)
+    }
+
+    func url(for track: AudioTrack, in project: Project) -> URL {
+        directory(for: project).appendingPathComponent(track.filename)
+    }
+
+    // MARK: Dialog-Lesen
+
+    /// Setzt (oder löscht mit `phoneme == nil`) den Eintrag einer Figur in einem Bild.
+    func setDialogue(frame: Int, character: String, phoneme: Phoneme?, word: String?, in project: Project) {
+        var updated = project
+        var entries = updated.dialogue ?? []
+        entries.removeAll { $0.frame == frame && $0.character == character }
+        if let phoneme {
+            let trimmed = word?.trimmingCharacters(in: .whitespacesAndNewlines)
+            entries.append(DialogueEntry(frame: frame, character: character, phoneme: phoneme,
+                                         word: trimmed?.isEmpty == false ? trimmed : nil))
+        }
+        updated.dialogue = entries.isEmpty ? nil : entries.sorted { ($0.frame, $0.character) < ($1.frame, $1.character) }
+        save(updated)
+    }
+
+    /// Ersetzt alle Einträge einer Figur (automatisches Lesen).
+    func replaceDialogue(of character: String, with entries: [DialogueEntry], in project: Project) {
+        var updated = project
+        var all = (updated.dialogue ?? []).filter { $0.character != character }
+        all += entries
+        updated.dialogue = all.isEmpty ? nil : all.sorted { ($0.frame, $0.character) < ($1.frame, $1.character) }
         save(updated)
     }
 

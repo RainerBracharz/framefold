@@ -43,6 +43,24 @@ Der automatische Auslöser (Hände weg, Szene ruhig) läuft wie gewohnt weiter u
 - **Testaufnahme**: Ein Bild, das nicht ins Werk geht. Es dient nur zum Prüfen von Licht und Bildausschnitt.
 - **Zeitraffer**: Intervall von 1 Sekunde bis 1 Stunde. Optional mit Startzeit, Endzeit und Höchstzahl an Bildern.
 
+## Ton und Dialog
+
+- **Tonspuren**: Im Inspektor unter „Ton“ fügt „Tonspur hinzufügen …“ beliebig viele Spuren hinzu.
+  Jede Spur hat ein Einsatzbild („Ab Bild“), eine Lautstärke und einen Stummschalter.
+  Die Musik aus der Werkansicht erscheint hier als erste Spur.
+- **Wellenform**: Der Pegel aller Spuren liegt unter den Kacheln der Zeitleiste, Bild für Bild.
+- **Abspielen mit Ton**: Abspielen und Kurz abspielen laufen synchron mit dem Ton.
+  Beim Blättern mit ← und → erklingt der Ton genau dieses Bilds („Ton beim Blättern“).
+- **X-Sheet** (⇧X): Das Belichtungsblatt hat eine Zeile je Bild, mit Tonpegel, Mundform und Wort je Figur sowie Notiz.
+  Figuren legt man mit „Figur hinzufügen …“ an.
+  Eine Mundform gilt so lange, bis eine neue eingetragen ist.
+- **Mundformen** nach Preston Blair: AI, E, O, U, etc, FV, L, MBP, WQ, Ruhe.
+  Im Betrachter zeigt eine Anzeige für jede Figur die Mundform des gezeigten Bilds.
+- **Wörter erkennen**: Spur, Figur und Sprache wählen. FrameFold erkennt die gesprochenen Wörter, legt sie auf die Bilder und schlägt Mundformen vor.
+  Die Erkennung läuft nur auf dem Gerät. Ist sie für eine Sprache ohne Netz nicht verfügbar, bricht FrameFold ab, statt Ton zu verschicken.
+  Die Vorschläge sind ein Anfang, korrigiert wird im X-Sheet.
+- **Export**: Alle hörbaren Spuren werden zum Film gemischt.
+
 ## Export
 
 Den Export gibt es in der Werkansicht ab dem Modus Erweitert.
@@ -72,6 +90,7 @@ Sie sind nur aktiv, solange die Arbeitsfläche offen ist, damit einfache Tasten 
 | D | Bild verdoppeln |
 | ⌫ | Bild entfernen |
 | N | Notiz |
+| ⇧X | X-Sheet |
 | [ / ] | Weniger / mehr Zwiebelhaut |
 | M | Ansicht wechseln (Normal, Differenz, Belichtung) |
 | ⌘⏎ | Fertig |

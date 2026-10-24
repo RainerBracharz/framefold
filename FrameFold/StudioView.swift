@@ -39,10 +39,16 @@ struct StudioView: View {
     @State private var noteDraft = ""
     @State private var noteFrame: Int?
     @State private var flash = 0.0
+    @State private var audioPlayer = StudioAudioPlayer()
+    /// Tonpegel auf der Film-Zeitachse (120 Werte je Sekunde)
+    @State private var peaks: [Float] = []
+    @State private var showXSheet = false
+    @State private var importsAudio = false
 
     private var project: Project? { store.projects.first { $0.id == projectID } }
     private var urls: [URL] { project.map { store.frameURLs(for: $0) } ?? [] }
     private var fps: Int32 { max(1, PipelineSettings.restored().outputFPS) }
+    private var audioSources: [AudioSource] { project?.audioSources(fps: fps, store: store) ?? [] }
 
     var body: some View {
         HStack(spacing: 0) {
@@ -79,13 +85,23 @@ struct StudioView: View {
             if let raw = note.object as? String, let command = StudioCommand(rawValue: raw) { handle(command) }
         }
         .fileImporter(isPresented: $showReferenceImporter,
-                      allowedContentTypes: [.image, .movie]) { result in
-            if case .success(let url) = result {
+                      allowedContentTypes: importsAudio ? [.audio] : [.image, .movie]) { result in
+            guard case .success(let url) = result else { return }
+            if importsAudio {
+                if let project { store.addAudioTrack(from: url, startFrame: frameOnViewer ?? 0, to: project) }
+            } else {
                 reference.load(url)
                 reference.setKey(settings.referenceKey)
                 referenceFollow()
             }
         }
+        .sheet(isPresented: $showXSheet) {
+            XSheetView(projectID: projectID, fps: fps, peaks: peaks,
+                       currentFrame: (frameOnViewer ?? urls.count) + 1) { showXSheet = false }
+                .environmentObject(store)
+        }
+        .onChange(of: showXSheet) { _, open in hub.isActive = !open }
+        .onChange(of: project?.allAudioTracks) { _, _ in reloadAudio() }
         .alert(noteTitle, isPresented: Binding(get: { noteFrame != nil }, set: { if !$0 { noteFrame = nil } })) {
             TextField("Notiz", text: $noteDraft)
             Button("Sichern") {
@@ -126,6 +142,7 @@ struct StudioView: View {
             .clipped()
             .overlay(alignment: .topLeading) { viewerBadge }
             .overlay(alignment: .top) { noteBanner }
+            .overlay(alignment: .bottomLeading) { dialogueHUD }
             .position(x: geo.size.width / 2, y: geo.size.height / 2)
         }
         .background(Color(white: 0.08))
@@ -224,6 +241,33 @@ struct StudioView: View {
         return String(localized: "LIVE · BILD \(urls.count + 1)")
     }
 
+    /// Mundformen aller Figuren für das gezeigte Bild – beim Animieren
+    /// sieht man, welche Stellung jetzt dran ist.
+    @ViewBuilder
+    private var dialogueHUD: some View {
+        if settings.dialogueHUD, let project, let entries = project.dialogue, !entries.isEmpty {
+            let frame = (frameOnViewer ?? urls.count) + 1
+            HStack(spacing: 12) {
+                ForEach(project.characters, id: \.self) { name in
+                    if let entry = DialogueReading.current(in: entries, frame: frame, character: name) {
+                        HStack(spacing: 6) {
+                            MouthShape(phoneme: entry.phoneme).frame(width: 34, height: 22)
+                            VStack(alignment: .leading, spacing: 1) {
+                                Text(verbatim: name.uppercased()).font(Theme.mono(9, .medium))
+                                    .foregroundStyle(Theme.paperOnDark.opacity(0.7))
+                                Text(verbatim: entry.phoneme.label + (entry.frame == frame ? (entry.word.map { " »\($0)«" } ?? "") : ""))
+                                    .font(Theme.mono(12, .bold)).foregroundStyle(Theme.amber)
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 10).padding(.vertical, 6)
+            .background(Color.black.opacity(0.65))
+            .padding(10)
+        }
+    }
+
     @ViewBuilder
     private var noteBanner: some View {
         if showsLive, let note = project?.note(forFrame: urls.count + 1) {
@@ -301,7 +345,7 @@ struct StudioView: View {
                 }
                 .padding(.horizontal, 12).padding(.vertical, 8)
             }
-            .frame(height: 104)
+            .frame(height: peaks.isEmpty ? 104 : 120)
             .background(Color(white: 0.06))
             .onChange(of: frameOnViewer) { _, index in
                 withAnimation(.easeOut(duration: 0.15)) { proxy.scrollTo(index ?? -1, anchor: .center) }
@@ -322,6 +366,7 @@ struct StudioView: View {
                 .frame(width: cellWidth, height: 63)
                 .clipped()
                 .overlay(Rectangle().stroke(isShown ? Theme.amber : Color.clear, lineWidth: 2))
+            if !peaks.isEmpty { waveSlice(index).frame(width: cellWidth, height: 14) }
             HStack(spacing: 4) {
                 Text(String(format: "%03d", index + 1))
                     .font(Theme.mono(9, isShown ? .bold : .regular))
@@ -349,6 +394,23 @@ struct StudioView: View {
                   let from = project.frameFilenames.firstIndex(of: name) else { return false }
             store.moveFrame(named: name, by: index - from, in: project)
             return true
+        }
+    }
+
+    /// Wellenform genau dieses Bilds (bei der Bildrate des Films).
+    private func waveSlice(_ index: Int) -> some View {
+        let perFrame = 120.0 / Double(fps)
+        let a = Int(Double(index) * perFrame), b = Int(Double(index + 1) * perFrame)
+        let slice = a < peaks.count ? Array(peaks[a..<min(max(a, b), peaks.count)]) : []
+        return Canvas { ctx, size in
+            guard !slice.isEmpty else { return }
+            let step = size.width / CGFloat(slice.count)
+            var path = Path()
+            for (i, v) in slice.enumerated() {
+                let h = max(1, CGFloat(v) * size.height)
+                path.addRect(CGRect(x: CGFloat(i) * step, y: (size.height - h) / 2, width: max(1, step - 1), height: h))
+            }
+            ctx.fill(path, with: .color(Theme.amber.opacity(0.75)))
         }
     }
 
@@ -399,11 +461,11 @@ struct StudioView: View {
                         slider("Versatz Y", $settings.referenceOffsetY, -0.5...0.5)
                         picker("Chroma-Key", $settings.referenceKey, ChromaKey.allCases) { $0.label }
                         HStack {
-                            smallButton("Ersetzen …") { showReferenceImporter = true }
+                            smallButton("Ersetzen …") { importsAudio = false; showReferenceImporter = true }
                             smallButton("Entfernen") { reference.clear() }
                         }
                     } else {
-                        smallButton("Bild oder Film laden …") { showReferenceImporter = true }
+                        smallButton("Bild oder Film laden …") { importsAudio = false; showReferenceImporter = true }
                         Text("Ein Film läuft Bild für Bild mit: Bild n zeigt die Stelle n ÷ Bildrate.")
                             .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
                     }
@@ -420,6 +482,17 @@ struct StudioView: View {
                             }
                         }
                     }
+                }
+                section("Ton") {
+                    if let project {
+                        ForEach(project.allAudioTracks) { track in trackRow(track, in: project) }
+                    }
+                    HStack {
+                        smallButton("Tonspur hinzufügen …") { importsAudio = true; showReferenceImporter = true }
+                        smallButton("X-Sheet …") { handle(.xsheet) }
+                    }
+                    toggle("Ton beim Blättern", $settings.scrubAudio)
+                    toggle("Mundformen einblenden", $settings.dialogueHUD)
                 }
                 section("Zeitraffer") {
                     stepper("Intervall", value: $settings.intervalSeconds, in: 1...3600, step: intervalStep) { Self.durationText($0) }
@@ -454,6 +527,34 @@ struct StudioView: View {
             .padding(16)
         }
         .tint(Theme.amber)
+    }
+
+    /// Eine Tonspur im Inspektor: Einsatzbild, Lautstärke, stumm, entfernen.
+    private func trackRow(_ track: AudioTrack, in project: Project) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Image(systemName: track.muted ? "speaker.slash" : "waveform")
+                    .foregroundStyle(track.muted ? Theme.paperOnDark.opacity(0.4) : Theme.amber)
+                Text(verbatim: track.name).font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark).lineLimit(1)
+                Spacer()
+                Button { var t = track; t.muted.toggle(); store.updateAudioTrack(t, in: project) } label: {
+                    Image(systemName: track.muted ? "speaker.wave.2" : "speaker.slash")
+                }
+                .buttonStyle(.plain).foregroundStyle(Theme.paperOnDark)
+                .help(Text(track.muted ? "Ton an" : "Stumm"))
+                Button { store.removeAudioTrack(track, from: project) } label: { Image(systemName: "trash") }
+                    .buttonStyle(.plain).foregroundStyle(Theme.paperOnDark)
+                    .help(Text("Spur entfernen"))
+            }
+            stepper("Ab Bild", value: Binding(get: { track.startFrame + 1 },
+                                              set: { var t = track; t.startFrame = $0 - 1; store.updateAudioTrack(t, in: project) }),
+                    in: 1...100_000) { "\($0)" }
+            Slider(value: Binding(get: { track.volume },
+                                  set: { var t = track; t.volume = $0; store.updateAudioTrack(t, in: project) }),
+                   in: 0...1.5)
+        }
+        .padding(8)
+        .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.15), lineWidth: 1))
     }
 
     private var intervalStep: Double {
@@ -536,9 +637,11 @@ struct StudioView: View {
         case .stepBack:
             stopPlayback(); testShown = nil
             selected = StudioPlayback.step(from: frameOnViewer, by: -1, count: urls.count)
+            scrub()
         case .stepForward:
             stopPlayback(); testShown = nil
             selected = StudioPlayback.step(from: frameOnViewer, by: 1, count: urls.count)
+            scrub()
         case .live:
             stopPlayback(); selected = nil; showCaptured = false; testShown = nil
         case .play:
@@ -570,6 +673,9 @@ struct StudioView: View {
             settings.viewMode = all[(all.firstIndex(of: settings.viewMode)! + 1) % all.count]
         case .note:
             editNote((frameOnViewer ?? urls.count) + 1)
+        case .xsheet:
+            stopPlayback()
+            showXSheet = true
         case .testShot:
             if let frame = controller.currentLatestFrame {
                 testShots.append(UIImage(cgImage: frame))
@@ -584,6 +690,8 @@ struct StudioView: View {
         cache.preload(range.map { urls[$0] })
         playing = true
         playIndex = range.lowerBound
+        let rate = Double(fps)
+        audioPlayer.play(from: Double(range.lowerBound) / rate)
         let interval = UInt64(1_000_000_000 / Double(fps))
         playTask = Task { @MainActor in
             while !Task.isCancelled {
@@ -593,17 +701,35 @@ struct StudioView: View {
                     playIndex += 1
                 } else if loop {
                     playIndex = range.lowerBound
+                    audioPlayer.play(from: Double(range.lowerBound) / rate)
                 } else {
                     break
                 }
             }
-            if !Task.isCancelled { playing = false }
+            if !Task.isCancelled { playing = false; audioPlayer.stop() }
         }
     }
 
     private func stopPlayback() {
         playTask?.cancel(); playTask = nil
         playing = false
+        audioPlayer.stop()
+    }
+
+    /// Ton genau des gezeigten Bilds anspielen.
+    private func scrub() {
+        guard settings.scrubAudio, !audioSources.isEmpty else { return }
+        let frame = frameOnViewer ?? urls.count
+        audioPlayer.play(from: Double(frame) / Double(fps), duration: 1 / Double(fps))
+    }
+
+    private func reloadAudio() {
+        let sources = audioSources
+        audioPlayer.load(sources)
+        Task.detached(priority: .utility) {
+            let combined = Waveform.combined(sources)
+            await MainActor.run { peaks = combined }
+        }
     }
 
     private func setAutoToggle(_ on: Bool) {
@@ -656,6 +782,7 @@ struct StudioView: View {
         #endif
         apply(settings)
         cache.preload(Array(urls.suffix(12)))
+        reloadAudio()
     }
 
     #if DEBUG
@@ -682,6 +809,22 @@ struct StudioView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 6) { handle(.play) }
             case "test":
                 DispatchQueue.main.asyncAfter(deadline: .now() + 4) { handle(.testShot) }
+            case "audio":
+                if let project, !(project.audioTracks ?? []).contains(where: { $0.name == "dialog" }) {
+                    store.addAudioTrack(from: URL(fileURLWithPath: kv[1]), startFrame: 2, to: project)
+                }
+            case "dialogue":
+                // Beispiel-Dialog ohne Spracherkennung (die fragt um Erlaubnis)
+                let words = [TimedWord(text: "Hallo", start: 0.2, duration: 0.6),
+                             TimedWord(text: "ich", start: 1.0, duration: 0.3),
+                             TimedWord(text: "bin", start: 1.3, duration: 0.3),
+                             TimedWord(text: "Papier", start: 1.9, duration: 0.7)]
+                if let project {
+                    store.replaceDialogue(of: kv[1], with: DialogueReading.entries(
+                        for: words, character: kv[1], fps: fps, offsetFrames: 2), in: project)
+                }
+            case "xsheet":
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) { handle(.xsheet) }
             case "note":
                 if let project { store.setNote(kv[1], forFrame: urls.count + 1, in: project) }
             default: break

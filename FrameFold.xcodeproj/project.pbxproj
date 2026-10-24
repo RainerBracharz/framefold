@@ -34,6 +34,9 @@
 		BB20F0F0F0F0F0F0F0F0F312 /* LiveSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F313 /* LiveSettingsView.swift */; };
 		BB20F0F0F0F0F0F0F0F0F314 /* LiveCaptureController+MacCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F315 /* LiveCaptureController+MacCamera.swift */; };
 		BB20F0F0F0F0F0F0F0F0F316 /* LiveCaptureController+Simulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */; };
+		CC30B2B2B2B2B2B2B2B2B220 /* StudioXSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30B2B2B2B2B2B2B2B2B221 /* StudioXSheet.swift */; };
+		CC30B2B2B2B2B2B2B2B2B120 /* StudioAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30B2B2B2B2B2B2B2B2B121 /* StudioAudio.swift */; };
+		CC30B2B2B2B2B2B2B2B2B020 /* Dialogue.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30B2B2B2B2B2B2B2B2B021 /* Dialogue.swift */; };
 		CC30A1A1A1A1A1A1A1A1A310 /* StudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30A1A1A1A1A1A1A1A1A311 /* StudioView.swift */; };
 		CC30A1A1A1A1A1A1A1A1A210 /* StudioParts.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30A1A1A1A1A1A1A1A1A211 /* StudioParts.swift */; };
 		CC30A1A1A1A1A1A1A1A1A110 /* StudioState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30A1A1A1A1A1A1A1A1A111 /* StudioState.swift */; };
@@ -115,6 +118,9 @@
 		BB20F0F0F0F0F0F0F0F0F313 /* LiveSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSettingsView.swift; sourceTree = "<group>"; };
 		BB20F0F0F0F0F0F0F0F0F315 /* LiveCaptureController+MacCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+MacCamera.swift"; sourceTree = "<group>"; };
 		BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+Simulator.swift"; sourceTree = "<group>"; };
+		CC30B2B2B2B2B2B2B2B2B221 /* StudioXSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioXSheet.swift; sourceTree = "<group>"; };
+		CC30B2B2B2B2B2B2B2B2B121 /* StudioAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioAudio.swift; sourceTree = "<group>"; };
+		CC30B2B2B2B2B2B2B2B2B021 /* Dialogue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dialogue.swift; sourceTree = "<group>"; };
 		CC30A1A1A1A1A1A1A1A1A311 /* StudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioView.swift; sourceTree = "<group>"; };
 		CC30A1A1A1A1A1A1A1A1A211 /* StudioParts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioParts.swift; sourceTree = "<group>"; };
 		CC30A1A1A1A1A1A1A1A1A111 /* StudioState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioState.swift; sourceTree = "<group>"; };
@@ -217,6 +223,9 @@
 				BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */,
 				BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */,
 				BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */,
+				CC30B2B2B2B2B2B2B2B2B221 /* StudioXSheet.swift */,
+				CC30B2B2B2B2B2B2B2B2B121 /* StudioAudio.swift */,
+				CC30B2B2B2B2B2B2B2B2B021 /* Dialogue.swift */,
 				CC30A1A1A1A1A1A1A1A1A311 /* StudioView.swift */,
 				CC30A1A1A1A1A1A1A1A1A211 /* StudioParts.swift */,
 				CC30A1A1A1A1A1A1A1A1A111 /* StudioState.swift */,
@@ -431,6 +440,9 @@
 				BB20F0F0F0F0F0F0F0F0F303 /* LiveLoopView.swift in Sources */,
 				BB20F0F0F0F0F0F0F0F0F305 /* DuoSupport.swift in Sources */,
 				BB20F0F0F0F0F0F0F0F0F316 /* LiveCaptureController+Simulator.swift in Sources */,
+				CC30B2B2B2B2B2B2B2B2B220 /* StudioXSheet.swift in Sources */,
+				CC30B2B2B2B2B2B2B2B2B120 /* StudioAudio.swift in Sources */,
+				CC30B2B2B2B2B2B2B2B2B020 /* Dialogue.swift in Sources */,
 				CC30A1A1A1A1A1A1A1A1A310 /* StudioView.swift in Sources */,
 				CC30A1A1A1A1A1A1A1A1A210 /* StudioParts.swift in Sources */,
 				CC30A1A1A1A1A1A1A1A1A110 /* StudioState.swift in Sources */,
@@ -498,6 +510,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Im Studio erkennt FrameFold gesprochene Wörter einer Tonspur – nur auf dem Gerät –, um Mundformen den Bildern zuzuordnen.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -529,6 +542,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Im Studio erkennt FrameFold gesprochene Wörter einer Tonspur – nur auf dem Gerät –, um Mundformen den Bildern zuzuordnen.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -32,6 +32,12 @@ struct StudioSettings: Codable, Equatable {
     var averageFrames = 1
     var captureBlackout = false
 
+    // Ton
+    /// Beim Blättern den Ton genau dieses Bilds anspielen
+    var scrubAudio = true
+    /// Mundformen der Figuren im Betrachter einblenden
+    var dialogueHUD = true
+
     // Zeitraffer
     var intervalSeconds = 5.0
     var useStartTime = false
@@ -69,6 +75,8 @@ struct StudioSettings: Codable, Equatable {
         autoShutter = v(.autoShutter, d.autoShutter)
         averageFrames = v(.averageFrames, d.averageFrames)
         captureBlackout = v(.captureBlackout, d.captureBlackout)
+        scrubAudio = v(.scrubAudio, d.scrubAudio)
+        dialogueHUD = v(.dialogueHUD, d.dialogueHUD)
         intervalSeconds = v(.intervalSeconds, d.intervalSeconds)
         useStartTime = v(.useStartTime, d.useStartTime)
         startTime = v(.startTime, d.startTime)
@@ -162,7 +170,7 @@ enum ChromaKey: String, Codable, CaseIterable, Identifiable {
 enum StudioCommand: String {
     case capture, stepBack, stepForward, live, play, shortPlay
     case toggle, autoToggle, loopIn, loopOut, loopClear
-    case duplicate, delete, onionMore, onionLess, cycleView, note, testShot
+    case duplicate, delete, onionMore, onionLess, cycleView, note, testShot, xsheet
 }
 
 /// Ob gerade eine Studio-Arbeitsfläche offen ist – nur dann sind die

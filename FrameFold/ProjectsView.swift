@@ -410,6 +410,9 @@ struct ProjectDetailView: View {
         .onChange(of: currentProject.audioFilename) { _, _ in
             exportURL = nil
         }
+        .onChange(of: currentProject.audioTracks) { _, _ in
+            exportURL = nil
+        }
     }
 
     /// Immer den frischen Stand aus dem Store verwenden.
@@ -471,7 +474,12 @@ struct ProjectDetailView: View {
         HStack(spacing: 10) {
             Image(systemName: "music.note")
                 .foregroundStyle(Theme.ink)
-            if currentProject.audioFilename != nil {
+            if currentProject.audioFilename == nil, let tracks = currentProject.audioTracks, !tracks.isEmpty {
+                Text("\(tracks.count) Tonspuren (Studio)")
+                    .font(Theme.body)
+                    .foregroundStyle(Theme.ink)
+                Spacer()
+            } else if currentProject.audioFilename != nil {
                 Text("Mit Ton")
                     .font(Theme.body)
                     .foregroundStyle(Theme.ink)
@@ -848,7 +856,7 @@ struct ProjectDetailView: View {
         errorMessage = nil
         let urls = store.frameURLs(for: currentProject)
         let settings = exportSettings
-        let audio = store.audioURL(for: currentProject)
+        let audio = currentProject.audioSources(fps: settings.outputFPS, store: store)
 
         Task {
             do {
@@ -857,8 +865,12 @@ struct ProjectDetailView: View {
                 ) { p in
                     Task { @MainActor in exportProgress = p }
                 }
-                if let audio {
-                    url = try await StopMotionAssembler.addAudio(audio, to: url)
+                // Alle Tonspuren (Musik aus der Werkansicht und Studio-Spuren)
+                // auf Filmlänge mischen und unterlegen
+                if !audio.isEmpty {
+                    let duration = try await AVURLAsset(url: url).load(.duration).seconds
+                    let mix = try AudioMixer.mix(audio, duration: duration)
+                    url = try await StopMotionAssembler.addAudio(mix, to: url)
                 }
                 await MainActor.run {
                     exportURL = url

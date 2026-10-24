@@ -3,6 +3,7 @@ FrameFold 2.6
 Das Studio – und Ton.
 
 • Studio: Ab „Erweitert“ wird die Kamera zur Profi-Arbeitsfläche – Zeitleiste zum Ziehen, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder, Differenz- und Belichtungsansicht, Formatmasken, Raster, Referenzbild oder -film mit Chroma-Key, Notizen je Bild, Mitteln gegen Rauschen, Zeitraffer mit Start- und Endzeit. Alles auch über Tasten (Menü „Studio“).
+• Ton wie im Studio: mehrere Tonspuren mit Einsatzbild und Lautstärke, Wellenform in der Zeitleiste, Ton beim Abspielen und Blättern. Im X-Sheet Dialog lesen mit Mundformen je Figur – Wörter erkennt FrameFold auf Wunsch selbst, nur auf dem Gerät.
 • Export als ProRes oder Bildsequenz (PNG, TIFF, JPEG).
 • Musik oder Ton: In der Werkansicht eine Audiodatei wählen – sie liegt unter dem exportierten Film.
 • Bis 24 Bilder pro Sekunde: 15 und 24 fps für flüssige Bewegung.
