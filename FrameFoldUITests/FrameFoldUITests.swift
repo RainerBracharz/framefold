@@ -60,6 +60,8 @@ final class FrameFoldUITests: XCTestCase {
             app.launchEnvironment["FF_VIDEO"] = video
         }
         app.launch()
+        // iPad im Ständer: FF_ORIENT=landscape dreht das Gerät quer
+        if let o = env["FF_ORIENT"] { XCUIDevice.shared.orientation = o == "landscape" ? .landscapeLeft : .portrait }
     }
 
     override func tearDownWithError() throws {
@@ -333,6 +335,15 @@ final class FrameFoldUITests: XCTestCase {
         work.tap()
         XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Zuletzt gelöscht'")).firstMatch
             .waitForExistence(timeout: 5), "altes Bild nicht im Papierkorb")
+
+        // Verdoppeln: aus drei Bildern werden vier
+        let second = app.descendants(matching: .any).matching(label("02")).firstMatch
+        XCTAssertTrue(second.waitForExistence(timeout: 5))
+        second.coordinate(withNormalizedOffset: CGVector(dx: 2.5, dy: -2.5)).press(forDuration: 1.5)
+        XCTAssertTrue(tap(["Verdoppeln"]), "Menüeintrag Verdoppeln fehlt")
+        XCTAssertTrue(app.descendants(matching: .any).matching(label("04")).firstMatch
+            .waitForExistence(timeout: 5), "Bild 4 fehlt nach dem Verdoppeln")
+        shot("duplicate")
     }
 
     /// Tippt `button`, bis `target` erscheint – höchstens dreimal.

@@ -117,6 +117,7 @@ struct CameraPreview: UIViewRepresentable {
 
     func updateUIView(_ uiView: PreviewView, context: Context) {
         context.coordinator.onFocusTap = onFocusTap
+        uiView.setNeedsLayout()   // iPad: Drehung anbinden, sobald die Kamera da ist
     }
 
     func makeCoordinator() -> Coordinator { Coordinator(onFocusTap: onFocusTap) }
@@ -138,6 +139,28 @@ struct CameraPreview: UIViewRepresentable {
         override static var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
         var videoPreviewLayer: AVCaptureVideoPreviewLayer {
             layer as! AVCaptureVideoPreviewLayer
+        }
+        /// iPad: Die Vorschau folgt der Gerätelage (am iPhone fest Hochformat).
+        private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
+        private var rotationObservation: NSKeyValueObservation?
+
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            #if !targetEnvironment(macCatalyst)
+            guard UIDevice.current.userInterfaceIdiom == .pad, rotationCoordinator == nil,
+                  let device = (videoPreviewLayer.session?.inputs.first as? AVCaptureDeviceInput)?.device else { return }
+            let coordinator = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: videoPreviewLayer)
+            rotationCoordinator = coordinator
+            rotationObservation = coordinator.observe(\.videoRotationAngleForHorizonLevelPreview,
+                                                      options: [.initial, .new]) { [weak self] c, _ in
+                let angle = c.videoRotationAngleForHorizonLevelPreview
+                DispatchQueue.main.async {
+                    guard let conn = self?.videoPreviewLayer.connection,
+                          conn.isVideoRotationAngleSupported(angle) else { return }
+                    conn.videoRotationAngle = angle
+                }
+            }
+            #endif
         }
     }
 }

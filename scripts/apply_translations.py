@@ -33,7 +33,7 @@ LANG = sys.argv[sys.argv.index("--lang") + 1] if "--lang" in sys.argv else "en"
 NEUTRAL = {
     "", "%lld", "FrameFold",
     "1 s", "2 s", "3 s",
-    "2 fps", "3 fps", "4 fps", "6 fps", "8 fps", "10 fps", "12 fps",
+    "2 fps", "3 fps", "4 fps", "6 fps", "8 fps", "10 fps", "12 fps", "15 fps", "24 fps",
 }
 
 

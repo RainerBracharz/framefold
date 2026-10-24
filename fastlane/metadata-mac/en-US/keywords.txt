@@ -1,1 +1,1 @@
-document camera,webcam,timelapse,animation,artist,studio,craft,paper,origami,classroom,teaching
+stopmotion,claymation,brickfilm,flipbook,animation,animator,timelapse,kids,classroom,onion skin,clay

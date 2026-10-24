@@ -257,6 +257,55 @@ final class ProjectStoreTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: projectDir(project).path))
         XCTAssertTrue(makeStore().projects.isEmpty)
     }
+
+    // MARK: Verdoppeln, Umordnen, Ton
+
+    func testDuplicateInsertsCopyBehindOriginal() throws {
+        let store = makeStore()
+        let project = store.createProject(name: "A")
+        store.appendFrame(jpegData: jpeg(1), to: project)
+        store.appendFrame(jpegData: jpeg(2), to: current(store, project))
+
+        let copy = store.duplicateFrame(named: "000000.jpg", in: current(store, project))
+
+        XCTAssertEqual(copy, "000002.jpg")
+        XCTAssertEqual(current(store, project).frameFilenames, ["000000.jpg", "000002.jpg", "000001.jpg"])
+        let data = try Data(contentsOf: projectDir(project).appendingPathComponent("000002.jpg"))
+        XCTAssertEqual(data, jpeg(1))
+    }
+
+    func testMoveFrameClampsAtEnds() {
+        let store = makeStore()
+        let project = store.createProject(name: "A")
+        for i in 0..<3 { store.appendFrame(jpegData: jpeg(UInt8(i)), to: current(store, project)) }
+
+        store.moveFrame(named: "000000.jpg", by: 1, in: current(store, project))
+        XCTAssertEqual(current(store, project).frameFilenames, ["000001.jpg", "000000.jpg", "000002.jpg"])
+        store.moveFrame(named: "000002.jpg", by: -5, in: current(store, project))
+        XCTAssertEqual(current(store, project).frameFilenames, ["000002.jpg", "000001.jpg", "000000.jpg"])
+        XCTAssertEqual(makeStore().projects[0].frameFilenames, ["000002.jpg", "000001.jpg", "000000.jpg"],
+                       "Reihenfolge übersteht das Neuladen")
+    }
+
+    func testAudioIsCopiedReplacedAndRemoved() throws {
+        let store = makeStore()
+        let project = store.createProject(name: "A")
+        let source = root.appendingPathComponent("lied.m4a")
+        try Data([1, 2, 3]).write(to: source)
+
+        XCTAssertTrue(store.setAudio(from: source, for: project))
+        let first = try XCTUnwrap(store.audioURL(for: current(store, project)))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: first.path))
+
+        XCTAssertTrue(store.setAudio(from: source, for: current(store, project)))
+        let second = try XCTUnwrap(store.audioURL(for: current(store, project)))
+        XCTAssertNotEqual(first, second)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: first.path), "alte Spur ersetzt")
+
+        store.removeAudio(from: current(store, project))
+        XCTAssertNil(current(store, project).audioFilename)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: second.path))
+    }
 }
 
 @MainActor

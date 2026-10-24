@@ -1,3 +1,5 @@
+Die Stop-Motion-App, die von selbst auslöst, sobald deine Hände aus dem Bild sind. Kostenlos, ohne Abo, ohne Werbung, ohne Konto, ohne Internet.
+
 FrameFold macht aus deiner Arbeit am Tisch eine Stopmotion – vollautomatisch und komplett auf deinem Mac.
 
 Eine Kamera blickt von oben auf den Tisch, du faltest, zeichnest, legst. FrameFold löst selbst aus, sobald deine Hände aus dem Bild sind und die Szene ruht. Nichts verlässt deinen Mac: keine Cloud, kein Konto, kein Tracking.
@@ -7,6 +9,9 @@ Am besten mit einer Dokumentenkamera, die senkrecht auf den Tisch blickt – Fra
 
 SCHARF, ODER GAR NICHT
 Die App misst laufend die Bildschärfe. Ein unscharfes Bild landet gar nicht erst im Werk. Wo die Kamera es erlaubt, hält FrameFold Belichtung und Weißabgleich fest, damit zwischen den Bildern nichts flackert.
+
+SCHNITT UND TON
+Ein Bild verdoppeln, damit eine Pose länger steht, Bilder per Ziehen umordnen, bis 24 Bilder pro Sekunde exportieren – und Musik oder Ton aus deinen Dateien unter den Film legen.
 
 DER FILM WÄCHST MIT
 Während du arbeitest, läuft die Stopmotion schon als Schleife neben dem Kamerabild.
@@ -23,7 +28,7 @@ Einfach (auswählen, auslösen, fertig – ideal für den Unterricht), Erweitert
 WERKE STATT DATEIEN
 Projekte sammeln Bilder über beliebig viele Sessions, mit 30-Tage-Papierkorb. Das Ergebnis erscheint als Edition: „Blatt 01–24 · Serie von 24 · datiert 2026".
 
-AUCH AUF DEM IPHONE
-FrameFold gibt es ebenso für das iPhone – dort mit Stativ, Apple Watch als Fernauslöser und Studio-Monitor.
+AUCH AUF IPHONE UND IPAD
+FrameFold gibt es ebenso für iPhone und iPad – dort mit Stativ, Apple Watch als Fernauslöser und Studio-Monitor.
 
 Entstanden als maßgeschneidertes Werkzeug für den Künstler Aldo Tolino, dessen Arbeit gedruckte Fotografien zu Objekten faltet und wieder fotografiert – Bild, Objekt, Bild.

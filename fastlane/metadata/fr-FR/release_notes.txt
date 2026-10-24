@@ -1,7 +1,8 @@
-FrameFold 2.5
+FrameFold 2.6
 
-Quand le trépied bouge – et quand une image ne convient pas.
+Désormais aussi sur iPad – et avec du son.
 
-• Le trépied a bougé ? Si l’arrière-plan n’est plus placé comme sur la première image, FrameFold le signale et peut afficher la première image pour réaligner. « C’est bon » garde la nouvelle position.
-• Reprendre une seule image : appui long sur une image de la planche contact, puis « Reprendre » – la prochaine image remplace exactement celle-ci, à sa place. L’ancienne reste 30 jours dans la corbeille.
-• Corrigé : « Continuer avec la caméra » restait parfois bloqué sur le résultat de la dernière séance.
+• iPad : FrameFold fonctionne sur iPad, en portrait et en paysage. Sur un support, le viseur et les images suivent l’orientation de l’appareil.
+• Musique ou son : choisis un fichier audio dans la vue de l’œuvre – il accompagne le film exporté.
+• Jusqu’à 24 images par seconde : 15 et 24 fps pour un mouvement fluide.
+• Dupliquer et réordonner : appuie longuement sur une image pour « Dupliquer », « Avancer » et « Reculer » – ou fais-la simplement glisser ailleurs dans la planche contact.

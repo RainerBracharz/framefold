@@ -1,7 +1,8 @@
-FrameFold 2.5
+FrameFold 2.6
 
-Wenn am Stativ etwas verrutscht – und wenn ein Bild nicht passt.
+Jetzt auch auf dem iPad – und mit Ton.
 
-• Stativ verrutscht? Liegt der Hintergrund anders als beim ersten Bild, sagt FrameFold Bescheid und blendet auf Wunsch das erste Bild zum Ausrichten ein. Mit „Passt so“ wird die neue Position übernommen.
-• Einzelnes Bild neu aufnehmen: Im Kontaktbogen ein Bild lange drücken und „Neu aufnehmen“ wählen – das nächste Bild ersetzt genau dieses, an seiner Stelle. Das alte bleibt 30 Tage im Papierkorb.
-• Behoben: „Mit der Kamera weiterarbeiten“ blieb manchmal auf dem Ergebnis der letzten Aufnahme hängen.
+• iPad: FrameFold läuft auf dem iPad, hoch und quer. Im Ständer folgen Sucher und Bilder der Lage des Geräts.
+• Musik oder Ton: In der Werkansicht eine Audiodatei wählen – sie liegt unter dem exportierten Film.
+• Bis 24 Bilder pro Sekunde: 15 und 24 fps für flüssige Bewegung.
+• Bilder verdoppeln und umordnen: Ein Bild lange drücken für „Verdoppeln“, „Nach vorn“ und „Nach hinten“ – oder im Kontaktbogen einfach an eine andere Stelle ziehen.

@@ -1,9 +1,7 @@
-FrameFold 2.4 for Mac
+FrameFold 2.6
 
-Steadier films and a new way to share.
+With sound – and smoother.
 
-• Reduce flicker: when exporting, FrameFold evens out brightness from frame to frame – clouds, room light or auto exposure no longer make the film flicker. Slow changes in light stay. On by default, can be turned off in the export settings.
-• Share as GIF: below every finished film – an endlessly looping GIF for messengers, school platforms and slides that don’t play video.
-• Shoot with a presenter remote: “Page Down” takes a frame, “Page Up” takes it back – camera and table stay untouched. Also in the Capture menu.
-• Camera moved? If the background sits differently than in the first frame, FrameFold tells you and can show the first frame to line things up again.
-• Retake a single frame: right-click it in the contact sheet and choose “Retake” – the next frame replaces exactly this one, in place. The old one stays in the trash for 30 days.
+• Music or sound: pick an audio file in the work view – it plays under the exported film.
+• Up to 24 fps: 15 and 24 fps for smooth motion.
+• Duplicate and reorder frames: right-click a frame for “Duplicate”, “Move earlier” and “Move later” – or drag it to a new place in the contact sheet.

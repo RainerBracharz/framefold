@@ -1,7 +1,8 @@
-FrameFold 2.5
+FrameFold 2.6
 
-When the tripod gets bumped – and when one frame isn't right.
+Now on iPad too – and with sound.
 
-• Tripod moved? If the background sits differently than in the first frame, FrameFold tells you and can show the first frame to line things up again. “It's fine” keeps the new position.
-• Retake a single frame: press and hold a frame in the contact sheet and choose “Retake” – the next frame replaces exactly this one, in place. The old one stays in the trash for 30 days.
-• Fixed: “Continue with the camera” could get stuck on the result of the last session.
+• iPad: FrameFold runs on iPad, portrait and landscape. In a stand, viewfinder and frames follow the way the device is turned.
+• Music or sound: pick an audio file in the work view – it plays under the exported film.
+• Up to 24 fps: 15 and 24 fps for smooth motion.
+• Duplicate and reorder frames: press and hold a frame for “Duplicate”, “Move earlier” and “Move later” – or simply drag it to a new place in the contact sheet.

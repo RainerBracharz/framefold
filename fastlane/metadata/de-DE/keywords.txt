@@ -1,1 +1,1 @@
-Zeitraffer,Trickfilm,Animation,Kunst,Atelier,Handwerk,Papier,Origami,Unterricht,Schule,Stativ
+Stopmotion,Trickfilm,Knete,Claymation,Brickfilm,Daumenkino,Animation,Zeitraffer,Kinder,Schule,Stativ

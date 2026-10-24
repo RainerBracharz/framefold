@@ -1,4 +1,6 @@
-FrameFold turns a video of your working process into a stop-motion — automatically, and entirely on your iPhone.
+The stop-motion app that shoots by itself the moment your hands leave the frame. Free, no subscription, no ads, no account, no internet.
+
+FrameFold turns a video of your working process into a stop-motion — automatically, and entirely on your iPhone or iPad.
 
 The app finds the calm moments in your footage, drops every frame with your hands in it, compensates for shake and assembles the result. Nothing leaves your device: no cloud, no account, no tracking.
 
@@ -10,6 +12,9 @@ The app measures image sharpness continuously and only locks focus once it has a
 
 APPLE WATCH AS A REMOTE
 Fire and finish from your wrist, with the frame count and status on the watch face. Nobody has to touch the tripod. The volume buttons on headphones and AirPods fire too, and holding the shutter starts a countdown.
+
+EDIT AND SCORE
+Duplicate a frame to hold a pose longer, drag frames into a new order, export at up to 24 fps — and lay music or sound from your files under the film.
 
 THE FILM GROWS AS YOU WORK
 While you work, the stop-motion is already playing as a loop — in the viewfinder and on the studio monitor next to the camera feed.

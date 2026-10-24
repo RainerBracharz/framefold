@@ -1,3 +1,5 @@
+The stop-motion app that shoots by itself the moment your hands leave the frame. Free, no subscription, no ads, no account, no internet.
+
 FrameFold turns your work at the table into a stop-motion — automatically, and entirely on your Mac.
 
 A camera looks down at the table while you fold, draw, arrange. FrameFold fires by itself as soon as your hands leave the frame and the scene settles. Nothing leaves your Mac: no cloud, no account, no tracking.
@@ -7,6 +9,9 @@ Works best with a document camera looking straight down at the table — FrameFo
 
 SHARP, OR NOT AT ALL
 The app measures image sharpness continuously. A frame that isn't sharp never makes it into the work. Where the camera allows, FrameFold holds exposure and white balance so nothing flickers between frames.
+
+EDIT AND SCORE
+Duplicate a frame to hold a pose longer, drag frames into a new order, export at up to 24 fps — and lay music or sound from your files under the film.
 
 THE FILM GROWS AS YOU WORK
 While you work, the stop-motion is already playing as a loop next to the camera feed.
@@ -23,7 +28,7 @@ Simple (pick, shoot, done — made for teaching), Advanced (aspect, frame rate, 
 WORKS, NOT FILES
 Projects collect frames across any number of sessions, with a 30-day trash. The result arrives like an edition: "Sheets 01–24 · Series of 24 · dated 2026".
 
-ON IPHONE TOO
-FrameFold is also available for iPhone — there with a tripod, Apple Watch as a remote and a studio monitor.
+ON IPHONE AND IPAD TOO
+FrameFold is also available for iPhone and iPad — there with a tripod, Apple Watch as a remote and a studio monitor.
 
 Built as a bespoke tool for the artist Aldo Tolino, whose work folds printed photographs into objects and photographs them again — image, object, image.

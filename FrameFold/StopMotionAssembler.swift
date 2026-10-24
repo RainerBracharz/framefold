@@ -644,3 +644,46 @@ enum GIFMaker {
         return url
     }
 }
+
+// MARK: Tonspur
+
+extension StopMotionAssembler {
+    /// Legt eine Audiodatei unter den fertigen Film. Der Ton wird auf die
+    /// Filmlänge gekürzt; ist er kürzer, endet er einfach früher. Bild und
+    /// Ton werden nur umverpackt (kein neues Kodieren) – deshalb schnell.
+    /// MP4, wo der Ton es zulässt, sonst QuickTime.
+    static func addAudio(_ audioURL: URL, to videoURL: URL) async throws -> URL {
+        let video = AVURLAsset(url: videoURL)
+        let audio = AVURLAsset(url: audioURL)
+        guard let videoTrack = try await video.loadTracks(withMediaType: .video).first,
+              let audioTrack = try await audio.loadTracks(withMediaType: .audio).first else {
+            throw PipelineError.exportFailed
+        }
+        let duration = try await video.load(.duration)
+        let audioDuration = try await audio.load(.duration)
+
+        let composition = AVMutableComposition()
+        guard let v = composition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid),
+              let a = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid) else {
+            throw PipelineError.exportFailed
+        }
+        try v.insertTimeRange(CMTimeRange(start: .zero, duration: duration), of: videoTrack, at: .zero)
+        v.preferredTransform = try await videoTrack.load(.preferredTransform)
+        try a.insertTimeRange(CMTimeRange(start: .zero, duration: CMTimeMinimum(duration, audioDuration)),
+                              of: audioTrack, at: .zero)
+
+        for type in [AVFileType.mp4, .mov] {
+            guard let session = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetPassthrough),
+                  session.supportedFileTypes.contains(type) else { continue }
+            let url = FileManager.default.temporaryDirectory
+                .appendingPathComponent("framefold-\(UUID().uuidString.prefix(8)).\(type == .mp4 ? "mp4" : "mov")")
+            session.outputURL = url
+            session.outputFileType = type
+            await withCheckedContinuation { cont in
+                session.exportAsynchronously { cont.resume() }
+            }
+            if session.status == .completed { return url }
+        }
+        throw PipelineError.exportFailed
+    }
+}

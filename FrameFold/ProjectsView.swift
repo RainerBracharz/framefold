@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 import AVKit
 import UIKit
 
@@ -211,6 +212,7 @@ struct ProjectDetailView: View {
     @State private var shareItem: ShareItem?
     @State private var isEditingFrames = false
     @State private var showDeleteProject = false
+    @State private var showAudioImporter = false
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     private var mode: AppMode { AppMode.current(modeRaw) }
     @Environment(\.dismiss) private var dismiss
@@ -275,11 +277,40 @@ struct ProjectDetailView: View {
                             } label: {
                                 Label("Neu aufnehmen", systemImage: "camera.rotate")
                             }
+                            Button {
+                                store.duplicateFrame(named: url.lastPathComponent, in: currentProject)
+                            } label: {
+                                Label("Verdoppeln", systemImage: "plus.square.on.square")
+                            }
+                            if index > 0 {
+                                Button {
+                                    store.moveFrame(named: url.lastPathComponent, by: -1, in: currentProject)
+                                } label: {
+                                    Label("Nach vorn", systemImage: "arrow.left")
+                                }
+                            }
+                            if index < currentProject.frameCount - 1 {
+                                Button {
+                                    store.moveFrame(named: url.lastPathComponent, by: 1, in: currentProject)
+                                } label: {
+                                    Label("Nach hinten", systemImage: "arrow.right")
+                                }
+                            }
                             Button(role: .destructive) {
                                 store.removeFrames(at: IndexSet(integer: index), from: currentProject)
                             } label: {
                                 Label("Bild entfernen", systemImage: "trash")
                             }
+                        }
+                        // Umordnen per Ziehen: Bild auf eine andere Zelle legen
+                        .draggable(url.lastPathComponent) {
+                            FrameThumbnail(url: url).frame(width: 80, height: 80)
+                        }
+                        .dropDestination(for: String.self) { items, _ in
+                            guard let name = items.first,
+                                  let from = currentProject.frameFilenames.firstIndex(of: name) else { return false }
+                            store.moveFrame(named: name, by: index - from, in: currentProject)
+                            return true
                         }
                 }
             }
@@ -370,8 +401,11 @@ struct ProjectDetailView: View {
             // … und die Wahl wird zum neuen Standard für den nächsten Export.
             newValue.persist()
         }
-        .onChange(of: currentProject.frameCount) { _, _ in
-            // Frames entfernt/ergänzt → dito
+        .onChange(of: currentProject.frameFilenames) { _, _ in
+            // Frames entfernt, ergänzt oder umgestellt → dito
+            exportURL = nil
+        }
+        .onChange(of: currentProject.audioFilename) { _, _ in
             exportURL = nil
         }
     }
@@ -427,6 +461,37 @@ struct ProjectDetailView: View {
                 .tint(Theme.ink)
         }
         .padding(.vertical, 8)
+    }
+
+    /// Musik oder Ton unter dem Film – in jedem Modus, denn gerade Kinder
+    /// wollen ihren Film mit Musik. Nur aus Dateien, kein Mikrofon.
+    private var audioRow: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "music.note")
+                .foregroundStyle(Theme.ink)
+            if currentProject.audioFilename != nil {
+                Text("Mit Ton")
+                    .font(Theme.body)
+                    .foregroundStyle(Theme.ink)
+                Spacer()
+                Button("Ersetzen") { showAudioImporter = true }
+                    .font(Theme.caption(11))
+                Button("Entfernen", role: .destructive) { store.removeAudio(from: currentProject) }
+                    .font(Theme.caption(11))
+            } else {
+                Button("Musik oder Ton hinzufügen") { showAudioImporter = true }
+                    .font(Theme.body)
+                Spacer()
+            }
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(Theme.ink)
+        .padding(.horizontal, 4)
+        .fileImporter(isPresented: $showAudioImporter, allowedContentTypes: [.audio]) { result in
+            if case .success(let url) = result, !store.setAudio(from: url, for: currentProject) {
+                errorMessage = String(localized: "Die Tondatei konnte nicht übernommen werden.")
+            }
+        }
     }
 
     private var optionDivider: some View {
@@ -489,6 +554,8 @@ struct ProjectDetailView: View {
                             Text("8 fps").tag(Int32(8))
                             Text("10 fps").tag(Int32(10))
                             Text("12 fps").tag(Int32(12))
+                            Text("15 fps").tag(Int32(15))
+                            Text("24 fps").tag(Int32(24))
                         }
                     }
                     optionDivider
@@ -536,6 +603,8 @@ struct ProjectDetailView: View {
             .background(Theme.paperShade.opacity(0.5))
             .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
             }
+
+            audioRow
 
             if isExporting {
                 VStack(spacing: 8) {
@@ -735,13 +804,17 @@ struct ProjectDetailView: View {
         errorMessage = nil
         let urls = store.frameURLs(for: currentProject)
         let settings = exportSettings
+        let audio = store.audioURL(for: currentProject)
 
         Task {
             do {
-                let url = try await StopMotionAssembler().assemble(
+                var url = try await StopMotionAssembler().assemble(
                     imageURLs: urls, settings: settings
                 ) { p in
                     Task { @MainActor in exportProgress = p }
+                }
+                if let audio {
+                    url = try await StopMotionAssembler.addAudio(audio, to: url)
                 }
                 await MainActor.run {
                     exportURL = url

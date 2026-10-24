@@ -1,1 +1,1 @@
-Caméra stop motion automatique
+Déclenche quand la main part

@@ -842,6 +842,8 @@ struct SettingsView: View {
                             Text("8 fps").tag(Int32(8))
                             Text("10 fps").tag(Int32(10))
                             Text("12 fps").tag(Int32(12))
+                            Text("15 fps").tag(Int32(15))
+                            Text("24 fps – flüssig").tag(Int32(24))
                         }
                         Picker("Letztes Bild halten", selection: $settings.holdLastFrameSeconds) {
                             Text("Aus").tag(0.0)

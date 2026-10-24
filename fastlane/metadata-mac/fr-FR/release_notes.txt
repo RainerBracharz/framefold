@@ -1,9 +1,7 @@
-FrameFold 2.4 pour Mac
+FrameFold 2.6
 
-Des films plus stables et une nouvelle façon de partager.
+Avec du son – et plus fluide.
 
-• Réduire le scintillement : à l’export, FrameFold égalise la luminosité d’une image à l’autre – nuages, lumière de la pièce ou exposition automatique ne font plus scintiller le film. Les changements de lumière lents restent. Activé par défaut, désactivable dans les réglages d’export.
-• Partager en GIF : sous chaque film terminé – un GIF en boucle pour les messageries, plateformes scolaires et présentations qui ne lisent pas les vidéos.
-• Déclencher avec une télécommande de présentation : « Page suivante » prend une image, « Page précédente » l’annule – caméra et table restent intactes. Aussi dans le menu Prise de vue.
-• La caméra a bougé ? Si l’arrière-plan n’est plus placé comme sur la première image, FrameFold le signale et peut afficher la première image pour réaligner.
-• Reprendre une seule image : clic droit dans la planche contact, « Reprendre » – la prochaine image remplace exactement celle-ci, à sa place. L’ancienne reste 30 jours dans la corbeille.
+• Musique ou son : choisis un fichier audio dans la vue de l’œuvre – il accompagne le film exporté.
+• Jusqu’à 24 images par seconde : 15 et 24 fps pour un mouvement fluide.
+• Dupliquer et réordonner : clic droit sur une image pour « Dupliquer », « Avancer » et « Reculer » – ou fais-la glisser ailleurs dans la planche contact.

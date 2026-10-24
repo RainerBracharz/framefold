@@ -250,6 +250,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
     let session = AVCaptureSession()
     /// Aktuelles Aufnahmegerät – zum Fixieren von Belichtung/Fokus/Weißabgleich.
     var device: AVCaptureDevice?
+    /// iPad: Drehung der aufgenommenen Bilder folgt der Gerätelage.
+    private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
+    private var rotationObservation: NSKeyValueObservation?
 
     /// Sekunden Stabilität bis zum Auto-Shutter (live änderbar)
     @Published var stableSeconds: Double = Stored.double("liveStableSeconds", 0.8) {
@@ -875,8 +878,18 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // Video um 90° gedreht – genau der gemeldete Fehler.
         // Am Mac nicht: Eine Dokumentenkamera über dem Tisch liefert ihr Bild
         // so, wie es auf dem Tisch liegt.
+        // Am iPad steht das Gerät mal hoch, mal quer im Ständer: Die
+        // Bilder folgen der Lage des Geräts, wie die Vorschau.
         #if !targetEnvironment(macCatalyst)
-        if let conn = output.connection(with: .video),
+        if UIDevice.current.userInterfaceIdiom == .pad, let conn = output.connection(with: .video) {
+            let coordinator = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: nil)
+            rotationCoordinator = coordinator
+            rotationObservation = coordinator.observe(\.videoRotationAngleForHorizonLevelCapture,
+                                                      options: [.initial, .new]) { [weak conn] c, _ in
+                let angle = c.videoRotationAngleForHorizonLevelCapture
+                if let conn, conn.isVideoRotationAngleSupported(angle) { conn.videoRotationAngle = angle }
+            }
+        } else if let conn = output.connection(with: .video),
            conn.isVideoRotationAngleSupported(90) {
             conn.videoRotationAngle = 90
         }

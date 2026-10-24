@@ -9,7 +9,7 @@
 [<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="44" />](https://apps.apple.com/app/id6801045603)
 
 [![iOS Build](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml/badge.svg)](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml)
-&nbsp;·&nbsp; **Live on the App Store** &nbsp;·&nbsp; English · Deutsch · Français &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; watchOS &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
+&nbsp;·&nbsp; **Live on the App Store** &nbsp;·&nbsp; English · Deutsch · Français &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; iPhone · iPad · Mac · Apple Watch &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
 
 </div>
 
@@ -104,11 +104,18 @@ that decision is written up here:
 <img src="docs/watch.png" width="820" alt="FrameFold viewfinder on iPhone next to the Apple Watch remote showing the frame count" />
 </div>
 
+- **Edit and score.** Duplicate a frame to hold a pose, drag frames into a new
+  order, export at up to 24 fps, and lay music or sound from a file under the
+  film — remuxed, not re-encoded, so it takes a moment, not a minute.
+- **iPad in a stand.** On iPad the viewfinder and the captured frames follow the
+  device's orientation, portrait or landscape.
+- **For the classroom.** A two-lesson plan (German) with timings, roles and a
+  privacy summary: [docs/unterricht](docs/unterricht/README.md).
 - **Shutter without shake.** Hold the shutter for a three-second self-timer, or
   use the volume buttons on headphones and AirPods — Apple's capture-event API,
   which also covers cheap Bluetooth camera remotes.
-- **English and German.** The whole app, from first launch to the contact
-  sheet, follows the phone's language. Every screen is checked in both languages
+- **English, German and French.** The whole app, from first launch to the contact
+  sheet, follows the phone's language. Every screen is checked in every language
   by an automated walkthrough (see *Engineering*).
 - **Private by design.** Everything happens on the device. No account, no upload,
   no server, no network requests at all.

@@ -1,0 +1,39 @@
+La app de stop motion que dispara sola en cuanto tus manos salen del encuadre. Gratis, sin suscripción, sin anuncios, sin cuenta, sin internet.
+
+FrameFold convierte un vídeo de tu proceso de trabajo en un stop motion — de forma automática y por completo en tu iPhone o iPad.
+
+La app encuentra los momentos de calma, descarta cada fotograma en el que se ven tus manos, compensa el temblor y monta el resultado. Nada sale de tu dispositivo: sin nube, sin cuenta, sin rastreo.
+
+CÁMARA AUTOMÁTICA
+El dispositivo en un trípode y a trabajar — FrameFold dispara solo en cuanto tus manos salen del encuadre y la escena se queda quieta. La exposición y el balance de blancos se bloquean, y la velocidad de obturación se ajusta a la frecuencia de la red para que la luz artificial no parpadee. Con papel cebolla, control de desplazamiento, disparo por intervalos y nivel.
+
+NÍTIDO, O NADA
+La app mide la nitidez continuamente y solo bloquea el enfoque cuando de verdad está fijado. Si la nitidez cae, vuelve a enfocar sola. Un fotograma desenfocado nunca entra en la obra. En el trípode el enfoque queda fijo; a mano sigue al motivo — el sensor de movimiento decide qué caso se aplica.
+
+APPLE WATCH COMO MANDO
+Dispara y termina desde la muñeca, con el contador de fotogramas en la esfera. Nadie tiene que tocar el trípode. También disparan los botones de volumen de los auriculares y los AirPods, y mantener pulsado el obturador inicia una cuenta atrás.
+
+MONTAJE Y SONIDO
+Duplica un fotograma para que una pose dure más, reordena los fotogramas arrastrándolos, exporta hasta 24 fps — y pon música o sonido de tus archivos bajo la película.
+
+LA PELÍCULA CRECE CONTIGO
+Mientras trabajas, el stop motion ya se reproduce en bucle — en el visor y en el monitor de estudio junto a la imagen de la cámara.
+
+FLIPBOOK
+Cada obra se convierte en un flipbook listo para imprimir: hojas A4 con líneas de corte, margen de encuadernación y hojas numeradas. Recortar, grapar, pasar las páginas — la película vuelve a ser un objeto.
+
+MONITOR DE ESTUDIO
+Conecta una pantalla o un proyector y mostrará solo la imagen de la cámara, sin controles. Para clases y visitas al taller: todos miran, el dispositivo sigue intacto en el trípode.
+
+DE VÍDEO A STOP MOTION
+Elige un vídeo existente: se encuentran los momentos de calma, se quitan las manos y se descartan los duplicados. Antes del montaje revisas cada fotograma en la hoja de contactos.
+
+TRES MODOS
+Sencillo (elegir, disparar, listo — ideal para clase), Avanzado (formato, velocidad, resolución, reproducción) y un modo taller con relieve de papel, eco de imagen, aspecto de impresión, transiciones de pliegue, un reel de exposición y PDF listos para imprimir.
+
+OBRAS, NO ARCHIVOS
+Los proyectos reúnen fotogramas de tantas sesiones como quieras, con papelera de 30 días.
+
+La interfaz de la app está en inglés, alemán y francés.
+
+Creada como herramienta a medida para el artista Aldo Tolino, cuya obra pliega fotografías impresas en objetos y las vuelve a fotografiar — imagen, objeto, imagen.

@@ -211,4 +211,42 @@ final class AssemblerTests: XCTestCase {
         XCTAssertGreaterThan(original - neighbour, 0.08, "ohne Ausgleich ist Bild 3 deutlich heller")
         XCTAssertLessThan(abs(fixed - neighbour), 0.03, "mit Ausgleich gleich hell wie die Nachbarn (\(fixed) vs. \(neighbour))")
     }
+
+    /// Ton aus Datei: 3 s Sinus unter einem 2-s-Film. Ergebnis hat Bild und
+    /// Ton, der Ton endet mit dem Film. AAC und unkomprimiertes WAV.
+    func testAudioTrackIsAddedAndTrimmed() async throws {
+        let frames = try [UIColor.red, .green, .blue, .white].enumerated().map { i, c in
+            try save(solid(c, width: 640, height: 480), "a\(i).jpg")
+        }
+        let film = try await StopMotionAssembler().assemble(imageURLs: frames, settings: baseSettings()) { _ in }
+
+        for (name, settings) in [
+            ("ton.m4a", [AVFormatIDKey: kAudioFormatMPEG4AAC, AVSampleRateKey: 44_100, AVNumberOfChannelsKey: 1] as [String: Any]),
+            ("ton.wav", [AVFormatIDKey: kAudioFormatLinearPCM, AVSampleRateKey: 44_100, AVNumberOfChannelsKey: 1,
+                         AVLinearPCMBitDepthKey: 16, AVLinearPCMIsFloatKey: false, AVLinearPCMIsBigEndianKey: false])
+        ] {
+            let audioURL = dir.appendingPathComponent(name)
+            try writeSine(to: audioURL, seconds: 3, settings: settings)
+
+            let out = try await StopMotionAssembler.addAudio(audioURL, to: film)
+            let asset = AVURLAsset(url: out)
+            let audio = try await asset.loadTracks(withMediaType: .audio)
+            let video = try await asset.loadTracks(withMediaType: .video)
+            XCTAssertEqual(audio.count, 1, name)
+            XCTAssertEqual(video.count, 1, name)
+            let duration = try await asset.load(.duration).seconds
+            XCTAssertEqual(duration, 2, accuracy: 0.15, "\(name): Ton auf Filmlänge gekürzt")
+        }
+    }
+
+    private func writeSine(to url: URL, seconds: Double, settings: [String: Any]) throws {
+        let format = try XCTUnwrap(AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 1))
+        let file = try AVAudioFile(forWriting: url, settings: settings)
+        let count = AVAudioFrameCount(seconds * 44_100)
+        let buffer = try XCTUnwrap(AVAudioPCMBuffer(pcmFormat: format, frameCapacity: count))
+        buffer.frameLength = count
+        let data = try XCTUnwrap(buffer.floatChannelData?[0])
+        for i in 0..<Int(count) { data[i] = Float(sin(Double(i) * 2 * .pi * 440 / 44_100) * 0.3) }
+        try file.write(from: buffer)
+    }
 }

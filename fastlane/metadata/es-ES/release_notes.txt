@@ -1,0 +1,8 @@
+FrameFold 2.6
+
+Ahora también en iPad – y con sonido.
+
+• iPad: FrameFold funciona en iPad, en vertical y en horizontal. En un soporte, el visor y los fotogramas siguen la orientación del dispositivo.
+• Música o sonido: elige un archivo de audio en la vista de la obra – suena bajo la película exportada.
+• Hasta 24 fps: 15 y 24 fps para un movimiento fluido.
+• Duplicar y reordenar: mantén pulsado un fotograma para duplicarlo o moverlo – o arrástralo a otro lugar de la hoja de contactos.

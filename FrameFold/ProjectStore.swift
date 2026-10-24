@@ -17,6 +17,8 @@ struct Project: Identifiable, Codable {
     /// Fortlaufende Frame-Nummer – verhindert Dateinamens-Kollisionen
     /// nach dem Löschen einzelner Frames
     var nextFrameNumber: Int?
+    /// Musik- oder Tonspur für den Export (Datei im Werkordner, optional)
+    var audioFilename: String?
 
     var frameCount: Int { frameFilenames.count }
 
@@ -132,7 +134,7 @@ final class ProjectStore: ObservableObject {
         let project = Project(
             id: id, name: String(localized: "Wiederhergestelltes Werk"),
             createdAtISO: ISO8601DateFormatter().string(from: created),
-            frameFilenames: frames, trashFilenames: nil, nextFrameNumber: nil)
+            frameFilenames: frames, trashFilenames: nil, nextFrameNumber: nil, audioFilename: nil)
         if let data = try? JSONEncoder().encode(project) {
             try? data.write(to: dir.appendingPathComponent("manifest.json"), options: .atomic)
         }
@@ -174,7 +176,8 @@ final class ProjectStore: ObservableObject {
             createdAtISO: ISO8601DateFormatter().string(from: Date()),
             frameFilenames: [],
             trashFilenames: nil,
-            nextFrameNumber: 0)
+            nextFrameNumber: 0,
+            audioFilename: nil)
         save(project)
         return project
     }
@@ -247,6 +250,76 @@ final class ProjectStore: ObservableObject {
         updated.nextFrameNumber = number + 1
         save(updated)
         return filename
+    }
+
+    /// Übernimmt eine Audiodatei als Tonspur des Werks (Kopie im Werkordner;
+    /// die Quelle darf danach verschwinden). Eine vorige Spur wird ersetzt.
+    @discardableResult
+    func setAudio(from source: URL, for project: Project) -> Bool {
+        let scoped = source.startAccessingSecurityScopedResource()
+        defer { if scoped { source.stopAccessingSecurityScopedResource() } }
+        let ext = source.pathExtension.isEmpty ? "m4a" : source.pathExtension.lowercased()
+        let filename = "ton-\(UUID().uuidString.prefix(8)).\(ext)"
+        let dir = directory(for: project)
+        do {
+            try FileManager.default.copyItem(at: source, to: dir.appendingPathComponent(filename))
+        } catch {
+            return false
+        }
+        removeAudioFile(of: project)
+        var updated = project
+        updated.audioFilename = filename
+        save(updated)
+        return true
+    }
+
+    func removeAudio(from project: Project) {
+        removeAudioFile(of: project)
+        var updated = project
+        updated.audioFilename = nil
+        save(updated)
+    }
+
+    private func removeAudioFile(of project: Project) {
+        guard let name = project.audioFilename else { return }
+        try? FileManager.default.removeItem(at: directory(for: project).appendingPathComponent(name))
+    }
+
+    func audioURL(for project: Project) -> URL? {
+        project.audioFilename.map { directory(for: project).appendingPathComponent($0) }
+    }
+
+    /// Verdoppelt ein Bild direkt hinter sich – so steht eine Pose länger im
+    /// Film. Eine eigene Datei statt eines Verweises, damit Papierkorb und
+    /// „Neu aufnehmen“ jedes Exemplar einzeln behandeln können.
+    @discardableResult
+    func duplicateFrame(named name: String, in project: Project) -> String? {
+        guard let index = project.frameFilenames.firstIndex(of: name) else { return nil }
+        var updated = project
+        let number = nextNumber(for: updated)
+        let filename = String(format: "%06d.jpg", number)
+        let dir = directory(for: updated)
+        do {
+            try FileManager.default.copyItem(at: dir.appendingPathComponent(name),
+                                             to: dir.appendingPathComponent(filename))
+        } catch {
+            return nil
+        }
+        updated.frameFilenames.insert(filename, at: index + 1)
+        updated.nextFrameNumber = number + 1
+        save(updated)
+        return filename
+    }
+
+    /// Verschiebt ein Bild um `offset` Plätze (negativ = nach vorn).
+    func moveFrame(named name: String, by offset: Int, in project: Project) {
+        guard let index = project.frameFilenames.firstIndex(of: name) else { return }
+        let target = min(max(index + offset, 0), project.frameFilenames.count - 1)
+        guard target != index else { return }
+        var updated = project
+        updated.frameFilenames.remove(at: index)
+        updated.frameFilenames.insert(name, at: target)
+        save(updated)
     }
 
     /// Verschiebt genau diese Frames in den Papierkorb – für Verwerfen und
