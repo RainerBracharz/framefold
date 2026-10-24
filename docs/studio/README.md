@@ -54,7 +54,7 @@ Mit „Ordner beobachten“ wird jede Kamera nutzbar, die FrameFold nicht selbst
 - **Mitteln**: Nach dem Auslösen werden 2 bis 16 Kamerabilder gemittelt. Das senkt das Rauschen bei wenig Licht.
 - **Beim Auslösen abdunkeln**: Der Bildschirm wird kurz schwarz, damit sein Licht nicht aufs Set fällt.
 - **Testaufnahme**: Ein Bild, das nicht ins Werk geht. Es dient nur zum Prüfen von Licht und Bildausschnitt.
-- **Zeitraffer**: Intervall von 1 Sekunde bis 1 Stunde. Optional mit Startzeit, Endzeit und Höchstzahl an Bildern.
+- **Zeitraffer**: Intervall von 1 Sekunde bis 1 Stunde. Optional später starten (in Minuten), mit begrenzter Dauer und mit einer Höchstzahl an Bildern. Gezählt werden echte Aufnahmen, nicht Takte.
 
 ## Ton und Dialog
 

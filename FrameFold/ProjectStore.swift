@@ -357,27 +357,41 @@ final class ProjectStore: ObservableObject {
         return track
     }
 
-    /// Einsatz, Lautstärke oder Stumm einer Spur ändern. Die einfache
-    /// Musikspur wird dabei zur gewöhnlichen Spur.
-    func updateAudioTrack(_ track: AudioTrack, in project: Project) {
-        var updated = project
-        if track.id == Project.legacyTrackID {
-            var promoted = track
-            promoted.id = UUID()
+    /// Einsatz, Lautstärke oder Stumm einer Spur ändern – immer am aktuellen
+    /// Stand des Werks, nie an einer veralteten Kopie aus der Ansicht. Die
+    /// einfache Musikspur wird dabei zur gewöhnlichen Spur und behält ihre
+    /// Kennung; ein zweiter Aufruf mit derselben Kennung ändert sie nur.
+    func updateAudioTrack(id: UUID, in projectID: UUID, _ change: (inout AudioTrack) -> Void) {
+        guard var updated = projects.first(where: { $0.id == projectID }) else { return }
+        if let i = updated.audioTracks?.firstIndex(where: { $0.id == id }) {
+            change(&updated.audioTracks![i])
+        } else if id == Project.legacyTrackID, let legacy = updated.allAudioTracks.first(where: { $0.id == id }) {
+            var promoted = legacy
+            change(&promoted)
             updated.audioFilename = nil
             updated.audioTracks = [promoted] + (updated.audioTracks ?? [])
-        } else if let i = updated.audioTracks?.firstIndex(where: { $0.id == track.id }) {
-            updated.audioTracks?[i] = track
+        } else {
+            return
         }
         save(updated)
     }
 
+    func updateAudioTrack(_ track: AudioTrack, in project: Project) {
+        updateAudioTrack(id: track.id, in: project.id) { $0 = track }
+    }
+
     func removeAudioTrack(_ track: AudioTrack, from project: Project) {
-        if track.id == Project.legacyTrackID { removeAudio(from: project); return }
-        var updated = project
+        guard var updated = projects.first(where: { $0.id == project.id }) else { return }
+        guard let stored = updated.audioTracks?.first(where: { $0.id == track.id }) else {
+            if track.id == Project.legacyTrackID { removeAudio(from: updated) }
+            return
+        }
         updated.audioTracks?.removeAll { $0.id == track.id }
         if updated.audioTracks?.isEmpty == true { updated.audioTracks = nil }
-        try? FileManager.default.removeItem(at: directory(for: project).appendingPathComponent(track.filename))
+        // Die Datei nur löschen, wenn keine andere Spur sie noch nutzt
+        if !(updated.allAudioTracks.contains { $0.filename == stored.filename }) {
+            try? FileManager.default.removeItem(at: directory(for: updated).appendingPathComponent(stored.filename))
+        }
         save(updated)
     }
 

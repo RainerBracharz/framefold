@@ -22,6 +22,7 @@ final class StudioFolderWatch: ObservableObject {
     private var pendingSizes: [String: Int] = [:]
     private var timer: Timer?
     private var onImage: ((CGImage, Data) -> Void)?
+    private var loadChain: Task<Void, Never>?
 
     private static let bookmarkKey = "studioWatchFolder"
     static let imageExtensions: Set<String> = ["jpg", "jpeg", "heic", "heif", "png", "tif", "tiff",
@@ -66,6 +67,8 @@ final class StudioFolderWatch: ObservableObject {
     }
 
     func stop() {
+        loadChain?.cancel()
+        loadChain = nil
         timer?.invalidate()
         timer = nil
         isWatching = false
@@ -83,11 +86,19 @@ final class StudioFolderWatch: ObservableObject {
             }
             pendingSizes[name] = nil
             known.insert(name)
-            if let (image, data) = Self.load(url) {
-                imported += 1
-                onImage?(image, data)
-            } else {
-                lastError = String(localized: "„\(name)“ ließ sich nicht lesen.")
+            // Lesen und Umwandeln (RAW: einige Sekunden) im Hintergrund, aber
+            // der Reihe nach – die Bilder kommen in Kamera-Reihenfolge ins Werk.
+            let previous = loadChain
+            loadChain = Task { [weak self] in
+                await previous?.value
+                let loaded = await Task.detached(priority: .userInitiated) { Self.load(url) }.value
+                guard let self, self.isWatching else { return }
+                if let (image, data) = loaded {
+                    self.imported += 1
+                    self.onImage?(image, data)
+                } else {
+                    self.lastError = String(localized: "„\(name)“ ließ sich nicht lesen.")
+                }
             }
         }
     }

@@ -45,12 +45,14 @@ struct StudioView: View {
     @State private var showXSheet = false
     @State private var importKind: ImportKind = .reference
     @StateObject private var folderWatch = StudioFolderWatch()
+    @State private var volumeDraft: [UUID: Double] = [:]
+    /// Bildrate des Films – einmal beim Öffnen gelesen statt bei jedem Zugriff
+    @State private var fps: Int32 = max(1, PipelineSettings.restored().outputFPS)
 
     private enum ImportKind { case reference, audio, folder }
 
     private var project: Project? { store.projects.first { $0.id == projectID } }
     private var urls: [URL] { project.map { store.frameURLs(for: $0) } ?? [] }
-    private var fps: Int32 { max(1, PipelineSettings.restored().outputFPS) }
     private var audioSources: [AudioSource] { project?.audioSources(fps: fps, store: store) ?? [] }
 
     var body: some View {
@@ -588,13 +590,17 @@ struct StudioView: View {
                 }
                 section("Zeitraffer") {
                     stepper("Intervall", value: $settings.intervalSeconds, in: 1...3600, step: intervalStep) { Self.durationText($0) }
-                    toggle("Startzeit", $settings.useStartTime)
+                    // Bewusst ohne Datumsfelder: In einem Textfeld würden ⌫ und
+                    // die Pfeiltasten die Studio-Befehle auslösen.
+                    toggle("Später starten", $settings.useStartTime)
                     if settings.useStartTime {
-                        DatePicker("", selection: $settings.startTime).labelsHidden()
+                        stepper("Start in", value: $settings.startDelayMinutes, in: 1...1440,
+                                step: settings.startDelayMinutes < 60 ? 1 : 30) { Self.durationText($0 * 60) }
                     }
-                    toggle("Endzeit", $settings.useEndTime)
+                    toggle("Begrenzte Dauer", $settings.useEndTime)
                     if settings.useEndTime {
-                        DatePicker("", selection: $settings.endTime).labelsHidden()
+                        stepper("Dauer", value: $settings.durationMinutes, in: 1...10080,
+                                step: settings.durationMinutes < 60 ? 5 : 60) { Self.durationText($0 * 60) }
                     }
                     toggle("Höchstzahl", $settings.useFrameLimit)
                     if settings.useFrameLimit {
@@ -629,7 +635,7 @@ struct StudioView: View {
                     .foregroundStyle(track.muted ? Theme.paperOnDark.opacity(0.4) : Theme.amber)
                 Text(verbatim: track.name).font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark).lineLimit(1)
                 Spacer()
-                Button { var t = track; t.muted.toggle(); store.updateAudioTrack(t, in: project) } label: {
+                Button { store.updateAudioTrack(id: track.id, in: projectID) { $0.muted.toggle() } } label: {
                     Image(systemName: track.muted ? "speaker.wave.2" : "speaker.slash")
                 }
                 .buttonStyle(.plain).foregroundStyle(Theme.paperOnDark)
@@ -639,11 +645,17 @@ struct StudioView: View {
                     .help(Text("Spur entfernen"))
             }
             stepper("Ab Bild", value: Binding(get: { track.startFrame + 1 },
-                                              set: { var t = track; t.startFrame = $0 - 1; store.updateAudioTrack(t, in: project) }),
+                                              set: { frame in store.updateAudioTrack(id: track.id, in: projectID) { $0.startFrame = frame - 1 } }),
                     in: 1...100_000) { "\($0)" }
-            Slider(value: Binding(get: { track.volume },
-                                  set: { var t = track; t.volume = $0; store.updateAudioTrack(t, in: project) }),
-                   in: 0...1.5)
+            // Beim Ziehen nur die Anzeige ändern; gespeichert (und der Ton neu
+            // geladen) wird erst beim Loslassen.
+            Slider(value: Binding(get: { volumeDraft[track.id] ?? track.volume },
+                                  set: { volumeDraft[track.id] = $0 }),
+                   in: 0...1.5) { editing in
+                guard !editing, let volume = volumeDraft[track.id] else { return }
+                store.updateAudioTrack(id: track.id, in: projectID) { $0.volume = volume }
+                volumeDraft[track.id] = nil
+            }
         }
         .padding(8)
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.15), lineWidth: 1))
@@ -863,9 +875,12 @@ struct StudioView: View {
             controller.captureMode = .motion
             return
         }
-        controller.intervalSeconds = settings.intervalSeconds
-        controller.intervalStartDate = settings.useStartTime ? settings.startTime : nil
-        controller.intervalEndDate = settings.useEndTime ? settings.endTime : nil
+        // Eigener Takt des Studios – der gespeicherte Intervall-Regler der
+        // einfachen Kamera (1–30 s) bleibt unberührt.
+        controller.intervalOverride = settings.intervalSeconds
+        let start = settings.useStartTime ? Date().addingTimeInterval(settings.startDelayMinutes * 60) : Date()
+        controller.intervalStartDate = settings.useStartTime ? start : nil
+        controller.intervalEndDate = settings.useEndTime ? start.addingTimeInterval(settings.durationMinutes * 60) : nil
         controller.intervalFrameLimit = settings.useFrameLimit ? settings.frameLimit : nil
         controller.captureMode = .interval
     }
@@ -874,6 +889,7 @@ struct StudioView: View {
 
     private func activate() {
         hub.isActive = true
+        fps = max(1, PipelineSettings.restored().outputFPS)
         #if DEBUG
         debugPreset()
         #endif
@@ -948,6 +964,10 @@ struct StudioView: View {
         controller.intervalStartDate = nil
         controller.intervalEndDate = nil
         controller.intervalFrameLimit = nil
+        if controller.intervalOverride != nil, controller.captureMode == .interval {
+            controller.captureMode = .motion   // Studio-Zeitraffer endet mit dem Studio
+        }
+        controller.intervalOverride = nil
     }
 
     private func apply(_ s: StudioSettings) {

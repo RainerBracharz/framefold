@@ -83,7 +83,7 @@ enum AudioMixer {
 enum Waveform {
     /// Spitzenwerte je Zeitfenster (`perSecond` Werte pro Sekunde), 0…1.
     static func peaks(of url: URL, perSecond: Int = 120) -> [Float] {
-        if let cached = cache[url] { return cached }
+        if let cached = cacheLock.withLock({ cache[url] }) { return cached }
         guard let file = try? AVAudioFile(forReading: url) else { return [] }
         let format = file.processingFormat
         let binSize = max(1, AVAudioFrameCount(format.sampleRate) / AVAudioFrameCount(perSecond))
@@ -106,7 +106,7 @@ enum Waveform {
                 start = end
             }
         }
-        cache[url] = peaks
+        cacheLock.withLock { cache[url] = peaks }
         return peaks
     }
 
@@ -127,7 +127,10 @@ enum Waveform {
         return result
     }
 
+    /// Mehrere Hintergrund-Aufgaben lesen gleichzeitig – ohne Sperre würde
+    /// das Wörterbuch beim gleichzeitigen Schreiben beschädigt.
     nonisolated(unsafe) private static var cache: [URL: [Float]] = [:]
+    private static let cacheLock = NSLock()
 }
 
 // MARK: Wiedergabe im Studio

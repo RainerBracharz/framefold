@@ -14,7 +14,9 @@ extension LiveCaptureController {
         isPreparingCapture = true
         let count = max(1, averageFrames)
         let blackout = captureBlackout
-        Task { @MainActor [weak self] in
+        // Bild gehört zu genau dieser Sitzung – endet sie vorher, verfällt es.
+        let session = sessionStart
+        prepareTask = Task { @MainActor [weak self] in
             guard let self else { return }
             if blackout {
                 self.setBlackout(true)
@@ -25,17 +27,21 @@ extension LiveCaptureController {
             var frames: [CGImage] = []
             var last = self.currentLatestFrame
             let deadline = Date().addingTimeInterval(Double(count) * 0.25 + 1)
-            while frames.count < count, Date() < deadline {
+            while frames.count < count, Date() < deadline, !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: 40_000_000)
                 if let frame = self.currentLatestFrame, frame !== last {
                     frames.append(frame)
                     last = frame
                 }
             }
-            let result = Self.average(frames) ?? fallback
+            // Abgebrochen (Sitzung beendet): `stop()` hat schon aufgeräumt, und
+            // eine neue Auslösung darf ihr Abdunkeln behalten.
+            guard !Task.isCancelled else { return }
             if blackout { self.setBlackout(false) }
             self.isPreparingCapture = false
-            if self.isRunning { self.commit(frame: result) }
+            self.prepareTask = nil
+            guard self.isRunning, self.sessionStart == session else { return }
+            self.commit(frame: Self.average(frames) ?? fallback)
         }
     }
 

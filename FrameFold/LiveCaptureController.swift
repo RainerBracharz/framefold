@@ -672,6 +672,10 @@ final class LiveCaptureController: NSObject, ObservableObject {
     var intervalStartDate: Date?
     var intervalEndDate: Date?
     var intervalFrameLimit: Int?
+    /// Eigener Takt des Studios (nil = gespeichertes `intervalSeconds`)
+    var intervalOverride: Double?
+    /// Laufende Studio-Auslösung (Abdunkeln/Mitteln) – `stop()` bricht sie ab
+    var prepareTask: Task<Void, Never>?
     /// Läuft gerade eine Auslösung mit Abdunkeln oder Mittelung?
     var isPreparingCapture = false
     var currentLatestFrame: CGImage? { latestFrame }
@@ -785,6 +789,10 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     func stop() {
         isRunning = false
+        prepareTask?.cancel()
+        prepareTask = nil
+        isPreparingCapture = false
+        blackoutActive = false
         intervalTask?.cancel()
         // Ein laufender Selbstauslöser würde sonst NACH dem Beenden noch ein
         // Bild ins bereits montierte Werk legen.
@@ -1329,18 +1337,19 @@ final class LiveCaptureController: NSObject, ObservableObject {
             if let start = self?.intervalStartDate, start > Date() {
                 try? await Task.sleep(nanoseconds: UInt64(start.timeIntervalSinceNow * 1_000_000_000))
             }
-            var taken = 0
+            // Gezählt werden echte Bilder, nicht Takte: Ein Takt ohne scharfes
+            // Bild ergibt keines.
+            let startCount = self?.capturedCount ?? 0
             while !Task.isCancelled {
-                let seconds = self?.intervalSeconds ?? 3.0
+                let seconds = self?.intervalOverride ?? self?.intervalSeconds ?? 3.0
                 try? await Task.sleep(nanoseconds: UInt64(max(0.5, seconds) * 1_000_000_000))
                 guard let self, !Task.isCancelled else { break }
-                if Self.intervalFinished(taken: taken, limit: self.intervalFrameLimit,
+                if Self.intervalFinished(taken: self.capturedCount - startCount, limit: self.intervalFrameLimit,
                                          end: self.intervalEndDate, now: Date()) {
                     self.hint = String(localized: "Zeitraffer beendet")
                     break
                 }
                 self.captureNow(userInitiated: false)
-                taken += 1
             }
         }
     }

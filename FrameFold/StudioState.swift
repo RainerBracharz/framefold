@@ -47,9 +47,11 @@ struct StudioSettings: Codable, Equatable {
     // Zeitraffer
     var intervalSeconds = 5.0
     var useStartTime = false
-    var startTime = Date()
+    /// Start so viele Minuten nach dem Druck auf „Zeitraffer starten“
+    var startDelayMinutes = 60.0
     var useEndTime = false
-    var endTime = Date().addingTimeInterval(3600)
+    /// Dauer in Minuten ab Start
+    var durationMinutes = 60.0
     var useFrameLimit = false
     var frameLimit = 100
 
@@ -89,9 +91,9 @@ struct StudioSettings: Codable, Equatable {
         dialogueHUD = v(.dialogueHUD, d.dialogueHUD)
         intervalSeconds = v(.intervalSeconds, d.intervalSeconds)
         useStartTime = v(.useStartTime, d.useStartTime)
-        startTime = v(.startTime, d.startTime)
+        startDelayMinutes = v(.startDelayMinutes, d.startDelayMinutes)
         useEndTime = v(.useEndTime, d.useEndTime)
-        endTime = v(.endTime, d.endTime)
+        durationMinutes = v(.durationMinutes, d.durationMinutes)
         useFrameLimit = v(.useFrameLimit, d.useFrameLimit)
         frameLimit = v(.frameLimit, d.frameLimit)
     }

@@ -869,7 +869,10 @@ struct ProjectDetailView: View {
                 // auf Filmlänge mischen und unterlegen
                 if !audio.isEmpty {
                     let duration = try await AVURLAsset(url: url).load(.duration).seconds
-                    let mix = try AudioMixer.mix(audio, duration: duration)
+                    // Offline-Mischung im Hintergrund – sonst steht die Oberfläche
+                    let mix = try await Task.detached(priority: .userInitiated) {
+                        try AudioMixer.mix(audio, duration: duration)
+                    }.value
                     url = try await StopMotionAssembler.addAudio(mix, to: url)
                 }
                 await MainActor.run {

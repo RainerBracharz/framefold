@@ -8,6 +8,7 @@
 
 import XCTest
 import AVFoundation
+import UIKit
 @testable import FrameFold
 
 final class DialogueAudioTests: XCTestCase {
@@ -130,6 +131,43 @@ final class DialogueAudioTests: XCTestCase {
         XCTAssertEqual(store.projects[0].characters, ["Ben"])
         store.setDialogue(frame: 2, character: "Ben", phoneme: nil, word: nil, in: store.projects[0])
         XCTAssertNil(store.projects[0].dialogue)
+    }
+
+    @MainActor
+    func testLegacyTrackPromotionIsIdempotent() throws {
+        let suite = "ff-legacy-\(UUID().uuidString)"
+        let store = ProjectStore(root: dir.appendingPathComponent("store2"), defaults: UserDefaults(suiteName: suite)!)
+        defer { UserDefaults().removePersistentDomain(forName: suite) }
+        let project = store.createProject(name: "A")
+        XCTAssertTrue(store.setAudio(from: try tone("m.wav", seconds: 1), for: project))
+        // Zwei schnelle Änderungen mit derselben (Musik-)Kennung, wie beim Ziehen
+        store.updateAudioTrack(id: Project.legacyTrackID, in: project.id) { $0.volume = 0.5 }
+        store.updateAudioTrack(id: Project.legacyTrackID, in: project.id) { $0.volume = 0.3 }
+        let tracks = store.projects[0].allAudioTracks
+        XCTAssertEqual(tracks.count, 1, "keine doppelte Spur")
+        XCTAssertEqual(tracks.first?.volume ?? 0, 0.3, accuracy: 0.001)
+        let file = store.url(for: tracks[0], in: store.projects[0])
+        store.removeAudioTrack(tracks[0], from: store.projects[0])
+        XCTAssertTrue(store.projects[0].allAudioTracks.isEmpty)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: file.path))
+    }
+
+    @MainActor
+    func testStoppedSessionDropsPendingAveragedCapture() async throws {
+        let controller = LiveCaptureController()
+        var delivered = 0
+        controller.startWithoutCamera { _ in delivered += 1 }
+        controller.averageFrames = 4
+        let format = UIGraphicsImageRendererFormat(); format.scale = 1
+        let frame = UIGraphicsImageRenderer(size: CGSize(width: 32, height: 24), format: format).image { ctx in
+            UIColor.gray.setFill(); ctx.fill(CGRect(x: 0, y: 0, width: 32, height: 24))
+        }.cgImage!
+        controller.prepareCapture(fallback: frame)
+        XCTAssertTrue(controller.isPreparingCapture)
+        controller.stop()
+        XCTAssertFalse(controller.isPreparingCapture)
+        try await Task.sleep(nanoseconds: 1_500_000_000)
+        XCTAssertEqual(delivered, 0, "Bild der beendeten Sitzung verfällt")
     }
 
     // MARK: Mischung und Wellenform
