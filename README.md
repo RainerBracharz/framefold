@@ -23,8 +23,8 @@
 </div>
 
 <div align="center">
-<a href="docs/spot/framefold-spot-en.mp4"><img src="docs/spot/poster.jpg" width="640" alt="FrameFold spot: a folded amber paper object, “You fold. It films.”" /></a>
-<br/><sub><em>▶ The 16-second spot for 2.3 (with sound): auto-shutter, focus, live loop, Mac with a document camera, Apple Watch, video import, flip book.<br/>Paper fold, animation and modular-synth soundtrack generated in code — no stock footage.</em></sub>
+<a href="docs/spot/framefold-spot-en.mp4"><img src="docs/spot/poster.jpg" width="640" alt="FrameFold spot, final card: Mac, iPhone and Apple Watch showing the app, “For iPhone, Apple Watch and Mac”, Download on the App Store, free" /></a>
+<br/><sub><em>▶ The 29-second spot (with sound): a 1959 typesetting film and a 1913 ragtime record give way to FrameFold — auto-shutter, focus, live loop, Mac with a document camera, Apple Watch, video import, flip book — and end on iPhone, Apple Watch and Mac.<br/>Archive: “Learning to Set Type” (1959, Prelinger Archives) and “Black and White Rag” (George Botsford, Edison 1913), both public domain via archive.org. Paper fold, animation and modular-synth soundtrack generated in code.</em></sub>
 </div>
 
 ---
