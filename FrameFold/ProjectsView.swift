@@ -213,6 +213,8 @@ struct ProjectDetailView: View {
     @State private var isEditingFrames = false
     @State private var showDeleteProject = false
     @State private var showAudioImporter = false
+    @State private var sequenceFolder: ShareItem?
+    @State private var isExportingSequence = false
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     private var mode: AppMode { AppMode.current(modeRaw) }
     @Environment(\.dismiss) private var dismiss
@@ -494,6 +496,41 @@ struct ProjectDetailView: View {
         }
     }
 
+    /// Einzelbilder in voller Auflösung für Schnitt und Compositing.
+    private var sequenceRow: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "square.stack.3d.down.right").foregroundStyle(Theme.ink)
+            Text(isExportingSequence ? "Bilder werden geschrieben…" : "Bildsequenz")
+                .font(Theme.body).foregroundStyle(Theme.ink)
+            Spacer()
+            ForEach(SequenceFormat.allCases) { format in
+                Button(format.label) { exportSequence(format) }
+                    .font(Theme.caption(11))
+                    .disabled(isExportingSequence || currentProject.frameCount == 0)
+            }
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal, 4)
+        .sheet(item: $sequenceFolder) { item in
+            FolderExporter(url: item.url) { sequenceFolder = nil }
+        }
+    }
+
+    private func exportSequence(_ format: SequenceFormat) {
+        isExportingSequence = true
+        let urls = store.frameURLs(for: currentProject)
+        let name = currentProject.name
+        Task.detached(priority: .userInitiated) {
+            let folder = try? StopMotionAssembler.exportSequence(urls, name: name, format: format)
+            await MainActor.run {
+                isExportingSequence = false
+                if let folder { sequenceFolder = ShareItem(url: folder) } else {
+                    errorMessage = String(localized: "Die Bildsequenz konnte nicht geschrieben werden.")
+                }
+            }
+        }
+    }
+
     private var optionDivider: some View {
         Rectangle().fill(Theme.hairline).frame(height: 1)
     }
@@ -575,6 +612,12 @@ struct ProjectDetailView: View {
                     optionRow("Flimmern ausgleichen") {
                         Toggle("", isOn: $exportSettings.deflicker)
                     }
+                    optionDivider
+                    optionRow("Codec") {
+                        Picker("", selection: $exportSettings.videoCodec) {
+                            ForEach(VideoCodec.allCases) { Text(verbatim: $0.label).tag($0) }
+                        }
+                    }
                     if mode.showsTolino {
                         optionDivider
                         optionRow("Bild-Echo (Nachbild)") {
@@ -605,6 +648,7 @@ struct ProjectDetailView: View {
             }
 
             audioRow
+            if mode.showsAdvanced { sequenceRow }
 
             if isExporting {
                 VStack(spacing: 8) {
@@ -1303,3 +1347,27 @@ final class PrintFileActivity: UIActivity {
     }
 }
 #endif
+
+
+/// „Sichern unter …“ für einen ganzen Ordner (Bildsequenz).
+struct FolderExporter: UIViewControllerRepresentable {
+    let url: URL
+    let onDone: () -> Void
+
+    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
+        let picker = UIDocumentPickerViewController(forExporting: [url], asCopy: true)
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ controller: UIDocumentPickerViewController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator { Coordinator(onDone: onDone) }
+
+    final class Coordinator: NSObject, UIDocumentPickerDelegate {
+        let onDone: () -> Void
+        init(onDone: @escaping () -> Void) { self.onDone = onDone }
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) { onDone() }
+        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) { onDone() }
+    }
+}

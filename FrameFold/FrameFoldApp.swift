@@ -223,6 +223,7 @@ struct FrameFoldApp: App {
     @State private var selectedTab = Platform.startTab ?? (Platform.autostart ? 1 : 0)
     /// Erststart: einmaliger Onboarding-Flow, der auch den Modus setzt.
     @AppStorage("didOnboard") private var didOnboard = false
+    @ObservedObject private var studioHub = StudioHub.shared
 
     init() {
         // UI-Test-Lauf: Erststart herstellen (Onboarding, Kamera-Tipp, Modus).
@@ -362,12 +363,49 @@ struct FrameFoldApp: App {
             Button("Zurücknehmen (Fernbedienung)") { post(.ffUndoLastFrame) }
                 .keyboardShortcut(.pageUp, modifiers: [])
         }
+        CommandMenu("Studio") {
+            // Nur aktiv, solange die Studio-Arbeitsfläche offen ist – sonst
+            // würden einfache Tasten jedes Textfeld der App kapern.
+            Group {
+                studioButton("Auslösen", .capture, .return)
+                studioButton("Testaufnahme", .testShot, "t", [.shift, .option])
+                Divider()
+                studioButton("Bild zurück", .stepBack, .leftArrow)
+                studioButton("Bild vor", .stepForward, .rightArrow)
+                studioButton("Live-Bild", .live, "l")
+                studioButton("Abspielen / Stopp", .play, "p")
+                studioButton("Kurz abspielen", .shortPlay, "k")
+                Divider()
+                studioButton("Umschalten Live / Aufnahme", .toggle, "t")
+                studioButton("Auto-Umschalten", .autoToggle, "t", .shift)
+                studioButton("Schleifenanfang", .loopIn, "i")
+                studioButton("Schleifenende", .loopOut, "o")
+                studioButton("Schleife aufheben", .loopClear, "x")
+            }
+            Group {
+                Divider()
+                studioButton("Bild verdoppeln", .duplicate, "d")
+                studioButton("Bild entfernen", .delete, .delete)
+                studioButton("Notiz …", .note, "n")
+                Divider()
+                studioButton("Mehr Zwiebelhaut", .onionMore, "]")
+                studioButton("Weniger Zwiebelhaut", .onionLess, "[")
+                studioButton("Ansicht wechseln", .cycleView, "m")
+            }
+        }
         CommandGroup(before: .toolbar) {
             Divider()
             Button("Video") { selectedTab = 0 }.keyboardShortcut("1")
             Button("Kamera") { selectedTab = 1 }.keyboardShortcut("2")
             Button("Werke") { selectedTab = 2 }.keyboardShortcut("3")
         }
+    }
+
+    private func studioButton(_ title: LocalizedStringKey, _ command: StudioCommand,
+                              _ key: KeyEquivalent, _ modifiers: EventModifiers = []) -> some View {
+        Button(title) { studioHub.send(command) }
+            .keyboardShortcut(key, modifiers: modifiers)
+            .disabled(!studioHub.isActive)
     }
 
     private func post(_ name: Notification.Name) {

@@ -568,7 +568,12 @@ struct LiveCaptureView: View {
     /// Bedienleiste strukturell nicht verschwinden.
     private func captureView(project: Project) -> some View {
         Group {
-            if Platform.isMac {
+            if Platform.isMac, mode.showsAdvanced {
+                // Profi-Arbeitsfläche: Betrachter, Zeitleiste, Inspektor
+                StudioView(controller: controller, projectID: project.id,
+                           onFinish: { finishSession(project: project) },
+                           onUndo: { undoLastFrame(project: project) })
+            } else if Platform.isMac {
                 macCaptureView(project: project)
             } else if Duo.canArrange, horizontalSizeClass == .regular {
                 // iPhone Duo aufgeklappt (iOS 27.1): Das System ordnet Kamera

@@ -1,0 +1,762 @@
+import AVFoundation
+import SwiftUI
+import UniformTypeIdentifiers
+import UIKit
+
+/// Die Profi-Arbeitsfläche am Mac (ab „Erweitert“): großer Betrachter,
+/// Zeitleiste mit allen Bildern des Werks, Transport und ein Inspektor für
+/// Ansicht, Hilfslinien, Referenz, Aufnahme und Zeitraffer. Die Aufnahme
+/// selbst – Automatik, Speichern, Watch, Fernbedienung – bleibt bei
+/// `LiveCaptureView`; hier wird nur anders gezeigt und gesteuert.
+struct StudioView: View {
+    @EnvironmentObject var store: ProjectStore
+    @ObservedObject var controller: LiveCaptureController
+    let projectID: UUID
+    let onFinish: () -> Void
+    let onUndo: () -> Void
+
+    @State private var settings = StudioSettings.restored()
+    @StateObject private var cache = StudioFrameCache()
+    @StateObject private var reference = StudioReference()
+    @ObservedObject private var hub = StudioHub.shared
+
+    /// Gezeigtes Bild der Zeitleiste; nil = Live-Bild
+    @State private var selected: Int?
+    @State private var playing = false
+    @State private var playIndex = 0
+    @State private var playTask: Task<Void, Never>?
+    @State private var loopIn: Int?
+    @State private var loopOut: Int?
+    /// „Umschalten“: zeigt statt des Live-Bilds das letzte aufgenommene
+    @State private var showCaptured = false
+    @State private var autoToggle = false
+    @State private var autoPhase = false
+    @State private var toggleTask: Task<Void, Never>?
+    @State private var processed: UIImage?
+    @State private var testShots: [UIImage] = []
+    @State private var testShown: Int?
+    @State private var showReferenceImporter = false
+    @State private var noteDraft = ""
+    @State private var noteFrame: Int?
+    @State private var flash = 0.0
+
+    private var project: Project? { store.projects.first { $0.id == projectID } }
+    private var urls: [URL] { project.map { store.frameURLs(for: $0) } ?? [] }
+    private var fps: Int32 { max(1, PipelineSettings.restored().outputFPS) }
+
+    var body: some View {
+        HStack(spacing: 0) {
+            VStack(spacing: 0) {
+                viewer
+                transport
+                timeline
+            }
+            inspector
+                .frame(width: 290)
+                .background(Theme.darkroom.opacity(0.92))
+                .overlay(alignment: .leading) {
+                    Rectangle().fill(Theme.paperOnDark.opacity(0.12)).frame(width: 1)
+                }
+        }
+        .background(Color.black)
+        .onAppear(perform: activate)
+        .onDisappear(perform: deactivate)
+        .onChange(of: settings) { _, new in
+            new.persist()
+            apply(new)
+        }
+        .onChange(of: controller.liveFrame) { _, _ in updateProcessed() }
+        .onChange(of: controller.capturedCount) { old, new in
+            guard new > old else { return }
+            selected = nil
+            flash = 0.6
+            withAnimation(.easeOut(duration: 0.3)) { flash = 0 }
+        }
+        .onChange(of: controller.blackoutActive) { _, on in StudioBlackout.set(on) }
+        .onChange(of: urls.count) { _, _ in referenceFollow() }
+        .onChange(of: selected) { _, _ in referenceFollow() }
+        .onReceive(NotificationCenter.default.publisher(for: .ffStudio)) { note in
+            if let raw = note.object as? String, let command = StudioCommand(rawValue: raw) { handle(command) }
+        }
+        .fileImporter(isPresented: $showReferenceImporter,
+                      allowedContentTypes: [.image, .movie]) { result in
+            if case .success(let url) = result {
+                reference.load(url)
+                reference.setKey(settings.referenceKey)
+                referenceFollow()
+            }
+        }
+        .alert(noteTitle, isPresented: Binding(get: { noteFrame != nil }, set: { if !$0 { noteFrame = nil } })) {
+            TextField("Notiz", text: $noteDraft)
+            Button("Sichern") {
+                if let noteFrame, let project { store.setNote(noteDraft, forFrame: noteFrame, in: project) }
+                noteFrame = nil
+            }
+            Button("Abbrechen", role: .cancel) { noteFrame = nil }
+        }
+        // Solange die Notiz getippt wird, dürfen einfache Tasten nicht als
+        // Befehle gelten.
+        .onChange(of: noteFrame) { _, frame in hub.isActive = frame == nil }
+    }
+
+    private var noteTitle: String {
+        String(localized: "Notiz zu Bild \(noteFrame ?? 0)")
+    }
+
+    // MARK: Betrachter
+
+    private var viewer: some View {
+        GeometryReader { geo in
+            let canvas = fit(aspect: controller.frameAspect, in: geo.size)
+            ZStack {
+                base
+                if showsLive { onionLayers }
+                if let image = reference.image {
+                    Image(uiImage: image).resizable().scaledToFit()
+                        .scaleEffect(settings.referenceScale)
+                        .offset(x: settings.referenceOffsetX * canvas.width,
+                                y: settings.referenceOffsetY * canvas.height)
+                        .opacity(settings.referenceOpacity)
+                        .allowsHitTesting(false)
+                }
+                StudioGuides(settings: settings)
+                if flash > 0 { Color.white.opacity(flash).allowsHitTesting(false) }
+            }
+            .frame(width: canvas.width, height: canvas.height)
+            .clipped()
+            .overlay(alignment: .topLeading) { viewerBadge }
+            .overlay(alignment: .top) { noteBanner }
+            .position(x: geo.size.width / 2, y: geo.size.height / 2)
+        }
+        .background(Color(white: 0.08))
+    }
+
+    /// Größtes Rechteck mit `aspect` in `size`.
+    private func fit(aspect: Double, in size: CGSize) -> CGSize {
+        let a = max(0.1, aspect)
+        let inset = CGSize(width: max(1, size.width - 24), height: max(1, size.height - 24))
+        return inset.width / inset.height > a
+            ? CGSize(width: inset.height * a, height: inset.height)
+            : CGSize(width: inset.width, height: inset.width / a)
+    }
+
+    /// Zeigt der Betrachter gerade das Live-Bild?
+    private var showsLive: Bool { frameOnViewer == nil && testShown == nil }
+
+    /// Index des aufgenommenen Bilds, das gerade groß steht (nil = live).
+    private var frameOnViewer: Int? {
+        if playing { return playIndex }
+        if let selected { return selected }
+        if (showCaptured || (autoToggle && autoPhase)), !urls.isEmpty { return urls.count - 1 }
+        return nil
+    }
+
+    @ViewBuilder
+    private var base: some View {
+        if let testShown, testShots.indices.contains(testShown) {
+            Image(uiImage: testShots[testShown]).resizable().scaledToFill()
+        } else if let index = frameOnViewer, urls.indices.contains(index) {
+            if let image = cache.image(urls[index]) {
+                Image(uiImage: image).resizable().scaledToFill()
+            } else {
+                Color.black
+            }
+        } else if settings.viewMode != .normal, let processed {
+            Image(uiImage: processed).resizable().scaledToFill()
+        } else {
+            livePreview
+        }
+    }
+
+    @ViewBuilder
+    private var livePreview: some View {
+        if Platform.simulatedCamera {
+            if let sim = controller.simulatedPreview {
+                Image(uiImage: sim).resizable().scaledToFill()
+            } else {
+                Color.black
+            }
+        } else {
+            #if !targetEnvironment(simulator)
+            CameraPreview(session: controller.session) { point in controller.focus(atDevicePoint: point) }
+            #endif
+        }
+    }
+
+    /// Zwiebelhaut über mehrere Bilder: das jüngste am deutlichsten.
+    @ViewBuilder
+    private var onionLayers: some View {
+        let count = min(settings.onionFrames, urls.count)
+        if count > 0, settings.viewMode == .normal {
+            ForEach(0..<count, id: \.self) { i in
+                let url = urls[urls.count - count + i]
+                if let image = cache.image(url) {
+                    let weight = Double(i + 1) / Double(count)
+                    Image(uiImage: image).resizable().scaledToFill()
+                        .opacity(settings.onionOpacity * weight)
+                        .allowsHitTesting(false)
+                }
+            }
+        }
+    }
+
+    private var viewerBadge: some View {
+        HStack(spacing: 8) {
+            Text(verbatim: badgeText)
+                .font(Theme.mono(11, .medium))
+                .foregroundStyle(showsLive ? Color.black : Theme.paperOnDark)
+                .padding(.horizontal, 8).padding(.vertical, 4)
+                .background(showsLive ? Theme.amber : Color.black.opacity(0.6))
+            if showsLive {
+                Text(verbatim: controller.status.label)
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.paperOnDark)
+                    .padding(.horizontal, 8).padding(.vertical, 4)
+                    .background(Color.black.opacity(0.55))
+            }
+        }
+        .padding(10)
+    }
+
+    private var badgeText: String {
+        if let testShown { return String(localized: "TEST \(testShown + 1)") }
+        if let index = frameOnViewer { return String(localized: "BILD \(index + 1) / \(urls.count)") }
+        return String(localized: "LIVE · BILD \(urls.count + 1)")
+    }
+
+    @ViewBuilder
+    private var noteBanner: some View {
+        if showsLive, let note = project?.note(forFrame: urls.count + 1) {
+            Text(verbatim: note)
+                .font(Theme.mono(13, .medium))
+                .foregroundStyle(.black)
+                .padding(.horizontal, 14).padding(.vertical, 8)
+                .background(Theme.amber)
+                .padding(.top, 44)
+        }
+    }
+
+    // MARK: Transport
+
+    private var transport: some View {
+        HStack(spacing: 14) {
+            transportButton("backward.frame", "Bild zurück (←)") { handle(.stepBack) }
+            transportButton(playing ? "stop.fill" : "play.fill", "Abspielen (P)") { handle(.play) }
+            transportButton("goforward", "Kurz abspielen (K)") { handle(.shortPlay) }
+            transportButton("forward.frame", "Bild vor (→)") { handle(.stepForward) }
+            transportButton("record.circle", "Live-Bild (L)", active: showsLive) { handle(.live) }
+            Divider().frame(height: 22).overlay(Theme.paperOnDark.opacity(0.2))
+            transportButton("arrow.left.arrow.right", "Umschalten (T)", active: showCaptured) { handle(.toggle) }
+            transportButton("repeat", "Auto-Umschalten (⇧T)", active: autoToggle) { handle(.autoToggle) }
+            transportButton("chevron.left.to.line", "Schleifenanfang (I)", active: loopIn != nil) { handle(.loopIn) }
+            transportButton("chevron.right.to.line", "Schleifenende (O)", active: loopOut != nil) { handle(.loopOut) }
+            Spacer()
+            Button {
+                handle(.capture)
+            } label: {
+                Label("Auslösen", systemImage: "circle.inset.filled")
+                    .font(Theme.caption(12))
+                    .padding(.horizontal, 16).padding(.vertical, 8)
+                    .background(Theme.amber)
+                    .foregroundStyle(.black)
+            }
+            .buttonStyle(.plain)
+            .help("Auslösen (Leertaste oder ⏎)")
+            .keyboardShortcut(.space, modifiers: [])
+            Button("Fertig", action: onFinish)
+                .buttonStyle(.plain)
+                .font(Theme.caption(12))
+                .padding(.horizontal, 14).padding(.vertical, 8)
+                .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.5), lineWidth: 1))
+                .foregroundStyle(Theme.paperOnDark)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(Theme.darkroom)
+    }
+
+    private func transportButton(_ symbol: String, _ help: LocalizedStringKey, active: Bool = false,
+                                 action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: symbol)
+                .font(.system(size: 15, weight: .medium))
+                .frame(width: 30, height: 26)
+                .foregroundStyle(active ? Theme.amber : Theme.paperOnDark)
+        }
+        .buttonStyle(.plain)
+        .help(Text(help))
+        .accessibilityLabel(Text(help))
+    }
+
+    // MARK: Zeitleiste
+
+    private var timeline: some View {
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: true) {
+                LazyHStack(spacing: 3) {
+                    ForEach(Array(urls.enumerated()), id: \.element) { index, url in
+                        timelineCell(index: index, url: url).id(index)
+                    }
+                    liveCell.id(-1)
+                }
+                .padding(.horizontal, 12).padding(.vertical, 8)
+            }
+            .frame(height: 104)
+            .background(Color(white: 0.06))
+            .onChange(of: frameOnViewer) { _, index in
+                withAnimation(.easeOut(duration: 0.15)) { proxy.scrollTo(index ?? -1, anchor: .center) }
+            }
+            .onChange(of: urls.count) { _, _ in proxy.scrollTo(-1, anchor: .trailing) }
+            .onAppear { proxy.scrollTo(-1, anchor: .trailing) }
+        }
+    }
+
+    /// Kacheln im Seitenverhältnis der Kamera – hochkant wie quer.
+    private var cellWidth: CGFloat { min(140, max(36, 63 * controller.frameAspect)) }
+
+    private func timelineCell(index: Int, url: URL) -> some View {
+        let isShown = frameOnViewer == index
+        let inLoop = (loopIn ?? 0) <= index && index <= (loopOut ?? Int.max) && (loopIn != nil || loopOut != nil)
+        return VStack(spacing: 3) {
+            FrameThumbnail(url: url)
+                .frame(width: cellWidth, height: 63)
+                .clipped()
+                .overlay(Rectangle().stroke(isShown ? Theme.amber : Color.clear, lineWidth: 2))
+            HStack(spacing: 4) {
+                Text(String(format: "%03d", index + 1))
+                    .font(Theme.mono(9, isShown ? .bold : .regular))
+                    .foregroundStyle(isShown ? Theme.amber : Theme.paperOnDark.opacity(0.7))
+                if project?.note(forFrame: index + 1) != nil {
+                    Image(systemName: "text.bubble.fill").font(.system(size: 8)).foregroundStyle(Theme.amber)
+                }
+            }
+            Rectangle().fill(inLoop ? Theme.amber.opacity(0.8) : Color.clear).frame(height: 2)
+        }
+        .contentShape(Rectangle())
+        .onTapGesture { stopPlayback(); testShown = nil; selected = index }
+        .contextMenu {
+            Button { duplicate(index) } label: { Label("Verdoppeln", systemImage: "plus.square.on.square") }
+            Button { editNote(index + 1) } label: { Label("Notiz …", systemImage: "text.bubble") }
+            Button { loopIn = index } label: { Label("Als Schleifenanfang", systemImage: "chevron.left.to.line") }
+            Button { loopOut = index } label: { Label("Als Schleifenende", systemImage: "chevron.right.to.line") }
+            Button(role: .destructive) { delete(index) } label: { Label("Bild entfernen", systemImage: "trash") }
+        }
+        .draggable(url.lastPathComponent) {
+            FrameThumbnail(url: url).frame(width: 80, height: 45)
+        }
+        .dropDestination(for: String.self) { items, _ in
+            guard let name = items.first, let project,
+                  let from = project.frameFilenames.firstIndex(of: name) else { return false }
+            store.moveFrame(named: name, by: index - from, in: project)
+            return true
+        }
+    }
+
+    private var liveCell: some View {
+        VStack(spacing: 3) {
+            ZStack {
+                Rectangle().fill(Color.black)
+                Text("LIVE").font(Theme.mono(11, .bold)).foregroundStyle(Theme.amber)
+            }
+            .frame(width: cellWidth, height: 63)
+            .overlay(Rectangle().stroke(showsLive ? Theme.amber : Theme.paperOnDark.opacity(0.3), lineWidth: 2))
+            Text(String(format: "%03d", urls.count + 1))
+                .font(Theme.mono(9)).foregroundStyle(Theme.paperOnDark.opacity(0.7))
+            Rectangle().fill(Color.clear).frame(height: 2)
+        }
+        .contentShape(Rectangle())
+        .onTapGesture { handle(.live) }
+        .contextMenu {
+            Button { editNote(urls.count + 1) } label: { Label("Notiz …", systemImage: "text.bubble") }
+        }
+    }
+
+    // MARK: Inspektor
+
+    private var inspector: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                section("Ansicht") {
+                    picker("Modus", $settings.viewMode, StudioViewMode.allCases) { $0.label }
+                    stepper("Zwiebelhaut", value: $settings.onionFrames, in: 0...6) { $0 == 0 ? String(localized: "aus") : String(localized: "\($0) Bilder") }
+                    slider("Deckkraft", $settings.onionOpacity, 0.1...0.8)
+                    stepper("Kurz abspielen", value: $settings.shortPlayFrames, in: 4...48, step: 4) { String(localized: "\($0) Bilder") }
+                    stepper("Auto-Umschalten", value: $settings.toggleRate, in: 1...8) { String(localized: "\(Int($0))× pro s") }
+                }
+                section("Hilfslinien") {
+                    picker("Format", $settings.mask, MaskAspect.allCases) { $0.label }
+                    if settings.mask != .none { slider("Maske", $settings.maskOpacity, 0.2...1) }
+                    toggle("Sicherheitsrahmen", $settings.safeFrames)
+                    stepper("Raster Spalten", value: $settings.gridColumns, in: 0...12) { $0 < 2 ? String(localized: "aus") : "\($0)" }
+                    stepper("Raster Zeilen", value: $settings.gridRows, in: 0...12) { $0 < 2 ? String(localized: "aus") : "\($0)" }
+                }
+                section("Referenz") {
+                    if let name = reference.name {
+                        Text(verbatim: name).font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark).lineLimit(1)
+                        slider("Deckkraft", $settings.referenceOpacity, 0.05...1)
+                        slider("Größe", $settings.referenceScale, 0.2...3)
+                        slider("Versatz X", $settings.referenceOffsetX, -0.5...0.5)
+                        slider("Versatz Y", $settings.referenceOffsetY, -0.5...0.5)
+                        picker("Chroma-Key", $settings.referenceKey, ChromaKey.allCases) { $0.label }
+                        HStack {
+                            smallButton("Ersetzen …") { showReferenceImporter = true }
+                            smallButton("Entfernen") { reference.clear() }
+                        }
+                    } else {
+                        smallButton("Bild oder Film laden …") { showReferenceImporter = true }
+                        Text("Ein Film läuft Bild für Bild mit: Bild n zeigt die Stelle n ÷ Bildrate.")
+                            .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
+                    }
+                }
+                section("Aufnahme") {
+                    toggle("Automatik (Hände weg)", $settings.autoShutter)
+                    stepper("Mitteln", value: $settings.averageFrames, in: 1...16) { $0 == 1 ? String(localized: "aus") : String(localized: "\($0) Bilder") }
+                    toggle("Beim Auslösen abdunkeln", $settings.captureBlackout)
+                    HStack {
+                        smallButton("Testaufnahme") { handle(.testShot) }
+                        if !testShots.isEmpty {
+                            smallButton(testShown == nil ? "Test zeigen" : "Live") {
+                                testShown = testShown == nil ? testShots.count - 1 : nil
+                            }
+                        }
+                    }
+                }
+                section("Zeitraffer") {
+                    stepper("Intervall", value: $settings.intervalSeconds, in: 1...3600, step: intervalStep) { Self.durationText($0) }
+                    toggle("Startzeit", $settings.useStartTime)
+                    if settings.useStartTime {
+                        DatePicker("", selection: $settings.startTime).labelsHidden()
+                    }
+                    toggle("Endzeit", $settings.useEndTime)
+                    if settings.useEndTime {
+                        DatePicker("", selection: $settings.endTime).labelsHidden()
+                    }
+                    toggle("Höchstzahl", $settings.useFrameLimit)
+                    if settings.useFrameLimit {
+                        stepper("Bilder", value: $settings.frameLimit, in: 1...10000, step: 10) { "\($0)" }
+                    }
+                    smallButton(controller.captureMode == .interval ? "Zeitraffer stoppen" : "Zeitraffer starten") {
+                        toggleTimelapse()
+                    }
+                }
+                section("Werk") {
+                    if let project {
+                        Text(verbatim: "\(project.frameCount) · \(project.name)")
+                            .font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark)
+                        smallButton("Notiz zum nächsten Bild …") { editNote(urls.count + 1) }
+                        smallButton("Bilder im Finder zeigen") {
+                            UIApplication.shared.open(store.folderURL(for: project))
+                        }
+                        smallButton("Letztes Bild zurücknehmen", action: onUndo)
+                    }
+                }
+            }
+            .padding(16)
+        }
+        .tint(Theme.amber)
+    }
+
+    private var intervalStep: Double {
+        settings.intervalSeconds < 10 ? 1 : settings.intervalSeconds < 60 ? 5 : 60
+    }
+
+    static func durationText(_ seconds: Double) -> String {
+        let s = Int(seconds)
+        if s < 60 { return "\(s) s" }
+        if s < 3600 { return s % 60 == 0 ? "\(s / 60) min" : "\(s / 60) min \(s % 60) s" }
+        return "\(s / 3600) h \((s % 3600) / 60) min"
+    }
+
+    private func section<Content: View>(_ title: LocalizedStringKey, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title).font(Theme.caption(10)).tracking(1.4).textCase(.uppercase)
+                .foregroundStyle(Theme.paperOnDark.opacity(0.55))
+            content()
+        }
+    }
+
+    private func picker<T: Hashable & Identifiable>(_ title: LocalizedStringKey, _ value: Binding<T>, _ all: [T],
+                                                    label: @escaping (T) -> String) -> some View {
+        HStack {
+            Text(title).font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark)
+            Spacer()
+            Picker("", selection: value) {
+                ForEach(all) { Text(verbatim: label($0)).tag($0) }
+            }
+            .labelsHidden()
+            .fixedSize()
+            // Am Mac zeichnet das Auswahlmenü einen von außen gesetzten Wert
+            // sonst nicht neu – es bliebe beim Startwert stehen.
+            .id(label(value.wrappedValue))
+        }
+    }
+
+    private func stepper<V: Strideable & Comparable>(_ title: LocalizedStringKey, value: Binding<V>,
+                                                     in range: ClosedRange<V>, step: V.Stride = 1,
+                                                     text: @escaping (V) -> String) -> some View {
+        HStack {
+            Text(title).font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark)
+            Spacer()
+            Text(verbatim: text(value.wrappedValue)).font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark.opacity(0.8))
+            Stepper("", value: value, in: range, step: step).labelsHidden()
+        }
+    }
+
+    private func slider(_ title: LocalizedStringKey, _ value: Binding<Double>, _ range: ClosedRange<Double>) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title).font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark)
+            Slider(value: value, in: range)
+        }
+    }
+
+    private func toggle(_ title: LocalizedStringKey, _ value: Binding<Bool>) -> some View {
+        Toggle(isOn: value) {
+            Text(title).font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark)
+        }
+    }
+
+    private func smallButton(_ title: LocalizedStringKey, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title).font(Theme.mono(11))
+                .padding(.horizontal, 10).padding(.vertical, 5)
+                .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+                .foregroundStyle(Theme.paperOnDark)
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: Befehle
+
+    private func handle(_ command: StudioCommand) {
+        switch command {
+        case .capture:
+            stopPlayback()
+            selected = nil; testShown = nil
+            controller.captureNow()
+        case .stepBack:
+            stopPlayback(); testShown = nil
+            selected = StudioPlayback.step(from: frameOnViewer, by: -1, count: urls.count)
+        case .stepForward:
+            stopPlayback(); testShown = nil
+            selected = StudioPlayback.step(from: frameOnViewer, by: 1, count: urls.count)
+        case .live:
+            stopPlayback(); selected = nil; showCaptured = false; testShown = nil
+        case .play:
+            if playing { stopPlayback() } else {
+                play(StudioPlayback.range(count: urls.count, loopIn: loopIn, loopOut: loopOut), loop: true)
+            }
+        case .shortPlay:
+            play(StudioPlayback.shortRange(count: urls.count, frames: settings.shortPlayFrames), loop: false)
+        case .toggle:
+            showCaptured.toggle()
+        case .autoToggle:
+            setAutoToggle(!autoToggle)
+        case .loopIn:
+            loopIn = frameOnViewer ?? max(0, urls.count - 1)
+        case .loopOut:
+            loopOut = frameOnViewer ?? max(0, urls.count - 1)
+        case .loopClear:
+            loopIn = nil; loopOut = nil
+        case .duplicate:
+            if let index = frameOnViewer { duplicate(index) }
+        case .delete:
+            if let index = frameOnViewer { delete(index) }
+        case .onionMore:
+            settings.onionFrames = min(6, settings.onionFrames + 1)
+        case .onionLess:
+            settings.onionFrames = max(0, settings.onionFrames - 1)
+        case .cycleView:
+            let all = StudioViewMode.allCases
+            settings.viewMode = all[(all.firstIndex(of: settings.viewMode)! + 1) % all.count]
+        case .note:
+            editNote((frameOnViewer ?? urls.count) + 1)
+        case .testShot:
+            if let frame = controller.currentLatestFrame {
+                testShots.append(UIImage(cgImage: frame))
+                testShown = testShots.count - 1
+            }
+        }
+    }
+
+    private func play(_ range: ClosedRange<Int>?, loop: Bool) {
+        stopPlayback()
+        guard let range else { return }
+        cache.preload(range.map { urls[$0] })
+        playing = true
+        playIndex = range.lowerBound
+        let interval = UInt64(1_000_000_000 / Double(fps))
+        playTask = Task { @MainActor in
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: interval)
+                if Task.isCancelled { break }
+                if playIndex < range.upperBound {
+                    playIndex += 1
+                } else if loop {
+                    playIndex = range.lowerBound
+                } else {
+                    break
+                }
+            }
+            if !Task.isCancelled { playing = false }
+        }
+    }
+
+    private func stopPlayback() {
+        playTask?.cancel(); playTask = nil
+        playing = false
+    }
+
+    private func setAutoToggle(_ on: Bool) {
+        autoToggle = on
+        toggleTask?.cancel(); toggleTask = nil
+        autoPhase = false
+        guard on else { return }
+        toggleTask = Task { @MainActor in
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: UInt64(1_000_000_000 / max(1, settings.toggleRate)))
+                autoPhase.toggle()
+            }
+        }
+    }
+
+    private func duplicate(_ index: Int) {
+        guard let project, project.frameFilenames.indices.contains(index) else { return }
+        store.duplicateFrame(named: project.frameFilenames[index], in: project)
+    }
+
+    private func delete(_ index: Int) {
+        guard let project, project.frameFilenames.indices.contains(index) else { return }
+        store.removeFrames(at: IndexSet(integer: index), from: project)
+        if let selected, selected >= urls.count { self.selected = urls.isEmpty ? nil : urls.count - 1 }
+    }
+
+    private func editNote(_ frame: Int) {
+        noteDraft = project?.note(forFrame: frame) ?? ""
+        noteFrame = frame
+    }
+
+    private func toggleTimelapse() {
+        if controller.captureMode == .interval {
+            controller.captureMode = .motion
+            return
+        }
+        controller.intervalSeconds = settings.intervalSeconds
+        controller.intervalStartDate = settings.useStartTime ? settings.startTime : nil
+        controller.intervalEndDate = settings.useEndTime ? settings.endTime : nil
+        controller.intervalFrameLimit = settings.useFrameLimit ? settings.frameLimit : nil
+        controller.captureMode = .interval
+    }
+
+    // MARK: Ablauf
+
+    private func activate() {
+        hub.isActive = true
+        #if DEBUG
+        debugPreset()
+        #endif
+        apply(settings)
+        cache.preload(Array(urls.suffix(12)))
+    }
+
+    #if DEBUG
+    /// Screenshots und Prüfungen ohne Klicks: FF_STUDIO="view=difference,
+    /// mask=scope,grid=3x3,safe=1,onion=3,play=1,select=1"
+    private func debugPreset() {
+        guard let spec = ProcessInfo.processInfo.environment["FF_STUDIO"] else { return }
+        for pair in spec.split(separator: ",") {
+            let kv = pair.split(separator: "=").map(String.init)
+            guard kv.count == 2 else { continue }
+            switch kv[0] {
+            case "view": settings.viewMode = StudioViewMode(rawValue: kv[1]) ?? .normal
+            case "mask": settings.mask = MaskAspect(rawValue: kv[1]) ?? .none
+            case "safe": settings.safeFrames = kv[1] == "1"
+            case "onion": settings.onionFrames = Int(kv[1]) ?? 1
+            case "grid":
+                let g = kv[1].split(separator: "x").compactMap { Int($0) }
+                if g.count == 2 { settings.gridColumns = g[0]; settings.gridRows = g[1] }
+            case "auto": settings.autoShutter = kv[1] == "1"
+            case "average": settings.averageFrames = Int(kv[1]) ?? 1
+            case "blackout": settings.captureBlackout = kv[1] == "1"
+            case "select": selected = Int(kv[1])
+            case "play":
+                DispatchQueue.main.asyncAfter(deadline: .now() + 6) { handle(.play) }
+            case "test":
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4) { handle(.testShot) }
+            case "note":
+                if let project { store.setNote(kv[1], forFrame: urls.count + 1, in: project) }
+            default: break
+            }
+        }
+    }
+    #endif
+
+    private func deactivate() {
+        hub.isActive = false
+        stopPlayback()
+        setAutoToggle(false)
+        StudioBlackout.set(false)
+        // Die übrigen Ansichten kennen diese Schalter nicht – zurück auf Standard.
+        controller.publishesLiveFrames = false
+        controller.averageFrames = 1
+        controller.captureBlackout = false
+        controller.autoShutter = true
+        controller.intervalStartDate = nil
+        controller.intervalEndDate = nil
+        controller.intervalFrameLimit = nil
+    }
+
+    private func apply(_ s: StudioSettings) {
+        controller.publishesLiveFrames = s.viewMode != .normal
+        controller.averageFrames = s.averageFrames
+        controller.captureBlackout = s.captureBlackout
+        controller.autoShutter = s.autoShutter
+        reference.setKey(s.referenceKey)
+        if s.viewMode == .normal { processed = nil }
+    }
+
+    private func referenceFollow() {
+        reference.show(frame: frameOnViewer ?? urls.count, fps: fps)
+    }
+
+    /// Differenz- oder Belichtungsbild aus dem jüngsten Kamerabild rechnen –
+    /// im Hintergrund, damit der Betrachter flüssig bleibt.
+    private func updateProcessed() {
+        guard settings.viewMode != .normal, let live = controller.liveFrame else { return }
+        let mode = settings.viewMode
+        let against = urls.last.flatMap { cache.image($0)?.cgImage }
+        Task.detached(priority: .userInitiated) {
+            let image: CGImage?
+            switch mode {
+            case .difference:
+                image = against.flatMap { StudioImaging.difference(live: live, against: $0) } ?? live
+            case .clipping:
+                image = StudioImaging.clipping(live)
+            case .normal:
+                image = nil
+            }
+            await MainActor.run { processed = image.map { UIImage(cgImage: $0) } }
+        }
+    }
+}
+
+/// Bildschirm beim Auslösen abdunkeln: eine schwarze Fläche über dem ganzen
+/// Fenster, auch über Tab- und Menüleiste der App.
+@MainActor
+enum StudioBlackout {
+    private static weak var cover: UIView?
+
+    static func set(_ on: Bool) {
+        if on {
+            guard cover == nil,
+                  let window = UIApplication.shared.connectedScenes
+                    .compactMap({ ($0 as? UIWindowScene)?.keyWindow }).first else { return }
+            let view = UIView(frame: window.bounds)
+            view.backgroundColor = .black
+            view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            window.addSubview(view)
+            cover = view
+        } else {
+            cover?.removeFromSuperview()
+        }
+    }
+}

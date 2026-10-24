@@ -109,6 +109,14 @@ that decision is written up here:
   film — remuxed, not re-encoded, so it takes a moment, not a minute.
 - **iPad in a stand.** On iPad the viewfinder and the captured frames follow the
   device's orientation, portrait or landscape.
+- **Studio on the Mac.** In Advanced and Studio mode the Mac camera becomes a
+  full stop-motion workspace in the spirit of Dragonframe: viewer with live /
+  captured toggle and auto-toggle, multi-frame onion skin, difference and
+  clipping views, aspect masks, safe areas and grids, an image-or-movie
+  reference layer with chroma key, a draggable timeline with loop marks and
+  per-frame notes, frame averaging, capture blackout, test shots, scheduled
+  time-lapse, ProRes and image-sequence export — all on the keyboard.
+  Guide and key map: [docs/studio](docs/studio/README.md).
 - **For the classroom.** A two-lesson plan (German) with timings, roles and a
   privacy summary: [docs/unterricht](docs/unterricht/README.md).
 - **Shutter without shake.** Hold the shutter for a three-second self-timer, or

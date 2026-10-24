@@ -653,6 +653,30 @@ final class LiveCaptureController: NSObject, ObservableObject {
     private var calibrationStart: Date?
     /// Seit wann die Szene ununterbrochen zu unruhig zum Auslösen ist.
     private var restlessSince: Date?
+    // MARK: Studio (Mac-Arbeitsfläche)
+
+    /// Live-Bild für Differenz- und Belichtungsansicht – nur, wenn das
+    /// Studio es anfordert (sonst kostet jedes Bild ein SwiftUI-Update).
+    @Published private(set) var liveFrame: CGImage?
+    var publishesLiveFrames = false { didSet { if !publishesLiveFrames { liveFrame = nil } } }
+    /// Seitenverhältnis des Kamerabilds (Breite/Höhe) – für Masken und Raster.
+    @Published private(set) var frameAspect: Double = 16.0 / 9.0
+    /// Rauschminderung: so viele Kamerabilder nach dem Auslösen mitteln (1 = aus).
+    var averageFrames = 1
+    /// Bildschirm beim Auslösen abdunkeln, damit sein Licht nicht aufs Set fällt.
+    var captureBlackout = false
+    @Published private(set) var blackoutActive = false
+    /// Automatischer Auslöser an (aus: nur Taste, Watch, Intervall).
+    var autoShutter = true
+    /// Zeitraffer-Grenzen (nil = ohne): Start, Ende, Höchstzahl an Bildern.
+    var intervalStartDate: Date?
+    var intervalEndDate: Date?
+    var intervalFrameLimit: Int?
+    /// Läuft gerade eine Auslösung mit Abdunkeln oder Mittelung?
+    var isPreparingCapture = false
+    var currentLatestFrame: CGImage? { latestFrame }
+    func setBlackout(_ on: Bool) { blackoutActive = on }
+
     /// Simulator-Kamera: Task und aktuelles Vorschaubild.
     var simulatorTask: Task<Void, Never>?
     /// Im Simulator statt des Kamerabilds angezeigt (nil auf echten Geräten).
@@ -1301,11 +1325,22 @@ final class LiveCaptureController: NSObject, ObservableObject {
         intervalTask?.cancel()
         guard captureMode == .interval else { return }
         intervalTask = Task { [weak self] in
+            // Zeitraffer mit Startzeit: bis dahin nur warten.
+            if let start = self?.intervalStartDate, start > Date() {
+                try? await Task.sleep(nanoseconds: UInt64(start.timeIntervalSinceNow * 1_000_000_000))
+            }
+            var taken = 0
             while !Task.isCancelled {
                 let seconds = self?.intervalSeconds ?? 3.0
                 try? await Task.sleep(nanoseconds: UInt64(max(0.5, seconds) * 1_000_000_000))
                 guard let self, !Task.isCancelled else { break }
+                if Self.intervalFinished(taken: taken, limit: self.intervalFrameLimit,
+                                         end: self.intervalEndDate, now: Date()) {
+                    self.hint = String(localized: "Zeitraffer beendet")
+                    break
+                }
                 self.captureNow(userInitiated: false)
+                taken += 1
             }
         }
     }
@@ -1342,6 +1377,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
         latestGray = gray
         latestGrayWidth = w
         latestFrame = fullFrame
+        if publishesLiveFrames { liveFrame = fullFrame }
+        let aspect = Double(fullFrame.width) / Double(max(1, fullFrame.height))
+        if abs(aspect - frameAspect) > 0.01 { frameAspect = aspect }
         // Gerundet und nur bei echter Änderung veröffentlichen – sonst
         // zeichnet SwiftUI den ganzen Sucher zehnmal pro Sekunde neu.
         let rounded = (motion * 10).rounded() / 10
@@ -1482,6 +1520,12 @@ final class LiveCaptureController: NSObject, ObservableObject {
             return
         }
 
+        guard autoShutter else {
+            armed = false
+            stableSince = nil
+            setStatus(.waitingForWork)
+            return
+        }
         capture(frame: fullFrame)
     }
 
@@ -1686,7 +1730,20 @@ final class LiveCaptureController: NSObject, ObservableObject {
         return ctx.makeImage()
     }
 
+    /// Auslösen. Mit Abdunkeln oder Mittelung (Studio) erst vorbereiten,
+    /// sonst sofort ablegen.
     private func capture(frame: CGImage) {
+        guard !isPreparingCapture else { return }
+        guard captureBlackout || averageFrames > 1 else {
+            commit(frame: frame)
+            return
+        }
+        armed = false
+        stableSince = nil
+        prepareCapture(fallback: frame)
+    }
+
+    func commit(frame: CGImage) {
         armed = false
         handCheckResult = nil
         stableSince = nil

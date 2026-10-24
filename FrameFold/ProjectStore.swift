@@ -19,6 +19,11 @@ struct Project: Identifiable, Codable {
     var nextFrameNumber: Int?
     /// Musik- oder Tonspur für den Export (Datei im Werkordner, optional)
     var audioFilename: String?
+    /// Notizen zu Bildnummern (1-basiert, wie im X-Sheet) – erscheinen im
+    /// Studio, wenn genau dieses Bild als nächstes aufgenommen wird.
+    var notes: [String: String]?
+
+    func note(forFrame number: Int) -> String? { notes?[String(number)] }
 
     var frameCount: Int { frameFilenames.count }
 
@@ -50,6 +55,13 @@ final class ProjectStore: ObservableObject {
             .appendingPathComponent("FrameFold", isDirectory: true)
         #else
         let base = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        #endif
+        #if DEBUG
+        // Tests und Screenshots: eigener Ordner statt der echten Werke.
+        if let custom = ProcessInfo.processInfo.environment["FF_STORE_ROOT"], !custom.isEmpty {
+            self.init(root: URL(fileURLWithPath: custom, isDirectory: true))
+            return
+        }
         #endif
         self.init(root: base.appendingPathComponent("Projects", isDirectory: true))
     }
@@ -134,7 +146,7 @@ final class ProjectStore: ObservableObject {
         let project = Project(
             id: id, name: String(localized: "Wiederhergestelltes Werk"),
             createdAtISO: ISO8601DateFormatter().string(from: created),
-            frameFilenames: frames, trashFilenames: nil, nextFrameNumber: nil, audioFilename: nil)
+            frameFilenames: frames, trashFilenames: nil, nextFrameNumber: nil, audioFilename: nil, notes: nil)
         if let data = try? JSONEncoder().encode(project) {
             try? data.write(to: dir.appendingPathComponent("manifest.json"), options: .atomic)
         }
@@ -177,7 +189,8 @@ final class ProjectStore: ObservableObject {
             frameFilenames: [],
             trashFilenames: nil,
             nextFrameNumber: 0,
-            audioFilename: nil)
+            audioFilename: nil,
+            notes: nil)
         save(project)
         return project
     }
@@ -284,6 +297,19 @@ final class ProjectStore: ObservableObject {
         guard let name = project.audioFilename else { return }
         try? FileManager.default.removeItem(at: directory(for: project).appendingPathComponent(name))
     }
+
+    /// Notiz zu Bild `number` setzen; leerer Text entfernt sie.
+    func setNote(_ text: String, forFrame number: Int, in project: Project) {
+        var updated = project
+        var notes = updated.notes ?? [:]
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        notes[String(number)] = trimmed.isEmpty ? nil : trimmed
+        updated.notes = notes.isEmpty ? nil : notes
+        save(updated)
+    }
+
+    /// Ordner mit den Bildern des Werks (für „Im Finder zeigen“).
+    func folderURL(for project: Project) -> URL { directory(for: project) }
 
     func audioURL(for project: Project) -> URL? {
         project.audioFilename.map { directory(for: project).appendingPathComponent($0) }

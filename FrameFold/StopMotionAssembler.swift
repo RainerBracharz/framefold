@@ -113,11 +113,11 @@ final class StopMotionAssembler {
         let renderScale = CGFloat(width) / max(1, cropRect.width)
 
         let outputURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent("framefold-\(UUID().uuidString).mp4")
+            .appendingPathComponent("framefold-\(UUID().uuidString).\(settings.videoCodec.fileExtension)")
 
-        let writer = try AVAssetWriter(outputURL: outputURL, fileType: .mp4)
+        let writer = try AVAssetWriter(outputURL: outputURL, fileType: settings.videoCodec.fileType)
         let videoSettings: [String: Any] = [
-            AVVideoCodecKey: AVVideoCodecType.hevc,
+            AVVideoCodecKey: settings.videoCodec.avCodec,
             AVVideoWidthKey: width,
             AVVideoHeightKey: height
         ]
@@ -685,5 +685,51 @@ extension StopMotionAssembler {
             if session.status == .completed { return url }
         }
         throw PipelineError.exportFailed
+    }
+}
+
+// MARK: Bildsequenz
+
+/// Format der Einzelbilder beim Sequenz-Export.
+enum SequenceFormat: String, CaseIterable, Identifiable {
+    case png, tiff, jpeg
+    var id: String { rawValue }
+    var label: String { rawValue.uppercased() }
+    var type: UTType {
+        switch self {
+        case .png: return .png
+        case .tiff: return .tiff
+        case .jpeg: return .jpeg
+        }
+    }
+    var fileExtension: String { self == .jpeg ? "jpg" : rawValue }
+}
+
+extension StopMotionAssembler {
+    /// Schreibt die Bilder in voller Auflösung als nummerierte Einzelbilder
+    /// in einen neuen Ordner („Werk_0001.png“ …) – für Schnitt, Compositing
+    /// und Archiv. Gibt den Ordner zurück.
+    static func exportSequence(_ urls: [URL], name: String, format: SequenceFormat,
+                               progress: @escaping (Double) -> Void = { _ in }) throws -> URL {
+        let safe = name.components(separatedBy: CharacterSet(charactersIn: "/:\\?%*|\"<>")).joined(separator: "-")
+        let folder = FileManager.default.temporaryDirectory
+            .appendingPathComponent("framefold-\(UUID().uuidString.prefix(6))", isDirectory: true)
+            .appendingPathComponent(safe.isEmpty ? "FrameFold" : safe, isDirectory: true)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        for (i, url) in urls.enumerated() {
+            let target = folder.appendingPathComponent(String(format: "%@_%04d.%@", safe, i + 1, format.fileExtension))
+            if format == .jpeg {
+                try FileManager.default.copyItem(at: url, to: target)   // schon JPEG – verlustfrei kopieren
+            } else {
+                guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
+                      let image = CGImageSourceCreateImageAtIndex(source, 0, nil),
+                      let dest = CGImageDestinationCreateWithURL(target as CFURL, format.type.identifier as CFString, 1, nil)
+                else { throw PipelineError.exportFailed }
+                CGImageDestinationAddImage(dest, image, nil)
+                guard CGImageDestinationFinalize(dest) else { throw PipelineError.exportFailed }
+            }
+            progress(Double(i + 1) / Double(urls.count))
+        }
+        return folder
     }
 }

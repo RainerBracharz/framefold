@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(AVFoundation)
+import AVFoundation
+#endif
 #if canImport(CoreGraphics)
 import CoreGraphics
 #endif
@@ -71,7 +74,40 @@ struct PipelineSettings: Equatable, Codable {
     /// Flimmern ausgleichen: Helligkeit von Bild zu Bild angleichen
     /// (Tageslicht, Wolken, Raumlicht). Langsame Lichtwechsel bleiben.
     var deflicker: Bool = true
+    /// Video-Codec des Exports: HEVC/H.264 als MP4, ProRes als QuickTime
+    /// für den Schnitt.
+    var videoCodec: VideoCodec = .hevc
 }
+
+/// Codec des exportierten Films.
+enum VideoCodec: String, CaseIterable, Identifiable, Codable {
+    case hevc, h264, prores422, prores422HQ
+    var id: String { rawValue }
+    var label: String {
+        switch self {
+        case .hevc: return "HEVC"
+        case .h264: return "H.264"
+        case .prores422: return "ProRes 422"
+        case .prores422HQ: return "ProRes 422 HQ"
+        }
+    }
+    var isProRes: Bool { self == .prores422 || self == .prores422HQ }
+    var fileExtension: String { isProRes ? "mov" : "mp4" }
+}
+
+#if canImport(AVFoundation)
+extension VideoCodec {
+    var avCodec: AVVideoCodecType {
+        switch self {
+        case .hevc: return .hevc
+        case .h264: return .h264
+        case .prores422: return .proRes422
+        case .prores422HQ: return .proRes422HQ
+        }
+    }
+    var fileType: AVFileType { isProRes ? .mov : .mp4 }
+}
+#endif
 
 /// Auflösung des exportierten Videos (maximale Kantenlänge).
 enum ExportResolution: String, CaseIterable, Identifiable, Codable {
@@ -281,6 +317,7 @@ extension PipelineSettings {
         reliefStrength = v(.reliefStrength, d.reliefStrength)
         printLook = v(.printLook, d.printLook)
         deflicker = v(.deflicker, d.deflicker)
+        videoCodec = v(.videoCodec, d.videoCodec)
     }
 
     func persist() {
