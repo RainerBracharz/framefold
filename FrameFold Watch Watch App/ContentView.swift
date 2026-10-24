@@ -77,6 +77,17 @@ final class WatchShutter: NSObject, ObservableObject {
 
     override init() {
         super.init()
+        #if targetEnvironment(simulator)
+        // Store-Screenshots: FF_WATCH_DEMO=<Zähler> zeigt eine laufende
+        // Aufnahme, ohne dass ein iPhone gekoppelt sein muss.
+        if let demo = ProcessInfo.processInfo.environment["FF_WATCH_DEMO"], let n = Int(demo) {
+            count = n
+            status = String(localized: "Ruhig halten…")
+            isConnected = true
+            isActive = true
+            return
+        }
+        #endif
         guard WCSession.isSupported() else { return }
         session.delegate = self
         session.activate()

@@ -205,6 +205,23 @@
           }
         }
       }
+    },
+    "Ruhig halten…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold steady…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ne bouge pas…"
+          }
+        }
+      }
     }
   },
   "version": "1.3"
