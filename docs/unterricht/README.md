@@ -70,7 +70,6 @@ Datenschutzerklärung: <https://www.bracharz.com/framefold-datenschutz/>
 ## Weiterführend
 
 - App Store: <https://apps.apple.com/app/id6801045603>
-- Quellcode (offen): <https://github.com/RainerBracharz/framefold>
+- Quellcode (einsehbar): <https://github.com/RainerBracharz/framefold>
 - Anleitung zur App: [ANLEITUNG.md](../../ANLEITUNG.md)
 
-Dieser Entwurf darf frei verwendet, angepasst und weitergegeben werden (CC BY 4.0, Rainer Bracharz).
