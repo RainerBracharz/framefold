@@ -25,6 +25,8 @@ Der automatische Auslöser (Hände weg, Szene ruhig) läuft wie gewohnt weiter u
 - **Raster**: frei wählbar, bis 12 × 12.
 - **Referenzebene**: ein Bild oder ein Film mit Deckkraft, Größe, Versatz und Chroma-Key (Grün oder Blau).
   Ein Film läuft Bild für Bild mit: Bild n zeigt die Stelle n ÷ Bildrate.
+- **Lupe** (Z, stärker mit ⇧Z): Ein Ausschnitt des Live-Bilds steht 2-, 4- oder 8-fach vergrößert oben rechts, aus dem vollen Kamerabild, nicht hochgerechnet.
+  Ein Klick oder Ziehen im Bild setzt die Lupe und stellt dort scharf.
 - **Notizen**: Eine Notiz zu Bild n erscheint, wenn genau dieses Bild als Nächstes aufgenommen wird.
 
 ## Zeitleiste
@@ -34,6 +36,17 @@ Der automatische Auslöser (Hände weg, Szene ruhig) läuft wie gewohnt weiter u
 - Das Kontextmenü bietet Verdoppeln, Notiz, Schleifenanfang und -ende sowie Entfernen.
   Entfernte Bilder liegen 30 Tage im Papierkorb des Werks.
 - Eine Linie unter den Kacheln markiert die Schleife.
+
+## Kamera-Ordner
+
+Mit „Ordner beobachten“ wird jede Kamera nutzbar, die FrameFold nicht selbst steuert. So arbeitet auch Dragonframe mit nicht unterstützten Spiegelreflexkameras.
+
+- Im Inspektor unter „Kamera-Ordner“ den Ordner wählen, in den die Software der Kamera ihre Fotos legt. Das kann EOS Utility, Nikon Webcam Utility, Capture One, Lightroom-Tethering oder ein Kartenleser-Import sein.
+- Mit „Beobachten“ eingeschaltet wird jedes neue Foto in voller Auflösung das nächste Bild des Werks. Das gilt auch für RAW-Dateien (CR2/CR3, NEF, ARW, RAF, ORF, RW2, DNG), für HEIC, TIFF und PNG.
+  JPEG wird unverändert übernommen, alles andere als hochwertiges JPEG.
+- Was beim Einschalten schon im Ordner liegt, bleibt draußen. Eine Datei wird erst übernommen, wenn die Kamera sie fertig geschrieben hat.
+- Das Live-Bild für Zwiebelhaut, Lupe und Hilfslinien kommt weiter von der Mac-Kamera oder einer HDMI-Capture-Karte. Die Automatik am besten ausschalten, ausgelöst wird an der Kamera.
+- Der Ordner bleibt über Neustarts gemerkt („Vergessen“ löst ihn).
 
 ## Aufnahme
 
@@ -93,6 +106,7 @@ Sie sind nur aktiv, solange die Arbeitsfläche offen ist, damit einfache Tasten 
 | ⇧X | X-Sheet |
 | [ / ] | Weniger / mehr Zwiebelhaut |
 | M | Ansicht wechseln (Normal, Differenz, Belichtung) |
+| Z / ⇧Z | Lupe an/aus / stärker |
 | ⌘⏎ | Fertig |
 | ⌘⌫ | Letztes Bild zurücknehmen |
 | Bild ab / Bild auf | Auslösen / zurücknehmen (Präsentations-Fernbedienung) |

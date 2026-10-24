@@ -10,6 +10,7 @@ import XCTest
 import AVFoundation
 import ImageIO
 import UIKit
+import UniformTypeIdentifiers
 @testable import FrameFold
 
 final class StudioTests: XCTestCase {
@@ -168,6 +169,58 @@ final class StudioTests: XCTestCase {
             XCTAssertEqual(CGImageSourceGetType(source) as String?, format.type.identifier)
             try? FileManager.default.removeItem(at: folder.deletingLastPathComponent())
         }
+    }
+
+    // MARK: Lupe und Kamera-Ordner
+
+    func testLoupeRectZoomsAndStaysInside() {
+        let size = CGSize(width: 6000, height: 4000)
+        let mid = studioLoupeRect(imageSize: size, center: CGPoint(x: 0.5, y: 0.5), zoom: 4, aspect: 1.6)
+        XCTAssertEqual(mid.width, 1500)
+        XCTAssertEqual(mid.height, 938, accuracy: 1)
+        XCTAssertEqual(mid.midX, 3000, accuracy: 1)
+        let corner = studioLoupeRect(imageSize: size, center: CGPoint(x: 1, y: 0), zoom: 2, aspect: 1.6)
+        XCTAssertEqual(corner.maxX, 6000)
+        XCTAssertEqual(corner.minY, 0)
+    }
+
+    func testWatchFolderListsImagesInCameraOrder() throws {
+        for name in ["IMG_10.JPG", "IMG_9.jpg", "IMG_11.CR3", ".hidden.jpg", "notes.txt", "IMG_12.tif"] {
+            try Data([0]).write(to: dir.appendingPathComponent(name))
+        }
+        XCTAssertEqual(StudioFolderWatch.imageFiles(in: dir), ["IMG_9.jpg", "IMG_10.JPG", "IMG_11.CR3", "IMG_12.tif"])
+    }
+
+    func testWatchFolderKeepsJPEGBytesAndConvertsOthers() throws {
+        let jpeg = dir.appendingPathComponent("a.jpg")
+        let original = try XCTUnwrap(UIImage(cgImage: solid(0.3, width: 400, height: 300)).jpegData(compressionQuality: 0.8))
+        try original.write(to: jpeg)
+        let (image, data) = try XCTUnwrap(StudioFolderWatch.load(jpeg))
+        XCTAssertEqual(data, original, "JPEG bleibt Byte für Byte")
+        XCTAssertEqual(image.width, 400)
+
+        let tiff = dir.appendingPathComponent("b.tif")
+        let dest = try XCTUnwrap(CGImageDestinationCreateWithURL(tiff as CFURL, UTType.tiff.identifier as CFString, 1, nil))
+        CGImageDestinationAddImage(dest, solid(0.7, width: 640, height: 480), nil)
+        XCTAssertTrue(CGImageDestinationFinalize(dest))
+        let (converted, jpegData) = try XCTUnwrap(StudioFolderWatch.load(tiff))
+        XCTAssertEqual(converted.width, 640)
+        XCTAssertEqual(Array(jpegData.prefix(2)), [0xFF, 0xD8], "als JPEG abgelegt")
+        XCTAssertNil(StudioFolderWatch.load(dir.appendingPathComponent("fehlt.jpg")))
+    }
+
+    @MainActor
+    func testCommitWithOriginalDataDeliversThoseBytes() async throws {
+        let controller = LiveCaptureController()
+        let delivered = expectation(description: "Bild ins Werk")
+        var received: Data?
+        controller.startWithoutCamera { data in received = data; delivered.fulfill() }
+        let bytes = try XCTUnwrap(UIImage(cgImage: solid(0.5)).jpegData(compressionQuality: 0.5))
+        controller.commit(frame: solid(0.5), originalData: bytes)
+        await fulfillment(of: [delivered], timeout: 5)
+        XCTAssertEqual(received, bytes)
+        XCTAssertEqual(controller.capturedCount, 1)
+        controller.stop()
     }
 
     private func XCTUnwrapAsync<T>(_ value: T?) throws -> T { try XCTUnwrap(value) }

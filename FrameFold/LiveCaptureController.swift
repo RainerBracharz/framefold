@@ -1743,7 +1743,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         prepareCapture(fallback: frame)
     }
 
-    func commit(frame: CGImage) {
+    func commit(frame: CGImage, originalData: Data? = nil) {
         armed = false
         handCheckResult = nil
         stableSince = nil
@@ -1771,7 +1771,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
         encodeTask = Task { [weak self] in
             await previous?.value
             let (data, thumb) = await Task.detached(priority: .userInitiated) {
-                (image.jpegData(compressionQuality: 0.9), Self.loopThumbnail(image))
+                // Fotos aus dem Kamera-Ordner behalten ihre Originaldatei
+                (originalData ?? image.jpegData(compressionQuality: 0.9), Self.loopThumbnail(image))
             }.value
             guard let self else { return }
             if let thumb { self.loopFrames.append(thumb) }

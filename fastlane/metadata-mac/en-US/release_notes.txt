@@ -3,6 +3,7 @@ FrameFold 2.6
 The Studio – and sound.
 
 • Studio: from Advanced mode the camera becomes a pro workspace – draggable timeline, toggle between live view and captured frames, multi-frame onion skin, difference and exposure views, aspect masks, grids, a reference image or movie with chroma key, notes per frame, frame averaging against noise, time-lapse with start and end time. All on the keyboard too (Studio menu).
+• Any camera: photos your DSLR or mirrorless camera’s software drops into a folder become the next frame at full resolution – RAW too. Plus a loupe for checking focus in the live view.
 • Sound like a studio: multiple audio tracks with start frame and level, waveform in the timeline, sound while playing and stepping. Read dialogue in the X-sheet with mouth shapes per character – FrameFold can recognise the words itself, on the device only.
 • Export as ProRes or an image sequence (PNG, TIFF, JPEG).
 • Music or sound: pick an audio file in the work view – it plays under the exported film.

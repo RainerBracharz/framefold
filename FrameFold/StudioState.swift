@@ -13,6 +13,12 @@ struct StudioSettings: Codable, Equatable {
     var toggleRate = 2.0
     var shortPlayFrames = 12
 
+    /// Lupe: vergrößerter Ausschnitt des Live-Bilds zum Prüfen der Schärfe
+    var loupe = false
+    var loupeZoom = 4
+    var loupeX = 0.5
+    var loupeY = 0.5
+
     // Hilfen
     var mask: MaskAspect = .none
     var maskOpacity = 0.7
@@ -62,6 +68,10 @@ struct StudioSettings: Codable, Equatable {
         onionOpacity = v(.onionOpacity, d.onionOpacity)
         toggleRate = v(.toggleRate, d.toggleRate)
         shortPlayFrames = v(.shortPlayFrames, d.shortPlayFrames)
+        loupe = v(.loupe, d.loupe)
+        loupeZoom = v(.loupeZoom, d.loupeZoom)
+        loupeX = v(.loupeX, d.loupeX)
+        loupeY = v(.loupeY, d.loupeY)
         mask = v(.mask, d.mask)
         maskOpacity = v(.maskOpacity, d.maskOpacity)
         safeFrames = v(.safeFrames, d.safeFrames)
@@ -170,7 +180,7 @@ enum ChromaKey: String, Codable, CaseIterable, Identifiable {
 enum StudioCommand: String {
     case capture, stepBack, stepForward, live, play, shortPlay
     case toggle, autoToggle, loopIn, loopOut, loopClear
-    case duplicate, delete, onionMore, onionLess, cycleView, note, testShot, xsheet
+    case duplicate, delete, onionMore, onionLess, cycleView, note, testShot, xsheet, loupe, loupeZoom
 }
 
 /// Ob gerade eine Studio-Arbeitsfläche offen ist – nur dann sind die
@@ -215,4 +225,15 @@ enum StudioPlayback {
         let next = min(max(current + delta, 0), count)
         return next == count ? nil : next
     }
+}
+
+/// Ausschnitt der Lupe im Kamerabild: um `center` (0…1), `zoom`-fach
+/// vergrößert, im Seitenverhältnis `aspect` des Lupenfensters, am Rand
+/// angehalten statt abgeschnitten.
+func studioLoupeRect(imageSize: CGSize, center: CGPoint, zoom: Int, aspect: Double) -> CGRect {
+    let w = imageSize.width / CGFloat(max(1, zoom))
+    let h = min(imageSize.height, w / CGFloat(max(0.1, aspect)))
+    let x = min(max(0, center.x * imageSize.width - w / 2), imageSize.width - w)
+    let y = min(max(0, center.y * imageSize.height - h / 2), imageSize.height - h)
+    return CGRect(x: x, y: y, width: w, height: h).integral
 }

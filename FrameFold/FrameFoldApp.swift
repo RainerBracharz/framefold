@@ -392,6 +392,8 @@ struct FrameFoldApp: App {
                 studioButton("Mehr Zwiebelhaut", .onionMore, "]")
                 studioButton("Weniger Zwiebelhaut", .onionLess, "[")
                 studioButton("Ansicht wechseln", .cycleView, "m")
+                studioButton("Lupe", .loupe, "z")
+                studioButton("Lupe stärker", .loupeZoom, "z", .shift)
             }
         }
         CommandGroup(before: .toolbar) {

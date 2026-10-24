@@ -114,7 +114,9 @@ that decision is written up here:
   captured toggle and auto-toggle, multi-frame onion skin, difference and
   clipping views, aspect masks, safe areas and grids, an image-or-movie
   reference layer with chroma key, a draggable timeline with loop marks and
-  per-frame notes, frame averaging, capture blackout, test shots, scheduled
+  per-frame notes, a focus loupe, a watched camera folder that brings any
+  DSLR or mirrorless camera in at full resolution (RAW included), frame
+  averaging, capture blackout, test shots, scheduled
   time-lapse, ProRes and image-sequence export — all on the keyboard. Sound
   works like a studio too: multiple tracks with start frame and level, a
   waveform under the timeline, synced playback and per-frame scrubbing, and

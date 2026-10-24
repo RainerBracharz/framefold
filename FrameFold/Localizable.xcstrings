@@ -7884,6 +7884,214 @@
           }
         }
       }
+    },
+    "Lupe (Z)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loupe (Z)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loupe (Z)"
+          }
+        }
+      }
+    },
+    "Lupe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loupe"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loupe"
+          }
+        }
+      }
+    },
+    "Lupe stärker": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stronger loupe"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loupe plus forte"
+          }
+        }
+      }
+    },
+    "Vergrößerung": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Magnification"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grossissement"
+          }
+        }
+      }
+    },
+    "Im Bild klicken oder ziehen: Lupe setzen und dort scharfstellen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click or drag in the image: place the loupe and focus there."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clique ou glisse dans l’image : place la loupe et fait la mise au point à cet endroit."
+          }
+        }
+      }
+    },
+    "Kamera-Ordner": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera folder"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dossier de l’appareil"
+          }
+        }
+      }
+    },
+    "Beobachten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surveiller"
+          }
+        }
+      }
+    },
+    "%lld Fotos übernommen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld photos added"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld photos ajoutées"
+          }
+        }
+      }
+    },
+    "Anderer Ordner …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other folder …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autre dossier …"
+          }
+        }
+      }
+    },
+    "Vergessen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forget"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oublier"
+          }
+        }
+      }
+    },
+    "Ordner wählen …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose folder …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un dossier …"
+          }
+        }
+      }
+    },
+    "Fotos, die die Software deiner Kamera in diesen Ordner legt, werden in voller Auflösung das nächste Bild – auch RAW. Die Automatik am besten ausschalten.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos your camera’s software puts into this folder become the next frame at full resolution – RAW too. Best switch the auto shutter off."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les photos que le logiciel de ton appareil dépose dans ce dossier deviennent l’image suivante en pleine résolution – RAW compris. Mieux vaut désactiver le déclenchement auto."
+          }
+        }
+      }
+    },
+    "„%@“ ließ sich nicht lesen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” could not be read."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de lire « %@ »."
+          }
+        }
+      }
     }
   },
   "version": "1.3"

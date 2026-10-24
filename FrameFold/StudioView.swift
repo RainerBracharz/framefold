@@ -43,7 +43,10 @@ struct StudioView: View {
     /// Tonpegel auf der Film-Zeitachse (120 Werte je Sekunde)
     @State private var peaks: [Float] = []
     @State private var showXSheet = false
-    @State private var importsAudio = false
+    @State private var importKind: ImportKind = .reference
+    @StateObject private var folderWatch = StudioFolderWatch()
+
+    private enum ImportKind { case reference, audio, folder }
 
     private var project: Project? { store.projects.first { $0.id == projectID } }
     private var urls: [URL] { project.map { store.frameURLs(for: $0) } ?? [] }
@@ -85,11 +88,14 @@ struct StudioView: View {
             if let raw = note.object as? String, let command = StudioCommand(rawValue: raw) { handle(command) }
         }
         .fileImporter(isPresented: $showReferenceImporter,
-                      allowedContentTypes: importsAudio ? [.audio] : [.image, .movie]) { result in
+                      allowedContentTypes: importKind == .audio ? [.audio] : importKind == .folder ? [.folder] : [.image, .movie]) { result in
             guard case .success(let url) = result else { return }
-            if importsAudio {
+            switch importKind {
+            case .audio:
                 if let project { store.addAudioTrack(from: url, startFrame: frameOnViewer ?? 0, to: project) }
-            } else {
+            case .folder:
+                folderWatch.choose(url)
+            case .reference:
                 reference.load(url)
                 reference.setKey(settings.referenceKey)
                 referenceFollow()
@@ -143,6 +149,18 @@ struct StudioView: View {
             .overlay(alignment: .topLeading) { viewerBadge }
             .overlay(alignment: .top) { noteBanner }
             .overlay(alignment: .bottomLeading) { dialogueHUD }
+            .overlay { loupeMarker(canvas: canvas) }
+            .overlay(alignment: .topTrailing) { loupeInset }
+            .gesture(DragGesture(minimumDistance: 0).onChanged { value in
+                guard settings.loupe, showsLive else { return }
+                settings.loupeX = min(1, max(0, value.location.x / canvas.width))
+                settings.loupeY = min(1, max(0, value.location.y / canvas.height))
+            }.onEnded { _ in
+                // Die Lupe zeigt, wo scharfgestellt werden soll – also dort fokussieren
+                if settings.loupe, showsLive {
+                    controller.focus(atDevicePoint: CGPoint(x: settings.loupeX, y: settings.loupeY))
+                }
+            }, including: settings.loupe ? .all : .subviews)
             .position(x: geo.size.width / 2, y: geo.size.height / 2)
         }
         .background(Color(white: 0.08))
@@ -239,6 +257,42 @@ struct StudioView: View {
         if let testShown { return String(localized: "TEST \(testShown + 1)") }
         if let index = frameOnViewer { return String(localized: "BILD \(index + 1) / \(urls.count)") }
         return String(localized: "LIVE · BILD \(urls.count + 1)")
+    }
+
+    /// Vergrößerter Ausschnitt des Live-Bilds (aus dem vollen Kamerabild,
+    /// nicht hochgerechnet) – zum Prüfen der Schärfe.
+    @ViewBuilder
+    private var loupeInset: some View {
+        if settings.loupe, showsLive, let frame = controller.liveFrame {
+            let rect = studioLoupeRect(imageSize: CGSize(width: frame.width, height: frame.height),
+                                       center: CGPoint(x: settings.loupeX, y: settings.loupeY),
+                                       zoom: settings.loupeZoom, aspect: 16.0 / 10.0)
+            if let crop = frame.cropping(to: rect) {
+                VStack(alignment: .trailing, spacing: 2) {
+                    Image(uiImage: UIImage(cgImage: crop)).resizable().interpolation(.none)
+                        .frame(width: 320, height: 200)
+                        .overlay(Rectangle().stroke(Theme.amber, lineWidth: 2))
+                    Text(verbatim: "LUPE \(settings.loupeZoom)×").font(Theme.mono(10, .bold))
+                        .foregroundStyle(Theme.amber)
+                }
+                .padding(10)
+                .allowsHitTesting(false)
+            }
+        }
+    }
+
+    /// Rahmen im Betrachter, wo die Lupe hinschaut.
+    @ViewBuilder
+    private func loupeMarker(canvas: CGSize) -> some View {
+        if settings.loupe, showsLive {
+            let w = canvas.width / CGFloat(settings.loupeZoom)
+            let h = w / 1.6
+            Rectangle().stroke(Theme.amber, lineWidth: 1.5)
+                .frame(width: w, height: h)
+                .position(x: min(max(w / 2, settings.loupeX * canvas.width), canvas.width - w / 2),
+                          y: min(max(h / 2, settings.loupeY * canvas.height), canvas.height - h / 2))
+                .allowsHitTesting(false)
+        }
     }
 
     /// Mundformen aller Figuren für das gezeigte Bild – beim Animieren
@@ -442,6 +496,14 @@ struct StudioView: View {
                     picker("Modus", $settings.viewMode, StudioViewMode.allCases) { $0.label }
                     stepper("Zwiebelhaut", value: $settings.onionFrames, in: 0...6) { $0 == 0 ? String(localized: "aus") : String(localized: "\($0) Bilder") }
                     slider("Deckkraft", $settings.onionOpacity, 0.1...0.8)
+                    toggle("Lupe (Z)", $settings.loupe)
+                    if settings.loupe {
+                        picker("Vergrößerung", Binding(get: { LoupeZoom(id: settings.loupeZoom) },
+                                                      set: { settings.loupeZoom = $0.id }),
+                               [2, 4, 8].map(LoupeZoom.init)) { "\($0.id)×" }
+                        Text("Im Bild klicken oder ziehen: Lupe setzen und dort scharfstellen.")
+                            .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
+                    }
                     stepper("Kurz abspielen", value: $settings.shortPlayFrames, in: 4...48, step: 4) { String(localized: "\($0) Bilder") }
                     stepper("Auto-Umschalten", value: $settings.toggleRate, in: 1...8) { String(localized: "\(Int($0))× pro s") }
                 }
@@ -461,14 +523,44 @@ struct StudioView: View {
                         slider("Versatz Y", $settings.referenceOffsetY, -0.5...0.5)
                         picker("Chroma-Key", $settings.referenceKey, ChromaKey.allCases) { $0.label }
                         HStack {
-                            smallButton("Ersetzen …") { importsAudio = false; showReferenceImporter = true }
+                            smallButton("Ersetzen …") { importKind = .reference; showReferenceImporter = true }
                             smallButton("Entfernen") { reference.clear() }
                         }
                     } else {
-                        smallButton("Bild oder Film laden …") { importsAudio = false; showReferenceImporter = true }
+                        smallButton("Bild oder Film laden …") { importKind = .reference; showReferenceImporter = true }
                         Text("Ein Film läuft Bild für Bild mit: Bild n zeigt die Stelle n ÷ Bildrate.")
                             .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
                     }
+                }
+                section("Kamera-Ordner") {
+                    if let name = folderWatch.folderName {
+                        HStack {
+                            Image(systemName: "folder").foregroundStyle(Theme.amber)
+                            Text(verbatim: name).font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark).lineLimit(1)
+                        }
+                        toggle("Beobachten", Binding(get: { folderWatch.isWatching }, set: { on in
+                            if on {
+                                folderWatch.start { image, data in controller.commit(frame: image, originalData: data) }
+                            } else {
+                                folderWatch.stop()
+                            }
+                        }))
+                        if folderWatch.isWatching {
+                            Text("\(folderWatch.imported) Fotos übernommen").font(Theme.mono(10))
+                                .foregroundStyle(Theme.paperOnDark.opacity(0.7))
+                        }
+                        if let error = folderWatch.lastError {
+                            Text(verbatim: error).font(Theme.mono(10)).foregroundStyle(Theme.oxblood)
+                        }
+                        HStack {
+                            smallButton("Anderer Ordner …") { importKind = .folder; showReferenceImporter = true }
+                            smallButton("Vergessen") { folderWatch.forget() }
+                        }
+                    } else {
+                        smallButton("Ordner wählen …") { importKind = .folder; showReferenceImporter = true }
+                    }
+                    Text("Fotos, die die Software deiner Kamera in diesen Ordner legt, werden in voller Auflösung das nächste Bild – auch RAW. Die Automatik am besten ausschalten.")
+                        .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
                 }
                 section("Aufnahme") {
                     toggle("Automatik (Hände weg)", $settings.autoShutter)
@@ -488,7 +580,7 @@ struct StudioView: View {
                         ForEach(project.allAudioTracks) { track in trackRow(track, in: project) }
                     }
                     HStack {
-                        smallButton("Tonspur hinzufügen …") { importsAudio = true; showReferenceImporter = true }
+                        smallButton("Tonspur hinzufügen …") { importKind = .audio; showReferenceImporter = true }
                         smallButton("X-Sheet …") { handle(.xsheet) }
                     }
                     toggle("Ton beim Blättern", $settings.scrubAudio)
@@ -673,6 +765,11 @@ struct StudioView: View {
             settings.viewMode = all[(all.firstIndex(of: settings.viewMode)! + 1) % all.count]
         case .note:
             editNote((frameOnViewer ?? urls.count) + 1)
+        case .loupe:
+            settings.loupe.toggle()
+        case .loupeZoom:
+            settings.loupe = true
+            settings.loupeZoom = settings.loupeZoom >= 8 ? 2 : settings.loupeZoom * 2
         case .xsheet:
             stopPlayback()
             showXSheet = true
@@ -823,6 +920,10 @@ struct StudioView: View {
                     store.replaceDialogue(of: kv[1], with: DialogueReading.entries(
                         for: words, character: kv[1], fps: fps, offsetFrames: 2), in: project)
                 }
+            case "loupe": settings.loupe = true; settings.loupeZoom = Int(kv[1]) ?? 4
+            case "watch":
+                folderWatch.choose(URL(fileURLWithPath: kv[1], isDirectory: true))
+                folderWatch.start { image, data in controller.commit(frame: image, originalData: data) }
             case "xsheet":
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) { handle(.xsheet) }
             case "note":
@@ -835,6 +936,7 @@ struct StudioView: View {
 
     private func deactivate() {
         hub.isActive = false
+        folderWatch.stop()
         stopPlayback()
         setAutoToggle(false)
         StudioBlackout.set(false)
@@ -849,7 +951,7 @@ struct StudioView: View {
     }
 
     private func apply(_ s: StudioSettings) {
-        controller.publishesLiveFrames = s.viewMode != .normal
+        controller.publishesLiveFrames = s.viewMode != .normal || s.loupe
         controller.averageFrames = s.averageFrames
         controller.captureBlackout = s.captureBlackout
         controller.autoShutter = s.autoShutter
@@ -902,4 +1004,9 @@ enum StudioBlackout {
             cover?.removeFromSuperview()
         }
     }
+}
+
+/// Vergrößerungsstufe der Lupe als Auswahl-Element.
+private struct LoupeZoom: Hashable, Identifiable {
+    let id: Int
 }
