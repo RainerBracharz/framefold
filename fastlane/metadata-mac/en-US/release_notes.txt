@@ -1,7 +1,9 @@
 FrameFold 2.6
 
-With sound – and smoother.
+The Studio – and sound.
 
+• Studio: from Advanced mode the camera becomes a pro workspace – draggable timeline, toggle between live view and captured frames, multi-frame onion skin, difference and exposure views, aspect masks, grids, a reference image or movie with chroma key, notes per frame, frame averaging against noise, time-lapse with start and end time. All on the keyboard too (Studio menu).
+• Export as ProRes or an image sequence (PNG, TIFF, JPEG).
 • Music or sound: pick an audio file in the work view – it plays under the exported film.
 • Up to 24 fps: 15 and 24 fps for smooth motion.
 • Duplicate and reorder frames: right-click a frame for “Duplicate”, “Move earlier” and “Move later” – or drag it to a new place in the contact sheet.

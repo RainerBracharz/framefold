@@ -10,6 +10,9 @@ Works best with a document camera looking straight down at the table — FrameFo
 SHARP, OR NOT AT ALL
 The app measures image sharpness continuously. A frame that isn't sharp never makes it into the work. Where the camera allows, FrameFold holds exposure and white balance so nothing flickers between frames.
 
+STUDIO
+From Advanced mode the camera becomes a pro workspace: timeline, toggle between live view and captured frames, multi-frame onion skin, difference and exposure views, aspect masks, safe areas, grids, a reference image or movie with chroma key, notes per frame, frame averaging against noise, screen blackout on capture, test shots and time-lapse with start and end time. All on the keyboard too. Export as ProRes or an image sequence.
+
 EDIT AND SCORE
 Duplicate a frame to hold a pose longer, drag frames into a new order, export at up to 24 fps — and lay music or sound from your files under the film.
 

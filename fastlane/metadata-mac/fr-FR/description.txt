@@ -10,6 +10,9 @@ Idéal avec une caméra document qui regarde la table à la verticale — FrameF
 NET, OU RIEN
 L’app mesure la netteté en continu. Une image floue n’entre jamais dans l’œuvre. Quand la caméra le permet, FrameFold fige l’exposition et la balance des blancs pour que rien ne scintille d’une image à l’autre.
 
+STUDIO
+Dès le mode Avancé, la caméra devient un espace de travail pro : timeline, bascule entre direct et prises, pelure d’oignon sur plusieurs images, vues différence et exposition, masques de format, zones de sécurité, grilles, image ou film de référence avec incrustation, notes par image, moyenne contre le bruit, écran noir à la prise, prises test et time-lapse avec heure de début et de fin. Tout au clavier aussi. Export en ProRes ou en séquence d’images.
+
 MONTAGE ET SON
 Duplique une image pour tenir une pose plus longtemps, réordonne les images en les glissant, exporte jusqu’à 24 images par seconde — et pose une musique ou un son de tes fichiers sous le film.
 

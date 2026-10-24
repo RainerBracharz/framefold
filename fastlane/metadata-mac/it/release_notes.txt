@@ -1,7 +1,9 @@
 FrameFold 2.6
 
-Con il suono – e più fluido.
+Lo Studio – e il suono.
 
+• Studio: dalla modalità Avanzata la fotocamera diventa uno spazio di lavoro professionale – timeline da trascinare, passaggio tra live e fotogrammi, onion skin su più fotogrammi, viste differenza ed esposizione, maschere di formato, griglie, immagine o film di riferimento con chroma key, note per fotogramma, media contro il rumore, timelapse con ora di inizio e fine. Tutto anche da tastiera (menu Studio).
+• Esportazione in ProRes o come sequenza di immagini (PNG, TIFF, JPEG).
 • Musica o suono: scegli un file audio nella vista dell’opera – accompagna il film esportato.
 • Fino a 24 fps: 15 e 24 fps per un movimento fluido.
 • Duplicare e riordinare: clic secondario su un fotogramma per duplicarlo o spostarlo – oppure trascinalo in un altro punto del provino.

@@ -10,6 +10,9 @@ Funziona al meglio con una document camera rivolta verso il tavolo — FrameFold
 NITIDO, O NIENTE
 L’app misura la nitidezza di continuo. Un fotogramma sfocato non entra mai nell’opera. Dove la fotocamera lo consente, FrameFold blocca esposizione e bilanciamento del bianco, così nulla sfarfalla tra un fotogramma e l’altro.
 
+STUDIO
+Dalla modalità Avanzata la fotocamera diventa uno spazio di lavoro professionale: timeline, passaggio tra live e fotogrammi, onion skin su più fotogrammi, viste differenza ed esposizione, maschere di formato, aree di sicurezza, griglie, immagine o film di riferimento con chroma key, note per fotogramma, media contro il rumore, schermo nero allo scatto, scatti di prova e timelapse con ora di inizio e fine. Tutto anche da tastiera. Esportazione in ProRes o come sequenza di immagini.
+
 MONTAGGIO E SUONO
 Duplica un fotogramma per far durare di più una posa, riordina i fotogrammi trascinandoli, esporta fino a 24 fps — e metti musica o suoni dai tuoi file sotto il film.
 

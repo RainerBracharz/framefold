@@ -10,6 +10,9 @@ Funciona mejor con una cámara de documentos que mire la mesa en vertical — Fr
 NÍTIDO, O NADA
 La app mide la nitidez continuamente. Un fotograma desenfocado nunca entra en la obra. Donde la cámara lo permite, FrameFold fija la exposición y el balance de blancos para que nada parpadee entre fotogramas.
 
+STUDIO
+Desde el modo Avanzado la cámara se convierte en un espacio de trabajo profesional: línea de tiempo, alternar entre directo y fotogramas, papel cebolla de varios fotogramas, vistas de diferencia y exposición, máscaras de formato, zonas seguras, cuadrículas, imagen o vídeo de referencia con croma, notas por fotograma, promedio contra el ruido, pantalla negra al disparar, tomas de prueba y timelapse con hora de inicio y fin. Todo también con el teclado. Exportación en ProRes o como secuencia de imágenes.
+
 MONTAJE Y SONIDO
 Duplica un fotograma para que una pose dure más, reordena los fotogramas arrastrándolos, exporta hasta 24 fps — y pon música o sonido de tus archivos bajo la película.
 

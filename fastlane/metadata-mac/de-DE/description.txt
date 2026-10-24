@@ -10,6 +10,9 @@ Am besten mit einer Dokumentenkamera, die senkrecht auf den Tisch blickt – Fra
 SCHARF, ODER GAR NICHT
 Die App misst laufend die Bildschärfe. Ein unscharfes Bild landet gar nicht erst im Werk. Wo die Kamera es erlaubt, hält FrameFold Belichtung und Weißabgleich fest, damit zwischen den Bildern nichts flackert.
 
+STUDIO
+Ab „Erweitert“ wird die Kamera zur Profi-Arbeitsfläche: Zeitleiste, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder, Differenz- und Belichtungsansicht, Formatmasken, Sicherheitsrahmen, Raster, Referenzbild oder -film mit Chroma-Key, Notizen je Bild, Mitteln gegen Rauschen, Abdunkeln beim Auslösen, Testaufnahmen und Zeitraffer mit Start- und Endzeit. Alles auch über Tasten. Export als ProRes oder Bildsequenz.
+
 SCHNITT UND TON
 Ein Bild verdoppeln, damit eine Pose länger steht, Bilder per Ziehen umordnen, bis 24 Bilder pro Sekunde exportieren – und Musik oder Ton aus deinen Dateien unter den Film legen.
 

@@ -1,7 +1,9 @@
 FrameFold 2.6
 
-Con sonido – y más fluido.
+El Studio – y sonido.
 
+• Studio: desde el modo Avanzado la cámara se convierte en un espacio de trabajo profesional – línea de tiempo con arrastrar, alternar entre imagen en directo y fotogramas, papel cebolla de varios fotogramas, vistas de diferencia y exposición, máscaras de formato, cuadrículas, imagen o vídeo de referencia con croma, notas por fotograma, promedio contra el ruido, timelapse con hora de inicio y fin. Todo también con el teclado (menú Studio).
+• Exportación en ProRes o como secuencia de imágenes (PNG, TIFF, JPEG).
 • Música o sonido: elige un archivo de audio en la vista de la obra – suena bajo la película exportada.
 • Hasta 24 fps: 15 y 24 fps para un movimiento fluido.
 • Duplicar y reordenar: clic secundario en un fotograma para duplicarlo o moverlo – o arrástralo a otro lugar de la hoja de contactos.
