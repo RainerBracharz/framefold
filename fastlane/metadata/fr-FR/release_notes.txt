@@ -1,6 +1,7 @@
-FrameFold 2.4
+FrameFold 2.5
 
-Des films plus stables et une nouvelle façon de partager.
+Quand le trépied bouge – et quand une image ne convient pas.
 
-• Réduire le scintillement : à l’export, FrameFold égalise la luminosité d’une image à l’autre – nuages, lumière de la pièce ou exposition automatique ne font plus scintiller le film. Les changements de lumière lents restent. Activé par défaut, désactivable dans les réglages d’export.
-• Partager en GIF : sous chaque film terminé – un GIF en boucle pour les messageries, plateformes scolaires et présentations qui ne lisent pas les vidéos.
+• Le trépied a bougé ? Si l’arrière-plan n’est plus placé comme sur la première image, FrameFold le signale et peut afficher la première image pour réaligner. « C’est bon » garde la nouvelle position.
+• Reprendre une seule image : appui long sur une image de la planche contact, puis « Reprendre » – la prochaine image remplace exactement celle-ci, à sa place. L’ancienne reste 30 jours dans la corbeille.
+• Corrigé : « Continuer avec la caméra » restait parfois bloqué sur le résultat de la dernière séance.

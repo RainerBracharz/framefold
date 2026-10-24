@@ -1,6 +1,7 @@
-FrameFold 2.4
+FrameFold 2.5
 
-Ruhigere Filme und ein neuer Weg zum Teilen.
+Wenn am Stativ etwas verrutscht – und wenn ein Bild nicht passt.
 
-• Flimmern ausgleichen: Beim Export gleicht FrameFold die Helligkeit von Bild zu Bild an – Wolken, Raumlicht oder eine nachregelnde Belichtung zucken nicht mehr. Langsame Lichtwechsel bleiben. Standardmäßig an, abschaltbar in den Export-Einstellungen.
-• Als GIF teilen: Unter jedem fertigen Film – ein endlos laufendes GIF für Messenger, Schulplattformen und Präsentationen, die kein Video abspielen.
+• Stativ verrutscht? Liegt der Hintergrund anders als beim ersten Bild, sagt FrameFold Bescheid und blendet auf Wunsch das erste Bild zum Ausrichten ein. Mit „Passt so“ wird die neue Position übernommen.
+• Einzelnes Bild neu aufnehmen: Im Kontaktbogen ein Bild lange drücken und „Neu aufnehmen“ wählen – das nächste Bild ersetzt genau dieses, an seiner Stelle. Das alte bleibt 30 Tage im Papierkorb.
+• Behoben: „Mit der Kamera weiterarbeiten“ blieb manchmal auf dem Ergebnis der letzten Aufnahme hängen.

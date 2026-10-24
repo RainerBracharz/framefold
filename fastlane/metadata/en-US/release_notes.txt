@@ -1,6 +1,7 @@
-FrameFold 2.4
+FrameFold 2.5
 
-Steadier films and a new way to share.
+When the tripod gets bumped – and when one frame isn't right.
 
-• Reduce flicker: when exporting, FrameFold evens out brightness from frame to frame – clouds, room light or auto exposure no longer make the film flicker. Slow changes in light stay. On by default, can be turned off in the export settings.
-• Share as GIF: below every finished film – an endlessly looping GIF for messengers, school platforms and slides that don’t play video.
+• Tripod moved? If the background sits differently than in the first frame, FrameFold tells you and can show the first frame to line things up again. “It's fine” keeps the new position.
+• Retake a single frame: press and hold a frame in the contact sheet and choose “Retake” – the next frame replaces exactly this one, in place. The old one stays in the trash for 30 days.
+• Fixed: “Continue with the camera” could get stuck on the result of the last session.
