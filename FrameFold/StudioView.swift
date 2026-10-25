@@ -793,6 +793,14 @@ struct StudioView: View {
                                 .foregroundStyle(Theme.paperOnDark)
                         }
                         smallButton("Sprechen lassen …") { stopPlayback(); showSpeech = true }
+                    }
+                    HStack {
+                        MusicMenu(projectID: projectID, frame: frameOnViewer ?? 0, fps: fps) {
+                            Text("Musik …").font(Theme.mono(11))
+                                .padding(.horizontal, 10).padding(.vertical, 5)
+                                .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+                                .foregroundStyle(Theme.paperOnDark)
+                        }
                         smallButton("X-Sheet …") { handle(.xsheet) }
                     }
                     toggle("Ton beim Blättern", $settings.scrubAudio)
@@ -884,10 +892,19 @@ struct StudioView: View {
                 }
                 stepper("Einblenden", value: clipBinding(track, \.fadeIn), in: 0...10, step: 0.1) { Self.seconds($0) }
                 stepper("Ausblenden", value: clipBinding(track, \.fadeOut), in: 0...10, step: 0.1) { Self.seconds($0) }
+                Picker(selection: Binding(get: { track.voiceEffect?.rawValue ?? "" },
+                                          set: { raw in store.updateAudioTrack(id: track.id, in: projectID) { $0.voiceEffect = VoiceEffect(rawValue: raw) } })) {
+                    Text("Ohne Effekt").tag("")
+                    ForEach(VoiceEffect.allCases) { Text(verbatim: $0.label).tag($0.rawValue) }
+                } label: {
+                    Text("Stimmeffekt").font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark)
+                }
+                .font(Theme.mono(11))
+                .id(track.voiceEffect?.rawValue ?? "")
             }
             .padding(.top, 4)
         } label: {
-            Text("Kürzen und Blenden").font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark)
+            Text("Kürzen, Blenden, Effekt").font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark)
         }
         .tint(Theme.paperOnDark)
     }

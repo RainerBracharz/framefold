@@ -336,7 +336,19 @@
   "Ausblenden": "Fade out",
   "Einblenden": "Fade in",
   "Halten": "Hold",
-  "Kürzen und Blenden": "Trim and fade",
   "Länge": "Length",
-  "ganz": "full"
+  "ganz": "full",
+  "Fröhlich": "Happy",
+  "Hohe Stimme": "High voice",
+  "Kürzen, Blenden, Effekt": "Trim, fade, effect",
+  "Musik …": "Music …",
+  "Ohne Effekt": "No effect",
+  "Roboter": "Robot",
+  "Ruhig": "Calm",
+  "Spannend": "Suspense",
+  "Stimmeffekt": "Voice effect",
+  "Tiefe Stimme": "Deep voice",
+  "Traum": "Dream",
+  "Verfolgung": "Chase",
+  "Fünf Musikstücke von „Fröhlich“ bis „Verfolgung“ und Stimmeffekte (hoch, tief, Roboter) – im Studio unter „Ton“, jede Spur lässt sich kürzen und blenden.": "Five music pieces from “Happy” to “Chase” and voice effects (high, deep, robot) – in the studio under “Sound”; every track can be trimmed and faded."
 }

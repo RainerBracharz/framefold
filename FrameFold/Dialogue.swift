@@ -17,9 +17,23 @@ struct AudioTrack: Codable, Equatable, Identifiable {
     var maxLength: Double?
     var fadeIn: Double?
     var fadeOut: Double?
+    var voiceEffect: VoiceEffect?
 
     var isShaped: Bool {
-        (trimStart ?? 0) > 0 || (maxLength ?? 0) > 0 || (fadeIn ?? 0) > 0 || (fadeOut ?? 0) > 0
+        (trimStart ?? 0) > 0 || (maxLength ?? 0) > 0 || (fadeIn ?? 0) > 0 || (fadeOut ?? 0) > 0 || voiceEffect != nil
+    }
+}
+
+/// Stimmeffekte für Figuren – Maus, Riese, Roboter.
+enum VoiceEffect: String, Codable, CaseIterable, Identifiable {
+    case high, low, robot
+    var id: String { rawValue }
+    var label: String {
+        switch self {
+        case .high: return String(localized: "Hohe Stimme")
+        case .low: return String(localized: "Tiefe Stimme")
+        case .robot: return String(localized: "Roboter")
+        }
     }
 }
 

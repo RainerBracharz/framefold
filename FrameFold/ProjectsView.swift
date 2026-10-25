@@ -587,6 +587,11 @@ struct ProjectDetailView: View {
                     .font(Theme.body)
                 Spacer()
             }
+            MusicMenu(projectID: currentProject.id, frame: 0, fps: exportSettings.outputFPS) {
+                Image(systemName: "music.quarternote.3")
+            }
+            .accessibilityLabel(Text("Musik"))
+            .disabled(currentProject.frameCount == 0)
             Button { showVoice = true } label: { Image(systemName: "mic") }
                 .accessibilityLabel(Text("Stimme aufnehmen"))
                 .disabled(currentProject.frameCount == 0)

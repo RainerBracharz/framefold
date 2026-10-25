@@ -23,6 +23,40 @@ struct SoundEffectMenu<Label: View>: View {
     }
 }
 
+/// Menü „Musik“: legt ein Stück ab Bild `frame` an, so lang wie der Rest
+/// des Films (mindestens 4 s).
+struct MusicMenu<Label: View>: View {
+    @EnvironmentObject var store: ProjectStore
+    let projectID: UUID
+    let frame: Int
+    let fps: Int32
+    @ViewBuilder let label: () -> Label
+    @State private var working = false
+
+    var body: some View {
+        Menu {
+            ForEach(MusicStyle.allCases) { style in
+                Button { add(style) } label: { SwiftUI.Label(style.label, systemImage: style.symbol) }
+            }
+        } label: { label() }
+        .disabled(working)
+    }
+
+    private func add(_ style: MusicStyle) {
+        guard let project = store.projects.first(where: { $0.id == projectID }) else { return }
+        let seconds = Double(max(1, project.frameCount - frame)) / Double(max(1, fps)) + 1
+        working = true
+        Task {
+            let url = try? await Task.detached(priority: .userInitiated) {
+                try MusicLibrary.file(for: style, seconds: seconds)
+            }.value
+            working = false
+            guard let url, let current = store.projects.first(where: { $0.id == projectID }) else { return }
+            store.addAudioTrack(from: url, startFrame: frame, name: style.label, to: current)
+        }
+    }
+}
+
 /// Text vorlesen lassen (auf dem Gerät) und als Tonspur anlegen.
 struct SpeechSheet: View {
     @EnvironmentObject var store: ProjectStore

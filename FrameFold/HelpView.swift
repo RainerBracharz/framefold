@@ -46,6 +46,7 @@ struct HelpView: View {
         Topic(id: "sound", symbol: "waveform", title: "Ton", steps: [
             "Musik oder Ton aus Dateien hinzufügen, Stimme direkt aufnehmen oder Text sprechen lassen.",
             "Geräusche wie Plopp, Wusch oder Tadaa lassen sich an jedes Bild hängen.",
+            "Fünf Musikstücke von „Fröhlich“ bis „Verfolgung“ und Stimmeffekte (hoch, tief, Roboter) – im Studio unter „Ton“, jede Spur lässt sich kürzen und blenden.",
             "Im Studio hat jede Spur ein Startbild und eine Lautstärke; die Wellenform liegt unter der Zeitleiste.",
             "Im X-Sheet werden Mundformen den Bildern zugeordnet – auf Wunsch automatisch.",
         ]),

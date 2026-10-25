@@ -33,7 +33,7 @@ enum AudioShaper {
         let fadeIn = max(0, track.fadeIn ?? 0), fadeOut = max(0, track.fadeOut ?? 0)
         let modified = (try? source.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate)?
             .timeIntervalSince1970 ?? 0
-        let key = "\(source.path)|\(modified)|\(trim)|\(length)|\(fadeIn)|\(fadeOut)"
+        let key = "\(source.path)|\(modified)|\(trim)|\(length)|\(fadeIn)|\(fadeOut)|\(track.voiceEffect?.rawValue ?? "")"
         let hash = key.unicodeScalars.reduce(UInt64(1469598103934665603)) { ($0 ^ UInt64($1.value)) &* 1099511628211 }
         let target = FileManager.default.temporaryDirectory.appendingPathComponent("ff-clip-\(String(hash, radix: 16)).caf")
         if FileManager.default.fileExists(atPath: target.path) { return target }
@@ -65,16 +65,60 @@ enum AudioShaper {
             for i in 0..<inFrames { data[i] *= Float(i) / Float(inFrames) }
             for i in 0..<outFrames { data[frames - 1 - i] *= Float(i) / Float(outFrames) }
         }
+        let result = try track.voiceEffect.map { try apply($0, to: buffer) } ?? buffer
         let partial = target.deletingLastPathComponent().appendingPathComponent(".\(target.lastPathComponent)")
         try? FileManager.default.removeItem(at: partial)
         do {
-            let out = try AVAudioFile(forWriting: partial, settings: format.settings)
-            try out.write(from: buffer)
+            let out = try AVAudioFile(forWriting: partial, settings: result.format.settings)
+            try out.write(from: result)
             // Erst geschlossen ist die Datei vollständig auf der Platte
             if #available(iOS 18.0, macCatalyst 18.0, *) { out.close() }
         }
         try FileManager.default.moveItem(at: partial, to: target)
         return target
+    }
+
+    /// Stimmeffekt anwenden: Tonhöhe über Apples Time-Pitch-Einheit
+    /// (offline gerechnet), Roboter als Ringmodulation.
+    static func apply(_ effect: VoiceEffect, to buffer: AVAudioPCMBuffer) throws -> AVAudioPCMBuffer {
+        let format = buffer.format
+        if effect == .robot {
+            guard let channels = buffer.floatChannelData else { return buffer }
+            let rate = format.sampleRate
+            for c in 0..<Int(format.channelCount) {
+                for i in 0..<Int(buffer.frameLength) {
+                    let carrier = Float(sin(2 * Double.pi * 55 * Double(i) / rate))
+                    channels[c][i] = (channels[c][i] * carrier * 0.8 + channels[c][i] * 0.35)
+                }
+            }
+            return buffer
+        }
+        let engine = AVAudioEngine()
+        let player = AVAudioPlayerNode()
+        let pitch = AVAudioUnitTimePitch()
+        pitch.pitch = effect == .high ? 700 : -600   // Cent
+        engine.attach(player)
+        engine.attach(pitch)
+        engine.connect(player, to: pitch, format: format)
+        engine.connect(pitch, to: engine.mainMixerNode, format: format)
+        try engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 4096)
+        try engine.start()
+        player.scheduleBuffer(buffer)
+        player.play()
+        guard let out = AVAudioPCMBuffer(pcmFormat: engine.manualRenderingFormat, frameCapacity: buffer.frameLength),
+              let chunk = AVAudioPCMBuffer(pcmFormat: engine.manualRenderingFormat, frameCapacity: 4096),
+              let dst = out.floatChannelData else { throw PipelineError.exportFailed }
+        while out.frameLength < buffer.frameLength {
+            let wanted = min(chunk.frameCapacity, buffer.frameLength - out.frameLength)
+            guard try engine.renderOffline(wanted, to: chunk) == .success, chunk.frameLength > 0,
+                  let src = chunk.floatChannelData else { break }
+            for c in 0..<Int(out.format.channelCount) {
+                (dst[c] + Int(out.frameLength)).update(from: src[c], count: Int(chunk.frameLength))
+            }
+            out.frameLength += chunk.frameLength
+        }
+        engine.stop()
+        return out
     }
 }
 
