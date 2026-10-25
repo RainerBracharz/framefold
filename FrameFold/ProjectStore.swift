@@ -35,6 +35,9 @@ struct Project: Identifiable, Codable {
     var overlays: [FrameOverlay]?
     /// Kamerafahrten (Schwenk, Zoom) für den Export
     var cameraMoves: [CameraMove]? = nil
+    /// Lichtstimmungen (DMX) je Bild und ob zwischen ihnen überblendet wird
+    var lightCues: [LightCue]? = nil
+    var lightFade: Bool? = nil
 
     /// Alle Tonspuren – die einfache Musikspur aus der Werkansicht zählt
     /// als erste, mit Einsatz bei Bild 1.
@@ -707,6 +710,15 @@ final class ProjectStore: ObservableObject {
 
     func greenScreenBackgroundURL(for project: Project) -> URL? {
         project.greenScreen?.backgroundFilename.map { directory(for: project).appendingPathComponent($0) }
+    }
+
+    /// Lichtstimmungen des Werks setzen.
+    func setLightCues(_ cues: [LightCue], fade: Bool, in projectID: UUID) {
+        recordUndo(projectID, String(localized: "Licht"), coalesce: "light-\(projectID)")
+        guard var updated = projects.first(where: { $0.id == projectID }) else { return }
+        updated.lightCues = cues.isEmpty ? nil : cues.sorted { $0.frame < $1.frame }
+        updated.lightFade = fade ? true : nil
+        save(updated)
     }
 
     /// Kamerafahrten des Werks ersetzen (leer = keine).

@@ -51,6 +51,9 @@ struct StudioView: View {
     @State private var importKind: ImportKind = .reference
     @StateObject private var folderWatch = StudioFolderWatch()
     @StateObject private var tether = TetherCamera()
+    @StateObject private var lights = LightController()
+    /// Gerade verstellte Lichtwerte fürs nächste Bild (nil = aus den Stimmungen)
+    @State private var lightDraft: [Int]?
     /// Auslösen (Leertaste, Knopf) löst die per USB verbundene Kamera aus
     @State private var useTether = false
     @State private var volumeDraft: [UUID: Double] = [:]
@@ -187,6 +190,7 @@ struct StudioView: View {
             .onChange(of: selected) { _, _ in referenceFollow() }
             .onChange(of: project?.allAudioTracks) { _, _ in reloadAudio() }
             .onChange(of: shapes.revision) { _, _ in reloadAudio() }
+            .onChange(of: project?.frameCount) { _, _ in applyLight() }
             .onChange(of: project?.greenScreen) { _, _ in rebuildGreenScreen() }
             .onReceive(NotificationCenter.default.publisher(for: .ffStudio)) { note in
                 if let raw = note.object as? String, let command = StudioCommand(rawValue: raw) { handle(command) }
@@ -739,6 +743,7 @@ struct StudioView: View {
                         .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
                 }
                 if TetherCamera.isSupported { tetherSection }
+                lightSection
                 section("Kamera-Ordner") {
                     if let name = folderWatch.folderName {
                         HStack {
@@ -886,6 +891,93 @@ struct StudioView: View {
         }
         .padding(8)
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.15), lineWidth: 1))
+    }
+
+    // MARK: Licht (DMX über Art-Net)
+
+    private var nextFrame: Int { project?.frameCount ?? 0 }
+
+    private var plannedLight: [Int] {
+        guard let project else { return [] }
+        return ArtNet.values(project.lightCues ?? [], at: nextFrame, channels: lights.channels,
+                             fade: project.lightFade == true).map(Int.init)
+    }
+
+    private var lightValues: [Int] {
+        let base = lightDraft ?? plannedLight
+        return (0..<lights.channels).map { $0 < base.count ? base[$0] : 0 }
+    }
+
+    /// Licht für das nächste Bild stellen – nach jeder Aufnahme und beim Einschalten.
+    private func applyLight() {
+        guard lights.enabled else { return }
+        lightDraft = nil
+        lights.send(plannedLight.map { UInt8($0) })
+    }
+
+    private var lightSection: some View {
+        section("Licht (DMX)") {
+            toggle("Licht über Art-Net steuern", Binding(get: { lights.enabled }, set: { on in
+                lights.enabled = on
+                if on { applyLight() }
+            }))
+            if lights.enabled {
+                TextField("IP-Adresse des Art-Net-Knotens", text: $lights.host)
+                    .textFieldStyle(.roundedBorder).font(Theme.mono(11))
+                    .autocorrectionDisabled()
+                    .onSubmit { applyLight() }
+                stepper("Universum", value: $lights.universe, in: 0...32767) { "\($0)" }
+                stepper("Kanäle", value: $lights.channels, in: 1...32) { "\($0)" }
+                Text("Stimmung für Bild \(nextFrame + 1)").font(Theme.mono(11)).foregroundStyle(Theme.amber)
+                ForEach(0..<lights.channels, id: \.self) { channel in
+                    HStack {
+                        Text("Kanal \(channel + 1)").font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark).frame(width: 64, alignment: .leading)
+                        Slider(value: Binding(get: { Double(lightValues[channel]) }, set: { v in
+                            var values = lightValues
+                            values[channel] = Int(v.rounded())
+                            lightDraft = values
+                            lights.send(values.map { UInt8($0) })
+                        }), in: 0...255)
+                        Text(verbatim: "\(lightValues[channel])").font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark).frame(width: 30)
+                    }
+                }
+                HStack {
+                    smallButton("Ab diesem Bild speichern") { saveLightCue() }
+                    if lightDraft != nil { smallButton("Verwerfen") { applyLight() } }
+                }
+                if let project {
+                    toggle("Zwischen Stimmungen überblenden", Binding(get: { project.lightFade == true }, set: { on in
+                        store.setLightCues(project.lightCues ?? [], fade: on, in: projectID)
+                    }))
+                    ForEach(project.lightCues ?? []) { cue in
+                        HStack {
+                            Text("Ab Bild \(cue.frame + 1)").font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark)
+                            Text(verbatim: cue.values.prefix(8).map(String.init).joined(separator: " "))
+                                .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.6)).lineLimit(1)
+                            Spacer()
+                            Button {
+                                store.setLightCues((project.lightCues ?? []).filter { $0.id != cue.id },
+                                                   fade: project.lightFade == true, in: projectID)
+                            } label: { Image(systemName: "trash") }
+                                .buttonStyle(.plain).foregroundStyle(Theme.paperOnDark)
+                        }
+                    }
+                }
+                if let error = lights.lastError {
+                    Text(verbatim: error).font(Theme.mono(10)).foregroundStyle(Theme.oxblood)
+                }
+            }
+            Text("Nur im lokalen Netz und nur, wenn eingeschaltet. Nach jeder Aufnahme stellt FrameFold das Licht für das nächste Bild.")
+                .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
+        }
+    }
+
+    private func saveLightCue() {
+        guard let project else { return }
+        var cues = (project.lightCues ?? []).filter { $0.frame != nextFrame }
+        cues.append(LightCue(frame: nextFrame, values: lightValues))
+        store.setLightCues(cues, fade: project.lightFade == true, in: projectID)
+        lightDraft = nil
     }
 
     /// Spiegelreflex per USB: verbinden, dann löst „Auslösen“ die Kamera aus.
@@ -1279,6 +1371,7 @@ struct StudioView: View {
         hub.isActive = false
         folderWatch.stop()
         tether.stop()
+        lights.disconnect()
         stopPlayback()
         setAutoToggle(false)
         StudioBlackout.set(false)
