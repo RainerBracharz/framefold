@@ -24,7 +24,7 @@ extension Project {
                 if FileManager.default.fileExists(atPath: shaped.path) { url = shaped }
                 else { AudioShapeCenter.shared.request(spec) }
             }
-            return AudioSource(url: url, start: Double(track.startFrame) / Double(max(1, fps)), volume: track.volume)
+            return AudioSource(url: url, start: Double(min(max(0, track.startFrame), 100_000)) / Double(max(1, fps)), volume: track.volume)
         }
     }
 
@@ -35,7 +35,7 @@ extension Project {
         let jobs: [(ShapeSpec?, AudioSource)] = allAudioTracks.filter { !$0.muted }.map { track in
             let original = store.url(for: track, in: self)
             return (ShapeSpec(track: track, source: original),
-                    AudioSource(url: original, start: Double(track.startFrame) / Double(max(1, fps)), volume: track.volume))
+                    AudioSource(url: original, start: Double(min(max(0, track.startFrame), 100_000)) / Double(max(1, fps)), volume: track.volume))
         }
         return await Task.detached(priority: .userInitiated) {
             jobs.map { spec, source in
@@ -61,11 +61,18 @@ struct ShapeSpec: Sendable, Hashable {
         guard track.isShaped else { return nil }
         trackID = track.id
         self.source = source
-        trim = max(0, track.trimStart ?? 0)
-        length = max(0, track.maxLength ?? 0)
-        fadeIn = max(0, track.fadeIn ?? 0)
-        fadeOut = max(0, track.fadeOut ?? 0)
+        trim = Self.seconds(track.trimStart)
+        length = Self.seconds(track.maxLength)
+        fadeIn = Self.seconds(track.fadeIn)
+        fadeOut = Self.seconds(track.fadeOut)
         effect = track.voiceEffect
+    }
+
+    /// Endliche Sekunden zwischen 0 und einer Stunde – Werte aus fremden
+    /// Werken dürfen die Umrechnung in Samples nicht sprengen.
+    private static func seconds(_ value: Double?) -> Double {
+        guard let value, value.isFinite else { return 0 }
+        return min(max(0, value), 3600)
     }
 }
 

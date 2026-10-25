@@ -237,10 +237,11 @@ final class ProjectStore: ObservableObject {
     /// Fortlaufende Nummer für neue Frames – bei alten Manifesten aus dem
     /// höchsten vorhandenen Dateinamen abgeleitet.
     private func nextNumber(for project: Project) -> Int {
-        if let n = project.nextFrameNumber { return n }
+        // Nie unter die vorhandenen Nummern – sonst überschriebe ein neues
+        // Bild ein altes (etwa nach einem Import mit falscher Angabe)
         let all = project.frameFilenames + (project.trashFilenames ?? [])
-        let maxExisting = all.compactMap { Int($0.prefix(6)) }.max() ?? -1
-        return maxExisting + 1
+        let maxExisting = all.compactMap { Int($0.prefix(6)) }.filter { $0 >= 0 && $0 < 999_999 }.max() ?? -1
+        return min(999_999, max(project.nextFrameNumber ?? 0, maxExisting + 1))
     }
 
     func delete(_ project: Project) {
@@ -310,20 +311,22 @@ final class ProjectStore: ObservableObject {
         guard let project = try? JSONDecoder().decode(Project.self, from: JSONSerialization.data(withJSONObject: json)) else {
             throw WorkPackage.Failure.noManifest
         }
-        // Nur Dateien übernehmen, die wirklich (und mit unbedenklichem Namen)
-        // in der Datei lagen – ein Manifest darf nie auf „..“ oder Fremdes zeigen.
-        func ok(_ name: String) -> Bool { names.contains(name) && WorkPackage.isSafe(name) && name != "manifest.json" }
-        var checked = project
-        checked.frameFilenames = project.frameFilenames.filter(ok)
-        if let audio = checked.audioFilename, !ok(audio) { checked.audioFilename = nil }
-        checked.audioTracks = project.audioTracks?.filter { ok($0.filename) }
-        if checked.audioTracks?.isEmpty == true { checked.audioTracks = nil }
-        if let background = checked.greenScreen?.backgroundFilename, !ok(background) {
-            checked.greenScreen?.backgroundFilename = nil
-        }
+        // Fremdes Werk: Namen, Zahlen und Medien prüfen, bevor etwas davon
+        // in den Speicher kommt
+        let checked = try await Task.detached(priority: .userInitiated) {
+            let verified = ImportCheck.usableFiles(names, in: staging)
+            return ImportCheck.sanitized(project, files: verified)
+        }.value
         let target = directory(for: checked)
+        let keep = Set(checked.frameFilenames + checked.allAudioTracks.map(\.filename)
+                       + [checked.greenScreen?.backgroundFilename].compactMap { $0 })
+        // Nur Verwendetes übernehmen – keine Füllmengen, kein „trash“
         try await Task.detached(priority: .userInitiated) {
-            try FileManager.default.moveItem(at: staging, to: target)
+            let fm = FileManager.default
+            try fm.createDirectory(at: target, withIntermediateDirectories: true)
+            for name in keep {
+                try fm.moveItem(at: staging.appendingPathComponent(name), to: target.appendingPathComponent(name))
+            }
         }.value
         save(checked)
         return checked

@@ -323,7 +323,12 @@ struct FrameFoldApp: App {
             .task {
                 // Beispielwerk beim ersten Start – nicht in UI-Tests und
                 // Screenshot-Läufen, die einen leeren Erststart brauchen.
-                if !CommandLine.arguments.contains("--ff-fresh-start"), !Platform.autostart {
+                #if DEBUG
+                let freshStart = CommandLine.arguments.contains("--ff-fresh-start")
+                #else
+                let freshStart = false
+                #endif
+                if !freshStart, !Platform.autostart {
                     projectStore.createSampleIfNeeded()
                 }
                 StudioMonitorHub.shared.activate()

@@ -10,7 +10,10 @@ enum ReviewPrompt {
     static func noteFinishedFilm(defaults: UserDefaults = .standard,
                                  version: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "") -> Bool {
         // UI-Tests und Screenshot-Läufe: nie fragen, der Dialog läge über allem
-        if CommandLine.arguments.contains("--ff-fresh-start") || Platform.autostart { return false }
+        #if DEBUG
+        if CommandLine.arguments.contains("--ff-fresh-start") { return false }
+        #endif
+        if Platform.autostart { return false }
         let count = defaults.integer(forKey: "finishedFilms") + 1
         defaults.set(count, forKey: "finishedFilms")
         guard milestones.contains(count), defaults.string(forKey: "reviewAskedVersion") != version else { return false }

@@ -191,13 +191,29 @@ final class StudioTests: XCTestCase {
         XCTAssertEqual(StudioFolderWatch.imageFiles(in: dir), ["IMG_9.jpg", "IMG_10.JPG", "IMG_11.CR3", "IMG_12.tif"])
     }
 
-    func testWatchFolderKeepsJPEGBytesAndConvertsOthers() throws {
+    func testWatchFolderKeepsJPEGPixelsDropsGPSAndConvertsOthers() throws {
+        // Kamerafoto mit Ort, Seriennummer und Ausrichtung
         let jpeg = dir.appendingPathComponent("a.jpg")
-        let original = try XCTUnwrap(UIImage(cgImage: solid(0.3, width: 400, height: 300)).jpegData(compressionQuality: 0.8))
-        try original.write(to: jpeg)
+        let dest0 = try XCTUnwrap(CGImageDestinationCreateWithURL(jpeg as CFURL, UTType.jpeg.identifier as CFString, 1, nil))
+        let props: [CFString: Any] = [
+            kCGImagePropertyOrientation: 6,
+            kCGImagePropertyGPSDictionary: [kCGImagePropertyGPSLatitude: 48.0, kCGImagePropertyGPSLatitudeRef: "N"],
+            kCGImagePropertyExifAuxDictionary: [kCGImagePropertyExifAuxSerialNumber: "SN12345"],
+        ]
+        CGImageDestinationAddImage(dest0, solid(0.3, width: 400, height: 300), props as CFDictionary)
+        XCTAssertTrue(CGImageDestinationFinalize(dest0))
+
         let (image, data) = try XCTUnwrap(StudioFolderWatch.load(jpeg))
-        XCTAssertEqual(data, original, "JPEG bleibt Byte für Byte")
-        XCTAssertEqual(image.width, 400)
+        XCTAssertEqual(image.width, 300, "Ausrichtung angewandt")
+        let kept = try XCTUnwrap(CGImageSourceCreateWithData(data as CFData, nil))
+        let keptProps = try XCTUnwrap(CGImageSourceCopyPropertiesAtIndex(kept, 0, nil) as? [CFString: Any])
+        XCTAssertNil(keptProps[kCGImagePropertyGPSDictionary], "kein Ort")
+        XCTAssertNil((keptProps[kCGImagePropertyExifAuxDictionary] as? [CFString: Any])?[kCGImagePropertyExifAuxSerialNumber], "keine Seriennummer")
+        XCTAssertEqual(keptProps[kCGImagePropertyOrientation] as? Int, 6, "Ausrichtung bleibt")
+        // Bilddaten unverändert (verlustfrei übernommen)
+        let a = try XCTUnwrap(CGImageSourceCreateImageAtIndex(kept, 0, nil))
+        let b = try XCTUnwrap(CGImageSourceCreateImageAtIndex(CGImageSourceCreateWithURL(jpeg as CFURL, nil)!, 0, nil))
+        XCTAssertEqual(a.dataProvider?.data as Data?, b.dataProvider?.data as Data?)
 
         let tiff = dir.appendingPathComponent("b.tif")
         let dest = try XCTUnwrap(CGImageDestinationCreateWithURL(tiff as CFURL, UTType.tiff.identifier as CFString, 1, nil))

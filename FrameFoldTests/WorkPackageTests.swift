@@ -8,6 +8,7 @@
 //
 
 import XCTest
+import UIKit
 @testable import FrameFold
 
 @MainActor
@@ -32,11 +33,21 @@ final class WorkPackageTests: XCTestCase {
         defaults.removePersistentDomain(forName: suiteName)
     }
 
+    /// Ein echtes, winziges JPEG – der Import prüft den Inhalt.
+    private func jpeg(_ shade: CGFloat) -> Data {
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        return UIGraphicsImageRenderer(size: CGSize(width: 8, height: 8), format: format).jpegData(withCompressionQuality: 0.9) { ctx in
+            UIColor(white: shade, alpha: 1).setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: 8, height: 8))
+        }
+    }
+
     func testRoundTripCreatesIndependentCopyWithoutTrash() async throws {
         let store = ProjectStore(root: root, defaults: defaults)
         var project = store.createProject(name: "Faltung / Nr. 3")
         for marker in UInt8(1)...UInt8(3) {
-            _ = store.appendFrame(jpegData: Data([0xFF, 0xD8, marker, 0xFF, 0xD9]), to: store.projects.first { $0.id == project.id }!)
+            _ = store.appendFrame(jpegData: jpeg(CGFloat(marker) / 4), to: store.projects.first { $0.id == project.id }!)
         }
         project = store.projects.first { $0.id == project.id }!
         store.removeFrames(named: [project.frameFilenames[1]], from: project)
@@ -116,7 +127,7 @@ final class WorkPackageTests: XCTestCase {
         """
         try Data(json.utf8).write(to: manifest)
         let frame = scratch.appendingPathComponent("000000.jpg")
-        try Data([0xFF, 0xD8, 2, 0xFF, 0xD9]).write(to: frame)
+        try jpeg(0.3).write(to: frame)
         let evil = scratch.appendingPathComponent("boese.framefold")
         try WorkPackage.write(files: [(name: "manifest.json", url: manifest), (name: "000000.jpg", url: frame)], to: evil)
 
@@ -130,6 +141,64 @@ final class WorkPackageTests: XCTestCase {
         store.removeAudio(from: imported)
         XCTAssertTrue(FileManager.default.fileExists(atPath: root.appendingPathComponent(keeper.id.uuidString).path))
         XCTAssertEqual(store.projects.count, 2)
+    }
+
+    func testImportClampsNumbersAndDropsBadMedia() async throws {
+        let store = ProjectStore(root: root, defaults: defaults)
+        let manifest = scratch.appendingPathComponent("manifest.json")
+        let json = """
+        {"id":"\(UUID().uuidString)","name":"Groß","createdAtISO":"2026-10-25T00:00:00Z",
+         "frameFilenames":["000000.jpg","000001.jpg","000000.jpg"],"nextFrameNumber":0,
+         "audioTracks":[{"id":"\(UUID().uuidString)","name":"x","filename":"spur.caf","startFrame":9223372036854775807,
+                         "volume":1e300,"muted":false,"trimStart":1e300,"fadeOut":-5}],
+         "overlays":[{"id":"\(UUID().uuidString)","kind":"text","firstFrame":9223372036854775807,"lastFrame":-3,
+                      "x":1e300,"y":-1,"text":"Hi","size":1e300,"color":"white","strokes":[]}]}
+        """
+        try Data(json.utf8).write(to: manifest)
+        let good = scratch.appendingPathComponent("000000.jpg")
+        try jpeg(0.5).write(to: good)
+        let fake = scratch.appendingPathComponent("000001.jpg")
+        try Data("kein Bild".utf8).write(to: fake)
+        let notAudio = scratch.appendingPathComponent("spur.caf")
+        try Data("kein Ton".utf8).write(to: notAudio)
+        let pkg = scratch.appendingPathComponent("gross.framefold")
+        try WorkPackage.write(files: [(name: "manifest.json", url: manifest), (name: "000000.jpg", url: good),
+                                      (name: "000001.jpg", url: fake), (name: "spur.caf", url: notAudio)], to: pkg)
+
+        let imported = try await store.importPackage(from: pkg)
+        XCTAssertEqual(imported.frameFilenames, ["000000.jpg"], "Kein Bild und Doppeltes fallen weg")
+        XCTAssertEqual(imported.nextFrameNumber, 1, "Nächstes Bild überschreibt nichts")
+        XCTAssertNil(imported.audioTracks, "Kein Ton fällt weg")
+        let overlay = try XCTUnwrap(imported.overlays?.first)
+        XCTAssertEqual(overlay.firstFrame, 0)
+        XCTAssertEqual(overlay.lastFrame, 0)
+        XCTAssertEqual(overlay.x, 1)
+        XCTAssertEqual(overlay.size, 0.3)
+        let dir = root.appendingPathComponent(imported.id.uuidString)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: dir.appendingPathComponent("000001.jpg").path),
+                       "Unbrauchbares bleibt draußen")
+
+        // Ein neues Bild bekommt eine freie Nummer
+        let added = store.appendFrame(jpegData: jpeg(0.9), to: store.projects.first { $0.id == imported.id }!)
+        XCTAssertEqual(added, "000001.jpg")
+        XCTAssertEqual(try Data(contentsOf: dir.appendingPathComponent("000000.jpg")), try jpeg(0.5))
+    }
+
+    func testPackageRejectsDuplicatesAndTrashName() throws {
+        let file = scratch.appendingPathComponent("x")
+        try Data("x".utf8).write(to: file)
+        for names in [["a.jpg", "a.jpg"], ["trash"]] {
+            let pkg = scratch.appendingPathComponent("p-\(UUID().uuidString).framefold")
+            try WorkPackage.write(files: names.map { (name: $0, url: file) }, to: pkg)
+            XCTAssertThrowsError(try WorkPackage.read(pkg, into: scratch.appendingPathComponent(UUID().uuidString)), "\(names)")
+        }
+    }
+
+    func testSafeNames() {
+        XCTAssertEqual(WorkPackage.safeName(".."), "FrameFold")
+        XCTAssertEqual(WorkPackage.safeName("."), "FrameFold")
+        XCTAssertEqual(WorkPackage.safeName("..geheim"), "geheim")
+        XCTAssertEqual(WorkPackage.safeName(String(repeating: "a", count: 300)).count, 100)
     }
 
     func testUndoRestoresRemovedTrackFile() throws {

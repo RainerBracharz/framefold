@@ -728,10 +728,10 @@ extension StopMotionAssembler {
     /// und Archiv. Gibt den Ordner zurück.
     static func exportSequence(_ urls: [URL], name: String, format: SequenceFormat,
                                progress: @escaping (Double) -> Void = { _ in }) throws -> URL {
-        let safe = name.components(separatedBy: CharacterSet(charactersIn: "/:\\?%*|\"<>")).joined(separator: "-")
+        let safe = WorkPackage.safeName(name)
         let folder = FileManager.default.temporaryDirectory
             .appendingPathComponent("framefold-\(UUID().uuidString.prefix(6))", isDirectory: true)
-            .appendingPathComponent(safe.isEmpty ? "FrameFold" : safe, isDirectory: true)
+            .appendingPathComponent(safe, isDirectory: true)
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         for (i, url) in urls.enumerated() {
             let target = folder.appendingPathComponent(String(format: "%@_%04d.%@", safe, i + 1, format.fileExtension))

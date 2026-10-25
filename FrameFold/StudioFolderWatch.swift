@@ -121,11 +121,29 @@ final class StudioFolderWatch: ObservableObject {
         guard let image = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
                 ?? CGImageSourceCreateImageAtIndex(source, 0, nil) else { return nil }
         let ext = url.pathExtension.lowercased()
-        if ext == "jpg" || ext == "jpeg", let data = try? Data(contentsOf: url) {
+        if ext == "jpg" || ext == "jpeg", let data = strippedJPEG(source) {
             return (image, data)
         }
         guard let data = UIImage(cgImage: image).jpegData(compressionQuality: 0.95) else { return nil }
         return (image, data)
+    }
+
+    /// Das JPEG verlustfrei übernehmen, aber ohne Ort, Seriennummer und
+    /// Besitzername der Kamera – nur die Ausrichtung bleibt erhalten.
+    nonisolated private static func strippedJPEG(_ source: CGImageSource) -> Data? {
+        let data = NSMutableData()
+        guard let dest = CGImageDestinationCreateWithData(data, "public.jpeg" as CFString, 1, nil) else { return nil }
+        let metadata = CGImageMetadataCreateMutable()
+        if let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any],
+           let orientation = props[kCGImagePropertyOrientation] {
+            CGImageMetadataSetValueMatchingImageProperty(metadata, kCGImagePropertyTIFFDictionary,
+                                                         kCGImagePropertyTIFFOrientation, orientation as CFTypeRef)
+        }
+        let options: [CFString: Any] = [kCGImageDestinationMetadata: metadata,
+                                        kCGImageDestinationMergeMetadata: false,
+                                        kCGImageMetadataShouldExcludeGPS: true]
+        guard CGImageDestinationCopyImageSource(dest, source, options as CFDictionary, nil) else { return nil }
+        return data as Data
     }
 
     private func restoreBookmark() {

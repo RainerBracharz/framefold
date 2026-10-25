@@ -579,7 +579,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FrameFold nimmt auf deinen Wunsch Stimme oder Geräusche zu deinem Film auf. Die Aufnahme bleibt auf dem Gerät.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FrameFold nimmt auf deinen Wunsch Stimme oder Geräusche zu deinem Film auf und hört, wenn du es einschaltest, auf ein Klatschen als Auslöser. Aufnahmen bleiben auf dem Gerät; beim Klatschen wird nichts gespeichert.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Im Studio erkennt FrameFold gesprochene Wörter einer Tonspur – nur auf dem Gerät –, um Mundformen den Bildern zuzuordnen.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -612,7 +612,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FrameFold nimmt auf deinen Wunsch Stimme oder Geräusche zu deinem Film auf. Die Aufnahme bleibt auf dem Gerät.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FrameFold nimmt auf deinen Wunsch Stimme oder Geräusche zu deinem Film auf und hört, wenn du es einschaltest, auf ein Klatschen als Auslöser. Aufnahmen bleiben auf dem Gerät; beim Klatschen wird nichts gespeichert.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Im Studio erkennt FrameFold gesprochene Wörter einer Tonspur – nur auf dem Gerät –, um Mundformen den Bildern zuzuordnen.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

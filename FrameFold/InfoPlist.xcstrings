@@ -170,49 +170,49 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "FrameFold nimmt auf deinen Wunsch Stimme oder Geräusche zu deinem Film auf. Die Aufnahme bleibt auf dem Gerät."
+            "value": "FrameFold nimmt auf deinen Wunsch Stimme oder Geräusche zu deinem Film auf und hört, wenn du es einschaltest, auf ein Klatschen als Auslöser. Aufnahmen bleiben auf dem Gerät; beim Klatschen wird nichts gespeichert."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "At your request, FrameFold records voice or sound for your film. The recording stays on the device."
+            "value": "On request, FrameFold records your voice or sounds for your film and, if you turn it on, listens for a clap to take a shot. Recordings stay on the device; nothing is saved when listening for claps."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Si lo pides, FrameFold graba voz o sonidos para tu película. La grabación se queda en el dispositivo."
+            "value": "Si lo pides, FrameFold graba tu voz o sonidos para tu película y, si lo activas, escucha una palmada para disparar. Las grabaciones se quedan en el dispositivo; al escuchar palmadas no se guarda nada."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "À ta demande, FrameFold enregistre ta voix ou des sons pour ton film. L’enregistrement reste sur l’appareil."
+            "value": "À votre demande, FrameFold enregistre votre voix ou des sons pour votre film et, si vous l’activez, écoute un applaudissement pour déclencher. Les enregistrements restent sur l’appareil ; rien n’est enregistré pendant l’écoute des applaudissements."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Su tua richiesta, FrameFold registra voce o suoni per il tuo film. La registrazione resta sul dispositivo."
+            "value": "Su tua richiesta, FrameFold registra la tua voce o dei suoni per il film e, se lo attivi, ascolta un battito di mani per scattare. Le registrazioni restano sul dispositivo; durante l’ascolto del battito non viene salvato nulla."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ご希望に応じて、FrameFold が映像用の声やサウンドを録音します。録音はデバイス内にとどまります。"
+            "value": "ご希望に応じて、FrameFold は映画用の声や音を録音し、オンにすると拍手を合図に撮影します。録音はデバイスに残り、拍手を聞き取る際には何も保存されません。"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Op jouw verzoek neemt FrameFold stem of geluid op voor je film. De opname blijft op het apparaat."
+            "value": "Op jouw verzoek neemt FrameFold je stem of geluiden voor je film op en luistert het, als je dat inschakelt, naar een klap om een opname te maken. Opnamen blijven op het apparaat; bij het luisteren naar klappen wordt niets bewaard."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "A seu pedido, o FrameFold grava voz ou som para o seu filme. A gravação fica no dispositivo."
+            "value": "Se você pedir, o FrameFold grava sua voz ou sons para o filme e, se você ativar, escuta uma palma para disparar. As gravações ficam no aparelho; ao escutar palmas, nada é salvo."
           }
         }
       }
