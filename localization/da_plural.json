@@ -1,0 +1,38 @@
+{
+  "%lld Bilder": {
+    "one": "%lld billede",
+    "other": "%lld billeder"
+  },
+  "%lld Bilder aufgenommen": {
+    "one": "%lld billede taget",
+    "other": "%lld billeder taget"
+  },
+  "Fertig! %lld Bilder": {
+    "one": "Færdig! %lld billede",
+    "other": "Færdig! %lld billeder"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "one": "%lld billede · kontaktark",
+    "other": "%lld billeder · kontaktark"
+  },
+  "%lld Werke montieren": {
+    "one": "Saml %lld værk",
+    "other": "Saml %lld værker"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "one": "Senest slettet: gendan %lld billede",
+    "other": "Senest slettet: gendan %lld billeder"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "one": "%lld mere til et sekunds film",
+    "other": "%lld mere til et sekunds film"
+  },
+  "%lld Sekunden Film!": {
+    "one": "%lld sekund film!",
+    "other": "%lld sekunders film!"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "one": "Interval, hvert sekund",
+    "other": "Interval, hvert %lld. sekund"
+  }
+}

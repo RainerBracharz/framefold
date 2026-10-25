@@ -1,0 +1,7 @@
+{
+  "NSCameraUsageDescription": "I liveläget tar FrameFold bilder automatiskt så fort dina händer är ur bild.",
+  "NSMicrophoneUsageDescription": "När du vill spelar FrameFold in din röst eller ljud till din film och lyssnar, om du slår på det, efter en klapp för att ta en bild. Inspelningar stannar på enheten; när den lyssnar efter klappar sparas ingenting.",
+  "NSPhotoLibraryAddUsageDescription": "För att spara färdiga stopmotion-videor i ditt bildbibliotek.",
+  "NSSpeechRecognitionUsageDescription": "I Studio känner FrameFold igen talade ord i ett ljudspår — bara på enheten — för att matcha munformer mot bilderna.",
+  "FrameFold Work": "FrameFold-verk"
+}

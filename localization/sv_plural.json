@@ -1,0 +1,38 @@
+{
+  "%lld Bilder": {
+    "one": "%lld bild",
+    "other": "%lld bilder"
+  },
+  "%lld Bilder aufgenommen": {
+    "one": "%lld bild tagen",
+    "other": "%lld bilder tagna"
+  },
+  "Fertig! %lld Bilder": {
+    "one": "Klart! %lld bild",
+    "other": "Klart! %lld bilder"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "one": "%lld bild · kontaktkarta",
+    "other": "%lld bilder · kontaktkarta"
+  },
+  "%lld Werke montieren": {
+    "one": "Sätt ihop %lld verk",
+    "other": "Sätt ihop %lld verk"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "one": "Nyligen raderade: återställ %lld bild",
+    "other": "Nyligen raderade: återställ %lld bilder"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "one": "%lld till för en sekund film",
+    "other": "%lld till för en sekund film"
+  },
+  "%lld Sekunden Film!": {
+    "one": "%lld sekund film!",
+    "other": "%lld sekunder film!"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "one": "Intervall, varje sekund",
+    "other": "Intervall, med %lld sekunders mellanrum"
+  }
+}

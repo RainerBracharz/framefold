@@ -34,6 +34,6 @@ VIDEO TO STOP-MOTION
 Pick an existing video: the calm moments get found, hands removed, duplicates sorted out.
 
 ON THE MAC TOO
-The same app runs on the Mac, with a document camera or an iPhone as the camera, and exports ProRes or an image sequence. In eight languages.
+The same app runs on the Mac, with a document camera or an iPhone as the camera, and exports ProRes or an image sequence. In 17 languages.
 
 Built as a bespoke tool for the artist Aldo Tolino, whose work folds printed photographs into objects and photographs them again — image, object, image.

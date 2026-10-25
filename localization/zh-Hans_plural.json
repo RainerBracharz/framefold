@@ -1,0 +1,29 @@
+{
+  "%lld Bilder": {
+    "other": "%lld 帧"
+  },
+  "%lld Bilder aufgenommen": {
+    "other": "已拍摄 %lld 帧"
+  },
+  "Fertig! %lld Bilder": {
+    "other": "完成！%lld 帧"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "other": "%lld 帧 · 印样"
+  },
+  "%lld Werke montieren": {
+    "other": "合成 %lld 件作品"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "other": "最近删除：恢复 %lld 帧"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "other": "再拍 %lld 帧就够一秒影片"
+  },
+  "%lld Sekunden Film!": {
+    "other": "已有 %lld 秒影片！"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "other": "间隔，每 %lld 秒"
+  }
+}

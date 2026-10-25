@@ -1,0 +1,7 @@
+{
+  "NSCameraUsageDescription": "V živém režimu FrameFold automaticky pořizuje snímky, kdykoli máš ruce mimo záběr.",
+  "NSMicrophoneUsageDescription": "FrameFold na tvé přání nahrává hlas nebo zvuky k tvému filmu a – pokud to zapneš – poslouchá tlesknutí jako spoušť. Nahrávky zůstávají v zařízení; při poslechu tlesknutí se nic neukládá.",
+  "NSPhotoLibraryAddUsageDescription": "K ukládání hotových stop motion videí do tvé knihovny fotek.",
+  "NSSpeechRecognitionUsageDescription": "Ve Studiu FrameFold rozpoznává mluvená slova ve zvukové stopě – jen v zařízení –, aby snímkům přiřadil tvary úst.",
+  "FrameFold Work": "Dílo FrameFold"
+}

@@ -1,0 +1,7 @@
+{
+  "NSCameraUsageDescription": "W trybie na żywo FrameFold automatycznie robi klatki, gdy tylko twoje ręce są poza kadrem.",
+  "NSMicrophoneUsageDescription": "Na twoje życzenie FrameFold nagrywa głos lub dźwięki do twojego filmu, a jeśli to włączysz, nasłuchuje klaśnięcia jako spustu. Nagrania zostają na urządzeniu; przy nasłuchiwaniu klaśnięć nic nie jest zapisywane.",
+  "NSPhotoLibraryAddUsageDescription": "Do zapisywania gotowych filmów poklatkowych w twojej bibliotece zdjęć.",
+  "NSSpeechRecognitionUsageDescription": "W Studio FrameFold rozpoznaje wypowiadane słowa na ścieżce dźwiękowej – tylko na urządzeniu – aby przypisać kształty ust do klatek.",
+  "FrameFold Work": "Praca FrameFold"
+}

@@ -1,0 +1,7 @@
+{
+  "NSCameraUsageDescription": "在实时模式下，只要你的手离开画面，FrameFold 就会自动拍摄帧。",
+  "NSMicrophoneUsageDescription": "FrameFold 会根据你的需要为影片录制人声或声音；如果你开启拍手拍摄，它会聆听拍手声来拍摄。录音保留在设备上；聆听拍手声时不会保存任何内容。",
+  "NSPhotoLibraryAddUsageDescription": "用于将完成的定格动画视频保存到你的照片图库。",
+  "NSSpeechRecognitionUsageDescription": "在 Studio 中，FrameFold 会识别音轨中说出的词语（仅在设备上处理），以便为各帧匹配口型。",
+  "FrameFold Work": "FrameFold 作品"
+}

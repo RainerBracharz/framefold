@@ -1,0 +1,56 @@
+{
+  "%lld Bilder": {
+    "one": "%lld кадр",
+    "few": "%lld кадра",
+    "many": "%lld кадров",
+    "other": "%lld кадра"
+  },
+  "%lld Bilder aufgenommen": {
+    "one": "Снят %lld кадр",
+    "few": "Снято %lld кадра",
+    "many": "Снято %lld кадров",
+    "other": "Снято %lld кадра"
+  },
+  "Fertig! %lld Bilder": {
+    "one": "Готово! %lld кадр",
+    "few": "Готово! %lld кадра",
+    "many": "Готово! %lld кадров",
+    "other": "Готово! %lld кадра"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "one": "%lld кадр · контактный лист",
+    "few": "%lld кадра · контактный лист",
+    "many": "%lld кадров · контактный лист",
+    "other": "%lld кадра · контактный лист"
+  },
+  "%lld Werke montieren": {
+    "one": "Собрать %lld работу",
+    "few": "Собрать %lld работы",
+    "many": "Собрать %lld работ",
+    "other": "Собрать %lld работы"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "one": "Недавно удалённые: восстановить %lld кадр",
+    "few": "Недавно удалённые: восстановить %lld кадра",
+    "many": "Недавно удалённые: восстановить %lld кадров",
+    "other": "Недавно удалённые: восстановить %lld кадра"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "one": "ещё %lld кадр до секунды фильма",
+    "few": "ещё %lld кадра до секунды фильма",
+    "many": "ещё %lld кадров до секунды фильма",
+    "other": "ещё %lld кадра до секунды фильма"
+  },
+  "%lld Sekunden Film!": {
+    "one": "%lld секунда фильма!",
+    "few": "%lld секунды фильма!",
+    "many": "%lld секунд фильма!",
+    "other": "%lld секунды фильма!"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "one": "Интервал, каждую %lld секунду",
+    "few": "Интервал, каждые %lld секунды",
+    "many": "Интервал, каждые %lld секунд",
+    "other": "Интервал, каждые %lld секунды"
+  }
+}

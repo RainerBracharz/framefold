@@ -1,0 +1,7 @@
+{
+  "NSCameraUsageDescription": "Canlı modda FrameFold, elleriniz kadrajdan çıktığında otomatik olarak kare çeker.",
+  "NSMicrophoneUsageDescription": "FrameFold, isteğiniz üzerine filminiz için sesinizi veya sesleri kaydeder ve bu özelliği açarsanız çekim yapmak için alkışı dinler. Kayıtlar cihazda kalır; alkış dinlenirken hiçbir şey kaydedilmez.",
+  "NSPhotoLibraryAddUsageDescription": "Bitmiş stop motion videolarını fotoğraf arşivinize kaydetmek için.",
+  "NSSpeechRecognitionUsageDescription": "Stüdyoda FrameFold, ağız şekillerini karelere eşlemek için bir ses parçasındaki konuşulan sözcükleri tanır — yalnızca cihazda.",
+  "FrameFold Work": "FrameFold Eseri"
+}

@@ -1,0 +1,56 @@
+{
+  "%lld Bilder": {
+    "one": "%lld klatka",
+    "few": "%lld klatki",
+    "many": "%lld klatek",
+    "other": "%lld klatki"
+  },
+  "%lld Bilder aufgenommen": {
+    "one": "Zrobiono %lld klatkę",
+    "few": "Zrobiono %lld klatki",
+    "many": "Zrobiono %lld klatek",
+    "other": "Zrobiono %lld klatki"
+  },
+  "Fertig! %lld Bilder": {
+    "one": "Gotowe! %lld klatka",
+    "few": "Gotowe! %lld klatki",
+    "many": "Gotowe! %lld klatek",
+    "other": "Gotowe! %lld klatki"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "one": "%lld klatka · stykówka",
+    "few": "%lld klatki · stykówka",
+    "many": "%lld klatek · stykówka",
+    "other": "%lld klatki · stykówka"
+  },
+  "%lld Werke montieren": {
+    "one": "Zmontuj %lld pracę",
+    "few": "Zmontuj %lld prace",
+    "many": "Zmontuj %lld prac",
+    "other": "Zmontuj %lld pracy"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "one": "Ostatnio usunięte: przywróć %lld klatkę",
+    "few": "Ostatnio usunięte: przywróć %lld klatki",
+    "many": "Ostatnio usunięte: przywróć %lld klatek",
+    "other": "Ostatnio usunięte: przywróć %lld klatki"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "one": "jeszcze %lld klatka do sekundy filmu",
+    "few": "jeszcze %lld klatki do sekundy filmu",
+    "many": "jeszcze %lld klatek do sekundy filmu",
+    "other": "jeszcze %lld klatki do sekundy filmu"
+  },
+  "%lld Sekunden Film!": {
+    "one": "%lld sekunda filmu!",
+    "few": "%lld sekundy filmu!",
+    "many": "%lld sekund filmu!",
+    "other": "%lld sekundy filmu!"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "one": "Interwał, co %lld sekundę",
+    "few": "Interwał, co %lld sekundy",
+    "many": "Interwał, co %lld sekund",
+    "other": "Interwał, co %lld sekundy"
+  }
+}

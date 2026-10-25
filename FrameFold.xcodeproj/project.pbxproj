@@ -422,6 +422,15 @@
 				ja,
 				nl,
 				"pt-BR",
+				cs,
+				da,
+				ko,
+				pl,
+				ru,
+				sv,
+				tr,
+				uk,
+				"zh-Hans",
 				Base,
 			);
 			mainGroup = 97A63A01E61FD439E8760B8E;

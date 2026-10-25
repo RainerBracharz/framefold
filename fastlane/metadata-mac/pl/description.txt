@@ -1,0 +1,46 @@
+Aplikacja do animacji poklatkowej, która sama robi zdjęcie w chwili, gdy twoje ręce znikają z kadru. Za darmo, bez subskrypcji, bez reklam, bez konta, bez internetu.
+
+WSZYSTKO ZA DARMO, BEZ ZNAKU WODNEGO
+Dźwięk, efekty dźwiękowe, czytanie tekstu na głos, green screen, tytuły i napisy końcowe, tekst i dymki, rysowanie, eksport do 4K i ProRes — nic z tego nie kosztuje dodatkowo i żaden film nigdy nie ma znaku wodnego.
+
+FrameFold zamienia twoją pracę przy stole w stop motion — automatycznie i w całości na twoim Macu.
+
+Kamera patrzy z góry na stół, a ty składasz, rysujesz, układasz. FrameFold sam robi zdjęcie, gdy tylko twoje ręce znikną z kadru, a scena się uspokoi. Nic nie opuszcza twojego Maca: bez chmury, bez konta, bez śledzenia.
+
+KAMERA NAD STOŁEM
+Najlepiej działa wizualizer, który patrzy pionowo z góry na stół — podłączoną kamerę USB FrameFold wybierze sam. Jako kamerę można też wybrać iPhone’a lub wbudowaną kamerę. Ze skórką cebuli, kontrolą dryfu i interwałem; spacja robi zdjęcie ręcznie.
+
+OSTRO ALBO WCALE
+Aplikacja stale mierzy ostrość obrazu. Nieostra klatka nigdy nie trafi do pracy. Gdzie kamera na to pozwala, FrameFold utrzymuje ekspozycję i balans bieli, żeby między klatkami nic nie migotało.
+
+STUDIO
+Od trybu Zaawansowany kamera staje się profesjonalnym obszarem roboczym: oś czasu, przełączanie między obrazem na żywo a zrobionymi klatkami, skórka cebuli z wielu klatek, widok różnicy i ekspozycji, maski formatu, obszary bezpieczne, siatki, obraz lub film referencyjny z kluczowaniem kolorem, notatki do klatek, uśrednianie klatek przeciw szumom, przyciemnianie ekranu przy zdjęciu, zdjęcia próbne i timelapse z czasem startu i końca. Wszystko także z klawiatury. Eksport jako ProRes lub sekwencja obrazów.
+
+DŹWIĘK
+Wiele ścieżek dźwiękowych z przebiegiem fali: muzyka z twoich plików, nagrywanie głosu podczas odtwarzania filmu, dziesięć efektów dźwiękowych od Plum do Tadam przy dowolnej klatce albo głos, który przeczyta wpisany przez ciebie tekst. W X-Sheet kształty ust są przypisywane do klatek.
+
+TEKST, TYTUŁY, GREEN SCREEN
+Dymki, tekst i rysunki prosto w kadrze. Plansza tytułowa i napisy końcowe. Zieleń lub błękit zastąpisz obrazem albo filmem. Wygląd dla całego filmu.
+
+EDYCJA I EKSPORT
+Powielaj klatki, przeciągaj je w nowej kolejności, rób ponownie pojedyncze klatki, cofaj wszystko. Eksport od 2 do 30 fps, do 4K.
+
+FILM ROŚNIE RAZEM Z PRACĄ
+Podczas pracy stop motion już odtwarza się w pętli obok obrazu z kamery.
+
+FLIPBOOK
+Każda praca staje się flipbookiem gotowym do druku: arkusze A4 z liniami cięcia, grzbietem i numerowanymi kartkami. Wytnij, zszyj, kartkuj — film znów staje się obiektem.
+
+Z WIDEO DO STOP MOTION
+Wybierz istniejące wideo, spokojne chwile zostaną znalezione, ręce usunięte, duplikaty odsiane. Każdą klatkę sprawdzisz na stykówce, zanim film zostanie zmontowany.
+
+TRZY TRYBY
+Prosty (wybierz, zrób zdjęcie, gotowe — stworzony do nauczania), Zaawansowany (format, liczba klatek, rozdzielczość, odtwarzanie) i tryb Atelier z reliefem papieru, echem obrazu, wyglądem odbitki, przejściami z zagięciem, montażem wystawy oraz gotowymi do druku stykówkami i szablonami składania w PDF.
+
+PRACE, NIE PLIKI
+Projekty zbierają klatki z dowolnej liczby sesji, z koszem na 30 dni. Wynik przychodzi jak edycja: „Arkusze 01–24 · Seria 24 · data 2026”.
+
+TAKŻE NA IPHONIE I IPADZIE
+FrameFold jest dostępny również na iPhone’a i iPada — tam ze statywem, Apple Watch jako pilotem i zdjęciem klaśnięciem. W wielu językach.
+
+Stworzona jako narzędzie na miarę dla artysty Aldo Tolino, którego prace składają wydrukowane fotografie w obiekty i fotografują je ponownie — obraz, obiekt, obraz.

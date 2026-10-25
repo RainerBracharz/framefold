@@ -1,0 +1,38 @@
+{
+  "%lld Bilder": {
+    "one": "%lld kare",
+    "other": "%lld kare"
+  },
+  "%lld Bilder aufgenommen": {
+    "one": "%lld kare çekildi",
+    "other": "%lld kare çekildi"
+  },
+  "Fertig! %lld Bilder": {
+    "one": "Bitti! %lld kare",
+    "other": "Bitti! %lld kare"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "one": "%lld kare · kontakt baskı",
+    "other": "%lld kare · kontakt baskı"
+  },
+  "%lld Werke montieren": {
+    "one": "%lld eseri birleştir",
+    "other": "%lld eseri birleştir"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "one": "Son silinenler: %lld kareyi geri yükle",
+    "other": "Son silinenler: %lld kareyi geri yükle"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "one": "bir saniyelik film için %lld kare daha",
+    "other": "bir saniyelik film için %lld kare daha"
+  },
+  "%lld Sekunden Film!": {
+    "one": "%lld saniyelik film!",
+    "other": "%lld saniyelik film!"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "one": "Aralık, her saniye",
+    "other": "Aralık, her %lld saniyede"
+  }
+}

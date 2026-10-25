@@ -1,0 +1,29 @@
+{
+  "%lld Bilder": {
+    "other": "프레임 %lld개"
+  },
+  "%lld Bilder aufgenommen": {
+    "other": "프레임 %lld개 촬영됨"
+  },
+  "Fertig! %lld Bilder": {
+    "other": "완료! 프레임 %lld개"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "other": "프레임 %lld개 · 밀착 시트"
+  },
+  "%lld Werke montieren": {
+    "other": "작품 %lld개 합치기"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "other": "최근 삭제됨: 프레임 %lld개 복원"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "other": "영상 1초까지 %lld개 남음"
+  },
+  "%lld Sekunden Film!": {
+    "other": "영상 %lld초 분량!"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "other": "인터벌, %lld초마다"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "%lld Bilder": {
+    "one": "%lld snímek",
+    "few": "%lld snímky",
+    "many": "%lld snímku",
+    "other": "%lld snímků"
+  },
+  "%lld Bilder aufgenommen": {
+    "one": "Pořízen %lld snímek",
+    "few": "Pořízeny %lld snímky",
+    "many": "Pořízeno %lld snímku",
+    "other": "Pořízeno %lld snímků"
+  },
+  "Fertig! %lld Bilder": {
+    "one": "Hotovo! %lld snímek",
+    "few": "Hotovo! %lld snímky",
+    "many": "Hotovo! %lld snímku",
+    "other": "Hotovo! %lld snímků"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "one": "%lld snímek · kontaktní arch",
+    "few": "%lld snímky · kontaktní arch",
+    "many": "%lld snímku · kontaktní arch",
+    "other": "%lld snímků · kontaktní arch"
+  },
+  "%lld Werke montieren": {
+    "one": "Sestavit %lld dílo",
+    "few": "Sestavit %lld díla",
+    "many": "Sestavit %lld díla",
+    "other": "Sestavit %lld děl"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "one": "Nedávno smazané: obnovit %lld snímek",
+    "few": "Nedávno smazané: obnovit %lld snímky",
+    "many": "Nedávno smazané: obnovit %lld snímku",
+    "other": "Nedávno smazané: obnovit %lld snímků"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "one": "ještě %lld snímek na sekundu filmu",
+    "few": "ještě %lld snímky na sekundu filmu",
+    "many": "ještě %lld snímku na sekundu filmu",
+    "other": "ještě %lld snímků na sekundu filmu"
+  },
+  "%lld Sekunden Film!": {
+    "one": "%lld sekunda filmu!",
+    "few": "%lld sekundy filmu!",
+    "many": "%lld sekundy filmu!",
+    "other": "%lld sekund filmu!"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "one": "Interval, každou %lld sekundu",
+    "few": "Interval, každé %lld sekundy",
+    "many": "Interval, každých %lld sekundy",
+    "other": "Interval, každých %lld sekund"
+  }
+}

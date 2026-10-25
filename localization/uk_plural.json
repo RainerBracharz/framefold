@@ -1,0 +1,56 @@
+{
+  "%lld Bilder": {
+    "one": "%lld кадр",
+    "few": "%lld кадри",
+    "many": "%lld кадрів",
+    "other": "%lld кадру"
+  },
+  "%lld Bilder aufgenommen": {
+    "one": "Знято %lld кадр",
+    "few": "Знято %lld кадри",
+    "many": "Знято %lld кадрів",
+    "other": "Знято %lld кадру"
+  },
+  "Fertig! %lld Bilder": {
+    "one": "Готово! %lld кадр",
+    "few": "Готово! %lld кадри",
+    "many": "Готово! %lld кадрів",
+    "other": "Готово! %lld кадру"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "one": "%lld кадр · контактний аркуш",
+    "few": "%lld кадри · контактний аркуш",
+    "many": "%lld кадрів · контактний аркуш",
+    "other": "%lld кадру · контактний аркуш"
+  },
+  "%lld Werke montieren": {
+    "one": "Змонтувати %lld роботу",
+    "few": "Змонтувати %lld роботи",
+    "many": "Змонтувати %lld робіт",
+    "other": "Змонтувати %lld роботи"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "one": "Нещодавно видалені: відновити %lld кадр",
+    "few": "Нещодавно видалені: відновити %lld кадри",
+    "many": "Нещодавно видалені: відновити %lld кадрів",
+    "other": "Нещодавно видалені: відновити %lld кадру"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "one": "ще %lld кадр до секунди фільму",
+    "few": "ще %lld кадри до секунди фільму",
+    "many": "ще %lld кадрів до секунди фільму",
+    "other": "ще %lld кадру до секунди фільму"
+  },
+  "%lld Sekunden Film!": {
+    "one": "%lld секунда фільму!",
+    "few": "%lld секунди фільму!",
+    "many": "%lld секунд фільму!",
+    "other": "%lld секунди фільму!"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "one": "Інтервал, кожну %lld секунду",
+    "few": "Інтервал, кожні %lld секунди",
+    "many": "Інтервал, кожні %lld секунд",
+    "other": "Інтервал, кожні %lld секунди"
+  }
+}

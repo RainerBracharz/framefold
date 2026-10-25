@@ -1,0 +1,7 @@
+{
+  "NSCameraUsageDescription": "I livetilstand tager FrameFold automatisk billeder, når dine hænder er ude af billedet.",
+  "NSMicrophoneUsageDescription": "Når du ønsker det, optager FrameFold din stemme eller lyde til din film og lytter, hvis du slår det til, efter et klap for at tage et billede. Optagelser bliver på enheden; når der lyttes efter klap, gemmes intet.",
+  "NSPhotoLibraryAddUsageDescription": "Til at gemme færdige stopmotion-videoer i dit fotobibliotek.",
+  "NSSpeechRecognitionUsageDescription": "I Studio genkender FrameFold talte ord i et lydspor — kun på enheden — for at tilpasse mundformer til billederne.",
+  "FrameFold Work": "FrameFold-værk"
+}

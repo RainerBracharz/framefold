@@ -52,6 +52,60 @@
             "state": "translated",
             "value": "No modo ao vivo, o FrameFold captura quadros automaticamente sempre que suas mãos saem da imagem."
           }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "V živém režimu FrameFold automaticky pořizuje snímky, kdykoli máš ruce mimo záběr."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "W trybie na żywo FrameFold automatycznie robi klatki, gdy tylko twoje ręce są poza kadrem."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "У режимі наживо FrameFold автоматично знімає кадри, щойно твої руки зникають із кадру."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В режиме съёмки вживую FrameFold автоматически делает кадры, когда ваши руки уходят из кадра."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Canlı modda FrameFold, elleriniz kadrajdan çıktığında otomatik olarak kare çeker."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "라이브 모드에서 FrameFold는 손이 화면에서 벗어날 때마다 자동으로 프레임을 촬영합니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在实时模式下，只要你的手离开画面，FrameFold 就会自动拍摄帧。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I livetilstand tager FrameFold automatisk billeder, når dine hænder er ude af billedet."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I liveläget tar FrameFold bilder automatiskt så fort dina händer är ur bild."
+          }
         }
       }
     },
@@ -105,6 +159,60 @@
           "stringUnit": {
             "state": "translated",
             "value": "Para salvar os vídeos em stop motion prontos na sua fototeca."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "K ukládání hotových stop motion videí do tvé knihovny fotek."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Do zapisywania gotowych filmów poklatkowych w twojej bibliotece zdjęć."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Щоб зберігати готові стоп-моушн-відео у твоїй медіатеці."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для сохранения готовых стоп-моушен-видео в вашу медиатеку."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bitmiş stop motion videolarını fotoğraf arşivinize kaydetmek için."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "완성된 스톱모션 비디오를 사진 보관함에 저장하기 위해 사용합니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "用于将完成的定格动画视频保存到你的照片图库。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Til at gemme færdige stopmotion-videoer i dit fotobibliotek."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "För att spara färdiga stopmotion-videor i ditt bildbibliotek."
           }
         }
       }
@@ -160,6 +268,60 @@
             "state": "translated",
             "value": "No Studio, o FrameFold reconhece palavras faladas numa faixa de áudio – só no dispositivo – para combinar formas da boca com os quadros."
           }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ve Studiu FrameFold rozpoznává mluvená slova ve zvukové stopě – jen v zařízení –, aby snímkům přiřadil tvary úst."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "W Studio FrameFold rozpoznaje wypowiadane słowa na ścieżce dźwiękowej – tylko na urządzeniu – aby przypisać kształty ust do klatek."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "У Студії FrameFold розпізнає слова в аудіодоріжці — лише на пристрої, — щоб призначити кадрам форми рота."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В студии FrameFold распознаёт произнесённые слова в аудиодорожке — только на устройстве, — чтобы подобрать к кадрам формы рта."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stüdyoda FrameFold, ağız şekillerini karelere eşlemek için bir ses parçasındaki konuşulan sözcükleri tanır — yalnızca cihazda."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스튜디오에서 FrameFold는 입 모양을 프레임에 맞추기 위해 오디오 트랙의 말소리를 인식합니다. 처리는 기기에서만 이루어집니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Studio 中，FrameFold 会识别音轨中说出的词语（仅在设备上处理），以便为各帧匹配口型。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I Studio genkender FrameFold talte ord i et lydspor — kun på enheden — for at tilpasse mundformer til billederne."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I Studio känner FrameFold igen talade ord i ett ljudspår — bara på enheten — för att matcha munformer mot bilderna."
+          }
         }
       }
     },
@@ -214,6 +376,60 @@
             "state": "translated",
             "value": "Se você pedir, o FrameFold grava sua voz ou sons para o filme e, se você ativar, escuta uma palma para disparar. As gravações ficam no aparelho; ao escutar palmas, nada é salvo."
           }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FrameFold na tvé přání nahrává hlas nebo zvuky k tvému filmu a – pokud to zapneš – poslouchá tlesknutí jako spoušť. Nahrávky zůstávají v zařízení; při poslechu tlesknutí se nic neukládá."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Na twoje życzenie FrameFold nagrywa głos lub dźwięki do twojego filmu, a jeśli to włączysz, nasłuchuje klaśnięcia jako spustu. Nagrania zostają na urządzeniu; przy nasłuchiwaniu klaśnięć nic nie jest zapisywane."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "За твоїм бажанням FrameFold записує голос або звуки до твого фільму, а якщо ти це ввімкнеш, слухає оплеск як сигнал для зйомки. Записи залишаються на пристрої; під час очікування оплеску нічого не зберігається."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "По вашему желанию FrameFold записывает голос или звуки для фильма, а если вы включите эту функцию, слушает хлопок, чтобы сделать снимок. Записи остаются на устройстве; при ожидании хлопка ничего не сохраняется."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FrameFold, isteğiniz üzerine filminiz için sesinizi veya sesleri kaydeder ve bu özelliği açarsanız çekim yapmak için alkışı dinler. Kayıtlar cihazda kalır; alkış dinlenirken hiçbir şey kaydedilmez."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "요청 시 FrameFold는 영상에 넣을 목소리나 소리를 녹음하며, 이 기능을 켜면 박수 소리를 듣고 촬영합니다. 녹음은 기기에 남고, 박수를 듣는 동안에는 아무것도 저장되지 않습니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FrameFold 会根据你的需要为影片录制人声或声音；如果你开启拍手拍摄，它会聆听拍手声来拍摄。录音保留在设备上；聆听拍手声时不会保存任何内容。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du ønsker det, optager FrameFold din stemme eller lyde til din film og lytter, hvis du slår det til, efter et klap for at tage et billede. Optagelser bliver på enheden; når der lyttes efter klap, gemmes intet."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "När du vill spelar FrameFold in din röst eller ljud till din film och lyssnar, om du slår på det, efter en klapp för att ta en bild. Inspelningar stannar på enheten; när den lyssnar efter klappar sparas ingenting."
+          }
         }
       }
     },
@@ -266,6 +482,60 @@
           "stringUnit": {
             "state": "translated",
             "value": "Obra do FrameFold"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dílo FrameFold"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Praca FrameFold"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Робота FrameFold"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Работа FrameFold"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FrameFold Eseri"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FrameFold 작품"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FrameFold 作品"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FrameFold-værk"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FrameFold-verk"
           }
         }
       }
