@@ -125,6 +125,42 @@
               }
             }
           }
+        },
+        "ja": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld コマ"
+                }
+              }
+            }
+          }
+        },
+        "pt-BR": {
+          "variations": {
+            "plural": {
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld quadros"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld quadro"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld quadros"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -158,6 +194,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ontspanner"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "シャッター"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obturador"
           }
         }
       }
@@ -193,6 +241,18 @@
             "state": "translated",
             "value": "Gereed"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "準備完了"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pronto"
+          }
         }
       }
     },
@@ -226,6 +286,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Klaar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完了"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Concluído"
           }
         }
       }
@@ -261,6 +333,18 @@
             "state": "translated",
             "value": "Open FrameFold op de iPhone"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone で FrameFold を開く"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abra o FrameFold no iPhone"
+          }
         }
       }
     },
@@ -294,6 +378,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open het cameratabblad op de iPhone"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone でカメラタブを開く"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abra a aba da câmera no iPhone"
           }
         }
       }
@@ -329,6 +425,18 @@
             "state": "translated",
             "value": "Open het cameratabblad"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラタブを開く"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abra a aba Câmera"
+          }
         }
       }
     },
@@ -362,6 +470,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Niet afgedrukt – controleer de iPhone"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "撮影されませんでした – iPhone を確認してください"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não disparou – verifique o iPhone"
           }
         }
       }
@@ -397,6 +517,18 @@
             "state": "translated",
             "value": "Verbinden…"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "接続中…"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conectando…"
+          }
         }
       }
     },
@@ -430,6 +562,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "iPhone niet bereikbaar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone に接続できません"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone fora de alcance"
           }
         }
       }
@@ -465,6 +609,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stilhouden…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "動かさないで…"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mantenha firme…"
           }
         }
       }

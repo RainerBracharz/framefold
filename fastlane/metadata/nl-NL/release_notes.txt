@@ -2,7 +2,7 @@ FrameFold 2.6
 
 Nu ook op de iPad – en met geluid.
 
-• Ongedaan maken en opnieuw voor alles in een werk (herschikken, verwijderen, tekst …) – met de knop, ⌘Z of schudden. De Studio is er nu ook op de iPhone (live-instellingen → Studio).
+• Ongedaan maken en opnieuw voor alles in een werk (herschikken, verwijderen, tekst …) – met de knop of ⌘Z. De Studio is er nu ook op de iPhone (live-instellingen → Studio).
 • Tekst, tekstballonnen en tekenen: houd een beeld ingedrukt → ‘Tekst en tekenen …’. Tekst en ballonnen gelden voor meerdere beelden, tekeningen voor één beeld.
 • Volledige resolutie: elk beeld is een foto van de sensor, export tot 4K. Plus lenskeuze (ultragroothoek, tele, frontcamera), afdrukken met klappen, foto’s als beelden toevoegen en looks voor de hele film.
 • iPad: FrameFold werkt op de iPad, staand en liggend. In een standaard volgen zoeker en beelden de stand van het apparaat.
@@ -13,4 +13,5 @@ Nu ook op de iPad – en met geluid.
 • Tot 30 fps: 15, 24, 25 en 30 fps voor vloeiende beweging.
 • Handmatige camera (vanaf Uitgebreid): stel zelf ISO, sluitertijd, focus en witbalans in.
 • Verdubbelen en herschikken: houd een beeld ingedrukt om het te verdubbelen of te verplaatsen – of sleep het naar een andere plek op het contactvel.
-• Nu ook in het Spaans, Italiaans en Nederlands – en bij de eerste start staat er een voorbeeldwerk klaar.
+• Geluidseffecten en spraak: hang plop, woesj, tromgeroffel, tadaa en meer aan elk beeld – of laat getypte tekst door een stem uitspreken. Alles ontstaat op het apparaat. Plus een helpgedeelte met korte uitleg in de instellingen.
+• Nu ook in het Spaans, Italiaans, Nederlands, Japans en Portugees – en bij de eerste start staat er een voorbeeldwerk klaar.

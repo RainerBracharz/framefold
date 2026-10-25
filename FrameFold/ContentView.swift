@@ -819,6 +819,11 @@ struct SettingsView: View {
                 .listRowBackground(Theme.paperShade.opacity(0.5))
 
                 Section {
+                    HelpButton()
+                }
+                .listRowBackground(Theme.paperShade.opacity(0.5))
+
+                Section {
                     HStack(spacing: 12) {
                         Image(systemName: "wand.and.stars")
                             .foregroundStyle(Theme.ink)

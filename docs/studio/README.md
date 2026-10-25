@@ -1,6 +1,6 @@
 # FrameFold Studio (Mac, iPad und iPhone)
 
-Die Profi-Arbeitsfläche am Mac und am iPad (im Vollbild oder in einem breiten Fenster) und, eingeschaltet unter Live-Einstellungen → Studio, auch am iPhone (hochkant, Inspektor als eigenes Blatt). Alle Änderungen am Werk lassen sich rückgängig machen und wiederholen: Pfeil-Knöpfe, ⌘Z / ⇧⌘Z oder am iPhone Schütteln. Sie erscheint in der Kamera, sobald der Modus **Erweitert** oder **Atelier** eingestellt ist. Am iPad lösen auch die Lautstärketasten aus; die Tastenbefehle gelten mit angeschlossener Tastatur.
+Die Profi-Arbeitsfläche am Mac und am iPad (im Vollbild oder in einem breiten Fenster) und, eingeschaltet unter Live-Einstellungen → Studio, auch am iPhone (hochkant, Inspektor als eigenes Blatt). Alle Änderungen am Werk lassen sich rückgängig machen und wiederholen: Pfeil-Knöpfe, ⌘Z / ⇧⌘Z. Sie erscheint in der Kamera, sobald der Modus **Erweitert** oder **Atelier** eingestellt ist. Am iPad lösen auch die Lautstärketasten aus; die Tastenbefehle gelten mit angeschlossener Tastatur.
 Im Modus **Einfach** bleibt es beim schlichten Sucher.
 
 Die Arbeitsfläche besteht aus vier Teilen:
@@ -66,6 +66,8 @@ Mit „Ordner beobachten“ wird jede Kamera nutzbar, die FrameFold nicht selbst
   Jede Spur hat ein Einsatzbild („Ab Bild“), eine Lautstärke und einen Stummschalter.
   Die Musik aus der Werkansicht erscheint hier als erste Spur.
 - **Stimme aufnehmen** (R): Der Film läuft ab dem gezeigten Bild in der Bildrate, nach „3 – 2 – 1“ läuft die Aufnahme mit. „Übernehmen“ legt sie als neue Spur genau an dieser Stelle an. Die Aufnahme bleibt auf dem Gerät. In der Werkansicht gibt es dasselbe über das Mikrofon-Symbol, ab Bild 1.
+- **Geräusche**: „Geräusch …“ im Inspektor (oder „Geräusch hier“ im Kontextmenü eines Bildes) legt Plopp, Wusch, Klick, Boing, Ding, Trommelwirbel, Schritte, Platsch, Zisch oder Tadaa als eigene Spur ab dem gezeigten Bild an. Die Geräusche entstehen im Code – keine Lizenzfragen.
+- **Sprechen lassen …**: Getippten Text von einer Systemstimme sprechen lassen (Stimme und Tempo wählbar, „Anhören“ zum Probehören). „Als Tonspur hinzufügen“ legt ihn ab dem gezeigten Bild an. Die Sprachausgabe läuft auf dem Gerät.
 - **Wellenform**: Der Pegel aller Spuren liegt unter den Kacheln der Zeitleiste, Bild für Bild.
 - **Abspielen mit Ton**: Abspielen und Kurz abspielen laufen synchron mit dem Ton.
   Beim Blättern mit ← und → erklingt der Ton genau dieses Bilds („Ton beim Blättern“).

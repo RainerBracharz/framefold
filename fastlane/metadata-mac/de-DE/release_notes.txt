@@ -14,4 +14,5 @@ Das Studio – und Ton.
 • Musik oder Ton: In der Werkansicht eine Audiodatei wählen – sie liegt unter dem exportierten Film.
 • Bis 30 Bilder pro Sekunde: 15, 24, 25 und 30 fps für flüssige Bewegung.
 • Bilder verdoppeln und umordnen: Rechtsklick auf ein Bild für „Verdoppeln“, „Nach vorn“ und „Nach hinten“ – oder im Kontaktbogen an eine andere Stelle ziehen.
-• Jetzt auch auf Spanisch, Italienisch und Niederländisch – und beim ersten Start wartet ein Beispielwerk zum Ausprobieren.
+• Geräusche und Sprechen lassen: Plopp, Wusch, Trommelwirbel, Tadaa und mehr an jedes Bild hängen – oder getippten Text von einer Stimme sprechen lassen. Alles entsteht auf dem Gerät. Dazu eine Hilfe mit kurzen Anleitungen in den Einstellungen.
+• Jetzt auch auf Spanisch, Italienisch, Niederländisch, Japanisch und Portugiesisch – und beim ersten Start wartet ein Beispielwerk zum Ausprobieren.

@@ -292,6 +292,9 @@ struct ProjectDetailView: View {
                             } label: {
                                 Label("Text & Zeichnen …", systemImage: "pencil.and.scribble")
                             }
+                            SoundEffectMenu(projectID: currentProject.id, frame: index) {
+                                Label("Geräusch hier", systemImage: "speaker.wave.2")
+                            }
                             Button {
                                 store.duplicateFrame(named: url.lastPathComponent, in: currentProject)
                             } label: {

@@ -14,4 +14,5 @@ El Studio – y sonido.
 • Música o sonido: elige un archivo de audio en la vista de la obra – suena bajo la película exportada.
 • Hasta 30 fps: 15, 24, 25 y 30 fps para un movimiento fluido.
 • Duplicar y reordenar: clic secundario en un fotograma para duplicarlo o moverlo – o arrástralo a otro lugar de la hoja de contactos.
-• Ahora también en español, italiano y neerlandés, y al abrirla por primera vez te espera una obra de ejemplo.
+• Efectos de sonido y voz: añade pop, zas, redoble, tachán y más a cualquier fotograma, o haz que una voz lea un texto. Todo se genera en el dispositivo. Además, una ayuda con guías breves en los ajustes.
+• Ahora también en español, italiano, neerlandés, japonés y portugués, y al abrirla por primera vez te espera una obra de ejemplo.

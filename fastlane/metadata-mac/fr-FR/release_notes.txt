@@ -14,4 +14,5 @@ Le Studio – et le son.
 • Musique ou son : choisis un fichier audio dans la vue de l’œuvre – il accompagne le film exporté.
 • Jusqu’à 30 images par seconde : 15, 24, 25 et 30 fps pour un mouvement fluide.
 • Dupliquer et réordonner : clic droit sur une image pour « Dupliquer », « Avancer » et « Reculer » – ou fais-la glisser ailleurs dans la planche contact.
-• Désormais aussi en espagnol, italien et néerlandais – et une œuvre d’exemple attend au premier lancement.
+• Bruitages et synthèse vocale : placez plop, whoosh, roulement de tambour, tadaa et d’autres sur n’importe quelle image – ou faites lire un texte par une voix. Tout est créé sur l’appareil. Et une aide avec de courts guides dans les réglages.
+• Désormais aussi en espagnol, italien, néerlandais, japonais et portugais – et une œuvre d’exemple attend au premier lancement.

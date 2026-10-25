@@ -46,6 +46,7 @@ struct StudioView: View {
     @State private var showVoice = false
     @State private var overlayFrame: Int?
     @State private var showInspector = false
+    @State private var showSpeech = false
     @State private var importKind: ImportKind = .reference
     @StateObject private var folderWatch = StudioFolderWatch()
     @State private var volumeDraft: [UUID: Double] = [:]
@@ -229,6 +230,11 @@ struct StudioView: View {
             .sheet(isPresented: $showXSheet) { xSheet }
             .sheet(isPresented: $showVoice) { voiceSheet }
             .sheet(isPresented: overlayEditorShown) { overlayEditor }
+            .sheet(isPresented: $showSpeech) {
+                SpeechSheet(projectID: projectID, frame: frameOnViewer ?? urls.count) { showSpeech = false }
+                    .environmentObject(store)
+            }
+            .onChange(of: showSpeech) { _, _ in updateHub() }
             .alert(noteTitle, isPresented: noteShown) { noteAlert }
             // Solange ein Dialog offen ist, dürfen einfache Tasten nicht als
             // Befehle gelten.
@@ -239,7 +245,7 @@ struct StudioView: View {
     }
 
     private func updateHub() {
-        hub.isActive = !showXSheet && !showVoice && overlayFrame == nil && noteFrame == nil
+        hub.isActive = !showXSheet && !showVoice && !showSpeech && overlayFrame == nil && noteFrame == nil
     }
 
     private var xSheet: some View {
@@ -607,6 +613,7 @@ struct StudioView: View {
         .onTapGesture { stopPlayback(); testShown = nil; selected = index }
         .contextMenu {
             Button { stopPlayback(); overlayFrame = index } label: { Label("Text & Zeichnen …", systemImage: "pencil.and.scribble") }
+            SoundEffectMenu(projectID: projectID, frame: index) { Label("Geräusch hier", systemImage: "speaker.wave.2") }
             Button { duplicate(index) } label: { Label("Verdoppeln", systemImage: "plus.square.on.square") }
             Button { editNote(index + 1) } label: { Label("Notiz …", systemImage: "text.bubble") }
             Button { loopIn = index } label: { Label("Als Schleifenanfang", systemImage: "chevron.left.to.line") }
@@ -772,6 +779,15 @@ struct StudioView: View {
                     HStack {
                         smallButton("Tonspur hinzufügen …") { importKind = .audio; showReferenceImporter = true }
                         smallButton("Aufnehmen … (R)") { handle(.record) }
+                    }
+                    HStack {
+                        SoundEffectMenu(projectID: projectID, frame: frameOnViewer ?? urls.count) {
+                            Text("Geräusch …").font(Theme.mono(11))
+                                .padding(.horizontal, 10).padding(.vertical, 5)
+                                .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+                                .foregroundStyle(Theme.paperOnDark)
+                        }
+                        smallButton("Sprechen lassen …") { stopPlayback(); showSpeech = true }
                         smallButton("X-Sheet …") { handle(.xsheet) }
                     }
                     toggle("Ton beim Blättern", $settings.scrubAudio)

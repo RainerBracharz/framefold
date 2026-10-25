@@ -1,0 +1,48 @@
+{
+  "_hinweis": "Português: «one» para 0 e 1; «many» (p. ex. 1 milhão) = forma de «other».",
+  "%lld Bilder": {
+    "one": "%lld quadro",
+    "many": "%lld quadros",
+    "other": "%lld quadros"
+  },
+  "%lld Bilder aufgenommen": {
+    "one": "%lld quadro capturado",
+    "many": "%lld quadros capturados",
+    "other": "%lld quadros capturados"
+  },
+  "Fertig! %lld Bilder": {
+    "one": "Pronto! %lld quadro",
+    "many": "Pronto! %lld quadros",
+    "other": "Pronto! %lld quadros"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "one": "%lld quadro · folha de contato",
+    "many": "%lld quadros · folha de contato",
+    "other": "%lld quadros · folha de contato"
+  },
+  "%lld Werke montieren": {
+    "one": "Montar %lld obra",
+    "many": "Montar %lld obras",
+    "other": "Montar %lld obras"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "one": "Apagados recentemente: restaurar %lld quadro",
+    "many": "Apagados recentemente: restaurar %lld quadros",
+    "other": "Apagados recentemente: restaurar %lld quadros"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "one": "mais %lld para um segundo de filme",
+    "many": "mais %lld para um segundo de filme",
+    "other": "mais %lld para um segundo de filme"
+  },
+  "%lld Sekunden Film!": {
+    "one": "%lld segundo de filme!",
+    "many": "%lld segundos de filme!",
+    "other": "%lld segundos de filme!"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "one": "Intervalo, a cada %lld segundo",
+    "many": "Intervalo, a cada %lld segundos",
+    "other": "Intervalo, a cada %lld segundos"
+  }
+}

@@ -14,4 +14,5 @@ Lo Studio – e il suono.
 • Musica o suono: scegli un file audio nella vista dell’opera – accompagna il film esportato.
 • Fino a 30 fps: 15, 24, 25 e 30 fps per un movimento fluido.
 • Duplicare e riordinare: clic secondario su un fotogramma per duplicarlo o spostarlo – oppure trascinalo in un altro punto del provino.
-• Ora anche in spagnolo, italiano e olandese, e al primo avvio ti aspetta un’opera di esempio.
+• Effetti sonori e sintesi vocale: aggiungi pop, whoosh, rullo di tamburi, tadà e altro a qualsiasi fotogramma, oppure fai leggere un testo a una voce. Tutto nasce sul dispositivo. In più un aiuto con brevi guide nelle impostazioni.
+• Ora anche in spagnolo, italiano, olandese, giapponese e portoghese, e al primo avvio ti aspetta un’opera di esempio.

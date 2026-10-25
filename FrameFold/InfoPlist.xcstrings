@@ -35,10 +35,22 @@
             "value": "In modalità live, FrameFold riprende fotogrammi automaticamente quando le tue mani sono fuori dall’inquadratura."
           }
         },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ライブモードでは、手が画面から出るたびに FrameFold が自動でコマを撮影します。"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "In de livemodus neemt FrameFold automatisch beelden op wanneer je handen uit beeld zijn."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No modo ao vivo, o FrameFold captura quadros automaticamente sempre que suas mãos saem da imagem."
           }
         }
       }
@@ -77,10 +89,22 @@
             "value": "Per salvare i video stop motion finiti nella tua libreria foto."
           }
         },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完成したコマ撮り動画をフォトライブラリに保存するために使用します。"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Om voltooide stop-motionvideo’s in je fotobibliotheek te bewaren."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para salvar os vídeos em stop motion prontos na sua fototeca."
           }
         }
       }
@@ -119,10 +143,22 @@
             "value": "Nello Studio, FrameFold riconosce le parole pronunciate in una traccia audio (solo sul dispositivo) per abbinare le forme della bocca ai fotogrammi."
           }
         },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Studio では、口の形をコマに合わせるため、FrameFold がオーディオトラック内の話し言葉を認識します – 処理はデバイス上だけで行われます。"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "In de Studio herkent FrameFold gesproken woorden in een geluidsspoor – alleen op het apparaat – om mondvormen aan beelden te koppelen."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Studio, o FrameFold reconhece palavras faladas numa faixa de áudio – só no dispositivo – para combinar formas da boca com os quadros."
           }
         }
       }
@@ -161,10 +197,22 @@
             "value": "Su tua richiesta, FrameFold registra voce o suoni per il tuo film. La registrazione resta sul dispositivo."
           }
         },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ご希望に応じて、FrameFold が映像用の声やサウンドを録音します。録音はデバイス内にとどまります。"
+          }
+        },
         "nl": {
           "stringUnit": {
             "state": "translated",
             "value": "Op jouw verzoek neemt FrameFold stem of geluid op voor je film. De opname blijft op het apparaat."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A seu pedido, o FrameFold grava voz ou som para o seu filme. A gravação fica no dispositivo."
           }
         }
       }

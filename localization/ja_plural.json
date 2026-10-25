@@ -1,0 +1,30 @@
+{
+  "_hinweis": "Japanisch kennt keine Pluralformen: nur „other“.",
+  "%lld Bilder": {
+    "other": "%lld コマ"
+  },
+  "%lld Bilder aufgenommen": {
+    "other": "%lld コマ撮影しました"
+  },
+  "Fertig! %lld Bilder": {
+    "other": "完了！ %lld コマ"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "other": "%lld コマ · コンタクトシート"
+  },
+  "%lld Werke montieren": {
+    "other": "%lld 作品をつなげる"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "other": "最近削除した項目：%lld コマを復元"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "other": "あと %lld コマで映像 1 秒分"
+  },
+  "%lld Sekunden Film!": {
+    "other": "映像 %lld 秒分！"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "other": "インターバル、%lld 秒ごと"
+  }
+}

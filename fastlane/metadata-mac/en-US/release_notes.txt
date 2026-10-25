@@ -14,4 +14,5 @@ The Studio – and sound.
 • Music or sound: pick an audio file in the work view – it plays under the exported film.
 • Up to 30 fps: 15, 24, 25 and 30 fps for smooth motion.
 • Duplicate and reorder frames: right-click a frame for “Duplicate”, “Move earlier” and “Move later” – or drag it to a new place in the contact sheet.
-• Now also in Spanish, Italian and Dutch – and a sample work is waiting on first launch to try things out.
+• Sound effects and text to speech: attach pop, whoosh, drum roll, ta-da and more to any frame – or have a voice speak typed text. Everything is made on the device. Plus a help section with short guides in the settings.
+• Now also in Spanish, Italian, Dutch, Japanese and Portuguese – and a sample work is waiting on first launch to try things out.

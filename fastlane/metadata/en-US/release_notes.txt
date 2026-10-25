@@ -2,7 +2,7 @@ FrameFold 2.6
 
 Now on iPad too – and with sound.
 
-• Undo and redo for everything in a work (reordering, removing, text …) – by button, ⌘Z or shaking. The Studio is now on iPhone too (live settings → Studio).
+• Undo and redo for everything in a work (reordering, removing, text …) – by button or ⌘Z. The Studio is now on iPhone too (live settings → Studio).
 • Text, speech bubbles and drawing: press and hold a frame → “Text & drawing …”. Text and bubbles span several frames, drawings belong to one frame.
 • Full resolution: every frame comes as a photo from the sensor, export up to 4K. Plus lens choice (ultra wide, telephoto, front camera), clap to shoot, adding photos as frames and looks for the whole film.
 • iPad: FrameFold runs on iPad, portrait and landscape. In a stand, viewfinder and frames follow the way the device is turned.
@@ -13,4 +13,5 @@ Now on iPad too – and with sound.
 • Up to 30 fps: 15, 24, 25 and 30 fps for smooth motion.
 • Manual camera (from Advanced): set ISO, shutter speed, focus and white balance yourself – the automatic metering then stays out of it.
 • Duplicate and reorder frames: press and hold a frame for “Duplicate”, “Move earlier” and “Move later” – or simply drag it to a new place in the contact sheet.
-• Now also in Spanish, Italian and Dutch – and a sample work is waiting on first launch to try things out.
+• Sound effects and text to speech: attach pop, whoosh, drum roll, ta-da and more to any frame – or have a voice speak typed text. Everything is made on the device. Plus a help section with short guides in the settings.
+• Now also in Spanish, Italian, Dutch, Japanese and Portuguese – and a sample work is waiting on first launch to try things out.
