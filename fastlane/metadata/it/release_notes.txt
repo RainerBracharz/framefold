@@ -2,6 +2,7 @@ FrameFold 2.6
 
 Ora anche su iPad – e con il suono.
 
+• Annulla e ripeti per tutto nell’opera (riordinare, rimuovere, testo…): con il pulsante, ⌘Z o scuotendo. Lo Studio ora c’è anche su iPhone (impostazioni dal vivo → Studio).
 • Testo, fumetti e disegno: tieni premuto un fotogramma → «Testo e disegno …». Testi e fumetti valgono per più fotogrammi, i disegni per uno.
 • Risoluzione piena: ogni fotogramma è una foto dal sensore, esportazione fino a 4K. Inoltre: scelta dell’obiettivo (ultra grandangolo, teleobiettivo, fotocamera anteriore), scatto con un battito di mani, foto come fotogrammi e look per tutto il film.
 • iPad: FrameFold funziona su iPad, in verticale e in orizzontale. Su un supporto, mirino e fotogrammi seguono l’orientamento del dispositivo.

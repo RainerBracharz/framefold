@@ -2,6 +2,7 @@ FrameFold 2.6
 
 Now on iPad too – and with sound.
 
+• Undo and redo for everything in a work (reordering, removing, text …) – by button, ⌘Z or shaking. The Studio is now on iPhone too (live settings → Studio).
 • Text, speech bubbles and drawing: press and hold a frame → “Text & drawing …”. Text and bubbles span several frames, drawings belong to one frame.
 • Full resolution: every frame comes as a photo from the sensor, export up to 4K. Plus lens choice (ultra wide, telephoto, front camera), clap to shoot, adding photos as frames and looks for the whole film.
 • iPad: FrameFold runs on iPad, portrait and landscape. In a stand, viewfinder and frames follow the way the device is turned.

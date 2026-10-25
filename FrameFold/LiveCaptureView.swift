@@ -22,6 +22,8 @@ struct LiveCaptureView: View {
     @StateObject private var level = MotionLevel()
     @AppStorage("liveShowGrid") private var showGrid = true
     @AppStorage("liveShowLevel") private var showLevel = true
+    /// iPhone: Studio-Arbeitsfläche statt des einfachen Suchers (ab „Erweitert“)
+    @AppStorage("iPhoneStudio") private var iPhoneStudio = false
     @AppStorage("didSeeCameraTip") private var didSeeCameraTip = false
     /// Live-Loop im Sucher groß oder klein
     @State private var loopLarge = false
@@ -573,7 +575,8 @@ struct LiveCaptureView: View {
     /// Bedienleiste strukturell nicht verschwinden.
     private func captureView(project: Project) -> some View {
         Group {
-            if mode.showsAdvanced, Platform.isMac || (Platform.isPad && horizontalSizeClass == .regular) {
+            if mode.showsAdvanced, Platform.isMac || (Platform.isPad && horizontalSizeClass == .regular)
+                || (!Platform.isPad && iPhoneStudio) {
                 // Profi-Arbeitsfläche: Betrachter, Zeitleiste, Inspektor
                 StudioView(controller: controller, projectID: project.id,
                            onFinish: { finishSession(project: project) },

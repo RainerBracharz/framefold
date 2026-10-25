@@ -2,6 +2,7 @@ FrameFold 2.6
 
 Jetzt auch auf dem iPad – und mit Ton.
 
+• Rückgängig und Wiederholen für alles am Werk (Umordnen, Entfernen, Text …) – per Knopf, ⌘Z oder Schütteln. Das Studio gibt es jetzt auch auf dem iPhone (Live-Einstellungen → Studio).
 • Text, Sprechblasen und Zeichnen: Ein Bild lange drücken → „Text & Zeichnen …“. Text und Sprechblasen gelten für mehrere Bilder, Zeichnungen für ein Bild.
 • Volle Auflösung: Jedes Bild kommt als Foto vom Sensor, Export bis 4K. Dazu Objektivwahl (Ultraweitwinkel, Tele, Frontkamera), Auslösen per Klatschen, Fotos als Bilder hinzufügen und Looks für den ganzen Film.
 • iPad: FrameFold läuft auf dem iPad, hoch und quer. Im Ständer folgen Sucher und Bilder der Lage des Geräts.

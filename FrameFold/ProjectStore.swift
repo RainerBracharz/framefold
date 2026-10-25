@@ -283,6 +283,7 @@ final class ProjectStore: ObservableObject {
     @discardableResult
     func replaceFrame(named old: String, jpegData: Data, in project: Project) -> String? {
         guard let index = project.frameFilenames.firstIndex(of: old) else { return nil }
+        recordUndo(project.id, String(localized: "Neu aufnehmen"))
         var updated = project
         let number = nextNumber(for: updated)
         let filename = String(format: "%06d.jpg", number)
@@ -339,6 +340,7 @@ final class ProjectStore: ObservableObject {
 
     /// Notiz zu Bild `number` setzen; leerer Text entfernt sie.
     func setNote(_ text: String, forFrame number: Int, in project: Project) {
+        recordUndo(project.id, String(localized: "Notiz"))
         var updated = project
         var notes = updated.notes ?? [:]
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -411,6 +413,56 @@ final class ProjectStore: ObservableObject {
         directory(for: project).appendingPathComponent(track.filename)
     }
 
+    // MARK: Rückgängig
+
+    /// Die Undo-Verwaltung des Fensters (⌘Z, Bearbeiten-Menü, Schütteln am
+    /// iPhone). Gesetzt von der Oberfläche; ohne sie wird nichts vermerkt.
+    weak var undoManager: UndoManager?
+    private var lastUndoKey: (String, Date)?
+
+    /// Stand des Werks vor einer Änderung vermerken. Mehrere schnelle
+    /// Änderungen am selben Ding (Text tippen, Sprechblase ziehen) werden zu
+    /// einem Schritt zusammengefasst.
+    private func recordUndo(_ projectID: UUID, _ name: String, coalesce key: String? = nil) {
+        guard let undoManager, let before = projects.first(where: { $0.id == projectID }) else { return }
+        if let key, let last = lastUndoKey, last.0 == key, Date().timeIntervalSince(last.1) < 1.5 {
+            lastUndoKey = (key, Date())
+            return
+        }
+        lastUndoKey = key.map { ($0, Date()) }
+        undoManager.registerUndo(withTarget: self) { store in
+            MainActor.assumeIsolated { store.applyUndo(before) }
+        }
+        undoManager.setActionName(name)
+    }
+
+    /// Einen vermerkten Stand wiederherstellen – und den jetzigen für
+    /// „Wiederholen“ vermerken. Bilddateien wandern dabei zwischen Werk und
+    /// Papierkorb, damit Liste und Ordner zusammenpassen.
+    private func applyUndo(_ snapshot: Project) {
+        guard let current = projects.first(where: { $0.id == snapshot.id }) else { return }
+        lastUndoKey = nil
+        undoManager?.registerUndo(withTarget: self) { store in
+            MainActor.assumeIsolated { store.applyUndo(current) }
+        }
+        let dir = directory(for: snapshot)
+        let trashDir = dir.appendingPathComponent("trash", isDirectory: true)
+        let fm = FileManager.default
+        try? fm.createDirectory(at: trashDir, withIntermediateDirectories: true)
+        for name in snapshot.frameFilenames where !fm.fileExists(atPath: dir.appendingPathComponent(name).path) {
+            try? fm.moveItem(at: trashDir.appendingPathComponent(name), to: dir.appendingPathComponent(name))
+        }
+        for name in snapshot.trashFilenames ?? [] where !snapshot.frameFilenames.contains(name)
+            && fm.fileExists(atPath: dir.appendingPathComponent(name).path) {
+            try? fm.moveItem(at: dir.appendingPathComponent(name), to: trashDir.appendingPathComponent(name))
+        }
+        var restored = snapshot
+        // Fortlaufende Nummer nie zurückdrehen – sonst überschriebe das
+        // nächste Bild eine Datei, die noch im Papierkorb liegt.
+        restored.nextFrameNumber = max(snapshot.nextFrameNumber ?? 0, current.nextFrameNumber ?? 0)
+        save(restored)
+    }
+
     // MARK: Beispielwerk
 
     /// Beim allerersten Start ein kleines Beispielwerk anlegen (die Faltung
@@ -437,6 +489,7 @@ final class ProjectStore: ObservableObject {
 
     /// Einblendung anlegen oder ändern (gleiche Kennung = ersetzen).
     func upsertOverlay(_ overlay: FrameOverlay, in projectID: UUID) {
+        recordUndo(projectID, String(localized: "Text & Zeichnen"), coalesce: "overlay-\(overlay.id)")
         guard var updated = projects.first(where: { $0.id == projectID }) else { return }
         var all = updated.overlays ?? []
         if let i = all.firstIndex(where: { $0.id == overlay.id }) { all[i] = overlay } else { all.append(overlay) }
@@ -445,6 +498,7 @@ final class ProjectStore: ObservableObject {
     }
 
     func removeOverlay(id: UUID, in projectID: UUID) {
+        recordUndo(projectID, String(localized: "Text & Zeichnen"))
         guard var updated = projects.first(where: { $0.id == projectID }) else { return }
         updated.overlays?.removeAll { $0.id == id }
         if updated.overlays?.isEmpty == true { updated.overlays = nil }
@@ -455,6 +509,7 @@ final class ProjectStore: ObservableObject {
 
     /// Greenscreen-Farbe setzen (`.none` schaltet ab, der Hintergrund bleibt gemerkt).
     func setGreenScreenKey(_ key: ChromaKey, in projectID: UUID) {
+        recordUndo(projectID, String(localized: "Greenscreen"))
         guard var updated = projects.first(where: { $0.id == projectID }) else { return }
         var green = updated.greenScreen ?? GreenScreen()
         green.key = key
@@ -534,6 +589,7 @@ final class ProjectStore: ObservableObject {
     @discardableResult
     func duplicateFrame(named name: String, in project: Project) -> String? {
         guard let index = project.frameFilenames.firstIndex(of: name) else { return nil }
+        recordUndo(project.id, String(localized: "Verdoppeln"))
         var updated = project
         let number = nextNumber(for: updated)
         let filename = String(format: "%06d.jpg", number)
@@ -555,6 +611,7 @@ final class ProjectStore: ObservableObject {
         guard let index = project.frameFilenames.firstIndex(of: name) else { return }
         let target = min(max(index + offset, 0), project.frameFilenames.count - 1)
         guard target != index else { return }
+        recordUndo(project.id, String(localized: "Verschieben"))
         var updated = project
         updated.frameFilenames.remove(at: index)
         updated.frameFilenames.insert(name, at: target)
@@ -572,6 +629,7 @@ final class ProjectStore: ObservableObject {
 
     /// Verschiebt Frames in den Papierkorb (30 Tage wiederherstellbar).
     func removeFrames(at offsets: IndexSet, from project: Project) {
+        recordUndo(project.id, String(localized: "Bild entfernen"))
         var updated = project
         let dir = directory(for: updated)
         let trashDir = dir.appendingPathComponent("trash", isDirectory: true)
@@ -599,6 +657,7 @@ final class ProjectStore: ObservableObject {
     /// Holt alle Frames aus dem Papierkorb zurück (ans Ende der Timeline,
     /// in ursprünglicher Reihenfolge).
     func restoreTrash(in project: Project) {
+        recordUndo(project.id, String(localized: "Wiederherstellen"))
         var updated = project
         guard let trash = updated.trashFilenames, !trash.isEmpty else { return }
         let dir = directory(for: updated)

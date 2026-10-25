@@ -15,6 +15,7 @@ struct LiveSettingsView: View {
     @AppStorage("liveOnionOpacity") private var onionOpacity: Double = 0.35
     @AppStorage("liveOnionFirst") private var onionFirst: Bool = false
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
+    @AppStorage("iPhoneStudio") private var iPhoneStudio = false
     private var mode: AppMode { AppMode.current(modeRaw) }
 
     var body: some View {
@@ -64,6 +65,21 @@ struct LiveSettingsView: View {
                         CameraOptionsPanel(controller: controller)
                     } header: {
                         CatalogLabel("Kamera")
+                    }
+                    .listRowBackground(Theme.paperShade.opacity(0.5))
+                }
+
+                if mode.showsAdvanced, !Platform.isMac, !Platform.isPad {
+                    Section {
+                        Toggle(isOn: $iPhoneStudio) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Studio-Arbeitsfläche").font(Theme.body)
+                                Text("Zeitleiste, Abspielen, Zwiebelhaut über mehrere Bilder, Masken, Lupe, Ton und X-Sheet – wie am iPad und Mac.")
+                                    .font(Theme.mono(10)).foregroundStyle(Theme.graphite)
+                            }
+                        }
+                    } header: {
+                        CatalogLabel("Studio")
                     }
                     .listRowBackground(Theme.paperShade.opacity(0.5))
                 }

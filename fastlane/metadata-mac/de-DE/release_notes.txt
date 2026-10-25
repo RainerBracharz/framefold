@@ -2,6 +2,7 @@ FrameFold 2.6
 
 Das Studio – und Ton.
 
+• Rückgängig und Wiederholen für alles am Werk (Umordnen, Entfernen, Text …) – per Knopf oder ⌘Z / ⇧⌘Z.
 • Text, Sprechblasen und Zeichnen: Ein Bild lange drücken → „Text & Zeichnen …“. Text und Sprechblasen gelten für mehrere Bilder, Zeichnungen für ein Bild.
 • Außerdem: Export bis 4K, Auslösen per Klatschen, Fotos als Bilder hinzufügen und Looks für den ganzen Film.
 • Studio: Ab „Erweitert“ wird die Kamera zur Profi-Arbeitsfläche – Zeitleiste zum Ziehen, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder, Differenz- und Belichtungsansicht, Formatmasken, Raster, Referenzbild oder -film mit Chroma-Key, Notizen je Bild, Mitteln gegen Rauschen, Zeitraffer mit Start- und Endzeit. Alles auch über Tasten (Menü „Studio“).

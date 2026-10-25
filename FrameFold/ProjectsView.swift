@@ -383,6 +383,9 @@ struct ProjectDetailView: View {
             ToolbarItem(placement: .principal) {
                 WorkTitle(verbatim: currentProject.name, size: 17)
             }
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                UndoRedoButtons(tint: Theme.ink)
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 // Einzelne Frames entfernen ist Grundhygiene – in jedem Modus.
                 Button {
@@ -1548,5 +1551,40 @@ struct FolderExporter: UIViewControllerRepresentable {
         init(onDone: @escaping () -> Void) { self.onDone = onDone }
         func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) { onDone() }
         func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) { onDone() }
+    }
+}
+
+
+/// Rückgängig / Wiederholen als Knöpfe – dieselbe Undo-Verwaltung wie ⌘Z
+/// und Schütteln. Grau, solange es nichts zu tun gibt.
+struct UndoRedoButtons: View {
+    var tint: Color
+    @Environment(\.undoManager) private var undoManager
+    @State private var canUndo = false
+    @State private var canRedo = false
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Button { undoManager?.undo(); refresh() } label: { Image(systemName: "arrow.uturn.backward") }
+                .disabled(!canUndo)
+                .help(Text(undoManager?.undoMenuItemTitle ?? String(localized: "Rückgängig")))
+                .accessibilityLabel(Text("Rückgängig"))
+            Button { undoManager?.redo(); refresh() } label: { Image(systemName: "arrow.uturn.forward") }
+                .disabled(!canRedo)
+                .help(Text(undoManager?.redoMenuItemTitle ?? String(localized: "Wiederholen")))
+                .accessibilityLabel(Text("Wiederholen"))
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(tint)
+        .frame(minWidth: 60, minHeight: 30)
+        .onAppear(perform: refresh)
+        .onReceive(NotificationCenter.default.publisher(for: .NSUndoManagerDidCloseUndoGroup)) { _ in refresh() }
+        .onReceive(NotificationCenter.default.publisher(for: .NSUndoManagerDidUndoChange)) { _ in refresh() }
+        .onReceive(NotificationCenter.default.publisher(for: .NSUndoManagerDidRedoChange)) { _ in refresh() }
+    }
+
+    private func refresh() {
+        canUndo = undoManager?.canUndo ?? false
+        canRedo = undoManager?.canRedo ?? false
     }
 }

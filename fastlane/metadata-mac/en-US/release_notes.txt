@@ -2,6 +2,7 @@ FrameFold 2.6
 
 The Studio – and sound.
 
+• Undo and redo for everything in a work (reordering, removing, text …) – by button or ⌘Z / ⇧⌘Z.
 • Text, speech bubbles and drawing: press and hold a frame → “Text & drawing …”. Text and bubbles span several frames, drawings belong to one frame.
 • Also: export up to 4K, clap to shoot, adding photos as frames and looks for the whole film.
 • Studio: from Advanced mode the camera becomes a pro workspace – draggable timeline, toggle between live view and captured frames, multi-frame onion skin, difference and exposure views, aspect masks, grids, a reference image or movie with chroma key, notes per frame, frame averaging against noise, time-lapse with start and end time. All on the keyboard too (Studio menu).

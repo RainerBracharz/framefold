@@ -45,6 +45,7 @@ struct StudioView: View {
     @State private var showXSheet = false
     @State private var showVoice = false
     @State private var overlayFrame: Int?
+    @State private var showInspector = false
     @State private var importKind: ImportKind = .reference
     @StateObject private var folderWatch = StudioFolderWatch()
     @State private var volumeDraft: [UUID: Double] = [:]
@@ -64,7 +65,85 @@ struct StudioView: View {
         withDialogs(withImporter(withLifecycle(layout)))
     }
 
+    /// iPhone: alles untereinander, der Inspektor als eigenes Blatt.
+    private var compact: Bool { !Platform.isMac && !Platform.isPad }
+
+    @ViewBuilder
     private var layout: some View {
+        if compact {
+            VStack(spacing: 0) {
+                viewer
+                compactTransport
+                timeline
+            }
+            .background(Color.black)
+            .background { HardwareShutterBridge { handle(.capture) } }
+            .sheet(isPresented: $showInspector) {
+                NavigationStack {
+                    inspector
+                        .background(Theme.darkroom)
+                        .toolbar {
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("Fertig") { showInspector = false }
+                            }
+                        }
+                }
+                .preferredColorScheme(.dark)
+                .presentationDetents([.medium, .large])
+            }
+        } else {
+            wideLayout
+        }
+    }
+
+    /// Transport fürs iPhone: Werkzeuge zum Wischen, darunter groß Auslösen.
+    private var compactTransport: some View {
+        VStack(spacing: 6) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 2) {
+                    transportButton("backward.frame", "Bild zurück (←)") { handle(.stepBack) }
+                    transportButton(playing ? "stop.fill" : "play.fill", "Abspielen (P)") { handle(.play) }
+                    transportButton("goforward", "Kurz abspielen (K)") { handle(.shortPlay) }
+                    transportButton("forward.frame", "Bild vor (→)") { handle(.stepForward) }
+                    transportButton("record.circle", "Live-Bild (L)", active: showsLive) { handle(.live) }
+                    transportButton("arrow.left.arrow.right", "Umschalten (T)", active: showCaptured) { handle(.toggle) }
+                    transportButton("repeat", "Auto-Umschalten (⇧T)", active: autoToggle) { handle(.autoToggle) }
+                    transportButton("chevron.left.to.line", "Schleifenanfang (I)", active: loopIn != nil) { handle(.loopIn) }
+                    transportButton("chevron.right.to.line", "Schleifenende (O)", active: loopOut != nil) { handle(.loopOut) }
+                    UndoRedoButtons(tint: Theme.paperOnDark)
+                }
+                .padding(.horizontal, 8)
+            }
+            HStack(spacing: 10) {
+                Button { showInspector = true } label: {
+                    Image(systemName: "slider.horizontal.3").frame(width: 44, height: 44)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(Theme.paperOnDark)
+                .accessibilityLabel(Text("Einstellungen"))
+                Button { handle(.capture) } label: {
+                    Label("Auslösen", systemImage: "circle.inset.filled")
+                        .font(Theme.caption(13))
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .background(Theme.amber)
+                        .foregroundStyle(.black)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text("Auslöser"))
+                Button("Fertig · \(controller.capturedCount)", action: onFinish)
+                    .buttonStyle(.plain)
+                    .font(Theme.caption(12))
+                    .padding(.horizontal, 12).frame(minHeight: 44)
+                    .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.5), lineWidth: 1))
+                    .foregroundStyle(Theme.paperOnDark)
+            }
+            .padding(.horizontal, 12)
+        }
+        .padding(.vertical, 8)
+        .background(Theme.darkroom)
+    }
+
+    private var wideLayout: some View {
         HStack(spacing: 0) {
             VStack(spacing: 0) {
                 viewer
@@ -436,6 +515,8 @@ struct StudioView: View {
             transportButton("repeat", "Auto-Umschalten (⇧T)", active: autoToggle) { handle(.autoToggle) }
             transportButton("chevron.left.to.line", "Schleifenanfang (I)", active: loopIn != nil) { handle(.loopIn) }
             transportButton("chevron.right.to.line", "Schleifenende (O)", active: loopOut != nil) { handle(.loopOut) }
+            Divider().frame(height: 22).overlay(Theme.paperOnDark.opacity(0.2))
+            UndoRedoButtons(tint: Theme.paperOnDark)
             Spacer()
             Button {
                 handle(.capture)

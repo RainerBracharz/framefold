@@ -355,3 +355,51 @@ final class ImportIntoExistingWorkTests: XCTestCase {
                        "Vorhandene Bilder bleiben vorne")
     }
 }
+
+@MainActor
+final class UndoTests: XCTestCase {
+    func testUndoRedoOfRemoveMoveAndOverlay() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("ff-undo-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: root) }
+        let suite = "ff-undo-\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let store = ProjectStore(root: root, defaults: defaults)
+        let undo = UndoManager()
+        undo.groupsByEvent = false
+        store.undoManager = undo
+        let project = store.createProject(name: "A")
+        for i in 0..<3 { store.appendFrame(jpegData: Data([0xFF, 0xD8, UInt8(i), 0xFF, 0xD9]), to: store.projects[0]) }
+        func names() -> [String] { store.projects[0].frameFilenames }
+        let dir = root.appendingPathComponent(project.id.uuidString)
+
+        func step(_ body: () -> Void) { undo.beginUndoGrouping(); body(); undo.endUndoGrouping() }
+
+        step { store.removeFrames(at: IndexSet(integer: 1), from: store.projects[0]) }
+        XCTAssertEqual(names(), ["000000.jpg", "000002.jpg"])
+        undo.undo()
+        XCTAssertEqual(names(), ["000000.jpg", "000001.jpg", "000002.jpg"])
+        XCTAssertTrue(FileManager.default.fileExists(atPath: dir.appendingPathComponent("000001.jpg").path),
+                      "Datei zurück aus dem Papierkorb")
+        undo.redo()
+        XCTAssertEqual(names(), ["000000.jpg", "000002.jpg"])
+        XCTAssertFalse(FileManager.default.fileExists(atPath: dir.appendingPathComponent("000001.jpg").path))
+        undo.undo()
+
+        step { store.moveFrame(named: "000000.jpg", by: 2, in: store.projects[0]) }
+        XCTAssertEqual(names(), ["000001.jpg", "000002.jpg", "000000.jpg"])
+        undo.undo()
+        XCTAssertEqual(names(), ["000000.jpg", "000001.jpg", "000002.jpg"])
+
+        step { store.upsertOverlay(FrameOverlay(kind: .text, firstFrame: 0, lastFrame: 1, text: "Hi"), in: project.id) }
+        XCTAssertEqual(store.projects[0].overlays?.count, 1)
+        undo.undo()
+        XCTAssertNil(store.projects[0].overlays)
+
+        // Neue Bilder nach einem Rückgängig überschreiben nichts
+        step { store.duplicateFrame(named: "000000.jpg", in: store.projects[0]) }
+        undo.undo()
+        let next = store.appendFrame(jpegData: Data([0xFF, 0xD8, 9, 0xFF, 0xD9]), to: store.projects[0])
+        XCTAssertEqual(next, "000004.jpg")
+    }
+}

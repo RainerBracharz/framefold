@@ -2,6 +2,7 @@ FrameFold 2.6
 
 Désormais aussi sur iPad – et avec du son.
 
+• Annuler et rétablir pour tout dans une œuvre (réordonner, retirer, texte …) – par bouton, ⌘Z ou en secouant. Le Studio existe désormais aussi sur iPhone (réglages en direct → Studio).
 • Texte, bulles et dessin : appuie longuement sur une image → « Texte et dessin … ». Textes et bulles couvrent plusieurs images, les dessins une seule.
 • Pleine résolution : chaque image est une photo du capteur, export jusqu’en 4K. Et aussi : choix de l’objectif (ultra grand-angle, téléobjectif, caméra avant), déclenchement en tapant des mains, ajout de photos comme images et looks pour tout le film.
 • iPad : FrameFold fonctionne sur iPad, en portrait et en paysage. Sur un support, le viseur et les images suivent l’orientation de l’appareil.

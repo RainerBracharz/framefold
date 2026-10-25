@@ -286,6 +286,8 @@ struct FrameFoldApp: App {
                     .tag(2)
             }
             .environmentObject(projectStore)
+            // ⌘Z / Schütteln: Änderungen an Werken zurücknehmen
+            .background(UndoBridge(store: projectStore))
             // „Mit der Kamera weiterarbeiten" aus der Werkansicht
             .onReceive(NotificationCenter.default.publisher(for: .ffContinueWork)) { _ in
                 selectedTab = 1
@@ -426,5 +428,18 @@ struct FrameFoldApp: App {
     private func show(tab: Int, then name: Notification.Name) {
         selectedTab = tab
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { post(name) }
+    }
+}
+
+
+/// Reicht die Undo-Verwaltung des Fensters an den Werke-Speicher weiter.
+private struct UndoBridge: View {
+    let store: ProjectStore
+    @Environment(\.undoManager) private var undoManager
+
+    var body: some View {
+        Color.clear
+            .onAppear { store.undoManager = undoManager }
+            .onChange(of: undoManager) { _, manager in store.undoManager = manager }
     }
 }

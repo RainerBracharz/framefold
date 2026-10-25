@@ -1,6 +1,6 @@
-# FrameFold Studio (Mac und iPad)
+# FrameFold Studio (Mac, iPad und iPhone)
 
-Die Profi-Arbeitsfläche am Mac und am iPad (im Vollbild oder in einem breiten Fenster). Sie erscheint in der Kamera, sobald der Modus **Erweitert** oder **Atelier** eingestellt ist. Am iPad lösen auch die Lautstärketasten aus; die Tastenbefehle gelten mit angeschlossener Tastatur.
+Die Profi-Arbeitsfläche am Mac und am iPad (im Vollbild oder in einem breiten Fenster) und, eingeschaltet unter Live-Einstellungen → Studio, auch am iPhone (hochkant, Inspektor als eigenes Blatt). Alle Änderungen am Werk lassen sich rückgängig machen und wiederholen: Pfeil-Knöpfe, ⌘Z / ⇧⌘Z oder am iPhone Schütteln. Sie erscheint in der Kamera, sobald der Modus **Erweitert** oder **Atelier** eingestellt ist. Am iPad lösen auch die Lautstärketasten aus; die Tastenbefehle gelten mit angeschlossener Tastatur.
 Im Modus **Einfach** bleibt es beim schlichten Sucher.
 
 Die Arbeitsfläche besteht aus vier Teilen:

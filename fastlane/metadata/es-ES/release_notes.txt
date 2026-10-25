@@ -2,6 +2,7 @@ FrameFold 2.6
 
 Ahora también en iPad – y con sonido.
 
+• Deshacer y rehacer para todo en una obra (reordenar, quitar, texto…): con botón, ⌘Z o agitando. El Studio ya está también en el iPhone (ajustes en directo → Studio).
 • Texto, bocadillos y dibujo: mantén pulsado un fotograma → «Texto y dibujo …». Textos y bocadillos abarcan varios fotogramas; los dibujos, uno.
 • Resolución completa: cada fotograma es una foto del sensor, exportación hasta 4K. Además: elección de objetivo (ultra gran angular, teleobjetivo, cámara frontal), disparo con una palmada, añadir fotos como fotogramas y estilos para toda la película.
 • iPad: FrameFold funciona en iPad, en vertical y en horizontal. En un soporte, el visor y los fotogramas siguen la orientación del dispositivo.
