@@ -2,6 +2,7 @@ FrameFold 2.6
 
 Jetzt auch auf dem iPad – und mit Ton.
 
+• Text, Sprechblasen und Zeichnen: Ein Bild lange drücken → „Text & Zeichnen …“. Text und Sprechblasen gelten für mehrere Bilder, Zeichnungen für ein Bild.
 • Volle Auflösung: Jedes Bild kommt als Foto vom Sensor, Export bis 4K. Dazu Objektivwahl (Ultraweitwinkel, Tele, Frontkamera), Auslösen per Klatschen, Fotos als Bilder hinzufügen und Looks für den ganzen Film.
 • iPad: FrameFold läuft auf dem iPad, hoch und quer. Im Ständer folgen Sucher und Bilder der Lage des Geräts.
 • Greenscreen, Titel und Abspann: Grün oder Blau durch ein Bild oder einen Film ersetzen, dazu eine Titelkarte vor dem Film und ein Abspann danach.

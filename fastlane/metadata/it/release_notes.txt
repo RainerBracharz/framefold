@@ -2,6 +2,7 @@ FrameFold 2.6
 
 Ora anche su iPad – e con il suono.
 
+• Testo, fumetti e disegno: tieni premuto un fotogramma → «Testo e disegno …». Testi e fumetti valgono per più fotogrammi, i disegni per uno.
 • Risoluzione piena: ogni fotogramma è una foto dal sensore, esportazione fino a 4K. Inoltre: scelta dell’obiettivo (ultra grandangolo, teleobiettivo, fotocamera anteriore), scatto con un battito di mani, foto come fotogrammi e look per tutto il film.
 • iPad: FrameFold funziona su iPad, in verticale e in orizzontale. Su un supporto, mirino e fotogrammi seguono l’orientamento del dispositivo.
 • Green screen, titolo e titoli di coda: sostituisci il verde o il blu con un’immagine o un film, con un cartello del titolo prima del film e i titoli di coda alla fine.

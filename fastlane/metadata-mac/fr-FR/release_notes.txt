@@ -2,6 +2,7 @@ FrameFold 2.6
 
 Le Studio – et le son.
 
+• Texte, bulles et dessin : appuie longuement sur une image → « Texte et dessin … ». Textes et bulles couvrent plusieurs images, les dessins une seule.
 • Et aussi : export jusqu’en 4K, déclenchement en tapant des mains, ajout de photos comme images et looks pour tout le film.
 • Studio : dès le mode Avancé, la caméra devient un espace de travail pro – timeline à glisser, bascule entre direct et prises, pelure d’oignon sur plusieurs images, vues différence et exposition, masques de format, grilles, image ou film de référence avec incrustation, notes par image, moyenne contre le bruit, time-lapse avec heure de début et de fin. Tout au clavier aussi (menu Studio).
 • Fond vert, titre et générique : remplace le vert ou le bleu par une image ou un film, avec un carton de titre avant le film et un générique après.

@@ -2,6 +2,7 @@ FrameFold 2.6
 
 Nu ook op de iPad – en met geluid.
 
+• Tekst, tekstballonnen en tekenen: houd een beeld ingedrukt → ‘Tekst en tekenen …’. Tekst en ballonnen gelden voor meerdere beelden, tekeningen voor één beeld.
 • Volledige resolutie: elk beeld is een foto van de sensor, export tot 4K. Plus lenskeuze (ultragroothoek, tele, frontcamera), afdrukken met klappen, foto’s als beelden toevoegen en looks voor de hele film.
 • iPad: FrameFold werkt op de iPad, staand en liggend. In een standaard volgen zoeker en beelden de stand van het apparaat.
 • Greenscreen, titel en aftiteling: vervang groen of blauw door een afbeelding of film, met een titelkaart vóór de film en aftiteling erna.

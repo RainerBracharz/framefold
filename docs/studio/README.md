@@ -81,6 +81,8 @@ Mit „Ordner beobachten“ wird jede Kamera nutzbar, die FrameFold nicht selbst
 
 ## Greenscreen, Titel und Abspann
 
+- **Text, Sprechblasen, Zeichnen**: Im Kontextmenü eines Bilds (Zeitleiste oder Kontaktbogen) „Text & Zeichnen …“. Ins Bild tippen setzt Text oder Sprechblase, die für einen wählbaren Bereich von Bildern gilt; der Stift zeichnet auf genau dieses Bild (Rotoskopie). Im Studio-Betrachter erscheint alles live, im Export wird es eingebrannt.
+
 - **Greenscreen**: Im Studio-Inspektor oder in der Werkansicht (ab Erweitert) Grün oder Blau wählen und einen Hintergrund setzen, ein Bild oder einen Film.
   Ein Hintergrundfilm läuft Bild für Bild mit.
   Beim Export wird die Farbe ersetzt; „Im Sucher zeigen“ zeigt das schon beim Animieren.

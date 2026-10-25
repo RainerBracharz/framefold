@@ -2,6 +2,7 @@ FrameFold 2.6
 
 Lo Studio – e il suono.
 
+• Testo, fumetti e disegno: tieni premuto un fotogramma → «Testo e disegno …». Testi e fumetti valgono per più fotogrammi, i disegni per uno.
 • Inoltre: esportazione fino a 4K, scatto con un battito di mani, foto come fotogrammi e look per tutto il film.
 • Studio: dalla modalità Avanzata la fotocamera diventa uno spazio di lavoro professionale – timeline da trascinare, passaggio tra live e fotogrammi, onion skin su più fotogrammi, viste differenza ed esposizione, maschere di formato, griglie, immagine o film di riferimento con chroma key, note per fotogramma, media contro il rumore, timelapse con ora di inizio e fine. Tutto anche da tastiera (menu Studio).
 • Green screen, titolo e titoli di coda: sostituisci il verde o il blu con un’immagine o un film, con un cartello del titolo prima del film e i titoli di coda alla fine.

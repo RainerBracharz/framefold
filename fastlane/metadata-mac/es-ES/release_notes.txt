@@ -2,6 +2,7 @@ FrameFold 2.6
 
 El Studio – y sonido.
 
+• Texto, bocadillos y dibujo: mantén pulsado un fotograma → «Texto y dibujo …». Textos y bocadillos abarcan varios fotogramas; los dibujos, uno.
 • Además: exportación hasta 4K, disparo con una palmada, añadir fotos como fotogramas y estilos para toda la película.
 • Studio: desde el modo Avanzado la cámara se convierte en un espacio de trabajo profesional – línea de tiempo con arrastrar, alternar entre imagen en directo y fotogramas, papel cebolla de varios fotogramas, vistas de diferencia y exposición, máscaras de formato, cuadrículas, imagen o vídeo de referencia con croma, notas por fotograma, promedio contra el ruido, timelapse con hora de inicio y fin. Todo también con el teclado (menú Studio).
 • Croma, título y créditos: sustituye el verde o el azul por una imagen o un vídeo, con una cartela de título antes de la película y créditos al final.

@@ -2,6 +2,7 @@ FrameFold 2.6
 
 De Studio – en geluid.
 
+• Tekst, tekstballonnen en tekenen: houd een beeld ingedrukt → ‘Tekst en tekenen …’. Tekst en ballonnen gelden voor meerdere beelden, tekeningen voor één beeld.
 • Verder: export tot 4K, afdrukken met klappen, foto’s als beelden toevoegen en looks voor de hele film.
 • Studio: vanaf de modus Uitgebreid wordt de camera een professionele werkplek – tijdlijn met slepen, wisselen tussen live en opnames, onion skin over meerdere beelden, verschil- en belichtingsweergave, formaatmaskers, rasters, referentiebeeld of -film met chromakey, notities per beeld, middelen tegen ruis, timelapse met start- en eindtijd. Alles ook via het toetsenbord (menu Studio).
 • Greenscreen, titel en aftiteling: vervang groen of blauw door een afbeelding of film, met een titelkaart vóór de film en aftiteling erna.
