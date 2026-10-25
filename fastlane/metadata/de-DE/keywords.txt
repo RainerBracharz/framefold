@@ -1,1 +1,1 @@
-Stopmotion,Trickfilm,Knete,Claymation,Brickfilm,Daumenkino,Animation,Zeitraffer,Kinder,Schule,Stativ
+Stopmotion,Trickfilm,Legetrick,Knete,Brickfilm,Daumenkino,Animation,Zeitraffer,Kinder,Schule,Stativ

@@ -40,7 +40,7 @@ Alles läuft auf dem Gerät, ohne Konto und ohne Datenübertragung.
 - **Studio auf Mac und iPad:** Zeitleiste, Umschalten zwischen Live-Bild und Aufnahme, Formatmasken, Lupe, Referenzebene mit Chroma-Key, Kamera-Ordner für Spiegelreflex- und Systemkameras (auch RAW), Tonspuren mit Wellenform, Stimme aufnehmen, X-Sheet mit Mundformen nach Preston Blair, Wörter erkennen auf dem Gerät, ProRes und Bildsequenz.
 - **Ton ohne Aufpreis:** mehrere Tonspuren, Stimme aufnehmen, zehn im Code erzeugte Geräusche und Sprachausgabe als Tonspur – alles auf dem Gerät.
 - **Vom Film zurück zum Objekt:** Jedes Werk wird auf Knopfdruck zum druckfertigen Daumenkino.
-- **Für Schulen:** kein Konto, keine Daten, Einfach-Modus für Kinder, Unterrichtsentwurf unter CC BY 4.0: [docs/unterricht](../unterricht/README.md).
+- **Für Schulen:** kein Konto, keine Daten, Einfach-Modus für Kinder, Unterrichtsentwurf unter CC BY 4.0: [docs/unterricht](../unterricht/README.md), Datenschutz-Steckbrief für Schulträger: [docs/schule](../schule/README.md).
 
 ## Bildmaterial
 
