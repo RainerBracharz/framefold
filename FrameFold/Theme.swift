@@ -729,4 +729,6 @@ extension UIColor {
     static let ffHairline = UIColor(Theme.hairline)
     static let ffAmber = UIColor(Theme.amber)
     static let ffAmberLight = UIColor(Theme.amberLight)
+    static let ffDarkroom = UIColor(Theme.darkroom)
+    static let ffPaperOnDark = UIColor(Theme.paperOnDark)
 }

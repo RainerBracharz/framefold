@@ -124,6 +124,10 @@ that decision is written up here:
   an X-sheet for dialogue reading with Preston Blair mouth shapes — words can
   be recognised on-device and laid onto frames automatically.
   Guide and key map: [docs/studio](docs/studio/README.md).
+- **Green screen, title and credits.** Key out green or blue against an image or
+  a movie that follows frame by frame, and wrap the film in a title card and
+  end credits — added as separate segments, so deflicker and stabilisation
+  never touch them and the sound shifts with the title.
 - **For the classroom.** A two-lesson plan (German) with timings, roles and a
   privacy summary: [docs/unterricht](docs/unterricht/README.md).
 - **Shutter without shake.** Hold the shutter for a three-second self-timer, or

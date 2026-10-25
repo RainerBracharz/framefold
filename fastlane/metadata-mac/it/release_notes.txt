@@ -3,6 +3,7 @@ FrameFold 2.6
 Lo Studio – e il suono.
 
 • Studio: dalla modalità Avanzata la fotocamera diventa uno spazio di lavoro professionale – timeline da trascinare, passaggio tra live e fotogrammi, onion skin su più fotogrammi, viste differenza ed esposizione, maschere di formato, griglie, immagine o film di riferimento con chroma key, note per fotogramma, media contro il rumore, timelapse con ora di inizio e fine. Tutto anche da tastiera (menu Studio).
+• Green screen, titolo e titoli di coda: sostituisci il verde o il blu con un’immagine o un film, con un cartello del titolo prima del film e i titoli di coda alla fine.
 • Qualsiasi fotocamera: le foto che il software della tua reflex o mirrorless salva in una cartella diventano il fotogramma successivo a piena risoluzione – anche RAW. In più una lente per controllare la messa a fuoco dal vivo.
 • Registrare la voce: il film scorre mentre parli e la registrazione diventa una traccia esattamente al punto giusto.
 • Suono come in studio: più tracce con fotogramma d’inizio e volume, forma d’onda nella timeline, suono in riproduzione e scorrendo. Lettura dei dialoghi nell’X-sheet con forme della bocca per personaggio – FrameFold può riconoscere le parole da solo, solo sul dispositivo.

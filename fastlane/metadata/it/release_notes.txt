@@ -3,6 +3,7 @@ FrameFold 2.6
 Ora anche su iPad – e con il suono.
 
 • iPad: FrameFold funziona su iPad, in verticale e in orizzontale. Su un supporto, mirino e fotogrammi seguono l’orientamento del dispositivo.
+• Green screen, titolo e titoli di coda: sostituisci il verde o il blu con un’immagine o un film, con un cartello del titolo prima del film e i titoli di coda alla fine.
 • Studio su iPad: dalla modalità Avanzata la fotocamera diventa uno spazio di lavoro professionale – timeline, passaggio tra live e fotogrammi, onion skin su più fotogrammi, maschere, lente, più tracce audio con forma d’onda, X-sheet con forme della bocca.
 • Registrare la voce: il film scorre mentre parli e la registrazione finisce esattamente al punto giusto. Resta sul dispositivo.
 • Musica o suono: scegli un file audio nella vista dell’opera – accompagna il film esportato.

@@ -3,6 +3,7 @@ FrameFold 2.6
 Nu ook op de iPad – en met geluid.
 
 • iPad: FrameFold werkt op de iPad, staand en liggend. In een standaard volgen zoeker en beelden de stand van het apparaat.
+• Greenscreen, titel en aftiteling: vervang groen of blauw door een afbeelding of film, met een titelkaart vóór de film en aftiteling erna.
 • Studio op de iPad: vanaf de modus Uitgebreid wordt de camera een professionele werkplek – tijdlijn, wisselen tussen live en opnames, onion skin over meerdere beelden, maskers, loep, meerdere geluidssporen met golfvorm, X-sheet met mondvormen.
 • Stem opnemen: de film speelt mee terwijl je spreekt – de opname staat daarna precies op de goede plek. Ze blijft op het apparaat.
 • Muziek of geluid: kies een audiobestand in de werkweergave – het klinkt onder de geëxporteerde film.

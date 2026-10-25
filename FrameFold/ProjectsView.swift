@@ -214,6 +214,7 @@ struct ProjectDetailView: View {
     @State private var showDeleteProject = false
     @State private var showAudioImporter = false
     @State private var showVoice = false
+    @State private var showBackgroundImporter = false
     @State private var sequenceFolder: ShareItem?
     @State private var isExportingSequence = false
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
@@ -414,6 +415,9 @@ struct ProjectDetailView: View {
         .onChange(of: currentProject.audioTracks) { _, _ in
             exportURL = nil
         }
+        .onChange(of: currentProject.greenScreen) { _, _ in exportURL = nil }
+        .onChange(of: currentProject.titleText) { _, _ in exportURL = nil }
+        .onChange(of: currentProject.creditsText) { _, _ in exportURL = nil }
     }
 
     /// Immer den frischen Stand aus dem Store verwenden.
@@ -515,6 +519,59 @@ struct ProjectDetailView: View {
         .fileImporter(isPresented: $showAudioImporter, allowedContentTypes: [.audio]) { result in
             if case .success(let url) = result, !store.setAudio(from: url, for: currentProject) {
                 errorMessage = String(localized: "Die Tondatei konnte nicht übernommen werden.")
+            }
+        }
+    }
+
+    /// Titelkarte und Abspann – leer lassen heißt: keiner.
+    private var titleRows: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 10) {
+                Image(systemName: "textformat").foregroundStyle(Theme.ink)
+                TextField("Titel (optional)", text: Binding(
+                    get: { currentProject.titleText ?? "" },
+                    set: { store.setTitles(title: $0.isEmpty ? nil : $0, credits: currentProject.creditsText,
+                                           in: currentProject.id) }))
+                    .font(Theme.body)
+            }
+            HStack(alignment: .top, spacing: 10) {
+                Image(systemName: "list.bullet.rectangle").foregroundStyle(Theme.ink)
+                TextField("Abspann (optional, mehrere Zeilen)", text: Binding(
+                    get: { currentProject.creditsText ?? "" },
+                    set: { store.setTitles(title: currentProject.titleText, credits: $0.isEmpty ? nil : $0,
+                                           in: currentProject.id) }), axis: .vertical)
+                    .lineLimit(1...5)
+                    .font(Theme.body)
+            }
+        }
+        .padding(.horizontal, 4)
+    }
+
+    /// Greenscreen: Farbe wählen, Hintergrund setzen.
+    private var greenScreenRow: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "person.crop.rectangle.stack").foregroundStyle(Theme.ink)
+            Text("Greenscreen").font(Theme.body).foregroundStyle(Theme.ink)
+            Spacer()
+            Picker("", selection: Binding(
+                get: { currentProject.greenScreen?.key ?? .none },
+                set: { store.setGreenScreenKey($0, in: currentProject.id) })) {
+                ForEach(ChromaKey.allCases) { Text(verbatim: $0.label).tag($0) }
+            }
+            .labelsHidden()
+            .fixedSize()
+            if (currentProject.greenScreen?.key ?? .none) != .none {
+                Button(currentProject.greenScreen?.backgroundFilename == nil ? "Hintergrund …" : "Anderer Hintergrund …") {
+                    showBackgroundImporter = true
+                }
+                .font(Theme.caption(11))
+            }
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal, 4)
+        .fileImporter(isPresented: $showBackgroundImporter, allowedContentTypes: [.image, .movie]) { result in
+            if case .success(let url) = result, !store.setGreenScreenBackground(from: url, in: currentProject.id) {
+                errorMessage = String(localized: "Der Hintergrund konnte nicht übernommen werden.")
             }
         }
     }
@@ -671,7 +728,8 @@ struct ProjectDetailView: View {
             }
 
             audioRow
-            if mode.showsAdvanced { sequenceRow }
+            titleRows
+            if mode.showsAdvanced { greenScreenRow; sequenceRow }
 
             if isExporting {
                 VStack(spacing: 8) {
@@ -871,14 +929,28 @@ struct ProjectDetailView: View {
         errorMessage = nil
         let urls = store.frameURLs(for: currentProject)
         let settings = exportSettings
-        let audio = currentProject.audioSources(fps: settings.outputFPS, store: store)
+        var audio = currentProject.audioSources(fps: settings.outputFPS, store: store)
+        let green = currentProject.greenScreen
+        let compositor = green.flatMap {
+            GreenScreenCompositor(key: $0.key, background: store.greenScreenBackgroundURL(for: currentProject),
+                                  fps: settings.outputFPS)
+        }
+        let title = currentProject.titleText, credits = currentProject.creditsText
+        let subtitle = currentProject.createdDateText
 
         Task {
             do {
                 var url = try await StopMotionAssembler().assemble(
-                    imageURLs: urls, settings: settings
+                    imageURLs: urls, settings: settings, greenScreen: compositor
                 ) { p in
                     Task { @MainActor in exportProgress = p }
+                }
+                // Titel davor, Abspann dahinter – der Ton rückt um den Vorspann nach hinten
+                let wrapped = try await TitleSequence.wrap(film: url, title: title, subtitle: subtitle,
+                                                           credits: credits, settings: settings)
+                url = wrapped.url
+                if wrapped.lead > 0 {
+                    audio = audio.map { var a = $0; a.start += wrapped.lead; return a }
                 }
                 // Alle Tonspuren (Musik aus der Werkansicht und Studio-Spuren)
                 // auf Filmlänge mischen und unterlegen

@@ -19,6 +19,9 @@ struct StudioSettings: Codable, Equatable {
     var loupeX = 0.5
     var loupeY = 0.5
 
+    /// Greenscreen schon im Sucher zeigen (Hintergrund statt Farbe)
+    var greenPreview = false
+
     // Hilfen
     var mask: MaskAspect = .none
     var maskOpacity = 0.7
@@ -74,6 +77,7 @@ struct StudioSettings: Codable, Equatable {
         loupeZoom = v(.loupeZoom, d.loupeZoom)
         loupeX = v(.loupeX, d.loupeX)
         loupeY = v(.loupeY, d.loupeY)
+        greenPreview = v(.greenPreview, d.greenPreview)
         mask = v(.mask, d.mask)
         maskOpacity = v(.maskOpacity, d.maskOpacity)
         safeFrames = v(.safeFrames, d.safeFrames)

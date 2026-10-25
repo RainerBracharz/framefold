@@ -73,6 +73,7 @@ final class StopMotionAssembler {
     func assemble(
         imageURLs: [URL],
         settings: PipelineSettings,
+        greenScreen: GreenScreenCompositor? = nil,
         progress: @escaping (Double) -> Void
     ) async throws -> URL {
         guard !imageURLs.isEmpty else { throw PipelineError.noKeyframesFound }
@@ -84,6 +85,9 @@ final class StopMotionAssembler {
                       let image = UIImage(data: data)?.cgImage else {
                     throw PipelineError.exportFailed
                 }
+                // Greenscreen vor allem anderen: Flimmerausgleich und
+                // Effekte sehen schon das fertige Bild mit Hintergrund.
+                if let greenScreen { return await greenScreen.composite(image, index: index) }
                 return image
             },
             progress: progress

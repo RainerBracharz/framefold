@@ -50,7 +50,8 @@ struct StudioView: View {
     /// Bildrate des Films – einmal beim Öffnen gelesen statt bei jedem Zugriff
     @State private var fps: Int32 = max(1, PipelineSettings.restored().outputFPS)
 
-    private enum ImportKind { case reference, audio, folder }
+    private enum ImportKind { case reference, audio, folder, background }
+    @State private var greenCompositor: GreenScreenCompositor?
 
     private var project: Project? { store.projects.first { $0.id == projectID } }
     private var urls: [URL] { project.map { store.frameURLs(for: $0) } ?? [] }
@@ -100,6 +101,8 @@ struct StudioView: View {
                 if let project { store.addAudioTrack(from: url, startFrame: frameOnViewer ?? 0, to: project) }
             case .folder:
                 folderWatch.choose(url)
+            case .background:
+                store.setGreenScreenBackground(from: url, in: projectID)
             case .reference:
                 reference.load(url)
                 reference.setKey(settings.referenceKey)
@@ -123,6 +126,7 @@ struct StudioView: View {
         }
         .onChange(of: showVoice) { _, open in hub.isActive = !open }
         .onChange(of: project?.allAudioTracks) { _, _ in reloadAudio() }
+        .onChange(of: project?.greenScreen) { _, _ in rebuildGreenScreen() }
         .alert(noteTitle, isPresented: Binding(get: { noteFrame != nil }, set: { if !$0 { noteFrame = nil } })) {
             TextField("Notiz", text: $noteDraft)
             Button("Sichern") {
@@ -190,6 +194,9 @@ struct StudioView: View {
             : CGSize(width: inset.width, height: inset.width / a)
     }
 
+    /// Greenscreen im Sucher: eingeschaltet, Farbe und Hintergrund gesetzt.
+    private var greenPreviewActive: Bool { settings.greenPreview && greenCompositor != nil }
+
     /// Zeigt der Betrachter gerade das Live-Bild?
     private var showsLive: Bool { frameOnViewer == nil && testShown == nil }
 
@@ -211,7 +218,7 @@ struct StudioView: View {
             } else {
                 Color.black
             }
-        } else if settings.viewMode != .normal, let processed {
+        } else if settings.viewMode != .normal || greenPreviewActive, let processed {
             Image(uiImage: processed).resizable().scaledToFill()
         } else {
             livePreview
@@ -553,6 +560,19 @@ struct StudioView: View {
                         Text("Ein Film läuft Bild für Bild mit: Bild n zeigt die Stelle n ÷ Bildrate.")
                             .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
                     }
+                }
+                section("Greenscreen") {
+                    picker("Farbe", Binding(get: { project?.greenScreen?.key ?? .none },
+                                            set: { store.setGreenScreenKey($0, in: projectID) }),
+                           ChromaKey.allCases) { $0.label }
+                    if (project?.greenScreen?.key ?? .none) != .none {
+                        smallButton(project?.greenScreen?.backgroundFilename == nil ? "Hintergrund …" : "Anderer Hintergrund …") {
+                            importKind = .background; showReferenceImporter = true
+                        }
+                        toggle("Im Sucher zeigen", $settings.greenPreview)
+                    }
+                    Text("Die Farbe wird beim Export durch den Hintergrund ersetzt – ein Bild oder ein Film, der Bild für Bild mitläuft.")
+                        .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
                 }
                 section("Kamera-Ordner") {
                     if let name = folderWatch.folderName {
@@ -922,6 +942,7 @@ struct StudioView: View {
         apply(settings)
         cache.preload(Array(urls.suffix(12)))
         reloadAudio()
+        rebuildGreenScreen()
     }
 
     #if DEBUG
@@ -1001,12 +1022,12 @@ struct StudioView: View {
     }
 
     private func apply(_ s: StudioSettings) {
-        controller.publishesLiveFrames = s.viewMode != .normal || s.loupe
+        controller.publishesLiveFrames = s.viewMode != .normal || s.loupe || s.greenPreview
         controller.averageFrames = s.averageFrames
         controller.captureBlackout = s.captureBlackout
         controller.autoShutter = s.autoShutter
         reference.setKey(s.referenceKey)
-        if s.viewMode == .normal { processed = nil }
+        if s.viewMode == .normal, !s.greenPreview { processed = nil }
     }
 
     private func referenceFollow() {
@@ -1015,8 +1036,24 @@ struct StudioView: View {
 
     /// Differenz- oder Belichtungsbild aus dem jüngsten Kamerabild rechnen –
     /// im Hintergrund, damit der Betrachter flüssig bleibt.
+    private func rebuildGreenScreen() {
+        guard let project, let green = project.greenScreen else { greenCompositor = nil; return }
+        greenCompositor = GreenScreenCompositor(key: green.key, background: store.greenScreenBackgroundURL(for: project),
+                                                fps: fps)
+    }
+
     private func updateProcessed() {
-        guard settings.viewMode != .normal, let live = controller.liveFrame else { return }
+        guard let live = controller.liveFrame else { return }
+        if settings.viewMode == .normal {
+            // Greenscreen-Vorschau: das Live-Bild vor dem Hintergrund
+            guard greenPreviewActive, let compositor = greenCompositor else { return }
+            let index = urls.count
+            Task {
+                let image = await compositor.composite(live, index: index)
+                processed = UIImage(cgImage: image)
+            }
+            return
+        }
         let mode = settings.viewMode
         let against = urls.last.flatMap { cache.image($0)?.cgImage }
         Task.detached(priority: .userInitiated) {

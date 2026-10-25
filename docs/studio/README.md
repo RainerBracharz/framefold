@@ -75,6 +75,14 @@ Mit „Ordner beobachten“ wird jede Kamera nutzbar, die FrameFold nicht selbst
   Die Vorschläge sind ein Anfang, korrigiert wird im X-Sheet.
 - **Export**: Alle hörbaren Spuren werden zum Film gemischt.
 
+## Greenscreen, Titel und Abspann
+
+- **Greenscreen**: Im Studio-Inspektor oder in der Werkansicht (ab Erweitert) Grün oder Blau wählen und einen Hintergrund setzen, ein Bild oder einen Film.
+  Ein Hintergrundfilm läuft Bild für Bild mit.
+  Beim Export wird die Farbe ersetzt; „Im Sucher zeigen“ zeigt das schon beim Animieren.
+- **Titel und Abspann** (Werkansicht, in jedem Modus): ein Titel vor dem Film (2,5 s, mit Datum) und ein Abspann mit beliebig vielen Zeilen (4 s).
+  Der Ton rückt um den Titel nach hinten und bleibt synchron.
+
 ## Export
 
 Den Export gibt es in der Werkansicht ab dem Modus Erweitert.

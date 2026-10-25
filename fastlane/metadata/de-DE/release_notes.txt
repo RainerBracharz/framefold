@@ -3,6 +3,7 @@ FrameFold 2.6
 Jetzt auch auf dem iPad – und mit Ton.
 
 • iPad: FrameFold läuft auf dem iPad, hoch und quer. Im Ständer folgen Sucher und Bilder der Lage des Geräts.
+• Greenscreen, Titel und Abspann: Grün oder Blau durch ein Bild oder einen Film ersetzen, dazu eine Titelkarte vor dem Film und ein Abspann danach.
 • Studio auf dem iPad: Ab „Erweitert“ wird die Kamera zur Profi-Arbeitsfläche – Zeitleiste, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder, Masken, Lupe, mehrere Tonspuren mit Wellenform, X-Sheet mit Mundformen.
 • Stimme aufnehmen: Der Film läuft mit, du sprichst dazu – die Aufnahme liegt danach genau an der richtigen Stelle. Sie bleibt auf dem Gerät.
 • Musik oder Ton: In der Werkansicht eine Audiodatei wählen – sie liegt unter dem exportierten Film.

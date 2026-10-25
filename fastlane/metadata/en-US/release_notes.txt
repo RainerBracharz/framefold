@@ -3,6 +3,7 @@ FrameFold 2.6
 Now on iPad too – and with sound.
 
 • iPad: FrameFold runs on iPad, portrait and landscape. In a stand, viewfinder and frames follow the way the device is turned.
+• Green screen, title and credits: replace green or blue with an image or a movie, plus a title card before the film and credits after it.
 • Studio on iPad: from Advanced mode the camera becomes a pro workspace – timeline, toggle between live view and captured frames, multi-frame onion skin, masks, loupe, multiple audio tracks with waveform, X-sheet with mouth shapes.
 • Record voice: the film plays along while you speak – the recording lands exactly in the right place. It stays on the device.
 • Music or sound: pick an audio file in the work view – it plays under the exported film.

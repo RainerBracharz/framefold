@@ -26,6 +26,11 @@ struct Project: Identifiable, Codable {
     var audioTracks: [AudioTrack]?
     /// Dialog-Lesen: Mundformen je Bild und Figur
     var dialogue: [DialogueEntry]?
+    /// Greenscreen: Farbe und Hintergrund für den Export
+    var greenScreen: GreenScreen?
+    /// Titelkarte vor und Abspann nach dem Film (leer = keiner)
+    var titleText: String?
+    var creditsText: String?
 
     /// Alle Tonspuren – die einfache Musikspur aus der Werkansicht zählt
     /// als erste, mit Einsatz bei Bild 1.
@@ -171,7 +176,8 @@ final class ProjectStore: ObservableObject {
         let project = Project(
             id: id, name: String(localized: "Wiederhergestelltes Werk"),
             createdAtISO: ISO8601DateFormatter().string(from: created),
-            frameFilenames: frames, trashFilenames: nil, nextFrameNumber: nil, audioFilename: nil, notes: nil, audioTracks: nil, dialogue: nil)
+            frameFilenames: frames, trashFilenames: nil, nextFrameNumber: nil, audioFilename: nil, notes: nil, audioTracks: nil, dialogue: nil,
+            greenScreen: nil, titleText: nil, creditsText: nil)
         if let data = try? JSONEncoder().encode(project) {
             try? data.write(to: dir.appendingPathComponent("manifest.json"), options: .atomic)
         }
@@ -217,7 +223,10 @@ final class ProjectStore: ObservableObject {
             audioFilename: nil,
             notes: nil,
             audioTracks: nil,
-            dialogue: nil)
+            dialogue: nil,
+            greenScreen: nil,
+            titleText: nil,
+            creditsText: nil)
         save(project)
         return project
     }
@@ -397,6 +406,51 @@ final class ProjectStore: ObservableObject {
 
     func url(for track: AudioTrack, in project: Project) -> URL {
         directory(for: project).appendingPathComponent(track.filename)
+    }
+
+    // MARK: Greenscreen, Titel
+
+    /// Greenscreen-Farbe setzen (`.none` schaltet ab, der Hintergrund bleibt gemerkt).
+    func setGreenScreenKey(_ key: ChromaKey, in projectID: UUID) {
+        guard var updated = projects.first(where: { $0.id == projectID }) else { return }
+        var green = updated.greenScreen ?? GreenScreen()
+        green.key = key
+        updated.greenScreen = green
+        save(updated)
+    }
+
+    /// Hintergrundbild oder -film übernehmen (Kopie im Werkordner).
+    @discardableResult
+    func setGreenScreenBackground(from source: URL, in projectID: UUID) -> Bool {
+        guard var updated = projects.first(where: { $0.id == projectID }) else { return false }
+        let scoped = source.startAccessingSecurityScopedResource()
+        defer { if scoped { source.stopAccessingSecurityScopedResource() } }
+        let ext = source.pathExtension.isEmpty ? "jpg" : source.pathExtension.lowercased()
+        let filename = "hintergrund-\(UUID().uuidString.prefix(8)).\(ext)"
+        do {
+            try FileManager.default.copyItem(at: source, to: directory(for: updated).appendingPathComponent(filename))
+        } catch {
+            return false
+        }
+        var green = updated.greenScreen ?? GreenScreen()
+        if let old = green.backgroundFilename {
+            try? FileManager.default.removeItem(at: directory(for: updated).appendingPathComponent(old))
+        }
+        green.backgroundFilename = filename
+        updated.greenScreen = green
+        save(updated)
+        return true
+    }
+
+    func greenScreenBackgroundURL(for project: Project) -> URL? {
+        project.greenScreen?.backgroundFilename.map { directory(for: project).appendingPathComponent($0) }
+    }
+
+    func setTitles(title: String?, credits: String?, in projectID: UUID) {
+        guard var updated = projects.first(where: { $0.id == projectID }) else { return }
+        updated.titleText = title
+        updated.creditsText = credits
+        save(updated)
     }
 
     // MARK: Dialog-Lesen
