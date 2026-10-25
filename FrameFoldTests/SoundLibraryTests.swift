@@ -54,13 +54,29 @@ final class SoundLibraryTests: XCTestCase {
 
     func testVoiceEffectsKeepLengthAndSound() throws {
         let format = AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 1)!
-        for effect in VoiceEffect.allCases {
+        let source = FileManager.default.temporaryDirectory.appendingPathComponent("ff-test-stimme-\(UUID().uuidString).caf")
+        defer { try? FileManager.default.removeItem(at: source) }
+        do {
             let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 44_100)!
             buffer.frameLength = 44_100
             for i in 0..<44_100 { buffer.floatChannelData![0][i] = Float(sin(2 * Double.pi * 220 * Double(i) / 44_100) * 0.5) }
-            let out = try AudioShaper.apply(effect, to: buffer)
-            XCTAssertEqual(out.frameLength, 44_100, "\(effect)")
-            let peak = (0..<Int(out.frameLength)).map { abs(out.floatChannelData![0][$0]) }.max() ?? 0
+            let file = try AVAudioFile(forWriting: source, settings: format.settings)
+            try file.write(from: buffer)
+            if #available(iOS 18.0, macCatalyst 18.0, *) { file.close() }
+        }
+        for effect in VoiceEffect.allCases {
+            var track = AudioTrack(name: "Stimme", filename: "x")
+            track.voiceEffect = effect
+            let url = try AudioShaper.render(ShapeSpec(track: track, source: source)!)
+            let file = try AVAudioFile(forReading: url)
+            XCTAssertEqual(file.length, 44_100, "\(effect)")
+            let chunk = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: 44_100)!
+            var peak: Float = 0
+            while file.framePosition < file.length {
+                try file.read(into: chunk)
+                guard chunk.frameLength > 0 else { break }
+                for i in 0..<Int(chunk.frameLength) { peak = max(peak, abs(chunk.floatChannelData![0][i])) }
+            }
             XCTAssertGreaterThan(peak, 0.05, "\(effect) ist stumm")
         }
     }

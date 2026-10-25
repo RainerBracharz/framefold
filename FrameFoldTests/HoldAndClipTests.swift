@@ -62,7 +62,7 @@ final class HoldAndClipTests: XCTestCase {
         track.fadeIn = 0.2
         track.fadeOut = 0.2
         XCTAssertTrue(track.isShaped)
-        let url = try AudioShaper.shaped(source, track: track)
+        let url = try AudioShaper.render(ShapeSpec(track: track, source: source)!)
         let file = try AVAudioFile(forReading: url)
         XCTAssertEqual(Double(file.length) / rate, 1.0, accuracy: 0.01)
         var samples: [Float] = []
@@ -79,8 +79,13 @@ final class HoldAndClipTests: XCTestCase {
         XCTAssertLessThan(abs(data[n - 1]), 0.01, "Ausblenden endet still")
         XCTAssertEqual(data[n / 2], 0.5, accuracy: 0.001, "Mitte unverändert")
         // Gleiche Einstellung → dieselbe Datei aus dem Zwischenspeicher
-        XCTAssertEqual(try AudioShaper.shaped(source, track: track), url)
+        XCTAssertEqual(try AudioShaper.render(ShapeSpec(track: track, source: source)!), url)
         XCTAssertFalse(AudioTrack(name: "a", filename: "b").isShaped)
+
+        // Alles weggekürzt: Stille statt der ungekürzten Spur
+        track.trimStart = 5
+        let empty = try AVAudioFile(forReading: try AudioShaper.render(ShapeSpec(track: track, source: source)!))
+        XCTAssertLessThan(Double(empty.length) / rate, 0.1)
     }
 
     func testOldTrackWithoutClipFieldsStillDecodes() throws {

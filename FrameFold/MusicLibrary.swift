@@ -35,7 +35,7 @@ enum MusicLibrary {
 
     /// Datei mit dem Stück in der gewünschten Länge (mindestens 4 s).
     static func file(for style: MusicStyle, seconds: Double) throws -> URL {
-        let length = max(4, min(600, seconds.rounded(.up)))
+        let length = max(4, min(300, seconds.rounded(.up)))
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent("ff-musik-\(style.rawValue)-\(Int(length)).caf")
         if FileManager.default.fileExists(atPath: url.path) { return url }
@@ -45,14 +45,20 @@ enum MusicLibrary {
               let data = buffer.floatChannelData?[0] else { throw PipelineError.exportFailed }
         buffer.frameLength = AVAudioFrameCount(samples.count)
         samples.withUnsafeBufferPointer { data.update(from: $0.baseAddress!, count: samples.count) }
-        let partial = url.deletingLastPathComponent().appendingPathComponent(".\(url.lastPathComponent)")
-        try? FileManager.default.removeItem(at: partial)
+        // Eigener Name je Aufruf: Werkansicht und Studio dürfen dasselbe
+        // Stück gleichzeitig bestellen
+        let partial = url.deletingLastPathComponent().appendingPathComponent("ff-musik-teil-\(UUID().uuidString).caf")
+        defer { try? FileManager.default.removeItem(at: partial) }
         do {
             let file = try AVAudioFile(forWriting: partial, settings: format.settings)
             try file.write(from: buffer)
             if #available(iOS 18.0, macCatalyst 18.0, *) { file.close() }
         }
-        try FileManager.default.moveItem(at: partial, to: url)
+        if !FileManager.default.fileExists(atPath: url.path) {
+            do { try FileManager.default.moveItem(at: partial, to: url) } catch {
+                if !FileManager.default.fileExists(atPath: url.path) { throw error }
+            }
+        }
         return url
     }
 
@@ -141,7 +147,7 @@ enum MusicLibrary {
     /// Die Samples eines Stücks (mono, 44,1 kHz, −2 dBFS Spitze).
     static func render(_ style: MusicStyle, seconds: Double) -> [Float] {
         let count = Int(seconds * rate)
-        var out = [Double](repeating: 0, count: count)
+        var out = [Float](repeating: 0, count: count)
         var noise: UInt64 = 0x9E37_79B9_7F4A_7C15
         func nextNoise() -> Double {
             noise = noise &* 6364136223846793005 &+ 1442695040888963407
@@ -178,14 +184,16 @@ enum MusicLibrary {
                 case .snare:
                     v = (nextNoise() * 0.8 + sin(2 * .pi * 180 * t) * 0.4) * exp(-t * 18)
                 }
-                out[i] += v * note.gain * held
+                out[i] += Float(v * note.gain * held)
             }
         }
         // Am Ende ausblenden, damit der Film nicht mitten im Takt abreißt
         let fade = min(count, Int(1.5 * rate))
-        for i in 0..<fade { out[count - 1 - i] *= Double(i) / Double(fade) }
-        let peak = out.map(abs).max() ?? 1
-        let gain = peak > 0 ? 0.8 / peak : 1
-        return out.map { Float($0 * gain) }
+        for i in 0..<fade { out[count - 1 - i] *= Float(i) / Float(fade) }
+        var peak: Float = 0
+        for v in out { peak = max(peak, abs(v)) }
+        let gain: Float = peak > 0 ? 0.8 / peak : 1
+        for i in out.indices { out[i] *= gain }
+        return out
     }
 }

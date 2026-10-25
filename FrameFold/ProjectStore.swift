@@ -264,7 +264,9 @@ final class ProjectStore: ObservableObject {
         clean.trashFilenames = nil
         let manifest = try JSONEncoder().encode(clean)
         let dir = directory(for: project)
-        let skip = Set(project.trashFilenames ?? []).union(["manifest.json"])
+        // Nur, was das Werk wirklich verwendet – keine verwaisten Dateien
+        let used = Set(project.frameFilenames + project.allAudioTracks.map(\.filename)
+                       + [project.greenScreen?.backgroundFilename].compactMap { $0 })
         let outDir = FileManager.default.temporaryDirectory
             .appendingPathComponent("ff-werk-\(UUID().uuidString.prefix(8))", isDirectory: true)
         let target = outDir.appendingPathComponent(WorkPackage.filename(for: project.name))
@@ -273,7 +275,7 @@ final class ProjectStore: ObservableObject {
             let manifestURL = outDir.appendingPathComponent("manifest.json")
             try manifest.write(to: manifestURL)
             let names = (try FileManager.default.contentsOfDirectory(atPath: dir.path))
-                .filter { WorkPackage.isSafe($0) && !skip.contains($0) }
+                .filter { WorkPackage.isSafe($0) && used.contains($0) }
                 // Nur Dateien – der Papierkorb liegt als Unterordner daneben
                 .filter { (try? dir.appendingPathComponent($0).resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true }
                 .sorted()
@@ -295,9 +297,9 @@ final class ProjectStore: ObservableObject {
         let staging = FileManager.default.temporaryDirectory
             .appendingPathComponent("ff-import-\(id.uuidString)", isDirectory: true)
         defer { try? FileManager.default.removeItem(at: staging) }
-        try await Task.detached(priority: .userInitiated) {
+        let names = Set(try await Task.detached(priority: .userInitiated) {
             try WorkPackage.read(source, into: staging)
-        }.value
+        }.value)
         guard let data = try? Data(contentsOf: staging.appendingPathComponent("manifest.json")),
               var json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
             throw WorkPackage.Failure.noManifest
@@ -308,13 +310,21 @@ final class ProjectStore: ObservableObject {
         guard let project = try? JSONDecoder().decode(Project.self, from: JSONSerialization.data(withJSONObject: json)) else {
             throw WorkPackage.Failure.noManifest
         }
-        // Nur Bilder übernehmen, die wirklich in der Datei lagen
+        // Nur Dateien übernehmen, die wirklich (und mit unbedenklichem Namen)
+        // in der Datei lagen – ein Manifest darf nie auf „..“ oder Fremdes zeigen.
+        func ok(_ name: String) -> Bool { names.contains(name) && WorkPackage.isSafe(name) && name != "manifest.json" }
         var checked = project
-        checked.frameFilenames = project.frameFilenames.filter {
-            FileManager.default.fileExists(atPath: staging.appendingPathComponent($0).path)
+        checked.frameFilenames = project.frameFilenames.filter(ok)
+        if let audio = checked.audioFilename, !ok(audio) { checked.audioFilename = nil }
+        checked.audioTracks = project.audioTracks?.filter { ok($0.filename) }
+        if checked.audioTracks?.isEmpty == true { checked.audioTracks = nil }
+        if let background = checked.greenScreen?.backgroundFilename, !ok(background) {
+            checked.greenScreen?.backgroundFilename = nil
         }
         let target = directory(for: checked)
-        try FileManager.default.moveItem(at: staging, to: target)
+        try await Task.detached(priority: .userInitiated) {
+            try FileManager.default.moveItem(at: staging, to: target)
+        }.value
         save(checked)
         return checked
     }
@@ -383,6 +393,7 @@ final class ProjectStore: ObservableObject {
         } catch {
             return false
         }
+        recordUndo(project.id, String(localized: "Ton"))
         removeAudioFile(of: project)
         var updated = project
         updated.audioFilename = filename
@@ -391,6 +402,7 @@ final class ProjectStore: ObservableObject {
     }
 
     func removeAudio(from project: Project) {
+        recordUndo(project.id, String(localized: "Ton"))
         removeAudioFile(of: project)
         var updated = project
         updated.audioFilename = nil
@@ -399,7 +411,7 @@ final class ProjectStore: ObservableObject {
 
     private func removeAudioFile(of project: Project) {
         guard let name = project.audioFilename else { return }
-        try? FileManager.default.removeItem(at: directory(for: project).appendingPathComponent(name))
+        discardFile(name, of: project)
     }
 
     /// Notiz zu Bild `number` setzen; leerer Text entfernt sie.
@@ -429,7 +441,8 @@ final class ProjectStore: ObservableObject {
         }
         let track = AudioTrack(name: name ?? source.deletingPathExtension().lastPathComponent,
                                filename: filename, startFrame: startFrame)
-        var updated = project
+        recordUndo(project.id, String(localized: "Tonspur"))
+        var updated = projects.first(where: { $0.id == project.id }) ?? project
         updated.audioTracks = (updated.audioTracks ?? []) + [track]
         save(updated)
         return track
@@ -440,6 +453,7 @@ final class ProjectStore: ObservableObject {
     /// einfache Musikspur wird dabei zur gewöhnlichen Spur und behält ihre
     /// Kennung; ein zweiter Aufruf mit derselben Kennung ändert sie nur.
     func updateAudioTrack(id: UUID, in projectID: UUID, _ change: (inout AudioTrack) -> Void) {
+        recordUndo(projectID, String(localized: "Tonspur"), coalesce: "track-\(id)")
         guard var updated = projects.first(where: { $0.id == projectID }) else { return }
         if let i = updated.audioTracks?.firstIndex(where: { $0.id == id }) {
             change(&updated.audioTracks![i])
@@ -464,13 +478,34 @@ final class ProjectStore: ObservableObject {
             if track.id == Project.legacyTrackID { removeAudio(from: updated) }
             return
         }
+        recordUndo(project.id, String(localized: "Tonspur"))
         updated.audioTracks?.removeAll { $0.id == track.id }
         if updated.audioTracks?.isEmpty == true { updated.audioTracks = nil }
         // Die Datei nur löschen, wenn keine andere Spur sie noch nutzt
         if !(updated.allAudioTracks.contains { $0.filename == stored.filename }) {
-            try? FileManager.default.removeItem(at: directory(for: updated).appendingPathComponent(stored.filename))
+            discardFile(stored.filename, of: updated)
         }
         save(updated)
+    }
+
+    /// Datei im Werkordner – nil, wenn der Name aus dem Ordner herausführen
+    /// könnte. Vor jedem Löschen oder Verschieben benutzen.
+    private func safeFileURL(_ name: String, in project: Project) -> URL? {
+        WorkPackage.isSafe(name) ? directory(for: project).appendingPathComponent(name) : nil
+    }
+
+    /// Nicht mehr gebrauchte Ton- oder Hintergrunddatei in den Papierkorb
+    /// des Werks legen statt zu löschen – „Rückgängig“ holt sie zurück, nach
+    /// 30 Tagen räumt `purgeOldTrash` sie weg.
+    private func discardFile(_ name: String, of project: Project) {
+        guard let url = safeFileURL(name, in: project) else { return }
+        let trashDir = directory(for: project).appendingPathComponent("trash", isDirectory: true)
+        try? FileManager.default.createDirectory(at: trashDir, withIntermediateDirectories: true)
+        let target = trashDir.appendingPathComponent(name)
+        try? FileManager.default.removeItem(at: target)
+        try? FileManager.default.moveItem(at: url, to: target)
+        // Zeitstempel = Wegwerfzeit, damit die 30 Tage ab jetzt zählen
+        try? FileManager.default.setAttributes([.modificationDate: Date()], ofItemAtPath: target.path)
     }
 
     func url(for track: AudioTrack, in project: Project) -> URL {
@@ -519,6 +554,20 @@ final class ProjectStore: ObservableObject {
         for name in snapshot.trashFilenames ?? [] where !snapshot.frameFilenames.contains(name)
             && fm.fileExists(atPath: dir.appendingPathComponent(name).path) {
             try? fm.moveItem(at: dir.appendingPathComponent(name), to: trashDir.appendingPathComponent(name))
+        }
+        // Ton- und Hintergrunddateien, die der wiederhergestellte Stand
+        // braucht, liegen inzwischen vielleicht im Papierkorb
+        let needed = snapshot.allAudioTracks.map(\.filename) + [snapshot.greenScreen?.backgroundFilename].compactMap { $0 }
+        for name in needed where WorkPackage.isSafe(name) && !fm.fileExists(atPath: dir.appendingPathComponent(name).path) {
+            try? fm.moveItem(at: trashDir.appendingPathComponent(name), to: dir.appendingPathComponent(name))
+        }
+        // Bilder, die erst nach dem Stand entstanden sind (Verdoppeln, Halten),
+        // in den Papierkorb – sonst blieben sie verwaist im Ordner liegen
+        let known = Set(snapshot.frameFilenames + (snapshot.trashFilenames ?? []))
+        for name in current.frameFilenames where !known.contains(name) && WorkPackage.isSafe(name)
+            && fm.fileExists(atPath: dir.appendingPathComponent(name).path) {
+            try? fm.moveItem(at: dir.appendingPathComponent(name), to: trashDir.appendingPathComponent(name))
+            try? fm.setAttributes([.modificationDate: Date()], ofItemAtPath: trashDir.appendingPathComponent(name).path)
         }
         var restored = snapshot
         // Fortlaufende Nummer nie zurückdrehen – sonst überschriebe das
@@ -596,7 +645,7 @@ final class ProjectStore: ObservableObject {
         }
         var green = updated.greenScreen ?? GreenScreen()
         if let old = green.backgroundFilename {
-            try? FileManager.default.removeItem(at: directory(for: updated).appendingPathComponent(old))
+            discardFile(old, of: updated)
         }
         green.backgroundFilename = filename
         updated.greenScreen = green
@@ -764,8 +813,19 @@ final class ProjectStore: ObservableObject {
     func purgeOldTrash() {
         let cutoff = Date().addingTimeInterval(-30 * 24 * 3600)
         for project in projects {
-            guard var trash = project.trashFilenames, !trash.isEmpty else { continue }
             let trashDir = directory(for: project).appendingPathComponent("trash", isDirectory: true)
+            // Weggelegte Ton-, Hintergrund- und Bilddateien ohne Eintrag
+            let listed = Set(project.trashFilenames ?? [])
+            let referenced = Set(project.frameFilenames + project.allAudioTracks.map(\.filename))
+            for name in (try? FileManager.default.contentsOfDirectory(atPath: trashDir.path)) ?? []
+                where !listed.contains(name) && !referenced.contains(name) && WorkPackage.isSafe(name) {
+                let url = trashDir.appendingPathComponent(name)
+                if let modified = (try? FileManager.default.attributesOfItem(atPath: url.path)[.modificationDate]) as? Date,
+                   modified < cutoff {
+                    try? FileManager.default.removeItem(at: url)
+                }
+            }
+            guard var trash = project.trashFilenames, !trash.isEmpty else { continue }
             var changed = false
             for filename in trash {
                 let url = trashDir.appendingPathComponent(filename)

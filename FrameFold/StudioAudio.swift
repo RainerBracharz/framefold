@@ -10,115 +10,199 @@ struct AudioSource: Equatable {
 }
 
 extension Project {
-    /// Hörbare Spuren mit Einsatz in Sekunden bei `fps`.
+    /// Hörbare Spuren mit Einsatz in Sekunden bei `fps`. Gekürzte oder
+    /// bearbeitete Spuren kommen aus dem Zwischenspeicher; ist die Fassung
+    /// noch nicht gerechnet, wird sie im Hintergrund bestellt und bis dahin
+    /// das Original gespielt. Für den Export `renderedAudioSources` nehmen.
     @MainActor
     func audioSources(fps: Int32, store: ProjectStore) -> [AudioSource] {
         allAudioTracks.filter { !$0.muted }.map { track in
             let original = store.url(for: track, in: self)
-            return AudioSource(url: track.isShaped ? ((try? AudioShaper.shaped(original, track: track)) ?? original) : original,
-                               start: Double(track.startFrame) / Double(max(1, fps)),
-                               volume: track.volume)
+            var url = original
+            if let spec = ShapeSpec(track: track, source: original) {
+                let shaped = AudioShaper.target(for: spec)
+                if FileManager.default.fileExists(atPath: shaped.path) { url = shaped }
+                else { AudioShapeCenter.shared.request(spec) }
+            }
+            return AudioSource(url: url, start: Double(track.startFrame) / Double(max(1, fps)), volume: track.volume)
+        }
+    }
+
+    /// Wie `audioSources`, aber wartet, bis alle bearbeiteten Spuren
+    /// gerechnet sind – im Hintergrund.
+    @MainActor
+    func renderedAudioSources(fps: Int32, store: ProjectStore) async -> [AudioSource] {
+        let jobs: [(ShapeSpec?, AudioSource)] = allAudioTracks.filter { !$0.muted }.map { track in
+            let original = store.url(for: track, in: self)
+            return (ShapeSpec(track: track, source: original),
+                    AudioSource(url: original, start: Double(track.startFrame) / Double(max(1, fps)), volume: track.volume))
+        }
+        return await Task.detached(priority: .userInitiated) {
+            jobs.map { spec, source in
+                guard let spec else { return source }
+                var shaped = source
+                if let url = try? AudioShaper.render(spec) { shaped.url = url }
+                return shaped
+            }
+        }.value
+    }
+}
+
+// MARK: Kürzen, Blenden, Effekt
+
+/// Was mit einer Spur geschehen soll – nil, wenn sie unverändert bleibt.
+struct ShapeSpec: Sendable, Hashable {
+    let trackID: UUID
+    let source: URL
+    let trim: Double, length: Double, fadeIn: Double, fadeOut: Double
+    let effect: VoiceEffect?
+
+    init?(track: AudioTrack, source: URL) {
+        guard track.isShaped else { return nil }
+        trackID = track.id
+        self.source = source
+        trim = max(0, track.trimStart ?? 0)
+        length = max(0, track.maxLength ?? 0)
+        fadeIn = max(0, track.fadeIn ?? 0)
+        fadeOut = max(0, track.fadeOut ?? 0)
+        effect = track.voiceEffect
+    }
+}
+
+/// Bestellt bearbeitete Fassungen im Hintergrund – gebündelt, damit
+/// schnelles Klicken am Regler nicht jede Zwischenstufe rechnet – und
+/// meldet über `revision`, wenn eine fertig ist.
+@MainActor
+final class AudioShapeCenter: ObservableObject {
+    static let shared = AudioShapeCenter()
+    @Published private(set) var revision = 0
+    private var pending: [UUID: Task<Void, Never>] = [:]
+    private var wanted: [UUID: ShapeSpec] = [:]
+
+    func request(_ spec: ShapeSpec) {
+        guard wanted[spec.trackID] != spec else { return }
+        wanted[spec.trackID] = spec
+        pending[spec.trackID]?.cancel()
+        pending[spec.trackID] = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 300_000_000)
+            guard !Task.isCancelled else { return }
+            _ = await Task.detached(priority: .utility) { try? AudioShaper.render(spec) }.value
+            guard let self, !Task.isCancelled else { return }
+            self.pending[spec.trackID] = nil
+            self.wanted[spec.trackID] = nil
+            self.revision += 1
         }
     }
 }
 
-// MARK: Kürzen und Blenden
-
-/// Gekürzte und geblendete Fassung einer Spur als eigene Datei. Mischung,
-/// Wellenform und Wiedergabe im Studio nehmen dann einfach diese Datei –
-/// so klingen alle drei gleich.
+/// Gekürzte, geblendete oder verfremdete Fassung einer Spur als eigene
+/// Datei. Mischung, Wellenform und Wiedergabe im Studio nehmen dann einfach
+/// diese Datei – so klingen alle drei gleich. Gerechnet wird in Stücken,
+/// damit auch lange Musik nicht den Speicher füllt.
 enum AudioShaper {
-    static func shaped(_ source: URL, track: AudioTrack) throws -> URL {
-        let trim = max(0, track.trimStart ?? 0), length = max(0, track.maxLength ?? 0)
-        let fadeIn = max(0, track.fadeIn ?? 0), fadeOut = max(0, track.fadeOut ?? 0)
-        let modified = (try? source.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate)?
+    static func target(for spec: ShapeSpec) -> URL {
+        let modified = (try? spec.source.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate)?
             .timeIntervalSince1970 ?? 0
-        let key = "\(source.path)|\(modified)|\(trim)|\(length)|\(fadeIn)|\(fadeOut)|\(track.voiceEffect?.rawValue ?? "")"
+        let key = "\(spec.source.path)|\(modified)|\(spec.trim)|\(spec.length)|\(spec.fadeIn)|\(spec.fadeOut)|\(spec.effect?.rawValue ?? "")"
         let hash = key.unicodeScalars.reduce(UInt64(1469598103934665603)) { ($0 ^ UInt64($1.value)) &* 1099511628211 }
-        let target = FileManager.default.temporaryDirectory.appendingPathComponent("ff-clip-\(String(hash, radix: 16)).caf")
-        if FileManager.default.fileExists(atPath: target.path) { return target }
+        return FileManager.default.temporaryDirectory
+            .appendingPathComponent("ff-clip-\(spec.trackID.uuidString)-\(String(hash, radix: 16)).caf")
+    }
 
-        let file = try AVAudioFile(forReading: source)
+    static func render(_ spec: ShapeSpec) throws -> URL {
+        let target = target(for: spec)
+        let fm = FileManager.default
+        if fm.fileExists(atPath: target.path) { return target }
+
+        let file = try AVAudioFile(forReading: spec.source)
         let format = file.processingFormat
         let rate = format.sampleRate
-        let first = min(file.length, AVAudioFramePosition(trim * rate))
+        let first = min(file.length, AVAudioFramePosition(spec.trim * rate))
         var count = file.length - first
-        if length > 0 { count = min(count, AVAudioFramePosition(length * rate)) }
-        guard count > 0, let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(count)),
-              let channels = buffer.floatChannelData else { throw PipelineError.exportFailed }
-        file.framePosition = first
-        // AVAudioFile liest je Aufruf nicht immer alles – in Stücken anhängen
-        guard let chunk = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 65_536) else { throw PipelineError.exportFailed }
-        while buffer.frameLength < AVAudioFrameCount(count) {
-            let wanted = min(chunk.frameCapacity, AVAudioFrameCount(count) - buffer.frameLength)
-            try file.read(into: chunk, frameCount: wanted)
-            guard chunk.frameLength > 0, let src = chunk.floatChannelData else { break }
-            for c in 0..<Int(format.channelCount) {
-                (channels[c] + Int(buffer.frameLength)).update(from: src[c], count: Int(chunk.frameLength))
-            }
-            buffer.frameLength += chunk.frameLength
-        }
-        let frames = Int(buffer.frameLength)
-        let inFrames = min(frames, Int(fadeIn * rate)), outFrames = min(frames, Int(fadeOut * rate))
-        for c in 0..<Int(format.channelCount) {
-            let data = channels[c]
-            for i in 0..<inFrames { data[i] *= Float(i) / Float(inFrames) }
-            for i in 0..<outFrames { data[frames - 1 - i] *= Float(i) / Float(outFrames) }
-        }
-        let result = try track.voiceEffect.map { try apply($0, to: buffer) } ?? buffer
-        let partial = target.deletingLastPathComponent().appendingPathComponent(".\(target.lastPathComponent)")
-        try? FileManager.default.removeItem(at: partial)
+        if spec.length > 0 { count = min(count, AVAudioFramePosition(spec.length * rate)) }
+
+        let partial = fm.temporaryDirectory.appendingPathComponent("ff-clip-teil-\(UUID().uuidString).caf")
+        defer { try? fm.removeItem(at: partial) }
         do {
-            let out = try AVAudioFile(forWriting: partial, settings: result.format.settings)
-            try out.write(from: result)
-            // Erst geschlossen ist die Datei vollständig auf der Platte
+            let out = try AVAudioFile(forWriting: partial, settings: format.settings)
+            if count > 0 {
+                try stream(file, from: first, count: count, spec: spec, into: out)
+            } else if let silence = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(rate / 20)) {
+                // Alles weggekürzt: kurze Stille statt der ungekürzten Spur
+                silence.frameLength = silence.frameCapacity
+                for c in 0..<Int(format.channelCount) { silence.floatChannelData?[c].update(repeating: 0, count: Int(silence.frameLength)) }
+                try out.write(from: silence)
+            }
             if #available(iOS 18.0, macCatalyst 18.0, *) { out.close() }
         }
-        try FileManager.default.moveItem(at: partial, to: target)
+        // Ältere Fassungen derselben Spur wegräumen – jede Reglerstellung
+        // wäre sonst eine eigene, große Datei
+        let prefix = "ff-clip-\(spec.trackID.uuidString)-"
+        for name in (try? fm.contentsOfDirectory(atPath: fm.temporaryDirectory.path)) ?? [] where name.hasPrefix(prefix) {
+            try? fm.removeItem(at: fm.temporaryDirectory.appendingPathComponent(name))
+        }
+        if !fm.fileExists(atPath: target.path) { try fm.moveItem(at: partial, to: target) }
         return target
     }
 
-    /// Stimmeffekt anwenden: Tonhöhe über Apples Time-Pitch-Einheit
-    /// (offline gerechnet), Roboter als Ringmodulation.
-    static func apply(_ effect: VoiceEffect, to buffer: AVAudioPCMBuffer) throws -> AVAudioPCMBuffer {
-        let format = buffer.format
-        if effect == .robot {
-            guard let channels = buffer.floatChannelData else { return buffer }
-            let rate = format.sampleRate
-            for c in 0..<Int(format.channelCount) {
-                for i in 0..<Int(buffer.frameLength) {
-                    let carrier = Float(sin(2 * Double.pi * 55 * Double(i) / rate))
-                    channels[c][i] = (channels[c][i] * carrier * 0.8 + channels[c][i] * 0.35)
+    /// Stück für Stück lesen (oder durch die Tonhöhen-Einheit rechnen),
+    /// Effekt und Blenden anwenden, schreiben.
+    private static func stream(_ file: AVAudioFile, from first: AVAudioFramePosition, count: AVAudioFramePosition,
+                               spec: ShapeSpec, into out: AVAudioFile) throws {
+        let format = file.processingFormat
+        let rate = format.sampleRate
+        let chunkSize: AVAudioFrameCount = 16_384
+        let inFrames = AVAudioFramePosition(spec.fadeIn * rate), outFrames = AVAudioFramePosition(spec.fadeOut * rate)
+
+        var engine: AVAudioEngine?
+        if let effect = spec.effect, effect != .robot {
+            let e = AVAudioEngine(), player = AVAudioPlayerNode(), pitch = AVAudioUnitTimePitch()
+            pitch.pitch = effect == .high ? 700 : -600   // Cent
+            e.attach(player); e.attach(pitch)
+            e.connect(player, to: pitch, format: format)
+            e.connect(pitch, to: e.mainMixerNode, format: format)
+            try e.enableManualRenderingMode(.offline, format: format, maximumFrameCount: chunkSize)
+            try e.start()
+            player.scheduleSegment(file, startingFrame: first, frameCount: AVAudioFrameCount(count), at: nil)
+            player.play()
+            engine = e
+        } else {
+            file.framePosition = first
+        }
+        defer { engine?.stop() }
+        guard let chunk = AVAudioPCMBuffer(pcmFormat: engine?.manualRenderingFormat ?? format, frameCapacity: chunkSize)
+        else { throw PipelineError.exportFailed }
+
+        var done: AVAudioFramePosition = 0
+        while done < count {
+            let wanted = AVAudioFrameCount(min(AVAudioFramePosition(chunkSize), count - done))
+            if let engine {
+                guard try engine.renderOffline(wanted, to: chunk) == .success else { break }
+            } else {
+                try file.read(into: chunk, frameCount: wanted)
+            }
+            let n = Int(chunk.frameLength)
+            guard n > 0, let channels = chunk.floatChannelData else { break }
+            for c in 0..<Int(chunk.format.channelCount) {
+                let data = channels[c]
+                for i in 0..<n {
+                    let position = done + AVAudioFramePosition(i)
+                    var gain: Float = 1
+                    if position < inFrames { gain *= Float(position) / Float(inFrames) }
+                    let fromEnd = count - 1 - position
+                    if fromEnd < outFrames { gain *= Float(fromEnd) / Float(outFrames) }
+                    var v = data[i]
+                    if spec.effect == .robot {
+                        // Ringmodulation: die Stimme klingt nach Blech und Strom
+                        let carrier = Float(sin(2 * Double.pi * 55 * Double(position) / rate))
+                        v = v * carrier * 0.8 + v * 0.35
+                    }
+                    data[i] = v * gain
                 }
             }
-            return buffer
+            try out.write(from: chunk)
+            done += AVAudioFramePosition(n)
         }
-        let engine = AVAudioEngine()
-        let player = AVAudioPlayerNode()
-        let pitch = AVAudioUnitTimePitch()
-        pitch.pitch = effect == .high ? 700 : -600   // Cent
-        engine.attach(player)
-        engine.attach(pitch)
-        engine.connect(player, to: pitch, format: format)
-        engine.connect(pitch, to: engine.mainMixerNode, format: format)
-        try engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 4096)
-        try engine.start()
-        player.scheduleBuffer(buffer)
-        player.play()
-        guard let out = AVAudioPCMBuffer(pcmFormat: engine.manualRenderingFormat, frameCapacity: buffer.frameLength),
-              let chunk = AVAudioPCMBuffer(pcmFormat: engine.manualRenderingFormat, frameCapacity: 4096),
-              let dst = out.floatChannelData else { throw PipelineError.exportFailed }
-        while out.frameLength < buffer.frameLength {
-            let wanted = min(chunk.frameCapacity, buffer.frameLength - out.frameLength)
-            guard try engine.renderOffline(wanted, to: chunk) == .success, chunk.frameLength > 0,
-                  let src = chunk.floatChannelData else { break }
-            for c in 0..<Int(out.format.channelCount) {
-                (dst[c] + Int(out.frameLength)).update(from: src[c], count: Int(chunk.frameLength))
-            }
-            out.frameLength += chunk.frameLength
-        }
-        engine.stop()
-        return out
     }
 }
 

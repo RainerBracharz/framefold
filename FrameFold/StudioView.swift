@@ -10,6 +10,7 @@ import UIKit
 /// `LiveCaptureView`; hier wird nur anders gezeigt und gesteuert.
 struct StudioView: View {
     @EnvironmentObject var store: ProjectStore
+    @ObservedObject private var shapes = AudioShapeCenter.shared
     @ObservedObject var controller: LiveCaptureController
     let projectID: UUID
     let onFinish: () -> Void
@@ -182,6 +183,7 @@ struct StudioView: View {
             .onChange(of: urls.count) { _, _ in referenceFollow() }
             .onChange(of: selected) { _, _ in referenceFollow() }
             .onChange(of: project?.allAudioTracks) { _, _ in reloadAudio() }
+            .onChange(of: shapes.revision) { _, _ in reloadAudio() }
             .onChange(of: project?.greenScreen) { _, _ in rebuildGreenScreen() }
             .onReceive(NotificationCenter.default.publisher(for: .ffStudio)) { note in
                 if let raw = note.object as? String, let command = StudioCommand(rawValue: raw) { handle(command) }

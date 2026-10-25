@@ -1086,7 +1086,7 @@ struct ProjectDetailView: View {
         errorMessage = nil
         let urls = store.frameURLs(for: currentProject)
         let settings = exportSettings
-        var audio = currentProject.audioSources(fps: settings.outputFPS, store: store)
+        let project = currentProject
         let green = currentProject.greenScreen
         let compositor = green.flatMap {
             GreenScreenCompositor(key: $0.key, background: store.greenScreenBackgroundURL(for: currentProject),
@@ -1097,6 +1097,8 @@ struct ProjectDetailView: View {
         let subtitle = currentProject.createdDateText
 
         Task {
+            // Gekürzte und bearbeitete Spuren im Hintergrund fertig rechnen
+            var audio = await project.renderedAudioSources(fps: settings.outputFPS, store: store)
             do {
                 var url = try await StopMotionAssembler().assemble(
                     imageURLs: urls, settings: settings, greenScreen: compositor, overlays: overlays

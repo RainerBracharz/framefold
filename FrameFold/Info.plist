@@ -49,5 +49,9 @@
 			</array>
 		</dict>
 	</array>
+	<!-- Werk-Dateien direkt am Ort lesen (mit Freigabe) statt eine zweite
+	     Kopie in Documents/Inbox liegen zu lassen. -->
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 </dict>
 </plist>

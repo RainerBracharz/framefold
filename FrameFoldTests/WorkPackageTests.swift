@@ -101,6 +101,58 @@ final class WorkPackageTests: XCTestCase {
         XCTAssertTrue(store.projects.isEmpty)
     }
 
+    func testManifestCannotReferenceOutsideFiles() async throws {
+        let store = ProjectStore(root: root, defaults: defaults)
+        let keeper = store.createProject(name: "Bleibt")
+        _ = store.appendFrame(jpegData: Data([0xFF, 0xD8, 1, 0xFF, 0xD9]), to: keeper)
+
+        // Präpariertes Manifest: Spur, Ton und Hintergrund zeigen auf „..“
+        let manifest = scratch.appendingPathComponent("manifest.json")
+        let json = """
+        {"id":"\(UUID().uuidString)","name":"Böse","createdAtISO":"2026-10-25T00:00:00Z",
+         "frameFilenames":["000000.jpg","..",""],"audioFilename":"..",
+         "audioTracks":[{"id":"\(UUID().uuidString)","name":"x","filename":"..","startFrame":0,"volume":1,"muted":false}],
+         "greenScreen":{"key":"green","backgroundFilename":"../.."}}
+        """
+        try Data(json.utf8).write(to: manifest)
+        let frame = scratch.appendingPathComponent("000000.jpg")
+        try Data([0xFF, 0xD8, 2, 0xFF, 0xD9]).write(to: frame)
+        let evil = scratch.appendingPathComponent("boese.framefold")
+        try WorkPackage.write(files: [(name: "manifest.json", url: manifest), (name: "000000.jpg", url: frame)], to: evil)
+
+        let imported = try await store.importPackage(from: evil)
+        XCTAssertEqual(imported.frameFilenames, ["000000.jpg"])
+        XCTAssertNil(imported.audioFilename)
+        XCTAssertNil(imported.audioTracks)
+        XCTAssertNil(imported.greenScreen?.backgroundFilename)
+
+        // Auch ein Entfernen danach darf nichts außerhalb anrühren
+        store.removeAudio(from: imported)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: root.appendingPathComponent(keeper.id.uuidString).path))
+        XCTAssertEqual(store.projects.count, 2)
+    }
+
+    func testUndoRestoresRemovedTrackFile() throws {
+        let store = ProjectStore(root: root, defaults: defaults)
+        let undo = UndoManager()
+        undo.groupsByEvent = false
+        store.undoManager = undo
+        let project = store.createProject(name: "Ton")
+        let sound = scratch.appendingPathComponent("ton.caf")
+        try Data(repeating: 1, count: 100).write(to: sound)
+        undo.beginUndoGrouping()
+        let track = store.addAudioTrack(from: sound, to: project)!
+        undo.endUndoGrouping()
+        let fileURL = store.url(for: track, in: store.projects[0])
+        undo.beginUndoGrouping()
+        store.removeAudioTrack(track, from: store.projects[0])
+        undo.endUndoGrouping()
+        XCTAssertFalse(FileManager.default.fileExists(atPath: fileURL.path))
+        undo.undo()
+        XCTAssertEqual(store.projects[0].allAudioTracks.map(\.id), [track.id])
+        XCTAssertTrue(FileManager.default.fileExists(atPath: fileURL.path), "Datei kommt aus dem Papierkorb zurück")
+    }
+
     func testFilenameIsSafe() {
         XCTAssertEqual(WorkPackage.filename(for: "a/b:c"), "a-b-c.framefold")
         XCTAssertEqual(WorkPackage.filename(for: "   "), "FrameFold.framefold")
