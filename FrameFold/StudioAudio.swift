@@ -373,9 +373,23 @@ final class StudioAudioPlayer {
                                  at: delay > 0 ? AVAudioTime(sampleTime: AVAudioFramePosition(delay * rate), atRate: rate) : nil)
             node.play()
         }
+        // Beim Anspielen eines Bilds die Engine danach wieder schlafen legen
+        if let duration {
+            pauseTask = Task { [weak self] in
+                try? await Task.sleep(nanoseconds: UInt64((duration + 0.15) * 1_000_000_000))
+                guard !Task.isCancelled, let self else { return }
+                if self.engine.isRunning { self.engine.pause() }
+            }
+        }
     }
 
     func stop() {
+        pauseTask?.cancel()
         for (node, _, _) in nodes { node.stop() }
+        // Engine anhalten: sonst bliebe die Audio-Hardware nach dem ersten
+        // Abspielen dauerhaft wach und kostete Akku
+        if engine.isRunning { engine.pause() }
     }
+
+    private var pauseTask: Task<Void, Never>?
 }

@@ -23,7 +23,7 @@ final class FirstRunTests: XCTestCase {
     }
 
     @MainActor
-    func testSampleWorkIsCreatedOnceAndOnlyWhenEmpty() throws {
+    func testSampleWorkIsCreatedOnceAndOnlyWhenEmpty() async throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("ff-sample-\(UUID().uuidString)")
         defer { try? FileManager.default.removeItem(at: root) }
         let suite = "ff-sample-\(UUID().uuidString)"
@@ -31,12 +31,12 @@ final class FirstRunTests: XCTestCase {
         defer { defaults.removePersistentDomain(forName: suite) }
 
         let store = ProjectStore(root: root, defaults: defaults)
-        store.createSampleIfNeeded()
+        await store.createSampleIfNeeded()
         XCTAssertEqual(store.projects.count, 1)
         XCTAssertEqual(store.projects.first?.frameCount, 22)
         // Gelöscht bleibt gelöscht – kein neues Beispiel beim nächsten Start
         store.delete(store.projects[0])
-        store.createSampleIfNeeded()
+        await store.createSampleIfNeeded()
         XCTAssertTrue(store.projects.isEmpty)
 
         // Wer schon Werke hat, bekommt keins
@@ -45,7 +45,7 @@ final class FirstRunTests: XCTestCase {
         defer { defaults2.removePersistentDomain(forName: suite2) }
         let store2 = ProjectStore(root: root.appendingPathComponent("b"), defaults: defaults2)
         _ = store2.createProject(name: "Eigenes")
-        store2.createSampleIfNeeded()
+        await store2.createSampleIfNeeded()
         XCTAssertEqual(store2.projects.map(\.name), ["Eigenes"])
     }
 }

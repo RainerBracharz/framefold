@@ -207,7 +207,7 @@ final class ProjectStore: ObservableObject {
             projects.append(project)
             projects.sort { $0.createdAtISO > $1.createdAtISO }
         }
-        thumbnailCache[project.id] = nil
+        // Titelbild bleibt, solange das erste Bild dasselbe ist
     }
 
     // MARK: API
@@ -585,16 +585,22 @@ final class ProjectStore: ObservableObject {
     /// aus dem Spot, 22 Bilder): So gibt es sofort etwas zum Abspielen,
     /// Exportieren und Ausprobieren. Nur einmal je Installation und nur, wenn
     /// noch kein Werk existiert.
-    func createSampleIfNeeded() {
+    func createSampleIfNeeded() async {
         let key = "didCreateSample"
         guard !defaults.bool(forKey: key) else { return }
         defaults.set(true, forKey: key)
         guard projects.isEmpty else { return }
+        // Bilder im Hintergrund vorbereiten – der allererste Start soll
+        // nicht stocken
+        let images: [Data] = await Task.detached(priority: .utility) {
+            (1...22).compactMap { n in
+                UIImage(named: String(format: "sample-%02d", n))?.jpegData(compressionQuality: 0.85)
+            }
+        }.value
+        guard projects.isEmpty, !images.isEmpty else { return }
         var project = createProject(name: String(localized: "Beispiel: Faltung"))
-        for n in 1...22 {
-            guard let image = UIImage(named: String(format: "sample-%02d", n)),
-                  let data = image.jpegData(compressionQuality: 0.85),
-                  let current = projects.first(where: { $0.id == project.id }) else { continue }
+        for data in images {
+            guard let current = projects.first(where: { $0.id == project.id }) else { continue }
             appendFrame(jpegData: data, to: current)
         }
         if let current = projects.first(where: { $0.id == project.id }) { project = current }
@@ -847,21 +853,43 @@ final class ProjectStore: ObservableObject {
         }
     }
 
+    /// Die Ansichten fragen sehr oft (das Studio mehrmals je Neuzeichnen) –
+    /// darum zwischengespeichert, solange sich die Bildliste nicht ändert.
     func frameURLs(for project: Project) -> [URL] {
+        if let cached = urlCache[project.id], cached.names == project.frameFilenames { return cached.urls }
         let dir = directory(for: project)
-        return project.frameFilenames.map { dir.appendingPathComponent($0) }
+        let urls = project.frameFilenames.map { dir.appendingPathComponent($0, isDirectory: false) }
+        urlCache[project.id] = (project.frameFilenames, urls)
+        return urls
     }
+    private var urlCache: [UUID: (names: [String], urls: [URL])] = [:]
 
     /// Klein gerechnete Vorschaubilder, gecacht pro Projekt – vorher wurde
     /// bei jedem Listen-Render das volle 1080p-JPEG neu dekodiert.
-    private var thumbnailCache: [UUID: UIImage] = [:]
+    private var thumbnailCache: [UUID: (first: String, image: UIImage)] = [:]
+    private var thumbnailLoading: Set<UUID> = []
 
+    /// Titelbild eines Werks. Wird im Hintergrund gerechnet – bis dahin
+    /// liefert es das vorige Bild oder nil, danach zeichnen die Ansichten neu.
     func thumbnail(for project: Project) -> UIImage? {
-        if let cached = thumbnailCache[project.id] { return cached }
-        guard let first = frameURLs(for: project).first,
-              let small = UIImage.thumbnail(at: first, maxPixelSize: 640) else { return nil }
-        thumbnailCache[project.id] = small
-        return small
+        guard let firstName = project.frameFilenames.first else { return nil }
+        if let cached = thumbnailCache[project.id], cached.first == firstName { return cached.image }
+        guard !thumbnailLoading.contains(project.id), let url = frameURLs(for: project).first else {
+            return thumbnailCache[project.id]?.image
+        }
+        thumbnailLoading.insert(project.id)
+        let id = project.id
+        Task.detached(priority: .userInitiated) {
+            let small = UIImage.thumbnail(at: url, maxPixelSize: 640)
+            await MainActor.run {
+                self.thumbnailLoading.remove(id)
+                if let small {
+                    self.objectWillChange.send()
+                    self.thumbnailCache[id] = (firstName, small)
+                }
+            }
+        }
+        return thumbnailCache[project.id]?.image
     }
 
     /// Sichert die Keyframes eines verarbeiteten Videos als Projekt-Session
@@ -901,6 +929,18 @@ extension UIImage {
     /// Kontaktbogen Hunderte Kacheln zeigt. Thread-sicher.
     nonisolated static func thumbnail(at url: URL, maxPixelSize: Int) -> UIImage? {
         guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+        return thumbnail(from: source, maxPixelSize: maxPixelSize)
+    }
+
+    /// Wie oben, aus Bytes im Speicher (etwa das frisch aufgenommene Foto).
+    nonisolated static func thumbnail(data: Data, maxPixelSize: Int) -> UIImage? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
+        return thumbnail(from: source, maxPixelSize: maxPixelSize)
+    }
+
+    /// Der JPEG-Decoder rechnet dabei gleich beim Dekodieren klein – viel
+    /// schneller, als erst das ganze Foto zu entpacken.
+    nonisolated private static func thumbnail(from source: CGImageSource, maxPixelSize: Int) -> UIImage? {
         let options: [CFString: Any] = [
             kCGImageSourceCreateThumbnailFromImageAlways: true,
             kCGImageSourceCreateThumbnailWithTransform: true,

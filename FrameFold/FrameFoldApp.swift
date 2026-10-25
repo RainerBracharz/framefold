@@ -329,7 +329,7 @@ struct FrameFoldApp: App {
                 let freshStart = false
                 #endif
                 if !freshStart, !Platform.autostart {
-                    projectStore.createSampleIfNeeded()
+                    await projectStore.createSampleIfNeeded()
                 }
                 StudioMonitorHub.shared.activate()
                 WatchLink.shared.activate()   // Fernauslöser am Handgelenk

@@ -1159,15 +1159,27 @@ struct FrameThumbnail: View {
         .clipped()
         .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
         .task(id: url) {
-            guard image == nil else { return }
-            // Abseits des Hauptthreads und nur so groß wie nötig dekodieren –
-            // vorher wurde jedes volle Foto im Hauptthread geladen, und der
-            // Kontaktbogen ruckelte beim Scrollen.
-            image = await Task.detached(priority: .userInitiated) {
-                UIImage.thumbnail(at: url, maxPixelSize: 540)?.filled(to: CGSize(width: 180, height: 180))
+            if let cached = Self.cache.object(forKey: url as NSURL) { image = cached; return }
+            // Abseits des Hauptthreads und nur so groß wie nötig dekodieren
+            // (Kachel ≈ 90 pt × 3) – beim Zurückscrollen aus dem gemeinsamen
+            // Zwischenspeicher statt erneut.
+            let loaded = await Task.detached(priority: .userInitiated) {
+                UIImage.thumbnail(at: url, maxPixelSize: 300)
             }.value
+            if let loaded {
+                let cost = loaded.cgImage.map { $0.bytesPerRow * $0.height } ?? 0
+                Self.cache.setObject(loaded, forKey: url as NSURL, cost: cost)
+            }
+            image = loaded
         }
     }
+
+    /// Gemeinsam für Kontaktbogen und Studio-Zeitleiste, höchstens ~120 MB.
+    static let cache: NSCache<NSURL, UIImage> = {
+        let cache = NSCache<NSURL, UIImage>()
+        cache.totalCostLimit = 120 << 20
+        return cache
+    }()
 }
 
 /// Ausstellungsmodus: mehrere Werke auswählen und zu einem durchlaufenden

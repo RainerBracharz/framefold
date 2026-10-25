@@ -1061,7 +1061,14 @@ struct StudioView: View {
     private func play(_ range: ClosedRange<Int>?, loop: Bool) {
         stopPlayback()
         guard let range else { return }
-        cache.preload(range.map { urls[$0] })
+        let all = urls
+        // Nur das nächste Stück vorladen – das ganze Werk auf einmal
+        // belegte alle Kerne und Gigabytes Speicher
+        func window(from start: Int) -> [URL] {
+            let count = min(range.count, Int(fps) + 4)
+            return (0..<count).map { all[range.lowerBound + (start - range.lowerBound + $0) % range.count] }
+        }
+        cache.preload(window(from: range.lowerBound), replacing: true)
         playing = true
         playIndex = range.lowerBound
         let rate = Double(fps)
@@ -1073,6 +1080,7 @@ struct StudioView: View {
                 if Task.isCancelled { break }
                 if playIndex < range.upperBound {
                     playIndex += 1
+                    cache.preload(window(from: playIndex))
                 } else if loop {
                     playIndex = range.lowerBound
                     audioPlayer.play(from: Double(range.lowerBound) / rate)

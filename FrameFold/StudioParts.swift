@@ -110,28 +110,60 @@ enum StudioImaging {
 final class StudioFrameCache: ObservableObject {
     private let cache = NSCache<NSURL, UIImage>()
     private var loading: Set<URL> = []
+    /// Wartende Bilder – höchstens zwei werden gleichzeitig dekodiert, damit
+    /// Abspielen nicht alle Kerne und den Speicher auf einmal belegt.
+    private var queue: [URL] = []
+    private var queued: Set<URL> = []
+    private var active = 0
+    private let maxActive = 2
     /// Zählt hoch, wenn ein Bild fertig geladen ist – die Ansicht zeichnet neu.
     @Published private(set) var generation = 0
 
-    init() { cache.countLimit = 400 }
+    init() {
+        cache.countLimit = 400
+        cache.totalCostLimit = 400 << 20   // ~400 MB, Kosten = Pixelbytes
+    }
 
     func image(_ url: URL) -> UIImage? {
         if let image = cache.object(forKey: url as NSURL) { return image }
-        load(url)
+        enqueue([url], front: true)
         return nil
     }
 
-    func preload(_ urls: [URL]) { urls.forEach { if cache.object(forKey: $0 as NSURL) == nil { load($0) } } }
+    /// Bilder vorab laden. Mit `replacing` ersetzt die Liste alle noch
+    /// wartenden (beim Abspielen: nur das nächste Stück vorladen).
+    func preload(_ urls: [URL], replacing: Bool = false) {
+        if replacing { queue = []; queued = [] }
+        enqueue(urls, front: false)
+    }
 
-    private func load(_ url: URL) {
-        guard !loading.contains(url) else { return }
-        loading.insert(url)
-        Task.detached(priority: .userInitiated) {
-            let image = UIImage.thumbnail(at: url, maxPixelSize: 1600)
-            await MainActor.run {
-                if let image { self.cache.setObject(image, forKey: url as NSURL) }
-                self.loading.remove(url)
-                self.generation += 1
+    private func enqueue(_ urls: [URL], front: Bool) {
+        let fresh = urls.filter { cache.object(forKey: $0 as NSURL) == nil && !loading.contains($0) && !queued.contains($0) }
+        guard !fresh.isEmpty else { return }
+        queued.formUnion(fresh)
+        if front { queue.insert(contentsOf: fresh, at: 0) } else { queue.append(contentsOf: fresh) }
+        pump()
+    }
+
+    private func pump() {
+        while active < maxActive, !queue.isEmpty {
+            let url = queue.removeFirst()
+            queued.remove(url)
+            guard cache.object(forKey: url as NSURL) == nil, !loading.contains(url) else { continue }
+            loading.insert(url)
+            active += 1
+            Task.detached(priority: .userInitiated) {
+                let image = UIImage.thumbnail(at: url, maxPixelSize: 1600)
+                await MainActor.run {
+                    if let image {
+                        let cost = image.cgImage.map { $0.bytesPerRow * $0.height } ?? 0
+                        self.cache.setObject(image, forKey: url as NSURL, cost: cost)
+                    }
+                    self.loading.remove(url)
+                    self.active -= 1
+                    self.generation += 1
+                    self.pump()
+                }
             }
         }
     }

@@ -49,7 +49,11 @@ final class WatchLink: NSObject, ObservableObject {
         send(payload)
     }
 
-    private func send(_ payload: [String: Any]) {
+    private func send(_ payload: [String: Any], force: Bool = false) {
+        // Gleicher Stand wie zuletzt? Dann nichts schicken – der Status
+        // ändert sich beim Stabilisieren bis zu zehnmal je Sekunde, ohne dass
+        // sich an der Uhr etwas ändert. Spart Akku auf beiden Geräten.
+        if !force, NSDictionary(dictionary: payload).isEqual(to: lastPayload) { return }
         lastPayload = payload
         guard let session, session.activationState == .activated else { return }
         try? session.updateApplicationContext(payload)
@@ -61,7 +65,7 @@ final class WatchLink: NSObject, ObservableObject {
     /// Nach dem Wiederverbinden den aktuellen Stand nachschicken – sonst
     /// zeigt die Uhr „0" und „Bereit", auch mitten in einer Sitzung.
     fileprivate func resend() {
-        send(lastPayload)
+        send(lastPayload, force: true)
     }
 }
 

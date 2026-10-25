@@ -176,10 +176,11 @@ enum TitleSequence {
         s.interferenzEcho = false
         s.paperRelief = false
         s.printLook = false
-        s.holdLastFrameSeconds = 0
         let count = max(1, Int((seconds * Double(s.outputFPS)).rounded()))
-        return try await StopMotionAssembler().assemble(imageURLs: Array(repeating: url, count: count),
-                                                        settings: s) { _ in }
+        // Das Bild nur einmal laden und rechnen, den Rest „halten“ – vorher
+        // wurde die Karte für jedes einzelne Bild neu gelesen und dekodiert
+        s.holdLastFrameSeconds = Double(count - 1) / Double(max(1, s.outputFPS))
+        return try await StopMotionAssembler().assemble(imageURLs: [url], settings: s) { _ in }
     }
 
     /// Filme gleichen Formats hintereinander, nur umverpackt.

@@ -78,12 +78,16 @@ final class StopMotionAssembler {
         progress: @escaping (Double) -> Void
     ) async throws -> URL {
         guard !imageURLs.isEmpty else { throw PipelineError.noKeyframesFound }
+        // Nur so groß dekodieren, wie der Film es braucht (doppelte
+        // Ausgabekante deckt auch einen Zuschnitt 4:3 → 9:16 ab). Der
+        // JPEG-Decoder verkleinert dabei schon beim Entpacken – ein 48-MP-Foto
+        // läuft so nicht viermal in voller Größe durch die Kette.
+        let decodeLimit = settings.exportResolution.maxDimension.map { Int($0 * 2) }
         return try await write(
             frameCount: imageURLs.count,
             settings: settings,
             frameProvider: { index in
-                guard let data = try? Data(contentsOf: imageURLs[index]),
-                      let image = UIImage(data: data)?.cgImage else {
+                guard let image = Self.decode(imageURLs[index], maxPixelSize: decodeLimit) else {
                     throw PipelineError.exportFailed
                 }
                 // Greenscreen vor allem anderen: Flimmerausgleich und
@@ -96,8 +100,31 @@ final class StopMotionAssembler {
                 }
                 return result
             },
+            lumaProvider: { index in
+                // Für den Flimmerausgleich reicht ein Briefmarkenbild
+                Self.decode(imageURLs[index], maxPixelSize: 64).map(Self.meanLuma)
+            },
             progress: progress
         )
+    }
+
+    /// Bild laden, auf Wunsch schon beim Dekodieren verkleinert. Die
+    /// Pixel bleiben wie gespeichert (ohne EXIF-Drehung) – genau wie bisher
+    /// mit `UIImage(data:).cgImage`, damit sich kein Export verändert.
+    nonisolated static func decode(_ url: URL, maxPixelSize: Int?) -> CGImage? {
+        autoreleasepool {
+            guard let source = CGImageSourceCreateWithURL(url as CFURL, [kCGImageSourceShouldCache: false] as CFDictionary)
+            else { return nil }
+            if let maxPixelSize {
+                let options: [CFString: Any] = [kCGImageSourceCreateThumbnailFromImageAlways: true,
+                                                kCGImageSourceCreateThumbnailWithTransform: false,
+                                                kCGImageSourceShouldCacheImmediately: true,
+                                                kCGImageSourceThumbnailMaxPixelSize: maxPixelSize]
+                return CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
+            }
+            guard let data = try? Data(contentsOf: url) else { return nil }
+            return UIImage(data: data)?.cgImage
+        }
     }
 
     // MARK: Kern
@@ -106,6 +133,7 @@ final class StopMotionAssembler {
         frameCount: Int,
         settings: PipelineSettings,
         frameProvider rawProvider: @escaping (Int) async throws -> CGImage,
+        lumaProvider: ((Int) -> Double?)? = nil,
         progress: @escaping (Double) -> Void
     ) async throws -> URL {
         // Farblook direkt an der Quelle: Flimmerausgleich und Effekte sehen
@@ -192,8 +220,12 @@ final class StopMotionAssembler {
             lumas.reserveCapacity(frameCount)
             for i in 0..<frameCount {
                 try Task.checkCancellation()
-                let img = i == order[0] ? firstImage : try await frameProvider(i)
-                lumas.append(Self.meanLuma(img))
+                if let luma = lumaProvider?(i) {
+                    lumas.append(luma)
+                } else {
+                    let img = i == order[0] ? firstImage : try await frameProvider(i)
+                    lumas.append(Self.meanLuma(img))
+                }
             }
             gains = Algorithms.deflickerGains(lumas)
         }

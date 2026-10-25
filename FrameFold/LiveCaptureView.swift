@@ -676,13 +676,15 @@ struct LiveCaptureView: View {
                     return
                 }
                 sessionFiles.append(filename)
-                if let image = UIImage(data: jpegData) {
-                    // Klein rechnen: Vollauflösung im Daumenkino zwingt SwiftUI,
-                    // bei jedem Update sechs 1080p-Bilder zu skalieren.
-                    // Seitenverhältnis bleibt – der Streifen schneidet selbst zu.
-                    let thumb = image.scaledToFit(maxSide: 176)
-                    recentThumbs.append(thumb)
-                    if recentThumbs.count > 6 { recentThumbs.removeFirst() }
+                // Klein rechnen – im Hintergrund und direkt beim Dekodieren:
+                // das volle Foto (12–48 MP) zu entpacken ließ den Sucher bei
+                // jeder Auslösung stocken. Seitenverhältnis bleibt.
+                Task.detached(priority: .userInitiated) {
+                    guard let thumb = UIImage.thumbnail(data: jpegData, maxPixelSize: 176 * 3) else { return }
+                    await MainActor.run {
+                        recentThumbs.append(thumb)
+                        if recentThumbs.count > 6 { recentThumbs.removeFirst() }
+                    }
                 }
             }
         }
