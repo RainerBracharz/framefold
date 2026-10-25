@@ -9,6 +9,9 @@
 	<true/>
 	<key>com.apple.security.device.camera</key>
 	<true/>
+	<!-- Spiegelreflex- und Systemkameras per USB auslösen (ImageCaptureCore) -->
+	<key>com.apple.security.device.usb</key>
+	<true/>
 	<!-- Stimme zum Film aufnehmen (nur auf Wunsch, bleibt auf dem Mac) -->
 	<key>com.apple.security.device.audio-input</key>
 	<true/>

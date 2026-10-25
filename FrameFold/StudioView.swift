@@ -50,6 +50,9 @@ struct StudioView: View {
     @State private var showSpeech = false
     @State private var importKind: ImportKind = .reference
     @StateObject private var folderWatch = StudioFolderWatch()
+    @StateObject private var tether = TetherCamera()
+    /// Auslösen (Leertaste, Knopf) löst die per USB verbundene Kamera aus
+    @State private var useTether = false
     @State private var volumeDraft: [UUID: Double] = [:]
     /// Bildrate des Films – einmal beim Öffnen gelesen statt bei jedem Zugriff
     @State private var fps: Int32 = max(1, PipelineSettings.restored().outputFPS)
@@ -735,6 +738,7 @@ struct StudioView: View {
                     Text("Die Farbe wird beim Export durch den Hintergrund ersetzt – ein Bild oder ein Film, der Bild für Bild mitläuft.")
                         .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
                 }
+                if TetherCamera.isSupported { tetherSection }
                 section("Kamera-Ordner") {
                     if let name = folderWatch.folderName {
                         HStack {
@@ -884,6 +888,44 @@ struct StudioView: View {
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.15), lineWidth: 1))
     }
 
+    /// Spiegelreflex per USB: verbinden, dann löst „Auslösen“ die Kamera aus.
+    private var tetherSection: some View {
+        section("Spiegelreflex (USB)") {
+            toggle("Kamera verbinden", Binding(get: { tether.isSearching || tether.isReady }, set: { on in
+                if on {
+                    tether.start { image, data in controller.commit(frame: image, originalData: data) }
+                } else {
+                    tether.stop(); useTether = false
+                }
+            }))
+            if let name = tether.cameraName {
+                HStack {
+                    Image(systemName: "camera").foregroundStyle(Theme.amber)
+                    Text(verbatim: name).font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark).lineLimit(1)
+                }
+                if tether.isReady {
+                    toggle("Auslösen mit dieser Kamera", $useTether)
+                    if !tether.canTakePicture {
+                        Text("Diese Kamera meldet kein Auslösen über USB – den Kamera-Ordner nutzen.")
+                            .font(Theme.mono(10)).foregroundStyle(Theme.oxblood)
+                    }
+                    if tether.captured > 0 {
+                        Text("\(tether.captured) Fotos übernommen").font(Theme.mono(10))
+                            .foregroundStyle(Theme.paperOnDark.opacity(0.7))
+                    }
+                }
+            } else if tether.isSearching {
+                Text("Suche Kamera … per USB anschließen und einschalten.").font(Theme.mono(10))
+                    .foregroundStyle(Theme.paperOnDark.opacity(0.7))
+            }
+            if let error = tether.lastError {
+                Text(verbatim: error).font(Theme.mono(10)).foregroundStyle(Theme.oxblood)
+            }
+            Text("Löst die Kamera aus und holt das Foto in voller Auflösung (auch RAW). Ein Livebild liefert macOS dafür nicht – zum Ausrichten das Livebild einer zweiten Kamera oder den Sucher nutzen.")
+                .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
+        }
+    }
+
     /// Kürzen und Blenden einer Spur, in Zehntelsekunden.
     private func clipControls(_ track: AudioTrack) -> some View {
         DisclosureGroup {
@@ -999,7 +1041,7 @@ struct StudioView: View {
         case .capture:
             stopPlayback()
             selected = nil; testShown = nil
-            controller.captureNow()
+            if useTether, tether.isReady { tether.shoot() } else { controller.captureNow() }
         case .stepBack:
             stopPlayback(); testShown = nil
             selected = StudioPlayback.step(from: frameOnViewer, by: -1, count: urls.count)
@@ -1236,6 +1278,7 @@ struct StudioView: View {
     private func deactivate() {
         hub.isActive = false
         folderWatch.stop()
+        tether.stop()
         stopPlayback()
         setAutoToggle(false)
         StudioBlackout.set(false)
