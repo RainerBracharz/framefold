@@ -1,10 +1,13 @@
 FrameFold 2.7
 
-Ta med dig dina verk – och ljud till barnens filmer.
+Nu på 17 språk – och med verktyg som i en proffsstudio.
 
+• Kameraåkningar: panorering och zoom över en del av bilden, mjukt eller jämnt.
+• Bildlager: lägg egna bilder, även med genomskinlighet, över filmen – i den ordning du vill.
+• Rotoskopi: ta in en video som bilder, rita ovanpå och ersätt fotot i filmen med papper.
 • Verk som fil: högerklicka på ett verk i listan → ”Dela som fil …”. Via AirDrop eller Filer hamnar det på iPad, iPhone eller Mac, där FrameFold öppnar en kopia. Inget moln, inget konto.
-• Musik: fem stycken från ”Glad” till ”Jakt”, lika långa som din film och med uttoning på slutet.
-• Rösteffekter: ljus röst, mörk röst eller robot på vilket ljudspår som helst.
-• Korta ljudspår och tona in eller ut dem.
-• Håll en bild: en bild kan stå kvar i 2, 3, 4 eller 6 bilder – ett steg, en ångring.
-• Läget ”Atelier” heter nu likadant på alla språk.
+• Ljud: fem musikstycken, rösteffekter (ljus, mörk, robot), korta ljudspår och tona in och ut dem.
+• Håll en bild: låt en bild stå kvar i 2, 3, 4 eller 6 bilder.
+• Studio: utlös en systemkamera direkt via USB, ljus via DMX (Art-Net) och motion control via Bluetooth – värden per bild, inställda före varje bild. Ljus och motion control bara när du slår på dem.
+• Nu även på svenska och 8 andra språk.
+• Snabbare och säkrare: smidigare Studio med många bilder, snabbare export, kontrollerade verkfiler.

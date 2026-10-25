@@ -539,6 +539,222 @@
           }
         }
       }
+    },
+    "NSLocalNetworkUsageDescription": {
+      "comment": "Systemdialog beim ersten Einschalten der Lichtsteuerung (Art-Net)",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur wenn du im Studio die Lichtsteuerung einschaltest: FrameFold schickt Lichtwerte (Art-Net) an ein Gerät in deinem lokalen Netz. Es geht nichts ins Internet."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only if you turn on light control in the Studio: FrameFold sends light values (Art-Net) to a device on your local network. Nothing goes to the internet."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uniquement si vous activez le contrôle de la lumière dans le Studio : FrameFold envoie des valeurs d’éclairage (Art-Net) à un appareil de votre réseau local. Rien ne part sur Internet."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo si activas el control de luz en el Studio: FrameFold envía valores de luz (Art-Net) a un dispositivo de tu red local. Nada sale a internet."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo se attivi il controllo luci nello Studio: FrameFold invia valori di luce (Art-Net) a un dispositivo nella tua rete locale. Nulla va su Internet."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alleen als je in de Studio lichtbesturing inschakelt: FrameFold stuurt lichtwaarden (Art-Net) naar een apparaat in je lokale netwerk. Er gaat niets naar het internet."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Studio で照明コントロールをオンにした場合のみ：FrameFold はローカルネットワーク内の機器に照明の値（Art-Net）を送信します。インターネットには何も送信されません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Só se você ativar o controle de luz no Studio: o FrameFold envia valores de luz (Art-Net) para um aparelho na sua rede local. Nada vai para a internet."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jen když ve Studiu zapneš ovládání světla: FrameFold posílá hodnoty světla (Art-Net) do zařízení ve tvé místní síti. Nic nejde do internetu."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tylko gdy włączysz sterowanie światłem w Studio: FrameFold wysyła wartości światła (Art-Net) do urządzenia w twojej sieci lokalnej. Nic nie trafia do internetu."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Лише якщо ти вмикаєш керування світлом у Студії: FrameFold надсилає значення світла (Art-Net) на пристрій у твоїй локальній мережі. До інтернету нічого не потрапляє."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Только если вы включите управление светом в Студии: FrameFold отправляет значения света (Art-Net) на устройство в вашей локальной сети. В интернет ничего не уходит."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yalnızca Stüdyo’da ışık kontrolünü açarsanız: FrameFold ışık değerlerini (Art-Net) yerel ağınızdaki bir cihaza gönderir. İnternete hiçbir şey gitmez."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스튜디오에서 조명 제어를 켠 경우에만: FrameFold가 로컬 네트워크의 기기로 조명 값(Art-Net)을 보냅니다. 인터넷으로는 아무것도 보내지 않습니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仅当你在 Studio 中开启灯光控制时：FrameFold 会把灯光数值（Art-Net）发送到你本地网络中的设备。不会向互联网发送任何内容。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kun hvis du slår lysstyring til i Studio: FrameFold sender lysværdier (Art-Net) til en enhed på dit lokale netværk. Intet sendes til internettet."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bara om du slår på ljusstyrning i Studio: FrameFold skickar ljusvärden (Art-Net) till en enhet i ditt lokala nätverk. Inget skickas till internet."
+          }
+        }
+      }
+    },
+    "NSBluetoothAlwaysUsageDescription": {
+      "comment": "Systemdialog beim ersten Verbinden von Motion Control",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur wenn du im Studio Motion Control verbindest: FrameFold steuert per Bluetooth einen Kameraschlitten oder Schwenkkopf."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only if you connect motion control in the Studio: FrameFold controls a camera slider or pan-tilt head via Bluetooth."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uniquement si vous connectez le Motion Control dans le Studio : FrameFold pilote par Bluetooth un slider ou une tête panoramique."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo si conectas el Motion Control en el Studio: FrameFold controla por Bluetooth un slider de cámara o un cabezal panorámico."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo se colleghi il Motion Control nello Studio: FrameFold controlla via Bluetooth uno slider o una testa panoramica."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alleen als je in de Studio motion control verbindt: FrameFold stuurt via Bluetooth een cameraslider of panoramakop aan."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Studio でモーションコントロールを接続した場合のみ：FrameFold は Bluetooth でカメラスライダーや雲台を制御します。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Só se você conectar o Motion Control no Studio: o FrameFold controla por Bluetooth um slider de câmera ou uma cabeça panorâmica."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jen když ve Studiu připojíš Motion Control: FrameFold přes Bluetooth ovládá kamerový slider nebo panoramatickou hlavu."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tylko gdy połączysz Motion Control w Studio: FrameFold steruje przez Bluetooth sliderem kamery lub głowicą panoramiczną."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Лише якщо ти підключаєш Motion Control у Студії: FrameFold керує через Bluetooth слайдером камери або панорамною головкою."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Только если вы подключите Motion Control в Студии: FrameFold управляет по Bluetooth слайдером камеры или панорамной головкой."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yalnızca Stüdyo’da Motion Control’ü bağlarsanız: FrameFold, Bluetooth ile bir kamera kaydırıcısını veya pan-tilt başlığını kontrol eder."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스튜디오에서 모션 컨트롤을 연결한 경우에만: FrameFold가 Bluetooth로 카메라 슬라이더나 팬·틸트 헤드를 제어합니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仅当你在 Studio 中连接运动控制时：FrameFold 会通过蓝牙控制相机滑轨或云台。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kun hvis du forbinder motion control i Studio: FrameFold styrer en kameraslider eller et panoramahoved via Bluetooth."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bara om du ansluter motion control i Studio: FrameFold styr en kameraslider eller ett panoramahuvud via Bluetooth."
+          }
+        }
+      }
     }
   },
   "version": "1.3"

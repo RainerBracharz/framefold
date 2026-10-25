@@ -1,10 +1,13 @@
 FrameFold 2.7
 
-Prace wędrują z tobą – i dźwięk do filmów dla dzieci.
+Teraz w 17 językach – i z narzędziami jak w profesjonalnym studiu.
 
+• Jazdy kamery: panorama i zoom po fragmencie obrazu, płynnie lub równomiernie.
+• Warstwy obrazu: nałóż na film własne obrazy, także z przezroczystością – w wybranej kolejności.
+• Rotoskopia: zamień wideo na klatki, rysuj na nich i zastąp zdjęcie w filmie papierem.
 • Praca jako plik: na liście prac kliknij pracę prawym przyciskiem → „Udostępnij jako plik…”. Przez AirDrop lub Pliki trafi na iPada, iPhone’a lub Maca, gdzie FrameFold otworzy kopię. Bez chmury, bez konta.
-• Muzyka: pięć utworów od „Wesoło” do „Pościg”, tak długich jak twój film, z wyciszeniem na końcu.
-• Efekty głosu: wysoki głos, niski głos lub robot dla każdej ścieżki dźwiękowej.
-• Ścieżki dźwiękowe można przycinać, wyciszać i płynnie wprowadzać.
-• Zatrzymaj klatkę: klatka może trwać 2, 3, 4 lub 6 klatek – jeden krok, jedno cofnięcie.
-• Tryb „Atelier” ma teraz tę nazwę we wszystkich językach.
+• Dźwięk: pięć utworów muzycznych, efekty głosu (wysoki, niski, robot), przycinanie i wyciszanie ścieżek.
+• Przytrzymaj klatkę: klatka może trwać 2, 3, 4 lub 6 klatek.
+• Studio: wyzwalanie lustrzanki bezpośrednio przez USB, światło przez DMX (Art-Net) i Motion Control przez Bluetooth – wartości dla każdej klatki, ustawiane przed zdjęciem. Światło i Motion Control tylko wtedy, gdy je włączysz.
+• Teraz także po polsku i w 8 innych językach.
+• Szybciej i bezpieczniej: płynniejsze Studio przy wielu klatkach, szybszy eksport, sprawdzane pliki prac.

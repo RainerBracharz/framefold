@@ -1,10 +1,13 @@
 FrameFold 2.7
 
-Díla putují s tebou – a zvuk pro dětské filmy.
+Teď v 17 jazycích – a s nástroji jako v profesionálním studiu.
 
+• Jízdy kamery: švenk a zoom přes část obrazu, plynule nebo rovnoměrně.
+• Obrazové vrstvy: polož přes film vlastní obrázky, i s průhledností – v libovolném pořadí.
+• Rotoskopie: převeď video na snímky, kresli přes ně a nahraď fotku ve filmu papírem.
 • Dílo jako soubor: v seznamu děl podrž dílo → „Sdílet jako soubor…“. Přes AirDrop nebo Soubory se dostane na iPad, iPhone nebo Mac, kde FrameFold otevře kopii. Bez cloudu, bez účtu.
-• Hudba: pět skladeb od „Vesele“ po „Honička“, dlouhé jako tvůj film, na konci se ztlumí.
-• Hlasové efekty: vysoký hlas, hluboký hlas nebo robot pro každou zvukovou stopu.
-• Zvukové stopy lze zkrátit a postupně zesílit nebo ztlumit.
-• Podržet snímek: snímek může zůstat 2, 3, 4 nebo 6 snímků – jeden krok, jedno vrácení.
-• Režim „Ateliér“ má teď tento název ve všech jazycích.
+• Zvuk: pět hudebních skladeb, hlasové efekty (vysoký, hluboký, robot), zkracování a prolínání zvukových stop.
+• Podržet snímek: snímek může zůstat 2, 3, 4 nebo 6 snímků.
+• Studio: světlo přes DMX (Art-Net) a Motion Control přes Bluetooth – hodnoty pro každý snímek, nastavené před spuštěním. Obojí jen když to zapneš.
+• Nově i v češtině a 8 dalších jazycích.
+• Rychlejší a bezpečnější: plynulejší Studio při mnoha snímcích, rychlejší export, kontrolované soubory děl.

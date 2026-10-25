@@ -1,9 +1,13 @@
 FrameFold 2.7
 
-Le opere ti seguono – e audio per i film dei bambini.
+Ora in 17 lingue – e con strumenti da studio professionale.
 
+• Movimenti di camera: panoramica e zoom su un’area dell’immagine, morbidi o uniformi.
+• Livelli immagine: metti le tue immagini, anche con trasparenza, sopra il film – nell’ordine che vuoi.
+• Rotoscopia: importa un video come fotogrammi, disegnaci sopra e sostituisci la foto nel film con la carta.
 • Opera come file: tieni premuta un’opera nell’elenco → «Condividi come file …». Via AirDrop o File arriva su iPad, iPhone o Mac, dove FrameFold ne apre una copia. Senza cloud, senza account.
-• Musica: cinque brani, da «Allegro» a «Inseguimento», lunghi quanto il tuo film, con dissolvenza finale.
-• Effetti voce: voce acuta, voce profonda o robot per ogni traccia audio.
-• Taglia le tracce audio e falle entrare o uscire in dissolvenza.
-• Tieni un fotogramma: un fotogramma può durare 2, 3, 4 o 6 fotogrammi – un passo, un annulla.
+• Audio: cinque brani musicali, effetti voce (acuta, grave, robot), tracce audio da accorciare e sfumare.
+• Mantieni fotogramma: un fotogramma può restare per 2, 3, 4 o 6 fotogrammi.
+• Studio: luci via DMX (Art-Net) e Motion Control via Bluetooth – valori per fotogramma, impostati prima di ogni scatto. Entrambi solo se li attivi.
+• Novità: ceco, danese, coreano, polacco, russo, svedese, turco, ucraino e cinese.
+• Più veloce e più sicuro: Studio più fluido con molti fotogrammi, esportazione più rapida, file delle opere verificati.

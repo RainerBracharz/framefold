@@ -1,10 +1,13 @@
 FrameFold 2.7
 
-Take your works with you – and sound for kids' films.
+Now in 17 languages – and with tools like a pro studio.
 
+• Camera moves: pan and zoom across part of the image, smooth or steady.
+• Image layers: place your own images, also with transparency, over the film – in any order.
+• Rotoscoping: bring in a video as frames, draw over it and replace the photo in the film with paper.
 • Work as a file: right-click a work in the list → “Share as file …”. Via AirDrop or Files it goes to iPad, iPhone or Mac, where FrameFold opens a copy. No cloud, no account.
-• Music: five pieces from “Happy” to “Chase”, as long as your film, fading out at the end.
-• Voice effects: high voice, deep voice or robot for any audio track.
-• Trim audio tracks and fade them in or out.
-• Hold a frame: a frame can stay for 2, 3, 4 or 6 frames – one step, one undo.
-• The “Atelier” mode now has that name in every language.
+• Sound: five music pieces, voice effects (high, deep, robot), trim and fade audio tracks.
+• Hold a frame: let a frame stay for 2, 3, 4 or 6 frames.
+• Studio: trigger a DSLR directly over USB, lights via DMX (Art-Net) and motion control via Bluetooth – values per frame, set before each shot. Lights and motion control only when you turn them on.
+• New in Czech, Danish, Korean, Polish, Russian, Swedish, Turkish, Ukrainian and Chinese.
+• Faster and safer: smoother Studio with many frames, faster export, checked work files.

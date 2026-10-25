@@ -1,10 +1,13 @@
 FrameFold 2.7
 
-Eserlerinizi yanınızda taşıyın — ve çocuk filmleri için ses.
+Artık 17 dilde – ve profesyonel stüdyo araçlarıyla.
 
+• Kamera hareketleri: görüntünün bir bölümünde kaydırma ve yakınlaştırma, yumuşak ya da sabit hızda.
+• Görüntü katmanları: kendi görüntülerinizi, saydamlıkla da, filmin üzerine yerleştirin – istediğiniz sırayla.
+• Rotoskopi: bir videoyu kare olarak alın, üzerine çizin ve filmdeki fotoğrafı kâğıtla değiştirin.
 • Dosya olarak eser: listede bir esere sağ tıklayın → “Dosya olarak paylaş…”. AirDrop ya da Dosyalar ile iPad, iPhone veya Mac'e gider, orada FrameFold bir kopyasını açar. Bulut yok, hesap yok.
-• Müzik: “Neşeli”den “Kovalamaca”ya beş parça, filminiz kadar uzun, sonda sesi azalarak biter.
-• Ses efektleri: her ses parçası için ince ses, kalın ses ya da robot.
-• Ses parçalarını kırpın, sesini artırarak başlatıp azaltarak bitirin.
-• Kareyi tut: bir kare 2, 3, 4 ya da 6 kare boyunca kalabilir — tek adım, tek geri alma.
-• “Atelier” modu artık her dilde bu adı taşıyor.
+• Ses: beş müzik parçası, ses efektleri (ince, kalın, robot), ses kanallarını kısaltma ve geçişli açıp kapatma.
+• Kareyi tut: bir kare 2, 3, 4 veya 6 kare boyunca kalabilir.
+• Stüdyo: DSLR’yi doğrudan USB ile tetikleme, DMX (Art-Net) ile ışık ve Bluetooth ile Motion Control – her kare için değerler, çekimden önce ayarlanır. Işık ve Motion Control yalnızca siz açtığınızda.
+• Artık Türkçe ve 8 dilde daha.
+• Daha hızlı ve daha güvenli: çok karede daha akıcı Stüdyo, daha hızlı dışa aktarma, denetlenen eser dosyaları.
