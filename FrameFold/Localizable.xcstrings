@@ -2396,7 +2396,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Studio"
+            "value": "Atelier"
           }
         },
         "fr": {
@@ -2426,13 +2426,13 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Studio"
+            "value": "アトリエ"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Studio"
+            "value": "Ateliê"
           }
         }
       }
@@ -15881,7 +15881,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recently in the studio"
+            "value": "Recently in the atelier"
           }
         },
         "fr": {
@@ -15911,13 +15911,13 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "最近の Studio"
+            "value": "最近のアトリエ"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recentemente no Studio"
+            "value": "Recentemente no ateliê"
           }
         }
       }

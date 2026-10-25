@@ -35,7 +35,7 @@ VIDEO TO STOP-MOTION
 Pick an existing video, the calm moments get found, hands removed, duplicates sorted out. You check every frame on the contact sheet before it's assembled.
 
 THREE MODES
-Simple (pick, shoot, done — made for teaching), Advanced (aspect, frame rate, resolution, playback) and a studio mode with paper relief, image echo, print look, fold transitions, an exhibition reel and print-ready contact-sheet and fold-template PDFs.
+Simple (pick, shoot, done — made for teaching), Advanced (aspect, frame rate, resolution, playback) and an Atelier mode with paper relief, image echo, print look, fold transitions, an exhibition reel and print-ready contact-sheet and fold-template PDFs.
 
 WORKS, NOT FILES
 Projects collect frames across any number of sessions, with a 30-day trash. The result arrives like an edition: "Sheets 01–24 · Series of 24 · dated 2026".

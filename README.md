@@ -119,7 +119,7 @@ that decision is written up here:
   balance, looks for the whole film, photos from the library as frames.
 - **iPad in a stand.** On iPad the viewfinder and the captured frames follow the
   device's orientation, portrait or landscape.
-- **Studio on the Mac and iPad (and iPhone, if switched on).** In Advanced and Studio mode the camera becomes a
+- **Studio on the Mac and iPad (and iPhone, if switched on).** In Advanced and Atelier mode the camera becomes a
   full stop-motion workspace in the spirit of Dragonframe: viewer with live /
   captured toggle and auto-toggle, multi-frame onion skin, difference and
   clipping views, aspect masks, safe areas and grids, an image-or-movie
@@ -161,9 +161,9 @@ video or record live — and lets you choose a mode. It can be changed at any ti
 |---|---|
 | **Simple** | Pick a video, get a stop-motion. Nothing else on screen. Playful enough for Tolino's students: big counter, warm language, instant result. |
 | **Advanced** | Frame rate, aspect, resolution, playback mode, stabilisation. |
-| **Studio** | Everything, plus the studio effects below. |
+| **Atelier** | Everything, plus the studio effects below. |
 
-**The Studio stage:** *print look* (black and white on a warm paper tone), *paper
+**The Atelier stage:** *print look* (black and white on a warm paper tone), *paper
 relief* (each facet catching the light differently, as if the image had been
 folded and re-photographed), *image echo* (each frame lingering in the next, a
 recursion of its own image), and fold transitions in three styles — **crease**,
