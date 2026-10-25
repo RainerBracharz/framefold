@@ -13,7 +13,12 @@ jobs:
     name: Logik-Tests, Speicher-Tests, iOS- und Mac-Build
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      # Auf einen festen Stand gepinnt (v4) – ein verschobener Tag kann so
+      # keinen fremden Code in einen Job mit Schreibrecht bringen. Das Token
+      # bleibt nicht in .git liegen, während Build und Tests laufen.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       - name: Xcode-Version
         run: xcodebuild -version | tee /tmp/xcode-version.txt
