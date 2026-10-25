@@ -1,18 +1,10 @@
-FrameFold 2.6
+FrameFold 2.7
 
-O Studio – e som.
+Suas obras vão com você – e som para filmes infantis.
 
-• Desfazer e refazer para tudo numa obra (reordenar, remover, texto …) – por botão ou ⌘Z / ⇧⌘Z.
-• Texto, balões de fala e desenho: toque e segure um quadro → “Texto e desenho…”. Textos e balões se estendem por vários quadros; desenhos pertencem a um quadro.
-• Além disso: exportação em até 4K, bater palma para disparar, adicionar fotos como quadros e visuais para o filme inteiro.
-• Studio: a partir do modo Avançado, a câmera vira uma área de trabalho profissional – linha do tempo arrastável, alternância entre visão ao vivo e quadros capturados, papel cebola de vários quadros, visualizações de diferença e de exposição, máscaras de formato, grades, uma imagem ou um filme de referência com chroma key, notas por quadro, média de quadros contra ruído, time-lapse com horário de início e fim. Tudo também pelo teclado (menu Studio).
-• Tela verde, título e créditos: substitua verde ou azul por uma imagem ou um filme, além de uma cartela de título antes do filme e créditos depois dele.
-• Qualquer câmera: fotos que o software da sua câmera DSLR ou mirrorless coloca numa pasta viram o próximo quadro em resolução máxima – inclusive RAW. Além disso, uma lupa para conferir o foco na visão ao vivo.
-• Gravar voz: o filme toca junto enquanto você fala – a gravação cai como faixa exatamente no lugar certo.
-• Som de estúdio: várias faixas de áudio com quadro inicial e volume, forma de onda na linha do tempo, som ao reproduzir e ao avançar quadros. Leia os diálogos no X-Sheet com formas da boca por personagem – o FrameFold consegue reconhecer as palavras sozinho, só no dispositivo.
-• Exportação em ProRes ou como sequência de imagens (PNG, TIFF, JPEG).
-• Música ou som: escolha um arquivo de áudio na visão da obra – ele toca sob o filme exportado.
-• Até 30 fps: 15, 24, 25 e 30 fps para movimentos fluidos.
-• Duplicar e reordenar quadros: clique com o botão direito num quadro para “Duplicar”, “Mover para antes” e “Mover para depois” – ou arraste-o para um novo lugar na folha de contato.
-• Efeitos sonoros e voz: coloque pop, vush, rufar de tambores, tchan-tchan-tchan e mais em qualquer quadro – ou faça uma voz ler um texto digitado. Tudo é criado no aparelho. E uma ajuda com guias curtos nos ajustes.
-• Agora também em espanhol, italiano, holandês, japonês e português – e uma obra de exemplo espera por você no primeiro uso para experimentar.
+• Obra como arquivo: clique com o botão direito em uma obra na lista → “Compartilhar como arquivo…”. Por AirDrop ou Arquivos ela chega ao iPad, iPhone ou Mac, onde o FrameFold abre uma cópia. Sem nuvem, sem conta.
+• Música: cinco faixas, de “Alegre” a “Perseguição”, do tamanho do seu filme, com fade no final.
+• Efeitos de voz: voz aguda, voz grave ou robô para cada faixa de áudio.
+• Corte faixas de áudio e aplique fade de entrada ou saída.
+• Segurar um quadro: um quadro pode durar 2, 3, 4 ou 6 quadros – um passo, um desfazer.
+• O modo “Ateliê” agora tem esse nome em todos os idiomas.

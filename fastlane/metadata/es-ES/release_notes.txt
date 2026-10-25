@@ -1,17 +1,9 @@
-FrameFold 2.6
+FrameFold 2.7
 
-Ahora también en iPad – y con sonido.
+Tus obras viajan contigo, y sonido para películas infantiles.
 
-• Deshacer y rehacer para todo en una obra (reordenar, quitar, texto…): con botón o ⌘Z. El Studio ya está también en el iPhone (ajustes en directo → Studio).
-• Texto, bocadillos y dibujo: mantén pulsado un fotograma → «Texto y dibujo …». Textos y bocadillos abarcan varios fotogramas; los dibujos, uno.
-• Resolución completa: cada fotograma es una foto del sensor, exportación hasta 4K. Además: elección de objetivo (ultra gran angular, teleobjetivo, cámara frontal), disparo con una palmada, añadir fotos como fotogramas y estilos para toda la película.
-• iPad: FrameFold funciona en iPad, en vertical y en horizontal. En un soporte, el visor y los fotogramas siguen la orientación del dispositivo.
-• Croma, título y créditos: sustituye el verde o el azul por una imagen o un vídeo, con una cartela de título antes de la película y créditos al final.
-• Studio en el iPad: desde el modo Avanzado la cámara se convierte en un espacio de trabajo profesional – línea de tiempo, alternar entre directo y fotogramas, papel cebolla de varios fotogramas, máscaras, lupa, varias pistas de audio con forma de onda, hoja de exposición con formas de boca.
-• Grabar la voz: la película se reproduce mientras hablas y la grabación queda en el lugar exacto. Se queda en el dispositivo.
-• Música o sonido: elige un archivo de audio en la vista de la obra – suena bajo la película exportada.
-• Hasta 30 fps: 15, 24, 25 y 30 fps para un movimiento fluido.
-• Cámara manual (desde Avanzado): ajusta tú mismo ISO, velocidad de obturación, enfoque y balance de blancos.
-• Duplicar y reordenar: mantén pulsado un fotograma para duplicarlo o moverlo – o arrástralo a otro lugar de la hoja de contactos.
-• Efectos de sonido y voz: añade pop, zas, redoble, tachán y más a cualquier fotograma, o haz que una voz lea un texto. Todo se genera en el dispositivo. Además, una ayuda con guías breves en los ajustes.
-• Ahora también en español, italiano, neerlandés, japonés y portugués, y al abrirla por primera vez te espera una obra de ejemplo.
+• Obra como archivo: mantén pulsada una obra en la lista → «Compartir como archivo…». Por AirDrop o Archivos llega al iPad, iPhone o Mac, donde FrameFold abre una copia. Sin nube, sin cuenta.
+• Música: cinco piezas, de «Alegre» a «Persecución», tan largas como tu película, con desvanecimiento al final.
+• Efectos de voz: voz aguda, voz grave o robot para cada pista de audio.
+• Recorta las pistas de audio y haz que aparezcan o desaparezcan gradualmente.
+• Mantener un fotograma: un fotograma puede durar 2, 3, 4 o 6 fotogramas; un paso, un deshacer.

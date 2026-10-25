@@ -1,18 +1,10 @@
-FrameFold 2.6
+FrameFold 2.7
 
-The Studio – and sound.
+Take your works with you – and sound for kids' films.
 
-• Undo and redo for everything in a work (reordering, removing, text …) – by button or ⌘Z / ⇧⌘Z.
-• Text, speech bubbles and drawing: press and hold a frame → “Text & drawing …”. Text and bubbles span several frames, drawings belong to one frame.
-• Also: export up to 4K, clap to shoot, adding photos as frames and looks for the whole film.
-• Studio: from Advanced mode the camera becomes a pro workspace – draggable timeline, toggle between live view and captured frames, multi-frame onion skin, difference and exposure views, aspect masks, grids, a reference image or movie with chroma key, notes per frame, frame averaging against noise, time-lapse with start and end time. All on the keyboard too (Studio menu).
-• Green screen, title and credits: replace green or blue with an image or a movie, plus a title card before the film and credits after it.
-• Any camera: photos your DSLR or mirrorless camera’s software drops into a folder become the next frame at full resolution – RAW too. Plus a loupe for checking focus in the live view.
-• Record voice: the film plays along while you speak – the recording lands as a track exactly in the right place.
-• Sound like a studio: multiple audio tracks with start frame and level, waveform in the timeline, sound while playing and stepping. Read dialogue in the X-sheet with mouth shapes per character – FrameFold can recognise the words itself, on the device only.
-• Export as ProRes or an image sequence (PNG, TIFF, JPEG).
-• Music or sound: pick an audio file in the work view – it plays under the exported film.
-• Up to 30 fps: 15, 24, 25 and 30 fps for smooth motion.
-• Duplicate and reorder frames: right-click a frame for “Duplicate”, “Move earlier” and “Move later” – or drag it to a new place in the contact sheet.
-• Sound effects and text to speech: attach pop, whoosh, drum roll, ta-da and more to any frame – or have a voice speak typed text. Everything is made on the device. Plus a help section with short guides in the settings.
-• Now also in Spanish, Italian, Dutch, Japanese and Portuguese – and a sample work is waiting on first launch to try things out.
+• Work as a file: right-click a work in the list → “Share as file …”. Via AirDrop or Files it goes to iPad, iPhone or Mac, where FrameFold opens a copy. No cloud, no account.
+• Music: five pieces from “Happy” to “Chase”, as long as your film, fading out at the end.
+• Voice effects: high voice, deep voice or robot for any audio track.
+• Trim audio tracks and fade them in or out.
+• Hold a frame: a frame can stay for 2, 3, 4 or 6 frames – one step, one undo.
+• The “Atelier” mode now has that name in every language.

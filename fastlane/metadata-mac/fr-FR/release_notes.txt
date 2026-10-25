@@ -1,18 +1,9 @@
-FrameFold 2.6
+FrameFold 2.7
 
-Le Studio – et le son.
+Vos œuvres vous suivent – et du son pour les films d’enfants.
 
-• Annuler et rétablir pour tout dans une œuvre (réordonner, retirer, texte …) – par bouton ou ⌘Z / ⇧⌘Z.
-• Texte, bulles et dessin : appuie longuement sur une image → « Texte et dessin … ». Textes et bulles couvrent plusieurs images, les dessins une seule.
-• Et aussi : export jusqu’en 4K, déclenchement en tapant des mains, ajout de photos comme images et looks pour tout le film.
-• Studio : dès le mode Avancé, la caméra devient un espace de travail pro – timeline à glisser, bascule entre direct et prises, pelure d’oignon sur plusieurs images, vues différence et exposition, masques de format, grilles, image ou film de référence avec incrustation, notes par image, moyenne contre le bruit, time-lapse avec heure de début et de fin. Tout au clavier aussi (menu Studio).
-• Fond vert, titre et générique : remplace le vert ou le bleu par une image ou un film, avec un carton de titre avant le film et un générique après.
-• N’importe quel appareil : les photos que le logiciel de ton reflex ou hybride dépose dans un dossier deviennent l’image suivante en pleine résolution – RAW compris. Et une loupe pour vérifier la netteté en direct.
-• Enregistrer la voix : le film défile pendant que tu parles – l’enregistrement devient une piste exactement au bon endroit.
-• Le son comme en studio : plusieurs pistes avec image de départ et niveau, forme d’onde dans la timeline, son à la lecture et en parcourant. Lecture des dialogues dans la feuille d’exposition avec formes de bouche par personnage – FrameFold peut reconnaître les mots lui-même, uniquement sur l’appareil.
-• Export en ProRes ou en séquence d’images (PNG, TIFF, JPEG).
-• Musique ou son : choisis un fichier audio dans la vue de l’œuvre – il accompagne le film exporté.
-• Jusqu’à 30 images par seconde : 15, 24, 25 et 30 fps pour un mouvement fluide.
-• Dupliquer et réordonner : clic droit sur une image pour « Dupliquer », « Avancer » et « Reculer » – ou fais-la glisser ailleurs dans la planche contact.
-• Bruitages et synthèse vocale : placez plop, whoosh, roulement de tambour, tadaa et d’autres sur n’importe quelle image – ou faites lire un texte par une voix. Tout est créé sur l’appareil. Et une aide avec de courts guides dans les réglages.
-• Désormais aussi en espagnol, italien, néerlandais, japonais et portugais – et une œuvre d’exemple attend au premier lancement.
+• Œuvre en fichier : clic droit sur une œuvre dans la liste → « Partager comme fichier … ». Via AirDrop ou Fichiers, elle arrive sur iPad, iPhone ou Mac, où FrameFold en ouvre une copie. Sans cloud, sans compte.
+• Musique : cinq morceaux, de « Joyeux » à « Poursuite », aussi longs que votre film, avec un fondu à la fin.
+• Effets de voix : voix aiguë, voix grave ou robot pour chaque piste audio.
+• Couper les pistes audio et les faire apparaître ou disparaître en fondu.
+• Maintenir une image : une image peut durer 2, 3, 4 ou 6 images – une étape, une annulation.

@@ -1,18 +1,9 @@
-FrameFold 2.6
+FrameFold 2.7
 
-De Studio – en geluid.
+Je werken reizen mee – en geluid voor kinderfilms.
 
-• Ongedaan maken en opnieuw voor alles in een werk (herschikken, verwijderen, tekst …) – met de knop of ⌘Z / ⇧⌘Z.
-• Tekst, tekstballonnen en tekenen: houd een beeld ingedrukt → ‘Tekst en tekenen …’. Tekst en ballonnen gelden voor meerdere beelden, tekeningen voor één beeld.
-• Verder: export tot 4K, afdrukken met klappen, foto’s als beelden toevoegen en looks voor de hele film.
-• Studio: vanaf de modus Uitgebreid wordt de camera een professionele werkplek – tijdlijn met slepen, wisselen tussen live en opnames, onion skin over meerdere beelden, verschil- en belichtingsweergave, formaatmaskers, rasters, referentiebeeld of -film met chromakey, notities per beeld, middelen tegen ruis, timelapse met start- en eindtijd. Alles ook via het toetsenbord (menu Studio).
-• Greenscreen, titel en aftiteling: vervang groen of blauw door een afbeelding of film, met een titelkaart vóór de film en aftiteling erna.
-• Elke camera: foto’s die de software van je spiegelreflex of systeemcamera in een map zet, worden in volle resolutie het volgende beeld – ook RAW. Plus een loep om de scherpte in het livebeeld te controleren.
-• Stem opnemen: de film speelt mee terwijl je spreekt – de opname wordt een spoor op precies de goede plek.
-• Geluid als in een studio: meerdere sporen met startbeeld en volume, golfvorm in de tijdlijn, geluid bij afspelen en bladeren. Dialoog lezen in het X-sheet met mondvormen per personage – FrameFold herkent de woorden desgewenst zelf, alleen op het apparaat.
-• Export als ProRes of beeldreeks (PNG, TIFF, JPEG).
-• Muziek of geluid: kies een audiobestand in de werkweergave – het klinkt onder de geëxporteerde film.
-• Tot 30 fps: 15, 24, 25 en 30 fps voor vloeiende beweging.
-• Verdubbelen en herschikken: rechtsklik op een beeld om het te verdubbelen of te verplaatsen – of sleep het naar een andere plek op het contactvel.
-• Geluidseffecten en spraak: hang plop, woesj, tromgeroffel, tadaa en meer aan elk beeld – of laat getypte tekst door een stem uitspreken. Alles ontstaat op het apparaat. Plus een helpgedeelte met korte uitleg in de instellingen.
-• Nu ook in het Spaans, Italiaans, Nederlands, Japans en Portugees – en bij de eerste start staat er een voorbeeldwerk klaar.
+• Werk als bestand: klik met rechts op een werk in de lijst → ‘Delen als bestand …’. Via AirDrop of Bestanden komt het op iPad, iPhone of Mac, waar FrameFold een kopie opent. Zonder cloud, zonder account.
+• Muziek: vijf stukken van ‘Vrolijk’ tot ‘Achtervolging’, zo lang als je film, met uitfaden aan het eind.
+• Stemeffecten: hoge stem, lage stem of robot voor elk audiospoor.
+• Audiosporen inkorten en laten in- of uitfaden.
+• Beeld vasthouden: een beeld kan 2, 3, 4 of 6 beelden lang blijven staan – één stap, één keer ongedaan maken.

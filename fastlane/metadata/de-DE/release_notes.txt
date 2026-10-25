@@ -1,17 +1,9 @@
-FrameFold 2.6
+FrameFold 2.7
 
-Jetzt auch auf dem iPad – und mit Ton.
+Werke wandern mit – und Ton für Kinderfilme.
 
-• Rückgängig und Wiederholen für alles am Werk (Umordnen, Entfernen, Text …) – per Knopf oder ⌘Z. Das Studio gibt es jetzt auch auf dem iPhone (Live-Einstellungen → Studio).
-• Text, Sprechblasen und Zeichnen: Ein Bild lange drücken → „Text & Zeichnen …“. Text und Sprechblasen gelten für mehrere Bilder, Zeichnungen für ein Bild.
-• Volle Auflösung: Jedes Bild kommt als Foto vom Sensor, Export bis 4K. Dazu Objektivwahl (Ultraweitwinkel, Tele, Frontkamera), Auslösen per Klatschen, Fotos als Bilder hinzufügen und Looks für den ganzen Film.
-• iPad: FrameFold läuft auf dem iPad, hoch und quer. Im Ständer folgen Sucher und Bilder der Lage des Geräts.
-• Greenscreen, Titel und Abspann: Grün oder Blau durch ein Bild oder einen Film ersetzen, dazu eine Titelkarte vor dem Film und ein Abspann danach.
-• Studio auf dem iPad: Ab „Erweitert“ wird die Kamera zur Profi-Arbeitsfläche – Zeitleiste, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder, Masken, Lupe, mehrere Tonspuren mit Wellenform, X-Sheet mit Mundformen.
-• Stimme aufnehmen: Der Film läuft mit, du sprichst dazu – die Aufnahme liegt danach genau an der richtigen Stelle. Sie bleibt auf dem Gerät.
-• Musik oder Ton: In der Werkansicht eine Audiodatei wählen – sie liegt unter dem exportierten Film.
-• Bis 30 Bilder pro Sekunde: 15, 24, 25 und 30 fps für flüssige Bewegung.
-• Manuelle Kamera (ab „Erweitert“): ISO, Belichtungszeit, Fokus und Weißabgleich selbst stellen – die Automatik misst dann nicht mehr nach.
-• Bilder verdoppeln und umordnen: Ein Bild lange drücken für „Verdoppeln“, „Nach vorn“ und „Nach hinten“ – oder im Kontaktbogen einfach an eine andere Stelle ziehen.
-• Geräusche und Sprechen lassen: Plopp, Wusch, Trommelwirbel, Tadaa und mehr an jedes Bild hängen – oder getippten Text von einer Stimme sprechen lassen. Alles entsteht auf dem Gerät. Dazu eine Hilfe mit kurzen Anleitungen in den Einstellungen.
-• Jetzt auch auf Spanisch, Italienisch, Niederländisch, Japanisch und Portugiesisch – und beim ersten Start wartet ein Beispielwerk zum Ausprobieren.
+• Werk als Datei: In der Werkliste ein Werk lange drücken → „Als Datei teilen …“. Per AirDrop oder „Dateien“ kommt es aufs iPad, iPhone oder den Mac, dort öffnet FrameFold eine Kopie. Ohne Cloud, ohne Konto.
+• Musik: fünf Stücke von „Fröhlich“ bis „Verfolgung“, so lang wie dein Film, mit Ausblenden am Ende.
+• Stimmeffekte: hohe Stimme, tiefe Stimme oder Roboter für jede Tonspur.
+• Tonspuren kürzen und ein- oder ausblenden.
+• Bild halten: Ein Bild steht auf Wunsch 2, 3, 4 oder 6 Bilder lang – ein Schritt, ein Rückgängig.
