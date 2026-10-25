@@ -42,6 +42,7 @@ struct HelpView: View {
             "Titel und Abspann eintragen – sie kommen vor und hinter den Film.",
             "Greenscreen ersetzt Grün oder Blau durch ein Bild oder einen Film.",
             "Daumenkino und Kontaktbogen gibt es als PDF zum Drucken.",
+            "Kamerafahrt (ab „Erweitert“): Schwenk und Zoom über einen Bildbereich.",
         ]),
         Topic(id: "sound", symbol: "waveform", title: "Ton", steps: [
             "Musik oder Ton aus Dateien hinzufügen, Stimme direkt aufnehmen oder Text sprechen lassen.",
@@ -55,15 +56,17 @@ struct HelpView: View {
             "Zeitleiste, Abspielen, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder.",
             "Masken, Raster, Lupe, Referenzbild mit Chroma-Key, Differenz- und Belichtungsansicht.",
             "Alle Befehle mit Tastatur: Menü „Studio“.",
+            "Profi-Rig: Spiegelreflex per USB (Mac), Licht über Art-Net und Motion Control per Bluetooth – Werte je Bild, vor dem Auslösen gestellt.",
         ]),
         Topic(id: "drawing", symbol: "pencil.and.scribble", title: "Text und Zeichnen", steps: [
             "Ein Bild lange drücken und „Text & Zeichnen …“ wählen.",
             "Ins Bild tippen setzt Text oder Sprechblase; sie gelten für mehrere Bilder.",
             "Mit dem Stift auf genau dieses Bild zeichnen.",
             "Im Export wird alles in den Film eingebrannt.",
+            "Bild-Ebene: eigene Bilder (auch mit Transparenz) über den Film legen. Rotoskopie: „Video als Bilder …“, darüber zeichnen, Foto durch Papier ersetzen.",
         ]),
         Topic(id: "privacy", symbol: "lock", title: "Datenschutz", steps: [
-            "Kein Konto, keine Werbung, keine Netzwerkverbindung.",
+            "Kein Konto, keine Werbung, keine Verbindung ins Internet. Licht (Art-Net) und Motion Control (Bluetooth) verbinden sich nur, wenn du sie einschaltest – und nur mit deinem Gerät.",
             "Bilder, Ton und Werke bleiben auf dem Gerät.",
             "Mikrofon nur auf Wunsch: für Sprachaufnahmen und das Auslösen per Klatschen.",
             "Spracherkennung und Sprachausgabe laufen auf dem Gerät.",

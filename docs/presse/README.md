@@ -27,7 +27,7 @@ Alles läuft auf dem Gerät, ohne Konto und ohne Datenübertragung.
 |---|---|
 | Plattformen | iPhone, iPad (iOS 17+), Mac, Apple Watch als Fernauslöser |
 | Preis | kostenlos, keine In-App-Käufe, kein Abo, keine Werbung |
-| Datenschutz | keine Daten erhoben, kein Konto, keine Netzwerkverbindung; Mikrofon nur auf Wunsch (Stimme aufnehmen, Auslösen per Klatschen); Spracherkennung und Sprachausgabe nur auf dem Gerät |
+| Datenschutz | keine Daten erhoben, kein Konto, keine Verbindung ins Internet (Licht über Art-Net und Motion Control per Bluetooth nur auf Wunsch); Mikrofon nur auf Wunsch (Stimme aufnehmen, Auslösen per Klatschen); Spracherkennung und Sprachausgabe nur auf dem Gerät |
 | Sprachen | App: Deutsch, Englisch, Französisch, Spanisch, Italienisch, Niederländisch, Japanisch, Portugiesisch (Brasilien) |
 | Entwickler | Rainer Bracharz, Bracharz Consulting |
 | Erste Version | 24. August 2026 |

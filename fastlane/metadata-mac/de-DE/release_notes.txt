@@ -1,9 +1,13 @@
 FrameFold 2.7
 
-Werke wandern mit – und Ton für Kinderfilme.
+Jetzt in 17 Sprachen – und mit Werkzeugen wie im Profi-Studio.
 
-• Werk als Datei: In der Werkliste Rechtsklick auf ein Werk → „Als Datei teilen …“. Per AirDrop oder „Dateien“ kommt es aufs iPad, iPhone oder den Mac, dort öffnet FrameFold eine Kopie. Ohne Cloud, ohne Konto.
-• Musik: fünf Stücke von „Fröhlich“ bis „Verfolgung“, so lang wie dein Film, mit Ausblenden am Ende.
-• Stimmeffekte: hohe Stimme, tiefe Stimme oder Roboter für jede Tonspur.
-• Tonspuren kürzen und ein- oder ausblenden.
-• Bild halten: Ein Bild steht auf Wunsch 2, 3, 4 oder 6 Bilder lang – ein Schritt, ein Rückgängig.
+• Kamerafahrten: Schwenk und Zoom über einen Bildbereich, weich oder gleichförmig.
+• Bild-Ebenen: eigene Bilder, auch mit Transparenz, über den Film legen – mit Reihenfolge.
+• Rotoskopie: ein Video als Bilder übernehmen, darüber zeichnen und das Foto im Film durch Papier ersetzen.
+• Werk als Datei: In der Werkliste Rechtsklick auf ein Werk → „Als Datei teilen …“. Per AirDrop oder „Dateien“ kommt es aufs iPad, iPhone oder den Mac. Ohne Cloud, ohne Konto.
+• Ton: fünf Musikstücke, Stimmeffekte (hoch, tief, Roboter), Tonspuren kürzen und blenden.
+• Bild halten: ein Bild 2, 3, 4 oder 6 Bilder lang stehen lassen.
+• Studio: Spiegelreflex per USB direkt auslösen, Licht über DMX (Art-Net) und Motion Control per Bluetooth – Werte je Bild, vor dem Auslösen gestellt. Beides nur, wenn du es einschaltest.
+• Neu auf Tschechisch, Dänisch, Koreanisch, Polnisch, Russisch, Schwedisch, Türkisch, Ukrainisch und Chinesisch.
+• Schneller und sicherer: flüssigeres Studio bei vielen Bildern, schnellerer Export, geprüfte Werk-Dateien.

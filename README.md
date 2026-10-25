@@ -148,7 +148,9 @@ that decision is written up here:
   sheet, follows the phone's language. Every screen is checked in every language
   by an automated walkthrough (see *Engineering*).
 - **Private by design.** Everything happens on the device. No account, no upload,
-  no server, no network requests at all. The microphone is only used when you
+  no server, no connection to the internet. The only connections are opt-in studio
+  features for professional sets: lights via Art-Net on the local network and motion
+  control via Bluetooth. The microphone is only used when you
   record a voice or clap to shoot; speech recognition and text to speech run
   on the device. A short help with guides is built in.
 
