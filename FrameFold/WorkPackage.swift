@@ -194,13 +194,18 @@ enum ImportCheck {
         p.dialogue = p.dialogue?.filter { (0...100_000).contains($0.frame) }
 
         let lastFrame = max(0, p.frameFilenames.count - 1)
-        p.overlays = project.overlays?.prefix(10_000).map { overlay in
+        p.overlays = project.overlays?.prefix(10_000).filter { overlay in
+            // Bild-Ebenen nur mit einem geprüften Bild aus dem Paket
+            overlay.kind != .image || overlay.imageFilename.map { [.jpeg, .image].contains(files[$0]) } == true
+        }.map { overlay in
             var o = overlay
             o.firstFrame = min(max(0, o.firstFrame), lastFrame)
             o.lastFrame = min(max(o.firstFrame, o.lastFrame), lastFrame)
             o.x = clampUnit(o.x)
             o.y = clampUnit(o.y)
-            o.size = o.size.isFinite ? min(max(0.01, o.size), 0.3) : 0.06
+            o.size = o.size.isFinite ? min(max(0.01, o.size), o.kind == .image ? 1 : 0.3) : 0.06
+            if o.kind != .image { o.imageFilename = nil }
+            if o.kind != .drawing { o.paper = nil }
             o.text = String(o.text.prefix(2000))
             o.strokes = o.strokes.prefix(2000).map { stroke in
                 var s = stroke
@@ -209,6 +214,19 @@ enum ImportCheck {
                 return s
             }
             return o
+        }
+        p.cameraMoves = project.cameraMoves?.prefix(1000).map { move in
+            var m = move
+            m.firstFrame = min(max(0, m.firstFrame), lastFrame)
+            m.lastFrame = min(max(m.firstFrame, m.lastFrame), lastFrame)
+            for keyPath in [\CameraMove.from, \CameraMove.to] {
+                var f = m[keyPath: keyPath]
+                f.x = clampUnit(f.x)
+                f.y = clampUnit(f.y)
+                f.zoom = f.zoom.isFinite ? min(max(1, f.zoom), 4) : 1
+                m[keyPath: keyPath] = f
+            }
+            return m
         }
         return p
     }

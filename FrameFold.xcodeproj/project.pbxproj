@@ -37,6 +37,8 @@
 		D9FC1C8FA53AFED7B4F7DEDC /* SoundLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E34C35A672D6F0AC029DD2 /* SoundLibrary.swift */; };
 		343389853CFF4F13AC9A3766 /* SoundUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CD39DC0BE029146C705FF3 /* SoundUI.swift */; };
 		6AC6E4766611E796D7F28595 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59376B5070E76BF0525E48E /* HelpView.swift */; };
+		1FB1C66CF6AE801F7114AAA9 /* CameraMoveEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E61D7FD31DD14C4FD178DFF /* CameraMoveEditor.swift */; };
+		320918D380AA48FFFE331C8D /* CameraMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAC36CEF7EF184D8D1873D2 /* CameraMove.swift */; };
 		34E1DD2C18DC913C65DABB1E /* MusicLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40FA8D915709FBC84413973 /* MusicLibrary.swift */; };
 		857DAFE45094A7D6E3CB07DA /* WorkPackage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367935E5424A609B4DDD8E47 /* WorkPackage.swift */; };
 		CC30EBEBEBEBEBEBEBEBE1B0 /* OverlayEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30EBEBEBEBEBEBEBEBE1B1 /* OverlayEditorView.swift */; };
@@ -137,6 +139,8 @@
 		10E34C35A672D6F0AC029DD2 /* SoundLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundLibrary.swift; sourceTree = "<group>"; };
 		C3CD39DC0BE029146C705FF3 /* SoundUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundUI.swift; sourceTree = "<group>"; };
 		B59376B5070E76BF0525E48E /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
+		1E61D7FD31DD14C4FD178DFF /* CameraMoveEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraMoveEditor.swift; sourceTree = "<group>"; };
+		CFAC36CEF7EF184D8D1873D2 /* CameraMove.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraMove.swift; sourceTree = "<group>"; };
 		E40FA8D915709FBC84413973 /* MusicLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicLibrary.swift; sourceTree = "<group>"; };
 		367935E5424A609B4DDD8E47 /* WorkPackage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkPackage.swift; sourceTree = "<group>"; };
 		CC30EBEBEBEBEBEBEBEBE1B1 /* OverlayEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayEditorView.swift; sourceTree = "<group>"; };
@@ -258,6 +262,8 @@
 				10E34C35A672D6F0AC029DD2 /* SoundLibrary.swift */,
 				C3CD39DC0BE029146C705FF3 /* SoundUI.swift */,
 				B59376B5070E76BF0525E48E /* HelpView.swift */,
+				1E61D7FD31DD14C4FD178DFF /* CameraMoveEditor.swift */,
+				CFAC36CEF7EF184D8D1873D2 /* CameraMove.swift */,
 				E40FA8D915709FBC84413973 /* MusicLibrary.swift */,
 				367935E5424A609B4DDD8E47 /* WorkPackage.swift */,
 				CC30EBEBEBEBEBEBEBEBE1B1 /* OverlayEditorView.swift */,
@@ -496,6 +502,8 @@
 				D9FC1C8FA53AFED7B4F7DEDC /* SoundLibrary.swift in Sources */,
 				343389853CFF4F13AC9A3766 /* SoundUI.swift in Sources */,
 				6AC6E4766611E796D7F28595 /* HelpView.swift in Sources */,
+				1FB1C66CF6AE801F7114AAA9 /* CameraMoveEditor.swift in Sources */,
+				320918D380AA48FFFE331C8D /* CameraMove.swift in Sources */,
 				34E1DD2C18DC913C65DABB1E /* MusicLibrary.swift in Sources */,
 				857DAFE45094A7D6E3CB07DA /* WorkPackage.swift in Sources */,
 				CC30EBEBEBEBEBEBEBEBE1B0 /* OverlayEditorView.swift in Sources */,

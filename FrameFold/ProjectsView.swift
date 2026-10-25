@@ -281,6 +281,10 @@ struct ProjectDetailView: View {
     @State private var showAudioImporter = false
     @State private var showVoice = false
     @State private var showBackgroundImporter = false
+    @State private var showCameraMoves = false
+    @State private var showRotoImporter = false
+    @State private var rotoFPS = 12
+    @State private var rotoProgress: Double?
     @State private var photoItems: [PhotosPickerItem] = []
     @State private var overlayFrame: Int?
     @State private var importingPhotos = 0
@@ -632,8 +636,30 @@ struct ProjectDetailView: View {
                 Text(importingPhotos > 0 ? "Fotos werden übernommen … \(importingPhotos)" : "Fotos als Bilder hinzufügen")
                     .font(Theme.body).foregroundStyle(Theme.ink)
             }
-            .disabled(importingPhotos > 0)
+            .disabled(importingPhotos > 0 || rotoProgress != nil)
             Spacer()
+            // Rotoskopie: Video Bild für Bild als Vorlage zum Nachzeichnen
+            if let rotoProgress {
+                Text("\(Int(rotoProgress * 100)) %").font(Theme.mono(11)).foregroundStyle(Theme.graphite)
+            } else {
+                Menu {
+                    ForEach([6, 8, 12, 24], id: \.self) { rate in
+                        Button("\(rate) Bilder pro Sekunde") { rotoFPS = rate; showRotoImporter = true }
+                    }
+                } label: {
+                    Text("Video als Bilder …").font(Theme.caption(11))
+                }
+                .fixedSize()
+            }
+        }
+        .fileImporter(isPresented: $showRotoImporter, allowedContentTypes: [.movie]) { result in
+            guard case .success(let url) = result else { return }
+            rotoProgress = 0
+            Task {
+                let saved = await store.importVideoFrames(from: url, fps: rotoFPS, into: currentProject) { p in rotoProgress = p }
+                rotoProgress = nil
+                if saved == 0 { errorMessage = String(localized: "Aus dem Video konnten keine Bilder übernommen werden.") }
+            }
         }
         .padding(.horizontal, 4)
         .onChange(of: photoItems) { _, items in
@@ -726,6 +752,27 @@ struct ProjectDetailView: View {
             if case .success(let url) = result, !store.setGreenScreenBackground(from: url, in: currentProject.id) {
                 errorMessage = String(localized: "Der Hintergrund konnte nicht übernommen werden.")
             }
+        }
+    }
+
+    /// Schwenk und Zoom über Bildbereiche (Export).
+    private var cameraMoveRow: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "camera.metering.center.weighted").foregroundStyle(Theme.ink)
+            Text("Kamerafahrt").font(Theme.body).foregroundStyle(Theme.ink)
+            Spacer()
+            if let count = currentProject.cameraMoves?.count, count > 0 {
+                Text("\(count)×").font(Theme.mono(11)).foregroundStyle(Theme.graphite)
+            }
+            Button(currentProject.cameraMoves?.isEmpty == false ? "Bearbeiten …" : "Hinzufügen …") { showCameraMoves = true }
+                .font(Theme.caption(11))
+                .disabled(currentProject.frameCount < 2)
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal, 4)
+        .sheet(isPresented: $showCameraMoves) {
+            CameraMoveEditor(projectID: currentProject.id) { showCameraMoves = false }
+                .environmentObject(store)
         }
     }
 
@@ -886,7 +933,7 @@ struct ProjectDetailView: View {
             photoImportRow
             lookRow
             titleRows
-            if mode.showsAdvanced { greenScreenRow; sequenceRow }
+            if mode.showsAdvanced { greenScreenRow; cameraMoveRow; sequenceRow }
 
             if isExporting {
                 VStack(spacing: 8) {
@@ -1094,6 +1141,8 @@ struct ProjectDetailView: View {
         }
         let title = currentProject.titleText, credits = currentProject.creditsText
         let overlays = currentProject.overlays ?? []
+        let moves = currentProject.cameraMoves ?? []
+        let folder = store.folderURL(for: currentProject)
         let subtitle = currentProject.createdDateText
 
         Task {
@@ -1101,7 +1150,8 @@ struct ProjectDetailView: View {
             var audio = await project.renderedAudioSources(fps: settings.outputFPS, store: store)
             do {
                 var url = try await StopMotionAssembler().assemble(
-                    imageURLs: urls, settings: settings, greenScreen: compositor, overlays: overlays
+                    imageURLs: urls, settings: settings, greenScreen: compositor, overlays: overlays,
+                    cameraMoves: moves, overlayFolder: folder
                 ) { p in
                     Task { @MainActor in exportProgress = p }
                 }

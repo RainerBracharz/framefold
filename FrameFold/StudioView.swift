@@ -307,7 +307,7 @@ struct StudioView: View {
                 // Text, Sprechblasen, Zeichnungen – live für das nächste Bild
                 if let overlays = project?.overlays {
                     let index = frameOnViewer ?? urls.count
-                    OverlayLayer(overlays: overlays.filter { $0.covers(index) })
+                    OverlayLayer(overlays: overlays.filter { $0.covers(index) }, folder: project.map { store.folderURL(for: $0) })
                 }
                 StudioGuides(settings: settings)
                 if flash > 0 { Color.white.opacity(flash).allowsHitTesting(false) }

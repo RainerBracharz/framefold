@@ -29,7 +29,7 @@ struct OverlayStroke: Codable, Equatable {
 /// (0-basiert). Positionen und Größen relativ zum Bild, damit sie in jeder
 /// Auflösung und jedem Export gleich sitzen.
 struct FrameOverlay: Codable, Equatable, Identifiable {
-    enum Kind: String, Codable { case text, bubble, drawing }
+    enum Kind: String, Codable { case text, bubble, drawing, image }
 
     var id = UUID()
     var kind: Kind
@@ -43,6 +43,12 @@ struct FrameOverlay: Codable, Equatable, Identifiable {
     var size = 0.06
     var color: OverlayColor = .white
     var strokes: [OverlayStroke] = []
+    /// Bild-Ebene: Datei im Werkordner; `size` ist dann die Breite als
+    /// Anteil der Bildbreite
+    var imageFilename: String? = nil
+    /// Rotoskopie: Bei einer Zeichnung ersetzt weißes Papier das Foto –
+    /// im Film bleibt nur das Gezeichnete
+    var paper: Bool? = nil
 
     func covers(_ frame: Int) -> Bool { frame >= firstFrame && frame <= lastFrame }
 }
@@ -51,7 +57,7 @@ struct FrameOverlay: Codable, Equatable, Identifiable {
 enum OverlayRenderer {
 
     /// Einblendungen über ein Bild legen (nil = keine trifft dieses Bild).
-    static func apply(_ overlays: [FrameOverlay], frame index: Int, to image: CGImage) -> CGImage? {
+    static func apply(_ overlays: [FrameOverlay], frame index: Int, to image: CGImage, folder: URL? = nil) -> CGImage? {
         let active = overlays.filter { $0.covers(index) }
         guard !active.isEmpty else { return nil }
         let size = CGSize(width: image.width, height: image.height)
@@ -59,17 +65,54 @@ enum OverlayRenderer {
         format.scale = 1
         return UIGraphicsImageRenderer(size: size, format: format).image { ctx in
             UIImage(cgImage: image).draw(in: CGRect(origin: .zero, size: size))
-            draw(active, in: ctx.cgContext, size: size)
+            draw(active, in: ctx.cgContext, size: size, folder: folder)
         }.cgImage
     }
 
     /// In einen Kontext mit Ursprung oben links zeichnen.
-    static func draw(_ overlays: [FrameOverlay], in cg: CGContext, size: CGSize) {
+    static func draw(_ overlays: [FrameOverlay], in cg: CGContext, size: CGSize, folder: URL? = nil,
+                     paperOpacity: CGFloat = 1) {
         UIGraphicsPushContext(cg)
         defer { UIGraphicsPopContext() }
-        // Zeichnungen zuerst, Text liegt obenauf
+        // Papier zuerst – es deckt das Foto ab (im Editor nur halb, zum Durchpausen)
+        if overlays.contains(where: { $0.kind == .drawing && $0.paper == true }) {
+            UIColor(white: 0.98, alpha: paperOpacity).setFill()
+            UIRectFill(CGRect(origin: .zero, size: size))
+        }
+        // Ebenen von unten nach oben: Bilder, dann Zeichnungen, Text obenauf.
+        // Innerhalb einer Art gilt die Reihenfolge der Liste.
+        for overlay in overlays where overlay.kind == .image { drawImage(overlay, size: size, folder: folder) }
         for overlay in overlays where overlay.kind == .drawing { drawStrokes(overlay.strokes, in: cg, size: size) }
-        for overlay in overlays where overlay.kind != .drawing { drawText(overlay, size: size) }
+        for overlay in overlays where overlay.kind == .text || overlay.kind == .bubble { drawText(overlay, size: size) }
+    }
+
+    // MARK: Bild-Ebenen
+
+    private static let imageCache: NSCache<NSURL, UIImage> = {
+        let cache = NSCache<NSURL, UIImage>()
+        cache.totalCostLimit = 200 << 20
+        return cache
+    }()
+
+    static func image(for overlay: FrameOverlay, folder: URL?) -> UIImage? {
+        guard let name = overlay.imageFilename, let folder else { return nil }
+        let url = folder.appendingPathComponent(name) as NSURL
+        if let cached = imageCache.object(forKey: url) { return cached }
+        guard let image = UIImage.thumbnail(at: url as URL, maxPixelSize: 2048) else { return nil }
+        imageCache.setObject(image, forKey: url, cost: image.cgImage.map { $0.bytesPerRow * $0.height } ?? 0)
+        return image
+    }
+
+    /// Rahmen einer Bild-Ebene: Breite = `size` × Bildbreite, Seitenverhältnis des Bilds.
+    static func imageFrame(of overlay: FrameOverlay, image: UIImage?, size: CGSize) -> CGRect {
+        let aspect = image.map { $0.size.height > 0 ? $0.size.width / $0.size.height : 1 } ?? 1
+        let w = max(4, overlay.size * size.width), h = w / aspect
+        return CGRect(x: overlay.x * size.width - w / 2, y: overlay.y * size.height - h / 2, width: w, height: h)
+    }
+
+    private static func drawImage(_ overlay: FrameOverlay, size: CGSize, folder: URL?) {
+        guard let image = image(for: overlay, folder: folder) else { return }
+        image.draw(in: imageFrame(of: overlay, image: image, size: size))
     }
 
     private static func drawStrokes(_ strokes: [OverlayStroke], in cg: CGContext, size: CGSize) {
@@ -94,7 +137,8 @@ enum OverlayRenderer {
     }
 
     /// Rahmen, den Text oder Sprechblase einnehmen (für Treffer im Editor).
-    static func frame(of overlay: FrameOverlay, size: CGSize) -> CGRect {
+    static func frame(of overlay: FrameOverlay, size: CGSize, folder: URL? = nil) -> CGRect {
+        if overlay.kind == .image { return imageFrame(of: overlay, image: image(for: overlay, folder: folder), size: size) }
         let text = layoutText(overlay, size: size)
         let pad = overlay.kind == .bubble ? overlay.size * size.height * 0.6 : 0
         let w = text.width + pad * 2, h = text.height + pad * 2

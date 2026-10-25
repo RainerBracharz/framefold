@@ -1,3 +1,4 @@
+import PhotosUI
 import SwiftUI
 import UIKit
 
@@ -11,7 +12,7 @@ struct OverlayEditorView: View {
     let onClose: () -> Void
 
     private enum Tool: String, CaseIterable, Identifiable {
-        case select, text, bubble, pen
+        case select, text, bubble, pen, image
         var id: String { rawValue }
         var symbol: String {
             switch self {
@@ -19,6 +20,7 @@ struct OverlayEditorView: View {
             case .text: return "textformat"
             case .bubble: return "bubble.left"
             case .pen: return "pencil.tip"
+            case .image: return "photo.badge.plus"
             }
         }
         var label: LocalizedStringKey {
@@ -27,6 +29,7 @@ struct OverlayEditorView: View {
             case .text: return "Text"
             case .bubble: return "Sprechblase"
             case .pen: return "Stift"
+            case .image: return "Bild-Ebene"
             }
         }
     }
@@ -38,8 +41,22 @@ struct OverlayEditorView: View {
     @State private var penWidth = 0.008
     @State private var liveStroke: [CGPoint] = []
     @State private var dragOffset: CGSize?
+    @State private var showPhotoPicker = false
+    @State private var photoItem: PhotosPickerItem?
 
     private var project: Project? { store.projects.first { $0.id == projectID } }
+    private var folder: URL? { project.map { store.folderURL(for: $0) } }
+    /// Zeichnung genau dieses Bilds (alle Striche liegen in einer)
+    private var drawing: FrameOverlay? {
+        (project?.overlays ?? []).first { $0.kind == .drawing && $0.firstFrame == frameIndex && $0.lastFrame == frameIndex }
+    }
+    private var previousDrawing: FrameOverlay? {
+        guard frameIndex > 0 else { return nil }
+        guard var d = (project?.overlays ?? []).first(where: { $0.kind == .drawing && $0.firstFrame == frameIndex - 1 && $0.lastFrame == frameIndex - 1 })
+        else { return nil }
+        d.paper = nil
+        return d
+    }
     private var frameCount: Int { project?.frameCount ?? 1 }
     private var overlays: [FrameOverlay] { (project?.overlays ?? []).filter { $0.covers(frameIndex) } }
     private var selected: FrameOverlay? { project?.overlays?.first { $0.id == selectedID } }
@@ -58,14 +75,20 @@ struct OverlayEditorView: View {
                     Canvas { ctx, _ in
                         ctx.withCGContext { cg in
                             cg.translateBy(x: rect.minX, y: rect.minY)
+                            // Zwiebelhaut der Zeichnung des vorigen Bilds – zum Durchpausen
+                            if let previous = previousDrawing {
+                                cg.setAlpha(0.25)
+                                OverlayRenderer.draw([previous], in: cg, size: rect.size)
+                                cg.setAlpha(1)
+                            }
                             var shown = overlays
                             if liveStroke.count > 0 {
                                 shown.append(FrameOverlay(kind: .drawing, firstFrame: frameIndex, lastFrame: frameIndex,
                                                           strokes: [OverlayStroke(points: liveStroke, width: penWidth, color: penColor)]))
                             }
-                            OverlayRenderer.draw(shown, in: cg, size: rect.size)
+                            OverlayRenderer.draw(shown, in: cg, size: rect.size, folder: folder, paperOpacity: 0.6)
                             if let selected, selected.kind != .drawing {
-                                let r = OverlayRenderer.frame(of: selected, size: rect.size).insetBy(dx: -6, dy: -6)
+                                let r = OverlayRenderer.frame(of: selected, size: rect.size, folder: folder).insetBy(dx: -6, dy: -6)
                                 cg.setStrokeColor(UIColor.ffAmber.cgColor)
                                 cg.setLineWidth(2)
                                 cg.setLineDash(phase: 0, lengths: [6, 4])
@@ -87,6 +110,17 @@ struct OverlayEditorView: View {
         .background(Theme.darkroom)
         .preferredColorScheme(.dark)
         .task { loadImage() }
+        .photosPicker(isPresented: $showPhotoPicker, selection: $photoItem, matching: .images)
+        .onChange(of: photoItem) { _, item in
+            guard let item else { return }
+            photoItem = nil
+            Task {
+                guard let data = try? await item.loadTransferable(type: Data.self),
+                      let overlay = store.addImageOverlay(data: data, at: frameIndex, in: projectID) else { return }
+                selectedID = overlay.id
+                tool = .select
+            }
+        }
     }
 
     // MARK: Kopf und Werkzeuge
@@ -96,7 +130,9 @@ struct OverlayEditorView: View {
             Text("Bild \(frameIndex + 1)").font(Theme.caption(12)).tracking(1.2).textCase(.uppercase)
             Spacer()
             ForEach(Tool.allCases) { t in
-                Button { tool = t } label: {
+                Button {
+                    if t == .image { showPhotoPicker = true } else { tool = t }
+                } label: {
                     Image(systemName: t.symbol)
                         .frame(width: 40, height: 34)
                         .background(tool == t ? Theme.amber : Color.clear)
@@ -130,8 +166,28 @@ struct OverlayEditorView: View {
                     Text("Zeichnung gilt für dieses Bild.").font(Theme.mono(10)).opacity(0.6)
                 }
                 .font(Theme.mono(11))
+                // Rotoskopie: über dem Foto zeichnen, im Film nur die Zeichnung
+                Toggle(isOn: Binding(get: { drawing?.paper == true }, set: { setPaper($0) })) {
+                    Text("Foto im Film durch Papier ersetzen (Rotoskopie)").font(Theme.mono(11))
+                }
+                .disabled(drawing == nil)
             } else if let selected {
-                if selected.kind != .drawing {
+                if selected.kind == .image {
+                    HStack {
+                        Text("Größe").font(Theme.mono(11))
+                        Slider(value: Binding(get: { selected.size }, set: { v in update { $0.size = v } }), in: 0.05...1)
+                            .frame(maxWidth: 200)
+                        Spacer()
+                        Button { store.moveOverlay(id: selected.id, by: -1, in: projectID) } label: {
+                            Label("Nach hinten", systemImage: "square.2.layers.3d.bottom.filled")
+                        }
+                        Button { store.moveOverlay(id: selected.id, by: 1, in: projectID) } label: {
+                            Label("Nach vorn", systemImage: "square.2.layers.3d.top.filled")
+                        }
+                    }
+                    .font(Theme.mono(11))
+                }
+                if selected.kind == .text || selected.kind == .bubble {
                     TextField("Text", text: Binding(get: { selected.text },
                                                     set: { new in update { $0.text = new } }), axis: .vertical)
                         .lineLimit(1...4)
@@ -210,7 +266,7 @@ struct OverlayEditorView: View {
                     update { $0.x = min(1, max(0, base.width + dx)); $0.y = min(1, max(0, base.height + dy)) }
                 }
             }
-        case .text, .bubble:
+        case .text, .bubble, .image:
             break
         }
     }
@@ -220,7 +276,7 @@ struct OverlayEditorView: View {
         switch tool {
         case .pen:
             commitStroke()
-        case .select:
+        case .select, .image:
             dragOffset = nil
         case .text, .bubble:
             if let existing = hit(p, rect: rect) {
@@ -242,7 +298,10 @@ struct OverlayEditorView: View {
 
     private func hit(_ p: CGPoint, rect: CGRect) -> FrameOverlay? {
         let point = CGPoint(x: p.x * rect.width, y: p.y * rect.height)
-        return overlays.last { $0.kind != .drawing && OverlayRenderer.frame(of: $0, size: rect.size).insetBy(dx: -10, dy: -10).contains(point) }
+        // Text liegt über Bildern – also zuerst Text, dann Bild-Ebenen (oberste zuerst)
+        let candidates = overlays.filter { $0.kind == .text || $0.kind == .bubble }.reversed()
+            + overlays.filter { $0.kind == .image }.reversed()
+        return candidates.first { OverlayRenderer.frame(of: $0, size: rect.size, folder: folder).insetBy(dx: -10, dy: -10).contains(point) }
     }
 
     private func commitStroke() {
@@ -257,6 +316,12 @@ struct OverlayEditorView: View {
             store.upsertOverlay(FrameOverlay(kind: .drawing, firstFrame: frameIndex, lastFrame: frameIndex, strokes: [stroke]),
                                 in: projectID)
         }
+    }
+
+    private func setPaper(_ on: Bool) {
+        guard var d = drawing else { return }
+        d.paper = on ? true : nil
+        store.upsertOverlay(d, in: projectID)
     }
 
     private func undoStroke() {
@@ -291,9 +356,10 @@ struct OverlayEditorView: View {
 /// Einblendungen über einem Bild im Studio-Betrachter.
 struct OverlayLayer: View {
     let overlays: [FrameOverlay]
+    var folder: URL? = nil
     var body: some View {
         Canvas { ctx, size in
-            ctx.withCGContext { cg in OverlayRenderer.draw(overlays, in: cg, size: size) }
+            ctx.withCGContext { cg in OverlayRenderer.draw(overlays, in: cg, size: size, folder: folder) }
         }
         .allowsHitTesting(false)
     }

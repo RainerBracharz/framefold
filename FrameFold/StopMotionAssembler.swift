@@ -75,6 +75,8 @@ final class StopMotionAssembler {
         settings: PipelineSettings,
         greenScreen: GreenScreenCompositor? = nil,
         overlays: [FrameOverlay] = [],
+        cameraMoves: [CameraMove] = [],
+        overlayFolder: URL? = nil,
         progress: @escaping (Double) -> Void
     ) async throws -> URL {
         guard !imageURLs.isEmpty else { throw PipelineError.noKeyframesFound }
@@ -95,8 +97,13 @@ final class StopMotionAssembler {
                 var result = image
                 if let greenScreen { result = await greenScreen.composite(result, index: index) }
                 // Text, Sprechblasen, Zeichnungen obenauf
-                if !overlays.isEmpty, let drawn = OverlayRenderer.apply(overlays, frame: index, to: result) {
+                if !overlays.isEmpty, let drawn = OverlayRenderer.apply(overlays, frame: index, to: result, folder: overlayFolder) {
                     result = drawn
+                }
+                // Kamerafahrt zuletzt: Schwenk und Zoom über das fertige Bild
+                if let framing = CameraMoves.framing(cameraMoves, at: index),
+                   let moved = CameraMoves.apply(framing, to: result) {
+                    result = moved
                 }
                 return result
             },

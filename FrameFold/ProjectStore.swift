@@ -33,6 +33,8 @@ struct Project: Identifiable, Codable {
     var creditsText: String?
     /// Text, Sprechblasen und Zeichnungen über Bildbereichen
     var overlays: [FrameOverlay]?
+    /// Kamerafahrten (Schwenk, Zoom) für den Export
+    var cameraMoves: [CameraMove]? = nil
 
     /// Alle Tonspuren – die einfache Musikspur aus der Werkansicht zählt
     /// als erste, mit Einsatz bei Bild 1.
@@ -267,7 +269,8 @@ final class ProjectStore: ObservableObject {
         let dir = directory(for: project)
         // Nur, was das Werk wirklich verwendet – keine verwaisten Dateien
         let used = Set(project.frameFilenames + project.allAudioTracks.map(\.filename)
-                       + [project.greenScreen?.backgroundFilename].compactMap { $0 })
+                       + [project.greenScreen?.backgroundFilename].compactMap { $0 }
+                       + (project.overlays ?? []).compactMap(\.imageFilename))
         let outDir = FileManager.default.temporaryDirectory
             .appendingPathComponent("ff-werk-\(UUID().uuidString.prefix(8))", isDirectory: true)
         let target = outDir.appendingPathComponent(WorkPackage.filename(for: project.name))
@@ -319,7 +322,8 @@ final class ProjectStore: ObservableObject {
         }.value
         let target = directory(for: checked)
         let keep = Set(checked.frameFilenames + checked.allAudioTracks.map(\.filename)
-                       + [checked.greenScreen?.backgroundFilename].compactMap { $0 })
+                       + [checked.greenScreen?.backgroundFilename].compactMap { $0 }
+                       + (checked.overlays ?? []).compactMap(\.imageFilename))
         // Nur Verwendetes übernehmen – keine Füllmengen, kein „trash“
         try await Task.detached(priority: .userInitiated) {
             let fm = FileManager.default
@@ -561,6 +565,7 @@ final class ProjectStore: ObservableObject {
         // Ton- und Hintergrunddateien, die der wiederhergestellte Stand
         // braucht, liegen inzwischen vielleicht im Papierkorb
         let needed = snapshot.allAudioTracks.map(\.filename) + [snapshot.greenScreen?.backgroundFilename].compactMap { $0 }
+            + (snapshot.overlays ?? []).compactMap(\.imageFilename)
         for name in needed where WorkPackage.isSafe(name) && !fm.fileExists(atPath: dir.appendingPathComponent(name).path) {
             try? fm.moveItem(at: trashDir.appendingPathComponent(name), to: dir.appendingPathComponent(name))
         }
@@ -622,8 +627,46 @@ final class ProjectStore: ObservableObject {
     func removeOverlay(id: UUID, in projectID: UUID) {
         recordUndo(projectID, String(localized: "Text & Zeichnen"))
         guard var updated = projects.first(where: { $0.id == projectID }) else { return }
+        let removed = updated.overlays?.first { $0.id == id }
         updated.overlays?.removeAll { $0.id == id }
         if updated.overlays?.isEmpty == true { updated.overlays = nil }
+        if let name = removed?.imageFilename, !(updated.overlays ?? []).contains(where: { $0.imageFilename == name }) {
+            discardFile(name, of: updated)
+        }
+        save(updated)
+    }
+
+    /// Bild als Ebene über die Bilder ab `frame` legen (12 Bilder lang).
+    @discardableResult
+    func addImageOverlay(data: Data, at frame: Int, in projectID: UUID) -> FrameOverlay? {
+        guard let project = projects.first(where: { $0.id == projectID }),
+              let source = CGImageSourceCreateWithData(data as CFData, nil),
+              let type = CGImageSourceGetType(source) as String? else { return nil }
+        let ext = type == "public.png" ? "png" : "jpg"
+        let filename = "ebene-\(UUID().uuidString.prefix(8)).\(ext)"
+        let stored: Data?
+        if ext == "png" { stored = data }
+        else {
+            // Alles außer PNG als JPEG ablegen (HEIC, TIFF …)
+            stored = UIImage.thumbnail(data: data, maxPixelSize: 4096)?.jpegData(compressionQuality: 0.9)
+        }
+        guard let stored, (try? stored.write(to: directory(for: project).appendingPathComponent(filename))) != nil else { return nil }
+        let overlay = FrameOverlay(kind: .image, firstFrame: frame,
+                                   lastFrame: min(max(frame, project.frameCount - 1), frame + 11),
+                                   x: 0.5, y: 0.5, size: 0.4, imageFilename: filename)
+        upsertOverlay(overlay, in: projectID)
+        return overlay
+    }
+
+    /// Ebene in der Reihenfolge verschieben (1 = nach vorn, −1 = nach hinten).
+    func moveOverlay(id: UUID, by offset: Int, in projectID: UUID) {
+        guard var updated = projects.first(where: { $0.id == projectID }),
+              var all = updated.overlays, let i = all.firstIndex(where: { $0.id == id }) else { return }
+        let target = min(max(0, i + offset), all.count - 1)
+        guard target != i else { return }
+        recordUndo(projectID, String(localized: "Ebene"))
+        all.insert(all.remove(at: i), at: target)
+        updated.overlays = all
         save(updated)
     }
 
@@ -664,6 +707,14 @@ final class ProjectStore: ObservableObject {
 
     func greenScreenBackgroundURL(for project: Project) -> URL? {
         project.greenScreen?.backgroundFilename.map { directory(for: project).appendingPathComponent($0) }
+    }
+
+    /// Kamerafahrten des Werks ersetzen (leer = keine).
+    func setCameraMoves(_ moves: [CameraMove], in projectID: UUID) {
+        recordUndo(projectID, String(localized: "Kamerafahrt"), coalesce: "moves-\(projectID)")
+        guard var updated = projects.first(where: { $0.id == projectID }) else { return }
+        updated.cameraMoves = moves.isEmpty ? nil : moves
+        save(updated)
     }
 
     func setTitles(title: String?, credits: String?, in projectID: UUID) {
@@ -825,7 +876,8 @@ final class ProjectStore: ObservableObject {
             let trashDir = directory(for: project).appendingPathComponent("trash", isDirectory: true)
             // Weggelegte Ton-, Hintergrund- und Bilddateien ohne Eintrag
             let listed = Set(project.trashFilenames ?? [])
-            let referenced = Set(project.frameFilenames + project.allAudioTracks.map(\.filename))
+            let referenced = Set(project.frameFilenames + project.allAudioTracks.map(\.filename)
+                                 + (project.overlays ?? []).compactMap(\.imageFilename))
             for name in (try? FileManager.default.contentsOfDirectory(atPath: trashDir.path)) ?? []
                 where !listed.contains(name) && !referenced.contains(name) && WorkPackage.isSafe(name) {
                 let url = trashDir.appendingPathComponent(name)
@@ -890,6 +942,36 @@ final class ProjectStore: ObservableObject {
             }
         }
         return thumbnailCache[project.id]?.image
+    }
+
+    /// Rotoskopie: ein Video in fester Bildrate als Bilder anhängen (höchstens
+    /// `limit` Bilder). Dekodiert und kodiert im Hintergrund in einem Durchlauf.
+    func importVideoFrames(from videoURL: URL, fps: Int, limit: Int = 1500, into project: Project,
+                           progress: @escaping @MainActor (Double) -> Void = { _ in }) async -> Int {
+        let scoped = videoURL.startAccessingSecurityScopedResource()
+        defer { if scoped { videoURL.stopAccessingSecurityScopedResource() } }
+        let asset = AVURLAsset(url: videoURL)
+        guard let duration = try? await asset.load(.duration).seconds, duration.isFinite, duration > 0 else { return 0 }
+        let count = min(limit, max(1, Int(duration * Double(fps))))
+        let times = (0..<count).map { CMTime(seconds: Double($0) / Double(fps), preferredTimescale: 600) }
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        generator.maximumSize = CGSize(width: 3840, height: 3840)
+        generator.requestedTimeToleranceBefore = CMTime(value: 1, timescale: 60)
+        generator.requestedTimeToleranceAfter = CMTime(value: 1, timescale: 60)
+        var saved = 0
+        for await result in generator.images(for: times) {
+            guard let cgImage = try? result.image else { continue }
+            let data = await Task.detached(priority: .userInitiated) {
+                UIImage(cgImage: cgImage).jpegData(compressionQuality: 0.9)
+            }.value
+            if let data, let current = projects.first(where: { $0.id == project.id }),
+               appendFrame(jpegData: data, to: current) != nil {
+                saved += 1
+            }
+            progress(Double(saved) / Double(count))
+        }
+        return saved
     }
 
     /// Sichert die Keyframes eines verarbeiteten Videos als Projekt-Session
