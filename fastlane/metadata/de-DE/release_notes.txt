@@ -8,4 +8,5 @@ Jetzt auch auf dem iPad – und mit Ton.
 • Stimme aufnehmen: Der Film läuft mit, du sprichst dazu – die Aufnahme liegt danach genau an der richtigen Stelle. Sie bleibt auf dem Gerät.
 • Musik oder Ton: In der Werkansicht eine Audiodatei wählen – sie liegt unter dem exportierten Film.
 • Bis 24 Bilder pro Sekunde: 15 und 24 fps für flüssige Bewegung.
+• Manuelle Kamera (ab „Erweitert“): ISO, Belichtungszeit, Fokus und Weißabgleich selbst stellen – die Automatik misst dann nicht mehr nach.
 • Bilder verdoppeln und umordnen: Ein Bild lange drücken für „Verdoppeln“, „Nach vorn“ und „Nach hinten“ – oder im Kontaktbogen einfach an eine andere Stelle ziehen.

@@ -8495,6 +8495,121 @@
           }
         }
       }
+    },
+    "Manuelle Kamera": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manual camera"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra manuelle"
+          }
+        }
+      }
+    },
+    "ISO": {
+      "shouldTranslate": false
+    },
+    "Belichtungszeit": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shutter speed"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vitesse d’obturation"
+          }
+        }
+      }
+    },
+    "Fokus": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mise au point"
+          }
+        }
+      }
+    },
+    "nah": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "near"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "proche"
+          }
+        }
+      }
+    },
+    "fern": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "far"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "loin"
+          }
+        }
+      }
+    },
+    "Weißabgleich": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "White balance"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Balance des blancs"
+          }
+        }
+      }
+    },
+    "Belichtung, Fokus und Weißabgleich bleiben, wie du sie stellst – die Automatik misst nicht mehr nach.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exposure, focus and white balance stay exactly as you set them – the automatic metering no longer adjusts them."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exposition, mise au point et balance des blancs restent comme tu les règles – l’automatisme ne les corrige plus."
+          }
+        }
+      }
     }
   },
   "version": "1.3"

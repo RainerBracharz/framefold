@@ -561,6 +561,9 @@ struct StudioView: View {
                             .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
                     }
                 }
+                if controller.manualCapabilities.any {
+                    section("Kamera") { ManualCameraPanel(controller: controller, dark: true) }
+                }
                 section("Greenscreen") {
                     picker("Farbe", Binding(get: { project?.greenScreen?.key ?? .none },
                                             set: { store.setGreenScreenKey($0, in: projectID) }),

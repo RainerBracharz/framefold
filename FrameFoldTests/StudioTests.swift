@@ -223,5 +223,10 @@ final class StudioTests: XCTestCase {
         controller.stop()
     }
 
+    func testShutterLabel() {
+        XCTAssertEqual(LiveCaptureController.shutterLabel(1.0 / 250), "1/250 s")
+        XCTAssertEqual(LiveCaptureController.shutterLabel(0.5), "0.5 s")
+    }
+
     private func XCTUnwrapAsync<T>(_ value: T?) throws -> T { try XCTUnwrap(value) }
 }

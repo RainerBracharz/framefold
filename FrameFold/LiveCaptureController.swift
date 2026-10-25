@@ -479,7 +479,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         relockFocusOnly()
     }
     /// Ist der Fokus gerade eingefroren?
-    private var focusIsLocked = false
+    var focusIsLocked = false
     /// Dieses Gerät kann den Fokus gar nicht fixieren (Simulator, fehlende
     /// Unterstützung). Dann ist Nachfokussieren sinnlos.
     private var focusLockUnavailable = false
@@ -645,8 +645,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
     private var intervalTask: Task<Void, Never>?
     /// Getrennte Slots: Ein abgebrochener Fokuslauf darf die Belichtung
     /// nicht mit sich reissen.
-    private var focusTask: Task<Void, Never>?
-    private var exposureTask: Task<Void, Never>?
+    var focusTask: Task<Void, Never>?
+    var exposureTask: Task<Void, Never>?
     /// Wartet auf Schärfe, nachdem manuell ausgelöst wurde.
     private var pendingCaptureTask: Task<Void, Never>?
     /// Beginn der laufenden Kalibrierung – für den Sicherheits-Timeout.
@@ -676,6 +676,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
     var intervalOverride: Double?
     /// Laufende Studio-Auslösung (Abdunkeln/Mitteln) – `stop()` bricht sie ab
     var prepareTask: Task<Void, Never>?
+    /// Manuelle Kamera (nil = Automatik fixiert selbst)
+    @Published var manual: ManualCamera? { didSet { if manual != nil, manual != oldValue { applyManual() } } }
     /// Läuft gerade eine Auslösung mit Abdunkeln oder Mittelung?
     var isPreparingCapture = false
     var currentLatestFrame: CGImage? { latestFrame }
@@ -937,7 +939,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// der Abstand zum Werk ständig, ein fixierter Fokus wäre dort nach
     /// wenigen Sekunden zwangsläufig falsch.
     private func lockFocusOnly() {
-        guard rig.locksFocus else { return }
+        guard manual == nil, rig.locksFocus else { return }
         // Kein Gerät (Simulator) oder keine Unterstützung für `.locked`: Das
         // ist kein Fehlschlag, den man wiederholen könnte. Ohne diese Marke
         // liefe der Wächter bis zum Sitzungsende alle zwanzig Sekunden los
@@ -972,7 +974,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// die ganze Sitzung atmende Belichtung ist im fertigen Film nicht mehr
     /// zu retten.
     private func lockExposureAndWhiteBalance() {
-        guard let device else { return }
+        guard manual == nil, let device else { return }
         do {
             try device.lockForConfiguration()
 
@@ -1084,6 +1086,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     /// Misst Belichtung und Weißabgleich neu ein und fixiert sie wieder.
     private func relockExposure() {
+        guard manual == nil else { return }
         releaseExposureOnly()
         exposureTask?.cancel()
         exposureTask = Task { [weak self] in
@@ -1102,6 +1105,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// falsche – Position ein zweites Mal einfrieren. Genau daran krankte die
     /// zweite Sitzung.
     private func relockFocusOnly(explainOnce: Bool = false) {
+        guard manual == nil else { return }
         releaseFocusOnly()
         focusTask?.cancel()
         focusTask = Task { [weak self] in
@@ -1141,6 +1145,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Belichtung und Weißabgleich zurück auf Automatik – der Fokus bleibt,
     /// wo er ist.
     private func releaseExposureOnly() {
+        if manual != nil { applyManual(); return }
         exposureInfo = nil
         guard let device else { return }
         guard (try? device.lockForConfiguration()) != nil else { return }
@@ -1218,6 +1223,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// bleiben fixiert. Genau das braucht die Aufnahme aus der Hand: gleiche
     /// Helligkeit über alle Bilder, aber ein Fokus, der dem Abstand folgt.
     private func releaseFocusOnly() {
+        if manual != nil { applyManual(); return }
         focusIsLocked = false
         blurrySince = nil
         guard let device else { return }
@@ -1276,7 +1282,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Nur der Fokus wird neu gemessen – die Belichtung bleibt, wo sie ist,
     /// sonst gäbe es mitten im Film einen Helligkeitssprung.
     private func autoRefocus() {
-        guard rig.locksFocus else { return }
+        // Manuelle Kamera: Der Fokus gehört dem Nutzer.
+        guard manual == nil, rig.locksFocus else { return }
         // Einen laufenden Versuch nicht abwürgen: Ein Fokuslauf darf fast
         // neun Sekunden dauern, und gerade im Zielfall (nahes Motiv, wenig
         // Licht) braucht er sie. Ohne diese Zeile bräche die Reparatur genau
@@ -1301,7 +1308,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
 
     /// „1/100 s · ISO 32" – Belichtungszeit als Bruch, ISO gerundet.
-    private static func exposureLabel(duration: Double, iso: Double) -> String {
+    static func exposureLabel(duration: Double, iso: Double) -> String {
         let time = duration >= 1
             ? String(format: "%.1f s", duration)
             : "1/\(Int((1.0 / max(duration, 1e-6)).rounded())) s"
@@ -1310,6 +1317,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     /// Belichtung/Fokus/Weißabgleich zurück auf kontinuierliche Automatik.
     private func resetToContinuous() {
+        // Manuelle Kamera: die eigenen Werte bleiben, auch über „Neu einmessen“
+        if manual != nil { applyManual(); return }
         exposureInfo = nil
         focusIsLocked = false
         blurrySince = nil

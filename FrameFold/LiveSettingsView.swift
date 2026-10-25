@@ -59,6 +59,15 @@ struct LiveSettingsView: View {
                 .listRowBackground(Theme.paperShade.opacity(0.5))
                 }
 
+                if mode.showsAdvanced, controller.manualCapabilities.any {
+                    Section {
+                        ManualCameraPanel(controller: controller)
+                    } header: {
+                        CatalogLabel("Kamera")
+                    }
+                    .listRowBackground(Theme.paperShade.opacity(0.5))
+                }
+
                 if mode.showsAdvanced {
                 Section {
                     Toggle("Drittel-Raster", isOn: $showGrid)

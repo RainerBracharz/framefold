@@ -8,4 +8,5 @@ Ahora también en iPad – y con sonido.
 • Grabar la voz: la película se reproduce mientras hablas y la grabación queda en el lugar exacto. Se queda en el dispositivo.
 • Música o sonido: elige un archivo de audio en la vista de la obra – suena bajo la película exportada.
 • Hasta 24 fps: 15 y 24 fps para un movimiento fluido.
+• Cámara manual (desde Avanzado): ajusta tú mismo ISO, velocidad de obturación, enfoque y balance de blancos.
 • Duplicar y reordenar: mantén pulsado un fotograma para duplicarlo o moverlo – o arrástralo a otro lugar de la hoja de contactos.

@@ -50,6 +50,8 @@ Mit „Ordner beobachten“ wird jede Kamera nutzbar, die FrameFold nicht selbst
 
 ## Aufnahme
 
+- **Manuelle Kamera** (iPhone und iPad, im Inspektor unter „Kamera“): ISO, Belichtungszeit, Fokus und Weißabgleich von Hand. Solange sie an ist, misst die Automatik nicht nach. USB-Kameras am Mac bieten das meist nicht, dann fehlt der Abschnitt.
+
 - **Automatik (Hände weg)**: Lässt sich abschalten. Dann lösen nur noch Taste, Apple Watch, Fernbedienung oder Zeitraffer aus.
 - **Mitteln**: Nach dem Auslösen werden 2 bis 16 Kamerabilder gemittelt. Das senkt das Rauschen bei wenig Licht.
 - **Beim Auslösen abdunkeln**: Der Bildschirm wird kurz schwarz, damit sein Licht nicht aufs Set fällt.
