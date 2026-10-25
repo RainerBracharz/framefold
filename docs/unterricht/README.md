@@ -1,6 +1,6 @@
 # Trickfilm im Unterricht mit FrameFold
 
-Ein Unterrichtsentwurf für zwei Schulstunden (2 × 45 Minuten), Klasse 3 bis 10.
+Ein Unterrichtsentwurf für zwei Schulstunden (2 × 45 Minuten, in Österreich 2 × 50 Minuten), Klasse 3 bis 10.
 Die Kinder legen, kneten oder falten eine kurze Geschichte und filmen sie Bild für Bild.
 Das Gerät steht dabei auf dem Stativ. FrameFold löst von selbst aus, sobald die Hände aus dem Bild sind.
 Niemand muss das iPad oder iPhone während der Aufnahme berühren.
@@ -12,6 +12,7 @@ Für die Schule heißt das: keine Anmeldung der Kinder, keine Datenverarbeitung 
 ## Kompetenzen
 
 - **Produzieren und Präsentieren** (KMK-Strategie „Bildung in der digitalen Welt“, Bereich 3): eine Geschichte planen, als Film umsetzen und vorführen.
+- **Österreich**: Volksschule – übergreifendes Thema Medienbildung („eigene Medienbeiträge gestalten“) und Kunst und Gestaltung („Arbeit mit Fotos und Filmen“). Sekundarstufe I – Digitale Grundbildung (BGBl. II Nr. 267/2022), Kompetenzbereich „Produktion: Inhalte digital erstellen und veröffentlichen“.
 - **Bewegung verstehen**: Wie entsteht aus Einzelbildern Bewegung? Was bewirken kleine und große Schritte zwischen zwei Bildern?
 - **Zusammenarbeit**: In Gruppen zu dritt gibt es drei Rollen, die nach jeder Szene wechseln: Regie, Set und Kontrolle.
 - **Fächer**: Kunst, Deutsch (Erzählen), Sachunterricht oder Physik (Bewegung, Zeit), Informatik oder Medienbildung.
@@ -43,7 +44,7 @@ Für eine Sekunde Film braucht es 10 Bilder (bei 10 Bildern pro Sekunde).
 |---|---|
 | 10 min | **Nachaufnahme**: Im Werk ein misslungenes Bild lange drücken und „Neu aufnehmen“ wählen, oder „Verdoppeln“ für eine längere Pause. |
 | 10 min | **Ton**: „Musik oder Ton hinzufügen“ wählt eine Audiodatei, etwa ein selbst gesprochenes Geräusch aus der Sprachmemo-App oder lizenzfreie Musik. |
-| 5 min | **Export**: „Stopmotion exportieren“. Im Modus Erweitert lassen sich Bildrate (2 bis 24 fps), Format und Abspielmodus wählen. |
+| 5 min | **Export**: „Stopmotion exportieren“. Im Modus Erweitert lassen sich Bildrate (2 bis 30 fps), Format und Abspielmodus wählen. |
 | 15 min | **Vorführung**: Bildschirm oder Beamer anschließen. Jede Gruppe zeigt ihren Film und erzählt kurz, was am schwierigsten war. |
 | 5 min | **Daumenkino**: „Daumenkino“ erzeugt einen A4-Druckbogen mit Schnittlinien. Zu Hause ausschneiden, klammern, blättern. |
 
@@ -62,7 +63,7 @@ Für eine Sekunde Film braucht es 10 Bilder (bei 10 Bildern pro Sekunde).
 | Brauchen Kinder ein Konto? | Nein. |
 | Werden Daten übertragen? | Nein. Die App stellt keine Netzwerkverbindung her. |
 | Werbung oder Tracking? | Nein. |
-| Welche Berechtigungen? | Kamera; „Fotos hinzufügen“ nur zum Sichern des fertigen Films. Kein Mikrofon. |
+| Welche Berechtigungen? | Kamera. Das Mikrofon nur, wenn jemand „Stimme aufnehmen“ oder „Auslösen per Klatschen“ wählt. Fotos nur über die Fotoauswahl des Systems und zum Sichern des fertigen Films. |
 | Kosten? | Keine. Auch über Apple School Manager verteilbar. |
 
 Datenschutzerklärung: <https://www.bracharz.com/framefold-datenschutz/>
