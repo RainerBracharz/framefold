@@ -52,6 +52,9 @@ struct StudioView: View {
     @StateObject private var folderWatch = StudioFolderWatch()
     @StateObject private var tether = TetherCamera()
     @StateObject private var lights = LightController()
+    @StateObject private var motion = MotionController()
+    /// Vor jedem Auslösen die Achsen auf die Position fürs nächste Bild fahren
+    @State private var moveBeforeShot = true
     /// Gerade verstellte Lichtwerte fürs nächste Bild (nil = aus den Stimmungen)
     @State private var lightDraft: [Int]?
     /// Auslösen (Leertaste, Knopf) löst die per USB verbundene Kamera aus
@@ -744,6 +747,7 @@ struct StudioView: View {
                 }
                 if TetherCamera.isSupported { tetherSection }
                 lightSection
+                motionSection
                 section("Kamera-Ordner") {
                     if let name = folderWatch.folderName {
                         HStack {
@@ -891,6 +895,82 @@ struct StudioView: View {
         }
         .padding(8)
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.15), lineWidth: 1))
+    }
+
+    // MARK: Motion Control (Bluetooth)
+
+    private var motionSection: some View {
+        section("Motion Control") {
+            toggle("Motorsteuerung verbinden", Binding(get: { motion.isScanning || motion.isConnected }, set: { on in
+                if on { motion.scan() } else { motion.disconnect() }
+            }))
+            if let name = motion.connectedName {
+                HStack {
+                    Image(systemName: "dot.radiowaves.left.and.right").foregroundStyle(Theme.amber)
+                    Text(verbatim: name).font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark).lineLimit(1)
+                    if motion.isMoving { ProgressView().controlSize(.small) }
+                }
+                ForEach(0..<motion.axes, id: \.self) { axis in
+                    HStack(spacing: 6) {
+                        Text("Achse \(axis + 1)").font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark)
+                        Text(verbatim: "\(motion.positions.indices.contains(axis) ? motion.positions[axis] : 0)")
+                            .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.7)).frame(minWidth: 50, alignment: .trailing)
+                        Spacer()
+                        ForEach([-100, -10, 10, 100], id: \.self) { step in
+                            Button { motion.jog(axis: axis, by: step) } label: {
+                                Text(verbatim: step > 0 ? "+\(step)" : "\(step)").font(Theme.mono(10))
+                                    .padding(.horizontal, 5).padding(.vertical, 3)
+                                    .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+                            }
+                            .buttonStyle(.plain).foregroundStyle(Theme.paperOnDark)
+                            .disabled(motion.isMoving)
+                        }
+                    }
+                }
+                HStack {
+                    smallButton("Position für Bild \(nextFrame + 1) merken") { saveMotionKey() }
+                    smallButton("Nullpunkt") { motion.setZero() }
+                }
+                toggle("Vor dem Auslösen anfahren", $moveBeforeShot)
+                if let project {
+                    toggle("Weich zwischen den Positionen", Binding(get: { project.motionSmooth == true }, set: { on in
+                        store.setMotionKeys(project.motionKeys ?? [], smooth: on, in: projectID)
+                    }))
+                    ForEach(project.motionKeys ?? []) { key in
+                        HStack {
+                            Text("Ab Bild \(key.frame + 1)").font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark)
+                            Text(verbatim: key.positions.map(String.init).joined(separator: " · "))
+                                .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.6)).lineLimit(1)
+                            Spacer()
+                            Button {
+                                store.setMotionKeys((project.motionKeys ?? []).filter { $0.id != key.id },
+                                                    smooth: project.motionSmooth == true, in: projectID)
+                            } label: { Image(systemName: "trash") }
+                                .buttonStyle(.plain).foregroundStyle(Theme.paperOnDark)
+                        }
+                    }
+                }
+            } else if motion.isScanning {
+                if motion.devices.isEmpty {
+                    Text("Suche Motorsteuerung …").font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.7))
+                }
+                ForEach(motion.devices) { device in
+                    smallButton("Verbinden: \(device.name)") { motion.connect(device) }
+                }
+            }
+            if let error = motion.lastError {
+                Text(verbatim: error).font(Theme.mono(10)).foregroundStyle(Theme.oxblood)
+            }
+            Text("Steuert per Bluetooth einen Kameraschlitten oder Schwenkkopf (offenes Protokoll, z. B. mit ESP32). Positionen je Bild werden vor dem Auslösen angefahren.")
+                .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
+        }
+    }
+
+    private func saveMotionKey() {
+        guard let project else { return }
+        var keys = (project.motionKeys ?? []).filter { $0.frame != nextFrame }
+        keys.append(MotionKey(frame: nextFrame, positions: motion.positions))
+        store.setMotionKeys(keys, smooth: project.motionSmooth == true, in: projectID)
     }
 
     // MARK: Licht (DMX über Art-Net)
@@ -1133,7 +1213,20 @@ struct StudioView: View {
         case .capture:
             stopPlayback()
             selected = nil; testShown = nil
-            if useTether, tether.isReady { tether.shoot() } else { controller.captureNow() }
+            let shoot = { if useTether, tether.isReady { tether.shoot() } else { controller.captureNow() } }
+            if motion.isConnected, moveBeforeShot, let project, !(project.motionKeys ?? []).isEmpty {
+                // Erst fahren, dann auslösen – wie bei einer Motion-Control-Anlage
+                let target = MotionProtocol.positions(project.motionKeys ?? [], at: project.frameCount,
+                                                      axes: motion.axes, smooth: project.motionSmooth == true)
+                Task {
+                    if await motion.move(to: target) {
+                        try? await Task.sleep(nanoseconds: 300_000_000)   // ausschwingen lassen
+                        shoot()
+                    }
+                }
+            } else {
+                shoot()
+            }
         case .stepBack:
             stopPlayback(); testShown = nil
             selected = StudioPlayback.step(from: frameOnViewer, by: -1, count: urls.count)
@@ -1372,6 +1465,7 @@ struct StudioView: View {
         folderWatch.stop()
         tether.stop()
         lights.disconnect()
+        motion.disconnect()
         stopPlayback()
         setAutoToggle(false)
         StudioBlackout.set(false)

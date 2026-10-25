@@ -38,6 +38,9 @@ struct Project: Identifiable, Codable {
     /// Lichtstimmungen (DMX) je Bild und ob zwischen ihnen überblendet wird
     var lightCues: [LightCue]? = nil
     var lightFade: Bool? = nil
+    /// Motion Control: Achspositionen je Bild und ob weich gefahren wird
+    var motionKeys: [MotionKey]? = nil
+    var motionSmooth: Bool? = nil
 
     /// Alle Tonspuren – die einfache Musikspur aus der Werkansicht zählt
     /// als erste, mit Einsatz bei Bild 1.
@@ -710,6 +713,15 @@ final class ProjectStore: ObservableObject {
 
     func greenScreenBackgroundURL(for project: Project) -> URL? {
         project.greenScreen?.backgroundFilename.map { directory(for: project).appendingPathComponent($0) }
+    }
+
+    /// Motion-Control-Schlüssel des Werks setzen.
+    func setMotionKeys(_ keys: [MotionKey], smooth: Bool, in projectID: UUID) {
+        recordUndo(projectID, String(localized: "Motion Control"), coalesce: "motion-\(projectID)")
+        guard var updated = projects.first(where: { $0.id == projectID }) else { return }
+        updated.motionKeys = keys.isEmpty ? nil : keys.sorted { $0.frame < $1.frame }
+        updated.motionSmooth = smooth ? true : nil
+        save(updated)
     }
 
     /// Lichtstimmungen des Werks setzen.

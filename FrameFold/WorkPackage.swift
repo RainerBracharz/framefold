@@ -215,6 +215,12 @@ enum ImportCheck {
             }
             return o
         }
+        p.motionKeys = project.motionKeys?.prefix(5000).map { key in
+            var k = key
+            k.frame = min(max(0, k.frame), 100_000)
+            k.positions = k.positions.prefix(8).map { min(max(-100_000_000, $0), 100_000_000) }
+            return k
+        }
         p.lightCues = project.lightCues?.prefix(5000).map { cue in
             var c = cue
             c.frame = min(max(0, c.frame), 100_000)
