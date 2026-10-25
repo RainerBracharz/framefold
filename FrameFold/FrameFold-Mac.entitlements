@@ -9,6 +9,9 @@
 	<true/>
 	<key>com.apple.security.device.camera</key>
 	<true/>
+	<!-- Stimme zum Film aufnehmen (nur auf Wunsch, bleibt auf dem Mac) -->
+	<key>com.apple.security.device.audio-input</key>
+	<true/>
 	<key>com.apple.security.files.user-selected.read-write</key>
 	<true/>
 	<!-- Kamera-Ordner im Studio über Neustarts hinweg merken -->

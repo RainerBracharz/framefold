@@ -213,6 +213,7 @@ struct ProjectDetailView: View {
     @State private var isEditingFrames = false
     @State private var showDeleteProject = false
     @State private var showAudioImporter = false
+    @State private var showVoice = false
     @State private var sequenceFolder: ShareItem?
     @State private var isExportingSequence = false
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
@@ -475,7 +476,7 @@ struct ProjectDetailView: View {
             Image(systemName: "music.note")
                 .foregroundStyle(Theme.ink)
             if currentProject.audioFilename == nil, let tracks = currentProject.audioTracks, !tracks.isEmpty {
-                Text("\(tracks.count) Tonspuren (Studio)")
+                Text("\(tracks.count) Tonspuren")
                     .font(Theme.body)
                     .foregroundStyle(Theme.ink)
                 Spacer()
@@ -493,10 +494,24 @@ struct ProjectDetailView: View {
                     .font(Theme.body)
                 Spacer()
             }
+            Button { showVoice = true } label: { Image(systemName: "mic") }
+                .accessibilityLabel(Text("Stimme aufnehmen"))
+                .disabled(currentProject.frameCount == 0)
         }
         .buttonStyle(.plain)
         .foregroundStyle(Theme.ink)
         .padding(.horizontal, 4)
+        .sheet(isPresented: $showVoice) {
+            VoiceRecordSheet(urls: store.frameURLs(for: currentProject), startFrame: 0,
+                             fps: exportSettings.outputFPS) { url, frame in
+                if let url {
+                    store.addAudioTrack(from: url, startFrame: frame,
+                                        name: String(localized: "Stimme \(currentProject.allAudioTracks.count + 1)"),
+                                        to: currentProject)
+                }
+                showVoice = false
+            }
+        }
         .fileImporter(isPresented: $showAudioImporter, allowedContentTypes: [.audio]) { result in
             if case .success(let url) = result, !store.setAudio(from: url, for: currentProject) {
                 errorMessage = String(localized: "Die Tondatei konnte nicht übernommen werden.")

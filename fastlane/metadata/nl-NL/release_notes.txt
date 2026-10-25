@@ -3,6 +3,8 @@ FrameFold 2.6
 Nu ook op de iPad – en met geluid.
 
 • iPad: FrameFold werkt op de iPad, staand en liggend. In een standaard volgen zoeker en beelden de stand van het apparaat.
+• Studio op de iPad: vanaf de modus Uitgebreid wordt de camera een professionele werkplek – tijdlijn, wisselen tussen live en opnames, onion skin over meerdere beelden, maskers, loep, meerdere geluidssporen met golfvorm, X-sheet met mondvormen.
+• Stem opnemen: de film speelt mee terwijl je spreekt – de opname staat daarna precies op de goede plek. Ze blijft op het apparaat.
 • Muziek of geluid: kies een audiobestand in de werkweergave – het klinkt onder de geëxporteerde film.
 • Tot 24 fps: 15 en 24 fps voor vloeiende beweging.
 • Verdubbelen en herschikken: houd een beeld ingedrukt om het te verdubbelen of te verplaatsen – of sleep het naar een andere plek op het contactvel.

@@ -182,7 +182,7 @@ enum ChromaKey: String, Codable, CaseIterable, Identifiable {
 enum StudioCommand: String {
     case capture, stepBack, stepForward, live, play, shortPlay
     case toggle, autoToggle, loopIn, loopOut, loopClear
-    case duplicate, delete, onionMore, onionLess, cycleView, note, testShot, xsheet, loupe, loupeZoom
+    case duplicate, delete, onionMore, onionLess, cycleView, note, testShot, xsheet, loupe, loupeZoom, record
 }
 
 /// Ob gerade eine Studio-Arbeitsfläche offen ist – nur dann sind die

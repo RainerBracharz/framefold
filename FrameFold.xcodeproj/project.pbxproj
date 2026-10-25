@@ -34,6 +34,7 @@
 		BB20F0F0F0F0F0F0F0F0F312 /* LiveSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F313 /* LiveSettingsView.swift */; };
 		BB20F0F0F0F0F0F0F0F0F314 /* LiveCaptureController+MacCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F315 /* LiveCaptureController+MacCamera.swift */; };
 		BB20F0F0F0F0F0F0F0F0F316 /* LiveCaptureController+Simulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */; };
+		CC30D4D4D4D4D4D4D4D4D040 /* VoiceRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30D4D4D4D4D4D4D4D4D041 /* VoiceRecorder.swift */; };
 		CC30C3C3C3C3C3C3C3C3C030 /* StudioFolderWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30C3C3C3C3C3C3C3C3C031 /* StudioFolderWatch.swift */; };
 		CC30B2B2B2B2B2B2B2B2B220 /* StudioXSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30B2B2B2B2B2B2B2B2B221 /* StudioXSheet.swift */; };
 		CC30B2B2B2B2B2B2B2B2B120 /* StudioAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30B2B2B2B2B2B2B2B2B121 /* StudioAudio.swift */; };
@@ -119,6 +120,7 @@
 		BB20F0F0F0F0F0F0F0F0F313 /* LiveSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSettingsView.swift; sourceTree = "<group>"; };
 		BB20F0F0F0F0F0F0F0F0F315 /* LiveCaptureController+MacCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+MacCamera.swift"; sourceTree = "<group>"; };
 		BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+Simulator.swift"; sourceTree = "<group>"; };
+		CC30D4D4D4D4D4D4D4D4D041 /* VoiceRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecorder.swift; sourceTree = "<group>"; };
 		CC30C3C3C3C3C3C3C3C3C031 /* StudioFolderWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioFolderWatch.swift; sourceTree = "<group>"; };
 		CC30B2B2B2B2B2B2B2B2B221 /* StudioXSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioXSheet.swift; sourceTree = "<group>"; };
 		CC30B2B2B2B2B2B2B2B2B121 /* StudioAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioAudio.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 				BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */,
 				BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */,
 				BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */,
+				CC30D4D4D4D4D4D4D4D4D041 /* VoiceRecorder.swift */,
 				CC30C3C3C3C3C3C3C3C3C031 /* StudioFolderWatch.swift */,
 				CC30B2B2B2B2B2B2B2B2B221 /* StudioXSheet.swift */,
 				CC30B2B2B2B2B2B2B2B2B121 /* StudioAudio.swift */,
@@ -443,6 +446,7 @@
 				BB20F0F0F0F0F0F0F0F0F303 /* LiveLoopView.swift in Sources */,
 				BB20F0F0F0F0F0F0F0F0F305 /* DuoSupport.swift in Sources */,
 				BB20F0F0F0F0F0F0F0F0F316 /* LiveCaptureController+Simulator.swift in Sources */,
+				CC30D4D4D4D4D4D4D4D4D040 /* VoiceRecorder.swift in Sources */,
 				CC30C3C3C3C3C3C3C3C3C030 /* StudioFolderWatch.swift in Sources */,
 				CC30B2B2B2B2B2B2B2B2B220 /* StudioXSheet.swift in Sources */,
 				CC30B2B2B2B2B2B2B2B2B120 /* StudioAudio.swift in Sources */,
@@ -514,6 +518,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FrameFold nimmt auf deinen Wunsch Stimme oder Geräusche zu deinem Film auf. Die Aufnahme bleibt auf dem Gerät.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Im Studio erkennt FrameFold gesprochene Wörter einer Tonspur – nur auf dem Gerät –, um Mundformen den Bildern zuzuordnen.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -546,6 +551,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSCameraUsageDescription = "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FrameFold nimmt auf deinen Wunsch Stimme oder Geräusche zu deinem Film auf. Die Aufnahme bleibt auf dem Gerät.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Im Studio erkennt FrameFold gesprochene Wörter einer Tonspur – nur auf dem Gerät –, um Mundformen den Bildern zuzuordnen.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

@@ -8156,6 +8156,185 @@
           }
         }
       }
+    },
+    "Stimme aufnehmen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record voice"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer la voix"
+          }
+        }
+      }
+    },
+    "Stimme aufnehmen …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record voice …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer la voix …"
+          }
+        }
+      }
+    },
+    "Aufnehmen … (R)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record … (R)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer … (R)"
+          }
+        }
+      }
+    },
+    "ab Bild %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "from frame %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dès l’image %lld"
+          }
+        }
+      }
+    },
+    "Kein Mikrofonzugriff – erlauben unter Einstellungen → Datenschutz → Mikrofon.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No microphone access – allow it in Settings → Privacy → Microphone."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas d’accès au micro – autorise-le dans Réglages → Confidentialité → Micro."
+          }
+        }
+      }
+    },
+    "Stopp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrêter"
+          }
+        }
+      }
+    },
+    "Übernehmen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utiliser"
+          }
+        }
+      }
+    },
+    "Aufnahme starten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start recording"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Démarrer l’enregistrement"
+          }
+        }
+      }
+    },
+    "Stimme %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voix %lld"
+          }
+        }
+      }
+    },
+    "%lld Tonspuren": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld audio tracks"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pistes audio"
+          }
+        }
+      }
+    },
+    "…": {
+      "shouldTranslate": false
+    },
+    "Der Film läuft ab Bild %lld mit. Vorhandener Ton spielt während der Aufnahme nicht, damit er nicht mit aufgenommen wird.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The film plays along from frame %lld. Existing sound is not played during recording, so headphones aren’t needed to keep it out."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le film défile à partir de l’image %lld. Le son existant n’est pas joué pendant l’enregistrement."
+          }
+        }
+      }
     }
   },
   "version": "1.3"

@@ -1,6 +1,6 @@
-# FrameFold Studio (Mac)
+# FrameFold Studio (Mac und iPad)
 
-Die Profi-Arbeitsfläche der Mac-Fassung. Sie erscheint in der Kamera, sobald der Modus **Erweitert** oder **Atelier** eingestellt ist.
+Die Profi-Arbeitsfläche am Mac und am iPad (im Vollbild oder in einem breiten Fenster). Sie erscheint in der Kamera, sobald der Modus **Erweitert** oder **Atelier** eingestellt ist. Am iPad lösen auch die Lautstärketasten aus; die Tastenbefehle gelten mit angeschlossener Tastatur.
 Im Modus **Einfach** bleibt es beim schlichten Sucher.
 
 Die Arbeitsfläche besteht aus vier Teilen:
@@ -61,6 +61,7 @@ Mit „Ordner beobachten“ wird jede Kamera nutzbar, die FrameFold nicht selbst
 - **Tonspuren**: Im Inspektor unter „Ton“ fügt „Tonspur hinzufügen …“ beliebig viele Spuren hinzu.
   Jede Spur hat ein Einsatzbild („Ab Bild“), eine Lautstärke und einen Stummschalter.
   Die Musik aus der Werkansicht erscheint hier als erste Spur.
+- **Stimme aufnehmen** (R): Der Film läuft ab dem gezeigten Bild in der Bildrate, nach „3 – 2 – 1“ läuft die Aufnahme mit. „Übernehmen“ legt sie als neue Spur genau an dieser Stelle an. Die Aufnahme bleibt auf dem Gerät. In der Werkansicht gibt es dasselbe über das Mikrofon-Symbol, ab Bild 1.
 - **Wellenform**: Der Pegel aller Spuren liegt unter den Kacheln der Zeitleiste, Bild für Bild.
 - **Abspielen mit Ton**: Abspielen und Kurz abspielen laufen synchron mit dem Ton.
   Beim Blättern mit ← und → erklingt der Ton genau dieses Bilds („Ton beim Blättern“).
@@ -104,6 +105,7 @@ Sie sind nur aktiv, solange die Arbeitsfläche offen ist, damit einfache Tasten 
 | ⌫ | Bild entfernen |
 | N | Notiz |
 | ⇧X | X-Sheet |
+| R | Stimme aufnehmen |
 | [ / ] | Weniger / mehr Zwiebelhaut |
 | M | Ansicht wechseln (Normal, Differenz, Belichtung) |
 | Z / ⇧Z | Lupe an/aus / stärker |

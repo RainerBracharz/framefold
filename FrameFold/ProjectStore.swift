@@ -339,7 +339,7 @@ final class ProjectStore: ObservableObject {
 
     /// Nimmt eine Audiodatei als weitere Tonspur auf (Kopie im Werkordner).
     @discardableResult
-    func addAudioTrack(from source: URL, startFrame: Int = 0, to project: Project) -> AudioTrack? {
+    func addAudioTrack(from source: URL, startFrame: Int = 0, name: String? = nil, to project: Project) -> AudioTrack? {
         let scoped = source.startAccessingSecurityScopedResource()
         defer { if scoped { source.stopAccessingSecurityScopedResource() } }
         let ext = source.pathExtension.isEmpty ? "m4a" : source.pathExtension.lowercased()
@@ -349,7 +349,7 @@ final class ProjectStore: ObservableObject {
         } catch {
             return nil
         }
-        let track = AudioTrack(name: source.deletingPathExtension().lastPathComponent,
+        let track = AudioTrack(name: name ?? source.deletingPathExtension().lastPathComponent,
                                filename: filename, startFrame: startFrame)
         var updated = project
         updated.audioTracks = (updated.audioTracks ?? []) + [track]

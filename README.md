@@ -109,7 +109,7 @@ that decision is written up here:
   film — remuxed, not re-encoded, so it takes a moment, not a minute.
 - **iPad in a stand.** On iPad the viewfinder and the captured frames follow the
   device's orientation, portrait or landscape.
-- **Studio on the Mac.** In Advanced and Studio mode the Mac camera becomes a
+- **Studio on the Mac and iPad.** In Advanced and Studio mode the camera becomes a
   full stop-motion workspace in the spirit of Dragonframe: viewer with live /
   captured toggle and auto-toggle, multi-frame onion skin, difference and
   clipping views, aspect masks, safe areas and grids, an image-or-movie
@@ -119,7 +119,8 @@ that decision is written up here:
   averaging, capture blackout, test shots, scheduled
   time-lapse, ProRes and image-sequence export — all on the keyboard. Sound
   works like a studio too: multiple tracks with start frame and level, a
-  waveform under the timeline, synced playback and per-frame scrubbing, and
+  waveform under the timeline, voice recording while the film plays along,
+  synced playback and per-frame scrubbing, and
   an X-sheet for dialogue reading with Preston Blair mouth shapes — words can
   be recognised on-device and laid onto frames automatically.
   Guide and key map: [docs/studio](docs/studio/README.md).

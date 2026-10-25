@@ -13,6 +13,9 @@ L’app mesure la netteté en continu et ne verrouille la mise au point qu’une
 L’APPLE WATCH COMME TÉLÉCOMMANDE
 Déclenche et termine depuis ton poignet, avec le nombre d’images et l’état sur le cadran. Personne ne touche au trépied. Les boutons de volume des écouteurs et des AirPods déclenchent aussi, et un appui long lance un compte à rebours.
 
+STUDIO SUR IPAD
+Dès le mode Avancé, l’iPad devient un espace de travail pro : timeline, bascule entre direct et prises, pelure d’oignon sur plusieurs images, masques de format, loupe, plusieurs pistes audio avec forme d’onde, enregistrement de la voix pendant que le film défile et feuille d’exposition avec formes de bouche.
+
 MONTAGE ET SON
 Duplique une image pour tenir une pose plus longtemps, réordonne les images en les glissant, exporte jusqu’à 24 images par seconde — et pose une musique ou un son de tes fichiers sous le film.
 

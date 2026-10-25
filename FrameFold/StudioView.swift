@@ -43,6 +43,7 @@ struct StudioView: View {
     /// Tonpegel auf der Film-Zeitachse (120 Werte je Sekunde)
     @State private var peaks: [Float] = []
     @State private var showXSheet = false
+    @State private var showVoice = false
     @State private var importKind: ImportKind = .reference
     @StateObject private var folderWatch = StudioFolderWatch()
     @State private var volumeDraft: [UUID: Double] = [:]
@@ -63,13 +64,15 @@ struct StudioView: View {
                 timeline
             }
             inspector
-                .frame(width: 290)
+                .frame(width: Platform.isPad ? 300 : 290)
                 .background(Theme.darkroom.opacity(0.92))
                 .overlay(alignment: .leading) {
                     Rectangle().fill(Theme.paperOnDark.opacity(0.12)).frame(width: 1)
                 }
         }
         .background(Color.black)
+        // iPad: Lautstärketasten, Kopfhörer und Bluetooth-Auslöser lösen aus
+        .background { if Platform.isPad { HardwareShutterBridge { handle(.capture) } } }
         .onAppear(perform: activate)
         .onDisappear(perform: deactivate)
         .onChange(of: settings) { _, new in
@@ -109,6 +112,16 @@ struct StudioView: View {
                 .environmentObject(store)
         }
         .onChange(of: showXSheet) { _, open in hub.isActive = !open }
+        .sheet(isPresented: $showVoice) {
+            VoiceRecordSheet(urls: urls, startFrame: frameOnViewer ?? 0, fps: fps) { url, frame in
+                if let url, let project {
+                    store.addAudioTrack(from: url, startFrame: frame,
+                                        name: String(localized: "Stimme \(project.allAudioTracks.count + 1)"), to: project)
+                }
+                showVoice = false
+            }
+        }
+        .onChange(of: showVoice) { _, open in hub.isActive = !open }
         .onChange(of: project?.allAudioTracks) { _, _ in reloadAudio() }
         .alert(noteTitle, isPresented: Binding(get: { noteFrame != nil }, set: { if !$0 { noteFrame = nil } })) {
             TextField("Notiz", text: $noteDraft)
@@ -343,7 +356,7 @@ struct StudioView: View {
     // MARK: Transport
 
     private var transport: some View {
-        HStack(spacing: 14) {
+        HStack(spacing: Platform.isPad ? 6 : 14) {
             transportButton("backward.frame", "Bild zurück (←)") { handle(.stepBack) }
             transportButton(playing ? "stop.fill" : "play.fill", "Abspielen (P)") { handle(.play) }
             transportButton("goforward", "Kurz abspielen (K)") { handle(.shortPlay) }
@@ -367,7 +380,10 @@ struct StudioView: View {
             .buttonStyle(.plain)
             .help("Auslösen (Leertaste oder ⏎)")
             .keyboardShortcut(.space, modifiers: [])
-            Button("Fertig", action: onFinish)
+            .accessibilityLabel(Text("Auslöser"))
+            // Wie im einfachen Sucher: „Fertig · 3“ zeigt, wie viele Bilder
+            // diese Sitzung dazukommen.
+            Button("Fertig · \(controller.capturedCount)", action: onFinish)
                 .buttonStyle(.plain)
                 .font(Theme.caption(12))
                 .padding(.horizontal, 14).padding(.vertical, 8)
@@ -383,8 +399,8 @@ struct StudioView: View {
                                  action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: symbol)
-                .font(.system(size: 15, weight: .medium))
-                .frame(width: 30, height: 26)
+                .font(.system(size: Platform.isPad ? 19 : 15, weight: .medium))
+                .frame(width: Platform.isPad ? 44 : 30, height: Platform.isPad ? 44 : 26)
                 .foregroundStyle(active ? Theme.amber : Theme.paperOnDark)
         }
         .buttonStyle(.plain)
@@ -587,6 +603,7 @@ struct StudioView: View {
                     }
                     HStack {
                         smallButton("Tonspur hinzufügen …") { importKind = .audio; showReferenceImporter = true }
+                        smallButton("Aufnehmen … (R)") { handle(.record) }
                         smallButton("X-Sheet …") { handle(.xsheet) }
                     }
                     toggle("Ton beim Blättern", $settings.scrubAudio)
@@ -619,8 +636,10 @@ struct StudioView: View {
                         Text(verbatim: "\(project.frameCount) · \(project.name)")
                             .font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark)
                         smallButton("Notiz zum nächsten Bild …") { editNote(urls.count + 1) }
-                        smallButton("Bilder im Finder zeigen") {
-                            UIApplication.shared.open(store.folderURL(for: project))
+                        if Platform.isMac {
+                            smallButton("Bilder im Finder zeigen") {
+                                UIApplication.shared.open(store.folderURL(for: project))
+                            }
                         }
                         smallButton("Letztes Bild zurücknehmen", action: onUndo)
                     }
@@ -786,6 +805,9 @@ struct StudioView: View {
         case .loupeZoom:
             settings.loupe = true
             settings.loupeZoom = settings.loupeZoom >= 8 ? 2 : settings.loupeZoom * 2
+        case .record:
+            stopPlayback()
+            showVoice = true
         case .xsheet:
             stopPlayback()
             showXSheet = true
@@ -948,6 +970,8 @@ struct StudioView: View {
                 folderWatch.start { image, data in controller.commit(frame: image, originalData: data) }
             case "xsheet":
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) { handle(.xsheet) }
+            case "voice":
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) { handle(.record) }
             case "note":
                 if let project { store.setNote(kv[1], forFrame: urls.count + 1, in: project) }
             default: break

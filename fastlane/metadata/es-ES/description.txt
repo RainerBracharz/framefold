@@ -13,6 +13,9 @@ La app mide la nitidez continuamente y solo bloquea el enfoque cuando de verdad 
 APPLE WATCH COMO MANDO
 Dispara y termina desde la muñeca, con el contador de fotogramas en la esfera. Nadie tiene que tocar el trípode. También disparan los botones de volumen de los auriculares y los AirPods, y mantener pulsado el obturador inicia una cuenta atrás.
 
+STUDIO EN EL IPAD
+Desde el modo Avanzado el iPad se convierte en un espacio de trabajo profesional: línea de tiempo, alternar entre directo y fotogramas, papel cebolla de varios fotogramas, máscaras de formato, lupa, varias pistas de audio con forma de onda, grabación de voz mientras se reproduce la película y una hoja de exposición con formas de boca.
+
 MONTAJE Y SONIDO
 Duplica un fotograma para que una pose dure más, reordena los fotogramas arrastrándolos, exporta hasta 24 fps — y pon música o sonido de tus archivos bajo la película.
 

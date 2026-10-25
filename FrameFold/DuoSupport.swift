@@ -13,6 +13,9 @@ enum Platform {
         #endif
     }()
 
+    /// iPad (nicht Mac): bekommt ab „Erweitert“ die Studio-Arbeitsfläche.
+    @MainActor static var isPad: Bool { !isMac && UIDevice.current.userInterfaceIdiom == .pad }
+
     /// Ersatzkamera mit synthetischen Bildern: immer im Simulator, in der
     /// Mac-Testfassung nur mit gesetztem FF_SIM_FRAMES – für Store-Screenshots
     /// ohne echte Kamera (und ohne jemanden zu filmen).

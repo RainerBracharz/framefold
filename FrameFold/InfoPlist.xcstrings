@@ -72,6 +72,30 @@
           }
         }
       }
+    },
+    "NSMicrophoneUsageDescription": {
+      "comment": "Systemdialog bei „Stimme aufnehmen“",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FrameFold nimmt auf deinen Wunsch Stimme oder Geräusche zu deinem Film auf. Die Aufnahme bleibt auf dem Gerät."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At your request, FrameFold records voice or sound for your film. The recording stays on the device."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À ta demande, FrameFold enregistre ta voix ou des sons pour ton film. L’enregistrement reste sur l’appareil."
+          }
+        }
+      }
     }
   },
   "version": "1.3"

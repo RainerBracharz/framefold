@@ -105,7 +105,9 @@ final class DialogueAudioTests: XCTestCase {
         project = store.projects[0]
         XCTAssertEqual(project.allAudioTracks.count, 1, "Musik der Werkansicht zählt als Spur")
 
-        let voice = try XCTUnwrap(store.addAudioTrack(from: try tone("stimme.wav", seconds: 1), startFrame: 12, to: project))
+        let voice = try XCTUnwrap(store.addAudioTrack(from: try tone("stimme.wav", seconds: 1), startFrame: 12,
+                                                      name: "Stimme 2", to: project))
+        XCTAssertEqual(voice.name, "Stimme 2")
         project = store.projects[0]
         XCTAssertEqual(project.allAudioTracks.map(\.startFrame), [0, 12])
         XCTAssertTrue(FileManager.default.fileExists(atPath: store.url(for: voice, in: project).path))

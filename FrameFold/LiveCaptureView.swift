@@ -568,7 +568,7 @@ struct LiveCaptureView: View {
     /// Bedienleiste strukturell nicht verschwinden.
     private func captureView(project: Project) -> some View {
         Group {
-            if Platform.isMac, mode.showsAdvanced {
+            if mode.showsAdvanced, Platform.isMac || (Platform.isPad && horizontalSizeClass == .regular) {
                 // Profi-Arbeitsfläche: Betrachter, Zeitleiste, Inspektor
                 StudioView(controller: controller, projectID: project.id,
                            onFinish: { finishSession(project: project) },

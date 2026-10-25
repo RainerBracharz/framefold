@@ -13,6 +13,9 @@ L’app misura la nitidezza di continuo e blocca la messa a fuoco solo quando è
 APPLE WATCH COME TELECOMANDO
 Scatta e concludi dal polso, con il contatore dei fotogrammi sul quadrante. Nessuno deve toccare il treppiede. Scattano anche i tasti del volume di cuffie e AirPods, e tenendo premuto il pulsante di scatto parte un conto alla rovescia.
 
+STUDIO SU IPAD
+Dalla modalità Avanzata l’iPad diventa uno spazio di lavoro professionale: timeline, passaggio tra live e fotogrammi, onion skin su più fotogrammi, maschere di formato, lente, più tracce audio con forma d’onda, registrazione della voce mentre il film scorre e un X-sheet con forme della bocca.
+
 MONTAGGIO E SUONO
 Duplica un fotogramma per far durare di più una posa, riordina i fotogrammi trascinandoli, esporta fino a 24 fps — e metti musica o suoni dai tuoi file sotto il film.
 

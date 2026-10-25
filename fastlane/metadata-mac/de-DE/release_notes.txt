@@ -4,6 +4,7 @@ Das Studio – und Ton.
 
 • Studio: Ab „Erweitert“ wird die Kamera zur Profi-Arbeitsfläche – Zeitleiste zum Ziehen, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder, Differenz- und Belichtungsansicht, Formatmasken, Raster, Referenzbild oder -film mit Chroma-Key, Notizen je Bild, Mitteln gegen Rauschen, Zeitraffer mit Start- und Endzeit. Alles auch über Tasten (Menü „Studio“).
 • Jede Kamera: Fotos, die die Software deiner Spiegelreflex- oder Systemkamera in einen Ordner legt, werden in voller Auflösung das nächste Bild – auch RAW. Dazu eine Lupe zum Scharfstellen im Live-Bild.
+• Stimme aufnehmen: Der Film läuft mit, du sprichst dazu – die Aufnahme liegt danach als Tonspur genau an der richtigen Stelle.
 • Ton wie im Studio: mehrere Tonspuren mit Einsatzbild und Lautstärke, Wellenform in der Zeitleiste, Ton beim Abspielen und Blättern. Im X-Sheet Dialog lesen mit Mundformen je Figur – Wörter erkennt FrameFold auf Wunsch selbst, nur auf dem Gerät.
 • Export als ProRes oder Bildsequenz (PNG, TIFF, JPEG).
 • Musik oder Ton: In der Werkansicht eine Audiodatei wählen – sie liegt unter dem exportierten Film.
