@@ -511,5 +511,13 @@
   "Werk konnte nicht geöffnet werden": "Impossibile aprire l’opera",
   "Werk konnte nicht übertragen werden": "Impossibile trasferire l’opera",
   "Werk wird verpackt …": "Preparazione dell’opera …",
-  "In der Werkliste ein Werk lange drücken → „Als Datei teilen …“: So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät, dort öffnet FrameFold eine Kopie.": "Tieni premuta un’opera nell’elenco → «Condividi come file …»: così arriva su un altro dispositivo via AirDrop o File, dove FrameFold ne apre una copia."
+  "In der Werkliste ein Werk lange drücken → „Als Datei teilen …“: So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät, dort öffnet FrameFold eine Kopie.": "Tieni premuta un’opera nell’elenco → «Condividi come file …»: così arriva su un altro dispositivo via AirDrop o File, dove FrameFold ne apre una copia.",
+  "%lld Bilder lang": "%lld fotogrammi",
+  "Anfang weglassen": "Salta l’inizio",
+  "Ausblenden": "Dissolvenza in uscita",
+  "Einblenden": "Dissolvenza in entrata",
+  "Halten": "Tieni",
+  "Kürzen und Blenden": "Taglia e dissolvi",
+  "Länge": "Durata",
+  "ganz": "intero"
 }

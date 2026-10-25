@@ -10,6 +10,17 @@ struct AudioTrack: Codable, Equatable, Identifiable {
     var startFrame: Int = 0
     var volume: Double = 1
     var muted = false
+    /// Kürzen und Blenden, alles in Sekunden. Optional, damit ältere Werke
+    /// ohne diese Felder weiter lesbar bleiben.
+    var trimStart: Double?
+    /// Höchstens so lang spielen (nil = bis zum Ende der Datei)
+    var maxLength: Double?
+    var fadeIn: Double?
+    var fadeOut: Double?
+
+    var isShaped: Bool {
+        (trimStart ?? 0) > 0 || (maxLength ?? 0) > 0 || (fadeIn ?? 0) > 0 || (fadeOut ?? 0) > 0
+    }
 }
 
 /// Mundformen nach Preston Blair – der Standardsatz im Trickfilm. Jede

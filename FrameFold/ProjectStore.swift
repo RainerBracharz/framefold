@@ -670,6 +670,26 @@ final class ProjectStore: ObservableObject {
         return filename
     }
 
+    /// Ein Bild insgesamt `frames` Bilder lang stehen lassen – wie „auf
+    /// Zweien“ animieren, aber nur für diese Pose. Ein Schritt zum Zurücknehmen.
+    func holdFrame(named name: String, frames: Int, in project: Project) {
+        guard frames > 1, let index = project.frameFilenames.firstIndex(of: name) else { return }
+        recordUndo(project.id, String(localized: "Halten"))
+        var updated = project
+        let dir = directory(for: updated)
+        var inserted: [String] = []
+        for _ in 1..<frames {
+            let number = nextNumber(for: updated)
+            let filename = String(format: "%06d.jpg", number)
+            guard (try? FileManager.default.copyItem(at: dir.appendingPathComponent(name),
+                                                     to: dir.appendingPathComponent(filename))) != nil else { break }
+            inserted.append(filename)
+            updated.nextFrameNumber = number + 1
+        }
+        updated.frameFilenames.insert(contentsOf: inserted, at: index + 1)
+        save(updated)
+    }
+
     /// Verschiebt ein Bild um `offset` Plätze (negativ = nach vorn).
     func moveFrame(named name: String, by offset: Int, in project: Project) {
         guard let index = project.frameFilenames.firstIndex(of: name) else { return }

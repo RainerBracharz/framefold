@@ -13,11 +13,68 @@ extension Project {
     /// Hörbare Spuren mit Einsatz in Sekunden bei `fps`.
     @MainActor
     func audioSources(fps: Int32, store: ProjectStore) -> [AudioSource] {
-        allAudioTracks.filter { !$0.muted }.map {
-            AudioSource(url: store.url(for: $0, in: self),
-                        start: Double($0.startFrame) / Double(max(1, fps)),
-                        volume: $0.volume)
+        allAudioTracks.filter { !$0.muted }.map { track in
+            let original = store.url(for: track, in: self)
+            return AudioSource(url: track.isShaped ? ((try? AudioShaper.shaped(original, track: track)) ?? original) : original,
+                               start: Double(track.startFrame) / Double(max(1, fps)),
+                               volume: track.volume)
         }
+    }
+}
+
+// MARK: Kürzen und Blenden
+
+/// Gekürzte und geblendete Fassung einer Spur als eigene Datei. Mischung,
+/// Wellenform und Wiedergabe im Studio nehmen dann einfach diese Datei –
+/// so klingen alle drei gleich.
+enum AudioShaper {
+    static func shaped(_ source: URL, track: AudioTrack) throws -> URL {
+        let trim = max(0, track.trimStart ?? 0), length = max(0, track.maxLength ?? 0)
+        let fadeIn = max(0, track.fadeIn ?? 0), fadeOut = max(0, track.fadeOut ?? 0)
+        let modified = (try? source.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate)?
+            .timeIntervalSince1970 ?? 0
+        let key = "\(source.path)|\(modified)|\(trim)|\(length)|\(fadeIn)|\(fadeOut)"
+        let hash = key.unicodeScalars.reduce(UInt64(1469598103934665603)) { ($0 ^ UInt64($1.value)) &* 1099511628211 }
+        let target = FileManager.default.temporaryDirectory.appendingPathComponent("ff-clip-\(String(hash, radix: 16)).caf")
+        if FileManager.default.fileExists(atPath: target.path) { return target }
+
+        let file = try AVAudioFile(forReading: source)
+        let format = file.processingFormat
+        let rate = format.sampleRate
+        let first = min(file.length, AVAudioFramePosition(trim * rate))
+        var count = file.length - first
+        if length > 0 { count = min(count, AVAudioFramePosition(length * rate)) }
+        guard count > 0, let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(count)),
+              let channels = buffer.floatChannelData else { throw PipelineError.exportFailed }
+        file.framePosition = first
+        // AVAudioFile liest je Aufruf nicht immer alles – in Stücken anhängen
+        guard let chunk = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 65_536) else { throw PipelineError.exportFailed }
+        while buffer.frameLength < AVAudioFrameCount(count) {
+            let wanted = min(chunk.frameCapacity, AVAudioFrameCount(count) - buffer.frameLength)
+            try file.read(into: chunk, frameCount: wanted)
+            guard chunk.frameLength > 0, let src = chunk.floatChannelData else { break }
+            for c in 0..<Int(format.channelCount) {
+                (channels[c] + Int(buffer.frameLength)).update(from: src[c], count: Int(chunk.frameLength))
+            }
+            buffer.frameLength += chunk.frameLength
+        }
+        let frames = Int(buffer.frameLength)
+        let inFrames = min(frames, Int(fadeIn * rate)), outFrames = min(frames, Int(fadeOut * rate))
+        for c in 0..<Int(format.channelCount) {
+            let data = channels[c]
+            for i in 0..<inFrames { data[i] *= Float(i) / Float(inFrames) }
+            for i in 0..<outFrames { data[frames - 1 - i] *= Float(i) / Float(outFrames) }
+        }
+        let partial = target.deletingLastPathComponent().appendingPathComponent(".\(target.lastPathComponent)")
+        try? FileManager.default.removeItem(at: partial)
+        do {
+            let out = try AVAudioFile(forWriting: partial, settings: format.settings)
+            try out.write(from: buffer)
+            // Erst geschlossen ist die Datei vollständig auf der Platte
+            if #available(iOS 18.0, macCatalyst 18.0, *) { out.close() }
+        }
+        try FileManager.default.moveItem(at: partial, to: target)
+        return target
     }
 }
 

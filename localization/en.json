@@ -330,5 +330,13 @@
   "Werk konnte nicht geöffnet werden": "Couldn’t open the work",
   "Werk konnte nicht übertragen werden": "Couldn’t transfer the work",
   "Werk wird verpackt …": "Packing work …",
-  "In der Werkliste ein Werk lange drücken → „Als Datei teilen …“: So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät, dort öffnet FrameFold eine Kopie.": "Long-press a work in the list → “Share as file …”: that’s how it gets to another device via AirDrop or Files, where FrameFold opens a copy."
+  "In der Werkliste ein Werk lange drücken → „Als Datei teilen …“: So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät, dort öffnet FrameFold eine Kopie.": "Long-press a work in the list → “Share as file …”: that’s how it gets to another device via AirDrop or Files, where FrameFold opens a copy.",
+  "%lld Bilder lang": "%lld frames long",
+  "Anfang weglassen": "Skip start",
+  "Ausblenden": "Fade out",
+  "Einblenden": "Fade in",
+  "Halten": "Hold",
+  "Kürzen und Blenden": "Trim and fade",
+  "Länge": "Length",
+  "ganz": "full"
 }

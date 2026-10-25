@@ -616,5 +616,13 @@
   "Werk konnte nicht geöffnet werden": "作品を開けませんでした",
   "Werk konnte nicht übertragen werden": "作品を転送できませんでした",
   "Werk wird verpackt …": "作品をまとめています…",
-  "In der Werkliste ein Werk lange drücken → „Als Datei teilen …“: So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät, dort öffnet FrameFold eine Kopie.": "一覧で作品を長押し →「ファイルとして共有…」：AirDrop や「ファイル」で別のデバイスに送ると、FrameFold がコピーとして開きます。"
+  "In der Werkliste ein Werk lange drücken → „Als Datei teilen …“: So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät, dort öffnet FrameFold eine Kopie.": "一覧で作品を長押し →「ファイルとして共有…」：AirDrop や「ファイル」で別のデバイスに送ると、FrameFold がコピーとして開きます。",
+  "%lld Bilder lang": "%lld コマ分",
+  "Anfang weglassen": "冒頭をカット",
+  "Ausblenden": "フェードアウト",
+  "Einblenden": "フェードイン",
+  "Halten": "ホールド",
+  "Kürzen und Blenden": "カットとフェード",
+  "Länge": "長さ",
+  "ganz": "全体"
 }

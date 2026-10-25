@@ -615,6 +615,11 @@ struct StudioView: View {
             Button { stopPlayback(); overlayFrame = index } label: { Label("Text & Zeichnen …", systemImage: "pencil.and.scribble") }
             SoundEffectMenu(projectID: projectID, frame: index) { Label("Geräusch hier", systemImage: "speaker.wave.2") }
             Button { duplicate(index) } label: { Label("Verdoppeln", systemImage: "plus.square.on.square") }
+            Menu {
+                ForEach([2, 3, 4, 6], id: \.self) { n in
+                    Button("\(n) Bilder lang") { hold(index, frames: n) }
+                }
+            } label: { Label("Halten", systemImage: "pause.rectangle") }
             Button { editNote(index + 1) } label: { Label("Notiz …", systemImage: "text.bubble") }
             Button { loopIn = index } label: { Label("Als Schleifenanfang", systemImage: "chevron.left.to.line") }
             Button { loopOut = index } label: { Label("Als Schleifenende", systemImage: "chevron.right.to.line") }
@@ -863,9 +868,40 @@ struct StudioView: View {
                 store.updateAudioTrack(id: track.id, in: projectID) { $0.volume = volume }
                 volumeDraft[track.id] = nil
             }
+            clipControls(track)
         }
         .padding(8)
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.15), lineWidth: 1))
+    }
+
+    /// Kürzen und Blenden einer Spur, in Zehntelsekunden.
+    private func clipControls(_ track: AudioTrack) -> some View {
+        DisclosureGroup {
+            VStack(spacing: 2) {
+                stepper("Anfang weglassen", value: clipBinding(track, \.trimStart), in: 0...600, step: 0.1) { Self.seconds($0) }
+                stepper("Länge", value: clipBinding(track, \.maxLength), in: 0...600, step: 0.1) {
+                    $0 == 0 ? String(localized: "ganz") : Self.seconds($0)
+                }
+                stepper("Einblenden", value: clipBinding(track, \.fadeIn), in: 0...10, step: 0.1) { Self.seconds($0) }
+                stepper("Ausblenden", value: clipBinding(track, \.fadeOut), in: 0...10, step: 0.1) { Self.seconds($0) }
+            }
+            .padding(.top, 4)
+        } label: {
+            Text("Kürzen und Blenden").font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark)
+        }
+        .tint(Theme.paperOnDark)
+    }
+
+    private func clipBinding(_ track: AudioTrack, _ key: WritableKeyPath<AudioTrack, Double?>) -> Binding<Double> {
+        Binding(get: { track[keyPath: key] ?? 0 },
+                set: { value in
+                    let rounded = (value * 10).rounded() / 10
+                    store.updateAudioTrack(id: track.id, in: projectID) { $0[keyPath: key] = rounded > 0 ? rounded : nil }
+                })
+    }
+
+    static func seconds(_ value: Double) -> String {
+        value.formatted(.number.precision(.fractionLength(1))) + " s"
     }
 
     private var intervalStep: Double {
@@ -1067,6 +1103,11 @@ struct StudioView: View {
     private func duplicate(_ index: Int) {
         guard let project, project.frameFilenames.indices.contains(index) else { return }
         store.duplicateFrame(named: project.frameFilenames[index], in: project)
+    }
+
+    private func hold(_ index: Int, frames: Int) {
+        guard let project, project.frameFilenames.indices.contains(index) else { return }
+        store.holdFrame(named: project.frameFilenames[index], frames: frames, in: project)
     }
 
     private func delete(_ index: Int) {

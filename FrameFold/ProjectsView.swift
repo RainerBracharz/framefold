@@ -364,6 +364,13 @@ struct ProjectDetailView: View {
                             } label: {
                                 Label("Verdoppeln", systemImage: "plus.square.on.square")
                             }
+                            Menu {
+                                ForEach([2, 3, 4, 6], id: \.self) { n in
+                                    Button("\(n) Bilder lang") {
+                                        store.holdFrame(named: url.lastPathComponent, frames: n, in: currentProject)
+                                    }
+                                }
+                            } label: { Label("Halten", systemImage: "pause.rectangle") }
                             if index > 0 {
                                 Button {
                                     store.moveFrame(named: url.lastPathComponent, by: -1, in: currentProject)
