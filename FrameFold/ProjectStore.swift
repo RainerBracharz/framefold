@@ -910,7 +910,11 @@ final class ProjectStore: ObservableObject {
         for seconds in times {
             let time = CMTime(seconds: seconds, preferredTimescale: 600)
             guard let cgImage = try? await generator.image(at: time).image else { continue }
-            if let data = UIImage(cgImage: cgImage).jpegData(compressionQuality: 0.9) {
+            // JPEG im Hintergrund kodieren – bei 4K-Videos sonst spürbar im Hauptthread
+            let encoded = await Task.detached(priority: .userInitiated) {
+                UIImage(cgImage: cgImage).jpegData(compressionQuality: 0.9)
+            }.value
+            if let data = encoded {
                 // save() in appendFrame aktualisiert das Projekt im Speicher;
                 // Projekt-Objekt jeweils frisch holen:
                 if let current = projects.first(where: { $0.id == project.id }),

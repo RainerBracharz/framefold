@@ -58,9 +58,12 @@ enum StudioImaging {
         return (y, y, y, 1)
     }
 
-    private static var keyCubes: [Double: Cube] = [:]
+    /// Wird von mehreren Hintergrund-Aufgaben gleichzeitig gelesen und
+    /// beschrieben – darum hinter einer Sperre.
+    nonisolated(unsafe) private static var keyCubes: [Double: Cube] = [:]
+    private static let keyCubesLock = NSLock()
     private static func keyCube(hue: Double) -> Cube {
-        if let cached = keyCubes[hue] { return cached }
+        if let cached = keyCubesLock.withLock({ keyCubes[hue] }) { return cached }
         let cube = makeCube(size: 32) { r, g, b in
             let (h, s, v) = hsv(r, g, b)
             var distance = abs(h - hue)
@@ -69,7 +72,7 @@ enum StudioImaging {
             // vormultipliziert: durchsichtig heißt alle Kanäle 0
             return keyed ? (0, 0, 0, 0) : (r, g, b, 1)
         }
-        keyCubes[hue] = cube
+        keyCubesLock.withLock { keyCubes[hue] = cube }
         return cube
     }
 
