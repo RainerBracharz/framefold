@@ -320,5 +320,15 @@
   "Bilder noch einmal auswählen": "Choose frames again",
   "Bilder sichern": "Save frames",
   "Neues Werk anlegen …": "Create a new work …",
-  "Die Bilder kommen ans Ende des Werks und lassen sich dort mit weiteren Aufnahmen ergänzen.": "The frames go to the end of the work, where you can add more sessions."
+  "Die Bilder kommen ans Ende des Werks und lassen sich dort mit weiteren Aufnahmen ergänzen.": "The frames go to the end of the work, where you can add more sessions.",
+  "Als Datei teilen …": "Share as file …",
+  "Die Datei ist beschädigt oder unvollständig.": "The file is damaged or incomplete.",
+  "Diese Datei ist kein FrameFold-Werk.": "This file is not a FrameFold work.",
+  "In der Datei fehlt die Beschreibung des Werks.": "The file is missing the work’s description.",
+  "OK": "OK",
+  "Werk aus Datei öffnen …": "Open work from file …",
+  "Werk konnte nicht geöffnet werden": "Couldn’t open the work",
+  "Werk konnte nicht übertragen werden": "Couldn’t transfer the work",
+  "Werk wird verpackt …": "Packing work …",
+  "In der Werkliste ein Werk lange drücken → „Als Datei teilen …“: So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät, dort öffnet FrameFold eine Kopie.": "Long-press a work in the list → “Share as file …”: that’s how it gets to another device via AirDrop or Files, where FrameFold opens a copy."
 }

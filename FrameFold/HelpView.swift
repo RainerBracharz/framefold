@@ -35,6 +35,7 @@ struct HelpView: View {
             "Bilder per Ziehen umordnen; entfernte Bilder liegen 30 Tage im Papierkorb.",
             "Alles lässt sich rückgängig machen: mit den Pfeil-Knöpfen oder ⌘Z.",
             "Fotos aus der Mediathek lassen sich als Bilder anhängen.",
+            "In der Werkliste ein Werk lange drücken → „Als Datei teilen …“: So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät, dort öffnet FrameFold eine Kopie.",
         ]),
         Topic(id: "export", symbol: "square.and.arrow.up", title: "Exportieren", steps: [
             "Bildrate, Format und Look wählen, dann „Stopmotion exportieren“.",

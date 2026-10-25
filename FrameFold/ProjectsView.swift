@@ -18,6 +18,10 @@ struct ProjectsView: View {
     @State private var renameText = ""
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     @State private var path: [UUID] = []
+    @State private var showWorkImporter = false
+    @State private var workShare: ShareItem?
+    @State private var workError: String?
+    @State private var packing: UUID?
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -45,6 +49,14 @@ struct ProjectsView: View {
                         }
                         .buttonStyle(InkButtonStyle(fullWidth: false))
                         .padding(.top, 24)
+                        Button { showWorkImporter = true } label: {
+                            Text("Werk aus Datei öffnen …")
+                                .font(Theme.mono(12))
+                                .foregroundStyle(Theme.graphite)
+                                .underline()
+                        }
+                        .buttonStyle(.plain)
+                        .padding(.top, 14)
                         Spacer(minLength: 20)
                     }
                 } else {
@@ -59,6 +71,9 @@ struct ProjectsView: View {
                                     renameText = project.name
                                     renaming = project
                                 } label: { Label("Umbenennen …", systemImage: "pencil") }
+                                Button { shareWork(project) } label: {
+                                    Label("Als Datei teilen …", systemImage: "square.and.arrow.up")
+                                }
                                 Button(role: .destructive) {
                                     pendingDelete = project
                                 } label: { Label("Werk löschen", systemImage: "trash") }
@@ -140,9 +155,16 @@ struct ProjectsView: View {
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button { showNewProject = true } label: {
+                    Menu {
+                        Button { showNewProject = true } label: { Label("Neues Werk", systemImage: "plus") }
+                        Button { showWorkImporter = true } label: {
+                            Label("Werk aus Datei öffnen …", systemImage: "square.and.arrow.down")
+                        }
+                    } label: {
                         Image(systemName: "plus")
                             .foregroundStyle(Theme.ink)
+                    } primaryAction: {
+                        showNewProject = true
                     }
                     .accessibilityLabel("Neues Werk anlegen")
                 }
@@ -158,6 +180,48 @@ struct ProjectsView: View {
             }
             .sheet(isPresented: $showExhibition) {
                 ExhibitionSheet()
+            }
+            .sheet(item: $workShare) { item in
+                ActivityView(items: [item.url])
+            }
+            .fileImporter(isPresented: $showWorkImporter, allowedContentTypes: [.frameFoldWork]) { result in
+                guard case .success(let url) = result else { return }
+                Task {
+                    do {
+                        let project = try await store.importPackage(from: url)
+                        open(project.id)
+                    } catch {
+                        workError = error.localizedDescription
+                    }
+                }
+            }
+            .alert("Werk konnte nicht übertragen werden",
+                   isPresented: Binding(get: { workError != nil }, set: { if !$0 { workError = nil } })) {
+                Button("OK", role: .cancel) { workError = nil }
+            } message: {
+                Text(workError ?? "")
+            }
+            .overlay {
+                if packing != nil {
+                    ProgressView("Werk wird verpackt …")
+                        .font(Theme.mono(12))
+                        .padding(20)
+                        .background(Theme.paper)
+                        .overlay(Rectangle().stroke(Theme.hairline))
+                }
+            }
+        }
+    }
+
+    private func shareWork(_ project: Project) {
+        guard packing == nil else { return }
+        packing = project.id
+        Task {
+            defer { packing = nil }
+            do {
+                workShare = ShareItem(url: try await store.exportPackage(of: project))
+            } catch {
+                workError = error.localizedDescription
             }
         }
     }

@@ -501,5 +501,15 @@
   "Kamera-Tab öffnen": "Apri la scheda Fotocamera",
   "Nicht ausgelöst – iPhone prüfen": "Nessuno scatto: controlla l’iPhone",
   "Verbinde…": "Connessione…",
-  "iPhone nicht erreichbar": "iPhone non raggiungibile"
+  "iPhone nicht erreichbar": "iPhone non raggiungibile",
+  "Als Datei teilen …": "Condividi come file …",
+  "Die Datei ist beschädigt oder unvollständig.": "Il file è danneggiato o incompleto.",
+  "Diese Datei ist kein FrameFold-Werk.": "Questo file non è un’opera FrameFold.",
+  "In der Datei fehlt die Beschreibung des Werks.": "Nel file manca la descrizione dell’opera.",
+  "OK": "OK",
+  "Werk aus Datei öffnen …": "Apri opera da file …",
+  "Werk konnte nicht geöffnet werden": "Impossibile aprire l’opera",
+  "Werk konnte nicht übertragen werden": "Impossibile trasferire l’opera",
+  "Werk wird verpackt …": "Preparazione dell’opera …",
+  "In der Werkliste ein Werk lange drücken → „Als Datei teilen …“: So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät, dort öffnet FrameFold eine Kopie.": "Tieni premuta un’opera nell’elenco → «Condividi come file …»: così arriva su un altro dispositivo via AirDrop o File, dove FrameFold ne apre una copia."
 }

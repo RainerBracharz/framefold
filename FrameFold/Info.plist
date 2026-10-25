@@ -12,5 +12,42 @@
 	     bei jedem App-Store-Upload. -->
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<!-- Werk als Datei („Faltung.framefold“): per AirDrop oder „Dateien“
+	     von einem Gerät aufs andere. Importiert wird eine Kopie. -->
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.bracharz.framefold.work</string>
+			<key>UTTypeDescription</key>
+			<string>FrameFold Work</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>framefold</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>FrameFold Work</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.bracharz.framefold.work</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

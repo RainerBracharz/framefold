@@ -606,5 +606,15 @@
   "Zeitleiste, Abspielen, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder.": "Linha do tempo, reprodução, alternância entre imagem ao vivo e captura, papel cebola de vários quadros.",
   "Zisch": "Zap",
   "„Fertig“ zeigt den Film. Im Tab „Werke“ geht es weiter: exportieren, Ton, Titel.": "“Concluído” mostra o filme. A aba “Obras” leva adiante: exportar, som, títulos.",
-  "„Kamera verrutscht?“ erscheint, wenn das Stativ angestoßen wurde – das erste Bild hilft beim Ausrichten.": "“A câmera se mexeu?” aparece quando o suporte levou um esbarrão – o primeiro quadro ajuda a realinhar."
+  "„Kamera verrutscht?“ erscheint, wenn das Stativ angestoßen wurde – das erste Bild hilft beim Ausrichten.": "“A câmera se mexeu?” aparece quando o suporte levou um esbarrão – o primeiro quadro ajuda a realinhar.",
+  "Als Datei teilen …": "Compartilhar como arquivo…",
+  "Die Datei ist beschädigt oder unvollständig.": "O arquivo está danificado ou incompleto.",
+  "Diese Datei ist kein FrameFold-Werk.": "Este arquivo não é uma obra do FrameFold.",
+  "In der Datei fehlt die Beschreibung des Werks.": "Falta a descrição da obra no arquivo.",
+  "OK": "OK",
+  "Werk aus Datei öffnen …": "Abrir obra de um arquivo…",
+  "Werk konnte nicht geöffnet werden": "Não foi possível abrir a obra",
+  "Werk konnte nicht übertragen werden": "Não foi possível transferir a obra",
+  "Werk wird verpackt …": "Empacotando a obra…",
+  "In der Werkliste ein Werk lange drücken → „Als Datei teilen …“: So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät, dort öffnet FrameFold eine Kopie.": "Toque e segure uma obra na lista → “Compartilhar como arquivo…”: assim ela vai para outro aparelho por AirDrop ou Arquivos, onde o FrameFold abre uma cópia."
 }

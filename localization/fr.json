@@ -313,5 +313,15 @@
   "Bilder noch einmal auswählen": "Choisir à nouveau les images",
   "Bilder sichern": "Enregistrer les images",
   "Neues Werk anlegen …": "Créer une nouvelle œuvre …",
-  "Die Bilder kommen ans Ende des Werks und lassen sich dort mit weiteren Aufnahmen ergänzen.": "Les images s’ajoutent à la fin de l’œuvre, où tu peux ajouter d’autres séances."
+  "Die Bilder kommen ans Ende des Werks und lassen sich dort mit weiteren Aufnahmen ergänzen.": "Les images s’ajoutent à la fin de l’œuvre, où tu peux ajouter d’autres séances.",
+  "Als Datei teilen …": "Partager comme fichier …",
+  "Die Datei ist beschädigt oder unvollständig.": "Le fichier est endommagé ou incomplet.",
+  "Diese Datei ist kein FrameFold-Werk.": "Ce fichier n’est pas une œuvre FrameFold.",
+  "In der Datei fehlt die Beschreibung des Werks.": "La description de l’œuvre manque dans le fichier.",
+  "OK": "OK",
+  "Werk aus Datei öffnen …": "Ouvrir une œuvre depuis un fichier …",
+  "Werk konnte nicht geöffnet werden": "Impossible d’ouvrir l’œuvre",
+  "Werk konnte nicht übertragen werden": "Impossible de transférer l’œuvre",
+  "Werk wird verpackt …": "Préparation de l’œuvre …",
+  "In der Werkliste ein Werk lange drücken → „Als Datei teilen …“: So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät, dort öffnet FrameFold eine Kopie.": "Appuyez longuement sur une œuvre dans la liste → « Partager comme fichier … » : elle passe ainsi sur un autre appareil via AirDrop ou Fichiers, où FrameFold en ouvre une copie."
 }

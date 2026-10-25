@@ -224,6 +224,18 @@ struct FrameFoldApp: App {
     /// Erststart: einmaliger Onboarding-Flow, der auch den Modus setzt.
     @AppStorage("didOnboard") private var didOnboard = false
     @ObservedObject private var studioHub = StudioHub.shared
+    @State private var importError: String?
+
+    private func importWork(_ url: URL) async {
+        do {
+            let project = try await projectStore.importPackage(from: url)
+            OpenWork.pending = project.id
+            selectedTab = 2
+            NotificationCenter.default.post(name: .ffOpenWork, object: project.id)
+        } catch {
+            importError = error.localizedDescription
+        }
+    }
 
     init() {
         // UI-Test-Lauf: Erststart herstellen (Onboarding, Kamera-Tipp, Modus).
@@ -295,6 +307,17 @@ struct FrameFoldApp: App {
             // Ein Bild wurde neu aufgenommen: zurück ins Werk
             .onReceive(NotificationCenter.default.publisher(for: .ffOpenWork)) { _ in
                 selectedTab = 2
+            }
+            // Werk-Datei per AirDrop, „Dateien“ oder Finder geöffnet
+            .onOpenURL { url in
+                guard url.pathExtension.lowercased() == WorkPackage.fileExtension else { return }
+                Task { await importWork(url) }
+            }
+            .alert("Werk konnte nicht geöffnet werden",
+                   isPresented: Binding(get: { importError != nil }, set: { if !$0 { importError = nil } })) {
+                Button("OK", role: .cancel) { importError = nil }
+            } message: {
+                Text(importError ?? "")
             }
             // Externe Bildschirme (HDMI/AirPlay) zeigen den Studio-Monitor
             .task {

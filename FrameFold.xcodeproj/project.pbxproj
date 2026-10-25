@@ -37,6 +37,7 @@
 		D9FC1C8FA53AFED7B4F7DEDC /* SoundLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E34C35A672D6F0AC029DD2 /* SoundLibrary.swift */; };
 		343389853CFF4F13AC9A3766 /* SoundUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CD39DC0BE029146C705FF3 /* SoundUI.swift */; };
 		6AC6E4766611E796D7F28595 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59376B5070E76BF0525E48E /* HelpView.swift */; };
+		857DAFE45094A7D6E3CB07DA /* WorkPackage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367935E5424A609B4DDD8E47 /* WorkPackage.swift */; };
 		CC30EBEBEBEBEBEBEBEBE1B0 /* OverlayEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30EBEBEBEBEBEBEBEBE1B1 /* OverlayEditorView.swift */; };
 		CC30EBEBEBEBEBEBEBEBE0B0 /* FrameOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30EBEBEBEBEBEBEBEBE0B1 /* FrameOverlay.swift */; };
 		CC30DADADADADADADADAD0A0 /* ClapTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30DADADADADADADADAD0A1 /* ClapTrigger.swift */; };
@@ -135,6 +136,7 @@
 		10E34C35A672D6F0AC029DD2 /* SoundLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundLibrary.swift; sourceTree = "<group>"; };
 		C3CD39DC0BE029146C705FF3 /* SoundUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundUI.swift; sourceTree = "<group>"; };
 		B59376B5070E76BF0525E48E /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
+		367935E5424A609B4DDD8E47 /* WorkPackage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkPackage.swift; sourceTree = "<group>"; };
 		CC30EBEBEBEBEBEBEBEBE1B1 /* OverlayEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayEditorView.swift; sourceTree = "<group>"; };
 		CC30EBEBEBEBEBEBEBEBE0B1 /* FrameOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameOverlay.swift; sourceTree = "<group>"; };
 		CC30DADADADADADADADAD0A1 /* ClapTrigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClapTrigger.swift; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				10E34C35A672D6F0AC029DD2 /* SoundLibrary.swift */,
 				C3CD39DC0BE029146C705FF3 /* SoundUI.swift */,
 				B59376B5070E76BF0525E48E /* HelpView.swift */,
+				367935E5424A609B4DDD8E47 /* WorkPackage.swift */,
 				CC30EBEBEBEBEBEBEBEBE1B1 /* OverlayEditorView.swift */,
 				CC30EBEBEBEBEBEBEBEBE0B1 /* FrameOverlay.swift */,
 				CC30DADADADADADADADAD0A1 /* ClapTrigger.swift */,
@@ -490,6 +493,7 @@
 				D9FC1C8FA53AFED7B4F7DEDC /* SoundLibrary.swift in Sources */,
 				343389853CFF4F13AC9A3766 /* SoundUI.swift in Sources */,
 				6AC6E4766611E796D7F28595 /* HelpView.swift in Sources */,
+				857DAFE45094A7D6E3CB07DA /* WorkPackage.swift in Sources */,
 				CC30EBEBEBEBEBEBEBEBE1B0 /* OverlayEditorView.swift in Sources */,
 				CC30EBEBEBEBEBEBEBEBE0B0 /* FrameOverlay.swift in Sources */,
 				CC30DADADADADADADADAD0A0 /* ClapTrigger.swift in Sources */,

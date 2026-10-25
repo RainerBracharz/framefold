@@ -255,6 +255,70 @@ final class ProjectStore: ObservableObject {
         save(updated)
     }
 
+    // MARK: Werk als Datei
+
+    /// Schreibt das Werk als eine `.framefold`-Datei in einen temporären
+    /// Ordner – ohne Papierkorb, der bleibt auf diesem Gerät.
+    func exportPackage(of project: Project) async throws -> URL {
+        var clean = project
+        clean.trashFilenames = nil
+        let manifest = try JSONEncoder().encode(clean)
+        let dir = directory(for: project)
+        let skip = Set(project.trashFilenames ?? []).union(["manifest.json"])
+        let outDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("ff-werk-\(UUID().uuidString.prefix(8))", isDirectory: true)
+        let target = outDir.appendingPathComponent(WorkPackage.filename(for: project.name))
+        try await Task.detached(priority: .userInitiated) {
+            try FileManager.default.createDirectory(at: outDir, withIntermediateDirectories: true)
+            let manifestURL = outDir.appendingPathComponent("manifest.json")
+            try manifest.write(to: manifestURL)
+            let names = (try FileManager.default.contentsOfDirectory(atPath: dir.path))
+                .filter { WorkPackage.isSafe($0) && !skip.contains($0) }
+                // Nur Dateien – der Papierkorb liegt als Unterordner daneben
+                .filter { (try? dir.appendingPathComponent($0).resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true }
+                .sorted()
+            let files = [("manifest.json", manifestURL)] + names.map { ($0, dir.appendingPathComponent($0)) }
+            try WorkPackage.write(files: files.map { (name: $0.0, url: $0.1) }, to: target)
+            try? FileManager.default.removeItem(at: manifestURL)
+        }.value
+        return target
+    }
+
+    /// Liest eine `.framefold`-Datei als neues Werk ein. Es bekommt eine
+    /// neue Kennung – zweimal importiert ergibt zwei Werke, nichts wird
+    /// überschrieben.
+    @discardableResult
+    func importPackage(from source: URL) async throws -> Project {
+        let accessing = source.startAccessingSecurityScopedResource()
+        defer { if accessing { source.stopAccessingSecurityScopedResource() } }
+        let id = UUID()
+        let staging = FileManager.default.temporaryDirectory
+            .appendingPathComponent("ff-import-\(id.uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: staging) }
+        try await Task.detached(priority: .userInitiated) {
+            try WorkPackage.read(source, into: staging)
+        }.value
+        guard let data = try? Data(contentsOf: staging.appendingPathComponent("manifest.json")),
+              var json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
+            throw WorkPackage.Failure.noManifest
+        }
+        json["id"] = id.uuidString
+        json["createdAtISO"] = ISO8601DateFormatter().string(from: Date())
+        json["trashFilenames"] = nil
+        guard let project = try? JSONDecoder().decode(Project.self, from: JSONSerialization.data(withJSONObject: json)) else {
+            throw WorkPackage.Failure.noManifest
+        }
+        // Nur Bilder übernehmen, die wirklich in der Datei lagen
+        var checked = project
+        checked.frameFilenames = project.frameFilenames.filter {
+            FileManager.default.fileExists(atPath: staging.appendingPathComponent($0).path)
+        }
+        let target = directory(for: checked)
+        try FileManager.default.moveItem(at: staging, to: target)
+        save(checked)
+        return checked
+    }
+
     /// Hängt ein Bild als neuen Frame an (Live-Capture). Gibt den
     /// Dateinamen zurück – oder nil, wenn das Bild nicht gespeichert werden
     /// konnte (etwa weil der Speicher voll ist).

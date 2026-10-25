@@ -606,5 +606,15 @@
   "Zeitleiste, Abspielen, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder.": "タイムライン、再生、ライブ映像と撮影済みの切り替え、複数コマのオニオンスキン。",
   "Zisch": "ビビッ",
   "„Fertig“ zeigt den Film. Im Tab „Werke“ geht es weiter: exportieren, Ton, Titel.": "「完了」で映像を表示。続きは「作品」タブで：書き出し、サウンド、タイトル。",
-  "„Kamera verrutscht?“ erscheint, wenn das Stativ angestoßen wurde – das erste Bild hilft beim Ausrichten.": "スタンドにぶつかると「カメラが動きましたか？」と表示されます – 最初のコマを使って位置を合わせ直せます。"
+  "„Kamera verrutscht?“ erscheint, wenn das Stativ angestoßen wurde – das erste Bild hilft beim Ausrichten.": "スタンドにぶつかると「カメラが動きましたか？」と表示されます – 最初のコマを使って位置を合わせ直せます。",
+  "Als Datei teilen …": "ファイルとして共有…",
+  "Die Datei ist beschädigt oder unvollständig.": "ファイルが破損しているか、不完全です。",
+  "Diese Datei ist kein FrameFold-Werk.": "このファイルは FrameFold の作品ではありません。",
+  "In der Datei fehlt die Beschreibung des Werks.": "ファイルに作品の情報がありません。",
+  "OK": "OK",
+  "Werk aus Datei öffnen …": "ファイルから作品を開く…",
+  "Werk konnte nicht geöffnet werden": "作品を開けませんでした",
+  "Werk konnte nicht übertragen werden": "作品を転送できませんでした",
+  "Werk wird verpackt …": "作品をまとめています…",
+  "In der Werkliste ein Werk lange drücken → „Als Datei teilen …“: So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät, dort öffnet FrameFold eine Kopie.": "一覧で作品を長押し →「ファイルとして共有…」：AirDrop や「ファイル」で別のデバイスに送ると、FrameFold がコピーとして開きます。"
 }
