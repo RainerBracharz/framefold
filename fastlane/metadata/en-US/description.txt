@@ -1,40 +1,39 @@
 The stop-motion app that shoots by itself the moment your hands leave the frame. Free, no subscription, no ads, no account, no internet.
 
-FrameFold turns a video of your working process into a stop-motion — automatically, and entirely on your iPhone or iPad.
-
-The app finds the calm moments in your footage, drops every frame with your hands in it, compensates for shake and assembles the result. Nothing leaves your device: no cloud, no account, no tracking.
+EVERYTHING FREE, NO WATERMARK
+Sound, sound effects, text to speech, green screen, titles and end credits, text and speech bubbles, drawing, photo import, export up to 4K — none of it costs extra, and no film ever carries a watermark. Nothing leaves your device: no cloud, no account, no tracking.
 
 AUTOMATIC CAMERA
-Phone on a tripod, then work — FrameFold fires by itself as soon as your hands leave the frame and the scene settles. Exposure and white balance are locked, and the shutter speed snaps to the mains frequency so artificial light can't streak your frames. With onion skin, drift check, an interval trigger and a spirit level.
+iPhone or iPad on a tripod, then work — FrameFold fires by itself as soon as your hands leave the frame and the scene settles. Exposure and white balance are locked, and the shutter speed locks in to stop artificial light from flickering. With onion skin, a warning if the camera has shifted, an interval trigger and a spirit level. Every frame at full sensor resolution, with your choice of lens.
 
 SHARP, OR NOT AT ALL
-The app measures image sharpness continuously and only locks focus once it has actually settled. If sharpness drops later, it refocuses on its own. A frame that isn't sharp never makes it into the work. On a tripod focus stays locked; handheld it keeps tracking — the motion sensor decides which applies.
+The app measures image sharpness continuously and only locks focus once it has really settled. A frame that isn't sharp never makes it into the work. From Advanced mode you can also set ISO, shutter speed, focus and white balance yourself.
 
-APPLE WATCH AS A REMOTE
-Fire and finish from your wrist, with the frame count and status on the watch face. Nobody has to touch the tripod. The volume buttons on headphones and AirPods fire too, and holding the shutter starts a countdown.
+SHOOT WITHOUT TOUCHING
+Apple Watch as a remote with a frame counter, the volume buttons, AirPods, a clap, or a countdown with a long press. Nobody has to bump the tripod.
 
-STUDIO ON IPAD
-From Advanced mode the iPad becomes a pro workspace: timeline, toggle between live view and captured frames, multi-frame onion skin, aspect masks, loupe, multiple audio tracks with waveform, voice recording while the film plays and an X-sheet with mouth shapes.
+STUDIO
+From Advanced mode the iPad becomes a pro workspace — and the iPhone too, if you like: timeline, toggle between live view and captured frames, multi-frame onion skin, aspect masks, loupe, a reference image with chroma key and an X-Sheet with mouth shapes.
 
-EDIT AND SCORE
-Duplicate a frame to hold a pose longer, drag frames into a new order, export at up to 24 fps — and lay music or sound from your files under the film.
+SOUND
+Multiple audio tracks with waveform: music from your files, record your voice while the film plays, attach ten sound effects from Pop to Ta-da to any frame, or have a voice speak the text you type.
 
-THE FILM GROWS AS YOU WORK
-While you work, the stop-motion is already playing as a loop — in the viewfinder and on the studio monitor next to the camera feed.
+TEXT, TITLES, GREEN SCREEN
+Speech bubbles, text and drawings right in the frame. Title card and end credits. Replace green or blue with an image or a film. Looks for the whole film.
+
+EDIT AND EXPORT
+Duplicate frames, drag them into a new order, retake single frames, undo anything. Export at 2 to 30 fps, up to 4K, as a loop, boomerang or in reverse, and as a GIF too.
 
 FLIP BOOK
-Every work becomes a print-ready flip book: A4 sheets with cut lines, a binding edge and numbered leaves. Cut, staple, flip — the film becomes an object again.
+Every work becomes a print-ready flip book: A4 sheets with cut lines and numbered leaves. Cut, staple, flip.
 
-STUDIO MONITOR
-Connect a screen or projector and it shows the camera feed alone, with a catalogue line — no controls. For classes and studio visits: everyone watches, the phone stays untouched on the tripod.
+FOR SCHOOLS
+Simple mode shows only the essentials. No account, no data processing, no internet — it fits any school's data-protection rules. A lesson plan for two lessons is freely available, and a short help guide is built into the app.
 
 VIDEO TO STOP-MOTION
-Pick an existing video, the calm moments get found, hands removed, duplicates sorted out. You check every frame on the contact sheet before it's assembled.
+Pick an existing video: the calm moments get found, hands removed, duplicates sorted out.
 
-THREE MODES
-Simple (pick, shoot, done — made for teaching), Advanced (aspect, frame rate, resolution, playback) and a studio mode with paper relief, image echo, print look, fold transitions, an exhibition reel and print-ready contact-sheet and fold-template PDFs.
-
-WORKS, NOT FILES
-Projects collect frames across any number of sessions, with a 30-day trash. The result arrives like an edition: "Sheets 01–24 · Series of 24 · dated 2026".
+ON THE MAC TOO
+The same app runs on the Mac, with a document camera or an iPhone as the camera, and exports ProRes or an image sequence. In eight languages.
 
 Built as a bespoke tool for the artist Aldo Tolino, whose work folds printed photographs into objects and photographs them again — image, object, image.

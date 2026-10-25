@@ -1,11 +1,14 @@
 L’app de stop motion qui déclenche toute seule dès que tes mains quittent le cadre. Gratuite, sans abonnement, sans pub, sans compte, sans internet.
 
+TOUT EST GRATUIT, SANS FILIGRANE
+Son, bruitages, voix de synthèse, fond vert, titre et générique de fin, texte et bulles, dessin, export jusqu’en 4K et en ProRes — rien de tout cela n’est payant, et aucun film ne porte de filigrane.
+
 FrameFold transforme ton travail à la table en stop motion — automatiquement, et entièrement sur ton Mac.
 
 Une caméra regarde la table d’en haut pendant que tu plies, dessines, disposes. FrameFold déclenche tout seul dès que tes mains quittent le cadre et que la scène se calme. Rien ne quitte ton Mac : pas de cloud, pas de compte, pas de pistage.
 
 CAMÉRA AU-DESSUS DE LA TABLE
-Idéal avec une caméra document qui regarde la table à la verticale — FrameFold choisit de lui-même une caméra USB branchée. Un iPhone comme webcam ou la caméra intégrée peuvent aussi être choisis. Avec pelure d’oignon, contrôle de dérive et déclenchement à intervalle ; la barre d’espace déclenche à la main.
+Idéal avec une caméra document qui regarde la table à la verticale — FrameFold choisit de lui-même une caméra USB branchée. Un iPhone comme caméra ou la caméra intégrée peuvent aussi être choisis. Avec pelure d’oignon, contrôle de dérive et déclenchement à intervalle ; la barre d’espace déclenche à la main.
 
 NET, OU RIEN
 L’app mesure la netteté en continu. Une image floue n’entre jamais dans l’œuvre. Quand la caméra le permet, FrameFold fige l’exposition et la balance des blancs pour que rien ne scintille d’une image à l’autre.
@@ -13,8 +16,14 @@ L’app mesure la netteté en continu. Une image floue n’entre jamais dans l�
 STUDIO
 Dès le mode Avancé, la caméra devient un espace de travail pro : timeline, bascule entre direct et prises, pelure d’oignon sur plusieurs images, vues différence et exposition, masques de format, zones de sécurité, grilles, image ou film de référence avec incrustation, notes par image, moyenne contre le bruit, écran noir à la prise, prises test et time-lapse avec heure de début et de fin. Tout au clavier aussi. Export en ProRes ou en séquence d’images.
 
-MONTAGE ET SON
-Duplique une image pour tenir une pose plus longtemps, réordonne les images en les glissant, exporte jusqu’à 24 images par seconde — et pose une musique ou un son de tes fichiers sous le film.
+SON
+Plusieurs pistes audio avec forme d’onde : musique tirée de tes fichiers, voix enregistrée pendant que le film défile, dix bruitages de Plop à Tadaa à poser sur n’importe quelle image, ou un texte tapé que tu fais parler par une voix. Dans la feuille d’exposition, les formes de bouche sont attribuées aux images.
+
+TEXTE, TITRES, FOND VERT
+Bulles, texte et dessins directement dans l’image. Carton de titre et générique de fin. Remplace le vert ou le bleu par une image ou un film. Des looks pour tout le film.
+
+MONTAGE ET EXPORT
+Duplique des images, réordonne-les en les glissant, reprends-en une seule, annule tout. Export de 2 à 30 images par seconde, jusqu’en 4K.
 
 LE FILM GRANDIT AVEC TOI
 Pendant que tu travailles, le stop motion tourne déjà en boucle à côté de l’image de la caméra.
@@ -32,6 +41,6 @@ DES ŒUVRES, PAS DES FICHIERS
 Les projets réunissent les images de toutes tes séances, avec une corbeille de 30 jours. Le résultat se présente comme une édition : « Feuilles 01–24 · Série de 24 · datée 2026 ».
 
 AUSSI SUR IPHONE ET IPAD
-FrameFold existe aussi pour iPhone et iPad — avec trépied, Apple Watch comme télécommande et moniteur d’atelier.
+FrameFold existe aussi pour iPhone et iPad — avec trépied, Apple Watch comme télécommande et déclenchement en tapant des mains. En huit langues.
 
 Conçu sur mesure pour l’artiste Aldo Tolino, qui plie des photographies imprimées en objets avant de les photographier à nouveau — image, objet, image.

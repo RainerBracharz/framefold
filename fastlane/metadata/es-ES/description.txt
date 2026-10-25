@@ -1,40 +1,39 @@
 La app de stop motion que dispara sola en cuanto tus manos salen del encuadre. Gratis, sin suscripción, sin anuncios, sin cuenta, sin internet.
 
-FrameFold convierte un vídeo de tu proceso de trabajo en un stop motion — de forma automática y por completo en tu iPhone o iPad.
-
-La app encuentra los momentos de calma, descarta cada fotograma en el que se ven tus manos, compensa el temblor y monta el resultado. Nada sale de tu dispositivo: sin nube, sin cuenta, sin rastreo.
+TODO GRATIS, SIN MARCA DE AGUA
+Sonido, efectos de sonido, voz sintetizada, pantalla verde, título y créditos finales, texto y bocadillos, dibujo, importación de fotos, exportación hasta 4K — nada de esto cuesta extra, y ninguna película lleva marca de agua. Nada sale de tu dispositivo: sin nube, sin cuenta, sin rastreo.
 
 CÁMARA AUTOMÁTICA
-El dispositivo en un trípode y a trabajar — FrameFold dispara solo en cuanto tus manos salen del encuadre y la escena se queda quieta. La exposición y el balance de blancos se bloquean, y la velocidad de obturación se ajusta a la frecuencia de la red para que la luz artificial no parpadee. Con papel cebolla, control de desplazamiento, disparo por intervalos y nivel.
+iPhone o iPad en un trípode y a trabajar — FrameFold dispara solo en cuanto tus manos salen del encuadre y la escena se queda quieta. La exposición y el balance de blancos se bloquean, y la velocidad de obturación se ajusta para que la luz artificial no parpadee. Con papel cebolla, aviso si la cámara se ha movido, disparo por intervalos y nivel. Cada fotograma a la resolución completa del sensor, eligiendo el objetivo.
 
 NÍTIDO, O NADA
-La app mide la nitidez continuamente y solo bloquea el enfoque cuando de verdad está fijado. Si la nitidez cae, vuelve a enfocar sola. Un fotograma desenfocado nunca entra en la obra. En el trípode el enfoque queda fijo; a mano sigue al motivo — el sensor de movimiento decide qué caso se aplica.
+La app mide la nitidez continuamente y solo bloquea el enfoque cuando de verdad está fijado. Un fotograma desenfocado nunca entra en la obra. Desde el modo Avanzado también ajustas tú mismo ISO, velocidad de obturación, enfoque y balance de blancos.
 
-APPLE WATCH COMO MANDO
-Dispara y termina desde la muñeca, con el contador de fotogramas en la esfera. Nadie tiene que tocar el trípode. También disparan los botones de volumen de los auriculares y los AirPods, y mantener pulsado el obturador inicia una cuenta atrás.
+DISPARAR SIN TOCAR
+Apple Watch como mando con contador de fotogramas, botones de volumen, AirPods, una palmada o una cuenta atrás manteniendo pulsado. Nadie tiene que mover el trípode.
 
-STUDIO EN EL IPAD
-Desde el modo Avanzado el iPad se convierte en un espacio de trabajo profesional: línea de tiempo, alternar entre directo y fotogramas, papel cebolla de varios fotogramas, máscaras de formato, lupa, varias pistas de audio con forma de onda, grabación de voz mientras se reproduce la película y una hoja de exposición con formas de boca.
+STUDIO
+Desde el modo Avanzado el iPad se convierte en un espacio de trabajo profesional, y si quieres también el iPhone: línea de tiempo, alternar entre directo y fotogramas, papel cebolla de varios fotogramas, máscaras de formato, lupa, imagen de referencia con croma y una hoja de exposición con formas de boca.
 
-MONTAJE Y SONIDO
-Duplica un fotograma para que una pose dure más, reordena los fotogramas arrastrándolos, exporta hasta 24 fps — y pon música o sonido de tus archivos bajo la película.
+SONIDO
+Varias pistas de audio con forma de onda: música de tus archivos, graba tu voz mientras se reproduce la película, añade a cualquier fotograma diez efectos de sonido, de Pop a Tachán, o haz que una voz lea el texto que escribes.
 
-LA PELÍCULA CRECE CONTIGO
-Mientras trabajas, el stop motion ya se reproduce en bucle — en el visor y en el monitor de estudio junto a la imagen de la cámara.
+TEXTO, TÍTULOS, PANTALLA VERDE
+Bocadillos, texto y dibujos directamente en la imagen. Cartela de título y créditos finales. Sustituye el verde o el azul por una imagen o un vídeo. Estilos para toda la película.
+
+MONTAJE Y EXPORTACIÓN
+Duplica fotogramas, reordénalos arrastrándolos, repite uno solo, deshazlo todo. Exporta de 2 a 30 fps, hasta 4K, en bucle, en boomerang o al revés, y también como GIF.
 
 FLIPBOOK
-Cada obra se convierte en un flipbook listo para imprimir: hojas A4 con líneas de corte, margen de encuadernación y hojas numeradas. Recortar, grapar, pasar las páginas — la película vuelve a ser un objeto.
+Cada obra se convierte en un flipbook listo para imprimir: hojas A4 con líneas de corte y páginas numeradas. Recortar, grapar, pasar las páginas.
 
-MONITOR DE ESTUDIO
-Conecta una pantalla o un proyector y mostrará solo la imagen de la cámara, sin controles. Para clases y visitas al taller: todos miran, el dispositivo sigue intacto en el trípode.
+PARA LA ESCUELA
+El modo Sencillo muestra solo lo imprescindible. Sin cuenta, sin tratamiento de datos, sin internet — encaja con cualquier normativa de protección de datos. Hay una propuesta didáctica para dos sesiones disponible gratis, y una ayuda breve dentro de la app.
 
 DE VÍDEO A STOP MOTION
-Elige un vídeo existente: se encuentran los momentos de calma, se quitan las manos y se descartan los duplicados. Antes del montaje revisas cada fotograma en la hoja de contactos.
+Elige un vídeo existente: se encuentran los momentos de calma, se quitan las manos y se descartan los duplicados.
 
-TRES MODOS
-Sencillo (elegir, disparar, listo — ideal para clase), Avanzado (formato, velocidad, resolución, reproducción) y un modo taller con relieve de papel, eco de imagen, aspecto de impresión, transiciones de pliegue, un reel de exposición y PDF listos para imprimir.
-
-OBRAS, NO ARCHIVOS
-Los proyectos reúnen fotogramas de tantas sesiones como quieras, con papelera de 30 días.
+TAMBIÉN EN EL MAC
+La misma app funciona en el Mac, con una cámara de documentos o un iPhone como cámara, y exporta en ProRes o como secuencia de imágenes. En ocho idiomas.
 
 Creada como herramienta a medida para el artista Aldo Tolino, cuya obra pliega fotografías impresas en objetos y las vuelve a fotografiar — imagen, objeto, imagen.

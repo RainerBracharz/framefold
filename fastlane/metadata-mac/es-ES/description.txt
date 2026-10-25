@@ -1,29 +1,46 @@
 La app de stop motion que dispara sola en cuanto tus manos salen del encuadre. Gratis, sin suscripción, sin anuncios, sin cuenta, sin internet.
 
+TODO GRATIS, SIN MARCA DE AGUA
+Sonido, efectos de sonido, voz sintetizada, pantalla verde, título y créditos finales, texto y bocadillos, dibujo, exportación hasta 4K y en ProRes — nada de esto cuesta extra, y ninguna película lleva marca de agua.
+
 FrameFold convierte tu trabajo en la mesa en un stop motion — de forma automática y por completo en tu Mac.
 
 Una cámara mira la mesa desde arriba mientras pliegas, dibujas, colocas. FrameFold dispara solo en cuanto tus manos salen del encuadre y la escena se queda quieta. Nada sale de tu Mac: sin nube, sin cuenta, sin rastreo.
 
 CÁMARA SOBRE LA MESA
-Funciona mejor con una cámara de documentos que mire la mesa en vertical — FrameFold elige sola una cámara USB conectada. También se puede usar un iPhone como cámara web o la cámara integrada. Con papel cebolla, control de desplazamiento y disparo por intervalos; la barra espaciadora dispara a mano.
+Funciona mejor con una cámara de documentos que mire la mesa en vertical — FrameFold elige sola una cámara USB conectada. También puedes elegir un iPhone como cámara o la cámara integrada. Con papel cebolla, control de desplazamiento y disparo por intervalos; la barra espaciadora dispara a mano.
 
 NÍTIDO, O NADA
 La app mide la nitidez continuamente. Un fotograma desenfocado nunca entra en la obra. Donde la cámara lo permite, FrameFold fija la exposición y el balance de blancos para que nada parpadee entre fotogramas.
 
 STUDIO
-Desde el modo Avanzado la cámara se convierte en un espacio de trabajo profesional: línea de tiempo, alternar entre directo y fotogramas, papel cebolla de varios fotogramas, vistas de diferencia y exposición, máscaras de formato, zonas seguras, cuadrículas, imagen o vídeo de referencia con croma, notas por fotograma, promedio contra el ruido, pantalla negra al disparar, tomas de prueba y timelapse con hora de inicio y fin. Todo también con el teclado. Exportación en ProRes o como secuencia de imágenes.
+Desde el modo Avanzado la cámara se convierte en un espacio de trabajo profesional: línea de tiempo, alternar entre directo y fotogramas, papel cebolla de varios fotogramas, vistas de diferencia y exposición, máscaras de formato, zonas seguras, cuadrículas, imagen o vídeo de referencia con croma, notas por fotograma, promedio contra el ruido, pantalla oscura al disparar, tomas de prueba y timelapse con hora de inicio y fin. Todo también con el teclado. Exportación en ProRes o como secuencia de imágenes.
 
-MONTAJE Y SONIDO
-Duplica un fotograma para que una pose dure más, reordena los fotogramas arrastrándolos, exporta hasta 24 fps — y pon música o sonido de tus archivos bajo la película.
+SONIDO
+Varias pistas de audio con forma de onda: música de tus archivos, graba tu voz mientras se reproduce la película, añade a cualquier fotograma diez efectos de sonido, de Pop a Tachán, o haz que una voz lea el texto que escribes. En la hoja de exposición, las formas de boca se asignan a los fotogramas.
+
+TEXTO, TÍTULOS, PANTALLA VERDE
+Bocadillos, texto y dibujos directamente en la imagen. Cartela de título y créditos finales. Sustituye el verde o el azul por una imagen o un vídeo. Estilos para toda la película.
+
+MONTAJE Y EXPORTACIÓN
+Duplica fotogramas, reordénalos arrastrándolos, repite uno solo, deshazlo todo. Exporta de 2 a 30 fps, hasta 4K.
 
 LA PELÍCULA CRECE CONTIGO
 Mientras trabajas, el stop motion ya se reproduce en bucle junto a la imagen de la cámara.
 
 FLIPBOOK
-Cada obra se convierte en un flipbook listo para imprimir: hojas A4 con líneas de corte, margen de encuadernación y hojas numeradas.
+Cada obra se convierte en un flipbook listo para imprimir: hojas A4 con líneas de corte, margen de encuadernación y páginas numeradas. Recortar, grapar, pasar las páginas — la película vuelve a ser un objeto.
 
 DE VÍDEO A STOP MOTION
-Elige un vídeo existente: se encuentran los momentos de calma, se quitan las manos y se descartan los duplicados.
+Elige un vídeo existente: se encuentran los momentos de calma, se quitan las manos y se descartan los duplicados. Antes del montaje revisas cada fotograma en la hoja de contactos.
+
+TRES MODOS
+Sencillo (elegir, disparar, listo — ideal para clase), Avanzado (formato, velocidad, resolución, reproducción) y un modo taller con relieve de papel, eco de imagen, aspecto de impresión, transiciones de pliegue, un reel de exposición y PDF listos para imprimir de hojas de contactos y plantillas de plegado.
+
+OBRAS, NO ARCHIVOS
+Los proyectos reúnen fotogramas de tantas sesiones como quieras, con papelera de 30 días. El resultado se presenta como una edición: «Hojas 01–24 · Serie de 24 · fechada 2026».
 
 TAMBIÉN EN IPHONE Y IPAD
-FrameFold también está disponible para iPhone y iPad — allí con trípode, Apple Watch como mando y monitor de estudio.
+FrameFold también está disponible para iPhone y iPad — allí con trípode, Apple Watch como mando y disparo con una palmada. En ocho idiomas.
+
+Creada como herramienta a medida para el artista Aldo Tolino, cuya obra pliega fotografías impresas en objetos y las vuelve a fotografiar — imagen, objeto, imagen.

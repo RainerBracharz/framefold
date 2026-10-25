@@ -1,5 +1,8 @@
 Die Stop-Motion-App, die von selbst auslöst, sobald deine Hände aus dem Bild sind. Kostenlos, ohne Abo, ohne Werbung, ohne Konto, ohne Internet.
 
+ALLES KOSTENLOS, OHNE WASSERZEICHEN
+Ton, Geräusche, Sprachausgabe, Greenscreen, Titel und Abspann, Text und Sprechblasen, Zeichnen, Export bis 4K und ProRes – nichts davon kostet extra, kein Film trägt ein Wasserzeichen.
+
 FrameFold macht aus deiner Arbeit am Tisch eine Stopmotion – vollautomatisch und komplett auf deinem Mac.
 
 Eine Kamera blickt von oben auf den Tisch, du faltest, zeichnest, legst. FrameFold löst selbst aus, sobald deine Hände aus dem Bild sind und die Szene ruht. Nichts verlässt deinen Mac: keine Cloud, kein Konto, kein Tracking.
@@ -13,8 +16,14 @@ Die App misst laufend die Bildschärfe. Ein unscharfes Bild landet gar nicht ers
 STUDIO
 Ab „Erweitert“ wird die Kamera zur Profi-Arbeitsfläche: Zeitleiste, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder, Differenz- und Belichtungsansicht, Formatmasken, Sicherheitsrahmen, Raster, Referenzbild oder -film mit Chroma-Key, Notizen je Bild, Mitteln gegen Rauschen, Abdunkeln beim Auslösen, Testaufnahmen und Zeitraffer mit Start- und Endzeit. Alles auch über Tasten. Export als ProRes oder Bildsequenz.
 
-SCHNITT UND TON
-Ein Bild verdoppeln, damit eine Pose länger steht, Bilder per Ziehen umordnen, bis 24 Bilder pro Sekunde exportieren – und Musik oder Ton aus deinen Dateien unter den Film legen.
+TON
+Mehrere Tonspuren mit Wellenform: Musik aus deinen Dateien, Stimme zum laufenden Film aufnehmen, zehn Geräusche von Plopp bis Tadaa an jedes Bild hängen oder getippten Text von einer Stimme sprechen lassen. Im X-Sheet werden Mundformen den Bildern zugeordnet.
+
+TEXT, TITEL, GREENSCREEN
+Sprechblasen, Text und Zeichnungen direkt im Bild. Titelkarte und Abspann. Grün oder Blau durch ein Bild oder einen Film ersetzen. Looks für den ganzen Film.
+
+SCHNITT UND EXPORT
+Bilder verdoppeln, per Ziehen umordnen, einzeln neu aufnehmen, alles rückgängig machen. Export mit 2 bis 30 Bildern pro Sekunde, bis 4K.
 
 DER FILM WÄCHST MIT
 Während du arbeitest, läuft die Stopmotion schon als Schleife neben dem Kamerabild.
@@ -32,6 +41,6 @@ WERKE STATT DATEIEN
 Projekte sammeln Bilder über beliebig viele Sessions, mit 30-Tage-Papierkorb. Das Ergebnis erscheint als Edition: „Blatt 01–24 · Serie von 24 · datiert 2026".
 
 AUCH AUF IPHONE UND IPAD
-FrameFold gibt es ebenso für iPhone und iPad – dort mit Stativ, Apple Watch als Fernauslöser und Studio-Monitor.
+FrameFold gibt es ebenso für iPhone und iPad – dort mit Stativ, Apple Watch als Fernauslöser und Auslösen per Klatschen. In acht Sprachen.
 
 Entstanden als maßgeschneidertes Werkzeug für den Künstler Aldo Tolino, dessen Arbeit gedruckte Fotografien zu Objekten faltet und wieder fotografiert – Bild, Objekt, Bild.

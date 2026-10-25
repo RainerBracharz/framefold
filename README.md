@@ -105,11 +105,21 @@ that decision is written up here:
 </div>
 
 - **Edit and score.** Duplicate a frame to hold a pose, drag frames into a new
-  order, export at up to 24 fps, and lay music or sound from a file under the
-  film — remuxed, not re-encoded, so it takes a moment, not a minute.
+  order, reshoot a single frame, undo anything, export at 2 to 30 fps and up to
+  4K, and lay music or sound from a file under the film — remuxed, not
+  re-encoded, so it takes a moment, not a minute.
+- **Sound effects and text to speech.** Ten sound effects — pop, whoosh,
+  drum roll, ta-da and more — synthesised in code, so there are no licences
+  and nothing to download; and typed text spoken by an on-device voice. Both
+  land as audio tracks from the frame you choose.
+- **Text, speech bubbles and drawing.** Placed on the image, spanning as many
+  frames as the character speaks, burned into the export.
+- **Camera control.** Full sensor resolution through the photo output, lens
+  choice (ultra wide, tele, front), manual ISO, shutter, focus and white
+  balance, looks for the whole film, photos from the library as frames.
 - **iPad in a stand.** On iPad the viewfinder and the captured frames follow the
   device's orientation, portrait or landscape.
-- **Studio on the Mac and iPad.** In Advanced and Studio mode the camera becomes a
+- **Studio on the Mac and iPad (and iPhone, if switched on).** In Advanced and Studio mode the camera becomes a
   full stop-motion workspace in the spirit of Dragonframe: viewer with live /
   captured toggle and auto-toggle, multi-frame onion skin, difference and
   clipping views, aspect masks, safe areas and grids, an image-or-movie
@@ -132,12 +142,15 @@ that decision is written up here:
   privacy summary: [docs/unterricht](docs/unterricht/README.md).
 - **Shutter without shake.** Hold the shutter for a three-second self-timer, or
   use the volume buttons on headphones and AirPods — Apple's capture-event API,
-  which also covers cheap Bluetooth camera remotes.
-- **Six languages.** German, English, French, Spanish, Italian and Dutch. The whole app, from first launch to the contact
+  which also covers cheap Bluetooth camera remotes — or simply clap.
+- **Eight languages.** German, English, French, Spanish, Italian, Dutch,
+  Japanese and Portuguese (Brazil). The whole app, from first launch to the contact
   sheet, follows the phone's language. Every screen is checked in every language
   by an automated walkthrough (see *Engineering*).
 - **Private by design.** Everything happens on the device. No account, no upload,
-  no server, no network requests at all.
+  no server, no network requests at all. The microphone is only used when you
+  record a voice or clap to shoot; speech recognition and text to speech run
+  on the device. A short help with guides is built in.
 
 ## Three modes
 
@@ -148,9 +161,9 @@ video or record live — and lets you choose a mode. It can be changed at any ti
 |---|---|
 | **Simple** | Pick a video, get a stop-motion. Nothing else on screen. Playful enough for Tolino's students: big counter, warm language, instant result. |
 | **Advanced** | Frame rate, aspect, resolution, playback mode, stabilisation. |
-| **Aldo Tolino** | Everything, plus the studio effects below. |
+| **Studio** | Everything, plus the studio effects below. |
 
-**The Tolino stage:** *print look* (black and white on a warm paper tone), *paper
+**The Studio stage:** *print look* (black and white on a warm paper tone), *paper
 relief* (each facet catching the light differently, as if the image had been
 folded and re-photographed), *image echo* (each frame lingering in the next, a
 recursion of its own image), and fold transitions in three styles — **crease**,

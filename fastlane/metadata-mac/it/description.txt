@@ -1,29 +1,46 @@
 L’app di stop motion che scatta da sola appena le tue mani escono dall’inquadratura. Gratis, senza abbonamento, senza pubblicità, senza account, senza internet.
 
+TUTTO GRATIS, SENZA FILIGRANA
+Suono, effetti sonori, sintesi vocale, green screen, titolo e titoli di coda, testo e fumetti, disegno, esportazione fino a 4K e in ProRes — niente di tutto questo costa un extra, e nessun film porta una filigrana.
+
 FrameFold trasforma il tuo lavoro al tavolo in uno stop motion — in automatico e interamente sul tuo Mac.
 
 Una fotocamera guarda il tavolo dall’alto mentre pieghi, disegni, disponi. FrameFold scatta da solo appena le mani escono dall’inquadratura e la scena è ferma. Nulla lascia il tuo Mac: niente cloud, niente account, niente tracciamento.
 
 FOTOCAMERA SOPRA IL TAVOLO
-Funziona al meglio con una document camera rivolta verso il tavolo — FrameFold sceglie da solo una fotocamera USB collegata. Si possono usare anche un iPhone come webcam o la fotocamera integrata. Con onion skin, controllo dello spostamento e scatto a intervalli; la barra spaziatrice scatta a mano.
+Funziona al meglio con una document camera rivolta verso il tavolo — FrameFold sceglie da solo una fotocamera USB collegata. Si possono scegliere anche un iPhone come fotocamera o la fotocamera integrata. Con onion skin, controllo dello spostamento e scatto a intervalli; la barra spaziatrice scatta a mano.
 
 NITIDO, O NIENTE
 L’app misura la nitidezza di continuo. Un fotogramma sfocato non entra mai nell’opera. Dove la fotocamera lo consente, FrameFold blocca esposizione e bilanciamento del bianco, così nulla sfarfalla tra un fotogramma e l’altro.
 
 STUDIO
-Dalla modalità Avanzata la fotocamera diventa uno spazio di lavoro professionale: timeline, passaggio tra live e fotogrammi, onion skin su più fotogrammi, viste differenza ed esposizione, maschere di formato, aree di sicurezza, griglie, immagine o film di riferimento con chroma key, note per fotogramma, media contro il rumore, schermo nero allo scatto, scatti di prova e timelapse con ora di inizio e fine. Tutto anche da tastiera. Esportazione in ProRes o come sequenza di immagini.
+Dalla modalità Avanzata la fotocamera diventa uno spazio di lavoro professionale: timeline, passaggio tra live e fotogrammi, onion skin su più fotogrammi, viste differenza ed esposizione, maschere di formato, aree di sicurezza, griglie, immagine o film di riferimento con chroma key, note per fotogramma, media contro il rumore, schermo oscurato allo scatto, scatti di prova e timelapse con ora di inizio e fine. Tutto anche da tastiera. Esportazione in ProRes o come sequenza di immagini.
 
-MONTAGGIO E SUONO
-Duplica un fotogramma per far durare di più una posa, riordina i fotogrammi trascinandoli, esporta fino a 24 fps — e metti musica o suoni dai tuoi file sotto il film.
+SUONO
+Più tracce audio con forma d’onda: musica dai tuoi file, la tua voce registrata mentre il film scorre, dieci effetti sonori da Pop a Tadà da agganciare a qualsiasi fotogramma, oppure un testo digitato da far pronunciare a una voce. Nell’X-sheet le forme della bocca vengono assegnate ai fotogrammi.
+
+TESTO, TITOLI, GREEN SCREEN
+Fumetti, testo e disegni direttamente nell’immagine. Cartello del titolo e titoli di coda. Sostituisci il verde o il blu con un’immagine o un filmato. Look per tutto il film.
+
+MONTAGGIO ED ESPORTAZIONE
+Duplica fotogrammi, riordinali trascinandoli, rifanne uno solo, annulla tutto. Esportazione da 2 a 30 fotogrammi al secondo, fino a 4K.
 
 IL FILM CRESCE CON TE
 Mentre lavori, lo stop motion scorre già in loop accanto all’immagine della fotocamera.
 
 FLIPBOOK
-Ogni opera diventa un flipbook pronto da stampare: fogli A4 con linee di taglio, margine di rilegatura e pagine numerate.
+Ogni opera diventa un flipbook pronto da stampare: fogli A4 con linee di taglio, margine di rilegatura e pagine numerate. Ritagliare, pinzare, sfogliare — il film torna a essere un oggetto.
 
 DAL VIDEO ALLO STOP MOTION
-Scegli un video esistente: vengono trovati i momenti di calma, tolte le mani, scartati i doppioni.
+Scegli un video esistente: vengono trovati i momenti di calma, tolte le mani, scartati i doppioni. Prima del montaggio controlli ogni fotogramma sul provino.
+
+TRE MODALITÀ
+Semplice (scegli, scatta, fatto — ideale per la scuola), Avanzata (formato, frame rate, risoluzione, riproduzione) e una modalità atelier con rilievo di carta, eco d’immagine, effetto stampa, transizioni a piega, un reel da mostra e PDF pronti da stampare di provini e modelli di piegatura.
+
+OPERE, NON FILE
+I progetti raccolgono fotogrammi da tutte le sessioni che vuoi, con un cestino di 30 giorni. Il risultato si presenta come un’edizione: «Fogli 01–24 · Serie di 24 · datata 2026».
 
 ANCHE SU IPHONE E IPAD
-FrameFold è disponibile anche per iPhone e iPad — lì con treppiede, Apple Watch come telecomando e monitor da studio.
+FrameFold è disponibile anche per iPhone e iPad — lì con treppiede, Apple Watch come telecomando e scatto con un battito di mani. In otto lingue.
+
+Nata come strumento su misura per l’artista Aldo Tolino, che piega fotografie stampate in oggetti e le fotografa di nuovo — immagine, oggetto, immagine.

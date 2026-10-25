@@ -1,40 +1,39 @@
 L’app de stop motion qui déclenche toute seule dès que tes mains quittent le cadre. Gratuite, sans abonnement, sans pub, sans compte, sans internet.
 
-FrameFold transforme la vidéo de ton travail en stop motion — automatiquement, et entièrement sur ton iPhone ou iPad.
-
-L’app repère les moments calmes de ta vidéo, écarte chaque image où l’on voit tes mains, compense les secousses et assemble le résultat. Rien ne quitte ton appareil : pas de cloud, pas de compte, pas de pistage.
+TOUT EST GRATUIT, SANS FILIGRANE
+Son, bruitages, voix de synthèse, fond vert, titre et générique de fin, texte et bulles, dessin, import de photos, export jusqu’en 4K — rien de tout cela n’est payant, et aucun film ne porte de filigrane. Rien ne quitte ton appareil : pas de cloud, pas de compte, pas de pistage.
 
 CAMÉRA AUTOMATIQUE
-iPhone sur trépied, et au travail — FrameFold déclenche tout seul dès que tes mains quittent le cadre et que la scène se calme. L’exposition et la balance des blancs sont verrouillées, et la vitesse d’obturation se cale sur la fréquence du secteur pour que la lumière artificielle ne zèbre pas tes images. Avec pelure d’oignon, contrôle de dérive, déclenchement à intervalle et niveau.
+iPhone ou iPad sur trépied, et au travail — FrameFold déclenche tout seul dès que tes mains quittent le cadre et que la scène se calme. L’exposition et la balance des blancs sont verrouillées, et la vitesse d’obturation se cale pour que la lumière artificielle ne scintille pas. Avec pelure d’oignon, alerte si la caméra a bougé, déclenchement à intervalle et niveau. Chaque image en pleine résolution du capteur, avec choix de l’objectif.
 
 NET, OU RIEN
-L’app mesure la netteté en continu et ne verrouille la mise au point qu’une fois celle-ci vraiment stable. Si la netteté se perd ensuite, elle refait la mise au point toute seule. Une image floue n’entre jamais dans l’œuvre. Sur trépied, la mise au point reste verrouillée ; à main levée, elle suit — le capteur de mouvement décide.
+L’app mesure la netteté en continu et ne verrouille la mise au point qu’une fois celle-ci vraiment stable. Une image floue n’entre jamais dans l’œuvre. Dès le mode Avancé, tu règles aussi toi-même ISO, vitesse d’obturation, mise au point et balance des blancs.
 
-L’APPLE WATCH COMME TÉLÉCOMMANDE
-Déclenche et termine depuis ton poignet, avec le nombre d’images et l’état sur le cadran. Personne ne touche au trépied. Les boutons de volume des écouteurs et des AirPods déclenchent aussi, et un appui long lance un compte à rebours.
+DÉCLENCHER SANS TOUCHER
+L’Apple Watch comme télécommande avec compteur d’images, les boutons de volume, les AirPods, un claquement de mains ou un compte à rebours par appui long. Personne ne bouscule le trépied.
 
-STUDIO SUR IPAD
-Dès le mode Avancé, l’iPad devient un espace de travail pro : timeline, bascule entre direct et prises, pelure d’oignon sur plusieurs images, masques de format, loupe, plusieurs pistes audio avec forme d’onde, enregistrement de la voix pendant que le film défile et feuille d’exposition avec formes de bouche.
+STUDIO
+Dès le mode Avancé, l’iPad devient un espace de travail pro, et l’iPhone aussi si tu le souhaites : timeline, bascule entre direct et prises, pelure d’oignon sur plusieurs images, masques de format, loupe, image de référence avec incrustation et feuille d’exposition avec formes de bouche.
 
-MONTAGE ET SON
-Duplique une image pour tenir une pose plus longtemps, réordonne les images en les glissant, exporte jusqu’à 24 images par seconde — et pose une musique ou un son de tes fichiers sous le film.
+SON
+Plusieurs pistes audio avec forme d’onde : musique tirée de tes fichiers, voix enregistrée pendant que le film défile, dix bruitages de Plop à Tadaa à poser sur n’importe quelle image, ou un texte tapé que tu fais parler par une voix.
 
-LE FILM GRANDIT AVEC TOI
-Pendant que tu travailles, le stop motion tourne déjà en boucle — dans le viseur et sur le moniteur d’atelier, à côté de l’image de la caméra.
+TEXTE, TITRES, FOND VERT
+Bulles, texte et dessins directement dans l’image. Carton de titre et générique de fin. Remplace le vert ou le bleu par une image ou un film. Des looks pour tout le film.
+
+MONTAGE ET EXPORT
+Duplique des images, réordonne-les en les glissant, reprends-en une seule, annule tout. Export de 2 à 30 images par seconde, jusqu’en 4K, en boucle, en boomerang ou à rebours, et aussi en GIF.
 
 FOLIOSCOPE
-Chaque œuvre devient un folioscope prêt à imprimer : planches A4 avec traits de coupe, bord de reliure et feuillets numérotés. Découper, agrafer, feuilleter — le film redevient objet.
+Chaque œuvre devient un folioscope prêt à imprimer : planches A4 avec traits de coupe et feuillets numérotés. Découper, agrafer, feuilleter.
 
-MONITEUR D’ATELIER
-Branche un écran ou un projecteur : il n’affiche que l’image de la caméra, avec une ligne de catalogue — sans commandes. Pour les cours et les visites d’atelier : tout le monde regarde, l’iPhone reste intact sur son trépied.
+POUR L’ÉCOLE
+Le mode Simple n’affiche que l’essentiel. Pas de compte, aucun traitement de données, pas d’internet — compatible avec toutes les règles de protection des données. Une séquence pédagogique de deux séances est disponible gratuitement, et une aide courte est intégrée à l’app.
 
 DE LA VIDÉO AU STOP MOTION
-Choisis une vidéo existante : les moments calmes sont repérés, les mains retirées, les doublons écartés. Tu vérifies chaque image sur la planche contact avant le montage.
+Choisis une vidéo existante : les moments calmes sont repérés, les mains retirées, les doublons écartés.
 
-TROIS MODES
-Simple (choisir, déclencher, terminé — pensé pour l’enseignement), Avancé (format, cadence, résolution, lecture) et un mode atelier avec relief papier, écho d’image, rendu tirage, transitions pliées, film d’exposition et PDF prêts à imprimer : planche contact et gabarit de pliage.
-
-DES ŒUVRES, PAS DES FICHIERS
-Les projets réunissent les images de toutes tes séances, avec une corbeille de 30 jours. Le résultat se présente comme une édition : « Feuilles 01–24 · Série de 24 · datée 2026 ».
+AUSSI SUR MAC
+La même app tourne sur Mac, avec une caméra document ou un iPhone comme caméra, et exporte en ProRes ou en séquence d’images. En huit langues.
 
 Conçu sur mesure pour l’artiste Aldo Tolino, qui plie des photographies imprimées en objets avant de les photographier à nouveau — image, objet, image.

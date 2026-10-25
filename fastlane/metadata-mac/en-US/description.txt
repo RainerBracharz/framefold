@@ -1,11 +1,14 @@
 The stop-motion app that shoots by itself the moment your hands leave the frame. Free, no subscription, no ads, no account, no internet.
 
+EVERYTHING FREE, NO WATERMARK
+Sound, sound effects, text to speech, green screen, titles and end credits, text and speech bubbles, drawing, export up to 4K and ProRes — none of it costs extra, and no film ever carries a watermark.
+
 FrameFold turns your work at the table into a stop-motion — automatically, and entirely on your Mac.
 
 A camera looks down at the table while you fold, draw, arrange. FrameFold fires by itself as soon as your hands leave the frame and the scene settles. Nothing leaves your Mac: no cloud, no account, no tracking.
 
 CAMERA ABOVE THE TABLE
-Works best with a document camera looking straight down at the table — FrameFold picks a connected USB camera on its own. An iPhone as a webcam or the built-in camera can be chosen too. With onion skin, drift check and an interval trigger; the space bar fires by hand.
+Works best with a document camera looking straight down at the table — FrameFold picks a connected USB camera on its own. An iPhone as a camera or the built-in camera can be chosen too. With onion skin, drift check and an interval trigger; the space bar fires by hand.
 
 SHARP, OR NOT AT ALL
 The app measures image sharpness continuously. A frame that isn't sharp never makes it into the work. Where the camera allows, FrameFold holds exposure and white balance so nothing flickers between frames.
@@ -13,8 +16,14 @@ The app measures image sharpness continuously. A frame that isn't sharp never ma
 STUDIO
 From Advanced mode the camera becomes a pro workspace: timeline, toggle between live view and captured frames, multi-frame onion skin, difference and exposure views, aspect masks, safe areas, grids, a reference image or movie with chroma key, notes per frame, frame averaging against noise, screen blackout on capture, test shots and time-lapse with start and end time. All on the keyboard too. Export as ProRes or an image sequence.
 
-EDIT AND SCORE
-Duplicate a frame to hold a pose longer, drag frames into a new order, export at up to 24 fps — and lay music or sound from your files under the film.
+SOUND
+Multiple audio tracks with waveform: music from your files, record your voice while the film plays, attach ten sound effects from Pop to Ta-da to any frame, or have a voice speak the text you type. In the X-Sheet, mouth shapes are matched to the frames.
+
+TEXT, TITLES, GREEN SCREEN
+Speech bubbles, text and drawings right in the frame. Title card and end credits. Replace green or blue with an image or a film. Looks for the whole film.
+
+EDIT AND EXPORT
+Duplicate frames, drag them into a new order, retake single frames, undo anything. Export at 2 to 30 fps, up to 4K.
 
 THE FILM GROWS AS YOU WORK
 While you work, the stop-motion is already playing as a loop next to the camera feed.
@@ -32,6 +41,6 @@ WORKS, NOT FILES
 Projects collect frames across any number of sessions, with a 30-day trash. The result arrives like an edition: "Sheets 01–24 · Series of 24 · dated 2026".
 
 ON IPHONE AND IPAD TOO
-FrameFold is also available for iPhone and iPad — there with a tripod, Apple Watch as a remote and a studio monitor.
+FrameFold is also available for iPhone and iPad — there with a tripod, Apple Watch as a remote and clap to shoot. In eight languages.
 
 Built as a bespoke tool for the artist Aldo Tolino, whose work folds printed photographs into objects and photographs them again — image, object, image.

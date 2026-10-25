@@ -1,40 +1,39 @@
 L’app di stop motion che scatta da sola appena le tue mani escono dall’inquadratura. Gratis, senza abbonamento, senza pubblicità, senza account, senza internet.
 
-FrameFold trasforma un video del tuo lavoro in uno stop motion — in automatico e interamente sul tuo iPhone o iPad.
-
-L’app trova i momenti di calma, scarta ogni fotogramma in cui si vedono le tue mani, compensa il mosso e monta il risultato. Nulla lascia il tuo dispositivo: niente cloud, niente account, niente tracciamento.
+TUTTO GRATIS, SENZA FILIGRANA
+Suono, effetti sonori, sintesi vocale, green screen, titolo e titoli di coda, testo e fumetti, disegno, importazione di foto, esportazione fino a 4K — niente di tutto questo costa un extra, e nessun film porta una filigrana. Nulla lascia il tuo dispositivo: niente cloud, niente account, niente tracciamento.
 
 FOTOCAMERA AUTOMATICA
-Il dispositivo sul treppiede e al lavoro — FrameFold scatta da solo appena le mani escono dall’inquadratura e la scena è ferma. Esposizione e bilanciamento del bianco vengono bloccati e il tempo di posa si adatta alla frequenza di rete, così la luce artificiale non sfarfalla. Con onion skin, controllo dello spostamento, scatto a intervalli e livella.
+iPhone o iPad sul treppiede e al lavoro — FrameFold scatta da solo appena le mani escono dall’inquadratura e la scena è ferma. Esposizione e bilanciamento del bianco vengono bloccati e il tempo di posa si aggancia in modo che la luce artificiale non sfarfalli. Con onion skin, avviso se la fotocamera si è spostata, scatto a intervalli e livella. Ogni fotogramma alla piena risoluzione del sensore, con scelta dell’obiettivo.
 
 NITIDO, O NIENTE
-L’app misura la nitidezza di continuo e blocca la messa a fuoco solo quando è davvero a posto. Se la nitidezza cala, rimette a fuoco da sola. Un fotogramma sfocato non entra mai nell’opera. Sul treppiede il fuoco resta fisso; a mano libera segue il soggetto — decide il sensore di movimento.
+L’app misura la nitidezza di continuo e blocca la messa a fuoco solo quando è davvero a posto. Un fotogramma sfocato non entra mai nell’opera. Dalla modalità Avanzata puoi impostare anche a mano ISO, tempo di posa, messa a fuoco e bilanciamento del bianco.
 
-APPLE WATCH COME TELECOMANDO
-Scatta e concludi dal polso, con il contatore dei fotogrammi sul quadrante. Nessuno deve toccare il treppiede. Scattano anche i tasti del volume di cuffie e AirPods, e tenendo premuto il pulsante di scatto parte un conto alla rovescia.
+SCATTARE SENZA TOCCARE
+Apple Watch come telecomando con contatore dei fotogrammi, tasti del volume, AirPods, un battito di mani o un conto alla rovescia con una pressione prolungata. Nessuno deve urtare il treppiede.
 
-STUDIO SU IPAD
-Dalla modalità Avanzata l’iPad diventa uno spazio di lavoro professionale: timeline, passaggio tra live e fotogrammi, onion skin su più fotogrammi, maschere di formato, lente, più tracce audio con forma d’onda, registrazione della voce mentre il film scorre e un X-sheet con forme della bocca.
+STUDIO
+Dalla modalità Avanzata l’iPad diventa uno spazio di lavoro professionale, e volendo anche l’iPhone: timeline, passaggio tra live e fotogrammi, onion skin su più fotogrammi, maschere di formato, lente, immagine di riferimento con chroma key e un X-sheet con forme della bocca.
 
-MONTAGGIO E SUONO
-Duplica un fotogramma per far durare di più una posa, riordina i fotogrammi trascinandoli, esporta fino a 24 fps — e metti musica o suoni dai tuoi file sotto il film.
+SUONO
+Più tracce audio con forma d’onda: musica dai tuoi file, la tua voce registrata mentre il film scorre, dieci effetti sonori da Pop a Tadà da agganciare a qualsiasi fotogramma, oppure un testo digitato da far pronunciare a una voce.
 
-IL FILM CRESCE CON TE
-Mentre lavori, lo stop motion scorre già in loop — nel mirino e sul monitor dello studio accanto all’immagine della fotocamera.
+TESTO, TITOLI, GREEN SCREEN
+Fumetti, testo e disegni direttamente nell’immagine. Cartello del titolo e titoli di coda. Sostituisci il verde o il blu con un’immagine o un filmato. Look per tutto il film.
+
+MONTAGGIO ED ESPORTAZIONE
+Duplica fotogrammi, riordinali trascinandoli, rifanne uno solo, annulla tutto. Esportazione da 2 a 30 fotogrammi al secondo, fino a 4K, in loop, a boomerang o al contrario, anche come GIF.
 
 FLIPBOOK
-Ogni opera diventa un flipbook pronto da stampare: fogli A4 con linee di taglio, margine di rilegatura e pagine numerate. Ritagliare, pinzare, sfogliare — il film torna a essere un oggetto.
+Ogni opera diventa un flipbook pronto da stampare: fogli A4 con linee di taglio e pagine numerate. Ritagliare, pinzare, sfogliare.
 
-MONITOR DA STUDIO
-Collega uno schermo o un proiettore: mostra solo l’immagine della fotocamera, senza comandi. Per lezioni e visite in laboratorio: tutti guardano, il dispositivo resta intatto sul treppiede.
+PER LA SCUOLA
+La modalità Semplice mostra solo l’essenziale. Nessun account, nessun trattamento dei dati, niente internet — compatibile con qualsiasi regolamento sulla privacy. Una proposta didattica per due lezioni è disponibile gratuitamente, e nell’app c’è una breve guida.
 
 DAL VIDEO ALLO STOP MOTION
-Scegli un video esistente: vengono trovati i momenti di calma, tolte le mani, scartati i doppioni. Prima del montaggio controlli ogni fotogramma sul provino.
+Scegli un video esistente: vengono trovati i momenti di calma, tolte le mani, scartati i doppioni.
 
-TRE MODALITÀ
-Semplice (scegli, scatta, fatto — ideale per la scuola), Avanzata (formato, frame rate, risoluzione, riproduzione) e una modalità atelier con rilievo di carta, eco d’immagine, effetto stampa, transizioni a piega, un reel da mostra e PDF pronti da stampare.
-
-OPERE, NON FILE
-I progetti raccolgono fotogrammi da tutte le sessioni che vuoi, con un cestino di 30 giorni.
+ANCHE SU MAC
+La stessa app funziona su Mac, con una document camera o un iPhone come fotocamera, ed esporta in ProRes o come sequenza di immagini. In otto lingue.
 
 Nata come strumento su misura per l’artista Aldo Tolino, che piega fotografie stampate in oggetti e le fotografa di nuovo — immagine, oggetto, immagine.

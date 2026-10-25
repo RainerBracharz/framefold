@@ -1,40 +1,39 @@
 De stop-motion-app die vanzelf een foto maakt zodra je handen uit beeld zijn. Gratis, zonder abonnement, zonder reclame, zonder account, zonder internet.
 
-FrameFold maakt van een video van je werkproces een stop-motion — automatisch en volledig op je iPhone of iPad.
-
-De app vindt de rustige momenten, laat elk beeld met je handen erin weg, corrigeert trillingen en monteert het resultaat. Niets verlaat je apparaat: geen cloud, geen account, geen tracking.
+ALLES GRATIS, ZONDER WATERMERK
+Geluid, geluidseffecten, voorleesstem, greenscreen, titel en aftiteling, tekst en tekstballonnen, tekenen, foto's importeren, export tot 4K — niets daarvan kost extra, en geen enkele film krijgt een watermerk. Niets verlaat je apparaat: geen cloud, geen account, geen tracking.
 
 AUTOMATISCHE CAMERA
-Apparaat op een statief en aan de slag — FrameFold drukt zelf af zodra je handen uit beeld zijn en de scène stilstaat. Belichting en witbalans worden vastgezet en de sluitertijd past zich aan de netfrequentie aan, zodat kunstlicht niet flikkert. Met onion skin, verschuivingscontrole, intervalopname en waterpas.
+iPhone of iPad op een statief en aan de slag — FrameFold drukt zelf af zodra je handen uit beeld zijn en de scène stilstaat. Belichting en witbalans worden vastgezet en de sluitertijd klikt vast, zodat kunstlicht niet flikkert. Met onion skin, waarschuwing als de camera is verschoven, intervalopname en waterpas. Elk beeld in de volle sensorresolutie, met keuze van de lens.
 
 SCHERP, OF HELEMAAL NIET
-De app meet voortdurend de scherpte en zet de focus pas vast als die echt goed zit. Zakt de scherpte weg, dan stelt hij zelf opnieuw scherp. Een onscherp beeld komt nooit in het werk. Op een statief blijft de focus vast; uit de hand volgt hij mee — de bewegingssensor bepaalt wat van toepassing is.
+De app meet voortdurend de scherpte en zet de focus pas vast als die echt goed zit. Een onscherp beeld komt nooit in het werk. Vanaf de modus Uitgebreid stel je ISO, sluitertijd, focus en witbalans ook zelf in.
 
-APPLE WATCH ALS AFSTANDSBEDIENING
-Afdrukken en afronden vanaf je pols, met de beeldteller op de wijzerplaat. Niemand hoeft het statief aan te raken. Ook de volumeknoppen van koptelefoons en AirPods drukken af, en de ontspanner lang ingedrukt houden start een aftelling.
+AFDRUKKEN ZONDER AANRAKEN
+Apple Watch als afstandsbediening met beeldteller, volumeknoppen, AirPods, klappen of een aftelling door lang te drukken. Niemand hoeft het statief aan te stoten.
 
-STUDIO OP DE IPAD
-Vanaf de modus Uitgebreid wordt de iPad een professionele werkplek: tijdlijn, wisselen tussen live en opnames, onion skin over meerdere beelden, formaatmaskers, loep, meerdere geluidssporen met golfvorm, stem opnemen terwijl de film speelt en een X-sheet met mondvormen.
+STUDIO
+Vanaf de modus Uitgebreid wordt de iPad een professionele werkplek, en desgewenst ook de iPhone: tijdlijn, wisselen tussen live en opnames, onion skin over meerdere beelden, formaatmaskers, loep, referentiebeeld met chromakey en een X-sheet met mondvormen.
 
-MONTAGE EN GELUID
-Verdubbel een beeld zodat een pose langer blijft staan, zet beelden in een nieuwe volgorde door ze te slepen, exporteer tot 24 fps — en leg muziek of geluid uit je bestanden onder de film.
+GELUID
+Meerdere geluidssporen met golfvorm: muziek uit je bestanden, je stem opnemen terwijl de film speelt, tien geluidseffecten van Plop tot Tadaa aan elk beeld hangen, of getypte tekst laten uitspreken door een stem.
 
-DE FILM GROEIT MEE
-Terwijl je werkt, speelt de stop-motion al als lus — in de zoeker en op de studiomonitor naast het camerabeeld.
+TEKST, TITELS, GREENSCREEN
+Tekstballonnen, tekst en tekeningen direct in beeld. Titelkaart en aftiteling. Vervang groen of blauw door een beeld of een film. Looks voor de hele film.
+
+MONTAGE EN EXPORT
+Beelden verdubbelen, door slepen herschikken, los opnieuw opnemen, alles ongedaan maken. Export met 2 tot 30 beelden per seconde, tot 4K, als lus, boomerang of achteruit, ook als GIF.
 
 FLIPBOEK
-Elk werk wordt een drukklaar flipboek: A4-vellen met snijlijnen, bindrand en genummerde blaadjes. Knippen, nieten, bladeren — de film wordt weer een object.
+Elk werk wordt een drukklaar flipboek: A4-vellen met snijlijnen en genummerde blaadjes. Knippen, nieten, bladeren.
 
-STUDIOMONITOR
-Sluit een scherm of beamer aan en die toont alleen het camerabeeld, zonder bediening. Voor lessen en atelierbezoeken: iedereen kijkt mee, het apparaat blijft onaangeroerd op het statief.
+VOOR SCHOOL
+De modus Eenvoudig toont alleen het hoognodige. Geen account, geen gegevensverwerking, geen internet — past bij elk privacybeleid. Een lesplan voor twee lessen is vrij beschikbaar, en in de app zit een korte uitleg.
 
 VAN VIDEO NAAR STOP-MOTION
-Kies een bestaande video: rustige momenten worden gevonden, handen verwijderd, dubbele beelden uitgezocht. Voor de montage controleer je elk beeld op het contactvel.
+Kies een bestaande video: rustige momenten worden gevonden, handen verwijderd, dubbele beelden uitgezocht.
 
-DRIE MODI
-Eenvoudig (kiezen, afdrukken, klaar — ideaal voor de klas), Uitgebreid (formaat, beeldsnelheid, resolutie, afspelen) en een ateliermodus met papierreliëf, beeldecho, drukbeeld, vouwovergangen, een tentoonstellingsreel en drukklare pdf's.
-
-WERKEN IN PLAATS VAN BESTANDEN
-Projecten verzamelen beelden uit zoveel sessies als je wilt, met een prullenmand van 30 dagen.
+OOK OP DE MAC
+Dezelfde app draait op de Mac, met een documentcamera of een iPhone als camera, en exporteert als ProRes of beeldreeks. In acht talen.
 
 Ontstaan als maatwerk voor de kunstenaar Aldo Tolino, wiens werk gedrukte foto's tot objecten vouwt en opnieuw fotografeert — beeld, object, beeld.
