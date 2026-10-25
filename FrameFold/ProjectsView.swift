@@ -1,4 +1,5 @@
 import SwiftUI
+import PhotosUI
 import UniformTypeIdentifiers
 import AVKit
 import StoreKit
@@ -216,6 +217,8 @@ struct ProjectDetailView: View {
     @State private var showAudioImporter = false
     @State private var showVoice = false
     @State private var showBackgroundImporter = false
+    @State private var photoItems: [PhotosPickerItem] = []
+    @State private var importingPhotos = 0
     @Environment(\.requestReview) private var requestReview
     @State private var sequenceFolder: ShareItem?
     @State private var isExportingSequence = false
@@ -525,6 +528,59 @@ struct ProjectDetailView: View {
         }
     }
 
+    /// Fotos aus der Mediathek als weitere Bilder anhängen – in der gewählten
+    /// Reihenfolge.
+    private var photoImportRow: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "photo.on.rectangle").foregroundStyle(Theme.ink)
+            PhotosPicker(selection: $photoItems, matching: .images, preferredItemEncoding: .compatible) {
+                Text(importingPhotos > 0 ? "Fotos werden übernommen … \(importingPhotos)" : "Fotos als Bilder hinzufügen")
+                    .font(Theme.body).foregroundStyle(Theme.ink)
+            }
+            .disabled(importingPhotos > 0)
+            Spacer()
+        }
+        .padding(.horizontal, 4)
+        .onChange(of: photoItems) { _, items in
+            guard !items.isEmpty else { return }
+            importPhotos(items)
+        }
+    }
+
+    private func importPhotos(_ items: [PhotosPickerItem]) {
+        importingPhotos = items.count
+        let projectID = currentProject.id
+        Task {
+            for item in items {
+                // HEIC, PNG, RAW … einheitlich als JPEG ins Werk
+                if let data = try? await item.loadTransferable(type: Data.self),
+                   let jpeg = await Task.detached(priority: .userInitiated, operation: {
+                       UIImage(data: data)?.jpegData(compressionQuality: 0.92)
+                   }).value,
+                   let current = store.projects.first(where: { $0.id == projectID }) {
+                    store.appendFrame(jpegData: jpeg, to: current)
+                }
+                importingPhotos -= 1
+            }
+            photoItems = []
+        }
+    }
+
+    /// Farblook des ganzen Films – in jedem Modus.
+    private var lookRow: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "camera.filters").foregroundStyle(Theme.ink)
+            Text("Look").font(Theme.body).foregroundStyle(Theme.ink)
+            Spacer()
+            Picker("", selection: $exportSettings.look) {
+                ForEach(FilmLook.allCases) { Text(verbatim: $0.label).tag($0) }
+            }
+            .labelsHidden()
+            .fixedSize()
+        }
+        .padding(.horizontal, 4)
+    }
+
     /// Titelkarte und Abspann – leer lassen heißt: keiner.
     private var titleRows: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -675,6 +731,8 @@ struct ProjectDetailView: View {
                             Text("12 fps").tag(Int32(12))
                             Text("15 fps").tag(Int32(15))
                             Text("24 fps").tag(Int32(24))
+                            Text("25 fps").tag(Int32(25))
+                            Text("30 fps").tag(Int32(30))
                         }
                     }
                     optionDivider
@@ -730,6 +788,8 @@ struct ProjectDetailView: View {
             }
 
             audioRow
+            photoImportRow
+            lookRow
             titleRows
             if mode.showsAdvanced { greenScreenRow; sequenceRow }
 

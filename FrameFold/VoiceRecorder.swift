@@ -10,6 +10,9 @@ final class VoiceRecorder: ObservableObject {
     @Published private(set) var elapsed: TimeInterval = 0
     @Published var denied = false
 
+    /// Läuft gerade irgendwo eine Sprachaufnahme? Dann löst Klatschen nicht aus.
+    static var isRecordingAnywhere = false
+
     private var recorder: AVAudioRecorder?
     private var meter: Timer?
     private(set) var url: URL?
@@ -40,6 +43,7 @@ final class VoiceRecorder: ObservableObject {
         self.recorder = recorder
         url = target
         isRecording = true
+        Self.isRecordingAnywhere = true
         elapsed = 0
         meter = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
             Task { @MainActor in self?.updateMeter() }
@@ -53,10 +57,9 @@ final class VoiceRecorder: ObservableObject {
         meter?.invalidate()
         meter = nil
         isRecording = false
+        Self.isRecordingAnywhere = false
         level = 0
-        #if !targetEnvironment(macCatalyst)
-        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
-        #endif
+        // Die Audio-Sitzung bleibt aktiv – ein Klatsch-Auslöser hört weiter mit.
     }
 
     private func updateMeter() {

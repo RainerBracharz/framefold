@@ -59,11 +59,20 @@ struct LiveSettingsView: View {
                 .listRowBackground(Theme.paperShade.opacity(0.5))
                 }
 
-                if mode.showsAdvanced, controller.manualCapabilities.any {
+                if mode.showsAdvanced, CameraOptionsPanel.isAvailable || controller.manualCapabilities.any {
                     Section {
-                        ManualCameraPanel(controller: controller)
+                        CameraOptionsPanel(controller: controller)
                     } header: {
                         CatalogLabel("Kamera")
+                    }
+                    .listRowBackground(Theme.paperShade.opacity(0.5))
+                }
+
+                if mode.showsAdvanced {
+                    Section {
+                        ClapTriggerToggle(controller: controller)
+                    } header: {
+                        CatalogLabel("Auslöser")
                     }
                     .listRowBackground(Theme.paperShade.opacity(0.5))
                 }

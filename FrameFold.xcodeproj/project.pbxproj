@@ -34,6 +34,9 @@
 		BB20F0F0F0F0F0F0F0F0F312 /* LiveSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F313 /* LiveSettingsView.swift */; };
 		BB20F0F0F0F0F0F0F0F0F314 /* LiveCaptureController+MacCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F315 /* LiveCaptureController+MacCamera.swift */; };
 		BB20F0F0F0F0F0F0F0F0F316 /* LiveCaptureController+Simulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */; };
+		CC30DADADADADADADADAD0A0 /* ClapTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30DADADADADADADADAD0A1 /* ClapTrigger.swift */; };
+		CC30C9C9C9C9C9C9C9C9C090 /* LiveCaptureController+Lens.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30C9C9C9C9C9C9C9C9C091 /* LiveCaptureController+Lens.swift */; };
+		CC30B8B8B8B8B8B8B8B8B080 /* LiveCaptureController+Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30B8B8B8B8B8B8B8B8B081 /* LiveCaptureController+Photo.swift */; };
 		CC30A7A7A7A7A7A7A7A7A070 /* ReviewPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30A7A7A7A7A7A7A7A7A071 /* ReviewPrompt.swift */; };
 		CC30F6F6F6F6F6F6F6F6F160 /* ManualCameraPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30F6F6F6F6F6F6F6F6F161 /* ManualCameraPanel.swift */; };
 		CC30F6F6F6F6F6F6F6F6F060 /* LiveCaptureController+Manual.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30F6F6F6F6F6F6F6F6F061 /* LiveCaptureController+Manual.swift */; };
@@ -124,6 +127,9 @@
 		BB20F0F0F0F0F0F0F0F0F313 /* LiveSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSettingsView.swift; sourceTree = "<group>"; };
 		BB20F0F0F0F0F0F0F0F0F315 /* LiveCaptureController+MacCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+MacCamera.swift"; sourceTree = "<group>"; };
 		BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+Simulator.swift"; sourceTree = "<group>"; };
+		CC30DADADADADADADADAD0A1 /* ClapTrigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClapTrigger.swift; sourceTree = "<group>"; };
+		CC30C9C9C9C9C9C9C9C9C091 /* LiveCaptureController+Lens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+Lens.swift"; sourceTree = "<group>"; };
+		CC30B8B8B8B8B8B8B8B8B081 /* LiveCaptureController+Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+Photo.swift"; sourceTree = "<group>"; };
 		CC30A7A7A7A7A7A7A7A7A071 /* ReviewPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPrompt.swift; sourceTree = "<group>"; };
 		CC30F6F6F6F6F6F6F6F6F161 /* ManualCameraPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualCameraPanel.swift; sourceTree = "<group>"; };
 		CC30F6F6F6F6F6F6F6F6F061 /* LiveCaptureController+Manual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+Manual.swift"; sourceTree = "<group>"; };
@@ -235,6 +241,9 @@
 				BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */,
 				BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */,
 				BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */,
+				CC30DADADADADADADADAD0A1 /* ClapTrigger.swift */,
+				CC30C9C9C9C9C9C9C9C9C091 /* LiveCaptureController+Lens.swift */,
+				CC30B8B8B8B8B8B8B8B8B081 /* LiveCaptureController+Photo.swift */,
 				CC30A7A7A7A7A7A7A7A7A071 /* ReviewPrompt.swift */,
 				CC30F6F6F6F6F6F6F6F6F161 /* ManualCameraPanel.swift */,
 				CC30F6F6F6F6F6F6F6F6F061 /* LiveCaptureController+Manual.swift */,
@@ -461,6 +470,9 @@
 				BB20F0F0F0F0F0F0F0F0F303 /* LiveLoopView.swift in Sources */,
 				BB20F0F0F0F0F0F0F0F0F305 /* DuoSupport.swift in Sources */,
 				BB20F0F0F0F0F0F0F0F0F316 /* LiveCaptureController+Simulator.swift in Sources */,
+				CC30DADADADADADADADAD0A0 /* ClapTrigger.swift in Sources */,
+				CC30C9C9C9C9C9C9C9C9C090 /* LiveCaptureController+Lens.swift in Sources */,
+				CC30B8B8B8B8B8B8B8B8B080 /* LiveCaptureController+Photo.swift in Sources */,
 				CC30A7A7A7A7A7A7A7A7A070 /* ReviewPrompt.swift in Sources */,
 				CC30F6F6F6F6F6F6F6F6F160 /* ManualCameraPanel.swift in Sources */,
 				CC30F6F6F6F6F6F6F6F6F060 /* LiveCaptureController+Manual.swift in Sources */,

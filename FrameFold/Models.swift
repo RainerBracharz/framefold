@@ -77,6 +77,24 @@ struct PipelineSettings: Equatable, Codable {
     /// Video-Codec des Exports: HEVC/H.264 als MP4, ProRes als QuickTime
     /// für den Schnitt.
     var videoCodec: VideoCodec = .hevc
+    /// Farblook des Exports – in jedem Modus wählbar
+    var look: FilmLook = .original
+}
+
+/// Einfache Farblooks für den ganzen Film.
+enum FilmLook: String, CaseIterable, Identifiable, Codable {
+    case original, blackWhite, warm, cool, vivid, faded
+    var id: String { rawValue }
+    var label: String {
+        switch self {
+        case .original: return String(localized: "Original")
+        case .blackWhite: return String(localized: "Schwarzweiß")
+        case .warm: return String(localized: "Warm")
+        case .cool: return String(localized: "Kühl")
+        case .vivid: return String(localized: "Kräftig")
+        case .faded: return String(localized: "Verblasst")
+        }
+    }
 }
 
 /// Codec des exportierten Films.
@@ -112,6 +130,7 @@ extension VideoCodec {
 /// Auflösung des exportierten Videos (maximale Kantenlänge).
 enum ExportResolution: String, CaseIterable, Identifiable, Codable {
     case p1080 = "1080p"
+    case uhd = "4K"
     case original = "Original"
 
     var id: String { rawValue }
@@ -120,6 +139,7 @@ enum ExportResolution: String, CaseIterable, Identifiable, Codable {
     var maxDimension: Double? {
         switch self {
         case .p1080: return 1920
+        case .uhd: return 3840
         case .original: return nil
         }
     }
@@ -318,6 +338,7 @@ extension PipelineSettings {
         printLook = v(.printLook, d.printLook)
         deflicker = v(.deflicker, d.deflicker)
         videoCodec = v(.videoCodec, d.videoCodec)
+        look = v(.look, d.look)
     }
 
     func persist() {

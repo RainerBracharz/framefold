@@ -147,8 +147,10 @@ struct CameraPreview: UIViewRepresentable {
         override func layoutSubviews() {
             super.layoutSubviews()
             #if !targetEnvironment(macCatalyst)
-            guard UIDevice.current.userInterfaceIdiom == .pad, rotationCoordinator == nil,
-                  let device = (videoPreviewLayer.session?.inputs.first as? AVCaptureDeviceInput)?.device else { return }
+            // Neu anbinden, wenn die Kamera gewechselt hat (Objektivwahl)
+            guard UIDevice.current.userInterfaceIdiom == .pad,
+                  let device = (videoPreviewLayer.session?.inputs.first as? AVCaptureDeviceInput)?.device,
+                  rotationCoordinator?.device != device else { return }
             let coordinator = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: videoPreviewLayer)
             rotationCoordinator = coordinator
             rotationObservation = coordinator.observe(\.videoRotationAngleForHorizonLevelPreview,

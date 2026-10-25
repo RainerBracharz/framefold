@@ -118,4 +118,32 @@ final class FilmExtrasTests: XCTestCase {
         XCTAssertEqual(p.titleText, "Faltung")
         XCTAssertEqual(p.creditsText, "Ende")
     }
+
+    // MARK: Looks, Klatschen, Auflösung
+
+    func testLooksShiftColourAsNamed() throws {
+        let grey = image { ctx in
+            UIColor(white: 0.5, alpha: 1).setFill(); ctx.fill(CGRect(x: 0, y: 0, width: 320, height: 240))
+        }.cgImage!
+        let colourful = image { ctx in
+            UIColor(red: 0.8, green: 0.3, blue: 0.2, alpha: 1).setFill(); ctx.fill(CGRect(x: 0, y: 0, width: 320, height: 240))
+        }.cgImage!
+        XCTAssertNil(StopMotionAssembler.apply(look: .original, to: grey))
+        let warm = pixel(try XCTUnwrap(StopMotionAssembler.apply(look: .warm, to: grey)), 100, 100)
+        let cool = pixel(try XCTUnwrap(StopMotionAssembler.apply(look: .cool, to: grey)), 100, 100)
+        XCTAssertGreaterThan(warm.r - warm.b, cool.r - cool.b, "warm röter als kühl: \(warm) \(cool)")
+        let bw = pixel(try XCTUnwrap(StopMotionAssembler.apply(look: .blackWhite, to: colourful)), 100, 100)
+        XCTAssertLessThan(abs(bw.r - bw.b), 6, "Schwarzweiß ohne Farbe: \(bw)")
+    }
+
+    func testClapNeedsLoudTransientAboveRoom() {
+        XCTAssertTrue(ClapListener.isClap(peakDB: -6, noiseFloor: -50))
+        XCTAssertFalse(ClapListener.isClap(peakDB: -20, noiseFloor: -50), "zu leise")
+        XCTAssertFalse(ClapListener.isClap(peakDB: -10, noiseFloor: -30), "lauter Raum: kein Abstand")
+    }
+
+    func testFourKExportLimitsLongEdge() {
+        XCTAssertEqual(ExportResolution.uhd.maxDimension, 3840)
+        XCTAssertNil(ExportResolution.original.maxDimension)
+    }
 }

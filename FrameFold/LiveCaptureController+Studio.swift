@@ -41,7 +41,8 @@ extension LiveCaptureController {
             self.isPreparingCapture = false
             self.prepareTask = nil
             guard self.isRunning, self.sessionStart == session else { return }
-            self.commit(frame: Self.average(frames) ?? fallback)
+            // Gemittelt ist das Ergebnis selbst das Bild fürs Werk – kein Foto
+            self.commit(frame: Self.average(frames) ?? fallback, allowPhoto: count == 1)
         }
     }
 

@@ -1,5 +1,64 @@
 import SwiftUI
 
+/// Kamera-Optionen am iPhone/iPad: Objektiv, volle Auflösung und die
+/// manuelle Kamera.
+struct CameraOptionsPanel: View {
+    @ObservedObject var controller: LiveCaptureController
+    var dark = false
+    @State private var lens = CameraLens.stored
+
+    static var isAvailable: Bool { !Platform.isMac }
+
+    private var text: Color { dark ? Theme.paperOnDark : Theme.ink }
+    private var font: Font { dark ? Theme.mono(11) : Theme.body }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            let lenses = CameraLens.available
+            if lenses.count > 1 {
+                HStack {
+                    Text("Objektiv").font(font).foregroundStyle(text)
+                    Spacer()
+                    Picker("", selection: $lens) {
+                        ForEach(lenses) { Text(verbatim: $0.label).tag($0) }
+                    }
+                    .labelsHidden()
+                    .fixedSize()
+                    .id(lens)
+                }
+                .onChange(of: lens) { _, new in controller.switchLens(to: new) }
+            }
+            Toggle(isOn: $controller.fullResolution) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(controller.photoMegapixels.map { String(localized: "Volle Auflösung (\($0) MP)") }
+                         ?? String(localized: "Volle Auflösung"))
+                        .font(font).foregroundStyle(text)
+                    Text("Jedes Bild als Foto vom Sensor statt als Videobild (1080p) – schärfer, braucht mehr Speicher.")
+                        .font(Theme.mono(10)).foregroundStyle(text.opacity(0.55))
+                }
+            }
+            ManualCameraPanel(controller: controller, dark: dark)
+        }
+    }
+}
+
+/// Auslösen per Klatschen – überall dort, wo es ein Mikrofon gibt.
+struct ClapTriggerToggle: View {
+    @ObservedObject var controller: LiveCaptureController
+    var dark = false
+
+    var body: some View {
+        Toggle(isOn: $controller.clapTrigger) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Auslösen per Klatschen").font(dark ? Theme.mono(11) : Theme.body)
+                    .foregroundStyle(dark ? Theme.paperOnDark : Theme.ink)
+                Text("Einmal klatschen = ein Bild. Das Mikrofon hört nur auf den Knall, nichts wird aufgenommen.")
+                    .font(Theme.mono(10)).foregroundStyle((dark ? Theme.paperOnDark : Theme.ink).opacity(0.55))
+            }
+        }
+    }
+}
+
 /// Regler der manuellen Kamera: ISO, Belichtungszeit, Fokus, Weißabgleich.
 /// Erscheint nur, wenn die Kamera das kann (iPhone/iPad, nicht die meisten
 /// USB-Kameras am Mac).

@@ -99,9 +99,16 @@ final class StopMotionAssembler {
     private func write(
         frameCount: Int,
         settings: PipelineSettings,
-        frameProvider: @escaping (Int) async throws -> CGImage,
+        frameProvider rawProvider: @escaping (Int) async throws -> CGImage,
         progress: @escaping (Double) -> Void
     ) async throws -> URL {
+        // Farblook direkt an der Quelle: Flimmerausgleich und Effekte sehen
+        // schon das fertige Bild.
+        let look = settings.look
+        let frameProvider: (Int) async throws -> CGImage = look == .original ? rawProvider : { index in
+            let image = try await rawProvider(index)
+            return Self.apply(look: look, to: image) ?? image
+        }
         let order = settings.loopMode.frameOrder(count: frameCount)
 
         // Ausgabegröße aus dem ersten Frame + Crop-Preset ableiten
@@ -735,5 +742,35 @@ extension StopMotionAssembler {
             progress(Double(i + 1) / Double(urls.count))
         }
         return folder
+    }
+}
+
+// MARK: Farblook
+
+extension StopMotionAssembler {
+    private static let lookContext = CIContext(options: [.cacheIntermediates: false])
+
+    /// Farblook auf ein Bild anwenden (nil = unverändert lassen).
+    static func apply(look: FilmLook, to image: CGImage) -> CGImage? {
+        let input = CIImage(cgImage: image)
+        let output: CIImage
+        switch look {
+        case .original:
+            return nil
+        case .blackWhite:
+            output = input.applyingFilter("CIPhotoEffectNoir")
+        case .warm:
+            output = input.applyingFilter("CITemperatureAndTint", parameters: [
+                "inputNeutral": CIVector(x: 6500, y: 0), "inputTargetNeutral": CIVector(x: 5200, y: 0)])
+        case .cool:
+            output = input.applyingFilter("CITemperatureAndTint", parameters: [
+                "inputNeutral": CIVector(x: 6500, y: 0), "inputTargetNeutral": CIVector(x: 8200, y: 0)])
+        case .vivid:
+            output = input.applyingFilter("CIColorControls", parameters: [
+                kCIInputSaturationKey: 1.35, kCIInputContrastKey: 1.12])
+        case .faded:
+            output = input.applyingFilter("CIPhotoEffectFade")
+        }
+        return lookContext.createCGImage(output, from: input.extent)
     }
 }

@@ -2,6 +2,7 @@ FrameFold 2.6
 
 El Studio – y sonido.
 
+• Además: exportación hasta 4K, disparo con una palmada, añadir fotos como fotogramas y estilos para toda la película.
 • Studio: desde el modo Avanzado la cámara se convierte en un espacio de trabajo profesional – línea de tiempo con arrastrar, alternar entre imagen en directo y fotogramas, papel cebolla de varios fotogramas, vistas de diferencia y exposición, máscaras de formato, cuadrículas, imagen o vídeo de referencia con croma, notas por fotograma, promedio contra el ruido, timelapse con hora de inicio y fin. Todo también con el teclado (menú Studio).
 • Croma, título y créditos: sustituye el verde o el azul por una imagen o un vídeo, con una cartela de título antes de la película y créditos al final.
 • Cualquier cámara: las fotos que el software de tu réflex o sin espejo deja en una carpeta se convierten en el siguiente fotograma a resolución completa – también RAW. Además, una lupa para comprobar el enfoque en directo.
@@ -9,6 +10,6 @@ El Studio – y sonido.
 • Sonido como en un estudio: varias pistas con fotograma de inicio y volumen, forma de onda en la línea de tiempo, sonido al reproducir y al avanzar. Lectura de diálogos en la hoja de exposición con formas de boca por personaje – FrameFold puede reconocer las palabras, solo en el dispositivo.
 • Exportación en ProRes o como secuencia de imágenes (PNG, TIFF, JPEG).
 • Música o sonido: elige un archivo de audio en la vista de la obra – suena bajo la película exportada.
-• Hasta 24 fps: 15 y 24 fps para un movimiento fluido.
+• Hasta 30 fps: 15, 24, 25 y 30 fps para un movimiento fluido.
 • Duplicar y reordenar: clic secundario en un fotograma para duplicarlo o moverlo – o arrástralo a otro lugar de la hoja de contactos.
 • Ahora también en español, italiano y neerlandés, y al abrirla por primera vez te espera una obra de ejemplo.

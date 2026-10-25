@@ -50,6 +50,8 @@ Mit „Ordner beobachten“ wird jede Kamera nutzbar, die FrameFold nicht selbst
 
 ## Aufnahme
 
+- **Objektiv und volle Auflösung** (iPhone und iPad, „Kamera“): Weitwinkel, Ultraweitwinkel, Tele oder Frontkamera. Mit „Volle Auflösung“ kommt jedes Bild als Foto vom Sensor statt als 1080p-Videobild; der Export geht bis 4K.
+- **Auslösen per Klatschen**: einmal klatschen = ein Bild. Das Mikrofon hört nur auf den Knall, nichts wird aufgezeichnet.
 - **Manuelle Kamera** (iPhone und iPad, im Inspektor unter „Kamera“): ISO, Belichtungszeit, Fokus und Weißabgleich von Hand. Solange sie an ist, misst die Automatik nicht nach. USB-Kameras am Mac bieten das meist nicht, dann fehlt der Abschnitt.
 
 - **Automatik (Hände weg)**: Lässt sich abschalten. Dann lösen nur noch Taste, Apple Watch, Fernbedienung oder Zeitraffer aus.

@@ -251,7 +251,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Aktuelles Aufnahmegerät – zum Fixieren von Belichtung/Fokus/Weißabgleich.
     var device: AVCaptureDevice?
     /// iPad: Drehung der aufgenommenen Bilder folgt der Gerätelage.
-    private var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
+    var rotationCoordinator: AVCaptureDevice.RotationCoordinator?
     private var rotationObservation: NSKeyValueObservation?
 
     /// Sekunden Stabilität bis zum Auto-Shutter (live änderbar)
@@ -676,6 +676,20 @@ final class LiveCaptureController: NSObject, ObservableObject {
     var intervalOverride: Double?
     /// Laufende Studio-Auslösung (Abdunkeln/Mitteln) – `stop()` bricht sie ab
     var prepareTask: Task<Void, Never>?
+    /// Fotos in voller Auflösung statt des 1080p-Videobilds (iPhone/iPad)
+    @Published var fullResolution = Stored.bool("liveFullResolution", true) {
+        didSet { Stored.set(fullResolution, "liveFullResolution") }
+    }
+    var photoOutput: AVCapturePhotoOutput?
+    /// Auslösen per Klatschen (Mikrofon, nichts wird gespeichert)
+    @Published var clapTrigger = Stored.bool("liveClapTrigger", false) {
+        didSet {
+            Stored.set(clapTrigger, "liveClapTrigger")
+            updateClapListener()
+        }
+    }
+    var clapListener: ClapListener?
+    var photoDelegates: Set<PhotoCaptureDelegate> = []
     /// Manuelle Kamera (nil = Automatik fixiert selbst)
     @Published var manual: ManualCamera? { didSet { if manual != nil, manual != oldValue { applyManual() } } }
     /// Läuft gerade eine Auslösung mit Abdunkeln oder Mittelung?
@@ -787,10 +801,12 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // die ganze Zeit auf dem Stativ steht.
         rigIsAutomatic = true
         rig = lastMountedSignal ? .tripod : .handheld
+        updateClapListener()
     }
 
     func stop() {
         isRunning = false
+        clapListener?.stop()
         prepareTask?.cancel()
         prepareTask = nil
         isPreparingCapture = false
@@ -858,7 +874,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
         }
         return found.first
         #else
-        return AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+        // Das gewählte Objektiv, sonst die Hauptkamera hinten
+        return CameraLens.stored.device ?? AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
         #endif
     }
 
@@ -914,22 +931,39 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // so, wie es auf dem Tisch liegt.
         // Am iPad steht das Gerät mal hoch, mal quer im Ständer: Die
         // Bilder folgen der Lage des Geräts, wie die Vorschau.
+        applyCaptureRotation(device: device)
+        session.commitConfiguration()
+        configurePhotoOutput(for: device)
+        applyCaptureRotation(device: device)
+        return true
+    }
+
+    /// Drehung der Aufnahme: am iPhone fest Hochformat, am iPad der Gerätelage
+    /// folgend, am Mac unverändert (die Dokumentenkamera liefert das Bild so,
+    /// wie es auf dem Tisch liegt). Nach jedem Kamerawechsel neu, weil dabei
+    /// neue Verbindungen entstehen.
+    func applyCaptureRotation(device: AVCaptureDevice) {
         #if !targetEnvironment(macCatalyst)
-        if UIDevice.current.userInterfaceIdiom == .pad, let conn = output.connection(with: .video) {
+        let outputs: [AVCaptureOutput] = session.outputs
+        func set(_ angle: CGFloat) {
+            for output in outputs {
+                if let conn = output.connection(with: .video), conn.isVideoRotationAngleSupported(angle) {
+                    conn.videoRotationAngle = angle
+                }
+            }
+        }
+        if UIDevice.current.userInterfaceIdiom == .pad {
             let coordinator = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: nil)
             rotationCoordinator = coordinator
             rotationObservation = coordinator.observe(\.videoRotationAngleForHorizonLevelCapture,
-                                                      options: [.initial, .new]) { [weak conn] c, _ in
+                                                      options: [.initial, .new]) { c, _ in
                 let angle = c.videoRotationAngleForHorizonLevelCapture
-                if let conn, conn.isVideoRotationAngleSupported(angle) { conn.videoRotationAngle = angle }
+                Task { @MainActor in set(angle) }
             }
-        } else if let conn = output.connection(with: .video),
-           conn.isVideoRotationAngleSupported(90) {
-            conn.videoRotationAngle = 90
+        } else {
+            set(90)
         }
         #endif
-        session.commitConfiguration()
-        return true
     }
 
     /// Fixiert Belichtung, Fokus und Weißabgleich für Stop-Motion. Wenn möglich
@@ -1761,7 +1795,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         prepareCapture(fallback: frame)
     }
 
-    func commit(frame: CGImage, originalData: Data? = nil) {
+    func commit(frame: CGImage, originalData: Data? = nil, allowPhoto: Bool = true) {
         armed = false
         handCheckResult = nil
         stableSince = nil
@@ -1772,7 +1806,11 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
         // Spürbar & hörbar: Aldo schaut aufs Werk, nicht aufs Display
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        if playShutterSound {
+        // Das Foto in voller Auflösung sofort anfordern – die Szene ist jetzt
+        // ruhig. (Beim Foto spielt das System selbst den Verschlusston.)
+        let photoTask: Task<Data?, Never>? = (allowPhoto && originalData == nil && usesFullResolutionPhoto)
+            ? Task { await self.capturePhotoData() } : nil
+        if playShutterSound, photoTask == nil {
             AudioServicesPlaySystemSound(1108) // Kamera-Verschluss
         }
 
@@ -1787,10 +1825,13 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // `onCapture` zurück – das Bild soll trotzdem ins Werk.
         let deliver = onCapture
         encodeTask = Task { [weak self] in
+            let photo = await photoTask?.value
             await previous?.value
+            let original = originalData ?? photo
             let (data, thumb) = await Task.detached(priority: .userInitiated) {
-                // Fotos aus dem Kamera-Ordner behalten ihre Originaldatei
-                (originalData ?? image.jpegData(compressionQuality: 0.9), Self.loopThumbnail(image))
+                // Fotos aus dem Kamera-Ordner und Vollbild-Fotos behalten
+                // ihre Originaldatei
+                (original ?? image.jpegData(compressionQuality: 0.9), Self.loopThumbnail(image))
             }.value
             guard let self else { return }
             if let thumb { self.loopFrames.append(thumb) }

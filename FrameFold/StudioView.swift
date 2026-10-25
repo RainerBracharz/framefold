@@ -561,8 +561,8 @@ struct StudioView: View {
                             .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
                     }
                 }
-                if controller.manualCapabilities.any {
-                    section("Kamera") { ManualCameraPanel(controller: controller, dark: true) }
+                if CameraOptionsPanel.isAvailable || controller.manualCapabilities.any {
+                    section("Kamera") { CameraOptionsPanel(controller: controller, dark: true) }
                 }
                 section("Greenscreen") {
                     picker("Farbe", Binding(get: { project?.greenScreen?.key ?? .none },
@@ -609,6 +609,7 @@ struct StudioView: View {
                 }
                 section("Aufnahme") {
                     toggle("Automatik (Hände weg)", $settings.autoShutter)
+                    ClapTriggerToggle(controller: controller, dark: true)
                     stepper("Mitteln", value: $settings.averageFrames, in: 1...16) { $0 == 1 ? String(localized: "aus") : String(localized: "\($0) Bilder") }
                     toggle("Beim Auslösen abdunkeln", $settings.captureBlackout)
                     HStack {
