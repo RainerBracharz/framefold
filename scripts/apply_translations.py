@@ -66,6 +66,8 @@ for catalog_path in CATALOGS:
                 entry["shouldTranslate"] = False
                 gesamt["neutral"] += 1
             continue
+        if entry.get("shouldTranslate") is False:
+            continue  # z. B. Sprachnamen in ihrer eigenen Sprache
 
         locs = entry.setdefault("localizations", {})
         if LANG in locs:

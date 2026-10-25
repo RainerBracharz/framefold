@@ -10,3 +10,4 @@ Now on iPad too – and with sound.
 • Up to 24 fps: 15 and 24 fps for smooth motion.
 • Manual camera (from Advanced): set ISO, shutter speed, focus and white balance yourself – the automatic metering then stays out of it.
 • Duplicate and reorder frames: press and hold a frame for “Duplicate”, “Move earlier” and “Move later” – or simply drag it to a new place in the contact sheet.
+• Now also in Spanish, Italian and Dutch – and a sample work is waiting on first launch to try things out.

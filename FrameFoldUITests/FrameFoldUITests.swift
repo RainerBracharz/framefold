@@ -28,6 +28,10 @@ final class FrameFoldUITests: XCTestCase {
     /// entstehen in der vollen Werkstatt, die Durchsicht im Einfach-Modus.
     private var showAll = false
     private var shotIndex = 0
+    /// Weitere Sprachen (es/it/nl): deutsch → Zielsprache aus
+    /// localization/<lang>.json (FF_L10N). Jeder gesuchte Knopf wird um seine
+    /// Übersetzung ergänzt – so laufen dieselben Schritte in jeder Sprache.
+    private var l10n: [String: String] = [:]
 
     override func setUpWithError() throws {
         continueAfterFailure = true   // eine fehlende Station soll die übrigen nicht kosten
@@ -42,10 +46,22 @@ final class FrameFoldUITests: XCTestCase {
             shotDir = url
         }
 
+        if let path = env["FF_L10N"], let data = FileManager.default.contents(atPath: path),
+           let table = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+            for (key, value) in table {
+                guard let value = value as? String, !key.hasPrefix("_") else { continue }
+                l10n[key] = value
+                // „Fertig · %lld“ → Präfix „Fertig ·“ für die Suche mit prefix
+                if let cut = key.range(of: " %lld"), let vcut = value.range(of: " %") {
+                    l10n[String(key[..<cut.lowerBound])] = String(value[..<vcut.lowerBound])
+                }
+            }
+        }
+
         app = XCUIApplication()
         app.launchArguments = [
             "-AppleLanguages", "(\(lang))",
-            "-AppleLocale", ["de": "de_AT", "fr": "fr_FR"][lang] ?? "en_US",
+            "-AppleLocale", ["de": "de_AT", "fr": "fr_FR", "es": "es_ES", "it": "it_IT", "nl": "nl_NL"][lang] ?? "en_US",
             // Erststart herstellen: Onboarding und Kamera-Tipp sollen mit drauf.
             "--ff-fresh-start",
         ]
@@ -161,7 +177,7 @@ final class FrameFoldUITests: XCTestCase {
             // Falls wir noch im Detail stehen: zurück zur Liste
             if app.navigationBars.buttons.firstMatch.exists,
                !app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'frames' OR label CONTAINS[c] 'Bilder' OR label CONTAINS[c] 'images'")).firstMatch.exists {
-                tap(["Back", "Zurück", "Retour", "Œuvres"], timeout: 1)
+                tap(["Back", "Zurück", "Retour", "Œuvres", "Werke"], timeout: 1)
             }
         }
 
@@ -487,6 +503,7 @@ final class FrameFoldUITests: XCTestCase {
                      prefix: Bool = false, timeout: TimeInterval = 4) -> Bool {
         let scope = root ?? app!
         let op = prefix ? "BEGINSWITH[c]" : "==[c]"
+        let labels = labels + labels.compactMap { l10n[$0] }
         let subs = labels.map { NSPredicate(format: "label \(op) %@ OR title \(op) %@", $0, $0) }
         let pred = NSCompoundPredicate(orPredicateWithSubpredicates: subs)
 

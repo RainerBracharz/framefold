@@ -17,10 +17,28 @@
             "value": "In live mode, FrameFold takes frames automatically whenever your hands are out of the shot."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En el modo en directo, FrameFold toma fotogramas automáticamente cuando tus manos están fuera del encuadre."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "En mode direct, FrameFold prend des images automatiquement dès que tes mains sont hors du cadre."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In modalità live, FrameFold riprende fotogrammi automaticamente quando le tue mani sono fuori dall’inquadratura."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In de livemodus neemt FrameFold automatisch beelden op wanneer je handen uit beeld zijn."
           }
         }
       }
@@ -41,10 +59,28 @@
             "value": "To save finished stop-motion videos to your photo library."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para guardar los vídeos de stop motion terminados en tu fototeca."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Pour enregistrer les vidéos stop motion terminées dans ta photothèque."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per salvare i video stop motion finiti nella tua libreria foto."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Om voltooide stop-motionvideo’s in je fotobibliotheek te bewaren."
           }
         }
       }
@@ -65,10 +101,28 @@
             "value": "In the Studio, FrameFold recognises spoken words in an audio track – on the device only – to match mouth shapes to frames."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En el Studio, FrameFold reconoce las palabras habladas de una pista de audio (solo en el dispositivo) para asignar formas de boca a los fotogramas."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Dans le Studio, FrameFold reconnaît les mots d’une piste audio – uniquement sur l’appareil – pour associer les formes de bouche aux images."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nello Studio, FrameFold riconosce le parole pronunciate in una traccia audio (solo sul dispositivo) per abbinare le forme della bocca ai fotogrammi."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In de Studio herkent FrameFold gesproken woorden in een geluidsspoor – alleen op het apparaat – om mondvormen aan beelden te koppelen."
           }
         }
       }
@@ -89,10 +143,28 @@
             "value": "At your request, FrameFold records voice or sound for your film. The recording stays on the device."
           }
         },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si lo pides, FrameFold graba voz o sonidos para tu película. La grabación se queda en el dispositivo."
+          }
+        },
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "À ta demande, FrameFold enregistre ta voix ou des sons pour ton film. L’enregistrement reste sur l’appareil."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Su tua richiesta, FrameFold registra voce o suoni per il tuo film. La registrazione resta sul dispositivo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Op jouw verzoek neemt FrameFold stem of geluid op voor je film. De opname blijft op het apparaat."
           }
         }
       }

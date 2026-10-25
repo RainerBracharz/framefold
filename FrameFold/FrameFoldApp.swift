@@ -296,6 +296,11 @@ struct FrameFoldApp: App {
             }
             // Externe Bildschirme (HDMI/AirPlay) zeigen den Studio-Monitor
             .task {
+                // Beispielwerk beim ersten Start – nicht in UI-Tests und
+                // Screenshot-Läufen, die einen leeren Erststart brauchen.
+                if !CommandLine.arguments.contains("--ff-fresh-start"), !Platform.autostart {
+                    projectStore.createSampleIfNeeded()
+                }
                 StudioMonitorHub.shared.activate()
                 WatchLink.shared.activate()   // Fernauslöser am Handgelenk
                 #if targetEnvironment(macCatalyst)

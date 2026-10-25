@@ -408,6 +408,28 @@ final class ProjectStore: ObservableObject {
         directory(for: project).appendingPathComponent(track.filename)
     }
 
+    // MARK: Beispielwerk
+
+    /// Beim allerersten Start ein kleines Beispielwerk anlegen (die Faltung
+    /// aus dem Spot, 22 Bilder): So gibt es sofort etwas zum Abspielen,
+    /// Exportieren und Ausprobieren. Nur einmal je Installation und nur, wenn
+    /// noch kein Werk existiert.
+    func createSampleIfNeeded() {
+        let key = "didCreateSample"
+        guard !defaults.bool(forKey: key) else { return }
+        defaults.set(true, forKey: key)
+        guard projects.isEmpty else { return }
+        var project = createProject(name: String(localized: "Beispiel: Faltung"))
+        for n in 1...22 {
+            guard let image = UIImage(named: String(format: "sample-%02d", n)),
+                  let data = image.jpegData(compressionQuality: 0.85),
+                  let current = projects.first(where: { $0.id == project.id }) else { continue }
+            appendFrame(jpegData: data, to: current)
+        }
+        if let current = projects.first(where: { $0.id == project.id }) { project = current }
+        if project.frameCount == 0 { delete(project) }
+    }
+
     // MARK: Greenscreen, Titel
 
     /// Greenscreen-Farbe setzen (`.none` schaltet ab, der Hintergrund bleibt gemerkt).

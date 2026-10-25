@@ -1,0 +1,39 @@
+{
+  "_hinweis": "Nederlands: ‘one’ alleen voor 1.",
+  "%lld Bilder": {
+    "one": "%lld beeld",
+    "other": "%lld beelden"
+  },
+  "%lld Bilder aufgenommen": {
+    "one": "%lld beeld opgenomen",
+    "other": "%lld beelden opgenomen"
+  },
+  "Fertig! %lld Bilder": {
+    "one": "Klaar! %lld beeld",
+    "other": "Klaar! %lld beelden"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "one": "%lld beeld · contactvel",
+    "other": "%lld beelden · contactvel"
+  },
+  "%lld Werke montieren": {
+    "one": "%lld werk monteren",
+    "other": "%lld werken monteren"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "one": "Recent verwijderd: %lld beeld terugzetten",
+    "other": "Recent verwijderd: %lld beelden terugzetten"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "one": "nog %lld voor een seconde film",
+    "other": "nog %lld voor een seconde film"
+  },
+  "%lld Sekunden Film!": {
+    "one": "%lld seconde film!",
+    "other": "%lld seconden film!"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "one": "Interval, elke seconde",
+    "other": "Interval, elke %lld seconden"
+  }
+}

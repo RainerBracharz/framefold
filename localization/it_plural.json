@@ -1,0 +1,48 @@
+{
+  "_hinweis": "Italiano: «one» solo per 1; «many» (es. 1 000 000) = forma di «other».",
+  "%lld Bilder": {
+    "one": "%lld fotogramma",
+    "many": "%lld fotogrammi",
+    "other": "%lld fotogrammi"
+  },
+  "%lld Bilder aufgenommen": {
+    "one": "%lld fotogramma ripreso",
+    "many": "%lld fotogrammi ripresi",
+    "other": "%lld fotogrammi ripresi"
+  },
+  "Fertig! %lld Bilder": {
+    "one": "Fatto! %lld fotogramma",
+    "many": "Fatto! %lld fotogrammi",
+    "other": "Fatto! %lld fotogrammi"
+  },
+  "%lld Bilder · Kontaktbogen": {
+    "one": "%lld fotogramma · provino",
+    "many": "%lld fotogrammi · provino",
+    "other": "%lld fotogrammi · provino"
+  },
+  "%lld Werke montieren": {
+    "one": "Monta %lld opera",
+    "many": "Monta %lld opere",
+    "other": "Monta %lld opere"
+  },
+  "Zuletzt gelöscht: %lld Bilder wiederherstellen": {
+    "one": "Eliminati di recente: ripristina %lld fotogramma",
+    "many": "Eliminati di recente: ripristina %lld fotogrammi",
+    "other": "Eliminati di recente: ripristina %lld fotogrammi"
+  },
+  "noch %lld für eine Sekunde Film": {
+    "one": "ancora %lld per un secondo di film",
+    "many": "ancora %lld per un secondo di film",
+    "other": "ancora %lld per un secondo di film"
+  },
+  "%lld Sekunden Film!": {
+    "one": "%lld secondo di film!",
+    "many": "%lld secondi di film!",
+    "other": "%lld secondi di film!"
+  },
+  "Intervall, alle %lld Sekunden": {
+    "one": "Intervallo, ogni secondo",
+    "many": "Intervallo, ogni %lld secondi",
+    "other": "Intervallo, ogni %lld secondi"
+  }
+}

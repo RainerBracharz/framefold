@@ -11,3 +11,4 @@ Le Studio – et le son.
 • Musique ou son : choisis un fichier audio dans la vue de l’œuvre – il accompagne le film exporté.
 • Jusqu’à 24 images par seconde : 15 et 24 fps pour un mouvement fluide.
 • Dupliquer et réordonner : clic droit sur une image pour « Dupliquer », « Avancer » et « Reculer » – ou fais-la glisser ailleurs dans la planche contact.
+• Désormais aussi en espagnol, italien et néerlandais – et une œuvre d’exemple attend au premier lancement.

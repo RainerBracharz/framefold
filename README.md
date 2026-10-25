@@ -133,7 +133,7 @@ that decision is written up here:
 - **Shutter without shake.** Hold the shutter for a three-second self-timer, or
   use the volume buttons on headphones and AirPods — Apple's capture-event API,
   which also covers cheap Bluetooth camera remotes.
-- **English, German and French.** The whole app, from first launch to the contact
+- **Six languages.** German, English, French, Spanish, Italian and Dutch. The whole app, from first launch to the contact
   sheet, follows the phone's language. Every screen is checked in every language
   by an automated walkthrough (see *Engineering*).
 - **Private by design.** Everything happens on the device. No account, no upload,

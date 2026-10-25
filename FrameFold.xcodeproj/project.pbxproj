@@ -34,6 +34,7 @@
 		BB20F0F0F0F0F0F0F0F0F312 /* LiveSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F313 /* LiveSettingsView.swift */; };
 		BB20F0F0F0F0F0F0F0F0F314 /* LiveCaptureController+MacCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F315 /* LiveCaptureController+MacCamera.swift */; };
 		BB20F0F0F0F0F0F0F0F0F316 /* LiveCaptureController+Simulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */; };
+		CC30A7A7A7A7A7A7A7A7A070 /* ReviewPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30A7A7A7A7A7A7A7A7A071 /* ReviewPrompt.swift */; };
 		CC30F6F6F6F6F6F6F6F6F160 /* ManualCameraPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30F6F6F6F6F6F6F6F6F161 /* ManualCameraPanel.swift */; };
 		CC30F6F6F6F6F6F6F6F6F060 /* LiveCaptureController+Manual.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30F6F6F6F6F6F6F6F6F061 /* LiveCaptureController+Manual.swift */; };
 		CC30E5E5E5E5E5E5E5E5E050 /* FilmExtras.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC30E5E5E5E5E5E5E5E5E051 /* FilmExtras.swift */; };
@@ -123,6 +124,7 @@
 		BB20F0F0F0F0F0F0F0F0F313 /* LiveSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveSettingsView.swift; sourceTree = "<group>"; };
 		BB20F0F0F0F0F0F0F0F0F315 /* LiveCaptureController+MacCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+MacCamera.swift"; sourceTree = "<group>"; };
 		BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+Simulator.swift"; sourceTree = "<group>"; };
+		CC30A7A7A7A7A7A7A7A7A071 /* ReviewPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPrompt.swift; sourceTree = "<group>"; };
 		CC30F6F6F6F6F6F6F6F6F161 /* ManualCameraPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualCameraPanel.swift; sourceTree = "<group>"; };
 		CC30F6F6F6F6F6F6F6F6F061 /* LiveCaptureController+Manual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveCaptureController+Manual.swift"; sourceTree = "<group>"; };
 		CC30E5E5E5E5E5E5E5E5E051 /* FilmExtras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmExtras.swift; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 				BB20F0F0F0F0F0F0F0F0F304 /* LiveLoopView.swift */,
 				BB20F0F0F0F0F0F0F0F0F306 /* DuoSupport.swift */,
 				BB20F0F0F0F0F0F0F0F0F317 /* LiveCaptureController+Simulator.swift */,
+				CC30A7A7A7A7A7A7A7A7A071 /* ReviewPrompt.swift */,
 				CC30F6F6F6F6F6F6F6F6F161 /* ManualCameraPanel.swift */,
 				CC30F6F6F6F6F6F6F6F6F061 /* LiveCaptureController+Manual.swift */,
 				CC30E5E5E5E5E5E5E5E5E051 /* FilmExtras.swift */,
@@ -374,7 +377,10 @@
 			knownRegions = (
 				de,
 				en,
+				es,
 				fr,
+				it,
+				nl,
 				Base,
 			);
 			mainGroup = 97A63A01E61FD439E8760B8E;
@@ -455,6 +461,7 @@
 				BB20F0F0F0F0F0F0F0F0F303 /* LiveLoopView.swift in Sources */,
 				BB20F0F0F0F0F0F0F0F0F305 /* DuoSupport.swift in Sources */,
 				BB20F0F0F0F0F0F0F0F0F316 /* LiveCaptureController+Simulator.swift in Sources */,
+				CC30A7A7A7A7A7A7A7A7A070 /* ReviewPrompt.swift in Sources */,
 				CC30F6F6F6F6F6F6F6F6F160 /* ManualCameraPanel.swift in Sources */,
 				CC30F6F6F6F6F6F6F6F6F060 /* LiveCaptureController+Manual.swift in Sources */,
 				CC30E5E5E5E5E5E5E5E5E050 /* FilmExtras.swift in Sources */,

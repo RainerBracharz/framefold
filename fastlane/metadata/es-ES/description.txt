@@ -37,6 +37,4 @@ Sencillo (elegir, disparar, listo — ideal para clase), Avanzado (formato, velo
 OBRAS, NO ARCHIVOS
 Los proyectos reúnen fotogramas de tantas sesiones como quieras, con papelera de 30 días.
 
-La interfaz de la app está en inglés, alemán y francés.
-
 Creada como herramienta a medida para el artista Aldo Tolino, cuya obra pliega fotografías impresas en objetos y las vuelve a fotografiar — imagen, objeto, imagen.

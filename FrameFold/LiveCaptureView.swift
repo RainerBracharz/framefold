@@ -1,6 +1,7 @@
 import SwiftUI
 import AVFoundation
 import AVKit   // AVCaptureEventInteraction (Hardware-Fernauslöser)
+import StoreKit  // Bewertungsabfrage
 import PhotosUI
 import UIKit
 
@@ -33,6 +34,7 @@ struct LiveCaptureView: View {
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     private var mode: AppMode { AppMode.current(modeRaw) }
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.requestReview) private var requestReview
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     /// iPhone Duo: Film auf dem Außendisplay – vom Nutzer abschaltbar, und ob
     /// das System dort gerade etwas zeigen kann.
@@ -420,7 +422,10 @@ struct LiveCaptureView: View {
                     imageURLs: urls, settings: PipelineSettings.restored()
                 ) { p in Task { @MainActor in assembleProgress = p } }
                 guard !Task.isCancelled else { return }
-                await MainActor.run { resultURL = url; isAssembling = false }
+                await MainActor.run {
+                    resultURL = url; isAssembling = false
+                    if ReviewPrompt.noteFinishedFilm() { requestReview() }
+                }
             } catch is CancellationError {
             } catch {
                 await MainActor.run {

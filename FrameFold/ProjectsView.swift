@@ -1,6 +1,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 import AVKit
+import StoreKit
 import UIKit
 
 /// Projektliste im Werkverzeichnis-Stil: nummerierte Einträge,
@@ -215,6 +216,7 @@ struct ProjectDetailView: View {
     @State private var showAudioImporter = false
     @State private var showVoice = false
     @State private var showBackgroundImporter = false
+    @Environment(\.requestReview) private var requestReview
     @State private var sequenceFolder: ShareItem?
     @State private var isExportingSequence = false
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
@@ -964,6 +966,7 @@ struct ProjectDetailView: View {
                 }
                 await MainActor.run {
                     exportURL = url
+                    if ReviewPrompt.noteFinishedFilm() { requestReview() }
                     isExporting = false
                     // Kein automatisches Teilen-Sheet mehr: das Ergebnis läuft
                     // jetzt direkt als Vorschau – teilen entscheidet der Nutzer.
