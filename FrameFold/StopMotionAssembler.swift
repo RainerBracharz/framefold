@@ -74,6 +74,7 @@ final class StopMotionAssembler {
         imageURLs: [URL],
         settings: PipelineSettings,
         greenScreen: GreenScreenCompositor? = nil,
+        overlays: [FrameOverlay] = [],
         progress: @escaping (Double) -> Void
     ) async throws -> URL {
         guard !imageURLs.isEmpty else { throw PipelineError.noKeyframesFound }
@@ -87,8 +88,13 @@ final class StopMotionAssembler {
                 }
                 // Greenscreen vor allem anderen: Flimmerausgleich und
                 // Effekte sehen schon das fertige Bild mit Hintergrund.
-                if let greenScreen { return await greenScreen.composite(image, index: index) }
-                return image
+                var result = image
+                if let greenScreen { result = await greenScreen.composite(result, index: index) }
+                // Text, Sprechblasen, Zeichnungen obenauf
+                if !overlays.isEmpty, let drawn = OverlayRenderer.apply(overlays, frame: index, to: result) {
+                    result = drawn
+                }
+                return result
             },
             progress: progress
         )

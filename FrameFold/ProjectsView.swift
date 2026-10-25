@@ -218,6 +218,7 @@ struct ProjectDetailView: View {
     @State private var showVoice = false
     @State private var showBackgroundImporter = false
     @State private var photoItems: [PhotosPickerItem] = []
+    @State private var overlayFrame: Int?
     @State private var importingPhotos = 0
     @Environment(\.requestReview) private var requestReview
     @State private var sequenceFolder: ShareItem?
@@ -285,6 +286,11 @@ struct ProjectDetailView: View {
                                 NotificationCenter.default.post(name: .ffContinueWork, object: currentProject.id)
                             } label: {
                                 Label("Neu aufnehmen", systemImage: "camera.rotate")
+                            }
+                            Button {
+                                overlayFrame = index
+                            } label: {
+                                Label("Text & Zeichnen …", systemImage: "pencil.and.scribble")
                             }
                             Button {
                                 store.duplicateFrame(named: url.lastPathComponent, in: currentProject)
@@ -421,6 +427,7 @@ struct ProjectDetailView: View {
             exportURL = nil
         }
         .onChange(of: currentProject.greenScreen) { _, _ in exportURL = nil }
+        .onChange(of: currentProject.overlays) { _, _ in exportURL = nil }
         .onChange(of: currentProject.titleText) { _, _ in exportURL = nil }
         .onChange(of: currentProject.creditsText) { _, _ in exportURL = nil }
     }
@@ -510,6 +517,12 @@ struct ProjectDetailView: View {
         .buttonStyle(.plain)
         .foregroundStyle(Theme.ink)
         .padding(.horizontal, 4)
+        .sheet(isPresented: Binding(get: { overlayFrame != nil }, set: { if !$0 { overlayFrame = nil } })) {
+            if let overlayFrame {
+                OverlayEditorView(projectID: currentProject.id, frameIndex: overlayFrame) { self.overlayFrame = nil }
+                    .environmentObject(store)
+            }
+        }
         .sheet(isPresented: $showVoice) {
             VoiceRecordSheet(urls: store.frameURLs(for: currentProject), startFrame: 0,
                              fps: exportSettings.outputFPS) { url, frame in
@@ -998,12 +1011,13 @@ struct ProjectDetailView: View {
                                   fps: settings.outputFPS)
         }
         let title = currentProject.titleText, credits = currentProject.creditsText
+        let overlays = currentProject.overlays ?? []
         let subtitle = currentProject.createdDateText
 
         Task {
             do {
                 var url = try await StopMotionAssembler().assemble(
-                    imageURLs: urls, settings: settings, greenScreen: compositor
+                    imageURLs: urls, settings: settings, greenScreen: compositor, overlays: overlays
                 ) { p in
                     Task { @MainActor in exportProgress = p }
                 }

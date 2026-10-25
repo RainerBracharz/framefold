@@ -44,6 +44,7 @@ struct StudioView: View {
     @State private var peaks: [Float] = []
     @State private var showXSheet = false
     @State private var showVoice = false
+    @State private var overlayFrame: Int?
     @State private var importKind: ImportKind = .reference
     @StateObject private var folderWatch = StudioFolderWatch()
     @State private var volumeDraft: [UUID: Double] = [:]
@@ -57,7 +58,13 @@ struct StudioView: View {
     private var urls: [URL] { project.map { store.frameURLs(for: $0) } ?? [] }
     private var audioSources: [AudioSource] { project?.audioSources(fps: fps, store: store) ?? [] }
 
+    // Der Körper ist bewusst in Stücke geteilt: Als eine lange Kette
+    // überfordert er den Typprüfer älterer Xcode-Versionen (CI).
     var body: some View {
+        withDialogs(withImporter(withLifecycle(layout)))
+    }
+
+    private var layout: some View {
         HStack(spacing: 0) {
             VStack(spacing: 0) {
                 viewer
@@ -74,70 +81,120 @@ struct StudioView: View {
         .background(Color.black)
         // iPad: Lautstärketasten, Kopfhörer und Bluetooth-Auslöser lösen aus
         .background { if Platform.isPad { HardwareShutterBridge { handle(.capture) } } }
-        .onAppear(perform: activate)
-        .onDisappear(perform: deactivate)
-        .onChange(of: settings) { _, new in
-            new.persist()
-            apply(new)
-        }
-        .onChange(of: controller.liveFrame) { _, _ in updateProcessed() }
-        .onChange(of: controller.capturedCount) { old, new in
-            guard new > old else { return }
-            selected = nil
-            flash = 0.6
-            withAnimation(.easeOut(duration: 0.3)) { flash = 0 }
-        }
-        .onChange(of: controller.blackoutActive) { _, on in StudioBlackout.set(on) }
-        .onChange(of: urls.count) { _, _ in referenceFollow() }
-        .onChange(of: selected) { _, _ in referenceFollow() }
-        .onReceive(NotificationCenter.default.publisher(for: .ffStudio)) { note in
-            if let raw = note.object as? String, let command = StudioCommand(rawValue: raw) { handle(command) }
-        }
-        .fileImporter(isPresented: $showReferenceImporter,
-                      allowedContentTypes: importKind == .audio ? [.audio] : importKind == .folder ? [.folder] : [.image, .movie]) { result in
-            guard case .success(let url) = result else { return }
-            switch importKind {
-            case .audio:
-                if let project { store.addAudioTrack(from: url, startFrame: frameOnViewer ?? 0, to: project) }
-            case .folder:
-                folderWatch.choose(url)
-            case .background:
-                store.setGreenScreenBackground(from: url, in: projectID)
-            case .reference:
-                reference.load(url)
-                reference.setKey(settings.referenceKey)
-                referenceFollow()
+    }
+
+    private func withLifecycle<V: View>(_ content: V) -> some View {
+        content
+            .onAppear(perform: activate)
+            .onDisappear(perform: deactivate)
+            .onChange(of: settings) { _, new in
+                new.persist()
+                apply(new)
             }
+            .onChange(of: controller.liveFrame) { _, _ in updateProcessed() }
+            .onChange(of: controller.capturedCount) { old, new in
+                guard new > old else { return }
+                selected = nil
+                flash = 0.6
+                withAnimation(.easeOut(duration: 0.3)) { flash = 0 }
+            }
+            .onChange(of: controller.blackoutActive) { _, on in StudioBlackout.set(on) }
+            .onChange(of: urls.count) { _, _ in referenceFollow() }
+            .onChange(of: selected) { _, _ in referenceFollow() }
+            .onChange(of: project?.allAudioTracks) { _, _ in reloadAudio() }
+            .onChange(of: project?.greenScreen) { _, _ in rebuildGreenScreen() }
+            .onReceive(NotificationCenter.default.publisher(for: .ffStudio)) { note in
+                if let raw = note.object as? String, let command = StudioCommand(rawValue: raw) { handle(command) }
+            }
+    }
+
+    private var importTypes: [UTType] {
+        switch importKind {
+        case .audio: return [.audio]
+        case .folder: return [.folder]
+        case .reference, .background: return [.image, .movie]
         }
-        .sheet(isPresented: $showXSheet) {
-            XSheetView(projectID: projectID, fps: fps, peaks: peaks,
-                       currentFrame: (frameOnViewer ?? urls.count) + 1) { showXSheet = false }
+    }
+
+    private func withImporter<V: View>(_ content: V) -> some View {
+        content.fileImporter(isPresented: $showReferenceImporter, allowedContentTypes: importTypes) { result in
+            guard case .success(let url) = result else { return }
+            imported(url)
+        }
+    }
+
+    private func imported(_ url: URL) {
+        switch importKind {
+        case .audio:
+            if let project { store.addAudioTrack(from: url, startFrame: frameOnViewer ?? 0, to: project) }
+        case .folder:
+            folderWatch.choose(url)
+        case .background:
+            store.setGreenScreenBackground(from: url, in: projectID)
+        case .reference:
+            reference.load(url)
+            reference.setKey(settings.referenceKey)
+            referenceFollow()
+        }
+    }
+
+    private var overlayEditorShown: Binding<Bool> {
+        Binding(get: { overlayFrame != nil }, set: { if !$0 { overlayFrame = nil } })
+    }
+    private var noteShown: Binding<Bool> {
+        Binding(get: { noteFrame != nil }, set: { if !$0 { noteFrame = nil } })
+    }
+
+    private func withDialogs<V: View>(_ content: V) -> some View {
+        content
+            .sheet(isPresented: $showXSheet) { xSheet }
+            .sheet(isPresented: $showVoice) { voiceSheet }
+            .sheet(isPresented: overlayEditorShown) { overlayEditor }
+            .alert(noteTitle, isPresented: noteShown) { noteAlert }
+            // Solange ein Dialog offen ist, dürfen einfache Tasten nicht als
+            // Befehle gelten.
+            .onChange(of: showXSheet) { _, _ in updateHub() }
+            .onChange(of: showVoice) { _, _ in updateHub() }
+            .onChange(of: overlayFrame) { _, _ in updateHub() }
+            .onChange(of: noteFrame) { _, _ in updateHub() }
+    }
+
+    private func updateHub() {
+        hub.isActive = !showXSheet && !showVoice && overlayFrame == nil && noteFrame == nil
+    }
+
+    private var xSheet: some View {
+        XSheetView(projectID: projectID, fps: fps, peaks: peaks,
+                   currentFrame: (frameOnViewer ?? urls.count) + 1) { showXSheet = false }
+            .environmentObject(store)
+    }
+
+    private var voiceSheet: some View {
+        VoiceRecordSheet(urls: urls, startFrame: frameOnViewer ?? 0, fps: fps) { url, frame in
+            if let url, let project {
+                store.addAudioTrack(from: url, startFrame: frame,
+                                    name: String(localized: "Stimme \(project.allAudioTracks.count + 1)"), to: project)
+            }
+            showVoice = false
+        }
+    }
+
+    @ViewBuilder
+    private var overlayEditor: some View {
+        if let overlayFrame {
+            OverlayEditorView(projectID: projectID, frameIndex: overlayFrame) { self.overlayFrame = nil }
                 .environmentObject(store)
         }
-        .onChange(of: showXSheet) { _, open in hub.isActive = !open }
-        .sheet(isPresented: $showVoice) {
-            VoiceRecordSheet(urls: urls, startFrame: frameOnViewer ?? 0, fps: fps) { url, frame in
-                if let url, let project {
-                    store.addAudioTrack(from: url, startFrame: frame,
-                                        name: String(localized: "Stimme \(project.allAudioTracks.count + 1)"), to: project)
-                }
-                showVoice = false
-            }
+    }
+
+    @ViewBuilder
+    private var noteAlert: some View {
+        TextField("Notiz", text: $noteDraft)
+        Button("Sichern") {
+            if let noteFrame, let project { store.setNote(noteDraft, forFrame: noteFrame, in: project) }
+            noteFrame = nil
         }
-        .onChange(of: showVoice) { _, open in hub.isActive = !open }
-        .onChange(of: project?.allAudioTracks) { _, _ in reloadAudio() }
-        .onChange(of: project?.greenScreen) { _, _ in rebuildGreenScreen() }
-        .alert(noteTitle, isPresented: Binding(get: { noteFrame != nil }, set: { if !$0 { noteFrame = nil } })) {
-            TextField("Notiz", text: $noteDraft)
-            Button("Sichern") {
-                if let noteFrame, let project { store.setNote(noteDraft, forFrame: noteFrame, in: project) }
-                noteFrame = nil
-            }
-            Button("Abbrechen", role: .cancel) { noteFrame = nil }
-        }
-        // Solange die Notiz getippt wird, dürfen einfache Tasten nicht als
-        // Befehle gelten.
-        .onChange(of: noteFrame) { _, frame in hub.isActive = frame == nil }
+        Button("Abbrechen", role: .cancel) { noteFrame = nil }
     }
 
     private var noteTitle: String {
@@ -159,6 +216,11 @@ struct StudioView: View {
                                 y: settings.referenceOffsetY * canvas.height)
                         .opacity(settings.referenceOpacity)
                         .allowsHitTesting(false)
+                }
+                // Text, Sprechblasen, Zeichnungen – live für das nächste Bild
+                if let overlays = project?.overlays {
+                    let index = frameOnViewer ?? urls.count
+                    OverlayLayer(overlays: overlays.filter { $0.covers(index) })
                 }
                 StudioGuides(settings: settings)
                 if flash > 0 { Color.white.opacity(flash).allowsHitTesting(false) }
@@ -463,6 +525,7 @@ struct StudioView: View {
         .contentShape(Rectangle())
         .onTapGesture { stopPlayback(); testShown = nil; selected = index }
         .contextMenu {
+            Button { stopPlayback(); overlayFrame = index } label: { Label("Text & Zeichnen …", systemImage: "pencil.and.scribble") }
             Button { duplicate(index) } label: { Label("Verdoppeln", systemImage: "plus.square.on.square") }
             Button { editNote(index + 1) } label: { Label("Notiz …", systemImage: "text.bubble") }
             Button { loopIn = index } label: { Label("Als Schleifenanfang", systemImage: "chevron.left.to.line") }

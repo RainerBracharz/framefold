@@ -31,6 +31,8 @@ struct Project: Identifiable, Codable {
     /// Titelkarte vor und Abspann nach dem Film (leer = keiner)
     var titleText: String?
     var creditsText: String?
+    /// Text, Sprechblasen und Zeichnungen über Bildbereichen
+    var overlays: [FrameOverlay]?
 
     /// Alle Tonspuren – die einfache Musikspur aus der Werkansicht zählt
     /// als erste, mit Einsatz bei Bild 1.
@@ -177,7 +179,7 @@ final class ProjectStore: ObservableObject {
             id: id, name: String(localized: "Wiederhergestelltes Werk"),
             createdAtISO: ISO8601DateFormatter().string(from: created),
             frameFilenames: frames, trashFilenames: nil, nextFrameNumber: nil, audioFilename: nil, notes: nil, audioTracks: nil, dialogue: nil,
-            greenScreen: nil, titleText: nil, creditsText: nil)
+            greenScreen: nil, titleText: nil, creditsText: nil, overlays: nil)
         if let data = try? JSONEncoder().encode(project) {
             try? data.write(to: dir.appendingPathComponent("manifest.json"), options: .atomic)
         }
@@ -226,7 +228,8 @@ final class ProjectStore: ObservableObject {
             dialogue: nil,
             greenScreen: nil,
             titleText: nil,
-            creditsText: nil)
+            creditsText: nil,
+            overlays: nil)
         save(project)
         return project
     }
@@ -428,6 +431,24 @@ final class ProjectStore: ObservableObject {
         }
         if let current = projects.first(where: { $0.id == project.id }) { project = current }
         if project.frameCount == 0 { delete(project) }
+    }
+
+    // MARK: Text, Sprechblasen, Zeichnungen
+
+    /// Einblendung anlegen oder ändern (gleiche Kennung = ersetzen).
+    func upsertOverlay(_ overlay: FrameOverlay, in projectID: UUID) {
+        guard var updated = projects.first(where: { $0.id == projectID }) else { return }
+        var all = updated.overlays ?? []
+        if let i = all.firstIndex(where: { $0.id == overlay.id }) { all[i] = overlay } else { all.append(overlay) }
+        updated.overlays = all
+        save(updated)
+    }
+
+    func removeOverlay(id: UUID, in projectID: UUID) {
+        guard var updated = projects.first(where: { $0.id == projectID }) else { return }
+        updated.overlays?.removeAll { $0.id == id }
+        if updated.overlays?.isEmpty == true { updated.overlays = nil }
+        save(updated)
     }
 
     // MARK: Greenscreen, Titel

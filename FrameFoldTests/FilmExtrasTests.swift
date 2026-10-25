@@ -146,4 +146,40 @@ final class FilmExtrasTests: XCTestCase {
         XCTAssertEqual(ExportResolution.uhd.maxDimension, 3840)
         XCTAssertNil(ExportResolution.original.maxDimension)
     }
+
+    // MARK: Text, Sprechblasen, Zeichnungen
+
+    func testOverlaysAppearOnlyOnTheirFrames() throws {
+        let base = image { ctx in
+            UIColor.black.setFill(); ctx.fill(CGRect(x: 0, y: 0, width: 320, height: 240))
+        }.cgImage!
+        let stroke = OverlayStroke(points: [CGPoint(x: 0.1, y: 0.5), CGPoint(x: 0.9, y: 0.5)], width: 0.05, color: .red)
+        let overlays = [
+            FrameOverlay(kind: .drawing, firstFrame: 2, lastFrame: 2, strokes: [stroke]),
+            FrameOverlay(kind: .bubble, firstFrame: 0, lastFrame: 1, x: 0.5, y: 0.25, text: "Hallo!", size: 0.1, color: .white),
+        ]
+        XCTAssertNil(OverlayRenderer.apply(overlays, frame: 3, to: base), "Bild 4: nichts")
+        let drawn = try XCTUnwrap(OverlayRenderer.apply(overlays, frame: 2, to: base))
+        let line = pixel(drawn, 160, 120)
+        XCTAssertGreaterThan(line.r, 150, "roter Strich in Bildmitte: \(line)")
+        let bubble = try XCTUnwrap(OverlayRenderer.apply(overlays, frame: 1, to: base))
+        let rect = OverlayRenderer.frame(of: overlays[1], size: CGSize(width: 320, height: 240))
+        let edge = pixel(bubble, Int(rect.minX) + 4, Int(rect.midY))
+        XCTAssertGreaterThan(edge.g, 200, "weiße Sprechblase: \(edge)")
+    }
+
+    @MainActor
+    func testOverlayStoreUpsertAndRemove() throws {
+        let suite = "ff-overlay-\(UUID().uuidString)"
+        let store = ProjectStore(root: dir.appendingPathComponent("ov"), defaults: UserDefaults(suiteName: suite)!)
+        defer { UserDefaults().removePersistentDomain(forName: suite) }
+        let project = store.createProject(name: "A")
+        var overlay = FrameOverlay(kind: .text, firstFrame: 0, lastFrame: 5, text: "Eins")
+        store.upsertOverlay(overlay, in: project.id)
+        overlay.text = "Zwei"
+        store.upsertOverlay(overlay, in: project.id)
+        XCTAssertEqual(store.projects[0].overlays?.map(\.text), ["Zwei"])
+        store.removeOverlay(id: overlay.id, in: project.id)
+        XCTAssertNil(store.projects[0].overlays)
+    }
 }
