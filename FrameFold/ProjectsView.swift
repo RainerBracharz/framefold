@@ -1708,11 +1708,13 @@ struct UndoRedoButtons: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            Button { undoManager?.undo(); refresh() } label: { Image(systemName: "arrow.uturn.backward") }
+            Button { undoManager?.undo(); refresh() } label: { Image(systemName: "arrow.uturn.backward").touchLabel(7, 8) }
+                .touchButton(7, 8)
                 .disabled(!canUndo)
                 .help(Text(undoManager?.undoMenuItemTitle ?? String(localized: "Rückgängig")))
                 .accessibilityLabel(Text("Rückgängig"))
-            Button { undoManager?.redo(); refresh() } label: { Image(systemName: "arrow.uturn.forward") }
+            Button { undoManager?.redo(); refresh() } label: { Image(systemName: "arrow.uturn.forward").touchLabel(7, 8) }
+                .touchButton(7, 8)
                 .disabled(!canRedo)
                 .help(Text(undoManager?.redoMenuItemTitle ?? String(localized: "Wiederholen")))
                 .accessibilityLabel(Text("Wiederholen"))

@@ -124,7 +124,11 @@ struct StudioView: View {
                     UndoRedoButtons(tint: Theme.paperOnDark)
                 }
                 .padding(.horizontal, 8)
+                // Die Scroll-Ansicht schneidet Berührungen an ihrer Kante ab –
+                // sie braucht dieselbe Zugabe wie die Knöpfe darin
+                .padding(.vertical, 5)
             }
+            .padding(.vertical, -5)
             HStack(spacing: 10) {
                 Button { showInspector = true } label: {
                     Image(systemName: "slider.horizontal.3").frame(width: 44, height: 44)
@@ -570,8 +574,10 @@ struct StudioView: View {
                 .font(.system(size: Platform.isPad ? 19 : 15, weight: .medium))
                 .frame(width: Platform.isPad ? 44 : 30, height: Platform.isPad ? 44 : 26)
                 .foregroundStyle(active ? Theme.amber : Theme.paperOnDark)
+                .touchLabel(Platform.isPad ? 0 : 3, Platform.isPad ? 0 : 5)
         }
         .buttonStyle(.plain)
+        .touchButton(Platform.isPad ? 0 : 3, Platform.isPad ? 0 : 5)
         .help(Text(help))
         .accessibilityLabel(Text(help))
     }
@@ -806,7 +812,9 @@ struct StudioView: View {
                                 .padding(.horizontal, 10).padding(.vertical, 5)
                                 .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
                                 .foregroundStyle(Theme.paperOnDark)
+                                .touchLabel(0, 6)
                         }
+                        .touchButton(0, 6)
                         smallButton("Sprechen lassen …") { stopPlayback(); showSpeech = true }
                     }
                     HStack {
@@ -815,7 +823,9 @@ struct StudioView: View {
                                 .padding(.horizontal, 10).padding(.vertical, 5)
                                 .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
                                 .foregroundStyle(Theme.paperOnDark)
+                                .touchLabel(0, 6)
                         }
+                        .touchButton(0, 6)
                         smallButton("X-Sheet …") { handle(.xsheet) }
                     }
                     toggle("Ton beim Blättern", $settings.scrubAudio)
@@ -871,12 +881,14 @@ struct StudioView: View {
                 Text(verbatim: track.name).font(Theme.mono(11)).foregroundStyle(Theme.paperOnDark).lineLimit(1)
                 Spacer()
                 Button { store.updateAudioTrack(id: track.id, in: projectID) { $0.muted.toggle() } } label: {
-                    Image(systemName: track.muted ? "speaker.wave.2" : "speaker.slash")
+                    Image(systemName: track.muted ? "speaker.wave.2" : "speaker.slash").touchLabel(9, 9)
                 }
                 .buttonStyle(.plain).foregroundStyle(Theme.paperOnDark)
+                .touchButton(9, 9)
                 .help(Text(track.muted ? "Ton an" : "Stumm"))
-                Button { store.removeAudioTrack(track, from: project) } label: { Image(systemName: "trash") }
+                Button { store.removeAudioTrack(track, from: project) } label: { Image(systemName: "trash").touchLabel(9, 9) }
                     .buttonStyle(.plain).foregroundStyle(Theme.paperOnDark)
+                    .touchButton(9, 9)
                     .help(Text("Spur entfernen"))
             }
             stepper("Ab Bild", value: Binding(get: { track.startFrame + 1 },
@@ -921,8 +933,10 @@ struct StudioView: View {
                                 Text(verbatim: step > 0 ? "+\(step)" : "\(step)").font(Theme.mono(10))
                                     .padding(.horizontal, 5).padding(.vertical, 3)
                                     .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
+                                    .touchLabel(3, 9)
                             }
                             .buttonStyle(.plain).foregroundStyle(Theme.paperOnDark)
+                            .touchButton(3, 9)
                             .disabled(motion.isMoving)
                         }
                     }
@@ -945,8 +959,9 @@ struct StudioView: View {
                             Button {
                                 store.setMotionKeys((project.motionKeys ?? []).filter { $0.id != key.id },
                                                     smooth: project.motionSmooth == true, in: projectID)
-                            } label: { Image(systemName: "trash") }
+                            } label: { Image(systemName: "trash").touchLabel(9, 9) }
                                 .buttonStyle(.plain).foregroundStyle(Theme.paperOnDark)
+                                .touchButton(9, 9)
                         }
                     }
                 }
@@ -1038,8 +1053,9 @@ struct StudioView: View {
                             Button {
                                 store.setLightCues((project.lightCues ?? []).filter { $0.id != cue.id },
                                                    fade: project.lightFade == true, in: projectID)
-                            } label: { Image(systemName: "trash") }
+                            } label: { Image(systemName: "trash").touchLabel(9, 9) }
                                 .buttonStyle(.plain).foregroundStyle(Theme.paperOnDark)
+                                .touchButton(9, 9)
                         }
                     }
                 }
@@ -1202,8 +1218,10 @@ struct StudioView: View {
                 .padding(.horizontal, 10).padding(.vertical, 5)
                 .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.35), lineWidth: 1))
                 .foregroundStyle(Theme.paperOnDark)
+                .touchLabel(0, 6)
         }
         .buttonStyle(.plain)
+        .touchButton(0, 6)
     }
 
     // MARK: Befehle

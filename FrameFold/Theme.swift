@@ -732,3 +732,20 @@ extension UIColor {
     static let ffDarkroom = UIColor(Theme.darkroom)
     static let ffPaperOnDark = UIColor(Theme.paperOnDark)
 }
+
+// MARK: Touch-Ziele
+
+/// Größere Trefferfläche für kleine Knöpfe, ohne Aussehen oder Layout zu
+/// ändern (Apple: 36 pt für Touch am Mac, entspricht 44 pt am iPhone).
+/// SwiftUI begrenzt Treffer auf den Rahmen des Knopfs – darum wächst der Knopf
+/// wirklich: Abstand innen ums Label (`touchLabel`), und derselbe Wert negativ
+/// außen um den Knopf (`touchButton`) hebt das fürs Layout wieder auf.
+extension View {
+    func touchLabel(_ horizontal: CGFloat, _ vertical: CGFloat) -> some View {
+        padding(.horizontal, horizontal).padding(.vertical, vertical).contentShape(Rectangle())
+    }
+
+    func touchButton(_ horizontal: CGFloat, _ vertical: CGFloat) -> some View {
+        padding(.horizontal, -horizontal).padding(.vertical, -vertical)
+    }
+}

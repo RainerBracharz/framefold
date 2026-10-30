@@ -137,8 +137,10 @@ struct OverlayEditorView: View {
                         .frame(width: 40, height: 34)
                         .background(tool == t ? Theme.amber : Color.clear)
                         .foregroundStyle(tool == t ? Color.black : Theme.paperOnDark)
+                        .touchLabel(0, 1)
                 }
                 .buttonStyle(.plain)
+                .touchButton(0, 1)
                 .help(Text(t.label))
                 .accessibilityLabel(Text(t.label))
             }
@@ -233,8 +235,10 @@ struct OverlayEditorView: View {
                         .frame(width: 24, height: 24)
                         .overlay(Circle().stroke(selection == c ? Theme.amber : Color.white.opacity(0.3),
                                                  lineWidth: selection == c ? 3 : 1))
+                        .touchLabel(3, 6)
                 }
                 .buttonStyle(.plain)
+                .touchButton(3, 6)
                 .accessibilityLabel(Text(verbatim: c.rawValue))
             }
         }
