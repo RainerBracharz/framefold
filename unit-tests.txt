@@ -1,0 +1,218 @@
+2026-10-31 10:59:18.246922+0000 FrameFold[20324:55872] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-31 10:59:18.248870+0000 FrameFold[20324:55894] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-31 10:59:18.248972+0000 FrameFold[20324:55894] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-31 10:59:18.257741+0000 FrameFold[20324:55894] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-31 10:59:18.257797+0000 FrameFold[20324:55894] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-31 10:59:18.259818+0000 FrameFold[20324:55871] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-31 10:59:18.259851+0000 FrameFold[20324:55871] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+Test Case '-[FrameFoldTests.ArtNetTests testCuesStepAndFade]' started.
+Test Case '-[FrameFoldTests.ArtNetTests testCuesStepAndFade]' passed (0.006 seconds).
+Test Case '-[FrameFoldTests.ArtNetTests testDMXPacketLayout]' started.
+Test Case '-[FrameFoldTests.ArtNetTests testDMXPacketLayout]' passed (0.003 seconds).
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.009 (0.011) seconds
+Test Case '-[FrameFoldTests.AssemblerTests testAudioTrackIsAddedAndTrimmed]' started.
+Test Case '-[FrameFoldTests.AssemblerTests testAudioTrackIsAddedAndTrimmed]' passed (1.347 seconds).
+Test Case '-[FrameFoldTests.AssemblerTests testBlendFramesAreAligned]' started.
+Test Case '-[FrameFoldTests.AssemblerTests testBlendFramesAreAligned]' passed (0.555 seconds).
+Test Case '-[FrameFoldTests.AssemblerTests testDeflickerEvensOutBrightnessJump]' started.
+Test Case '-[FrameFoldTests.AssemblerTests testDeflickerEvensOutBrightnessJump]' passed (0.409 seconds).
+Test Case '-[FrameFoldTests.AssemblerTests testGIFFromFilm]' started.
+Test Case '-[FrameFoldTests.AssemblerTests testGIFFromFilm]' passed (0.713 seconds).
+Test Case '-[FrameFoldTests.AssemblerTests testImageOfDifferentSizeFillsFrame]' started.
+Test Case '-[FrameFoldTests.AssemblerTests testImageOfDifferentSizeFillsFrame]' passed (0.444 seconds).
+	 Executed 5 tests, with 0 failures (0 unexpected) in 3.468 (3.471) seconds
+Test Case '-[FrameFoldTests.AutoShutterTests testNoCaptureWhileMoving]' started.
+Test Case '-[FrameFoldTests.AutoShutterTests testNoCaptureWhileMoving]' passed (10.888 seconds).
+Test Case '-[FrameFoldTests.AutoShutterTests testOneCapturePerStillPhase]' started.
+Test Case '-[FrameFoldTests.AutoShutterTests testOneCapturePerStillPhase]' passed (30.680 seconds).
+Test Case '-[FrameFoldTests.AutoShutterTests testStillSceneCapturesAtMostOnce]' started.
+Test Case '-[FrameFoldTests.AutoShutterTests testStillSceneCapturesAtMostOnce]' passed (11.587 seconds).
+	 Executed 3 tests, with 0 failures (0 unexpected) in 53.155 (53.159) seconds
+Test Case '-[FrameFoldTests.CameraMoveTests testApplyCropsTheRightRegion]' started.
+Test Case '-[FrameFoldTests.CameraMoveTests testApplyCropsTheRightRegion]' passed (0.003 seconds).
+Test Case '-[FrameFoldTests.CameraMoveTests testMoveInterpolatesAndHolds]' started.
+Test Case '-[FrameFoldTests.CameraMoveTests testMoveInterpolatesAndHolds]' passed (0.003 seconds).
+Test Case '-[FrameFoldTests.CameraMoveTests testRectStaysInsideImage]' started.
+Test Case '-[FrameFoldTests.CameraMoveTests testRectStaysInsideImage]' passed (0.001 seconds).
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.007 (0.009) seconds
+Test Case '-[FrameFoldTests.CameraShiftTests testNoWarningWhenOnlyTheWorkChanges]' started.
+Test Case '-[FrameFoldTests.CameraShiftTests testNoWarningWhenOnlyTheWorkChanges]' passed (31.953 seconds).
+Test Case '-[FrameFoldTests.CameraShiftTests testWarnsWhenCameraIsBumped]' started.
+Test Case '-[FrameFoldTests.CameraShiftTests testWarnsWhenCameraIsBumped]' passed (31.682 seconds).
+	 Executed 2 tests, with 0 failures (0 unexpected) in 63.635 (63.639) seconds
+Test Case '-[FrameFoldTests.DialogueAudioTests testCombinedWaveformAppliesOffsetAndVolume]' started.
+Test Case '-[FrameFoldTests.DialogueAudioTests testCombinedWaveformAppliesOffsetAndVolume]' passed (0.031 seconds).
+Test Case '-[FrameFoldTests.DialogueAudioTests testCurrentEntryHoldsUntilNextChange]' started.
+Test Case '-[FrameFoldTests.DialogueAudioTests testCurrentEntryHoldsUntilNextChange]' passed (0.002 seconds).
+Test Case '-[FrameFoldTests.DialogueAudioTests testLegacyTrackPromotionIsIdempotent]' started.
+Test Case '-[FrameFoldTests.DialogueAudioTests testLegacyTrackPromotionIsIdempotent]' passed (0.038 seconds).
+Test Case '-[FrameFoldTests.DialogueAudioTests testMixPlacesTracksAtTheirStart]' started.
+Test Case '-[FrameFoldTests.DialogueAudioTests testMixPlacesTracksAtTheirStart]' passed (0.075 seconds).
+Test Case '-[FrameFoldTests.DialogueAudioTests testMixWithoutSourcesFails]' started.
+Test Case '-[FrameFoldTests.DialogueAudioTests testMixWithoutSourcesFails]' passed (0.107 seconds).
+Test Case '-[FrameFoldTests.DialogueAudioTests testOffsetShiftsEntries]' started.
+Test Case '-[FrameFoldTests.DialogueAudioTests testOffsetShiftsEntries]' passed (0.004 seconds).
+Test Case '-[FrameFoldTests.DialogueAudioTests testPhonemeGuessCoversBasicSounds]' started.
+Test Case '-[FrameFoldTests.DialogueAudioTests testPhonemeGuessCoversBasicSounds]' passed (0.002 seconds).
+Test Case '-[FrameFoldTests.DialogueAudioTests testSpreadFillsAllFrames]' started.
+Test Case '-[FrameFoldTests.DialogueAudioTests testSpreadFillsAllFrames]' passed (0.002 seconds).
+Test Case '-[FrameFoldTests.DialogueAudioTests testStoppedSessionDropsPendingAveragedCapture]' started.
+Test Case '-[FrameFoldTests.DialogueAudioTests testStoppedSessionDropsPendingAveragedCapture]' passed (1.596 seconds).
+Test Case '-[FrameFoldTests.DialogueAudioTests testTracksAndDialogueInStore]' started.
+Test Case '-[FrameFoldTests.DialogueAudioTests testTracksAndDialogueInStore]' passed (0.030 seconds).
+Test Case '-[FrameFoldTests.DialogueAudioTests testWordsBecomeFrameEntriesWithRests]' started.
+Test Case '-[FrameFoldTests.DialogueAudioTests testWordsBecomeFrameEntriesWithRests]' passed (0.002 seconds).
+	 Executed 11 tests, with 0 failures (0 unexpected) in 1.889 (1.896) seconds
+Test Case '-[FrameFoldTests.FilmExtrasTests testCardsHaveRequestedSize]' started.
+Test Case '-[FrameFoldTests.FilmExtrasTests testCardsHaveRequestedSize]' passed (0.012 seconds).
+Test Case '-[FrameFoldTests.FilmExtrasTests testClapNeedsLoudTransientAboveRoom]' started.
+Test Case '-[FrameFoldTests.FilmExtrasTests testClapNeedsLoudTransientAboveRoom]' passed (0.002 seconds).
+Test Case '-[FrameFoldTests.FilmExtrasTests testFourKExportLimitsLongEdge]' started.
+Test Case '-[FrameFoldTests.FilmExtrasTests testFourKExportLimitsLongEdge]' passed (0.002 seconds).
+Test Case '-[FrameFoldTests.FilmExtrasTests testGreenIsReplacedByBackgroundAndRestStays]' started.
+Test Case '-[FrameFoldTests.FilmExtrasTests testGreenIsReplacedByBackgroundAndRestStays]' passed (0.097 seconds).
+Test Case '-[FrameFoldTests.FilmExtrasTests testLooksShiftColourAsNamed]' started.
+Test Case '-[FrameFoldTests.FilmExtrasTests testLooksShiftColourAsNamed]' passed (0.054 seconds).
+Test Case '-[FrameFoldTests.FilmExtrasTests testOverlaysAppearOnlyOnTheirFrames]' started.
+Test Case '-[FrameFoldTests.FilmExtrasTests testOverlaysAppearOnlyOnTheirFrames]' passed (0.077 seconds).
+Test Case '-[FrameFoldTests.FilmExtrasTests testOverlayStoreUpsertAndRemove]' started.
+Test Case '-[FrameFoldTests.FilmExtrasTests testOverlayStoreUpsertAndRemove]' passed (0.010 seconds).
+Test Case '-[FrameFoldTests.FilmExtrasTests testStoreKeepsGreenScreenAndTitles]' started.
+Test Case '-[FrameFoldTests.FilmExtrasTests testStoreKeepsGreenScreenAndTitles]' passed (0.012 seconds).
+Test Case '-[FrameFoldTests.FilmExtrasTests testTitleAndCreditsWrapTheFilm]' started.
+Test Case '-[FrameFoldTests.FilmExtrasTests testTitleAndCreditsWrapTheFilm]' passed (0.333 seconds).
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.599 (0.603) seconds
+Test Case '-[FrameFoldTests.FirstRunTests testReviewAsksAtThirdAndTenthFilmOncePerVersion]' started.
+Test Case '-[FrameFoldTests.FirstRunTests testReviewAsksAtThirdAndTenthFilmOncePerVersion]' passed (0.014 seconds).
+Test Case '-[FrameFoldTests.FirstRunTests testSampleWorkIsCreatedOnceAndOnlyWhenEmpty]' started.
+Test Case '-[FrameFoldTests.FirstRunTests testSampleWorkIsCreatedOnceAndOnlyWhenEmpty]' passed (0.118 seconds).
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.131 (0.132) seconds
+Test Case '-[FrameFoldTests.HoldAndClipTests testHoldInsertsCopiesRightAfterFrame]' started.
+Test Case '-[FrameFoldTests.HoldAndClipTests testHoldInsertsCopiesRightAfterFrame]' passed (0.220 seconds).
+Test Case '-[FrameFoldTests.HoldAndClipTests testOldTrackWithoutClipFieldsStillDecodes]' started.
+Test Case '-[FrameFoldTests.HoldAndClipTests testOldTrackWithoutClipFieldsStillDecodes]' passed (0.210 seconds).
+Test Case '-[FrameFoldTests.HoldAndClipTests testShapedClipHasLengthAndFades]' started.
+Test Case '-[FrameFoldTests.HoldAndClipTests testShapedClipHasLengthAndFades]' passed (0.235 seconds).
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.665 (0.666) seconds
+Test Case '-[FrameFoldTests.ImageLayerTests testImageLayerIsStoredDrawnAndTravels]' started.
+Test Case '-[FrameFoldTests.ImageLayerTests testImageLayerIsStoredDrawnAndTravels]' passed (0.244 seconds).
+Test Case '-[FrameFoldTests.ImageLayerTests testPaperHidesPhotoForRotoscoping]' started.
+Test Case '-[FrameFoldTests.ImageLayerTests testPaperHidesPhotoForRotoscoping]' passed (0.209 seconds).
+Test Case '-[FrameFoldTests.ImageLayerTests testVideoFramesAtFixedRate]' started.
+Test Case '-[FrameFoldTests.ImageLayerTests testVideoFramesAtFixedRate]' passed (0.532 seconds).
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.986 (0.988) seconds
+Test Case '-[FrameFoldTests.ImportIntoExistingWorkTests testVideoFramesAppendToExistingWork]' started.
+Test Case '-[FrameFoldTests.ImportIntoExistingWorkTests testVideoFramesAppendToExistingWork]' passed (0.260 seconds).
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.260 (0.260) seconds
+Test Case '-[FrameFoldTests.MotionControlTests testPathBetweenKeys]' started.
+Test Case '-[FrameFoldTests.MotionControlTests testPathBetweenKeys]' passed (0.001 seconds).
+Test Case '-[FrameFoldTests.MotionControlTests testProtocolLines]' started.
+Test Case '-[FrameFoldTests.MotionControlTests testProtocolLines]' passed (0.002 seconds).
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds
+Test Case '-[FrameFoldTests.ProjectStoreTests testAppendFramePersistsAcrossReload]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testAppendFramePersistsAcrossReload]' passed (0.223 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testAudioIsCopiedReplacedAndRemoved]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testAudioIsCopiedReplacedAndRemoved]' passed (0.216 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testDeleteRemovesWholeProject]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testDeleteRemovesWholeProject]' passed (0.213 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testDuplicateInsertsCopyBehindOriginal]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testDuplicateInsertsCopyBehindOriginal]' passed (0.219 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testEmptyNameGetsNumberedName]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testEmptyNameGetsNumberedName]' passed (0.213 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testFrameNumbersDoNotCollideAfterRemoval]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testFrameNumbersDoNotCollideAfterRemoval]' passed (0.224 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testLegacyTrashIsStampedOnceBeforePurge]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testLegacyTrashIsStampedOnceBeforePurge]' passed (0.222 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testMissingManifestIsRecoveredFromImages]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testMissingManifestIsRecoveredFromImages]' passed (0.220 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testMoveFrameClampsAtEnds]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testMoveFrameClampsAtEnds]' passed (0.221 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testPurgeRemovesOnlyTrashOlderThan30Days]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testPurgeRemovesOnlyTrashOlderThan30Days]' passed (0.223 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testRemoveFramesNamedIgnoresUnknownNames]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testRemoveFramesNamedIgnoresUnknownNames]' passed (0.214 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testRemoveFramesNamedTouchesOnlyThoseFrames]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testRemoveFramesNamedTouchesOnlyThoseFrames]' passed (0.223 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testReplaceFrameKeepsPosition]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testReplaceFrameKeepsPosition]' passed (0.126 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testRestoreTrashKeepsCaptureOrder]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testRestoreTrashKeepsCaptureOrder]' passed (0.226 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testTemporaryCleanupRemovesOnlyOldOwnFiles]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testTemporaryCleanupRemovesOnlyOldOwnFiles]' passed (0.214 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testTrashedFrameGetsFreshTimestamp]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testTrashedFrameGetsFreshTimestamp]' passed (0.217 seconds).
+Test Case '-[FrameFoldTests.ProjectStoreTests testTruncatedManifestIsRecoveredFromImages]' started.
+Test Case '-[FrameFoldTests.ProjectStoreTests testTruncatedManifestIsRecoveredFromImages]' passed (0.219 seconds).
+	 Executed 17 tests, with 0 failures (0 unexpected) in 3.634 (3.644) seconds
+Test Case '-[FrameFoldTests.SoundLibraryTests testEveryEffectIsAudibleAndNormalized]' started.
+Test Case '-[FrameFoldTests.SoundLibraryTests testEveryEffectIsAudibleAndNormalized]' passed (0.282 seconds).
+Test Case '-[FrameFoldTests.SoundLibraryTests testFileIsReadable]' started.
+Test Case '-[FrameFoldTests.SoundLibraryTests testFileIsReadable]' passed (0.106 seconds).
+Test Case '-[FrameFoldTests.SoundLibraryTests testMusicFileIsReadable]' started.
+Test Case '-[FrameFoldTests.SoundLibraryTests testMusicFileIsReadable]' passed (0.308 seconds).
+Test Case '-[FrameFoldTests.SoundLibraryTests testMusicHasRequestedLengthAndLevel]' started.
+Test Case '-[FrameFoldTests.SoundLibraryTests testMusicHasRequestedLengthAndLevel]' passed (2.103 seconds).
+Test Case '-[FrameFoldTests.SoundLibraryTests testRenderIsDeterministic]' started.
+Test Case '-[FrameFoldTests.SoundLibraryTests testRenderIsDeterministic]' passed (0.107 seconds).
+Test Case '-[FrameFoldTests.SoundLibraryTests testVoiceEffectsKeepLengthAndSound]' started.
+Test Case '-[FrameFoldTests.SoundLibraryTests testVoiceEffectsKeepLengthAndSound]' passed (0.273 seconds).
+	 Executed 6 tests, with 0 failures (0 unexpected) in 3.178 (3.181) seconds
+Test Case '-[FrameFoldTests.StudioTests testAverageOfFrames]' started.
+Test Case '-[FrameFoldTests.StudioTests testAverageOfFrames]' passed (0.110 seconds).
+Test Case '-[FrameFoldTests.StudioTests testCommitWithOriginalDataDeliversThoseBytes]' started.
+Test Case '-[FrameFoldTests.StudioTests testCommitWithOriginalDataDeliversThoseBytes]' passed (0.007 seconds).
+Test Case '-[FrameFoldTests.StudioTests testImageSequenceWritesNumberedFiles]' started.
+Test Case '-[FrameFoldTests.StudioTests testImageSequenceWritesNumberedFiles]' passed (0.136 seconds).
+Test Case '-[FrameFoldTests.StudioTests testIntervalLimits]' started.
+Test Case '-[FrameFoldTests.StudioTests testIntervalLimits]' passed (0.002 seconds).
+Test Case '-[FrameFoldTests.StudioTests testLoupeRectZoomsAndStaysInside]' started.
+Test Case '-[FrameFoldTests.StudioTests testLoupeRectZoomsAndStaysInside]' passed (0.002 seconds).
+Test Case '-[FrameFoldTests.StudioTests testMaskRectIsCentredAndKeepsRatio]' started.
+Test Case '-[FrameFoldTests.StudioTests testMaskRectIsCentredAndKeepsRatio]' passed (0.002 seconds).
+Test Case '-[FrameFoldTests.StudioTests testNotesAreStoredPerFrameNumber]' started.
+Test Case '-[FrameFoldTests.StudioTests testNotesAreStoredPerFrameNumber]' passed (0.011 seconds).
+Test Case '-[FrameFoldTests.StudioTests testPlaybackRangeRespectsLoopMarks]' started.
+Test Case '-[FrameFoldTests.StudioTests testPlaybackRangeRespectsLoopMarks]' passed (0.002 seconds).
+Test Case '-[FrameFoldTests.StudioTests testProResExportIsQuickTime]' started.
+Test Case '-[FrameFoldTests.StudioTests testProResExportIsQuickTime]' passed (0.104 seconds).
+Test Case '-[FrameFoldTests.StudioTests testSettingsSurviveMissingKeys]' started.
+Test Case '-[FrameFoldTests.StudioTests testSettingsSurviveMissingKeys]' passed (0.002 seconds).
+Test Case '-[FrameFoldTests.StudioTests testShortPlayTakesLastFrames]' started.
+Test Case '-[FrameFoldTests.StudioTests testShortPlayTakesLastFrames]' passed (0.001 seconds).
+Test Case '-[FrameFoldTests.StudioTests testShutterLabel]' started.
+Test Case '-[FrameFoldTests.StudioTests testShutterLabel]' passed (0.001 seconds).
+Test Case '-[FrameFoldTests.StudioTests testStepEndsAtLiveAndStopsAtFirst]' started.
+Test Case '-[FrameFoldTests.StudioTests testStepEndsAtLiveAndStopsAtFirst]' passed (0.001 seconds).
+Test Case '-[FrameFoldTests.StudioTests testWatchFolderKeepsJPEGPixelsDropsGPSAndConvertsOthers]' started.
+Test Case '-[FrameFoldTests.StudioTests testWatchFolderKeepsJPEGPixelsDropsGPSAndConvertsOthers]' passed (0.026 seconds).
+Test Case '-[FrameFoldTests.StudioTests testWatchFolderListsImagesInCameraOrder]' started.
+Test Case '-[FrameFoldTests.StudioTests testWatchFolderListsImagesInCameraOrder]' passed (0.006 seconds).
+	 Executed 15 tests, with 0 failures (0 unexpected) in 0.413 (0.420) seconds
+Test Case '-[FrameFoldTests.TetherTests testTakePictureExistsAtRuntimeOnMac]' started.
+Test Case '-[FrameFoldTests.TetherTests testTakePictureExistsAtRuntimeOnMac]' passed (0.001 seconds).
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.002) seconds
+Test Case '-[FrameFoldTests.UndoTests testUndoRedoOfRemoveMoveAndOverlay]' started.
+Test Case '-[FrameFoldTests.UndoTests testUndoRedoOfRemoveMoveAndOverlay]' passed (0.025 seconds).
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.025 (0.026) seconds
+Test Case '-[FrameFoldTests.WorkPackageTests testFilenameIsSafe]' started.
+Test Case '-[FrameFoldTests.WorkPackageTests testFilenameIsSafe]' passed (0.220 seconds).
+Test Case '-[FrameFoldTests.WorkPackageTests testImportClampsNumbersAndDropsBadMedia]' started.
+Test Case '-[FrameFoldTests.WorkPackageTests testImportClampsNumbersAndDropsBadMedia]' passed (0.151 seconds).
+Test Case '-[FrameFoldTests.WorkPackageTests testManifestCannotReferenceOutsideFiles]' started.
+Test Case '-[FrameFoldTests.WorkPackageTests testManifestCannotReferenceOutsideFiles]' passed (0.239 seconds).
+Test Case '-[FrameFoldTests.WorkPackageTests testPackageRejectsDuplicatesAndTrashName]' started.
+Test Case '-[FrameFoldTests.WorkPackageTests testPackageRejectsDuplicatesAndTrashName]' passed (0.224 seconds).
+Test Case '-[FrameFoldTests.WorkPackageTests testRejectsForeignAndTruncatedFiles]' started.
+Test Case '-[FrameFoldTests.WorkPackageTests testRejectsForeignAndTruncatedFiles]' passed (0.225 seconds).
+Test Case '-[FrameFoldTests.WorkPackageTests testRejectsPathTraversal]' started.
+Test Case '-[FrameFoldTests.WorkPackageTests testRejectsPathTraversal]' passed (0.218 seconds).
+Test Case '-[FrameFoldTests.WorkPackageTests testRoundTripCreatesIndependentCopyWithoutTrash]' started.
+Test Case '-[FrameFoldTests.WorkPackageTests testRoundTripCreatesIndependentCopyWithoutTrash]' passed (0.250 seconds).
+Test Case '-[FrameFoldTests.WorkPackageTests testSafeNames]' started.
+Test Case '-[FrameFoldTests.WorkPackageTests testSafeNames]' passed (0.218 seconds).
+Test Case '-[FrameFoldTests.WorkPackageTests testUndoRestoresRemovedTrackFile]' started.
+Test Case '-[FrameFoldTests.WorkPackageTests testUndoRestoresRemovedTrackFile]' passed (0.243 seconds).
+	 Executed 9 tests, with 0 failures (0 unexpected) in 1.987 (1.995) seconds
+	 Executed 95 tests, with 0 failures (0 unexpected) in 134.043 (134.113) seconds
+	 Executed 95 tests, with 0 failures (0 unexpected) in 134.043 (134.116) seconds
+** TEST SUCCEEDED **
