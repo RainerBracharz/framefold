@@ -5,6 +5,7 @@
 #
 #   ruby scripts/asc_report.rb            # Bericht auf die Konsole
 #   ruby scripts/asc_report.rb --csv      # zusätzlich eine CSV-Zeile zum Mitschreiben
+#   ruby scripts/asc_report.rb --monat 2026-10   # Rückblick auf einen Monat
 #
 # Braucht:
 #   ~/.appstoreconnect/AuthKey_<KEY_ID>.p8   — der API-Schlüssel (liegt bewusst
@@ -95,7 +96,9 @@ end
 
 # Ein Bericht pro Zeitraum. 404 heisst schlicht „an diesem Tag nichts verkauft“
 # und ist kein Fehler.
-def sales_rows(frequency:, report_date:)
+LUECKEN = []
+
+def sales_rows(frequency:, report_date:, retries: 1)
   code, body = get("/v1/salesReports", {
     "filter[frequency]"     => frequency,
     "filter[reportDate]"    => report_date,
@@ -130,7 +133,13 @@ def sales_rows(frequency:, report_date:)
   end
 
   unless code == 200
-    warn("  ! #{frequency} #{report_date}: HTTP #{code}")
+    # Apple antwortet gelegentlich mit 500 – einmal wiederholen, dann melden,
+    # damit eine Lücke nicht als „nichts geladen“ durchgeht.
+    if retries.positive?
+      sleep 2
+      return sales_rows(frequency: frequency, report_date: report_date, retries: retries - 1)
+    end
+    LUECKEN << report_date
     return []
   end
 
@@ -153,6 +162,7 @@ ARTEN = {
   "1EU"  => "Erstinstallation", "1-B"  => "Erstinstallation (Bundle)",
   "F1-B" => "Erstinstallation (Bundle)",
   "3"    => "Erneut geladen",   "3F"   => "Erneut geladen",
+  "F3"   => "Erneut geladen",
   "7"    => "Aktualisierung",   "7F"   => "Aktualisierung",
   "7T"   => "Aktualisierung",   "F7"   => "Aktualisierung",
   "IA1"  => "In-App-Kauf",      "IA1-M" => "In-App-Kauf",
@@ -173,41 +183,21 @@ end
 heute = Date.today
 $stderr.print "Hole Berichte"
 
-# Tagesberichte werden zwischengespeichert: Der laufende Monat und das
-# 30-Tage-Fenster überschneiden sich, jeder Tag soll aber nur einmal geholt
-# und nur einmal gezählt werden.
+# Nur Tagesberichte, jeder Tag einmal: Die Monatsberichte kommen für Apps wie
+# diese unvollständig (am 01.11.2026 ergab „gesamt“ 25, „letzte 30 Tage“ 65).
+monat_arg = ARGV.include?("--monat") ? ARGV[ARGV.index("--monat") + 1] : nil
+abort("Monat bitte als JJJJ-MM angeben.") if ARGV.include?("--monat") && monat_arg !~ /\A\d{4}-\d{2}\z/
+
 tage = {}
-hole_tag = lambda do |tag|
-  tage[tag.iso8601] ||= begin
-    $stderr.print "."
-    sales_rows(frequency: "DAILY", report_date: tag.iso8601)
-  end
-end
-
-# Abgeschlossene Monate als Monatsbericht — spart Abfragen. Den laufenden
-# Monat gibt es als Monatsbericht noch nicht: Apple erstellt ihn erst nach
-# Monatsende. Er muss deshalb tageweise dazu, sonst fehlt er in der
-# Gesamtsumme und „letzte 30 Tage“ wäre grösser als „gesamt“.
-alle = []
-monatsanfang = Date.new(heute.year, heute.month, 1)
-monat = Date.new(LAUNCH.year, LAUNCH.month, 1)
-while monat < monatsanfang
-  alle.concat(sales_rows(frequency: "MONTHLY", report_date: monat.strftime("%Y-%m")))
+(LAUNCH..heute).each do |t|
+  tage[t] = sales_rows(frequency: "DAILY", report_date: t.iso8601)
   $stderr.print "."
-  monat = monat.next_month
-end
-(monatsanfang..heute).each { |t| alle.concat(hole_tag.call(t)) if t >= LAUNCH }
-
-letzte30 = []
-letzte7  = []
-(0..29).each do |back|
-  tag = heute - back
-  next if tag < LAUNCH
-  rows = hole_tag.call(tag)
-  letzte30.concat(rows)
-  letzte7.concat(rows) if back < 7
 end
 $stderr.puts
+
+alle     = tage.values.flatten
+letzte30 = tage.select { |t, _| t > heute - 30 }.values.flatten
+letzte7  = tage.select { |t, _| t > heute - 7 }.values.flatten
 
 # Versionen
 versionen = begin
@@ -223,6 +213,37 @@ def zeile(label, wert, breite = 26)
   puts "  #{label.ljust(breite)}#{wert.to_s.rjust(6)}"
 end
 
+def art(row) = ARTEN[row["Product Type Identifier"].to_s] || "Code #{row["Product Type Identifier"]}"
+def erst?(row) = art(row).start_with?("Erstinstallation")
+
+# Rückblick auf einen Monat, tageweise gezählt
+if monat_arg
+  zeilen = tage.select { |t, _| t.strftime("%Y-%m") == monat_arg }
+  rows = zeilen.values.flatten
+  puts
+  puts "#{APP_NAME} · Monat #{monat_arg}"
+  puts "─" * 46
+  puts
+  puts "NACH ART"
+  rows.group_by { |r| art(r) }.map { |k, v| [k, summe(v)] }.sort_by { |_, n| -n }.each { |k, n| zeile(k, n) }
+  neu = rows.select { |r| erst?(r) }
+  puts
+  puts "ERSTINSTALLATIONEN NACH LAND"
+  gruppiert(neu, "Country Code").each { |l, n| zeile(l, n) }
+  puts
+  puts "ERSTINSTALLATIONEN NACH GERÄT"
+  gruppiert(neu, "Device").each { |g, n| zeile(g, n) }
+  puts
+  puts "ERSTINSTALLATIONEN JE TAG"
+  zeilen.each { |t, r| n = summe(r.select { |x| erst?(x) }); zeile(t.strftime("%d.%m."), n) if n.positive? }
+  unless LUECKEN.empty?
+    puts
+    puts "ACHTUNG, Tage ohne Bericht wegen Serverfehler: #{LUECKEN.join(', ')}"
+  end
+  puts
+  exit
+end
+
 puts
 puts "#{APP_NAME} · Bericht vom #{heute.strftime('%d.%m.%Y')}"
 puts "─" * 46
@@ -232,12 +253,16 @@ zeile "Gesamt seit #{LAUNCH.strftime('%d.%m.%Y')}", summe(alle)
 zeile "Letzte 30 Tage", summe(letzte30)
 zeile "Letzte 7 Tage",  summe(letzte7)
 
+puts
+puts "ERSTINSTALLATIONEN"
+zeile "Gesamt", summe(alle.select { |r| erst?(r) })
+zeile "Letzte 30 Tage", summe(letzte30.select { |r| erst?(r) })
+zeile "Letzte 7 Tage",  summe(letzte7.select { |r| erst?(r) })
+
 unless alle.empty?
   puts
   puts "NACH ART"
-  gruppiert(alle, "Product Type Identifier").each do |code, n|
-    zeile(ARTEN[code] || "Code #{code}", n)
-  end
+  alle.group_by { |r| art(r) }.map { |k, v| [k, summe(v)] }.sort_by { |_, n| -n }.each { |k, n| zeile(k, n) }
 
   puts
   puts "NACH LAND"
@@ -258,6 +283,11 @@ unless versionen.empty?
     a = v["attributes"]
     zeile(a["versionString"], a["appStoreState"], 26)
   end
+end
+
+unless LUECKEN.empty?
+  puts
+  puts "ACHTUNG, Tage ohne Bericht wegen Serverfehler: #{LUECKEN.join(', ')}"
 end
 
 puts
