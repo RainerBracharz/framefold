@@ -1,13 +1,2 @@
-FrameFold 2.7
-
-Agora em 17 idiomas – e com ferramentas de estúdio profissional.
-
-• Movimentos de câmera: panorâmica e zoom sobre uma área da imagem, suaves ou uniformes.
-• Camadas de imagem: coloque suas próprias imagens, também com transparência, sobre o filme – na ordem que quiser.
-• Rotoscopia: importe um vídeo como quadros, desenhe por cima e troque a foto do filme por papel.
-• Obra como arquivo: toque e segure uma obra na lista → “Compartilhar como arquivo…”. Por AirDrop ou Arquivos ela chega ao iPad, iPhone ou Mac, onde o FrameFold abre uma cópia. Sem nuvem, sem conta.
-• Som: cinco músicas, efeitos de voz (aguda, grave, robô), corte de faixas de áudio e fades.
-• Segurar quadro: um quadro pode ficar por 2, 3, 4 ou 6 quadros.
-• Studio: luz via DMX (Art-Net) e Motion Control por Bluetooth – valores por quadro, ajustados antes de cada disparo. Os dois só quando você ativar.
-• Novo em tcheco, dinamarquês, coreano, polonês, russo, sueco, turco, ucraniano e chinês.
-• Mais rápido e mais seguro: Studio mais fluido com muitos quadros, exportação mais rápida, arquivos de obra verificados.
+Os textos de todo o app estão mais curtos e consistentes, das dicas à ajuda.
+Os botões pequenos no estúdio, na lista de obras e no desenho ficaram mais fáceis de acertar.

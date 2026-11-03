@@ -1,13 +1,2 @@
-FrameFold 2.7
-
-Nu in 17 talen – en met gereedschap als in een profstudio.
-
-• Camerabewegingen: pannen en zoomen over een deel van het beeld, zacht of gelijkmatig.
-• Afbeeldingslagen: leg je eigen afbeeldingen, ook met transparantie, over de film – in de volgorde die je wilt.
-• Rotoscopie: zet een video om in beelden, teken eroverheen en vervang de foto in de film door papier.
-• Werk als bestand: klik met rechts op een werk in de lijst → ‘Delen als bestand …’. Via AirDrop of Bestanden komt het op iPad, iPhone of Mac, waar FrameFold een kopie opent. Zonder cloud, zonder account.
-• Geluid: vijf muziekstukken, stemeffecten (hoog, laag, robot), geluidssporen inkorten en laten in- en uitvloeien.
-• Beeld vasthouden: laat een beeld 2, 3, 4 of 6 beelden lang staan.
-• Studio: een spiegelreflexcamera direct via USB afdrukken, licht via DMX (Art-Net) en motion control via Bluetooth – waarden per beeld, ingesteld vóór het afdrukken. Licht en motion control alleen als je ze inschakelt.
-• Nieuw in het Tsjechisch, Deens, Koreaans, Pools, Russisch, Zweeds, Turks, Oekraïens en Chinees.
-• Sneller en veiliger: soepelere Studio bij veel beelden, snellere export, gecontroleerde werkbestanden.
+De teksten in de hele app zijn korter en consistenter, van tips tot de hulp.
+Kleine knoppen in de studio, de werkenlijst en bij het tekenen zijn makkelijker te raken.

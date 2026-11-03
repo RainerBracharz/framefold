@@ -1,13 +1,2 @@
-FrameFold 2.7
-
-Teď v 17 jazycích – a s nástroji jako v profesionálním studiu.
-
-• Jízdy kamery: švenk a zoom přes část obrazu, plynule nebo rovnoměrně.
-• Obrazové vrstvy: polož přes film vlastní obrázky, i s průhledností – v libovolném pořadí.
-• Rotoskopie: převeď video na snímky, kresli přes ně a nahraď fotku ve filmu papírem.
-• Dílo jako soubor: v seznamu děl podrž dílo → „Sdílet jako soubor…“. Přes AirDrop nebo Soubory se dostane na iPad, iPhone nebo Mac, kde FrameFold otevře kopii. Bez cloudu, bez účtu.
-• Zvuk: pět hudebních skladeb, hlasové efekty (vysoký, hluboký, robot), zkracování a prolínání zvukových stop.
-• Podržet snímek: snímek může zůstat 2, 3, 4 nebo 6 snímků.
-• Studio: světlo přes DMX (Art-Net) a Motion Control přes Bluetooth – hodnoty pro každý snímek, nastavené před spuštěním. Obojí jen když to zapneš.
-• Nově i v češtině a 8 dalších jazycích.
-• Rychlejší a bezpečnější: plynulejší Studio při mnoha snímcích, rychlejší export, kontrolované soubory děl.
+Texty v celé aplikaci jsou kratší a jednotnější, od tipů až po nápovědu.
+Malá tlačítka ve studiu, v seznamu děl a při kreslení se snáz trefují.
