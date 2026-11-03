@@ -35,11 +35,11 @@ INK = (29, 26, 22)
 AMBER = (217, 155, 43)
 
 TEXT = {
-    "de": ["Du arbeitest.\nSie löst von selbst aus.", "Der Film wächst mit.", "Fertig: deine Stopmotion.",
+    "de": ["Du arbeitest.\nFrameFold löst von selbst aus.", "Der Film wächst mit.", "Fertig ist deine Stop-Motion.",
            "Jedes Bild auf einen Blick."],
-    "en": ["You work.\nIt shoots by itself.", "The film grows as you go.", "Done: your stop motion.",
+    "en": ["You work.\nFrameFold shoots by itself.", "The film grows as you go.", "Your stop motion is ready.",
            "Every frame at a glance."],
-    "fr": ["Tu travailles.\nElle déclenche seule.", "Le film grandit avec toi.", "Terminé : ton stop motion.",
+    "fr": ["Tu travailles.\nFrameFold déclenche seul.", "Le film grandit avec toi.", "Ton stop motion est prêt.",
            "Toutes les images d’un coup d’œil."],
 }
 
