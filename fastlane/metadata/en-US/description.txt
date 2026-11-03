@@ -1,39 +1,39 @@
-The stop-motion app that shoots automatically as soon as your hands are out of the frame. Free, no subscription, no ads, no account and no internet.
+The stop-motion app that takes the shot by itself as soon as your hands leave the frame. Free, with no subscription, no ads, no account and no internet.
 
-ALL FREE, NO WATERMARKS
-All features are free, including sound, music, green screen, titles, drawing and export up to 4K. No film has a watermark. FrameFold collects no data. Images, sound and works stay on your device.
+EVERYTHING FREE, NO WATERMARKS
+Every feature is free, including sound, music, green screen, titles, drawing and export up to 4K. No film ever carries a watermark. FrameFold collects no data. Your frames, sound and works stay on your device.
 
 AUTOMATIC CAMERA
-Put your iPhone or iPad on a tripod and work. FrameFold shoots as soon as your hands are out of the frame and the scene is still. Exposure and white balance remain locked, the shutter speed locks against the flickering of artificial light. There is also onion skin, a warning for a moved camera, an interval shutter and a level.
+Put your iPhone or iPad on a tripod and get to work. FrameFold shoots as soon as your hands leave the frame and the scene is still. Exposure and white balance stay locked, and the shutter speed is matched to your lights so they don't flicker. You also get onion skin, a warning when the camera has moved, an interval timer and a spirit level.
 
-SHARP IMAGES
-The app constantly measures the sharpness and only locks the focus when it is right. A blurry image does not get into the work. From "Advanced" on, you set ISO, shutter speed, focus and white balance yourself and choose the lens. Every image has the full sensor resolution.
+SHARP FRAMES
+The app measures sharpness continuously and locks focus only once it is right. A blurry frame never makes it into your work. From “Advanced” mode on, you can set ISO, shutter speed, focus and white balance yourself and pick the lens. Every frame uses the full sensor resolution.
 
 SHOOT WITHOUT TOUCHING
-The Apple Watch becomes a remote shutter with a frame counter. Shooting also works with the volume buttons, with AirPods, by clapping or with the self-timer via a long press. Nobody has to touch the tripod.
+Your Apple Watch becomes a remote with a frame counter. You can also shoot with the volume buttons, with AirPods, by clapping, or with a self-timer by long-pressing. Nobody has to touch the tripod.
 
-THE FILM GROWS WITH YOU
-From the second image on, the film runs as a loop in the viewfinder. A connected screen or projector shows the camera image without controls.
+WATCH THE FILM GROW
+From the second frame on, your film plays as a loop in the viewfinder. A connected screen or projector shows the camera feed without any controls.
 
 EDITING
-Duplicate images, hold them, rearrange them by dragging or reshoot them individually. Everything can be undone. Text, speech bubbles and drawings go directly into the image, you put your own images as layers on top. Green screen replaces green or blue with an image or a film. From "Advanced" on, there are camera movements with pan and zoom. For rotoscoping, a video turns into images you draw over. There are also title cards, credits and looks for the whole film.
+Duplicate, hold, reorder or reshoot any frame. Everything can be undone. Add text, speech bubbles and drawings right on the frame, and lay your own images on top as layers. Green screen swaps green or blue for an image or a video. From “Advanced” mode on, you get camera moves with pan and zoom. For rotoscoping, a video becomes frames you can draw over. Title cards, credits and looks for the whole film are included too.
 
 SOUND
-Multiple audio tracks with waveforms. Music comes from your files or from five included tracks from "Happy" to "Dream". You attach ten sounds from Pop to Ta-da to any image. You record your voice to the running film, high, low or as a robot if you want. A voice on the device speaks typed text.
+Multiple audio tracks with waveforms. Use music from your files or one of five built-in tracks, from “Happy” to “Dream”. Attach any of ten sound effects, from Pop to Ta-da, to any frame. Record your voice while the film plays, and make it high, low or robotic if you like. An on-device voice reads out text you type.
 
 STUDIO
-From "Advanced" on, the iPad becomes a studio workspace, the iPhone too if you want. With a timeline, switching between live image and recording, onion skin over multiple images, format masks, magnifying glass, reference image with chroma key and an X-Sheet for mouth shapes. You set light via DMX (Art-Net) and motion control via Bluetooth per image.
+From “Advanced” mode on, the iPad turns into a studio workspace, and so does the iPhone if you switch it on. You get a timeline, a toggle between live view and captured frames, multi-frame onion skin, aspect masks, a focus loupe, a reference image with chroma key and an X-Sheet for mouth shapes. Lights via DMX (Art-Net) and motion control via Bluetooth are set per frame.
 
-EXPORT AND FLIPBOOK
-Export with 2 to 30 frames per second, up to 4K, as a loop, boomerang or backwards, also as a GIF. Every work becomes a print-ready flipbook if you want, with A4 sheets, cut lines and numbered pages. A work goes as a file via AirDrop to another device.
+EXPORT AND FLIP BOOK
+Export at 2 to 30 frames per second, up to 4K, as a loop, boomerang or in reverse, or as a GIF. Any work can become a print-ready flip book with A4 sheets, cut lines and numbered pages. Send a work as a file via AirDrop to another device.
 
 VIDEO TO STOP-MOTION
-Choose an existing video. FrameFold detects the quiet moments, removes images with hands and sorts out duplicates.
+Pick an existing video. FrameFold finds the still moments, removes frames with hands in them and drops duplicates.
 
 FOR SCHOOLS
-The "Simple" mode shows only the essentials. There is no account and no connection to the internet. A lesson plan for two hours is freely available, a short help is in the app.
+“Simple” mode shows only what you need. There is no account and no internet connection. A free two-lesson plan is available, and a short guide is built into the app.
 
 ALSO ON THE MAC
-The same app runs on the Mac, with a document camera or iPhone as a camera and export as ProRes or image sequence. FrameFold is available in 17 languages.
+The same app runs on the Mac, with a document camera or an iPhone as the camera, and exports to ProRes or image sequences. FrameFold is available in 17 languages.
 
-FrameFold was created as a tool for the artist Aldo Tolino. He folds printed photographs into objects and photographs them again.
+FrameFold began as a tool for the artist Aldo Tolino, who folds printed photographs into objects and photographs them again.
