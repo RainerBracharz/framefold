@@ -1,46 +1,39 @@
-Stopmotion-appen, der selv tager billedet, i samme øjeblik dine hænder er ude af billedet. Gratis, uden abonnement, uden reklamer, uden konto, uden internet.
+Stopmotion-appen til Mac, der udløser af sig selv, så snart dine hænder er ude af billedet. Gratis, uden abonnement, uden reklamer, uden konto og uden internet.
 
-ALT GRATIS, INTET VANDMÆRKE
-Lyd, lydeffekter, oplæsning af tekst, greenscreen, titler og rulletekster, tekst og talebobler, tegning, eksport op til 4K og ProRes — intet af det koster ekstra, og ingen film får nogensinde et vandmærke.
-
-FrameFold forvandler dit arbejde ved bordet til en stopmotion — automatisk og helt på din Mac.
-
-Et kamera kigger ned på bordet, mens du folder, tegner og arrangerer. FrameFold tager selv billedet, så snart dine hænder er ude af billedet og scenen falder til ro. Intet forlader din Mac: ingen sky, ingen konto, ingen sporing.
+ALT ER GRATIS, UDEN VANDMÆRKE
+Alle funktioner er gratis, også lyd, musik, greenscreen, titler, tegning og eksport op til 4K eller som ProRes. Ingen film har et vandmærke. FrameFold indsamler ingen data. Billeder, lyd og værker bliver på din Mac.
 
 KAMERA OVER BORDET
-Virker bedst med et dokumentkamera, der kigger lodret ned på bordet — FrameFold vælger selv et tilsluttet USB-kamera. Du kan også vælge en iPhone som kamera eller det indbyggede kamera. Med løgskind, driftkontrol og intervaludløser; mellemrumstasten tager et billede manuelt.
+Et kamera ser ned på bordet oppefra, du folder, tegner eller lægger. FrameFold udløser, så snart dine hænder er ude af billedet og scenen er i ro. Det fungerer bedst med et dokumentkamera, et tilsluttet USB-kamera vælger FrameFold af sig selv. En iPhone som kamera eller det indbyggede kamera fungerer også. Manuelt udløser mellemrumstasten. Dertil er der løgskind, en advarsel ved forskubbet kamera og interval-udløser.
 
-SKARPT – ELLER SLET IKKE
-Appen måler skarpheden hele tiden. Et billede, der ikke er skarpt, kommer aldrig med i værket. Hvor kameraet tillader det, holder FrameFold eksponering og hvidbalance fast, så intet flimrer mellem billederne.
+SKARPE BILLEDER
+Appen måler løbende skarpheden. Et uskarpt billede kommer ikke med i dit værk. Hvor kameraet tillader det, forbliver eksponering og hvidbalance faste, så intet flimrer mellem billederne.
 
-STUDIO
-Fra tilstanden Avanceret bliver kameraet til en professionel arbejdsflade: tidslinje, skift mellem livebillede og optagne billeder, løgskind over flere billeder, forskels- og eksponeringsvisning, formatmasker, sikre områder, gitre, referencebillede eller -film med chroma key, noter til hvert billede, gennemsnit af billeder mod støj, mørklagt skærm ved optagelse, testbilleder og time-lapse med start- og sluttidspunkt. Alt sammen også fra tastaturet. Eksport som ProRes eller billedsekvens.
+SPEJLREFLEKS OG SPEJLLØSE
+Via en overvåget mappe kommer hvert foto fra dit kamera i fuld opløsning ind i dit værk, også RAW.
+
+STUDIE
+Fra "Avanceret" bliver kameraet til en studie-arbejdsflade. Med tidslinje, skift mellem live-billede og optagelse, løgskind over flere billeder, differens- og belysningsvisning, formatmasker, sikkerhedsrammer, gitter, referencebillede eller -film med chroma-key, noter pr. billede, midler mod støj, nedblænding ved udløsning, testoptagelser og intervaloptagelse med start- og sluttid. Alle kommandoer fungerer også via tastaturet. Lys via DMX (Art-Net) og motion control via Bluetooth indstiller du pr. billede.
+
+FILMEN VOKSER MED
+Mens du arbejder, kører stopmotion-filmen allerede som en sløjfe ved siden af kamerabilledet.
+
+REDIGERING
+Fordobl billeder, hold dem, omarranger ved at trække eller optag dem enkeltvis igen. Alt kan fortrydes. Tekst, talebobler og tegninger kommer direkte ind i billedet, egne billeder lægger du som lag henover. Greenscreen erstatter grøn eller blå med et billede eller en film. Fra "Avanceret" er der kamerakørsler med panorering og zoom. Til rotoskopi bliver en video til billeder, som du tegner over. Dertil kommer titelkort, rulletekster og looks til hele filmen.
 
 LYD
-Flere lydspor med bølgeform: musik fra dine filer, optag din stemme, mens filmen kører, sæt ti lydeffekter fra Plop til Tada på ethvert billede, eller lad en stemme læse den tekst op, du skriver. I X-Sheet tilpasses mundformer til billederne.
+Flere lydspor med bølgeform. Musik kommer fra dine filer eller fra fem egne numre fra "Glad" til "Drøm". Ti lyde fra Plop til Tada hæfter du på hvert billede. Din stemme optager du til den kørende film, om ønsket lyst, mørkt eller som en robot. Indtastet tekst læses op af en stemme på din Mac. I X-Sheet tildeler du mundformer til billederne.
 
-TEKST, TITLER, GREENSCREEN
-Talebobler, tekst og tegninger direkte i billedet. Titelkort og rulletekster. Erstat grøn eller blå med et billede eller en film. Looks til hele filmen.
+EKSPORT OG FLIPBOG
+Eksport med 2 til 30 billeder i sekundet, op til 4K, som ProRes eller som billedsekvens. Hvert værk bliver om ønsket til en trykklar flipbog, med A4-ark, klippelinjer og nummererede blade.
 
-REDIGER OG EKSPORTÉR
-Dupliker billeder, træk dem i ny rækkefølge, tag enkelte billeder om, fortryd alt. Eksportér med 2 til 30 fps, op til 4K.
+VIDEO TIL STOPMOTION
+Vælg en eksisterende video. FrameFold genkender de rolige øjeblikke, fjerner billeder med hænder og sorterer dubletter fra. Inden da ser du hvert billede på kontaktarket.
 
-FILMEN VOKSER, MENS DU ARBEJDER
-Mens du arbejder, kører stopmotionen allerede i loop ved siden af kamerabilledet.
-
-FLIPBOG
-Hvert værk bliver til en flipbog klar til udskrift: A4-ark med klippelinjer, indbindingskant og nummererede blade. Klip, hæft, bladr — filmen bliver igen til et objekt.
-
-FRA VIDEO TIL STOPMOTION
-Vælg en eksisterende video: de rolige øjeblikke bliver fundet, hænder fjernet og dubletter sorteret fra. Du tjekker hvert billede på kontaktarket, før det samles.
-
-TRE TILSTANDE
-Enkel (vælg, tag billeder, færdig — lavet til undervisning), Avanceret (format, billedhastighed, opløsning, afspilning) og tilstanden Atelier med papirrelief, billedekko, tryklook, fold-overgange, en udstillingsfilm og kontaktark og foldeskabeloner som PDF klar til udskrift.
-
-VÆRKER, IKKE FILER
-Projekter samler billeder over lige så mange optagelser du vil, med en papirkurv på 30 dage. Resultatet kommer som en udgave: “Ark 01–24 · Serie på 24 · dateret 2026”.
+TIL SKOLEN
+Tilstanden "Enkel" viser kun det nødvendige. Der er ingen konto og ingen forbindelse til internettet. Et undervisningsoplæg til to timer er frit tilgængeligt, en kort hjælp findes i appen.
 
 OGSÅ PÅ IPHONE OG IPAD
-FrameFold findes også til iPhone og iPad — der med stativ, Apple Watch som fjernbetjening og klap for at tage billeder. På 17 sprog.
+FrameFold findes også til iPhone og iPad, der med stativ, Apple Watch som fjernudløser og udløsning ved at klappe. FrameFold findes på 17 sprog.
 
-Udviklet som et skræddersyet værktøj til kunstneren Aldo Tolino, hvis værker folder trykte fotografier til objekter og fotograferer dem igen — billede, objekt, billede.
+FrameFold opstod som et værktøj til kunstneren Aldo Tolino. Han folder trykte fotografier til objekter og fotograferer dem igen.

@@ -54,7 +54,7 @@ final class TetherCamera: NSObject, ObservableObject {
                     browser.start()
                 } else {
                     self.isSearching = false
-                    self.lastError = String(localized: "Kein Zugriff auf angeschlossene Kameras – in den Systemeinstellungen erlauben.")
+                    self.lastError = String(localized: "Kein Zugriff auf angeschlossene Kameras. Bitte in den Systemeinstellungen erlauben.")
                 }
             }
         }
@@ -79,7 +79,7 @@ final class TetherCamera: NSObject, ObservableObject {
             return
         }
         guard canTakePicture, camera.responds(to: Self.takePicture) else {
-            lastError = String(localized: "Diese Kamera lässt sich über USB nicht auslösen – den Kamera-Ordner nutzen.")
+            lastError = String(localized: "Diese Kamera lässt sich über USB nicht auslösen. Nutze den Kamera-Ordner.")
             return
         }
         lastError = nil

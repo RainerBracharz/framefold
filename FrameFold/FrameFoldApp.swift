@@ -78,7 +78,7 @@ struct OnboardingView: View {
                 .hung()
         } right: {
             CatalogLabel("Bild · Objekt · Bild")
-            Text("Aus deiner Arbeit\nwird eine Stopmotion.")
+            Text("Aus deiner Arbeit\nwird eine Stop-Motion.")
                 .font(Theme.serifItalic(28))
                 .foregroundStyle(Theme.ink)
                 .lineSpacing(2)
@@ -95,7 +95,7 @@ struct OnboardingView: View {
     private var cardTwo: some View {
         spread {
             CatalogLabel("Zwei Wege")
-            Text("Video wählen —\noder live aufnehmen.")
+            Text("Video wählen\noder live aufnehmen.")
                 .font(Theme.serifItalic(28))
                 .foregroundStyle(Theme.ink)
                 .lineSpacing(2)
@@ -104,7 +104,7 @@ struct OnboardingView: View {
 
             wayRow(icon: "film",
                    title: "Video wählen",
-                   text: "Ein fertiges Video aus der Mediathek — FrameFold macht den Rest.")
+                   text: "Ein fertiges Video aus der Mediathek. FrameFold macht den Rest.")
             wayRow(icon: "camera",
                    title: "Direkt aufnehmen",
                    text: Platform.isMac
@@ -129,7 +129,7 @@ struct OnboardingView: View {
                        text: "Nur das Nötigste: auswählen, auslösen, fertig. Empfohlen für den Anfang.")
             modeChoice(mode: .tolino,
                        title: "Atelier",
-                       text: "Format, Bildrate, Effekte, Faltvorlagen, Ausstellung — die volle Werkstatt.")
+                       text: "Format, Bildrate, Effekte, Faltvorlagen und Ausstellung.")
 
             Text("Lässt sich jederzeit über das Regler-Symbol ändern.")
                 .font(Theme.mono(11))

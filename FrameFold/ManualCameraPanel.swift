@@ -33,7 +33,7 @@ struct CameraOptionsPanel: View {
                     Text(controller.photoMegapixels.map { String(localized: "Volle Auflösung (\($0) MP)") }
                          ?? String(localized: "Volle Auflösung"))
                         .font(font).foregroundStyle(text)
-                    Text("Jedes Bild als Foto vom Sensor statt als Videobild (1080p) – schärfer, braucht mehr Speicher.")
+                    Text("Jedes Bild wird als Foto vom Sensor aufgenommen. Das ist schärfer als ein Videobild (1080p), braucht aber mehr Speicher.")
                         .font(Theme.mono(10)).foregroundStyle(text.opacity(0.55))
                 }
             }
@@ -97,7 +97,7 @@ struct ManualCameraPanel: View {
                                                   set: { controller.manual?.kelvin = Float($0) }), in: 2500...8000, step: 50)
                         }
                     }
-                    Text("Belichtung, Fokus und Weißabgleich bleiben, wie du sie stellst – die Automatik misst nicht mehr nach.")
+                    Text("Belichtung, Fokus und Weißabgleich bleiben, wie du sie stellst. Die Automatik misst nicht mehr nach.")
                         .font(Theme.mono(10)).foregroundStyle(text.opacity(0.55))
                 }
             }

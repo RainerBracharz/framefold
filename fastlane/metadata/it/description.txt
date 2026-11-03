@@ -1,39 +1,39 @@
-L’app di stop motion che scatta da sola appena le tue mani escono dall’inquadratura. Gratis, senza abbonamento, senza pubblicità, senza account, senza internet.
+L'app per stop motion che scatta da sola appena le tue mani escono dall'inquadratura. Gratuita, senza abbonamenti, senza pubblicità, senza account e senza internet.
 
-TUTTO GRATIS, SENZA FILIGRANA
-Suono, effetti sonori, sintesi vocale, green screen, titolo e titoli di coda, testo e fumetti, disegno, importazione di foto, esportazione fino a 4K — niente di tutto questo costa un extra, e nessun film porta una filigrana. Nulla lascia il tuo dispositivo: niente cloud, niente account, niente tracciamento.
+TUTTO GRATUITO, SENZA FILIGRANE
+Tutte le funzioni sono gratuite, inclusi audio, musica, green screen, titoli, disegno e l'esportazione fino a 4K. Nessun video ha una filigrana. FrameFold non raccoglie dati. Immagini, audio e Opere restano sul tuo dispositivo.
 
 FOTOCAMERA AUTOMATICA
-iPhone o iPad sul treppiede e al lavoro — FrameFold scatta da solo appena le mani escono dall’inquadratura e la scena è ferma. Esposizione e bilanciamento del bianco vengono bloccati e il tempo di posa si aggancia in modo che la luce artificiale non sfarfalli. Con onion skin, avviso se la fotocamera si è spostata, scatto a intervalli e livella. Ogni fotogramma alla piena risoluzione del sensore, con scelta dell’obiettivo.
+Metti l'iPhone o l'iPad sul treppiede e lavora. FrameFold scatta appena le tue mani escono dall'inquadratura e la scena è ferma. L'esposizione e il bilanciamento del bianco restano fissi, il tempo di posa si blocca per evitare lo sfarfallio della luce artificiale. Ci sono anche Onion skin, un avviso se la fotocamera si sposta, lo scatto a intervalli e la livella.
 
-NITIDO, O NIENTE
-L’app misura la nitidezza di continuo e blocca la messa a fuoco solo quando è davvero a posto. Un fotogramma sfocato non entra mai nell’opera. Dalla modalità Avanzata puoi impostare anche a mano ISO, tempo di posa, messa a fuoco e bilanciamento del bianco.
+IMMAGINI NITIDE
+L'app misura continuamente la nitidezza e blocca la messa a fuoco solo quando è corretta. Un'immagine sfocata non entra nell'Opera. Da "Avanzata" imposti tu ISO, tempo di esposizione, messa a fuoco e bilanciamento del bianco e scegli l'obiettivo. Ogni immagine ha l'intera risoluzione del sensore.
 
-SCATTARE SENZA TOCCARE
-Apple Watch come telecomando con contatore dei fotogrammi, tasti del volume, AirPods, un battito di mani o un conto alla rovescia con una pressione prolungata. Nessuno deve urtare il treppiede.
+SCATTO SENZA TOCCO
+L'Apple Watch diventa un telecomando con contafotogrammi. Puoi scattare anche con i tasti del volume, con gli AirPods, battendo le mani o con l'autoscatto tramite una pressione lunga. Nessuno deve toccare il treppiede.
+
+IL VIDEO CRESCE CON TE
+Dal secondo fotogramma il video viene riprodotto a ciclo continuo nel mirino. Uno schermo o un proiettore collegato mostra l'immagine della fotocamera senza i comandi.
+
+MODIFICA
+Puoi duplicare, trattenere, riordinare trascinando o scattare di nuovo singole immagini. Tutto può essere annullato. Testo, fumetti e disegni vanno direttamente nell'immagine, puoi sovrapporre le tue immagini come livelli. Il green screen sostituisce il verde o il blu con un'immagine o un video. Da "Avanzata" ci sono movimenti di macchina con panoramica e zoom. Per il rotoscopio un video diventa una serie di immagini su cui disegnare. Ci sono anche cartello del titolo, titoli di coda e stili per l'intero video.
+
+AUDIO
+Diverse tracce audio con forma d'onda. La musica proviene dai tuoi file o da cinque brani inclusi da "Allegro" a "Sogno". Puoi allegare dieci rumori da Pop a Tadà a ogni immagine. Registri la tua voce mentre il video scorre, se vuoi acuta, grave o come un robot. Una voce sul dispositivo legge il testo digitato.
 
 STUDIO
-Dalla modalità Avanzata l’iPad diventa uno spazio di lavoro professionale, e volendo anche l’iPhone: timeline, passaggio tra live e fotogrammi, onion skin su più fotogrammi, maschere di formato, lente, immagine di riferimento con chroma key e un X-sheet con forme della bocca.
+Da "Avanzata" l'iPad diventa un'area di lavoro da studio, se vuoi anche l'iPhone. Con linea temporale, passaggio tra immagine dal vivo e registrazione, Onion skin su più immagini, maschere di formato, lente d'ingrandimento, immagine di riferimento con chroma key e un X-sheet per le forme della bocca. Imposti la luce tramite DMX (Art-Net) e il motion control via Bluetooth per ogni immagine.
 
-SUONO
-Più tracce audio con forma d’onda: musica dai tuoi file, la tua voce registrata mentre il film scorre, dieci effetti sonori da Pop a Tadà da agganciare a qualsiasi fotogramma, oppure un testo digitato da far pronunciare a una voce.
+ESPORTAZIONE E FLIPBOOK
+Esportazione da 2 a 30 fotogrammi al secondo, fino a 4K, a ciclo continuo, boomerang o all'indietro, anche come GIF. Ogni Opera diventa su richiesta un flipbook pronto per la stampa, con fogli A4, linee di taglio e pagine numerate. Un'Opera arriva come file tramite AirDrop su un altro dispositivo.
 
-TESTO, TITOLI, GREEN SCREEN
-Fumetti, testo e disegni direttamente nell’immagine. Cartello del titolo e titoli di coda. Sostituisci il verde o il blu con un’immagine o un filmato. Look per tutto il film.
-
-MONTAGGIO ED ESPORTAZIONE
-Duplica fotogrammi, riordinali trascinandoli, rifanne uno solo, annulla tutto. Esportazione da 2 a 30 fotogrammi al secondo, fino a 4K, in loop, a boomerang o al contrario, anche come GIF.
-
-FLIPBOOK
-Ogni opera diventa un flipbook pronto da stampare: fogli A4 con linee di taglio e pagine numerate. Ritagliare, pinzare, sfogliare.
+DA VIDEO A STOP MOTION
+Scegli un video esistente. FrameFold riconosce i momenti fermi, rimuove le immagini con le mani e scarta i doppioni.
 
 PER LA SCUOLA
-La modalità Semplice mostra solo l’essenziale. Nessun account, nessun trattamento dei dati, niente internet — compatibile con qualsiasi regolamento sulla privacy. Una proposta didattica per due lezioni è disponibile gratuitamente, e nell’app c’è una breve guida.
-
-DAL VIDEO ALLO STOP MOTION
-Scegli un video esistente: vengono trovati i momenti di calma, tolte le mani, scartati i doppioni.
+La modalità "Semplice" mostra solo il necessario. Non c'è alcun account e nessuna connessione a internet. Un piano di lezione di due ore è disponibile liberamente, un breve aiuto è nell'app.
 
 ANCHE SU MAC
-La stessa app funziona su Mac, con una document camera o un iPhone come fotocamera, ed esporta in ProRes o come sequenza di immagini. In 17 lingue.
+La stessa app funziona su Mac, con telecamera per documenti o iPhone come fotocamera ed esportazione come ProRes o sequenza di immagini. FrameFold è disponibile in 17 lingue.
 
-Nata come strumento su misura per l’artista Aldo Tolino, che piega fotografie stampate in oggetti e le fotografa di nuovo — immagine, oggetto, immagine.
+FrameFold è nata come strumento per l'artista Aldo Tolino. Piega fotografie stampate in oggetti e le fotografa di nuovo.

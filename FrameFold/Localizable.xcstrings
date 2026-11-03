@@ -2157,7 +2157,7 @@
         }
       }
     },
-    "%lld von %lld Bildern gesichert – die übrigen ließen sich nicht lesen.": {
+    "%lld von %lld Bildern gesichert. Die übrigen ließen sich nicht lesen.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -2945,7 +2945,7 @@
     "2 fps": {
       "shouldTranslate": false
     },
-    "2 fps – sehr langsam": {
+    "2 fps, sehr langsam": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -3863,7 +3863,7 @@
         }
       }
     },
-    "Alles dabei — plus die Spezialfeatures: Facetten, Echo, Faltvorlage, Rekursion, Ausstellung.": {
+    "Alles aus „Erweitert“ und dazu Facetten, Echo, Faltvorlage, Rekursion und Ausstellung.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -5363,7 +5363,7 @@
         }
       }
     },
-    "Aufgeklappt zeigt das iPhone Duo den bisherigen Film außen – zum Tisch hin.": {
+    "Aufgeklappt zeigt das iPhone Duo den bisherigen Film außen, zum Tisch hin.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -6263,7 +6263,7 @@
         }
       }
     },
-    "Aus deiner Arbeit\nwird eine Stopmotion.": {
+    "Aus deiner Arbeit\nwird eine Stop-Motion.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -7763,7 +7763,7 @@
         }
       }
     },
-    "Auto-Shutter": {
+    "Auto-Auslöser": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -7863,7 +7863,7 @@
         }
       }
     },
-    "Baue Stopmotion…": {
+    "Baue Stop-Motion…": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -8163,7 +8163,7 @@
         }
       }
     },
-    "Bereit – arbeite einfach": {
+    "Bereit. Arbeite einfach.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -9569,7 +9569,7 @@
         }
       }
     },
-    "Bilder sammeln sich über beliebig viele\nAufnahmen – live oder aus Videos.": {
+    "Bilder sammeln sich über beliebig viele\nAufnahmen, live oder aus Videos.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -10275,7 +10275,7 @@
         }
       }
     },
-    "Blendet das nächste Bild ein — als Falzkante, als triangulierte Facetten oder als eingewobene Bildstreifen.": {
+    "Blendet das nächste Bild ein: als Falzkante, als triangulierte Facetten oder als eingewobene Bildstreifen.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -10581,7 +10581,7 @@
         }
       }
     },
-    "Das Stopmotion-Video konnte nicht geschrieben werden.": {
+    "Das Stop-Motion-Video konnte nicht geschrieben werden.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -12481,7 +12481,7 @@
         }
       }
     },
-    "Dokumentenkamera mit Fokus-Schalter: auf Einzelfokus (S) stellen und einmal scharfstellen – sonst stellt sie bei jeder Hand im Bild neu scharf. Helligkeit und Weißabgleich lassen sich meist mit der App des Herstellers fest einstellen.": {
+    "Dokumentenkamera mit Fokus-Schalter: auf Einzelfokus (S) stellen und einmal scharfstellen. Sonst stellt sie bei jeder Hand im Bild neu scharf. Helligkeit und Weißabgleich lassen sich meist mit der App des Herstellers fest einstellen.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -13781,7 +13781,7 @@
         }
       }
     },
-    "Ein Werk gewählt – noch mindestens eines.": {
+    "Ein Werk gewählt, noch mindestens eines.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -13881,7 +13881,7 @@
         }
       }
     },
-    "Ein fertiges Video aus der Mediathek — FrameFold macht den Rest.": {
+    "Ein fertiges Video aus der Mediathek. FrameFold macht den Rest.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -16839,7 +16839,7 @@
         }
       }
     },
-    "Format, Bildrate, Effekte, Faltvorlagen, Ausstellung — die volle Werkstatt.": {
+    "Format, Bildrate, Effekte, Faltvorlagen und Ausstellung.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -18542,7 +18542,7 @@
         }
       }
     },
-    "Im Intervall-Modus löst FrameFold in festem Takt aus – unabhängig von Bewegung.": {
+    "Im Intervall-Modus löst FrameFold in festem Takt aus, unabhängig von Bewegung.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -19300,7 +19300,7 @@
         }
       }
     },
-    "Jede Facette liegt anders im Licht — als wäre das Bild gefaltet und wieder abfotografiert worden.": {
+    "Jede Facette liegt anders im Licht, als wäre das Bild gefaltet und wieder abfotografiert worden.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -19400,7 +19400,7 @@
         }
       }
     },
-    "Kalibriere – kurz ruhig lassen…": {
+    "Kalibriere, kurz ruhig lassen…": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -19900,7 +19900,7 @@
         }
       }
     },
-    "Keine ruhigen Momente gefunden. Halte beim Filmen zwischendurch kurz still – oder nimm etwas länger auf.": {
+    "Keine ruhigen Momente gefunden. Halte beim Filmen zwischendurch kurz still oder nimm etwas länger auf.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -21900,7 +21900,7 @@
         }
       }
     },
-    "Kamera bleibt ruhig: FrameFold sperrt Belichtung und Weißabgleich nach der kurzen Kalibrierung – so driftet zwischen den Bildern nichts. Der Fokus wird am Stativ fixiert, aus der Hand läuft er mit.": {
+    "Kamera bleibt ruhig: FrameFold sperrt Belichtung und Weißabgleich nach der kurzen Kalibrierung. So driftet zwischen den Bildern nichts. Der Fokus wird am Stativ fixiert, aus der Hand läuft er mit.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -22000,7 +22000,7 @@
         }
       }
     },
-    "Kamera fest über dem Tisch, etwa eine Dokumentenkamera. Arbeite einfach — FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.": {
+    "Kamera fest über dem Tisch, etwa eine Dokumentenkamera. Arbeite einfach. FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -22300,7 +22300,7 @@
         }
       }
     },
-    "Kamera nicht berühren: fest über dem Tisch montieren und den Auto-Shutter arbeiten lassen (oder den runden Knopf).": {
+    "Kamera nicht berühren. Fest über dem Tisch montieren und den Auto-Auslöser arbeiten lassen, oder den runden Knopf drücken.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -22800,7 +22800,7 @@
         }
       }
     },
-    "Keine Kamera gefunden. Schließ eine USB-Kamera an – etwa eine Dokumentenkamera über dem Tisch – oder nimm dein iPhone als Kamera. Videos kannst du im Video-Tab trotzdem verarbeiten.": {
+    "Keine Kamera gefunden. Schließ eine USB-Kamera an, etwa eine Dokumentenkamera über dem Tisch, oder nimm dein iPhone als Kamera. Videos kannst du im Video-Tab trotzdem verarbeiten.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -23000,7 +23000,7 @@
         }
       }
     },
-    "Keine ruhigen Momente gefunden. Das Video ist evtl. sehr kurz oder durchgehend in Bewegung – nimm etwas länger auf oder halte zwischendurch kurz still.": {
+    "Keine ruhigen Momente gefunden. Das Video ist evtl. sehr kurz oder durchgehend in Bewegung. Nimm etwas länger auf oder halte zwischendurch kurz still.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -23100,7 +23100,7 @@
         }
       }
     },
-    "Keine ruhigen Momente gefunden. Das Video ist evtl. sehr kurz oder durchgehend in Bewegung — schiebe den Regler unten Richtung Mehr Bilder oder nimm etwas länger auf.": {
+    "Keine ruhigen Momente gefunden. Das Video ist evtl. sehr kurz oder durchgehend in Bewegung. Schiebe den Regler unten Richtung „Mehr Bilder“ oder nimm etwas länger auf.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -23900,7 +23900,7 @@
         }
       }
     },
-    "Labor-Ansicht: Blattnummer, Sitzungsuhr, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": {
+    "Labor-Ansicht: Blattnummer, Sitzungsuhr und Messwerte. Der Falz-Countdown wandert in Amber um den Auslöser.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -24000,7 +24000,7 @@
         }
       }
     },
-    "Labor-Ansicht: Blattnummer, Sitzungsuhr, fixierte Belichtung, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.": {
+    "Labor-Ansicht: Blattnummer, Sitzungsuhr, fixierte Belichtung und Messwerte. Der Falz-Countdown wandert in Amber um den Auslöser.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -25000,7 +25000,7 @@
         }
       }
     },
-    "Los — ich schau zu": {
+    "Los, ich schau zu": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -26600,7 +26600,7 @@
         }
       }
     },
-    "Noch kein Werk – leg eines an, dann kann die Kamera loslegen.": {
+    "Noch kein Werk. Leg eines an, dann kann die Kamera loslegen.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -27100,7 +27100,7 @@
         }
       }
     },
-    "Nur das Nötigste: Video wählen → Stopmotion.": {
+    "Nur das Nötigste: Video wählen → Stop-Motion.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -27300,7 +27300,7 @@
         }
       }
     },
-    "Nur wenige Bilder gefunden. Für eine flüssigere Stopmotion den Regler unten Richtung Mehr Bilder schieben oder länger aufnehmen.": {
+    "Nur wenige Bilder gefunden. Für eine flüssigere Stop-Motion den Regler unten Richtung „Mehr Bilder“ schieben oder länger aufnehmen.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -29000,7 +29000,7 @@
         }
       }
     },
-    "Schwarzweiß mit warmem Papierton — wie ein abfotografierter Druck.": {
+    "Schwarzweiß mit warmem Papierton, wie ein abfotografierter Druck.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -29912,7 +29912,7 @@
         }
       }
     },
-    "Stopmotion erstellen": {
+    "Stop-Motion erstellen": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -30012,7 +30012,7 @@
         }
       }
     },
-    "Stopmotion exportieren": {
+    "Stop-Motion exportieren": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -30112,7 +30112,7 @@
         }
       }
     },
-    "Stopmotion wird montiert…": {
+    "Stop-Motion wird montiert…": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -30512,7 +30512,7 @@
         }
       }
     },
-    "Szene wirkt dauerhaft unruhig. Kamerahalterung prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen.": {
+    "Szene wirkt dauerhaft unruhig. Kamerahalterung prüfen oder in den Einstellungen die Bewegungs-Toleranz erhöhen.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -30612,7 +30612,7 @@
         }
       }
     },
-    "Szene wirkt dauerhaft unruhig. Stativ prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen.": {
+    "Szene wirkt dauerhaft unruhig. Stativ prüfen oder in den Einstellungen die Bewegungs-Toleranz erhöhen.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -31712,7 +31712,7 @@
         }
       }
     },
-    "Video wählen —\noder live aufnehmen.": {
+    "Video wählen\noder live aufnehmen.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -33612,7 +33612,7 @@
         }
       }
     },
-    "Zeigt das erste oder letzte Bild als Überblendung – zum Ausrichten und um Drift zu erkennen.": {
+    "Zeigt das erste oder letzte Bild als Überblendung, zum Ausrichten und um Drift zu erkennen.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -33812,7 +33812,7 @@
         }
       }
     },
-    "Zu viel Bewegung – steht die Kamera wirklich fest?": {
+    "Zu viel Bewegung. Steht die Kamera wirklich fest?": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -33912,7 +33912,7 @@
         }
       }
     },
-    "Zu viel Wackeln – leg das iPhone irgendwo auf oder lehne es an.": {
+    "Zu viel Wackeln. Leg das iPhone irgendwo auf oder lehne es an.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -35273,7 +35273,7 @@
     "iPhone Duo": {
       "shouldTranslate": false
     },
-    "iPhone aufs Stativ oder ruhig über die Arbeit halten. Arbeite einfach — FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.": {
+    "iPhone aufs Stativ oder ruhig über die Arbeit halten. Arbeite einfach. FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -35573,7 +35573,7 @@
         }
       }
     },
-    "iPhone nicht berühren: aufs Stativ stellen und den Auto-Shutter arbeiten lassen (oder den runden Knopf).": {
+    "iPhone nicht berühren. Aufs Stativ stellen und den Auto-Auslöser arbeiten lassen, oder den runden Knopf drücken.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -37525,7 +37525,7 @@
         }
       }
     },
-    "Bild %lld neu aufnehmen – das nächste Bild ersetzt es.": {
+    "Bild %lld neu aufnehmen. Das nächste Bild ersetzt es.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
@@ -38426,7 +38426,7 @@
         }
       }
     },
-    "24 fps – flüssig": {
+    "24 fps, flüssig": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -48953,7 +48953,7 @@
         }
       }
     },
-    "Im Bild klicken oder ziehen: Lupe setzen und dort scharfstellen.": {
+    "Klicke oder ziehe im Bild, um die Lupe zu setzen und dort scharfzustellen.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -49653,7 +49653,7 @@
         }
       }
     },
-    "Fotos, die die Software deiner Kamera in diesen Ordner legt, werden in voller Auflösung das nächste Bild – auch RAW. Die Automatik am besten ausschalten.": {
+    "Fotos, die die Software deiner Kamera in diesen Ordner legt, werden in voller Auflösung das nächste Bild. Das gilt auch für RAW. Schalte die Automatik am besten aus.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -50653,7 +50653,7 @@
         }
       }
     },
-    "Kein Mikrofonzugriff – erlauben unter Einstellungen → Datenschutz → Mikrofon.": {
+    "Kein Mikrofonzugriff. Erlaube ihn unter Einstellungen → Datenschutz → Mikrofon.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -52156,7 +52156,7 @@
         }
       }
     },
-    "Die Farbe wird beim Export durch den Hintergrund ersetzt – ein Bild oder ein Film, der Bild für Bild mitläuft.": {
+    "Die Farbe wird beim Export durch den Hintergrund ersetzt. Das kann ein Bild oder ein Film sein, der Bild für Bild mitläuft.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -52959,7 +52959,7 @@
         }
       }
     },
-    "Belichtung, Fokus und Weißabgleich bleiben, wie du sie stellst – die Automatik misst nicht mehr nach.": {
+    "Belichtung, Fokus und Weißabgleich bleiben, wie du sie stellst. Die Automatik misst nicht mehr nach.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -54668,7 +54668,7 @@
         }
       }
     },
-    "Jedes Bild als Foto vom Sensor statt als Videobild (1080p) – schärfer, braucht mehr Speicher.": {
+    "Jedes Bild wird als Foto vom Sensor aufgenommen. Das ist schärfer als ein Videobild (1080p), braucht aber mehr Speicher.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -56368,7 +56368,7 @@
         }
       }
     },
-    "Zeitleiste, Abspielen, Zwiebelhaut über mehrere Bilder, Masken, Lupe, Ton und X-Sheet – wie am iPad und Mac.": {
+    "Zeitleiste, Abspielen, Zwiebelhaut über mehrere Bilder, Masken, Lupe, Ton und X-Sheet. Das funktioniert wie am iPad und Mac.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -57168,7 +57168,7 @@
         }
       }
     },
-    "Alle Befehle mit Tastatur: Menü „Studio“.": {
+    "Alle Tastaturbefehle stehen im Menü „Studio“.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -57268,7 +57268,7 @@
         }
       }
     },
-    "Alles lässt sich rückgängig machen: mit den Pfeil-Knöpfen oder ⌘Z.": {
+    "Alles lässt sich mit den Pfeil-Knöpfen oder ⌘Z rückgängig machen.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -57868,7 +57868,7 @@
         }
       }
     },
-    "Bildrate, Format und Look wählen, dann „Stopmotion exportieren“.": {
+    "Bildrate, Format und Look wählen, dann „Stop-Motion exportieren“.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -58468,7 +58468,7 @@
         }
       }
     },
-    "Die Sprachausgabe läuft auf dem Gerät – nichts wird übertragen.": {
+    "Die Sprachausgabe läuft auf dem Gerät. Nichts wird übertragen.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -58668,7 +58668,7 @@
         }
       }
     },
-    "Die Zwiebelhaut zeigt das vorige Bild durchscheinend – so sieht man den letzten Schritt.": {
+    "Die Zwiebelhaut zeigt das vorige Bild durchscheinend. So sieht man den letzten Schritt.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -59068,7 +59068,7 @@
         }
       }
     },
-    "Ein kleines Stück bewegen, Hände aus dem Bild – FrameFold löst von selbst aus.": {
+    "Ein kleines Stück bewegen und die Hände aus dem Bild nehmen. FrameFold löst von selbst aus.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -59868,7 +59868,7 @@
         }
       }
     },
-    "Gleichmäßiges Raumlicht statt Fenster: Wolken lassen den Film flackern.": {
+    "Nutze gleichmäßiges Raumlicht. Licht vom Fenster mit ziehenden Wolken lässt den Film flackern.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -60468,7 +60468,7 @@
         }
       }
     },
-    "Im X-Sheet werden Mundformen den Bildern zugeordnet – auf Wunsch automatisch.": {
+    "Im X-Sheet werden Mundformen den Bildern zugeordnet. Das geht auf Wunsch auch automatisch.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -61068,7 +61068,7 @@
         }
       }
     },
-    "Mikrofon nur auf Wunsch: für Sprachaufnahmen und das Auslösen per Klatschen.": {
+    "Das Mikrofon wird nur auf Wunsch für Sprachaufnahmen und das Auslösen per Klatschen genutzt.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -62368,106 +62368,6 @@
         }
       }
     },
-    "Text und Zeichnen": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Text and drawing"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Texte et dessin"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Texto y dibujo"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Testo e disegno"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tekst en tekenen"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "テキストと描画"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Texto e desenho"
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Text a kreslení"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tekst i rysowanie"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Текст і малювання"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Текст и рисунок"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Metin ve çizim"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "텍스트와 그리기"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "文字与绘画"
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tekst og tegning"
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Text och teckning"
-          }
-        }
-      }
-    },
     "Tipps fürs Set": {
       "localizations": {
         "en": {
@@ -62568,7 +62468,7 @@
         }
       }
     },
-    "Titel und Abspann eintragen – sie kommen vor und hinter den Film.": {
+    "Titel und Abspann eintragen. Sie kommen vor und hinter den Film.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -63368,7 +63268,7 @@
         }
       }
     },
-    "„Kamera verrutscht?“ erscheint, wenn das Stativ angestoßen wurde – das erste Bild hilft beim Ausrichten.": {
+    "„Kamera verrutscht?“ erscheint, wenn das Stativ angestoßen wurde. Das erste Bild hilft beim Ausrichten.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -64368,7 +64268,7 @@
         }
       }
     },
-    "In der Werkliste ein Werk lange drücken → „Als Datei teilen …“: So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät, dort öffnet FrameFold eine Kopie.": {
+    "In der Werkliste ein Werk lange drücken und „Als Datei teilen …“ wählen. So kommt es per AirDrop oder „Dateien“ auf ein anderes Gerät. Dort öffnet FrameFold eine Kopie.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -66368,7 +66268,7 @@
         }
       }
     },
-    "Fünf Musikstücke von „Fröhlich“ bis „Verfolgung“ und Stimmeffekte (hoch, tief, Roboter) – im Studio unter „Ton“, jede Spur lässt sich kürzen und blenden.": {
+    "Fünf Musikstücke von „Fröhlich“ bis „Verfolgung“ und Stimmeffekte (hoch, tief, Roboter) findest du im Studio unter „Ton“. Jede Spur lässt sich kürzen und blenden.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -67768,7 +67668,7 @@
         }
       }
     },
-    "Schwenk und Zoom über einen Bildbereich – im Export, wie eine Kamerabewegung über das Set.": {
+    "Schwenk und Zoom über einen Bildbereich. Das wirkt im Export wie eine Kamerabewegung über das Set.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -68768,7 +68668,7 @@
         }
       }
     },
-    "Bild-Ebene: eigene Bilder (auch mit Transparenz) über den Film legen. Rotoskopie: „Video als Bilder …“, darüber zeichnen, Foto durch Papier ersetzen.": {
+    "Bild-Ebene legt eigene Bilder (auch mit Transparenz) über den Film. Für Rotoskopie wählst du „Video als Bilder …“, zeichnest darüber und ersetzt das Foto durch Papier.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -69168,7 +69068,7 @@
         }
       }
     },
-    "Diese Kamera lässt sich über USB nicht auslösen – den Kamera-Ordner nutzen.": {
+    "Diese Kamera lässt sich über USB nicht auslösen. Nutze den Kamera-Ordner.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -69268,7 +69168,7 @@
         }
       }
     },
-    "Diese Kamera meldet kein Auslösen über USB – den Kamera-Ordner nutzen.": {
+    "Diese Kamera meldet kein Auslösen über USB. Nutze den Kamera-Ordner.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -69568,7 +69468,7 @@
         }
       }
     },
-    "Kamerafahrt (ab „Erweitert“): Schwenk und Zoom über einen Bildbereich.": {
+    "Kamerafahrt (ab „Erweitert“) erzeugt Schwenk und Zoom über einen Bildbereich.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -69868,7 +69768,7 @@
         }
       }
     },
-    "Kein Bluetooth-Zugriff – in den Einstellungen erlauben.": {
+    "Kein Bluetooth-Zugriff. Bitte in den Einstellungen erlauben.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -69968,7 +69868,7 @@
         }
       }
     },
-    "Kein Konto, keine Werbung, keine Verbindung ins Internet. Licht (Art-Net) und Motion Control (Bluetooth) verbinden sich nur, wenn du sie einschaltest – und nur mit deinem Gerät.": {
+    "Kein Konto, keine Werbung, keine Verbindung ins Internet. Licht (Art-Net) und Motion Control (Bluetooth) verbinden sich nur, wenn du sie einschaltest, und nur mit deinem eigenen Gerät.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -70068,7 +69968,7 @@
         }
       }
     },
-    "Kein Zugriff auf angeschlossene Kameras – in den Systemeinstellungen erlauben.": {
+    "Kein Zugriff auf angeschlossene Kameras. Bitte in den Systemeinstellungen erlauben.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -70568,7 +70468,7 @@
         }
       }
     },
-    "Löst die Kamera aus und holt das Foto in voller Auflösung (auch RAW). Ein Livebild liefert macOS dafür nicht – zum Ausrichten das Livebild einer zweiten Kamera oder den Sucher nutzen.": {
+    "Löst die Kamera aus und holt das Foto in voller Auflösung (auch RAW). Ein Livebild liefert macOS dafür nicht. Nutze zum Ausrichten das Livebild einer zweiten Kamera oder den Sucher.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -71268,7 +71168,7 @@
         }
       }
     },
-    "Profi-Rig: Spiegelreflex per USB (Mac), Licht über Art-Net und Motion Control per Bluetooth – Werte je Bild, vor dem Auslösen gestellt.": {
+    "Für Profi-Sets steuert FrameFold eine Spiegelreflex per USB (Mac), Licht über Art-Net und Motion Control per Bluetooth. Die Werte stellst du je Bild ein, sie werden vor dem Auslösen gesetzt.": {
       "localizations": {
         "en": {
           "stringUnit": {

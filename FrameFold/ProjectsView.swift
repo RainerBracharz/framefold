@@ -38,7 +38,7 @@ struct ProjectsView: View {
                             .font(Theme.serifItalic(21))
                             .foregroundStyle(Theme.ink)
                             .padding(.top, 24)
-                        Text("Bilder sammeln sich über beliebig viele\nAufnahmen – live oder aus Videos.")
+                        Text("Bilder sammeln sich über beliebig viele\nAufnahmen, live oder aus Videos.")
                             .font(Theme.mono(12))
                             .foregroundStyle(Theme.graphite)
                             .multilineTextAlignment(.center)
@@ -938,7 +938,7 @@ struct ProjectDetailView: View {
             if isExporting {
                 VStack(spacing: 8) {
                     HairlineProgress(value: exportProgress)
-                    CatalogLabel("Stopmotion wird montiert…", size: 10)
+                    CatalogLabel("Stop-Motion wird montiert…", size: 10)
                 }
             } else if let exportURL {
                 // Fertig: erst ansehen (Endlos-Schleife), dann teilen
@@ -956,7 +956,7 @@ struct ProjectDetailView: View {
                 // Frames, verfällt das Video ohnehin und der Export-Knopf
                 // kehrt von selbst zurück.
             } else {
-                Button("Stopmotion exportieren") { export() }
+                Button("Stop-Motion exportieren") { export() }
                     .buttonStyle(InkButtonStyle())
                     .disabled(currentProject.frameCount == 0)
             }
@@ -1251,7 +1251,7 @@ struct ExhibitionSheet: View {
     private var selectionHint: String {
         switch chosen.count {
         case 0: return String(localized: "Mindestens zwei Werke wählen.")
-        case 1: return String(localized: "Ein Werk gewählt – noch mindestens eines.")
+        case 1: return String(localized: "Ein Werk gewählt, noch mindestens eines.")
         default: return String(localized: "\(chosen.count) Werke · \(totalFrames) Bilder")
         }
     }

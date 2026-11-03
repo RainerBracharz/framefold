@@ -1,39 +1,39 @@
-Elleriniz kadrajdan çıktığı anda kendiliğinden çeken stop motion uygulaması. Ücretsiz; abonelik yok, reklam yok, hesap yok, internet yok.
+Ellerin kadrajdan çıktığı an kendi kendine fotoğraf çeken stop motion uygulaması. Ücretsiz, abonelik yok, reklam yok, hesap yok ve internet gerekmez.
 
-HER ŞEY ÜCRETSİZ, FİLİGRAN YOK
-Ses, ses efektleri, metin seslendirme, yeşil perde, başlık ve jenerik, metin ve konuşma balonları, çizim, fotoğraf içe aktarma, 4K'ya kadar dışa aktarma — hiçbiri ek ücretli değil ve hiçbir filmde filigran yok. Hiçbir şey cihazınızdan çıkmaz: bulut yok, hesap yok, izleme yok.
+HER ŞEY ÜCRETSİZ, FİLİGRANSIZ
+Tüm özellikler ücretsizdir. Buna ses, müzik, yeşil ekran, başlıklar, çizim ve 4K'ya kadar dışa aktarma dahildir. Hiçbir filmde filigran bulunmaz. FrameFold veri toplamaz. Görüntüler, sesler ve Eserler cihazında kalır.
 
 OTOMATİK KAMERA
-iPhone ya da iPad tripoda, sonra çalışın — elleriniz kadrajdan çıkıp sahne durulunca FrameFold kendiliğinden çeker. Pozlama ve beyaz dengesi kilitlenir, enstantane de yapay ışığın titremesini önleyecek şekilde sabitlenir. Soğan kabuğu, kamera kayarsa uyarı, aralıklı çekim ve su terazisi ile. Her kare tam sensör çözünürlüğünde, lens seçimiyle.
+iPhone veya iPad'i tripoda koy ve çalış. FrameFold, ellerin kadrajdan çıkıp sahne hareketsiz kaldığında fotoğrafı çeker. Pozlama ve beyaz dengesi sabit kalır, deklanşör hızı yapay ışığın titremesini önleyecek şekilde kilitlenir. Ayrıca Soğan kabuğu, kayan kamera uyarısı, aralıklı çekim ve su terazisi bulunur.
 
-YA NET YA HİÇ
-Uygulama netliği sürekli ölçer ve odağı ancak gerçekten oturduğunda kilitler. Net olmayan bir kare esere asla girmez. Gelişmiş modda ISO, enstantane, odak ve beyaz dengesini kendiniz de ayarlayabilirsiniz.
+NET GÖRÜNTÜLER
+Uygulama netliği sürekli ölçer ve odak ancak tam oturduğunda sabitlenir. Bulanık bir görüntü Eser'e eklenmez. "Gelişmiş" modundan itibaren ISO, pozlama süresi, odak ve beyaz dengesini kendin ayarlar ve lensi seçersin. Her görüntü tam sensör çözünürlüğüne sahiptir.
 
-DOKUNMADAN ÇEKİN
-Kare sayaçlı uzaktan kumanda olarak Apple Watch, ses düğmeleri, AirPods, bir alkış ya da uzun basışla geri sayım. Kimse tripoda çarpmak zorunda kalmaz.
+DOKUNMADAN ÇEKİM
+Apple Watch, görüntü sayacı olan bir uzaktan kumandaya dönüşür. Çekim ayrıca ses düğmeleri, AirPods, el çırpma veya uzun basarak zamanlayıcı ile de yapılabilir. Kimsenin tripoda dokunmasına gerek kalmaz.
 
-STÜDYO
-Gelişmiş modda iPad profesyonel bir çalışma alanına dönüşür — isterseniz iPhone da: zaman çizelgesi, canlı görüntü ile çekilen kareler arasında geçiş, çok kareli soğan kabuğu, en-boy maskeleri, büyüteç, chroma key'li referans görüntü ve ağız şekilli X-Sheet.
+FİLM SENİNLE BÜYÜR
+İkinci kareden itibaren film, vizörde bir döngü olarak oynatılır. Bağlı bir ekran veya projektör, kamera görüntüsünü kontroller olmadan gösterir.
+
+DÜZENLEME
+Görüntüleri çoğalt, beklet, sürükleyerek yeniden sırala veya tek tek yeniden çek. Her şey geri alınabilir. Metin, konuşma balonları ve çizimler doğrudan görüntüye eklenir, kendi resimlerini katman olarak üste yerleştirirsin. Yeşil ekran, yeşil veya maviyi bir resim veya filmle değiştirir. "Gelişmiş" modundan itibaren kaydırma ve yakınlaştırma ile kamera hareketleri bulunur. Rotoskopi için bir video, üzerine çizim yapabileceğin görüntülere dönüştürülür. Ayrıca tüm film için başlık kartı, jenerik ve görünümler mevcuttur.
 
 SES
-Dalga formlu birden çok ses parçası: dosyalarınızdan müzik, film oynarken sesinizi kaydetme, Pıt'tan Tadaa'ya on ses efektini herhangi bir kareye ekleme ya da yazdığınız metni bir sese okutma.
+Dalga formuna sahip çoklu ses parçaları. Müzik, dosyalarından veya "Neşeli" ile "Rüya" arasındaki beş özel parçadan gelir. "Pıt" ile "Tadaa" arasındaki on sesi herhangi bir görüntüye eklersin. Sesini oynatılan filme kaydedersin, istersen ince, kalın veya robot sesi olarak ayarlarsın. Yazılan metin cihazdaki bir ses tarafından okunur.
 
-METİN, BAŞLIKLAR, YEŞİL PERDE
-Konuşma balonları, metin ve çizimler doğrudan karede. Başlık kartı ve jenerik. Yeşili ya da maviyi bir görüntü veya filmle değiştirin. Tüm film için görünümler.
+STÜDYO
+"Gelişmiş" modundan itibaren iPad bir stüdyo çalışma alanına dönüşür, istersen iPhone da öyle. Zaman çizelgesi, canlı görüntü ile kayıt arasında geçiş, birden fazla görüntü üzerinde Soğan kabuğu, format maskeleri, büyüteç, kroma anahtarlı referans görüntü ve ağız şekilleri için bir X-Sheet bulunur. DMX (Art-Net) üzerinden ışık ve Bluetooth üzerinden hareket kontrolü her görüntü için ayarlanır.
 
-DÜZENLEME VE DIŞA AKTARMA
-Kareleri çoğaltın, sürükleyerek yeniden sıralayın, tek tek yeniden çekin, her şeyi geri alın. 2 ile 30 fps arasında, 4K'ya kadar, döngü, bumerang ya da tersten ve GIF olarak da dışa aktarın.
-
-FLIPBOOK
-Her eser baskıya hazır bir flipbook olur: kesim çizgili ve numaralı yapraklı A4 sayfalar. Kesin, zımbalayın, çevirin.
-
-OKULLAR İÇİN
-Basit mod yalnızca gerekenleri gösterir. Hesap yok, veri işleme yok, internet yok — her okulun veri koruma kurallarına uyar. İki ders saatlik bir ders planı ücretsiz olarak sunulur, kısa bir yardım kılavuzu da uygulamada yerleşik.
+DIŞA AKTARMA VE FLIPBOOK
+Saniyede 2 ila 30 kare ile 4K'ya kadar, döngü, bumerang veya geriye doğru, ayrıca GIF olarak dışa aktarma. Her Eser, A4 kağıdı, kesim çizgileri ve numaralandırılmış sayfalarla baskıya hazır bir flipbook'a dönüştürülebilir. Bir Eser, AirDrop üzerinden başka bir cihaza dosya olarak gönderilir.
 
 VİDEODAN STOP MOTION'A
-Var olan bir video seçin: durgun anlar bulunur, eller çıkarılır, kopyalar ayıklanır.
+Mevcut bir videoyu seç. FrameFold sakin anları algılar, ellerin olduğu görüntüleri kaldırır ve kopyaları ayıklar.
 
-MAC'TE DE
-Aynı uygulama Mac'te de çalışır; kamera olarak bir doküman kamerası ya da iPhone ile, ProRes veya görüntü dizisi olarak dışa aktarır. Birçok dilde.
+OKULLAR İÇİN
+"Basit" modu sadece en gereklileri gösterir. Hesap yoktur ve internet bağlantısı kurulmaz. İki saatlik bir ders planı mevcuttur, uygulamada kısa bir yardım bulunur.
 
-Basılı fotoğrafları nesnelere katlayıp yeniden fotoğraflayan sanatçı Aldo Tolino için özel bir araç olarak geliştirildi — görüntü, nesne, görüntü.
+MAC'TE DE MEVCUT
+Aynı uygulama Mac'te de çalışır, belge kamerası veya kamera olarak iPhone ile kullanılır ve ProRes veya görüntü dizisi olarak dışa aktarılır. FrameFold 17 dilde mevcuttur.
+
+FrameFold, sanatçı Aldo Tolino için bir araç olarak ortaya çıktı. Basılı fotoğrafları katlayarak nesnelere dönüştürür ve onları yeniden fotoğraflar.

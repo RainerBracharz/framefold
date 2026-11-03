@@ -1,39 +1,39 @@
-Aplikace na stop motion, která snímá sama ve chvíli, kdy máš ruce mimo záběr. Zdarma, bez předplatného, bez reklam, bez účtu, bez internetu.
+Aplikace pro stop motion, která fotí sama, jakmile tvé ruce zmizí ze záběru. Zdarma, bez předplatného, bez reklam, bez účtu a bez internetu.
 
 VŠECHNO ZDARMA, BEZ VODOZNAKU
-Zvuk, zvukové efekty, čtení textu nahlas, zelené plátno, titulky a závěrečné titulky, text a bubliny, kreslení, import fotek, export až do 4K — nic z toho nic nestojí navíc a žádný film nikdy nenese vodoznak. Nic neopouští tvé zařízení: žádný cloud, žádný účet, žádné sledování.
+Všechny funkce jsou zdarma, včetně zvuku, hudby, zeleného plátna, titulků, kreslení a exportu až do 4K. Žádný film nemá vodoznak. FrameFold neshromažďuje žádná data. Obrázky, zvuk a Díla zůstávají na tvém zařízení.
 
 AUTOMATICKÁ KAMERA
-iPhone nebo iPad na stativ a pracuj — FrameFold snímá sám, jakmile máš ruce mimo záběr a scéna se uklidní. Expozice a vyvážení bílé se zamknou a čas závěrky se nastaví tak, aby umělé světlo neblikalo. S cibulovou slupkou, upozorněním, když se kamera posunula, intervalovou spouští a vodováhou. Každý snímek v plném rozlišení snímače, s objektivem podle tvé volby.
+Dej iPhone nebo iPad na stativ a pracuj. FrameFold fotí, jakmile tvé ruce zmizí ze záběru a scéna je v klidu. Expozice a vyvážení bílé zůstávají pevné, rychlost závěrky se uzamkne proti blikání umělého světla. K dispozici je Cibulová slupka, varování při posunutí kamery, intervalová Automatická spoušť a vodováha.
 
-OSTRÉ, NEBO VŮBEC
-Aplikace průběžně měří ostrost obrazu a ostření zamkne, až když se opravdu ustálí. Snímek, který není ostrý, se do díla nikdy nedostane. Od režimu Pokročilý můžeš ISO, čas závěrky, ostření a vyvážení bílé nastavit i sám.
+OSTRÉ OBRÁZKY
+Aplikace neustále měří ostrost a zafixuje zaostření, až když je správné. Neostrý snímek se do Díla nedostane. V režimu Pokročilý si sám nastavíš ISO, čas expozice, zaostření a vyvážení bílé a vybereš objektiv. Každý snímek má plné rozlišení snímače.
 
-SNÍMÁNÍ BEZ DOTYKU
-Apple Watch jako dálkové ovládání s počítadlem snímků, tlačítka hlasitosti, AirPods, tlesknutí nebo odpočet dlouhým stisknutím. Do stativu nemusí nikdo strčit.
+FOCENÍ BEZ DOTEKU
+Apple Watch fungují jako dálková spoušť s počítadlem snímků. Fotit lze i tlačítky hlasitosti, pomocí AirPods, tlesknutím nebo samospouští dlouhým stisknutím. Nikdo se nemusí dotýkat stativu.
 
-STUDIO
-Od režimu Pokročilý se z iPadu stane profesionální pracovní plocha — a na přání i z iPhonu: časová osa, přepínání mezi živým obrazem a pořízenými snímky, cibulová slupka přes více snímků, masky formátu, lupa, referenční obrázek s klíčováním barvy a X-Sheet s tvary úst.
+FILM ROSTE S TEBOU
+Od druhého snímku běží film ve smyčce v hledáčku. Připojená obrazovka nebo projektor ukazuje obraz z kamery bez ovládacích prvků.
+
+ÚPRAVY
+Snímky můžeš zdvojovat, podržet, přesouvat tažením nebo jednotlivě přefotit. Vše lze vrátit zpět. Text, bubliny a kresby jdou přímo do obrazu, vlastní obrázky vložíš jako vrstvy přes ně. Zelené plátno nahradí zelenou nebo modrou barvu obrázkem nebo filmem. V režimu Pokročilý jsou k dispozici pohyby kamery s posunem a zoomem. Pro rotoskopii se video převede na snímky, přes které kreslíš. K tomu se přidává úvodní titulek, závěrečné titulky a vzhledy pro celý film.
 
 ZVUK
-Více zvukových stop s průběhem vlny: hudba z tvých souborů, nahrávání hlasu během přehrávání filmu, deset zvukových efektů od Plop po Tadá ke kterémukoli snímku, nebo hlas, který přečte text, jaký napíšeš.
+Více zvukových stop s křivkou. Hudba pochází z tvých souborů nebo z pěti vlastních skladeb od Vesele po Sen. Deset zvuků od Plop po Tadá připojíš ke každému snímku. Svůj hlas nahraješ k běžícímu filmu, podle přání vysoko, hluboko nebo jako robot. Napsaný text přečte hlas v zařízení.
 
-TEXT, TITULKY, ZELENÉ PLÁTNO
-Bubliny, text a kresby přímo v obraze. Úvodní titulek a závěrečné titulky. Zelenou nebo modrou nahradíš obrázkem nebo filmem. Vzhledy pro celý film.
+STUDIO
+V režimu Pokročilý se iPad stane studiovou pracovní plochou, podle přání i iPhone. S časovou osou, přepínáním mezi živým obrazem a záznamem, funkcí Cibulová slupka přes více snímků, formátovými maskami, lupou, referenčním snímkem s klíčováním barev a X-Sheet pro tvary úst. Světlo přes DMX (Art-Net) a ovládání pohybu přes Bluetooth nastavíš pro každý snímek.
 
-ÚPRAVY A EXPORT
-Zdvojuj snímky, přetahuj je do nového pořadí, přesnímej jednotlivé snímky, vrať cokoli zpět. Export při 2 až 30 fps, až do 4K, jako smyčka, bumerang nebo pozpátku — a také jako GIF.
+EXPORT A FLIPBOOK
+Exportovat stop motion můžeš s 2 až 30 snímky za sekundu, až do 4K, jako smyčku, bumerang nebo pozpátku, také jako GIF. Každé Dílo se podle přání stane flipbookem připraveným k tisku, s archy A4, ořezovými značkami a číslovanými listy. Dílo se přenese jako soubor přes AirDrop do jiného zařízení.
 
-FLIPBOOK
-Z každého díla se stane flipbook připravený k tisku: archy A4 s čarami pro stříhání a číslovanými listy. Ustřihnout, sešít, listovat.
+Z VIDEA NA STOP MOTION
+Vyber existující video. FrameFold rozpozná klidné momenty, odstraní snímky s rukama a vyřadí duplikáty.
 
 PRO ŠKOLY
-Jednoduchý režim ukazuje jen to nejnutnější. Žádný účet, žádné zpracování dat, žádný internet — vyhoví pravidlům ochrany dat každé školy. Plán výuky na dvě vyučovací hodiny je volně k dispozici a krátká nápověda je přímo v aplikaci.
+Režim Jednoduchý ukazuje jen to nejnutnější. Neexistuje žádný účet a žádné připojení k internetu. Plán hodiny na dvě vyučovací hodiny je volně dostupný, krátká nápověda je v aplikaci.
 
-Z VIDEA STOP MOTION
-Vyber existující video: klidné okamžiky se najdou, ruce se odstraní, duplikáty vytřídí.
+TAKÉ NA MACU
+Stejná aplikace běží na Macu, s dokumentární kamerou nebo iPhonem jako kamerou a exportem jako ProRes nebo sekvence snímků. FrameFold je k dispozici v 17 jazycích.
 
-I NA MACU
-Stejná aplikace běží i na Macu, s dokumentovou kamerou nebo iPhonem jako kamerou, a exportuje ProRes nebo sekvenci obrázků. V mnoha jazycích.
-
-Vytvořeno jako nástroj na míru pro umělce Alda Tolina (Aldo Tolino), jehož díla skládají vytištěné fotografie do objektů a ty znovu fotografují — obraz, objekt, obraz.
+FrameFold vznikl jako nástroj pro umělce Alda Tolina. Skládá vytištěné fotografie do objektů a znovu je fotí.

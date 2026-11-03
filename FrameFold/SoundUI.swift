@@ -112,7 +112,7 @@ struct SpeechSheet: View {
                 Button("Abbrechen", role: .cancel, action: onClose)
                     .buttonStyle(DarkSecondaryButtonStyle())
             }
-            Text("Die Sprachausgabe läuft auf dem Gerät – nichts wird übertragen.")
+            Text("Die Sprachausgabe läuft auf dem Gerät. Nichts wird übertragen.")
                 .font(Theme.mono(10)).opacity(0.55)
         }
         .foregroundStyle(Theme.paperOnDark)

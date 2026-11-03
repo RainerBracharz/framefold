@@ -1,46 +1,39 @@
-L’app de stop motion qui déclenche toute seule dès que tes mains quittent le cadre. Gratuite, sans abonnement, sans pub, sans compte, sans internet.
+L'application de stop motion pour le Mac qui déclenche toute seule dès que tes mains quittent l'image. Gratuit, sans abonnement, sans publicité, sans compte et sans internet.
 
-TOUT EST GRATUIT, SANS FILIGRANE
-Son, bruitages, voix de synthèse, fond vert, titre et générique de fin, texte et bulles, dessin, export jusqu’en 4K et en ProRes — rien de tout cela n’est payant, et aucun film ne porte de filigrane.
-
-FrameFold transforme ton travail à la table en stop motion — automatiquement, et entièrement sur ton Mac.
-
-Une caméra regarde la table d’en haut pendant que tu plies, dessines, disposes. FrameFold déclenche tout seul dès que tes mains quittent le cadre et que la scène se calme. Rien ne quitte ton Mac : pas de cloud, pas de compte, pas de pistage.
+TOUT GRATUIT, SANS FILIGRANE
+Toutes les fonctions sont gratuites, y compris le son, la musique, le fond vert, les titres, le dessin et l'exportation jusqu'en 4K ou en ProRes. Aucun film ne porte de filigrane. FrameFold ne collecte aucune donnée. Les images, le son et les œuvres restent sur ton Mac.
 
 CAMÉRA AU-DESSUS DE LA TABLE
-Idéal avec une caméra document qui regarde la table à la verticale — FrameFold choisit de lui-même une caméra USB branchée. Un iPhone comme caméra ou la caméra intégrée peuvent aussi être choisis. Avec pelure d’oignon, contrôle de dérive et déclenchement à intervalle ; la barre d’espace déclenche à la main.
+Une caméra regarde la table par le haut, tu plies, dessines ou poses des objets. FrameFold déclenche dès que tes mains quittent l'image et que la scène est immobile. Idéal avec une caméra de documents, FrameFold choisit tout seul une caméra USB branchée. Un iPhone comme caméra ou la caméra intégrée fonctionnent aussi. La barre d'espace déclenche manuellement. S'y ajoutent pelure d’oignon, alerte si la caméra a bougé et intervallomètre.
 
-NET, OU RIEN
-L’app mesure la netteté en continu. Une image floue n’entre jamais dans l’œuvre. Quand la caméra le permet, FrameFold fige l’exposition et la balance des blancs pour que rien ne scintille d’une image à l’autre.
+IMAGES NETTES
+L'application mesure la netteté en continu. Une image floue n'entre pas dans l'œuvre. Si la caméra le permet, l'exposition et la balance des blancs restent fixes pour que rien ne scintille entre les images.
+
+REFLEX ET HYBRIDES
+Via un dossier surveillé, chaque photo de ton appareil photo arrive dans l'œuvre en pleine résolution, même en RAW.
 
 STUDIO
-Dès le mode Avancé, la caméra devient un espace de travail pro : timeline, bascule entre direct et prises, pelure d’oignon sur plusieurs images, vues différence et exposition, masques de format, zones de sécurité, grilles, image ou film de référence avec incrustation, notes par image, moyenne contre le bruit, écran noir à la prise, prises test et time-lapse avec heure de début et de fin. Tout au clavier aussi. Export en ProRes ou en séquence d’images.
+À partir du mode Avancé, la caméra devient un espace de travail de studio. Avec chronologie, bascule entre image en direct et enregistrement, la pelure d’oignon sur plusieurs images, une vue de différence et d'exposition, des masques de format, un cadre de sécurité, une grille, une image ou un film de référence avec incrustation chromatique, des notes par image, un moyennage anti-bruit, l'assombrissement lors du déclenchement, des prises de vue test et un time-lapse avec heure de début et de fin. Tout se pilote aussi au clavier. Tu règles la lumière via DMX (Art-Net) et le contrôle de mouvement par Bluetooth pour chaque image.
+
+LE FILM SE CONSTRUIT
+Pendant que tu travailles, le stop motion tourne déjà en boucle à côté de l'image de la caméra.
+
+ÉDITION
+Duplique, maintiens, déplace ou reprends chaque image. Tout peut être annulé. Le texte, les bulles et les dessins s'ajoutent directement sur l'image, tu superposes tes propres images comme calques. Le fond vert remplace le vert ou le bleu par une image ou un film. À partir du mode Avancé, il y a des mouvements de caméra avec panoramique et zoom. Pour la rotoscopie, une vidéo devient une suite d'images sur lesquelles tu dessines. Et aussi carton de titre, générique et styles pour tout le film.
 
 SON
-Plusieurs pistes audio avec forme d’onde : musique tirée de tes fichiers, voix enregistrée pendant que le film défile, dix bruitages de Plop à Tadaa à poser sur n’importe quelle image, ou un texte tapé que tu fais parler par une voix. Dans la feuille d’exposition, les formes de bouche sont attribuées aux images.
+Plusieurs pistes audio avec forme d'onde. La musique vient de tes fichiers ou de cinq morceaux intégrés allant de Joyeux à Rêve. Tu attaches dix bruitages allant de Plop à Tadaa à chaque image. Tu enregistres ta voix sur le film en cours, au choix en aigu, en grave ou comme un robot. Une voix sur le Mac lit le texte tapé. Dans la feuille d’exposition, tu associes des formes de bouche aux images.
 
-TEXTE, TITRES, FOND VERT
-Bulles, texte et dessins directement dans l’image. Carton de titre et générique de fin. Remplace le vert ou le bleu par une image ou un film. Des looks pour tout le film.
+EXPORTATION ET FOLIOSCOPE
+Exportation de 2 à 30 images par seconde, jusqu'en 4K, en ProRes ou en séquence d'images. Chaque œuvre devient sur demande un folioscope prêt à imprimer, avec des planches A4, des lignes de coupe et des pages numérotées.
 
-MONTAGE ET EXPORT
-Duplique des images, réordonne-les en les glissant, reprends-en une seule, annule tout. Export de 2 à 30 images par seconde, jusqu’en 4K.
+DE VIDÉO À STOP MOTION
+Choisis une vidéo existante. FrameFold détecte les moments calmes, retire les images avec des mains et élimine les doublons. Avant, tu vois chaque image sur la planche contact.
 
-LE FILM GRANDIT AVEC TOI
-Pendant que tu travailles, le stop motion tourne déjà en boucle à côté de l’image de la caméra.
-
-FOLIOSCOPE
-Chaque œuvre devient un folioscope prêt à imprimer : planches A4 avec traits de coupe, bord de reliure et feuillets numérotés. Découper, agrafer, feuilleter — le film redevient objet.
-
-DE LA VIDÉO AU STOP MOTION
-Choisis une vidéo existante : les moments calmes sont repérés, les mains retirées, les doublons écartés. Tu vérifies chaque image sur la planche contact avant le montage.
-
-TROIS MODES
-Simple (choisir, déclencher, terminé — pensé pour l’enseignement), Avancé (format, cadence, résolution, lecture) et un mode atelier avec relief papier, écho d’image, rendu tirage, transitions pliées, film d’exposition et PDF prêts à imprimer : planche contact et gabarit de pliage.
-
-DES ŒUVRES, PAS DES FICHIERS
-Les projets réunissent les images de toutes tes séances, avec une corbeille de 30 jours. Le résultat se présente comme une édition : « Feuilles 01–24 · Série de 24 · datée 2026 ».
+POUR L'ÉCOLE
+Le mode Simple montre seulement l'essentiel. Il n'y a pas de compte et pas de connexion à internet. Un plan de cours de deux heures est disponible gratuitement, une aide courte est dans l'app.
 
 AUSSI SUR IPHONE ET IPAD
-FrameFold existe aussi pour iPhone et iPad — avec trépied, Apple Watch comme télécommande et déclenchement en tapant des mains. En 17 langues.
+FrameFold existe aussi pour iPhone et iPad, avec trépied, Apple Watch comme télécommande et déclenchement en tapant dans les mains. FrameFold est disponible en 17 langues.
 
-Conçu sur mesure pour l’artiste Aldo Tolino, qui plie des photographies imprimées en objets avant de les photographier à nouveau — image, objet, image.
+FrameFold a été créé comme outil pour l'artiste Aldo Tolino. Il plie des photographies imprimées pour en faire des objets et les photographie à nouveau.

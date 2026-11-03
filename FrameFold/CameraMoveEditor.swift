@@ -18,7 +18,7 @@ struct CameraMoveEditor: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Schwenk und Zoom über einen Bildbereich – im Export, wie eine Kamerabewegung über das Set.")
+                    Text("Schwenk und Zoom über einen Bildbereich. Das wirkt im Export wie eine Kamerabewegung über das Set.")
                         .font(Theme.mono(11)).foregroundStyle(Theme.graphite)
                     if !moves.isEmpty {
                         Picker("Kamerafahrt", selection: Binding(get: { selected?.id ?? UUID() }, set: { selectedID = $0 })) {

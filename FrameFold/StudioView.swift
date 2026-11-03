@@ -704,7 +704,7 @@ struct StudioView: View {
                         picker("Vergrößerung", Binding(get: { LoupeZoom(id: settings.loupeZoom) },
                                                       set: { settings.loupeZoom = $0.id }),
                                [2, 4, 8].map(LoupeZoom.init)) { "\($0.id)×" }
-                        Text("Im Bild klicken oder ziehen: Lupe setzen und dort scharfstellen.")
+                        Text("Klicke oder ziehe im Bild, um die Lupe zu setzen und dort scharfzustellen.")
                             .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
                     }
                     stepper("Kurz abspielen", value: $settings.shortPlayFrames, in: 4...48, step: 4) { String(localized: "\($0) Bilder") }
@@ -748,7 +748,7 @@ struct StudioView: View {
                         }
                         toggle("Im Sucher zeigen", $settings.greenPreview)
                     }
-                    Text("Die Farbe wird beim Export durch den Hintergrund ersetzt – ein Bild oder ein Film, der Bild für Bild mitläuft.")
+                    Text("Die Farbe wird beim Export durch den Hintergrund ersetzt. Das kann ein Bild oder ein Film sein, der Bild für Bild mitläuft.")
                         .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
                 }
                 if TetherCamera.isSupported { tetherSection }
@@ -781,7 +781,7 @@ struct StudioView: View {
                     } else {
                         smallButton("Ordner wählen …") { importKind = .folder; showReferenceImporter = true }
                     }
-                    Text("Fotos, die die Software deiner Kamera in diesen Ordner legt, werden in voller Auflösung das nächste Bild – auch RAW. Die Automatik am besten ausschalten.")
+                    Text("Fotos, die die Software deiner Kamera in diesen Ordner legt, werden in voller Auflösung das nächste Bild. Das gilt auch für RAW. Schalte die Automatik am besten aus.")
                         .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
                 }
                 section("Aufnahme") {
@@ -1094,7 +1094,7 @@ struct StudioView: View {
                 if tether.isReady {
                     toggle("Auslösen mit dieser Kamera", $useTether)
                     if !tether.canTakePicture {
-                        Text("Diese Kamera meldet kein Auslösen über USB – den Kamera-Ordner nutzen.")
+                        Text("Diese Kamera meldet kein Auslösen über USB. Nutze den Kamera-Ordner.")
                             .font(Theme.mono(10)).foregroundStyle(Theme.oxblood)
                     }
                     if tether.captured > 0 {
@@ -1109,7 +1109,7 @@ struct StudioView: View {
             if let error = tether.lastError {
                 Text(verbatim: error).font(Theme.mono(10)).foregroundStyle(Theme.oxblood)
             }
-            Text("Löst die Kamera aus und holt das Foto in voller Auflösung (auch RAW). Ein Livebild liefert macOS dafür nicht – zum Ausrichten das Livebild einer zweiten Kamera oder den Sucher nutzen.")
+            Text("Löst die Kamera aus und holt das Foto in voller Auflösung (auch RAW). Ein Livebild liefert macOS dafür nicht. Nutze zum Ausrichten das Livebild einer zweiten Kamera oder den Sucher.")
                 .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
         }
     }

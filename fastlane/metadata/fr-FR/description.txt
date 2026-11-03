@@ -1,39 +1,39 @@
-L’app de stop motion qui déclenche toute seule dès que tes mains quittent le cadre. Gratuite, sans abonnement, sans pub, sans compte, sans internet.
+L'application de stop motion qui déclenche toute seule dès que tes mains quittent l'image. Gratuit, sans abonnement, sans publicité, sans compte et sans internet.
 
-TOUT EST GRATUIT, SANS FILIGRANE
-Son, bruitages, voix de synthèse, fond vert, titre et générique de fin, texte et bulles, dessin, import de photos, export jusqu’en 4K — rien de tout cela n’est payant, et aucun film ne porte de filigrane. Rien ne quitte ton appareil : pas de cloud, pas de compte, pas de pistage.
+TOUT GRATUIT, SANS FILIGRANE
+Toutes les fonctions sont gratuites, y compris le son, la musique, le fond vert, les titres, le dessin et l'exportation jusqu'en 4K. Aucun film ne porte de filigrane. FrameFold ne collecte aucune donnée. Les images, le son et les œuvres restent sur ton appareil.
 
 CAMÉRA AUTOMATIQUE
-iPhone ou iPad sur trépied, et au travail — FrameFold déclenche tout seul dès que tes mains quittent le cadre et que la scène se calme. L’exposition et la balance des blancs sont verrouillées, et la vitesse d’obturation se cale pour que la lumière artificielle ne scintille pas. Avec pelure d’oignon, alerte si la caméra a bougé, déclenchement à intervalle et niveau. Chaque image en pleine résolution du capteur, avec choix de l’objectif.
+Place l'iPhone ou l'iPad sur le trépied et travaille. FrameFold déclenche dès que tes mains quittent l'image et que la scène est immobile. L'exposition et la balance des blancs restent fixes, la vitesse d'obturation se verrouille contre le scintillement de la lumière artificielle. S'y ajoutent pelure d’oignon, alerte si la caméra a bougé, intervallomètre et niveau à bulle.
 
-NET, OU RIEN
-L’app mesure la netteté en continu et ne verrouille la mise au point qu’une fois celle-ci vraiment stable. Une image floue n’entre jamais dans l’œuvre. Dès le mode Avancé, tu règles aussi toi-même ISO, vitesse d’obturation, mise au point et balance des blancs.
+IMAGES NETTES
+L'application mesure la netteté en continu et fixe la mise au point seulement quand elle est bonne. Une image floue n'entre pas dans l'œuvre. À partir du mode Avancé, tu règles toi-même les ISO, le temps de pose, la mise au point et la balance des blancs et tu choisis l'objectif. Chaque image a la pleine résolution du capteur.
 
-DÉCLENCHER SANS TOUCHER
-L’Apple Watch comme télécommande avec compteur d’images, les boutons de volume, les AirPods, un claquement de mains ou un compte à rebours par appui long. Personne ne bouscule le trépied.
+DÉCLENCHEMENT SANS CONTACT
+L'Apple Watch devient une télécommande avec compteur d'images. Tu peux aussi déclencher avec les boutons de volume, des AirPods, en tapant dans les mains ou avec le retardateur (appui long). Personne ne doit toucher le trépied.
 
-STUDIO
-Dès le mode Avancé, l’iPad devient un espace de travail pro, et l’iPhone aussi si tu le souhaites : timeline, bascule entre direct et prises, pelure d’oignon sur plusieurs images, masques de format, loupe, image de référence avec incrustation et feuille d’exposition avec formes de bouche.
+LE FILM SE CONSTRUIT
+Dès la deuxième image, le film tourne en boucle dans le viseur. Un écran ou un projecteur connecté montre l'image de la caméra sans commandes.
+
+ÉDITION
+Duplique, maintiens, déplace ou reprends chaque image. Tout peut être annulé. Le texte, les bulles et les dessins s'ajoutent directement sur l'image, tu superposes tes propres images comme calques. Le fond vert remplace le vert ou le bleu par une image ou un film. À partir du mode Avancé, il y a des mouvements de caméra avec panoramique et zoom. Pour la rotoscopie, une vidéo devient une suite d'images sur lesquelles tu dessines. Et aussi carton de titre, générique et styles pour tout le film.
 
 SON
-Plusieurs pistes audio avec forme d’onde : musique tirée de tes fichiers, voix enregistrée pendant que le film défile, dix bruitages de Plop à Tadaa à poser sur n’importe quelle image, ou un texte tapé que tu fais parler par une voix.
+Plusieurs pistes audio avec forme d'onde. La musique vient de tes fichiers ou de cinq morceaux intégrés allant de Joyeux à Rêve. Tu attaches dix bruitages allant de Plop à Tadaa à chaque image. Tu enregistres ta voix sur le film en cours, au choix en aigu, en grave ou comme un robot. Une voix sur l'appareil lit le texte tapé.
 
-TEXTE, TITRES, FOND VERT
-Bulles, texte et dessins directement dans l’image. Carton de titre et générique de fin. Remplace le vert ou le bleu par une image ou un film. Des looks pour tout le film.
+STUDIO
+À partir du mode Avancé, l'iPad devient un espace de travail de studio, l'iPhone aussi sur demande. Avec une chronologie, le basculement entre l'image en direct et l'enregistrement, la pelure d’oignon sur plusieurs images, des masques de format, une loupe, une image de référence avec incrustation chromatique et une feuille d’exposition pour les formes de bouche. Tu règles la lumière via DMX (Art-Net) et le contrôle de mouvement par Bluetooth pour chaque image.
 
-MONTAGE ET EXPORT
-Duplique des images, réordonne-les en les glissant, reprends-en une seule, annule tout. Export de 2 à 30 images par seconde, jusqu’en 4K, en boucle, en boomerang ou à rebours, et aussi en GIF.
+EXPORTATION ET FOLIOSCOPE
+Exportation de 2 à 30 images par seconde, jusqu'en 4K, en boucle, en boomerang ou à l'envers, aussi en GIF. Chaque œuvre devient sur demande un folioscope prêt à imprimer, avec des planches A4, des lignes de coupe et des pages numérotées. Une œuvre se transfère comme fichier par AirDrop vers un autre appareil.
 
-FOLIOSCOPE
-Chaque œuvre devient un folioscope prêt à imprimer : planches A4 avec traits de coupe et feuillets numérotés. Découper, agrafer, feuilleter.
+DE VIDÉO À STOP MOTION
+Choisis une vidéo existante. FrameFold détecte les moments calmes, retire les images avec des mains et élimine les doublons.
 
-POUR L’ÉCOLE
-Le mode Simple n’affiche que l’essentiel. Pas de compte, aucun traitement de données, pas d’internet — compatible avec toutes les règles de protection des données. Une séquence pédagogique de deux séances est disponible gratuitement, et une aide courte est intégrée à l’app.
-
-DE LA VIDÉO AU STOP MOTION
-Choisis une vidéo existante : les moments calmes sont repérés, les mains retirées, les doublons écartés.
+POUR L'ÉCOLE
+Le mode Simple montre seulement l'essentiel. Il n'y a pas de compte et pas de connexion à internet. Un plan de cours de deux heures est disponible gratuitement, une aide courte est dans l'app.
 
 AUSSI SUR MAC
-La même app tourne sur Mac, avec une caméra document ou un iPhone comme caméra, et exporte en ProRes ou en séquence d’images. En 17 langues.
+La même application fonctionne sur le Mac, avec une caméra de documents ou un iPhone comme caméra et une exportation en ProRes ou en séquence d'images. FrameFold est disponible en 17 langues.
 
-Conçu sur mesure pour l’artiste Aldo Tolino, qui plie des photographies imprimées en objets avant de les photographier à nouveau — image, objet, image.
+FrameFold a été créé comme outil pour l'artiste Aldo Tolino. Il plie des photographies imprimées pour en faire des objets et les photographie à nouveau.

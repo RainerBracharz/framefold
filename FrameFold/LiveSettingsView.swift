@@ -30,8 +30,8 @@ struct LiveSettingsView: View {
                          ? "Einfach: nur Auslöser und Fertig. Alles Weitere erscheint ab \"Erweitert\"."
                          : mode.showsTolino
                          ? (Platform.isMac
-                            ? "Labor-Ansicht: Blattnummer, Sitzungsuhr, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser."
-                            : "Labor-Ansicht: Blattnummer, Sitzungsuhr, fixierte Belichtung, Messwerte – und der Falz-Countdown wandert in Amber um den Auslöser.")
+                            ? "Labor-Ansicht: Blattnummer, Sitzungsuhr und Messwerte. Der Falz-Countdown wandert in Amber um den Auslöser."
+                            : "Labor-Ansicht: Blattnummer, Sitzungsuhr, fixierte Belichtung und Messwerte. Der Falz-Countdown wandert in Amber um den Auslöser.")
                          : Platform.isMac
                          ? "Alle Werkzeuge sichtbar: Raster, Pegel, Daumenkino mit Zurücknehmen, Neu-Einmessen, Referenzbild."
                          : "Alle Werkzeuge sichtbar: Raster, Wasserwaage, Pegel, Daumenkino mit Zurücknehmen, Neu-Fixieren, Referenzbild.")
@@ -51,7 +51,7 @@ struct LiveSettingsView: View {
                 Section {
                     Toggle("Film auf dem Außendisplay", isOn: $outerDisplayOn)
                         .font(Theme.body)
-                    Text("Aufgeklappt zeigt das iPhone Duo den bisherigen Film außen – zum Tisch hin.")
+                    Text("Aufgeklappt zeigt das iPhone Duo den bisherigen Film außen, zum Tisch hin.")
                         .font(Theme.mono(11))
                         .foregroundStyle(Theme.graphite)
                 } header: {
@@ -74,7 +74,7 @@ struct LiveSettingsView: View {
                         Toggle(isOn: $iPhoneStudio) {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Studio-Arbeitsfläche").font(Theme.body)
-                                Text("Zeitleiste, Abspielen, Zwiebelhaut über mehrere Bilder, Masken, Lupe, Ton und X-Sheet – wie am iPad und Mac.")
+                                Text("Zeitleiste, Abspielen, Zwiebelhaut über mehrere Bilder, Masken, Lupe, Ton und X-Sheet. Das funktioniert wie am iPad und Mac.")
                                     .font(Theme.mono(10)).foregroundStyle(Theme.graphite)
                             }
                         }
@@ -130,7 +130,7 @@ struct LiveSettingsView: View {
                     Toggle("Nicht auslösen, solange Hände im Bild sind", isOn: $controller.checkHands)
                         .font(Theme.body)
                 } header: {
-                    CatalogLabel("Auto-Shutter")
+                    CatalogLabel("Auto-Auslöser")
                 }
                 .listRowBackground(Theme.paperShade.opacity(0.5))
 
@@ -144,7 +144,7 @@ struct LiveSettingsView: View {
                             Text("Intervall: \(controller.intervalSeconds, specifier: "%.0f") s")
                                 .font(Theme.body)
                             Slider(value: $controller.intervalSeconds, in: 1...30, step: 1)
-                            Text("Im Intervall-Modus löst FrameFold in festem Takt aus – unabhängig von Bewegung.")
+                            Text("Im Intervall-Modus löst FrameFold in festem Takt aus, unabhängig von Bewegung.")
                                 .font(Theme.mono(11))
                                 .foregroundStyle(Theme.graphite)
                         }
@@ -173,7 +173,7 @@ struct LiveSettingsView: View {
                         Text("Deckkraft: \(Int(onionOpacity * 100)) %")
                             .font(Theme.body)
                         Slider(value: $onionOpacity, in: 0.1...0.8, step: 0.05)
-                        Text("Zeigt das erste oder letzte Bild als Überblendung – zum Ausrichten und um Drift zu erkennen.")
+                        Text("Zeigt das erste oder letzte Bild als Überblendung, zum Ausrichten und um Drift zu erkennen.")
                             .font(Theme.mono(11))
                             .foregroundStyle(Theme.graphite)
                     }
@@ -186,12 +186,12 @@ struct LiveSettingsView: View {
                 Section {
                     tipRow("lightbulb", "Licht konstant halten: Kunstlicht nutzen, Fenster abdunkeln. Billige LED-/Leuchtstofflampen flackern im Netztakt und streifen einzelne Bilder.")
                     if Platform.isMac {
-                        tipRow("hand.raised", "Kamera nicht berühren: fest über dem Tisch montieren und den Auto-Shutter arbeiten lassen (oder den runden Knopf).")
+                        tipRow("hand.raised", "Kamera nicht berühren. Fest über dem Tisch montieren und den Auto-Auslöser arbeiten lassen, oder den runden Knopf drücken.")
                         tipRow("lock", "Licht ruhig halten: Gleichmäßiges Kunstlicht ohne Sonne hält den Film ruhig. Wo die Kamera es erlaubt, sperrt FrameFold Belichtung und Weißabgleich.")
-                        tipRow("scope", "Dokumentenkamera mit Fokus-Schalter: auf Einzelfokus (S) stellen und einmal scharfstellen – sonst stellt sie bei jeder Hand im Bild neu scharf. Helligkeit und Weißabgleich lassen sich meist mit der App des Herstellers fest einstellen.")
+                        tipRow("scope", "Dokumentenkamera mit Fokus-Schalter: auf Einzelfokus (S) stellen und einmal scharfstellen. Sonst stellt sie bei jeder Hand im Bild neu scharf. Helligkeit und Weißabgleich lassen sich meist mit der App des Herstellers fest einstellen.")
                     } else {
-                        tipRow("hand.raised", "iPhone nicht berühren: aufs Stativ stellen und den Auto-Shutter arbeiten lassen (oder den runden Knopf).")
-                        tipRow("lock", "Kamera bleibt ruhig: FrameFold sperrt Belichtung und Weißabgleich nach der kurzen Kalibrierung – so driftet zwischen den Bildern nichts. Der Fokus wird am Stativ fixiert, aus der Hand läuft er mit.")
+                        tipRow("hand.raised", "iPhone nicht berühren. Aufs Stativ stellen und den Auto-Auslöser arbeiten lassen, oder den runden Knopf drücken.")
+                        tipRow("lock", "Kamera bleibt ruhig: FrameFold sperrt Belichtung und Weißabgleich nach der kurzen Kalibrierung. So driftet zwischen den Bildern nichts. Der Fokus wird am Stativ fixiert, aus der Hand läuft er mit.")
                     }
                     tipRow("square.2.layers.3d", "Drift früh erkennen: Zwiebelhaut anlassen und die Aufnahme ab und zu mit dem ersten Bild vergleichen.")
                     tipRow("timer", Platform.isMac

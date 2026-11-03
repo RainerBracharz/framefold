@@ -54,3 +54,6 @@ fastlane/screenshots-mac
 
 # Laufzeitprofile aus Debug-Starts
 *.profraw
+
+# Gemini-Lektorat: Arbeitsstände, bleiben lokal
+lektorat/

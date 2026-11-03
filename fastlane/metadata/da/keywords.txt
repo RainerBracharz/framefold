@@ -1,1 +1,1 @@
-animation,lerfilm,brickfilm,klodsfilm,flipbog,tegnefilm,timelapse,børn,skole,undervisning,løgskind
+animation,lerfilm,brickfilm,klodsfilm,flipbog,tegnefilm,automatisk,børn,skole,undervisning,stativ

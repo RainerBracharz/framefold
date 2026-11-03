@@ -67,13 +67,13 @@ final class LiveCaptureController: NSObject, ObservableObject {
                                : String(localized: "Kamera startet…")
             case .calibrating:
                 return playful ? String(localized: "Halt kurz still…")
-                               : String(localized: "Kalibriere – kurz ruhig lassen…")
+                               : String(localized: "Kalibriere, kurz ruhig lassen…")
             case .focusing:
                 return playful ? String(localized: "Moment, wird scharf…")
                                : String(localized: "Noch nicht scharf…")
             case .waitingForWork:
-                return playful ? String(localized: "Los — ich schau zu")
-                               : String(localized: "Bereit – arbeite einfach")
+                return playful ? String(localized: "Los, ich schau zu")
+                               : String(localized: "Bereit. Arbeite einfach.")
             case .working:
                 return playful ? String(localized: "Ich warte, bis du weg bist…")
                                : String(localized: "Arbeit erkannt…")
@@ -1504,8 +1504,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
             if restlessSince == nil { restlessSince = Date() }
             if Date().timeIntervalSince(restlessSince!) > 6 {
                 hint = Platform.isMac
-                    ? String(localized: "Szene wirkt dauerhaft unruhig. Kamerahalterung prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen.")
-                    : String(localized: "Szene wirkt dauerhaft unruhig. Stativ prüfen – oder in den Einstellungen die Bewegungs-Toleranz erhöhen.")
+                    ? String(localized: "Szene wirkt dauerhaft unruhig. Kamerahalterung prüfen oder in den Einstellungen die Bewegungs-Toleranz erhöhen.")
+                    : String(localized: "Szene wirkt dauerhaft unruhig. Stativ prüfen oder in den Einstellungen die Bewegungs-Toleranz erhöhen.")
             }
             return
         }

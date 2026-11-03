@@ -199,7 +199,7 @@ extension MotionController: CBCentralManagerDelegate {
         MainActor.assumeIsolated {
             if central.state == .poweredOn { startScan() }
             else if central.state == .unauthorized {
-                lastError = String(localized: "Kein Bluetooth-Zugriff – in den Einstellungen erlauben.")
+                lastError = String(localized: "Kein Bluetooth-Zugriff. Bitte in den Einstellungen erlauben.")
             } else if central.state == .poweredOff {
                 lastError = String(localized: "Bluetooth ist ausgeschaltet.")
             }

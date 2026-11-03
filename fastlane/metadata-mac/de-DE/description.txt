@@ -1,46 +1,39 @@
-Die Stop-Motion-App, die von selbst auslöst, sobald deine Hände aus dem Bild sind. Kostenlos, ohne Abo, ohne Werbung, ohne Konto, ohne Internet.
+Die Stop-Motion-App für den Mac, die von selbst auslöst, sobald deine Hände aus dem Bild sind. Kostenlos, ohne Abo, ohne Werbung, ohne Konto und ohne Internet.
 
 ALLES KOSTENLOS, OHNE WASSERZEICHEN
-Ton, Geräusche, Sprachausgabe, Greenscreen, Titel und Abspann, Text und Sprechblasen, Zeichnen, Export bis 4K und ProRes – nichts davon kostet extra, kein Film trägt ein Wasserzeichen.
-
-FrameFold macht aus deiner Arbeit am Tisch eine Stopmotion – vollautomatisch und komplett auf deinem Mac.
-
-Eine Kamera blickt von oben auf den Tisch, du faltest, zeichnest, legst. FrameFold löst selbst aus, sobald deine Hände aus dem Bild sind und die Szene ruht. Nichts verlässt deinen Mac: keine Cloud, kein Konto, kein Tracking.
+Alle Funktionen sind kostenlos, auch Ton, Musik, Greenscreen, Titel, Zeichnen und der Export bis 4K oder als ProRes. Kein Film trägt ein Wasserzeichen. FrameFold erhebt keine Daten. Bilder, Ton und Werke bleiben auf deinem Mac.
 
 KAMERA ÜBER DEM TISCH
-Am besten mit einer Dokumentenkamera, die senkrecht auf den Tisch blickt – FrameFold wählt eine angesteckte USB-Kamera von selbst. Ein iPhone als Kamera oder die eingebaute Kamera lassen sich ebenso wählen. Mit Zwiebelhaut, Drift-Kontrolle und Intervall-Auslöser; von Hand löst die Leertaste aus.
+Eine Kamera blickt von oben auf den Tisch, du faltest, zeichnest oder legst. FrameFold löst aus, sobald deine Hände aus dem Bild sind und die Szene ruht. Am besten geht das mit einer Dokumentenkamera, eine angesteckte USB-Kamera wählt FrameFold von selbst. Ein iPhone als Kamera oder die eingebaute Kamera gehen ebenso. Von Hand löst die Leertaste aus. Dazu gibt es Zwiebelhaut, eine Warnung bei verrutschter Kamera und Intervall-Auslöser.
 
-SCHARF, ODER GAR NICHT
-Die App misst laufend die Bildschärfe. Ein unscharfes Bild landet gar nicht erst im Werk. Wo die Kamera es erlaubt, hält FrameFold Belichtung und Weißabgleich fest, damit zwischen den Bildern nichts flackert.
+SCHARFE BILDER
+Die App misst laufend die Schärfe. Ein unscharfes Bild kommt nicht ins Werk. Wo die Kamera es erlaubt, bleiben Belichtung und Weißabgleich fest, damit zwischen den Bildern nichts flackert.
+
+SPIEGELREFLEX UND SPIEGELLOSE
+Über einen überwachten Ordner kommt jedes Foto deiner Kamera in voller Auflösung ins Werk, auch RAW.
 
 STUDIO
-Ab „Erweitert“ wird die Kamera zur Profi-Arbeitsfläche: Zeitleiste, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder, Differenz- und Belichtungsansicht, Formatmasken, Sicherheitsrahmen, Raster, Referenzbild oder -film mit Chroma-Key, Notizen je Bild, Mitteln gegen Rauschen, Abdunkeln beim Auslösen, Testaufnahmen und Zeitraffer mit Start- und Endzeit. Alles auch über Tasten. Export als ProRes oder Bildsequenz.
-
-TON
-Mehrere Tonspuren mit Wellenform: Musik aus deinen Dateien, Stimme zum laufenden Film aufnehmen, zehn Geräusche von Plopp bis Tadaa an jedes Bild hängen oder getippten Text von einer Stimme sprechen lassen. Im X-Sheet werden Mundformen den Bildern zugeordnet.
-
-TEXT, TITEL, GREENSCREEN
-Sprechblasen, Text und Zeichnungen direkt im Bild. Titelkarte und Abspann. Grün oder Blau durch ein Bild oder einen Film ersetzen. Looks für den ganzen Film.
-
-SCHNITT UND EXPORT
-Bilder verdoppeln, per Ziehen umordnen, einzeln neu aufnehmen, alles rückgängig machen. Export mit 2 bis 30 Bildern pro Sekunde, bis 4K.
+Ab „Erweitert“ wird die Kamera zur Studio-Arbeitsfläche. Mit Zeitleiste, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder, Differenz- und Belichtungsansicht, Formatmasken, Sicherheitsrahmen, Raster, Referenzbild oder -film mit Chroma-Key, Notizen je Bild, Mitteln gegen Rauschen, Abdunkeln beim Auslösen, Testaufnahmen und Zeitraffer mit Start- und Endzeit. Alle Befehle gehen auch über die Tastatur. Licht über DMX (Art-Net) und Motion Control per Bluetooth stellst du je Bild ein.
 
 DER FILM WÄCHST MIT
-Während du arbeitest, läuft die Stopmotion schon als Schleife neben dem Kamerabild.
+Während du arbeitest, läuft die Stop-Motion schon als Schleife neben dem Kamerabild.
 
-DAUMENKINO
-Jedes Werk wird zum druckfertigen Daumenkino: A4-Bogen mit Schnittlinien, Bindekante und nummerierten Blättern. Ausschneiden, klammern, blättern – aus dem Film wird wieder ein Objekt.
+BEARBEITEN
+Bilder verdoppeln, halten, per Ziehen umordnen oder einzeln neu aufnehmen. Alles lässt sich rückgängig machen. Text, Sprechblasen und Zeichnungen kommen direkt ins Bild, eigene Bilder legst du als Ebenen darüber. Greenscreen ersetzt Grün oder Blau durch ein Bild oder einen Film. Ab „Erweitert“ gibt es Kamerafahrten mit Schwenk und Zoom. Für Rotoskopie wird ein Video zu Bildern, über die du zeichnest. Dazu kommen Titelkarte, Abspann und Looks für den ganzen Film.
 
-VIDEO ZU STOPMOTION
-Vorhandenes Video wählen, ruhige Momente werden erkannt, Hände entfernt, Duplikate aussortiert. Vor der Montage prüfst du jedes Bild auf dem Kontaktbogen.
+TON
+Mehrere Tonspuren mit Wellenform. Musik kommt aus deinen Dateien oder aus fünf eigenen Stücken von „Fröhlich“ bis „Traum“. Zehn Geräusche von Plopp bis Tadaa hängst du an jedes Bild. Deine Stimme nimmst du zum laufenden Film auf, auf Wunsch hoch, tief oder als Roboter. Getippten Text spricht eine Stimme auf dem Mac. Im X-Sheet ordnest du Mundformen den Bildern zu.
 
-DREI MODI
-Einfach (auswählen, auslösen, fertig – ideal für den Unterricht), Erweitert (Format, Bildrate, Auflösung, Abspielmodus) und ein Atelier-Modus mit Papierrelief, Bild-Echo, Druckbild-Look, Falt-Übergängen, Ausstellungs-Reel und druckfertigen Kontaktbogen- und Faltvorlagen-PDFs.
+EXPORT UND DAUMENKINO
+Export mit 2 bis 30 Bildern pro Sekunde, bis 4K, als ProRes oder als Bildsequenz. Jedes Werk wird auf Wunsch zum druckfertigen Daumenkino, mit A4-Bogen, Schnittlinien und nummerierten Blättern.
 
-WERKE STATT DATEIEN
-Projekte sammeln Bilder über beliebig viele Sessions, mit 30-Tage-Papierkorb. Das Ergebnis erscheint als Edition: „Blatt 01–24 · Serie von 24 · datiert 2026".
+VIDEO ZU STOP-MOTION
+Wähl ein vorhandenes Video. FrameFold erkennt die ruhigen Momente, entfernt Bilder mit Händen und sortiert Doppelte aus. Vorher siehst du jedes Bild auf dem Kontaktbogen.
+
+FÜR DIE SCHULE
+Der Modus „Einfach“ zeigt nur das Nötigste. Es gibt kein Konto und keine Verbindung ins Internet. Ein Unterrichtsentwurf für zwei Stunden ist frei verfügbar, eine kurze Hilfe ist in der App.
 
 AUCH AUF IPHONE UND IPAD
-FrameFold gibt es ebenso für iPhone und iPad – dort mit Stativ, Apple Watch als Fernauslöser und Auslösen per Klatschen. In 17 Sprachen.
+FrameFold gibt es ebenso für iPhone und iPad, dort mit Stativ, Apple Watch als Fernauslöser und Auslösen per Klatschen. FrameFold gibt es in 17 Sprachen.
 
-Entstanden als maßgeschneidertes Werkzeug für den Künstler Aldo Tolino, dessen Arbeit gedruckte Fotografien zu Objekten faltet und wieder fotografiert – Bild, Objekt, Bild.
+FrameFold entstand als Werkzeug für den Künstler Aldo Tolino. Er faltet gedruckte Fotografien zu Objekten und fotografiert sie wieder.

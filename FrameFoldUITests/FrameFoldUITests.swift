@@ -199,7 +199,7 @@ final class FrameFoldUITests: XCTestCase {
             sleep(1)
             shot("project-detail-bottom")
             // Video montieren: danach stehen Vorschau und „Teilen" im Bild
-            if tap(["Export stop-motion", "Stopmotion exportieren", "Exporter le stop motion"]) {
+            if tap(["Export stop-motion", "Stop-Motion exportieren", "Exporter le stop motion"]) {
                 // Montage abwarten: fertig, sobald „Teilen" auftaucht (max. 60 s)
                 let share = app.buttons.matching(NSPredicate(
                     format: "label CONTAINS[c] 'share' OR label CONTAINS[c] 'teilen' OR label CONTAINS[c] 'partager'")).firstMatch

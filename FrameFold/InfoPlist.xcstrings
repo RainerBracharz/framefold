@@ -8,7 +8,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "FrameFold nimmt im Live-Modus automatisch Frames auf, wenn deine Hände aus dem Bild sind."
+            "value": "FrameFold nimmt im Live-Modus automatisch Bilder auf, wenn deine Hände aus dem Bild sind."
           }
         },
         "en": {
@@ -116,7 +116,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zum Sichern fertiger Stopmotion-Videos in deiner Fotomediathek."
+            "value": "Zum Sichern fertiger Stop-Motion-Videos in deiner Fotomediathek."
           }
         },
         "en": {
@@ -224,7 +224,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Im Studio erkennt FrameFold gesprochene Wörter einer Tonspur – nur auf dem Gerät –, um Mundformen den Bildern zuzuordnen."
+            "value": "Im Studio erkennt FrameFold gesprochene Wörter einer Tonspur, um Mundformen den Bildern zuzuordnen. Das geschieht nur auf dem Gerät."
           }
         },
         "en": {
@@ -547,7 +547,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nur wenn du im Studio die Lichtsteuerung einschaltest: FrameFold schickt Lichtwerte (Art-Net) an ein Gerät in deinem lokalen Netz. Es geht nichts ins Internet."
+            "value": "FrameFold schickt Lichtwerte (Art-Net) nur dann an ein Gerät in deinem lokalen Netz, wenn du im Studio die Lichtsteuerung einschaltest. Es geht nichts ins Internet."
           }
         },
         "en": {
@@ -655,7 +655,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nur wenn du im Studio Motion Control verbindest: FrameFold steuert per Bluetooth einen Kameraschlitten oder Schwenkkopf."
+            "value": "FrameFold steuert nur dann per Bluetooth einen Kameraschlitten oder Schwenkkopf, wenn du im Studio Motion Control verbindest."
           }
         },
         "en": {

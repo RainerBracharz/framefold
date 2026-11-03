@@ -283,7 +283,7 @@ enum PipelineStage: Equatable {
         case .selectingKeyframes: return String(localized: "Wähle Keyframes…")
         case .checkingHands: return String(localized: "Prüfe auf Hände…")
         case .reviewing: return String(localized: "Keyframes prüfen")
-        case .assembling: return String(localized: "Baue Stopmotion…")
+        case .assembling: return String(localized: "Baue Stop-Motion…")
         case .done: return String(localized: "Fertig")
         case .failed(let msg): return String(localized: "Fehler: \(msg)")
         }

@@ -215,7 +215,7 @@ struct LiveCaptureView: View {
     private func retakeBanner(project: Project) -> some View {
         let number = (retake.flatMap { project.frameFilenames.firstIndex(of: $0.filename) } ?? 0) + 1
         return VStack(spacing: 0) {
-            Text("Bild \(number) neu aufnehmen – das nächste Bild ersetzt es.")
+            Text("Bild \(number) neu aufnehmen. Das nächste Bild ersetzt es.")
                 .font(Theme.mono(11))
                 .foregroundStyle(Theme.darkroom)
                 .multilineTextAlignment(.center)
@@ -233,8 +233,8 @@ struct LiveCaptureView: View {
                 FoldMark(size: 44, color: Theme.paperOnDark)
                 CatalogLabel("So funktioniert die Kamera", color: Theme.paperOnDark)
                 Text(Platform.isMac
-                     ? "Kamera fest über dem Tisch, etwa eine Dokumentenkamera. Arbeite einfach — FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht."
-                     : "iPhone aufs Stativ oder ruhig über die Arbeit halten. Arbeite einfach — FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.")
+                     ? "Kamera fest über dem Tisch, etwa eine Dokumentenkamera. Arbeite einfach. FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht."
+                     : "iPhone aufs Stativ oder ruhig über die Arbeit halten. Arbeite einfach. FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.")
                     .font(Theme.mono(12))
                     .foregroundStyle(Theme.paperOnDark.opacity(0.85))
                     .multilineTextAlignment(.center)
@@ -265,7 +265,7 @@ struct LiveCaptureView: View {
             FoldMark(size: 40, color: Theme.paperOnDark)
             CatalogLabel("Keine Kamera verfügbar", color: Theme.paperOnDark)
             Text(Platform.isMac
-                 ? "Keine Kamera gefunden. Schließ eine USB-Kamera an – etwa eine Dokumentenkamera über dem Tisch – oder nimm dein iPhone als Kamera. Videos kannst du im Video-Tab trotzdem verarbeiten."
+                 ? "Keine Kamera gefunden. Schließ eine USB-Kamera an, etwa eine Dokumentenkamera über dem Tisch, oder nimm dein iPhone als Kamera. Videos kannst du im Video-Tab trotzdem verarbeiten."
                  : "Auf diesem Gerät wurde keine Kamera gefunden (z. B. im Simulator). Die Live-Aufnahme braucht ein echtes iPhone. Videos kannst du im Video-Tab trotzdem verarbeiten.")
                 .font(Theme.mono(12))
                 .foregroundStyle(Theme.paperOnDark.opacity(0.7))
@@ -330,7 +330,7 @@ struct LiveCaptureView: View {
                         FoldedPaperHero(seed: 33, accent: Theme.violet, animatesLight: false)
                             .frame(height: horizontalSizeClass == .regular ? 260 : 150)
                             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.3), lineWidth: 1))
-                        Text("Noch kein Werk – leg eines an, dann kann die Kamera loslegen.")
+                        Text("Noch kein Werk. Leg eines an, dann kann die Kamera loslegen.")
                             .font(Theme.mono(12))
                             .foregroundStyle(Theme.paperOnDark.opacity(0.6))
                             .multilineTextAlignment(.center)
@@ -472,7 +472,7 @@ struct LiveCaptureView: View {
                         .frame(width: 180)
                     CatalogLabel(mode == .basic ? "Wird zusammengesetzt…"
                                  : mode == .tolino ? "Werk wird montiert…"
-                                 : "Stopmotion wird montiert…",
+                                 : "Stop-Motion wird montiert…",
                                  color: Theme.paperOnDark.opacity(0.6), size: 9)
                 }
                 .frame(maxHeight: .infinity)
@@ -920,8 +920,8 @@ struct LiveCaptureView: View {
                 // die eine Unruhe-Meldung, die Prüfung war überflüssig.
                 Text(verbatim: mode == .basic
                      ? (Platform.isMac
-                        ? String(localized: "Zu viel Bewegung – steht die Kamera wirklich fest?")
-                        : String(localized: "Zu viel Wackeln – leg das iPhone irgendwo auf oder lehne es an."))
+                        ? String(localized: "Zu viel Bewegung. Steht die Kamera wirklich fest?")
+                        : String(localized: "Zu viel Wackeln. Leg das iPhone irgendwo auf oder lehne es an."))
                      : hint)
                     .font(Theme.mono(11))
                     .foregroundStyle(Theme.darkroom)

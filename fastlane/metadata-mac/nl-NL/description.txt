@@ -1,46 +1,39 @@
-De stop-motion-app die vanzelf een foto maakt zodra je handen uit beeld zijn. Gratis, zonder abonnement, zonder reclame, zonder account, zonder internet.
+De stop-motion-app voor de Mac die vanzelf een foto maakt zodra je handen uit beeld zijn. Gratis, zonder abonnement, zonder reclame, zonder account en zonder internet.
 
 ALLES GRATIS, ZONDER WATERMERK
-Geluid, geluidseffecten, voorleesstem, greenscreen, titel en aftiteling, tekst en tekstballonnen, tekenen, export tot 4K en ProRes — niets daarvan kost extra, en geen enkele film krijgt een watermerk.
-
-FrameFold maakt van je werk aan tafel een stop-motion — automatisch en volledig op je Mac.
-
-Een camera kijkt van boven op de tafel terwijl je vouwt, tekent, legt. FrameFold drukt zelf af zodra je handen uit beeld zijn en de scène stilstaat. Niets verlaat je Mac: geen cloud, geen account, geen tracking.
+Alle functies zijn gratis, ook geluid, muziek, greenscreen, titels, tekenen en de export tot 4K of als ProRes. Geen enkele film heeft een watermerk. FrameFold verzamelt geen gegevens. Afbeeldingen, geluid en werken blijven op je Mac.
 
 CAMERA BOVEN DE TAFEL
-Werkt het best met een documentcamera die recht op de tafel kijkt — FrameFold kiest zelf een aangesloten USB-camera. Een iPhone als camera of de ingebouwde camera kun je ook kiezen. Met onion skin, verschuivingscontrole en intervalopname; met de spatiebalk druk je met de hand af.
+Een camera kijkt van bovenaf op tafel, je vouwt, tekent of legt. FrameFold maakt een foto zodra je handen uit beeld zijn en de scène stilstaat. Dit gaat het beste met een documentencamera, een aangesloten USB-camera kiest FrameFold vanzelf. Een iPhone als camera of de ingebouwde camera werken ook. De spatiebalk maakt handmatig een foto. Daarnaast is er onion skin, een waarschuwing bij een verschoven camera en een auto-ontspanner.
 
-SCHERP, OF HELEMAAL NIET
-De app meet voortdurend de scherpte. Een onscherp beeld komt nooit in het werk. Waar de camera het toelaat, zet FrameFold belichting en witbalans vast, zodat er niets flikkert tussen de beelden.
+SCHERPE BEELDEN
+De app meet continu de scherpte. Een onscherp beeld komt niet in het werk. Waar de camera het toelaat, blijven belichting en witbalans vaststaan, zodat er niets flikkert tussen de beelden.
 
-STUDIO
-Vanaf de modus Uitgebreid wordt de camera een professionele werkplek: tijdlijn, wisselen tussen live en opnames, onion skin over meerdere beelden, verschil- en belichtingsweergave, formaatmaskers, veilige marges, rasters, referentiebeeld of -film met chromakey, notities per beeld, middelen tegen ruis, scherm verduisteren bij afdrukken, testopnames en timelapse met start- en eindtijd. Alles ook via het toetsenbord. Export als ProRes of beeldreeks.
+SPIEGELREFLEX EN SYSTEEMCAMERA
+Via een bewaakte map komt elke foto van je camera in volledige resolutie in het werk, ook RAW.
 
-GELUID
-Meerdere geluidssporen met golfvorm: muziek uit je bestanden, je stem opnemen terwijl de film speelt, tien geluidseffecten van Plop tot Tadaa aan elk beeld hangen, of getypte tekst laten uitspreken door een stem. In het X-sheet worden mondvormen aan de beelden gekoppeld.
-
-TEKST, TITELS, GREENSCREEN
-Tekstballonnen, tekst en tekeningen direct in beeld. Titelkaart en aftiteling. Vervang groen of blauw door een beeld of een film. Looks voor de hele film.
-
-MONTAGE EN EXPORT
-Beelden verdubbelen, door slepen herschikken, los opnieuw opnemen, alles ongedaan maken. Export met 2 tot 30 beelden per seconde, tot 4K.
+ATELIER
+Vanaf "Uitgebreid" wordt de camera een atelier-werkruimte. Met tijdlijn, schakelen tussen livebeeld en opname, onion skin over meerdere beelden, verschil- en belichtingsweergave, formaatmaskers, veiligheidskaders, raster, referentiebeeld of -film met chroma-key, notities per beeld, middelen tegen ruis, verduisteren bij het maken van een foto, testopnames en timelapse met start- en eindtijd. Alle commando's werken ook via het toetsenbord. Licht via DMX (Art-Net) en motion control via Bluetooth stel je per beeld in.
 
 DE FILM GROEIT MEE
-Terwijl je werkt, speelt de stop-motion al als lus naast het camerabeeld.
+Terwijl je werkt, loopt de stop-motion al als een loop naast het camerabeeld.
 
-FLIPBOEK
-Elk werk wordt een drukklaar flipboek: A4-vellen met snijlijnen, bindrand en genummerde blaadjes. Knippen, nieten, bladeren — de film wordt weer een object.
+BEWERKEN
+Beelden verdubbelen, vasthouden, door slepen herschikken of afzonderlijk opnieuw opnemen. Alles kan ongedaan worden gemaakt. Tekst, spraakballonnen en tekeningen komen direct in beeld, eigen afbeeldingen leg je er als lagen overheen. Greenscreen vervangt groen of blauw door een afbeelding of een film. Vanaf "Uitgebreid" zijn er camerabewegingen met pan en zoom. Voor rotoscopie wordt een video omgezet in beelden waar je overheen tekent. Daarnaast zijn er een titelkaart, aftiteling en looks voor de hele film.
 
-VAN VIDEO NAAR STOP-MOTION
-Kies een bestaande video: rustige momenten worden gevonden, handen verwijderd, dubbele beelden uitgezocht. Voor de montage controleer je elk beeld op het contactvel.
+GELUID
+Meerdere audiotracks met golfvorm. Muziek komt uit je bestanden of uit vijf eigen nummers van "Vrolijk" tot "Droom". Tien geluiden van Plop tot Tadaa koppel je aan elk beeld. Je neemt je stem op bij de lopende film, desgewenst hoog, laag of als robot. Getypte tekst wordt uitgesproken door een stem op de Mac. In de X-sheet wijs je mondvormen toe aan de beelden.
 
-DRIE MODI
-Eenvoudig (kiezen, afdrukken, klaar — ideaal voor de klas), Uitgebreid (formaat, beeldsnelheid, resolutie, afspelen) en een ateliermodus met papierreliëf, beeldecho, drukbeeld, vouwovergangen, een tentoonstellingsreel en drukklare pdf's van contactvellen en vouwsjablonen.
+EXPORT EN FLIPBOEK
+Export met 2 tot 30 beelden per seconde, tot 4K, als ProRes of als beeldsequentie. Elk werk wordt desgewenst een printklaar flipboek, met A4-vellen, snijlijnen en genummerde pagina's.
 
-WERKEN IN PLAATS VAN BESTANDEN
-Projecten verzamelen beelden uit zoveel sessies als je wilt, met een prullenmand van 30 dagen. Het resultaat verschijnt als editie: “Vellen 01–24 · Serie van 24 · gedateerd 2026”.
+VIDEO NAAR STOP-MOTION
+Kies een bestaande video. FrameFold herkent de rustige momenten, verwijdert beelden met handen en filtert dubbele beelden eruit. Vooraf zie je elk beeld op het contactvel.
+
+VOOR SCHOOL
+De modus "Eenvoudig" toont alleen het nodige. Er is geen account en geen verbinding met het internet. Een lesplan voor twee uur is vrij beschikbaar, een korte hulp zit in de app.
 
 OOK OP IPHONE EN IPAD
-FrameFold is er ook voor iPhone en iPad — daar met statief, Apple Watch als afstandsbediening en afdrukken met klappen. In 17 talen.
+FrameFold is er ook voor iPhone en iPad, daar met statief, Apple Watch als afstandsbediening en foto's maken door te klappen. FrameFold is beschikbaar in 17 talen.
 
-Ontstaan als maatwerk voor de kunstenaar Aldo Tolino, wiens werk gedrukte foto's tot objecten vouwt en opnieuw fotografeert — beeld, object, beeld.
+FrameFold is ontstaan als gereedschap voor de kunstenaar Aldo Tolino. Hij vouwt geprinte foto's tot objecten en fotografeert ze opnieuw.

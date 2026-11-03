@@ -127,7 +127,7 @@ struct VoiceRecordSheet: View {
             }
 
             if recorder.denied {
-                Text("Kein Mikrofonzugriff – erlauben unter Einstellungen → Datenschutz → Mikrofon.")
+                Text("Kein Mikrofonzugriff. Erlaube ihn unter Einstellungen → Datenschutz → Mikrofon.")
                     .font(Theme.mono(11)).foregroundStyle(Theme.oxblood)
             }
 

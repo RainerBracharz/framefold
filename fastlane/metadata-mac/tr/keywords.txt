@@ -1,1 +1,1 @@
-animasyon,kil,hamur,oyun hamuru,lego,çizgi film,kukla,flipbook,timelapse,çocuk,okul,soğan kabuğu
+animasyon,kil,hamur,oyun hamuru,çizgi film,kukla,flipbook,otomatik,çocuk,okul,soğan kabuğu

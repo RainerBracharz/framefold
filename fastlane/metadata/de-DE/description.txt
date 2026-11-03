@@ -1,39 +1,39 @@
-Die Stop-Motion-App, die von selbst auslöst, sobald deine Hände aus dem Bild sind. Kostenlos, ohne Abo, ohne Werbung, ohne Konto, ohne Internet.
+Die Stop-Motion-App, die von selbst auslöst, sobald deine Hände aus dem Bild sind. Kostenlos, ohne Abo, ohne Werbung, ohne Konto und ohne Internet.
 
 ALLES KOSTENLOS, OHNE WASSERZEICHEN
-Ton, Geräusche, Sprachausgabe, Greenscreen, Titel und Abspann, Text und Sprechblasen, Zeichnen, Foto-Import, Export bis 4K – nichts davon kostet extra, kein Film trägt ein Wasserzeichen. Nichts verlässt dein Gerät: keine Cloud, kein Konto, kein Tracking.
+Alle Funktionen sind kostenlos, auch Ton, Musik, Greenscreen, Titel, Zeichnen und der Export bis 4K. Kein Film trägt ein Wasserzeichen. FrameFold erhebt keine Daten. Bilder, Ton und Werke bleiben auf deinem Gerät.
 
 AUTOMATISCHE KAMERA
-iPhone oder iPad aufs Stativ, arbeiten – FrameFold löst selbst aus, sobald deine Hände aus dem Bild sind und die Szene ruht. Belichtung und Weißabgleich werden fixiert, die Verschlusszeit rastet gegen Kunstlicht-Flackern ein. Mit Zwiebelhaut, Warnung bei verrutschter Kamera, Intervall-Auslöser und Wasserwaage. Jedes Bild in voller Sensorauflösung, mit Wahl des Objektivs.
+Stell iPhone oder iPad aufs Stativ und arbeite. FrameFold löst aus, sobald deine Hände aus dem Bild sind und die Szene ruht. Belichtung und Weißabgleich bleiben fest, die Verschlusszeit rastet gegen das Flackern von Kunstlicht ein. Dazu gibt es Zwiebelhaut, eine Warnung bei verrutschter Kamera, Intervall-Auslöser und Wasserwaage.
 
-SCHARF, ODER GAR NICHT
-Die App misst laufend die Bildschärfe und fixiert den Fokus erst, wenn er wirklich sitzt. Ein unscharfes Bild landet gar nicht erst im Werk. Ab „Erweitert“ stellst du ISO, Belichtungszeit, Fokus und Weißabgleich auch selbst.
+SCHARFE BILDER
+Die App misst laufend die Schärfe und fixiert den Fokus erst, wenn er sitzt. Ein unscharfes Bild kommt nicht ins Werk. Ab „Erweitert“ stellst du ISO, Belichtungszeit, Fokus und Weißabgleich selbst ein und wählst das Objektiv. Jedes Bild hat die volle Sensorauflösung.
 
-AUSLÖSEN, OHNE ZU BERÜHREN
-Apple Watch als Fernauslöser mit Bildzähler, Lautstärketasten, AirPods, Klatschen oder ein Countdown per langem Druck. Niemand muss das Stativ anstoßen.
+AUSLÖSEN OHNE BERÜHREN
+Die Apple Watch wird zum Fernauslöser mit Bildzähler. Auslösen geht auch mit den Lautstärketasten, mit AirPods, durch Klatschen oder mit dem Selbstauslöser per langem Druck. Niemand muss das Stativ anfassen.
 
-STUDIO
-Ab „Erweitert“ wird das iPad zur Profi-Arbeitsfläche, auf Wunsch auch das iPhone: Zeitleiste, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder, Formatmasken, Lupe, Referenzbild mit Chroma-Key und ein X-Sheet mit Mundformen.
+DER FILM WÄCHST MIT
+Ab dem zweiten Bild läuft der Film als Schleife im Sucher mit. Ein angeschlossener Bildschirm oder Beamer zeigt das Kamerabild ohne Bedienelemente.
+
+BEARBEITEN
+Bilder verdoppeln, halten, per Ziehen umordnen oder einzeln neu aufnehmen. Alles lässt sich rückgängig machen. Text, Sprechblasen und Zeichnungen kommen direkt ins Bild, eigene Bilder legst du als Ebenen darüber. Greenscreen ersetzt Grün oder Blau durch ein Bild oder einen Film. Ab „Erweitert“ gibt es Kamerafahrten mit Schwenk und Zoom. Für Rotoskopie wird ein Video zu Bildern, über die du zeichnest. Dazu kommen Titelkarte, Abspann und Looks für den ganzen Film.
 
 TON
-Mehrere Tonspuren mit Wellenform: Musik aus deinen Dateien, Stimme zum laufenden Film aufnehmen, zehn Geräusche von Plopp bis Tadaa an jedes Bild hängen oder getippten Text von einer Stimme sprechen lassen.
+Mehrere Tonspuren mit Wellenform. Musik kommt aus deinen Dateien oder aus fünf eigenen Stücken von „Fröhlich“ bis „Traum“. Zehn Geräusche von Plopp bis Tadaa hängst du an jedes Bild. Deine Stimme nimmst du zum laufenden Film auf, auf Wunsch hoch, tief oder als Roboter. Getippten Text spricht eine Stimme auf dem Gerät.
 
-TEXT, TITEL, GREENSCREEN
-Sprechblasen, Text und Zeichnungen direkt im Bild. Titelkarte und Abspann. Grün oder Blau durch ein Bild oder einen Film ersetzen. Looks für den ganzen Film.
+STUDIO
+Ab „Erweitert“ wird das iPad zur Studio-Arbeitsfläche, auf Wunsch auch das iPhone. Mit Zeitleiste, Umschalten zwischen Live-Bild und Aufnahme, Zwiebelhaut über mehrere Bilder, Formatmasken, Lupe, Referenzbild mit Chroma-Key und einem X-Sheet für Mundformen. Licht über DMX (Art-Net) und Motion Control per Bluetooth stellst du je Bild ein.
 
-SCHNITT UND EXPORT
-Bilder verdoppeln, per Ziehen umordnen, einzeln neu aufnehmen, alles rückgängig machen. Export mit 2 bis 30 Bildern pro Sekunde, bis 4K, als Schleife, Boomerang oder rückwärts, auch als GIF.
+EXPORT UND DAUMENKINO
+Export mit 2 bis 30 Bildern pro Sekunde, bis 4K, als Schleife, Boomerang oder rückwärts, auch als GIF. Jedes Werk wird auf Wunsch zum druckfertigen Daumenkino, mit A4-Bogen, Schnittlinien und nummerierten Blättern. Ein Werk kommt als Datei per AirDrop auf ein anderes Gerät.
 
-DAUMENKINO
-Jedes Werk wird zum druckfertigen Daumenkino: A4-Bogen mit Schnittlinien und nummerierten Blättern. Ausschneiden, klammern, blättern.
+VIDEO ZU STOP-MOTION
+Wähl ein vorhandenes Video. FrameFold erkennt die ruhigen Momente, entfernt Bilder mit Händen und sortiert Doppelte aus.
 
 FÜR DIE SCHULE
-Der Modus „Einfach“ zeigt nur das Nötigste. Kein Konto, keine Datenverarbeitung, kein Internet – passt zu jedem Datenschutzkonzept. Ein Unterrichtsentwurf für zwei Stunden ist frei verfügbar. Eine kurze Hilfe ist in der App.
-
-VIDEO ZU STOPMOTION
-Vorhandenes Video wählen: Ruhige Momente werden erkannt, Hände entfernt, Duplikate aussortiert.
+Der Modus „Einfach“ zeigt nur das Nötigste. Es gibt kein Konto und keine Verbindung ins Internet. Ein Unterrichtsentwurf für zwei Stunden ist frei verfügbar, eine kurze Hilfe ist in der App.
 
 AUCH AUF DEM MAC
-Dieselbe App läuft auf dem Mac, mit Dokumentenkamera oder iPhone als Kamera und Export als ProRes oder Bildsequenz. In 17 Sprachen.
+Dieselbe App läuft auf dem Mac, mit Dokumentenkamera oder iPhone als Kamera und Export als ProRes oder Bildsequenz. FrameFold gibt es in 17 Sprachen.
 
-Entstanden als maßgeschneidertes Werkzeug für den Künstler Aldo Tolino, dessen Arbeit gedruckte Fotografien zu Objekten faltet und wieder fotografiert – Bild, Objekt, Bild.
+FrameFold entstand als Werkzeug für den Künstler Aldo Tolino. Er faltet gedruckte Fotografien zu Objekten und fotografiert sie wieder.

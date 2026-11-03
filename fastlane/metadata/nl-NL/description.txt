@@ -1,39 +1,39 @@
-De stop-motion-app die vanzelf een foto maakt zodra je handen uit beeld zijn. Gratis, zonder abonnement, zonder reclame, zonder account, zonder internet.
+De stop-motion-app die vanzelf een foto maakt zodra je handen uit beeld zijn. Gratis, zonder abonnement, zonder reclame, zonder account en zonder internet.
 
 ALLES GRATIS, ZONDER WATERMERK
-Geluid, geluidseffecten, voorleesstem, greenscreen, titel en aftiteling, tekst en tekstballonnen, tekenen, foto's importeren, export tot 4K — niets daarvan kost extra, en geen enkele film krijgt een watermerk. Niets verlaat je apparaat: geen cloud, geen account, geen tracking.
+Alle functies zijn gratis, ook geluid, muziek, greenscreen, titels, tekenen en de export tot 4K. Geen enkele film heeft een watermerk. FrameFold verzamelt geen gegevens. Afbeeldingen, geluid en werken blijven op je apparaat.
 
 AUTOMATISCHE CAMERA
-iPhone of iPad op een statief en aan de slag — FrameFold drukt zelf af zodra je handen uit beeld zijn en de scène stilstaat. Belichting en witbalans worden vastgezet en de sluitertijd klikt vast, zodat kunstlicht niet flikkert. Met onion skin, waarschuwing als de camera is verschoven, intervalopname en waterpas. Elk beeld in de volle sensorresolutie, met keuze van de lens.
+Zet de iPhone of iPad op een statief en werk. FrameFold maakt een foto zodra je handen uit beeld zijn en de scène stilstaat. Belichting en witbalans blijven vaststaan, de sluitertijd wordt vastgezet tegen het flikkeren van kunstlicht. Daarnaast is er onion skin, een waarschuwing bij een verschoven camera, een auto-ontspanner en een waterpas.
 
-SCHERP, OF HELEMAAL NIET
-De app meet voortdurend de scherpte en zet de focus pas vast als die echt goed zit. Een onscherp beeld komt nooit in het werk. Vanaf de modus Uitgebreid stel je ISO, sluitertijd, focus en witbalans ook zelf in.
+SCHERPE BEELDEN
+De app meet continu de scherpte en zet de focus pas vast als deze goed is. Een onscherp beeld komt niet in het werk. Vanaf "Uitgebreid" stel je ISO, belichtingstijd, focus en witbalans zelf in en kies je de lens. Elke afbeelding heeft de volledige sensorresolutie.
 
-AFDRUKKEN ZONDER AANRAKEN
-Apple Watch als afstandsbediening met beeldteller, volumeknoppen, AirPods, klappen of een aftelling door lang te drukken. Niemand hoeft het statief aan te stoten.
+FOTOGRAFEREN ZONDER AANRAKEN
+De Apple Watch wordt een afstandsbediening met beeldteller. Een foto maken kan ook met de volumeknoppen, met AirPods, door te klappen of met de zelfontspanner door lang te drukken. Niemand hoeft het statief aan te raken.
 
-STUDIO
-Vanaf de modus Uitgebreid wordt de iPad een professionele werkplek, en desgewenst ook de iPhone: tijdlijn, wisselen tussen live en opnames, onion skin over meerdere beelden, formaatmaskers, loep, referentiebeeld met chromakey en een X-sheet met mondvormen.
+DE FILM GROEIT MEE
+Vanaf het tweede beeld loopt de film als een loop in de zoeker mee. Een aangesloten scherm of beamer toont het camerabeeld zonder bedieningselementen.
+
+BEWERKEN
+Beelden verdubbelen, vasthouden, door slepen herschikken of afzonderlijk opnieuw opnemen. Alles kan ongedaan worden gemaakt. Tekst, spraakballonnen en tekeningen komen direct in beeld, eigen afbeeldingen leg je er als lagen overheen. Greenscreen vervangt groen of blauw door een afbeelding of een film. Vanaf "Uitgebreid" zijn er camerabewegingen met pan en zoom. Voor rotoscopie wordt een video omgezet in beelden waar je overheen tekent. Daarnaast zijn er een titelkaart, aftiteling en looks voor de hele film.
 
 GELUID
-Meerdere geluidssporen met golfvorm: muziek uit je bestanden, je stem opnemen terwijl de film speelt, tien geluidseffecten van Plop tot Tadaa aan elk beeld hangen, of getypte tekst laten uitspreken door een stem.
+Meerdere audiotracks met golfvorm. Muziek komt uit je bestanden of uit vijf eigen nummers van "Vrolijk" tot "Droom". Tien geluiden van Plop tot Tadaa koppel je aan elk beeld. Je neemt je stem op bij de lopende film, desgewenst hoog, laag of als robot. Getypte tekst wordt uitgesproken door een stem op het apparaat.
 
-TEKST, TITELS, GREENSCREEN
-Tekstballonnen, tekst en tekeningen direct in beeld. Titelkaart en aftiteling. Vervang groen of blauw door een beeld of een film. Looks voor de hele film.
+ATELIER
+Vanaf "Uitgebreid" wordt de iPad een atelier-werkruimte, desgewenst ook de iPhone. Met tijdlijn, schakelen tussen livebeeld en opname, onion skin over meerdere beelden, formaatmaskers, loep, referentiebeeld met chroma-key en een X-sheet voor mondvormen. Licht via DMX (Art-Net) en motion control via Bluetooth stel je per beeld in.
 
-MONTAGE EN EXPORT
-Beelden verdubbelen, door slepen herschikken, los opnieuw opnemen, alles ongedaan maken. Export met 2 tot 30 beelden per seconde, tot 4K, als lus, boomerang of achteruit, ook als GIF.
+EXPORT EN FLIPBOEK
+Export met 2 tot 30 beelden per seconde, tot 4K, als loop, boomerang of achteruit, ook als GIF. Elk werk wordt desgewenst een printklaar flipboek, met A4-vellen, snijlijnen en genummerde pagina's. Een werk stuur je als bestand via AirDrop naar een ander apparaat.
 
-FLIPBOEK
-Elk werk wordt een drukklaar flipboek: A4-vellen met snijlijnen en genummerde blaadjes. Knippen, nieten, bladeren.
+VIDEO NAAR STOP-MOTION
+Kies een bestaande video. FrameFold herkent de rustige momenten, verwijdert beelden met handen en filtert dubbele beelden eruit.
 
 VOOR SCHOOL
-De modus Eenvoudig toont alleen het hoognodige. Geen account, geen gegevensverwerking, geen internet — past bij elk privacybeleid. Een lesplan voor twee lessen is vrij beschikbaar, en in de app zit een korte uitleg.
-
-VAN VIDEO NAAR STOP-MOTION
-Kies een bestaande video: rustige momenten worden gevonden, handen verwijderd, dubbele beelden uitgezocht.
+De modus "Eenvoudig" toont alleen het nodige. Er is geen account en geen verbinding met het internet. Een lesplan voor twee uur is vrij beschikbaar, een korte hulp zit in de app.
 
 OOK OP DE MAC
-Dezelfde app draait op de Mac, met een documentcamera of een iPhone als camera, en exporteert als ProRes of beeldreeks. In 17 talen.
+Dezelfde app werkt op de Mac, met documentencamera of iPhone als camera en export als ProRes of beeldsequentie. FrameFold is beschikbaar in 17 talen.
 
-Ontstaan als maatwerk voor de kunstenaar Aldo Tolino, wiens werk gedrukte foto's tot objecten vouwt en opnieuw fotografeert — beeld, object, beeld.
+FrameFold is ontstaan als gereedschap voor de kunstenaar Aldo Tolino. Hij vouwt geprinte foto's tot objecten en fotografeert ze opnieuw.

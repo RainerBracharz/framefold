@@ -129,8 +129,8 @@ enum PipelineError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .emptyVideo: return String(localized: "Das Video ist leer oder konnte nicht gelesen werden.")
-        case .noKeyframesFound: return String(localized: "Keine ruhigen Momente gefunden. Das Video ist evtl. sehr kurz oder durchgehend in Bewegung – nimm etwas länger auf oder halte zwischendurch kurz still.")
-        case .exportFailed: return String(localized: "Das Stopmotion-Video konnte nicht geschrieben werden.")
+        case .noKeyframesFound: return String(localized: "Keine ruhigen Momente gefunden. Das Video ist evtl. sehr kurz oder durchgehend in Bewegung. Nimm etwas länger auf oder halte zwischendurch kurz still.")
+        case .exportFailed: return String(localized: "Das Stop-Motion-Video konnte nicht geschrieben werden.")
         }
     }
 }

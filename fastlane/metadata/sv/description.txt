@@ -1,39 +1,39 @@
-Stopmotion-appen som tar bilden själv i samma ögonblick som dina händer lämnar bilden. Gratis, utan abonnemang, utan reklam, utan konto, utan internet.
+Stopmotion-appen som tar bilden automatiskt när dina händer är ur bild. Gratis, utan abonnemang, utan reklam, utan konto och utan internet.
 
-ALLT GRATIS, INGEN VATTENSTÄMPEL
-Ljud, ljudeffekter, uppläsning av text, greenscreen, titlar och eftertexter, text och pratbubblor, teckning, import av foton, export upp till 4K — inget av det kostar extra, och ingen film får någonsin en vattenstämpel. Inget lämnar din enhet: inget moln, inget konto, ingen spårning.
+ALLT GRATIS, UTAN VATTENSTÄMPEL
+Alla funktioner är gratis, även ljud, musik, greenscreen, titlar, ritande och export upp till 4K. Ingen film har en vattenstämpel. FrameFold samlar inte in några data. Bilder, ljud och verk stannar på din enhet.
 
 AUTOMATISK KAMERA
-iPhone eller iPad på stativ, och jobba — FrameFold tar bilden själv så fort dina händer är ur bild och scenen har lugnat sig. Exponering och vitbalans låses, och slutartiden låses så att artificiellt ljus inte flimrar. Med lökskal, varning om kameran har flyttats, intervallavtryckare och vattenpass. Varje bild i sensorns fulla upplösning, med det objektiv du väljer.
+Sätt din iPhone eller iPad på stativet och arbeta. FrameFold tar bilden när dina händer är ur bild och scenen är stilla. Exponering och vitbalans förblir fasta, slutartiden låses för att undvika flimmer från artificiellt ljus. Dessutom finns lökskal, en varning om kameran flyttas, intervallutlösare och vattenpass.
 
-SKARPT – ELLER INTE ALLS
-Appen mäter skärpan hela tiden och låser fokus först när den verkligen har satt sig. En bild som inte är skarp kommer aldrig med i verket. Från läget Avancerad kan du också själv ställa in ISO, slutartid, fokus och vitbalans.
+SKARPA BILDER
+Appen mäter skärpan kontinuerligt och låser fokus först när den är rätt. En oskarp bild kommer inte med i ditt verk. Från läget "Avancerad" ställer du själv in ISO, slutartid, fokus och vitbalans samt väljer objektiv. Varje bild har full sensorupplösning.
 
-TA BILDER UTAN ATT RÖRA
-Apple Watch som fjärrkontroll med bildräknare, volymknapparna, AirPods, en klapp eller en nedräkning med ett långt tryck. Ingen behöver stöta till stativet.
+TA BILDER UTAN BERÖRING
+Din Apple Watch blir en fjärrutlösare med bildräknare. Du kan också ta bilder med volymknapparna, med AirPods, genom att klappa händerna eller med självutlösaren genom ett långt tryck. Ingen behöver röra stativet.
 
-STUDIO
-Från läget Avancerad blir iPad en professionell arbetsyta — och iPhone också om du vill: tidslinje, växling mellan livebild och tagna bilder, lökskal över flera bilder, formatmasker, lupp, referensbild med chroma key och ett X-Sheet med munformer.
+FILMEN VÄXER MED DIG
+Från och med den andra bilden spelas filmen upp som en slinga i sökaren. En ansluten skärm eller projektor visar kamerabilden utan reglage.
+
+REDIGERA
+Du kan dubblera bilder, hålla dem, ändra ordning genom att dra eller ta om dem en och en. Allt kan ångras. Text, pratbubblor och ritningar läggs direkt i bilden, egna bilder lägger du som lager ovanpå. Greenscreen ersätter grönt eller blått med en bild eller en film. Från läget "Avancerad" finns kameraåkningar med panorering och zoom. För rotoskopi omvandlas en video till bilder som du ritar över. Dessutom finns titelkort, eftertexter och utseenden för hela filmen.
 
 LJUD
-Flera ljudspår med vågform: musik från dina filer, spela in din röst medan filmen spelas, lägg tio ljudeffekter från Plopp till Tadaa på vilken bild som helst, eller låt en röst läsa upp texten du skriver.
+Flera ljudspår med vågform. Musiken kommer från dina filer eller från fem egna stycken från "Glad" till "Dröm". Tio ljud från Plopp till Tadaa kan du fästa vid varje bild. Du spelar in din röst till den pågående filmen, om du vill ljus, mörk eller som en robot. Skriven text läses upp av en röst på enheten.
 
-TEXT, TITLAR, GREENSCREEN
-Pratbubblor, text och teckningar direkt i bilden. Titelskylt och eftertexter. Ersätt grönt eller blått med en bild eller en film. Looks för hela filmen.
+STUDIO
+Från läget "Avancerad" blir din iPad en studioarbetsyta, om du vill även din iPhone. Med tidslinje, växling mellan livebild och inspelning, lökskal över flera bilder, formatmasker, förstoringsglas, referensbild med chroma-key och ett X-Sheet för munformer. Ljus via DMX (Art-Net) och rörelsekontroll via Bluetooth ställer du in per bild.
 
-REDIGERA OCH EXPORTERA
-Duplicera bilder, dra dem i ny ordning, ta om enstaka bilder, ångra allt. Exportera med 2 till 30 fps, upp till 4K, som loop, boomerang eller baklänges – och även som GIF.
+EXPORT OCH BLÄDDERBOK
+Export med 2 till 30 bilder per sekund, upp till 4K, som slinga, boomerang eller baklänges, även som GIF. Varje verk blir om du vill en utskriftsklar blädderbok, med A4-ark, skärlinjer och numrerade blad. Ett verk kan skickas som fil via AirDrop till en annan enhet.
 
-BLÄDDERBOK
-Varje verk blir en blädderbok redo att skriva ut: A4-ark med klipplinjer och numrerade blad. Klipp, häfta, bläddra.
+VIDEO TILL STOPMOTION
+Välj en befintlig video. FrameFold känner igen de lugna ögonblicken, tar bort bilder med händer och sorterar bort dubbletter.
 
 FÖR SKOLAN
-Läget Enkel visar bara det viktigaste. Inget konto, ingen databehandling, inget internet — det passar varje skolas dataskyddsregler. Ett lektionsupplägg för två lektioner finns fritt tillgängligt, och en kort hjälpguide är inbyggd i appen.
-
-FRÅN VIDEO TILL STOPMOTION
-Välj en befintlig video: de lugna ögonblicken hittas, händer tas bort och dubbletter sorteras bort.
+Läget "Enkel" visar bara det nödvändigaste. Det finns inget konto och ingen anslutning till internet. Ett lektionsupplägg för två timmar är fritt tillgängligt, en kort hjälp finns i appen.
 
 ÄVEN PÅ MAC
-Samma app körs på Mac, med en dokumentkamera eller en iPhone som kamera, och exporterar ProRes eller en bildsekvens. På 17 språk.
+Samma app körs på Mac, med dokumentkamera eller iPhone som kamera och export som ProRes eller bildsekvens. FrameFold finns på 17 språk.
 
-Skapad som ett skräddarsytt verktyg för konstnären Aldo Tolino, vars verk viker tryckta fotografier till objekt och fotograferar dem igen — bild, objekt, bild.
+FrameFold skapades som ett verktyg för konstnären Aldo Tolino. Han viker tryckta fotografier till objekt och fotograferar dem igen.

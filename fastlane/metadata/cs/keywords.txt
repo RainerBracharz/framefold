@@ -1,1 +1,1 @@
-animace,plastelína,lego film,brickfilm,flipbook,časosběr,děti,škola,trikový film,stativ,kreslený
+animace,plastelína,brickfilm,flipbook,automaticky,děti,škola,trikový film,stativ,kreslený

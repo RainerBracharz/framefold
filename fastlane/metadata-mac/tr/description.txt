@@ -1,46 +1,39 @@
-Elleriniz kadrajdan çıktığı anda kendiliğinden çeken stop motion uygulaması. Ücretsiz; abonelik yok, reklam yok, hesap yok, internet yok.
+Ellerin kadrajdan çıktığı an kendi kendine fotoğraf çeken Mac için stop motion uygulaması. Ücretsiz, abonelik yok, reklam yok, hesap yok ve internet gerekmez.
 
-HER ŞEY ÜCRETSİZ, FİLİGRAN YOK
-Ses, ses efektleri, metin seslendirme, yeşil perde, başlık ve jenerik, metin ve konuşma balonları, çizim, 4K'ya kadar ve ProRes olarak dışa aktarma — hiçbiri ek ücretli değil ve hiçbir filmde filigran yok.
+HER ŞEY ÜCRETSİZ, FİLİGRANSIZ
+Tüm özellikler ücretsizdir. Buna ses, müzik, yeşil ekran, başlıklar, çizim ve 4K'ya veya ProRes olarak dışa aktarma dahildir. Hiçbir filmde filigran bulunmaz. FrameFold veri toplamaz. Görüntüler, sesler ve Eserler Mac'inde kalır.
 
-FrameFold, masadaki çalışmanızı bir stop motion'a dönüştürür — otomatik olarak ve tamamen Mac'inizde.
+MASA ÜZERİNDE KAMERA
+Bir kamera yukarıdan masaya bakar, sen katlar, çizer veya yerleştirirsin. FrameFold, ellerin kadrajdan çıkıp sahne hareketsiz kaldığında fotoğrafı çeker. Bu en iyi bir belge kamerası ile çalışır, takılı bir USB kamerayı FrameFold kendisi seçer. Kamera olarak bir iPhone veya yerleşik kamera da kullanılabilir. Manuel olarak boşluk tuşu ile çekim yapılır. Ayrıca Soğan kabuğu, kayan kamera uyarısı ve aralıklı çekim bulunur.
 
-Siz katlarken, çizerken, dizerken bir kamera masaya yukarıdan bakar. Elleriniz kadrajdan çıkıp sahne durulunca FrameFold kendiliğinden çeker. Hiçbir şey Mac'inizden çıkmaz: bulut yok, hesap yok, izleme yok.
+NET GÖRÜNTÜLER
+Uygulama netliği sürekli ölçer. Bulanık bir görüntü Eser'e eklenmez. Kameranın izin verdiği durumlarda, görüntüler arasında titreme olmaması için pozlama ve beyaz dengesi sabit kalır.
 
-MASANIN ÜZERİNDE KAMERA
-En iyi sonuç, masaya tam yukarıdan bakan bir doküman kamerasıyla alınır — bağlı bir USB kamerayı FrameFold kendisi seçer. Kamera olarak iPhone ya da yerleşik kamera da seçilebilir. Soğan kabuğu, kayma kontrolü ve aralıklı çekim ile; boşluk tuşu elle çeker.
-
-YA NET YA HİÇ
-Uygulama netliği sürekli ölçer. Net olmayan bir kare esere asla girmez. Kamera izin verdiğinde FrameFold pozlamayı ve beyaz dengesini sabit tutar, böylece kareler arasında titreme olmaz.
+DSLR VE AYNASIZ
+İzlenen bir klasör üzerinden, kameranın her fotoğrafı tam çözünürlükte Eser içine alınır, RAW dahil.
 
 STÜDYO
-Gelişmiş modda kamera profesyonel bir çalışma alanına dönüşür: zaman çizelgesi, canlı görüntü ile çekilen kareler arasında geçiş, çok kareli soğan kabuğu, fark ve pozlama görünümleri, en-boy maskeleri, güvenli alanlar, ızgaralar, chroma key'li referans görüntü veya film, kare başına notlar, gürültüye karşı kare ortalama, çekimde ekran karartma, deneme çekimleri ve başlangıç-bitiş saatli hızlandırılmış çekim. Hepsi klavyeyle de. ProRes ya da görüntü dizisi olarak dışa aktarma.
+"Gelişmiş" modundan itibaren kamera bir stüdyo çalışma alanına dönüşür. Zaman çizelgesi, canlı görüntü ile kayıt arasında geçiş, birden fazla görüntü üzerinde Soğan kabuğu, fark ve pozlama görünümü, format maskeleri, güvenlik çerçeveleri, ızgara, kroma anahtarlı referans görüntü veya film, her görüntü için notlar, gürültü azaltma araçları, çekim sırasında karartma, test çekimleri ve başlangıç ile bitiş zamanı olan zaman atlamalı çekim bulunur. Tüm komutlar klavye üzerinden de çalışır. DMX (Art-Net) üzerinden ışık ve Bluetooth üzerinden hareket kontrolü her görüntü için ayarlanır.
+
+FİLM SENİNLE BÜYÜR
+Sen çalışırken, stop motion kamera görüntüsünün yanında bir döngü olarak oynatılır.
+
+DÜZENLEME
+Görüntüleri çoğalt, beklet, sürükleyerek yeniden sırala veya tek tek yeniden çek. Her şey geri alınabilir. Metin, konuşma balonları ve çizimler doğrudan görüntüye eklenir, kendi resimlerini katman olarak üste yerleştirirsin. Yeşil ekran, yeşil veya maviyi bir resim veya filmle değiştirir. "Gelişmiş" modundan itibaren kaydırma ve yakınlaştırma ile kamera hareketleri bulunur. Rotoskopi için bir video, üzerine çizim yapabileceğin görüntülere dönüştürülür. Ayrıca tüm film için başlık kartı, jenerik ve görünümler mevcuttur.
 
 SES
-Dalga formlu birden çok ses parçası: dosyalarınızdan müzik, film oynarken sesinizi kaydetme, Pıt'tan Tadaa'ya on ses efektini herhangi bir kareye ekleme ya da yazdığınız metni bir sese okutma. X-Sheet'te ağız şekilleri karelere eşlenir.
+Dalga formuna sahip çoklu ses parçaları. Müzik, dosyalarından veya "Neşeli" ile "Rüya" arasındaki beş özel parçadan gelir. "Pıt" ile "Tadaa" arasındaki on sesi herhangi bir görüntüye eklersin. Sesini oynatılan filme kaydedersin, istersen ince, kalın veya robot sesi olarak ayarlarsın. Yazılan metin Mac'teki bir ses tarafından okunur. X-Sheet içinde ağız şekillerini görüntülere atarsın.
 
-METİN, BAŞLIKLAR, YEŞİL PERDE
-Konuşma balonları, metin ve çizimler doğrudan karede. Başlık kartı ve jenerik. Yeşili ya da maviyi bir görüntü veya filmle değiştirin. Tüm film için görünümler.
-
-DÜZENLEME VE DIŞA AKTARMA
-Kareleri çoğaltın, sürükleyerek yeniden sıralayın, tek tek yeniden çekin, her şeyi geri alın. 2 ile 30 fps arasında, 4K'ya kadar dışa aktarın.
-
-FİLM SİZ ÇALIŞIRKEN BÜYÜR
-Siz çalışırken stop motion, kamera görüntüsünün yanında döngü hâlinde oynamaya başlar.
-
-FLIPBOOK
-Her eser baskıya hazır bir flipbook olur: kesim çizgili, cilt kenarlı ve numaralı yapraklı A4 sayfalar. Kesin, zımbalayın, çevirin — film yeniden bir nesneye dönüşür.
+DIŞA AKTARMA VE FLIPBOOK
+Saniyede 2 ila 30 kare ile 4K'ya kadar, ProRes veya görüntü dizisi olarak dışa aktarma. Her Eser, A4 kağıdı, kesim çizgileri ve numaralandırılmış sayfalarla baskıya hazır bir flipbook'a dönüştürülebilir.
 
 VİDEODAN STOP MOTION'A
-Var olan bir video seçin: durgun anlar bulunur, eller çıkarılır, kopyalar ayıklanır. Birleştirilmeden önce her kareyi kontakt baskıda kontrol edersiniz.
+Mevcut bir videoyu seç. FrameFold sakin anları algılar, ellerin olduğu görüntüleri kaldırır ve kopyaları ayıklar. Öncesinde her görüntüyü kontakt sayfasında görürsün.
 
-ÜÇ MOD
-Basit (seç, çek, bitti — derslere göre), Gelişmiş (en-boy oranı, kare hızı, çözünürlük, oynatma) ve kâğıt kabartma, görüntü yankısı, baskı görünümü, kıvrım geçişleri, sergi makarası ile baskıya hazır kontakt baskı ve katlama şablonu PDF'leri sunan Atelier modu.
+OKULLAR İÇİN
+"Basit" modu sadece en gereklileri gösterir. Hesap yoktur ve internet bağlantısı kurulmaz. İki saatlik bir ders planı mevcuttur, uygulamada kısa bir yardım bulunur.
 
-DOSYALAR DEĞİL, ESERLER
-Projeler, kareleri istediğiniz kadar çekimde toplar; 30 günlük çöp kutusu vardır. Sonuç bir baskı serisi gibi gelir: “Sayfa 01–24 · 24 parçalık seri · tarih 2026”.
+IPHONE VE IPAD'DE DE MEVCUT
+FrameFold ayrıca iPhone ve iPad için de mevcuttur, orada tripod, uzaktan kumanda olarak Apple Watch ve el çırparak çekim özellikleri bulunur. FrameFold 17 dilde mevcuttur.
 
-IPHONE VE IPAD'DE DE
-FrameFold iPhone ve iPad için de var — orada tripod, uzaktan kumanda olarak Apple Watch ve alkışla çekim ile. Birçok dilde.
-
-Basılı fotoğrafları nesnelere katlayıp yeniden fotoğraflayan sanatçı Aldo Tolino için özel bir araç olarak geliştirildi — görüntü, nesne, görüntü.
+FrameFold, sanatçı Aldo Tolino için bir araç olarak ortaya çıktı. Basılı fotoğrafları katlayarak nesnelere dönüştürür ve onları yeniden fotoğraflar.

@@ -118,7 +118,7 @@ final class WatchShutter: NSObject, ObservableObject {
         }, errorHandler: { _ in
             Task { @MainActor in
                 WKInterfaceDevice.current().play(.failure)
-                self.status = String(localized: "Nicht ausgelöst – iPhone prüfen")
+                self.status = String(localized: "Nicht ausgelöst, iPhone prüfen")
             }
         })
     }
