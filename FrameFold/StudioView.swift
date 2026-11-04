@@ -525,46 +525,70 @@ struct StudioView: View {
 
     // MARK: Transport
 
+    /// Passt alles in eine Zeile (Mac, iPad quer), stehen Auslösen und Fertig
+    /// rechts daneben. Im iPad-Hochformat ist die Spalte zu schmal: Dann
+    /// rutschen die beiden in eine zweite Zeile, statt umzubrechen.
     private var transport: some View {
-        HStack(spacing: Platform.isPad ? 6 : 14) {
-            transportButton("backward.frame", "Bild zurück (←)") { handle(.stepBack) }
-            transportButton(playing ? "stop.fill" : "play.fill", "Abspielen (P)") { handle(.play) }
-            transportButton("goforward", "Kurz abspielen (K)") { handle(.shortPlay) }
-            transportButton("forward.frame", "Bild vor (→)") { handle(.stepForward) }
-            transportButton("record.circle", "Live-Bild (L)", active: showsLive) { handle(.live) }
-            Divider().frame(height: 22).overlay(Theme.paperOnDark.opacity(0.2))
-            transportButton("arrow.left.arrow.right", "Umschalten (T)", active: showCaptured) { handle(.toggle) }
-            transportButton("repeat", "Auto-Umschalten (⇧T)", active: autoToggle) { handle(.autoToggle) }
-            transportButton("chevron.left.to.line", "Schleifenanfang (I)", active: loopIn != nil) { handle(.loopIn) }
-            transportButton("chevron.right.to.line", "Schleifenende (O)", active: loopOut != nil) { handle(.loopOut) }
-            Divider().frame(height: 22).overlay(Theme.paperOnDark.opacity(0.2))
-            UndoRedoButtons(tint: Theme.paperOnDark)
-            Spacer()
-            Button {
-                handle(.capture)
-            } label: {
-                Label("Auslösen", systemImage: "circle.inset.filled")
-                    .font(Theme.caption(12))
-                    .padding(.horizontal, 16).padding(.vertical, 8)
-                    .background(Theme.amber)
-                    .foregroundStyle(.black)
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: Platform.isPad ? 6 : 14) {
+                transportTools
+                Spacer(minLength: 12)
+                captureActions
             }
-            .buttonStyle(.plain)
-            .help("Auslösen (Leertaste oder ⏎)")
-            .keyboardShortcut(.space, modifiers: [])
-            .accessibilityLabel(Text("Auslöser"))
-            // Wie im einfachen Sucher: „Fertig · 3“ zeigt, wie viele Bilder
-            // diese Sitzung dazukommen.
-            Button("Fertig · \(controller.capturedCount)", action: onFinish)
-                .buttonStyle(.plain)
-                .font(Theme.caption(12))
-                .padding(.horizontal, 14).padding(.vertical, 8)
-                .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.5), lineWidth: 1))
-                .foregroundStyle(Theme.paperOnDark)
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: Platform.isPad ? 6 : 14) { transportTools }
+                HStack(spacing: 14) {
+                    Spacer(minLength: 0)
+                    captureActions
+                }
+            }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .background(Theme.darkroom)
+    }
+
+    @ViewBuilder
+    private var transportTools: some View {
+        transportButton("backward.frame", "Bild zurück (←)") { handle(.stepBack) }
+        transportButton(playing ? "stop.fill" : "play.fill", "Abspielen (P)") { handle(.play) }
+        transportButton("goforward", "Kurz abspielen (K)") { handle(.shortPlay) }
+        transportButton("forward.frame", "Bild vor (→)") { handle(.stepForward) }
+        transportButton("record.circle", "Live-Bild (L)", active: showsLive) { handle(.live) }
+        Divider().frame(height: 22).overlay(Theme.paperOnDark.opacity(0.2))
+        transportButton("arrow.left.arrow.right", "Umschalten (T)", active: showCaptured) { handle(.toggle) }
+        transportButton("repeat", "Auto-Umschalten (⇧T)", active: autoToggle) { handle(.autoToggle) }
+        transportButton("chevron.left.to.line", "Schleifenanfang (I)", active: loopIn != nil) { handle(.loopIn) }
+        transportButton("chevron.right.to.line", "Schleifenende (O)", active: loopOut != nil) { handle(.loopOut) }
+        Divider().frame(height: 22).overlay(Theme.paperOnDark.opacity(0.2))
+        UndoRedoButtons(tint: Theme.paperOnDark)
+    }
+
+    @ViewBuilder
+    private var captureActions: some View {
+        Button {
+            handle(.capture)
+        } label: {
+            Label("Auslösen", systemImage: "circle.inset.filled")
+                .font(Theme.caption(12))
+                .lineLimit(1).fixedSize()
+                .padding(.horizontal, 16).padding(.vertical, 8)
+                .background(Theme.amber)
+                .foregroundStyle(.black)
+        }
+        .buttonStyle(.plain)
+        .help("Auslösen (Leertaste oder ⏎)")
+        .keyboardShortcut(.space, modifiers: [])
+        .accessibilityLabel(Text("Auslöser"))
+        // Wie im einfachen Sucher: „Fertig · 3“ zeigt, wie viele Bilder
+        // diese Sitzung dazukommen.
+        Button("Fertig · \(controller.capturedCount)", action: onFinish)
+            .buttonStyle(.plain)
+            .font(Theme.caption(12))
+            .lineLimit(1).fixedSize()
+            .padding(.horizontal, 14).padding(.vertical, 8)
+            .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.5), lineWidth: 1))
+            .foregroundStyle(Theme.paperOnDark)
     }
 
     private func transportButton(_ symbol: String, _ help: LocalizedStringKey, active: Bool = false,

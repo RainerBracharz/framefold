@@ -51156,33 +51156,93 @@
     "%lld Tonspuren": {
       "localizations": {
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld audio tracks"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld audio track"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld audio tracks"
+                }
+              }
+            }
           }
         },
         "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld pistes audio"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld piste audio"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld pistes audio"
+                }
+              }
+            }
           }
         },
         "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld pistas de audio"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld pista de audio"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld pistas de audio"
+                }
+              }
+            }
           }
         },
         "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld tracce audio"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld traccia audio"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld tracce audio"
+                }
+              }
+            }
           }
         },
         "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld geluidssporen"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld geluidsspoor"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld geluidssporen"
+                }
+              }
+            }
           }
         },
         "ja": {
@@ -51192,9 +51252,21 @@
           }
         },
         "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld faixas de áudio"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld faixa de áudio"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld faixas de áudio"
+                }
+              }
+            }
           }
         },
         "cs": {
@@ -51249,6 +51321,24 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld ljudspår"
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Tonspur"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Tonspuren"
+                }
+              }
+            }
           }
         }
       }
