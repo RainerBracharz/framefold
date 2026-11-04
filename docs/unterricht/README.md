@@ -12,7 +12,7 @@ Für die Schule heißt das: keine Anmeldung der Kinder, keine Datenverarbeitung 
 ## Kompetenzen
 
 - **Produzieren und Präsentieren** (KMK-Strategie „Bildung in der digitalen Welt“, Bereich 3): eine Geschichte planen, als Film umsetzen und vorführen.
-- **Österreich**: Volksschule – übergreifendes Thema Medienbildung („eigene Medienbeiträge gestalten“) und Kunst und Gestaltung („Arbeit mit Fotos und Filmen“). Sekundarstufe I – Digitale Grundbildung (BGBl. II Nr. 267/2022), Kompetenzbereich „Produktion: Inhalte digital erstellen und veröffentlichen“.
+- **Österreich**: Volksschule: übergreifendes Thema Medienbildung („eigene Medienbeiträge gestalten“) und Kunst und Gestaltung („Arbeit mit Fotos und Filmen“). Sekundarstufe I: Digitale Grundbildung (BGBl. II Nr. 267/2022), Kompetenzbereich „Produktion: Inhalte digital erstellen und veröffentlichen“.
 - **Bewegung verstehen**: Wie entsteht aus Einzelbildern Bewegung? Was bewirken kleine und große Schritte zwischen zwei Bildern?
 - **Zusammenarbeit**: In Gruppen zu dritt gibt es drei Rollen, die nach jeder Szene wechseln: Regie, Set und Kontrolle.
 - **Fächer**: Kunst, Deutsch (Erzählen), Sachunterricht oder Physik (Bewegung, Zeit), Informatik oder Medienbildung.
@@ -44,7 +44,7 @@ Für eine Sekunde Film braucht es 10 Bilder (bei 10 Bildern pro Sekunde).
 |---|---|
 | 10 min | **Nachaufnahme**: Im Werk ein misslungenes Bild lange drücken und „Neu aufnehmen“ wählen, oder „Verdoppeln“ für eine längere Pause. |
 | 10 min | **Ton**: „Musik oder Ton hinzufügen“ wählt eine Audiodatei, etwa ein selbst gesprochenes Geräusch aus der Sprachmemo-App oder lizenzfreie Musik. |
-| 5 min | **Export**: „Stopmotion exportieren“. Im Modus Erweitert lassen sich Bildrate (2 bis 30 fps), Format und Abspielmodus wählen. |
+| 5 min | **Export**: „Stop-Motion exportieren“. Im Modus Erweitert lassen sich Bildrate (2 bis 30 fps), Format und Abspielmodus wählen. |
 | 15 min | **Vorführung**: Bildschirm oder Beamer anschließen. Jede Gruppe zeigt ihren Film und erzählt kurz, was am schwierigsten war. |
 | 5 min | **Daumenkino**: „Daumenkino“ erzeugt einen A4-Druckbogen mit Schnittlinien. Zu Hause ausschneiden, klammern, blättern. |
 
