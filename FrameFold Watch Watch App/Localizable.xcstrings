@@ -967,97 +967,97 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Not fired – check the iPhone"
+            "value": "Not fired, check the iPhone"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pas déclenché – vérifie l’iPhone"
+            "value": "Pas déclenché, vérifie l’iPhone"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No se disparó: revisa el iPhone"
+            "value": "No se disparó, revisa el iPhone"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nessuno scatto: controlla l’iPhone"
+            "value": "Non scattato, controlla l’iPhone"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Niet afgedrukt – controleer de iPhone"
+            "value": "Niet afgedrukt, iPhone controleren"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "撮影されませんでした – iPhone を確認してください"
+            "value": "撮影されませんでした。iPhone を確認してください"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Não disparou – verifique o iPhone"
+            "value": "Não disparou, verifique o iPhone"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nevyfoceno – zkontroluj iPhone"
+            "value": "Nevyfoceno, zkontroluj iPhone"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nie zrobiono zdjęcia – sprawdź iPhone’a"
+            "value": "Nie zrobiono zdjęcia, sprawdź iPhone’a"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не знято — перевір iPhone"
+            "value": "Не знято, перевір iPhone"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не снято — проверьте iPhone"
+            "value": "Не снято, проверь iPhone"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Çekilmedi — iPhone'u kontrol edin"
+            "value": "Tetiklenmedi, iPhone'u kontrol edin"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "촬영 안 됨 — iPhone을 확인하세요"
+            "value": "촬영 안 됨, iPhone을 확인하세요"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "未拍摄——请检查 iPhone"
+            "value": "未拍摄，请检查 iPhone"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Intet billede taget — tjek iPhonen"
+            "value": "Ikke udløst, tjek iPhonen"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ingen bild tagen — kontrollera iPhonen"
+            "value": "Inte utlöst, kontrollera iPhonen"
           }
         }
       }

@@ -14,19 +14,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "In live mode, FrameFold takes frames automatically whenever your hands are out of the shot."
+            "value": "In live mode FrameFold automatically takes frames when your hands are out of the frame."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "En el modo en directo, FrameFold toma fotogramas automáticamente cuando tus manos están fuera del encuadre."
+            "value": "En el modo en directo, FrameFold toma fotogramas automáticamente cuando tus manos están fuera de la imagen."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "En mode direct, FrameFold prend des images automatiquement dès que tes mains sont hors du cadre."
+            "value": "En mode direct, FrameFold prend automatiquement des images dès que tes mains sont hors du cadre."
           }
         },
         "it": {
@@ -44,25 +44,25 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "In de livemodus neemt FrameFold automatisch beelden op wanneer je handen uit beeld zijn."
+            "value": "FrameFold neemt in de livemodus automatisch beelden op als je handen uit beeld zijn."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "No modo ao vivo, o FrameFold captura quadros automaticamente sempre que suas mãos saem da imagem."
+            "value": "No modo ao vivo, o FrameFold captura quadros automaticamente quando suas mãos estão fora da imagem."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "V živém režimu FrameFold automaticky pořizuje snímky, kdykoli máš ruce mimo záběr."
+            "value": "V živém režimu FrameFold automaticky pořizuje snímky, když máš ruce mimo záběr."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "W trybie na żywo FrameFold automatycznie robi klatki, gdy tylko twoje ręce są poza kadrem."
+            "value": "W trybie na żywo FrameFold automatycznie robi zdjęcia, gdy twoje ręce są poza kadrem."
           }
         },
         "uk": {
@@ -74,7 +74,7 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "В режиме съёмки вживую FrameFold автоматически делает кадры, когда ваши руки уходят из кадра."
+            "value": "В режиме съёмки вживую FrameFold автоматически делает кадры, когда твои руки уходят из кадра."
           }
         },
         "tr": {
@@ -86,7 +86,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "라이브 모드에서 FrameFold는 손이 화면에서 벗어날 때마다 자동으로 프레임을 촬영합니다."
+            "value": "라이브 모드에서 FrameFold는 손이 화면에서 벗어날 때마다 자동으로 프레임을 촬영해요."
           }
         },
         "zh-Hans": {
@@ -98,13 +98,13 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "I livetilstand tager FrameFold automatisk billeder, når dine hænder er ude af billedet."
+            "value": "FrameFold tager automatisk billeder i livetilstand, når dine hænder er ude af billedet."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "I liveläget tar FrameFold bilder automatiskt så fort dina händer är ur bild."
+            "value": "FrameFold tar automatiskt bilder i liveläget när dina händer är ur bild."
           }
         }
       }
@@ -128,7 +128,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Para guardar los vídeos de stop motion terminados en tu fototeca."
+            "value": "Para guardar vídeos de stop motion terminados en tu fototeca."
           }
         },
         "fr": {
@@ -152,13 +152,13 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Om voltooide stop-motionvideo’s in je fotobibliotheek te bewaren."
+            "value": "Voor het bewaren van voltooide stop-motionvideo’s in je fotobibliotheek."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Para salvar os vídeos em stop motion prontos na sua fototeca."
+            "value": "Para salvar vídeos em stop motion prontos na sua fototeca."
           }
         },
         "cs": {
@@ -182,7 +182,7 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Для сохранения готовых стоп-моушен-видео в вашу медиатеку."
+            "value": "Для сохранения готовых стоп-моушен-видео в твою медиатеку."
           }
         },
         "tr": {
@@ -194,7 +194,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "완성된 스톱모션 비디오를 사진 보관함에 저장하기 위해 사용합니다."
+            "value": "완성된 스톱모션 비디오를 사진 보관함에 저장하기 위해 사용해요."
           }
         },
         "zh-Hans": {
@@ -230,97 +230,97 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "In the Studio, FrameFold recognises spoken words in an audio track – on the device only – to match mouth shapes to frames."
+            "value": "In the studio FrameFold recognizes spoken words of an audio track to assign mouth shapes to the frames. This happens only on the device."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "En el Studio, FrameFold reconoce las palabras habladas de una pista de audio (solo en el dispositivo) para asignar formas de boca a los fotogramas."
+            "value": "En el estudio, FrameFold reconoce las palabras habladas de una pista de audio para asignar formas de boca a los fotogramas. Esto solo ocurre en el dispositivo."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dans le Studio, FrameFold reconnaît les mots d’une piste audio – uniquement sur l’appareil – pour associer les formes de bouche aux images."
+            "value": "Dans le studio, FrameFold reconnaît les mots parlés d’une piste audio pour associer les formes de bouche aux images. Cela se fait uniquement sur l’appareil."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nello Studio, FrameFold riconosce le parole pronunciate in una traccia audio (solo sul dispositivo) per abbinare le forme della bocca ai fotogrammi."
+            "value": "Nello Studio FrameFold riconosce le parole pronunciate in una traccia audio per abbinare le forme della bocca ai fotogrammi. Questo avviene solo sul dispositivo."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Studio では、口の形をコマに合わせるため、FrameFold がオーディオトラック内の話し言葉を認識します – 処理はデバイス上だけで行われます。"
+            "value": "Studio では、口の形をコマに合わせるため、FrameFold がオーディオトラック内の話し言葉を認識します。処理はデバイス上でのみ行われます。"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "In de Studio herkent FrameFold gesproken woorden in een geluidsspoor – alleen op het apparaat – om mondvormen aan beelden te koppelen."
+            "value": "In de studio herkent FrameFold gesproken woorden van een geluidsspoor om mondvormen aan de beelden toe te wijzen. Dat gebeurt alleen op het apparaat."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "No Studio, o FrameFold reconhece palavras faladas numa faixa de áudio – só no dispositivo – para combinar formas da boca com os quadros."
+            "value": "No Studio, o FrameFold reconhece palavras faladas de uma faixa de áudio para atribuir formas da boca aos quadros. Isso acontece apenas no dispositivo."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ve Studiu FrameFold rozpoznává mluvená slova ve zvukové stopě – jen v zařízení –, aby snímkům přiřadil tvary úst."
+            "value": "Ve Studiu FrameFold rozpoznává mluvená slova ve zvukové stopě, aby snímkům přiřadil tvary úst. Děje se to jen v zařízení."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "W Studio FrameFold rozpoznaje wypowiadane słowa na ścieżce dźwiękowej – tylko na urządzeniu – aby przypisać kształty ust do klatek."
+            "value": "W Studio FrameFold rozpoznaje wypowiadane słowa na ścieżce dźwiękowej, aby przypisać kształty ust do klatek. Dzieje się to tylko na urządzeniu."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "У Студії FrameFold розпізнає слова в аудіодоріжці — лише на пристрої, — щоб призначити кадрам форми рота."
+            "value": "У Студії FrameFold розпізнає слова в аудіодоріжці, щоб призначити кадрам форми рота. Це відбувається лише на пристрої."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "В студии FrameFold распознаёт произнесённые слова в аудиодорожке — только на устройстве, — чтобы подобрать к кадрам формы рта."
+            "value": "В студии FrameFold распознаёт произнесённые слова в аудиодорожке, чтобы назначить формы рта кадрам. Это происходит только на устройстве."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stüdyoda FrameFold, ağız şekillerini karelere eşlemek için bir ses parçasındaki konuşulan sözcükleri tanır — yalnızca cihazda."
+            "value": "Stüdyoda FrameFold, ağız şekillerini karelere atamak için bir ses parçasındaki konuşulan kelimeleri tanır. Bu işlem yalnızca cihazda gerçekleşir."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "스튜디오에서 FrameFold는 입 모양을 프레임에 맞추기 위해 오디오 트랙의 말소리를 인식합니다. 처리는 기기에서만 이루어집니다."
+            "value": "스튜디오에서 FrameFold는 입 모양을 프레임에 맞추기 위해 오디오 트랙의 말소리를 인식해요. 처리는 기기에서만 이루어져요."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "在 Studio 中，FrameFold 会识别音轨中说出的词语（仅在设备上处理），以便为各帧匹配口型。"
+            "value": "在 Studio 中，FrameFold 会识别音轨中说出的词语，以便为各帧匹配口型。这仅在设备上进行。"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "I Studio genkender FrameFold talte ord i et lydspor — kun på enheden — for at tilpasse mundformer til billederne."
+            "value": "I Studio genkender FrameFold talte ord i et lydspor for at tildele mundformer til billederne. Det sker kun på enheden."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "I Studio känner FrameFold igen talade ord i ett ljudspår — bara på enheten — för att matcha munformer mot bilderna."
+            "value": "I Studio känner FrameFold igen talade ord i ett ljudspår för att koppla munformer till bilderna. Det sker bara på enheten."
           }
         }
       }
@@ -338,19 +338,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "On request, FrameFold records your voice or sounds for your film and, if you turn it on, listens for a clap to take a shot. Recordings stay on the device; nothing is saved when listening for claps."
+            "value": "On request, FrameFold records your voice or sounds for your film and, if you turn it on, listens for a clap to take a shot. Recordings stay on the device. Nothing is saved when listening for claps."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Si lo pides, FrameFold graba tu voz o sonidos para tu película y, si lo activas, escucha una palmada para disparar. Las grabaciones se quedan en el dispositivo; al escuchar palmadas no se guarda nada."
+            "value": "FrameFold graba voz o sonidos para tu película si lo deseas y, si lo enciendes, escucha una palmada como disparador. Las grabaciones se quedan en el dispositivo, al aplaudir no se guarda nada."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "À votre demande, FrameFold enregistre votre voix ou des sons pour votre film et, si vous l’activez, écoute un applaudissement pour déclencher. Les enregistrements restent sur l’appareil ; rien n’est enregistré pendant l’écoute des applaudissements."
+            "value": "Sur ta demande, FrameFold enregistre ta voix ou des bruits pour ton film et, si tu l’actives, écoute un applaudissement pour déclencher. Les enregistrements restent sur l’appareil. Rien n’est enregistré lors de l’écoute des applaudissements."
           }
         },
         "it": {
@@ -368,67 +368,67 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Op jouw verzoek neemt FrameFold je stem of geluiden voor je film op en luistert het, als je dat inschakelt, naar een klap om een opname te maken. Opnamen blijven op het apparaat; bij het luisteren naar klappen wordt niets bewaard."
+            "value": "FrameFold neemt op jouw verzoek stem of geluiden voor je film op en luistert, als je het inschakelt, naar een klap als ontspanner. Opnamen blijven op het apparaat. Bij het klappen wordt niets bewaard."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Se você pedir, o FrameFold grava sua voz ou sons para o filme e, se você ativar, escuta uma palma para disparar. As gravações ficam no aparelho; ao escutar palmas, nada é salvo."
+            "value": "O FrameFold grava a seu pedido voz ou sons para o seu filme e escuta, se você ativar, uma palma como disparador. As gravações ficam no dispositivo; ao bater palmas, nada é salvo."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "FrameFold na tvé přání nahrává hlas nebo zvuky k tvému filmu a – pokud to zapneš – poslouchá tlesknutí jako spoušť. Nahrávky zůstávají v zařízení; při poslechu tlesknutí se nic neukládá."
+            "value": "FrameFold na tvé přání nahrává hlas nebo zvuky k tvému filmu a, pokud to zapneš, poslouchá tlesknutí jako spoušť. Nahrávky zůstávají v zařízení. Při tlesknutí se nic neukládá."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Na twoje życzenie FrameFold nagrywa głos lub dźwięki do twojego filmu, a jeśli to włączysz, nasłuchuje klaśnięcia jako spustu. Nagrania zostają na urządzeniu; przy nasłuchiwaniu klaśnięć nic nie jest zapisywane."
+            "value": "Na twoje życzenie FrameFold nagrywa głos lub dźwięki do twojego filmu, a jeśli to włączysz, nasłuchuje klaśnięcia jako spustu. Nagrania zostają na urządzeniu. Przy nasłuchiwaniu klaśnięć nic nie jest zapisywane."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "За твоїм бажанням FrameFold записує голос або звуки до твого фільму, а якщо ти це ввімкнеш, слухає оплеск як сигнал для зйомки. Записи залишаються на пристрої; під час очікування оплеску нічого не зберігається."
+            "value": "За твоїм бажанням FrameFold записує голос або звуки до твого фільму, а якщо ти це ввімкнеш, слухає оплеск як сигнал для зйомки. Записи залишаються на пристрої. Під час очікування оплеску нічого не зберігається."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "По вашему желанию FrameFold записывает голос или звуки для фильма, а если вы включите эту функцию, слушает хлопок, чтобы сделать снимок. Записи остаются на устройстве; при ожидании хлопка ничего не сохраняется."
+            "value": "По твоему желанию FrameFold записывает голос или звуки для твоего фильма, а если ты включишь эту функцию, реагирует на хлопок для спуска затвора. Записи остаются на устройстве; при хлопке ничего не сохраняется."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "FrameFold, isteğiniz üzerine filminiz için sesinizi veya sesleri kaydeder ve bu özelliği açarsanız çekim yapmak için alkışı dinler. Kayıtlar cihazda kalır; alkış dinlenirken hiçbir şey kaydedilmez."
+            "value": "FrameFold, isteğiniz üzerine filminiz için sesinizi veya sesleri kaydeder ve açtığınızda tetikleyici olarak bir alkışı dinler. Kayıtlar cihazda kalır; alkış sırasında hiçbir şey kaydedilmez."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "요청 시 FrameFold는 영상에 넣을 목소리나 소리를 녹음하며, 이 기능을 켜면 박수 소리를 듣고 촬영합니다. 녹음은 기기에 남고, 박수를 듣는 동안에는 아무것도 저장되지 않습니다."
+            "value": "원할 경우 FrameFold는 영상에 넣을 목소리나 소리를 녹음하며, 이 기능을 켜면 박수 소리를 듣고 촬영해요. 녹음은 기기에 남고, 박수를 칠 때는 아무것도 저장되지 않아요."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "FrameFold 会根据你的需要为影片录制人声或声音；如果你开启拍手拍摄，它会聆听拍手声来拍摄。录音保留在设备上；聆听拍手声时不会保存任何内容。"
+            "value": "FrameFold 会根据你的需要为影片录制人声或声音，如果你开启该功能，它会聆听拍手声作为快门。录音保留在设备上，聆听拍手声时不会保存任何内容。"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Når du ønsker det, optager FrameFold din stemme eller lyde til din film og lytter, hvis du slår det til, efter et klap for at tage et billede. Optagelser bliver på enheden; når der lyttes efter klap, gemmes intet."
+            "value": "FrameFold optager efter dit ønske stemme eller lyde til din film og lytter, når du slår det til, efter et klap som udløser. Optagelser bliver på enheden; ved klap gemmes intet."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "När du vill spelar FrameFold in din röst eller ljud till din film och lyssnar, om du slår på det, efter en klapp för att ta en bild. Inspelningar stannar på enheten; när den lyssnar efter klappar sparas ingenting."
+            "value": "FrameFold spelar på din begäran in röst eller ljud till din film och lyssnar, om du slår på det, efter en klapp som avtryckare. Inspelningar stannar på enheten; vid klappning sparas ingenting."
           }
         }
       }
@@ -553,97 +553,97 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Only if you turn on light control in the Studio: FrameFold sends light values (Art-Net) to a device on your local network. Nothing goes to the internet."
+            "value": "FrameFold only sends light values (Art-Net) to a device on your local network if you turn on the light control in the studio. Nothing goes to the internet."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Uniquement si vous activez le contrôle de la lumière dans le Studio : FrameFold envoie des valeurs d’éclairage (Art-Net) à un appareil de votre réseau local. Rien ne part sur Internet."
+            "value": "FrameFold envoie des valeurs d’éclairage (Art-Net) à un appareil de ton réseau local uniquement si tu actives le contrôle de la lumière dans le studio. Rien ne part sur Internet."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Solo si activas el control de luz en el Studio: FrameFold envía valores de luz (Art-Net) a un dispositivo de tu red local. Nada sale a internet."
+            "value": "FrameFold solo envía valores de luz (Art-Net) a un dispositivo de tu red local si enciendes el control de luz en el estudio. Nada va a internet."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Solo se attivi il controllo luci nello Studio: FrameFold invia valori di luce (Art-Net) a un dispositivo nella tua rete locale. Nulla va su Internet."
+            "value": "FrameFold invia valori di luce (Art-Net) a un dispositivo nella tua rete locale solo se attivi il controllo luci nello Studio. Nulla va su Internet."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alleen als je in de Studio lichtbesturing inschakelt: FrameFold stuurt lichtwaarden (Art-Net) naar een apparaat in je lokale netwerk. Er gaat niets naar het internet."
+            "value": "FrameFold stuurt alleen lichtwaarden (Art-Net) naar een apparaat in je lokale netwerk als je in de studio de lichtbesturing inschakelt. Er gaat niets naar het internet."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Studio で照明コントロールをオンにした場合のみ：FrameFold はローカルネットワーク内の機器に照明の値（Art-Net）を送信します。インターネットには何も送信されません。"
+            "value": "Studio で照明コントロールをオンにした場合のみ、FrameFold はローカルネットワーク内の機器に照明の値（Art-Net）を送信します。インターネットには何も送信されません。"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Só se você ativar o controle de luz no Studio: o FrameFold envia valores de luz (Art-Net) para um aparelho na sua rede local. Nada vai para a internet."
+            "value": "O FrameFold envia valores de luz (Art-Net) para um dispositivo na sua rede local apenas se você ativar o controle de luz no Studio. Nada vai para a internet."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jen když ve Studiu zapneš ovládání světla: FrameFold posílá hodnoty světla (Art-Net) do zařízení ve tvé místní síti. Nic nejde do internetu."
+            "value": "FrameFold posílá hodnoty světla (Art-Net) do zařízení ve tvé místní síti jen tehdy, když ve Studiu zapneš ovládání světla. Nic nejde do internetu."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tylko gdy włączysz sterowanie światłem w Studio: FrameFold wysyła wartości światła (Art-Net) do urządzenia w twojej sieci lokalnej. Nic nie trafia do internetu."
+            "value": "FrameFold wysyła wartości światła (Art-Net) do urządzenia w twojej sieci lokalnej tylko wtedy, gdy włączysz sterowanie światłem w Studio. Nic nie trafia do internetu."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Лише якщо ти вмикаєш керування світлом у Студії: FrameFold надсилає значення світла (Art-Net) на пристрій у твоїй локальній мережі. До інтернету нічого не потрапляє."
+            "value": "FrameFold надсилає значення світла (Art-Net) на пристрій у твоїй локальній мережі, лише якщо ти вмикаєш керування світлом у Студії. До інтернету нічого не потрапляє."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Только если вы включите управление светом в Студии: FrameFold отправляет значения света (Art-Net) на устройство в вашей локальной сети. В интернет ничего не уходит."
+            "value": "FrameFold отправляет значения света (Art-Net) на устройство в твоей локальной сети только в том случае, если ты включаешь управление светом в студии. В интернет ничего не передается."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yalnızca Stüdyo’da ışık kontrolünü açarsanız: FrameFold ışık değerlerini (Art-Net) yerel ağınızdaki bir cihaza gönderir. İnternete hiçbir şey gitmez."
+            "value": "FrameFold, yalnızca Stüdyo’da ışık kontrolünü açtığınızda yerel ağınızdaki bir cihaza ışık değerleri (Art-Net) gönderir. İnternete hiçbir şey gitmez."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "스튜디오에서 조명 제어를 켠 경우에만: FrameFold가 로컬 네트워크의 기기로 조명 값(Art-Net)을 보냅니다. 인터넷으로는 아무것도 보내지 않습니다."
+            "value": "스튜디오에서 조명 제어를 켤 때만 FrameFold가 로컬 네트워크의 기기로 조명 값(Art-Net)을 보내요. 인터넷으로는 아무것도 보내지 않아요."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "仅当你在 Studio 中开启灯光控制时：FrameFold 会把灯光数值（Art-Net）发送到你本地网络中的设备。不会向互联网发送任何内容。"
+            "value": "仅当你在 Studio 中开启灯光控制时，FrameFold 才会把灯光数值（Art-Net）发送到你本地网络中的设备。不会向互联网发送任何内容。"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kun hvis du slår lysstyring til i Studio: FrameFold sender lysværdier (Art-Net) til en enhed på dit lokale netværk. Intet sendes til internettet."
+            "value": "FrameFold sender kun lysværdier (Art-Net) til en enhed på dit lokale netværk, når du slår lysstyringen til i Studio. Intet sendes til internettet."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bara om du slår på ljusstyrning i Studio: FrameFold skickar ljusvärden (Art-Net) till en enhet i ditt lokala nätverk. Inget skickas till internet."
+            "value": "FrameFold skickar ljusvärden (Art-Net) till en enhet i ditt lokala nätverk endast när du slår på ljusstyrningen i Studio. Inget skickas till internet."
           }
         }
       }
@@ -661,97 +661,97 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Only if you connect motion control in the Studio: FrameFold controls a camera slider or pan-tilt head via Bluetooth."
+            "value": "FrameFold only controls a camera slider or pan-tilt head via Bluetooth if you connect motion control in the studio."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Uniquement si vous connectez le Motion Control dans le Studio : FrameFold pilote par Bluetooth un slider ou une tête panoramique."
+            "value": "FrameFold pilote par Bluetooth un slider ou une tête panoramique uniquement si tu connectes le Motion Control dans le studio."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Solo si conectas el Motion Control en el Studio: FrameFold controla por Bluetooth un slider de cámara o un cabezal panorámico."
+            "value": "FrameFold solo controla por Bluetooth un deslizador de cámara o un cabezal panorámico si conectas el Motion Control en el estudio."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Solo se colleghi il Motion Control nello Studio: FrameFold controlla via Bluetooth uno slider o una testa panoramica."
+            "value": "FrameFold controlla via Bluetooth uno slider o una testa panoramica solo se colleghi il Motion Control nello Studio."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alleen als je in de Studio motion control verbindt: FrameFold stuurt via Bluetooth een cameraslider of panoramakop aan."
+            "value": "FrameFold bestuurt alleen via Bluetooth een cameraslider of panoramakop als je in de studio motion control verbindt."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Studio でモーションコントロールを接続した場合のみ：FrameFold は Bluetooth でカメラスライダーや雲台を制御します。"
+            "value": "Studio でモーションコントロールを接続した場合のみ、FrameFold は Bluetooth でカメラスライダーや雲台を制御します。"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Só se você conectar o Motion Control no Studio: o FrameFold controla por Bluetooth um slider de câmera ou uma cabeça panorâmica."
+            "value": "O FrameFold controla por Bluetooth um slider de câmera ou uma cabeça panorâmica apenas se você conectar o Motion Control no Studio."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jen když ve Studiu připojíš Motion Control: FrameFold přes Bluetooth ovládá kamerový slider nebo panoramatickou hlavu."
+            "value": "FrameFold přes Bluetooth ovládá kamerový slider nebo panoramatickou hlavu jen tehdy, když ve Studiu připojíš Motion Control."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tylko gdy połączysz Motion Control w Studio: FrameFold steruje przez Bluetooth sliderem kamery lub głowicą panoramiczną."
+            "value": "FrameFold steruje przez Bluetooth sliderem kamery lub głowicą panoramiczną tylko wtedy, gdy połączysz Motion Control w Studio."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Лише якщо ти підключаєш Motion Control у Студії: FrameFold керує через Bluetooth слайдером камери або панорамною головкою."
+            "value": "FrameFold керує через Bluetooth слайдером камери або панорамною головкою, лише якщо ти підключаєш Motion Control у Студії."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Только если вы подключите Motion Control в Студии: FrameFold управляет по Bluetooth слайдером камеры или панорамной головкой."
+            "value": "FrameFold управляет по Bluetooth слайдером камеры или панорамной головкой только в том случае, если ты подключаешь Motion Control в студии."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yalnızca Stüdyo’da Motion Control’ü bağlarsanız: FrameFold, Bluetooth ile bir kamera kaydırıcısını veya pan-tilt başlığını kontrol eder."
+            "value": "FrameFold, yalnızca Stüdyo’da Motion Control’ü bağladığınızda Bluetooth üzerinden bir kamera kızağını veya pan-tilt başlığını kontrol eder."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "스튜디오에서 모션 컨트롤을 연결한 경우에만: FrameFold가 Bluetooth로 카메라 슬라이더나 팬·틸트 헤드를 제어합니다."
+            "value": "스튜디오에서 모션 컨트롤을 연결할 때만 FrameFold가 Bluetooth로 카메라 슬라이더나 팬·틸트 헤드를 제어해요."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "仅当你在 Studio 中连接运动控制时：FrameFold 会通过蓝牙控制相机滑轨或云台。"
+            "value": "仅当你在 Studio 中连接运动控制时，FrameFold 才会通过蓝牙控制相机滑轨或云台。"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kun hvis du forbinder motion control i Studio: FrameFold styrer en kameraslider eller et panoramahoved via Bluetooth."
+            "value": "FrameFold styrer kun en kameraslider eller et panoramahoved via Bluetooth, når du forbinder motion control i Studio."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bara om du ansluter motion control i Studio: FrameFold styr en kameraslider eller ett panoramahuvud via Bluetooth."
+            "value": "FrameFold styr en kameraslider eller ett panoramahuvud via Bluetooth endast när du ansluter motion control i Studio."
           }
         }
       }

@@ -6,6 +6,7 @@ erst dann wird etwas eingesetzt. Ergebnisse landen in lektorat/ (nicht im Repo).
 
     python3 scripts/gemini_lektor.py app      # alle deutschen App-Texte prüfen → lektorat/app-*.json
     python3 scripts/gemini_lektor.py store    # Store-Texte iOS und Mac neu schreiben → lektorat/store.json
+    python3 scripts/gemini_lektor.py app-uebersetzen  # Übersetzungen der geänderten/gestrichelten App-Texte → lektorat/app-uebersetzung/
 
 Schlüssel: ~/bracharz-seo/.gemini-key, nur im Header, nie in URLs oder Logs.
 """
@@ -219,7 +220,81 @@ def uebersetzen():
         list(pool.map(eine, SPRACHEN))
 
 
+BRIEF_APP_UEBERSETZEN = """Du überarbeitest die Übersetzungen der Oberflächentexte der kostenlosen Stop-Motion-App FrameFold (iPhone, iPad, Mac, Apple Watch).
+Die deutschen Texte wurden lektoriert. Du bekommst je Eintrag [kennung], den neuen deutschen Text und die bisherige Übersetzung.
+Liefere für JEDEN Eintrag die vollständige Übersetzung in der Zielsprache:
+- Inhaltlich genau wie der neue deutsche Text. Nichts weglassen (auch kleine Wörter wie „nur“), nichts dazuerfinden.
+- Ist die bisherige Übersetzung schon richtig und regelkonform, gib sie unverändert zurück.
+- Keine Gedankenstriche (—, –, auch ―, ——) als Satzzeichen, auch nicht in Japanisch, Chinesisch oder Koreanisch. Ersatz: Beistrich, Punkt, neuer Satz. Bereichsangaben wie „01–%02d“ werden zu „01 bis %02d“ bzw. der üblichen Form der Sprache ohne Strich. Wortbindestriche bleiben.
+- Platzhalter (%@, %lld, %1$@, %2$lld, %.1f, %%, %02d) genau so oft und mit denselben Zeichen wie im deutschen Text.
+- Zeilenumbrüche (\\n) an denselben Stellen wie im deutschen Text.
+- Kurze Knopf- und Menütexte bleiben kurz.
+- App-Begriffe genau wie in der Begriffsliste der Zielsprache.
+- Natürlich, wie Muttersprachler gute App-Texte schreiben. Anrede informell, wo das in Apps dieser Sprache üblich ist, sonst wie in der bisherigen Übersetzung.
+""" + REGELN
+
+SCHEMA_APP_UEBERSETZEN = {"type": "object", "properties": {"eintraege": {"type": "array", "items": {
+    "type": "object", "properties": {"kennung": {"type": "string"}, "text": {"type": "string"}},
+    "required": ["kennung", "text"]}}}, "required": ["eintraege"]}
+
+STRICH = re.compile(r"[—–―]")
+
+
+def _werte(l):
+    return [l.get("stringUnit", {}).get("value", "")]
+
+
+def app_auswahl():
+    """[(kennung, katalog, schlüssel, deutsch)] – beim Lektorat geänderte Texte und alle mit Gedankenstrich."""
+    import subprocess
+    aus = []
+    for kat in KATALOGE:
+        alt = json.loads(subprocess.run(["git", "show", f"66ffca3^:{kat}"], cwd=REPO, capture_output=True,
+                                        text=True).stdout)["strings"]
+        neu = json.loads((REPO / kat).read_text(encoding="utf-8"))["strings"]
+        for schl, v in neu.items():
+            if v.get("shouldTranslate") is False:
+                continue
+            lok = v.get("localizations", {})
+            de = lok.get("de", {}).get("stringUnit", {}).get("value", schl)
+            geaendert = json.dumps(alt.get(schl, {}).get("localizations", {}).get("de", {})) != json.dumps(lok.get("de", {}))
+            strich = any(STRICH.search(x) for sp, l in lok.items() if sp != "de" for x in _werte(l))
+            if (geaendert or strich) and not any("variations" in l for l in lok.values()):
+                aus.append((f"t{len(aus) + 1}", kat, schl, de))
+    return aus
+
+
+def app_uebersetzen():
+    from concurrent.futures import ThreadPoolExecutor
+    auswahl = app_auswahl()
+    kats = {k: json.loads((REPO / k).read_text(encoding="utf-8"))["strings"] for k in KATALOGE}
+    sprachen = sorted({sp for s in kats.values() for v in s.values() for sp in v.get("localizations", {})} - {"de"})
+    haupt = kats["FrameFold/Localizable.xcstrings"]
+    ordner = AUS / "app-uebersetzung"
+    ordner.mkdir(exist_ok=True)
+    (ordner / "auswahl.json").write_text(json.dumps(auswahl, ensure_ascii=False, indent=1), encoding="utf-8")
+
+    def eine(sp):
+        ziel = ordner / f"{sp}.json"
+        if ziel.exists():
+            return
+        begriffe = "\n".join(f"{b} = {haupt.get(b, {}).get('localizations', {}).get(sp, {}).get('stringUnit', {}).get('value', '?')}"
+                             for b in BEGRIFFE)
+        zeilen = []
+        for k, kat, schl, de in auswahl:
+            bisher = kats[kat][schl].get("localizations", {}).get(sp, {}).get("stringUnit", {}).get("value", "")
+            zeilen.append(json.dumps({"kennung": k, "deutsch": de, "bisher": bisher}, ensure_ascii=False))
+        text = f"Zielsprache: {sp}\n\n# Begriffsliste (Deutsch = {sp})\n{begriffe}\n\n# Einträge\n" + "\n".join(zeilen)
+        erg, nutzung, version = gemini(BRIEF_APP_UEBERSETZEN, text, SCHEMA_APP_UEBERSETZEN)
+        ziel.write_text(json.dumps(erg, ensure_ascii=False, indent=1), encoding="utf-8")
+        protokoll(f"app-uebersetzen {sp}", nutzung, version)
+        print(sp, len(erg["eintraege"]))
+
+    with ThreadPoolExecutor(4) as pool:
+        list(pool.map(eine, sprachen))
+
+
 if __name__ == "__main__":
     AUS.mkdir(exist_ok=True)
-    {"app": app, "store": store, "uebersetzen": uebersetzen}.get(
+    {"app": app, "store": store, "uebersetzen": uebersetzen, "app-uebersetzen": app_uebersetzen}.get(
         sys.argv[1] if sys.argv[1:] else "", lambda: sys.exit(__doc__))()
