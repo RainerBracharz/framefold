@@ -119,7 +119,7 @@ struct LiveCaptureView: View {
                 if Platform.autostart, !Self.autostarted, targetProject == nil {
                     Self.autostarted = true   // nur einmal je Start (Test-Schalter)
                     didSeeCameraTip = true
-                    targetProject = store.projects.first ?? store.createProject(name: "Faltung")
+                    targetProject = store.projects.first ?? store.createProject(name: ProcessInfo.processInfo.environment["FF_WORK_NAME"] ?? "Faltung")
                 }
                 // „Mit der Kamera weiterarbeiten", bevor dieser Tab je offen war
                 if let id = ContinueWork.pending { continueWork(id) }
@@ -234,6 +234,8 @@ struct LiveCaptureView: View {
                 CatalogLabel("So funktioniert die Kamera", color: Theme.paperOnDark)
                 Text(Platform.isMac
                      ? "Kamera fest über dem Tisch, etwa eine Dokumentenkamera. Arbeite einfach. FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht."
+                     : Platform.isPad
+                     ? "iPad aufs Stativ oder ruhig über die Arbeit halten. Arbeite einfach. FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht."
                      : "iPhone aufs Stativ oder ruhig über die Arbeit halten. Arbeite einfach. FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.")
                     .font(Theme.mono(12))
                     .foregroundStyle(Theme.paperOnDark.opacity(0.85))
@@ -310,6 +312,8 @@ struct LiveCaptureView: View {
                         .fixedSize(horizontal: false, vertical: true)
                     Text(Platform.isMac
                          ? "Kamera über den Tisch. FrameFold löst aus, sobald deine Hände aus dem Bild sind."
+                         : Platform.isPad
+                         ? "iPad aufs Stativ. FrameFold löst aus, sobald deine Hände aus dem Bild sind."
                          : "iPhone aufs Stativ. FrameFold löst aus, sobald deine Hände aus dem Bild sind.")
                         .font(Theme.mono(12))
                         .foregroundStyle(Theme.paperOnDark.opacity(0.6))

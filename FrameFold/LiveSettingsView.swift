@@ -190,7 +190,9 @@ struct LiveSettingsView: View {
                         tipRow("lock", "Licht ruhig halten: Gleichmäßiges Kunstlicht ohne Sonne hält den Film ruhig. Wo die Kamera es erlaubt, sperrt FrameFold Belichtung und Weißabgleich.")
                         tipRow("scope", "Dokumentenkamera mit Fokus-Schalter: auf Einzelfokus (S) stellen und einmal scharfstellen. Sonst stellt sie bei jeder Hand im Bild neu scharf. Helligkeit und Weißabgleich lassen sich meist mit der App des Herstellers fest einstellen.")
                     } else {
-                        tipRow("hand.raised", "iPhone nicht berühren. Aufs Stativ stellen und den Auto-Auslöser arbeiten lassen, oder den runden Knopf drücken.")
+                        tipRow("hand.raised", Platform.isPad
+                               ? "iPad nicht berühren. Aufs Stativ stellen und den Auto-Auslöser arbeiten lassen, oder den runden Knopf drücken."
+                               : "iPhone nicht berühren. Aufs Stativ stellen und den Auto-Auslöser arbeiten lassen, oder den runden Knopf drücken.")
                         tipRow("lock", "Kamera bleibt ruhig: FrameFold sperrt Belichtung und Weißabgleich nach der kurzen Kalibrierung. So driftet zwischen den Bildern nichts. Der Fokus wird am Stativ fixiert, aus der Hand läuft er mit.")
                     }
                     tipRow("square.2.layers.3d", "Drift früh erkennen: Zwiebelhaut anlassen und die Aufnahme ab und zu mit dem ersten Bild vergleichen.")

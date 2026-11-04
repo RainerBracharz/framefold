@@ -109,6 +109,8 @@ struct OnboardingView: View {
                    title: "Direkt aufnehmen",
                    text: Platform.isMac
                        ? "Kamera über den Tisch, arbeiten. Es löst von selbst aus, sobald deine Hände aus dem Bild sind."
+                       : Platform.isPad
+                       ? "iPad aufs Stativ, arbeiten. Es löst von selbst aus, sobald deine Hände aus dem Bild sind."
                        : "iPhone aufs Stativ, arbeiten. Es löst von selbst aus, sobald deine Hände aus dem Bild sind.")
         }
     }

@@ -32423,7 +32423,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continuer la prise de vue"
+            "value": "Continuer"
           }
         },
         "es": {
@@ -32435,7 +32435,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continua a riprendere"
+            "value": "Continua"
           }
         },
         "nl": {
@@ -35373,6 +35373,106 @@
         }
       }
     },
+    "iPad aufs Stativ oder ruhig über die Arbeit halten. Arbeite einfach. FrameFold nimmt automatisch ein Bild auf, sobald deine Hände aus dem Bild sind und die Szene kurz ruht.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad on a tripod or held steady over your work. Just work. FrameFold takes a frame by itself as soon as your hands leave the frame and the scene settles."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad sur trépied ou tenu bien stable au-dessus de ton travail. Travaille simplement. FrameFold prend automatiquement une image dès que tes mains quittent le cadre et que la scène se calme un instant."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad en el trípode o sujeto firme sobre el trabajo. Tú solo trabaja. FrameFold toma automáticamente un fotograma en cuanto tus manos salen de la imagen y la escena se queda quieta un momento."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad sul treppiede o tenuto fermo sopra il lavoro. Lavora semplicemente. FrameFold scatta automaticamente un fotogramma appena le tue mani escono dall’inquadratura e la scena si ferma brevemente."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad op het statief of rustig boven het werk houden. Werk gewoon. FrameFold neemt automatisch een beeld op zodra je handen uit beeld zijn en de scène even rust."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad を三脚に置くか、作品の上でしっかり構えてください。そのまま作業します。手が画面から出てシーンが落ち着くと、FrameFold が自動でコマを撮影します。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad no tripé ou segurado firme sobre o trabalho. É só trabalhar. O FrameFold tira um quadro automaticamente assim que suas mãos saem da imagem e a cena fica parada por um momento."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad na stativ nebo ho drž klidně nad prací. Prostě pracuj. FrameFold pořídí snímek sám, jakmile máš ruce mimo záběr a scéna se na chvíli uklidní."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad na statyw albo trzymaj go nieruchomo nad pracą. Po prostu pracuj. FrameFold automatycznie robi zdjęcie, gdy tylko twoje ręce znikną z kadru, a scena na chwilę się uspokoi."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad на штатив або тримай його нерухомо над роботою. Просто працюй. FrameFold автоматично зробить кадр, щойно твої руки зникнуть із кадру і сцена ненадовго завмре."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Поставь iPad на штатив или неподвижно держи над работой. Просто работай. FrameFold автоматически делает снимок, как только твои руки уходят из кадра и сцена ненадолго замирает."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad'u tripoda koyun veya çalışmanın üzerinde sabit tutun. Sadece çalışın. Elleriniz kadrajdan çıkıp sahne kısa süre durulunca FrameFold otomatik olarak bir kare çeker."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad를 삼각대에 놓거나 작업 위에서 흔들림 없이 들고 있으세요. 그냥 작업하면 돼요. 손이 화면에서 벗어나고 장면이 잠시 멈추면 FrameFold가 자동으로 프레임을 촬영해요."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "把 iPad 架上三脚架，或稳稳地举在作品上方。尽管创作。手一离开画面且场景稍一静止，FrameFold 就会自动拍下一帧。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad på stativ, eller hold den roligt over arbejdet. Arbejd bare. FrameFold tager automatisk et billede, så snart dine hænder er ude af billedet og scenen kort falder til ro."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad på stativ eller håll den stilla över arbetet. Jobba bara. FrameFold tar automatiskt en bild så fort dina händer är ur bild och scenen vilar kort."
+          }
+        }
+      }
+    },
     "iPhone aufs Stativ, arbeiten. Es löst von selbst aus, sobald deine Hände aus dem Bild sind.": {
       "localizations": {
         "en": {
@@ -35473,12 +35573,112 @@
         }
       }
     },
+    "iPad aufs Stativ, arbeiten. Es löst von selbst aus, sobald deine Hände aus dem Bild sind.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad on a tripod, then work. It fires by itself as soon as your hands leave the frame."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad sur trépied, au travail. Il déclenche tout seul dès que tes mains quittent le cadre."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad en el trípode, a trabajar. Dispara por sí solo en cuanto tus manos salen de la imagen."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad sul treppiede, e al lavoro. Scatta da solo appena le tue mani escono dall’inquadratura."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad op het statief, werken. Hij drukt vanzelf af zodra je handen uit beeld zijn."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad を三脚に置いて作業します。手が画面から出ると自動で撮影します。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad no tripé, trabalhar. Ele dispara sozinho assim que suas mãos saem da imagem."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad na stativ a pracuj. Snímá sám, jakmile máš ruce mimo záběr."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad na statyw, pracuj. Zdjęcie robi się samo, gdy tylko twoje ręce znikną z kadru."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad на штатив, працюй. Він знімає сам, щойно твої руки зникнуть із кадру."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad на штатив, можно работать. Снимок делается сам, как только твои руки уходят из кадра."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad'u tripoda koyun ve çalışın. Elleriniz kadrajdan çıkar çıkmaz kendiliğinden çeker."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad를 삼각대에 놓고 작업하세요. 손이 화면에서 벗어나면 자동으로 촬영돼요."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "把 iPad 架上三脚架，开始创作。手一离开画面，它就会自动拍摄。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad på stativ, arbejd. Den tager billedet selv, så snart dine hænder er ude af billedet."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad på stativ, jobba. Den tar bilden själv så fort dina händer är ur bild."
+          }
+        }
+      }
+    },
     "iPhone aufs Stativ. FrameFold löst aus, sobald deine Hände aus dem Bild sind.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Phone on a tripod. FrameFold fires as soon as your hands leave the frame."
+            "value": "iPhone on a tripod. FrameFold fires as soon as your hands leave the frame."
           }
         },
         "fr": {
@@ -35508,13 +35708,13 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "スマートフォンを三脚に。手が画面から出ると FrameFold が撮影します。"
+            "value": "iPhoneを三脚に。手が画面から出ると FrameFold が撮影します。"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Telefone no tripé. O FrameFold dispara assim que suas mãos saem do quadro."
+            "value": "iPhone no tripé. O FrameFold dispara assim que suas mãos saem do quadro."
           }
         },
         "cs": {
@@ -35573,12 +35773,112 @@
         }
       }
     },
+    "iPad aufs Stativ. FrameFold löst aus, sobald deine Hände aus dem Bild sind.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad on a tripod. FrameFold fires as soon as your hands leave the frame."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad sur trépied. FrameFold déclenche dès que tes mains quittent le cadre."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad en el trípode. FrameFold dispara en cuanto tus manos salen del encuadre."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad sul treppiede. FrameFold scatta appena le tue mani escono dall’inquadratura."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad op het statief. FrameFold drukt af zodra je handen uit beeld zijn."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPadを三脚に。手が画面から出ると FrameFold が撮影します。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad no tripé. O FrameFold dispara assim que suas mãos saem do quadro."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad na stativ. FrameFold snímá, jakmile máš ruce mimo záběr."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad na statyw. FrameFold robi zdjęcie, gdy tylko twoje ręce znikną z kadru."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad на штатив. FrameFold знімає, щойно твої руки зникнуть із кадру."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad на штатив. FrameFold снимает, как только руки уходят из кадра."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad tripoda. Elleriniz kadrajdan çıkar çıkmaz FrameFold çeker."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad를 삼각대에. 손이 화면에서 벗어나면 FrameFold가 촬영해요."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad 架上三脚架。手一离开画面，FrameFold 就会拍摄。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad på stativ. FrameFold tager billedet, så snart dine hænder er ude af billedet."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad på stativ. FrameFold tar bilden så fort dina händer är ur bild."
+          }
+        }
+      }
+    },
     "iPhone nicht berühren. Aufs Stativ stellen und den Auto-Auslöser arbeiten lassen, oder den runden Knopf drücken.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Don't touch the phone: put it on a tripod and let the auto-shutter work (or use the round button)."
+            "value": "Don't touch the iPhone. Put it on a tripod and let the auto shutter work, or press the round button."
           }
         },
         "fr": {
@@ -35608,13 +35908,13 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "スマートフォンには触れないでください：三脚に置いて、オートシャッターにまかせましょう（または丸いボタンを使います）。"
+            "value": "iPhoneには触れないでください。三脚に置いてオートシャッターにまかせるか、丸いボタンを押します。"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Não toque no telefone: coloque-o num tripé e deixe o obturador automático trabalhar (ou use o botão redondo)."
+            "value": "Não toque no iPhone. Coloque-o num tripé e deixe o obturador automático trabalhar, ou aperte o botão redondo."
           }
         },
         "cs": {
@@ -35669,6 +35969,106 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rör inte iPhonen: ställ den på ett stativ och låt den automatiska avtryckaren jobba (eller använd den runda knappen)."
+          }
+        }
+      }
+    },
+    "iPad nicht berühren. Aufs Stativ stellen und den Auto-Auslöser arbeiten lassen, oder den runden Knopf drücken.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don't touch the iPad. Put it on a tripod and let the auto shutter work, or press the round button."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ne touche pas l’iPad : pose-le sur un trépied et laisse faire le déclenchement auto (ou le bouton rond)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No toques el iPad: ponlo en el trípode y deja trabajar al disparo automático (o usa el botón redondo)."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non toccare l’iPad: mettilo sul treppiede e lascia lavorare lo scatto automatico (o usa il pulsante rotondo)."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raak de iPad niet aan: zet hem op een statief en laat de auto-ontspanner werken (of gebruik de ronde knop)."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPadには触れないでください。三脚に置いてオートシャッターにまかせるか、丸いボタンを押します。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não toque no iPad. Coloque-o num tripé e deixe o obturador automático trabalhar, ou aperte o botão redondo."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nedotýkej se iPadu: postav ho na stativ a nech pracovat automatickou spoušť (nebo kulaté tlačítko)."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie dotykaj iPada: postaw go na statywie i pozwól działać automatycznemu spustowi (albo okrągłemu przyciskowi)."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не торкайся iPad: постав його на штатив і дай попрацювати автозатвору (або круглій кнопці)."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не трогайте iPad: поставьте его на штатив и доверьтесь автозатвору (или круглой кнопке)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad'e dokunmayın: tripoda koyun ve otomatik deklanşörün çalışmasına izin verin (ya da yuvarlak düğmeyi kullanın)."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad를 만지지 마세요: 삼각대에 놓고 자동 셔터에 맡기세요(또는 둥근 버튼)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不要触碰 iPad：把它架上三脚架，让自动快门工作（或使用圆形按钮）。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rør ikke iPad'en: stil den på et stativ, og lad auto-udløseren arbejde (eller brug den runde knap)."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rör inte iPaden: ställ den på ett stativ och låt den automatiska avtryckaren jobba (eller använd den runda knappen)."
           }
         }
       }
