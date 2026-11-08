@@ -137,10 +137,39 @@ Im Modellierkurs blieben 49 Bilder ohne Treffer: fast alle Titel, Zwischenblende
 und fertige Figuren ohne Hand; übersehen wurden etwa 5 Bilder mit
 Fingerspitzen am Rand oder halb überblendeten Händen.
 
+## Gegenprobe mit LEGO (08.11.2026)
+
+Brickfilme von archive.org, zwei Bilder je Sekunde:
+
+| Film | Bilder | als Hand | ganzer Ablauf: Szenen behalten (2.8) |
+|---|---|---|---|
+| „All of the Dead“ (`allofthedead`) | 204 | 9 | 66 von 66 (66) |
+| „Spider-Man: The Peril of Doc Ock“ (`peril_of_doc_ock`) | 460 | 21 | 130 von 134 (133) |
+| „The Han Solo Affair“ (`hansoloaffair`) | 342 | 4 | 127 von 128 (127) |
+| „ONE: A Space Odyssey Redux“ | 152 | 0 | 26 von 26 |
+| „Penalty!“ (`penalty`) | 40 | 0 | – |
+| „Them Twickenham Knights“ (`twickenhamknights`) | 224 | 23 | 4 von 4 (4) |
+
+Fehlalarm auf LEGO 57 von 1422 Bildern (4 %), mehr als auf Holz oder Knete,
+weil Minifiguren der Personen-Segmentierung menschlich genug sind. In
+„Twickenham“ schlägt sie 12 s lang auf eine ruhige Szene an. Die Fenster-Regel
+fängt das meist ab: Szenen gehen in Summe 5 von 358 verloren (2.8: 2).
+
+Echte Hände an LEGO, Making-ofs von Spite Your Face:
+„Making of the Han Solo Affair“ 35 von 273 Bildern erkannt, ungefähr 60 % der
+Bilder mit Hand (Sepia, 416×240, Hände oft nur als Finger im Anschnitt).
+„Inside the Studio“: Hände am Set erkannt, Rückenansichten von Menschen nicht.
+
+Balken: Beide Making-ofs und mehrere Brickfilme sind Breitbild mit schwarzen
+Balken. Die Randbedingung der Segmentierung sah deshalb Hände am Bildrand
+nicht. `VisionHandDetector.contentBox` schneidet die Balken jetzt ab:
+Making-of 25 → 35 erkannt, Brickfilme 4 Fehlalarme mehr, Lehrfilm, Knete
+und Holz unverändert.
+
 ## Offen
 
-- Gegenprobe mit LEGO-Figuren fehlt noch. Holz-, Insekten- und Knetfiguren
-  sind geprüft. Figuren in Nahaufnahme, die den Bildrand
+- LEGO ist der schwächste Fall: 4 % Fehlalarm, Hände in dunklen oder
+  farbstichigen Making-ofs nur zu gut der Hälfte erkannt. Figuren in Nahaufnahme, die den Bildrand
   füllen, hält die Segmentierung manchmal für Menschen.
 - Echte Atelieraufnahmen mit Händen, die vom Rand in eine Knetszene greifen,
   fehlen noch; der Modellierkurs zeigt Hände in der Bildmitte.

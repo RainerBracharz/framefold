@@ -50,7 +50,7 @@ final class VisionHandDetector: HandDetecting {
             let points = ((try? hand.recognizedPoints(.all)) ?? [:]).values.map(\.location)
             if Self.maskPeak(mask, near: points) >= Self.maskNearHand { return true }
         }
-        let (area, edge) = Self.coverage(mask)
+        let (area, edge) = Self.coverage(mask, content: Self.contentBox(cgImage))
         // Hände und Arme kommen beim Animieren vom Bildrand herein; eine Figur
         // mitten im Bild berührt den Rand nicht und bleibt erhalten.
         return area >= Self.personArea && edge >= Self.personEdge
@@ -76,18 +76,50 @@ final class VisionHandDetector: HandDetecting {
         return Double(peak) / 255
     }
 
-    /// Anteil der Maske an der ganzen Fläche und am äußeren Rand (8 % je Seite).
-    static func coverage(_ mask: CVPixelBuffer) -> (area: Double, edge: Double) {
+    /// Bildbereich ohne schwarze Balken (Breitbild im 4:3-Video und umgekehrt),
+    /// als Anteile 0…1 von links/oben. Ohne Balken das ganze Bild.
+    static func contentBox(_ image: CGImage) -> CGRect {
+        let n = 64
+        guard let ctx = CGContext(data: nil, width: n, height: n, bitsPerComponent: 8, bytesPerRow: n,
+                                  space: CGColorSpaceCreateDeviceGray(),
+                                  bitmapInfo: CGImageAlphaInfo.none.rawValue) else {
+            return CGRect(x: 0, y: 0, width: 1, height: 1)
+        }
+        ctx.draw(image, in: CGRect(x: 0, y: 0, width: n, height: n))
+        guard let data = ctx.data else { return CGRect(x: 0, y: 0, width: 1, height: 1) }
+        let px = data.assumingMemoryBound(to: UInt8.self)   // Zeile 0 = oben
+        func rowDark(_ y: Int) -> Bool { (0..<n).allSatisfy { px[y * n + $0] < 20 } }
+        func colDark(_ x: Int) -> Bool { (0..<n).allSatisfy { px[$0 * n + x] < 20 } }
+        var top = 0, bottom = n - 1, left = 0, right = n - 1
+        while top < n / 3, rowDark(top) { top += 1 }
+        while bottom > n * 2 / 3, rowDark(bottom) { bottom -= 1 }
+        while left < n / 3, colDark(left) { left += 1 }
+        while right > n * 2 / 3, colDark(right) { right -= 1 }
+        // Nur echte Balken zählen: ganz dunkle Bilder (Nacht, Abblende) bleiben unverändert.
+        if top == n / 3 || left == n / 3 { return CGRect(x: 0, y: 0, width: 1, height: 1) }
+        return CGRect(x: Double(left) / Double(n), y: Double(top) / Double(n),
+                      width: Double(right - left + 1) / Double(n),
+                      height: Double(bottom - top + 1) / Double(n))
+    }
+
+    /// Anteil der Maske an der Bildfläche und am äußeren Rand (8 % je Seite),
+    /// beides innerhalb von `content` (ohne schwarze Balken).
+    static func coverage(_ mask: CVPixelBuffer,
+                         content: CGRect = CGRect(x: 0, y: 0, width: 1, height: 1)) -> (area: Double, edge: Double) {
         CVPixelBufferLockBaseAddress(mask, .readOnly)
         defer { CVPixelBufferUnlockBaseAddress(mask, .readOnly) }
         guard let base = CVPixelBufferGetBaseAddress(mask) else { return (0, 0) }
-        let w = CVPixelBufferGetWidth(mask), h = CVPixelBufferGetHeight(mask)
+        let mw = CVPixelBufferGetWidth(mask), mh = CVPixelBufferGetHeight(mask)
         let rowBytes = CVPixelBufferGetBytesPerRow(mask)
         let p = base.assumingMemoryBound(to: UInt8.self)
+        let x0 = Int(content.minX * Double(mw)), x1 = max(x0 + 1, Int(content.maxX * Double(mw)))
+        let y0 = Int(content.minY * Double(mh)), y1 = max(y0 + 1, Int(content.maxY * Double(mh)))
+        let w = min(mw, x1) - x0, h = min(mh, y1) - y0
+        guard w > 0, h > 0 else { return (0, 0) }
         let mx = max(1, w * 8 / 100), my = max(1, h * 8 / 100)
         var on = 0, edge = 0, edgeOn = 0
         for y in 0..<h {
-            let row = p + y * rowBytes
+            let row = p + (y0 + y) * rowBytes + x0
             let edgeRow = y < my || y >= h - my
             for x in 0..<w {
                 let v = row[x] > 127
