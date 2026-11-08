@@ -136,6 +136,28 @@ final class AssemblerTests: XCTestCase {
         }
     }
 
+    /// Video-Tab mit Standardeinstellungen: Der Flimmerausgleich liest vorab
+    /// alle Bilder aus dem Video, danach braucht der Zusammenbau sie noch
+    /// einmal. Ab vier Bildern brach das früher mit „konnte nicht geschrieben
+    /// werden“ ab (Store-Fassungen 2.7 und 2.8).
+    func testVideoKeyframesWithDeflickerAndManyFrames() async throws {
+        let colors: [UIColor] = [.red, .green, .blue, .yellow, .cyan, .magenta]
+        let urls = try colors.enumerated().map { try save(solid($1, width: 320, height: 240), "s\($0).jpg") }
+        var still = baseSettings()
+        still.deflicker = false
+        let source = try await StopMotionAssembler().assemble(imageURLs: urls, settings: still) { _ in }
+
+        var settings = PipelineSettings()
+        settings.deflicker = true
+        settings.loopMode = .none
+        let duration = try await AVURLAsset(url: source).load(.duration).seconds
+        let times = (0..<6).map { (Double($0) + 0.5) * duration / 6 }
+        let out = try await StopMotionAssembler().assemble(
+            asset: AVURLAsset(url: source), keyframeTimes: times, settings: settings) { _ in }
+        let frames = try await AVURLAsset(url: out).load(.duration).seconds
+        XCTAssertGreaterThan(frames, 0)
+    }
+
     /// Zweites Bild ist dasselbe Motiv, verschoben. Mit Ausrichtung liegt es
     /// deckungsgleich auf dem ersten – und die Überblendung dazwischen muss
     /// das ebenfalls tun, statt zum unausgerichteten Bild zu springen.

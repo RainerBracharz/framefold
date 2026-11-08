@@ -592,16 +592,27 @@ final class StopMotionAssembler {
 /// auch lange Sequenzen nicht den Speicher füllen.
 private final class SequentialFrameSource {
 
+    private let generator: AVAssetImageGenerator
+    private let times: [CMTime]
     private var iterator: AVAssetImageGenerator.Images.AsyncIterator
     private var window: [Int: CGImage] = [:]
     private var nextIndex = 0
 
     init(generator: AVAssetImageGenerator, times: [CMTime]) {
+        self.generator = generator
+        self.times = times
         iterator = generator.images(for: times).makeAsyncIterator()
     }
 
     func frame(at index: Int) async throws -> CGImage {
         if let cached = window[index] { return cached }
+        // Schon vorbeigelaufen (der Flimmerausgleich liest vorab alle Bilder
+        // einmal): einen neuen Durchlauf von vorn starten statt abzubrechen.
+        if index < nextIndex {
+            iterator = generator.images(for: times).makeAsyncIterator()
+            window = [:]
+            nextIndex = 0
+        }
         while nextIndex <= index {
             guard let result = await iterator.next() else {
                 throw PipelineError.exportFailed
