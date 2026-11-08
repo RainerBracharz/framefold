@@ -6,4 +6,4 @@ sys.path.insert(0, ".")
 from selector import Settings, select
 
 sel = select(sys.argv[1], Settings())
-json.dump(sel["ranked_windows"], sys.stdout)
+json.dump({"windows": sel["ranked_windows"], "diff": sel["neighbor_diff"], "thr": sel["threshold"]}, sys.stdout)

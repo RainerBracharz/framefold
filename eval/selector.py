@@ -200,10 +200,11 @@ def select(video_path, st: Settings = Settings(), has_hand=None):
     if len(cur) >= min_frames:
         windows.append(cur)
 
-    chosen, hand_rejects, ranked_windows = [], 0, []
+    chosen, hand_rejects, ranked_windows, sorted_windows = [], 0, [], []
     for w in windows:
         ranked = sorted(w, key=lambda f: laplacian_variance(f["gray"]), reverse=True)
         ranked_windows.append([round(f["t"], 3) for f in ranked])
+        sorted_windows.append(ranked)
         if has_hand is None:
             chosen.append(ranked[0])
             continue
@@ -251,4 +252,7 @@ def select(video_path, st: Settings = Settings(), has_hand=None):
     return {"times": times, "threshold": thr, "windows": len(windows), "dupes": dupes,
             "hand_rejects": hand_rejects,
             "ranked_windows": ranked_windows,
+            # größte Blockdifferenz zwischen den schärfsten Bildern benachbarter Fenster
+            "neighbor_diff": [max_block_diff(a[0]["cmp"], b[0]["cmp"], st.dedup_grid, 1)
+                              for a, b in zip(sorted_windows, sorted_windows[1:])],
             "motion": [(round(f["t"], 3), round(f["motion"], 3)) for f in analyzed]}

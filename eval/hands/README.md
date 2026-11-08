@@ -181,6 +181,22 @@ und Holz unverändert.
 Keiner lohnt sich. Die Konfidenzen der Hand-Pose liegen praktisch nur bei 0
 oder 1, Körper-Pose und Klassifikation sehen in Figuren Menschen.
 
+## Vergleich mit Nachbarszenen (08.11.2026, verworfen)
+
+Idee: Eine Hand kommt und geht, eine Figur bleibt. Eine als Hand markierte
+Szene, die einer handfreien Nachbarszene gleicht, hätte also keine Hand.
+Gemessen wurde die größte Blockdifferenz (wie bei der Duplikatprüfung) zur
+nächsten handfreien Szene, geteilt durch die Bewegungsschwelle
+(`fenster.py` schreibt sie als `diff`):
+
+- echte Hände im Lehrfilm: 3,1 bis 5,5
+- Fehlalarme auf Figuren (Holz, Knete, LEGO): 4,0 bis 10,1
+
+Kein Abstand trennt die beiden. Die Prüffilme sind geschnitten, Fehlalarme
+liegen oft nach einem Schnitt oder in einer Nahaufnahme. Eine durchgehende
+Atelieraufnahme könnte sich anders verhalten, beschriftetes Material dafür
+fehlt. Deshalb nicht in der App.
+
 ## Offen
 
 - LEGO ist der schwächste Fall: 4 % Fehlalarm, Hände in dunklen oder

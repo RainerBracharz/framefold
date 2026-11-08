@@ -4,7 +4,8 @@ Wahrheit je Zeitpunkt t: Bild l_{round(t)+1} der 1-Bild/s-Beschriftung."""
 import csv, json
 from truth import NO_HANDS
 
-wins = json.load(open("fenster.json"))
+_f = json.load(open("fenster.json"))
+wins = _f["windows"] if isinstance(_f, dict) else _f
 det = {round(float(r["t"]), 3): r["hand"] == "1" for r in csv.DictReader(open("video.csv"))}
 def truth(t): return (round(t) + 1) not in NO_HANDS   # True = Hand zu sehen
 
