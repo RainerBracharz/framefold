@@ -122,9 +122,25 @@ Verworfen: Versuche je Fenster begrenzen (F1 0,35 bis 0,74, weil Hände oft nur
 an den Rändern eines Fensters stehen und die schärfsten Bilder sind), Sperrzone
 um erkannte Hände, Mehrheit unter den schärfsten statt über die Zeit.
 
+## Gegenprobe mit Knete (08.11.2026)
+
+| Film (archive.org) | Inhalt | Bilder | als Hand | ganzer Ablauf: Fenster behalten |
+|---|---|---|---|---|
+| Gumby „Robot Rumpus“ (`GumbyAdventuresPigeonInAPlumTree1`) | Knetfiguren, Farbe | 359 | 6 (Fehlalarm) | 105 von 107 |
+| „Gumbasia“ 1955 (`Gumbasia_331`) | abstrakte Knetformen | 192 | 6 (Fehlalarm) | – |
+| „Munchers“ 1973 (`munchers`) | Knetzähne, Farbe | 584 | 5 (Fehlalarm) | 131 von 131 |
+| Modellierkurs „Haciendo una mosca“ (Aldo Sánchez) | echte Hände formen Knete | 370 | 321 | – |
+
+Fehlalarm auf Knete 17 von 1135 Bildern (1,5 %). Die Fenster-Regel fängt
+einzelne Fehlalarme ab; im Gumby-Film fallen nur 2 von 107 Szenen weg.
+Im Modellierkurs blieben 49 Bilder ohne Treffer: fast alle Titel, Zwischenblenden
+und fertige Figuren ohne Hand; übersehen wurden etwa 5 Bilder mit
+Fingerspitzen am Rand oder halb überblendeten Händen.
+
 ## Offen
 
-- Gegenprobe mit Knet- und LEGO-Figuren in Farbe fehlt noch. Holz- und
-  Insektenpuppen sind geprüft. Figuren in Nahaufnahme, die den Bildrand
+- Gegenprobe mit LEGO-Figuren fehlt noch. Holz-, Insekten- und Knetfiguren
+  sind geprüft. Figuren in Nahaufnahme, die den Bildrand
   füllen, hält die Segmentierung manchmal für Menschen.
-- Farbaufnahmen aus echten Ateliers fehlen. Der Prüfsatz ist ein Schwarzweißfilm.
+- Echte Atelieraufnahmen mit Händen, die vom Rand in eine Knetszene greifen,
+  fehlen noch; der Modellierkurs zeigt Hände in der Bildmitte.
