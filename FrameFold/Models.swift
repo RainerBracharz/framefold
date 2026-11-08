@@ -295,10 +295,27 @@ enum PipelineStage: Equatable {
 extension PipelineSettings {
     private static let storageKey = "lastExportSettings"
 
+    /// Testläufe der Mac-Fassung (FF_STORE_ROOT) bekommen eigene Einstellungen,
+    /// sonst landen ihre Effekte in der installierten App. FF_RESET_EXPORT=1
+    /// räumt einmal auf, was frühere Testläufe dort hinterlassen haben.
+    private static let store: UserDefaults = {
+        #if DEBUG
+        let env = ProcessInfo.processInfo.environment
+        if let root = env["FF_STORE_ROOT"], !root.isEmpty,
+           let suite = UserDefaults(suiteName: "com.bracharz.framefold.export-test") {
+            if env["FF_RESET_EXPORT"] == "1" {
+                UserDefaults.standard.removeObject(forKey: storageKey)
+            }
+            return suite
+        }
+        #endif
+        return .standard
+    }()
+
     /// Die zuletzt benutzten Einstellungen – wer einmal 2 fps und Story-Format
     /// gewählt hat, will das beim nächsten Export nicht neu einstellen.
     static func restored() -> PipelineSettings {
-        guard let data = UserDefaults.standard.data(forKey: storageKey),
+        guard let data = store.data(forKey: storageKey),
               let saved = try? JSONDecoder().decode(PipelineSettings.self, from: data)
         else { return PipelineSettings() }
         return saved
@@ -343,7 +360,7 @@ extension PipelineSettings {
 
     func persist() {
         if let data = try? JSONEncoder().encode(self) {
-            UserDefaults.standard.set(data, forKey: Self.storageKey)
+            Self.store.set(data, forKey: Self.storageKey)
         }
     }
 }
