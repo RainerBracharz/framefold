@@ -1,2 +1,3 @@
-Texts throughout the app are shorter and more consistent, from hints to the help.
-Small buttons in the studio, the works list and the drawing tools are easier to hit.
+Films from the Video tab with four or more frames are created again, also with “Reduce flicker” switched on.
+Hand detection finds more hands, including cropped fingers and arms at the edge of the frame. It takes the hands of clay, wooden and brick figures for real ones less often.
+If a hand rests in the frame for a while, FrameFold leaves that moment out entirely.

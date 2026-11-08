@@ -1,2 +1,3 @@
-Die Texte in der ganzen App sind kürzer und einheitlicher, von den Hinweisen bis zur Hilfe.
-Kleine Knöpfe im Studio, in der Werkliste und beim Zeichnen sind leichter zu treffen.
+Filme aus dem Video-Tab mit vier oder mehr Bildern entstehen wieder, auch mit eingeschaltetem „Flimmern ausgleichen“.
+Die Handerkennung findet mehr Hände, auch angeschnittene Finger und Arme am Bildrand. Hände von Knet-, Holz- und Klemmbausteinfiguren hält sie seltener für echte.
+Ruht eine Hand länger im Bild, lässt FrameFold diese Stelle ganz aus.

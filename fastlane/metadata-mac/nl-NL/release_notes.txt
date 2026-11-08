@@ -1,2 +1,3 @@
-De teksten in de hele app zijn korter en consistenter, van tips tot de hulp.
-Kleine knoppen in de studio, de werkenlijst en bij het tekenen zijn makkelijker te raken.
+Films uit het tabblad Video met vier of meer beelden worden weer gemaakt, ook met ‘Flikkering verminderen’ aan.
+De handherkenning vindt meer handen, ook afgesneden vingers en armen aan de rand van het beeld. Handen van klei-, houten en bouwsteenfiguren ziet ze minder vaak aan voor echte.
+Rust een hand een tijdje in beeld, dan laat FrameFold dat moment helemaal weg.

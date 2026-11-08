@@ -1,2 +1,3 @@
-Texterna i hela appen är kortare och mer enhetliga, från tips till hjälpen.
-Små knappar i studion, verklistan och ritverktygen är lättare att träffa.
+Filmer från fliken Video med fyra eller fler bilder skapas igen, även med ”Minska flimmer” påslaget.
+Handigenkänningen hittar fler händer, även avskurna fingrar och armar i bildens kant. Den tar mer sällan händer på ler-, trä- och klossfigurer för riktiga.
+Vilar en hand en stund i bilden utelämnar FrameFold det ögonblicket helt.

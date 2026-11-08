@@ -1,2 +1,3 @@
-Os textos de todo o app estão mais curtos e consistentes, das dicas à ajuda.
-Os botões pequenos no estúdio, na lista de obras e no desenho ficaram mais fáceis de acertar.
+Filmes da aba Vídeo com quatro ou mais quadros voltam a ser criados, também com “Reduzir cintilação” ativado.
+A detecção de mãos encontra mais mãos, inclusive dedos cortados e braços na borda da imagem. Confunde com menos frequência mãos de bonecos de massinha, madeira e blocos de montar com mãos reais.
+Se uma mão fica um tempo parada na imagem, o FrameFold deixa esse momento de fora.

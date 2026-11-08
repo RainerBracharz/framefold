@@ -1,2 +1,4 @@
-Les textes de toute l'app sont plus courts et plus cohérents, des indications jusqu'à l'aide.
-Les petits boutons du studio, de la liste des œuvres et du dessin sont plus faciles à atteindre.
+Les films de l’onglet Vidéo comptant quatre images ou plus se créent de nouveau, même avec « Réduire le scintillement » activé.
+La détection des mains en trouve davantage, y compris les doigts coupés et les bras au bord de l’image. Elle prend moins souvent les mains des figurines en pâte à modeler, en bois et en briques pour de vraies mains.
+Si une main reste un moment dans l’image, FrameFold omet entièrement ce passage.
+Sur iPad, l’introduction et les conseils de caméra parlent de l’iPad. Dans le studio en portrait, « Déclencher » et « Terminé » occupent leur propre ligne.

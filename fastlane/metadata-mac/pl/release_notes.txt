@@ -1,2 +1,3 @@
-Teksty w całej aplikacji są krótsze i spójniejsze, od wskazówek po pomoc.
-Małe przyciski w studiu, na liście prac i przy rysowaniu łatwiej trafić.
+Filmy z karty Wideo z czterema lub więcej klatkami znów się tworzą, także przy włączonej opcji „Redukuj migotanie”.
+Wykrywanie dłoni znajduje więcej dłoni, także ucięte palce i ramiona przy krawędzi kadru. Rzadziej bierze dłonie figurek z plasteliny, drewna i klocków za prawdziwe.
+Jeśli dłoń dłużej spoczywa w kadrze, FrameFold całkowicie pomija ten moment.

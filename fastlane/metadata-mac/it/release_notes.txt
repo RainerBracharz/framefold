@@ -1,2 +1,3 @@
-I testi di tutta l'app sono più brevi e coerenti, dai suggerimenti alla guida.
-I pulsanti piccoli nello studio, nell'elenco delle opere e nel disegno sono più facili da colpire.
+I film della scheda Video con quattro o più fotogrammi si creano di nuovo, anche con «Riduci sfarfallio» attivo.
+Il rilevamento delle mani ne trova di più, comprese dita tagliate e braccia al bordo dell’immagine. Scambia meno spesso le mani di figure in plastilina, legno e mattoncini per mani vere.
+Se una mano resta a lungo nell’immagine, FrameFold tralascia del tutto quel momento.

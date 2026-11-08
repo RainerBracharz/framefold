@@ -1,2 +1,4 @@
-Los textos de toda la app son más breves y coherentes, desde los avisos hasta la ayuda.
-Los botones pequeños del estudio, de la lista de obras y del dibujo son más fáciles de pulsar.
+Las películas de la pestaña Vídeo con cuatro o más fotogramas vuelven a crearse, también con «Reducir parpadeo» activado.
+La detección de manos encuentra más manos, incluidos dedos cortados y brazos en el borde de la imagen. Confunde con menos frecuencia las manos de figuras de plastilina, madera y bloques de construcción con manos reales.
+Si una mano se queda un rato en la imagen, FrameFold omite ese momento por completo.
+En el iPad, la introducción y los consejos de cámara hablan del iPad. En el estudio en vertical, «Disparar» y «Listo» ocupan su propia línea.

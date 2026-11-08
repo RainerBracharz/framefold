@@ -1,2 +1,3 @@
-Texty v celé aplikaci jsou kratší a jednotnější, od tipů až po nápovědu.
-Malá tlačítka ve studiu, v seznamu děl a při kreslení se snáz trefují.
+Filmy z karty Video se čtyřmi a více snímky se znovu vytvářejí, i se zapnutou volbou „Potlačit blikání“.
+Rozpoznávání rukou najde víc rukou, i oříznuté prsty a paže na okraji obrazu. Ruce figurek z modelíny, dřeva a stavebnic považuje za skutečné méně často.
+Když ruka chvíli spočívá v obraze, FrameFold tento okamžik úplně vynechá.
