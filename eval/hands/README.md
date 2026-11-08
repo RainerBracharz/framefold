@@ -9,13 +9,24 @@ mit Händen erkennt. Die Video-Umwandlung und die Live-Kamera nutzen ihn beide.
   Sekunde = ein Bild, 621 Bilder. Fast nur Hände: Nahaufnahmen, angeschnittene
   Finger am Rand, Arme, Bewegungsunschärfe, Schwarzweiß. Von Hand beschriftet in
   `truth.py` (514 mit Händen, Armen oder Menschen; 107 ohne).
-- **Gegenprobe:** 32 Bilder ohne Hände (gefaltetes Papier, Beispielbilder der App).
+- **Gegenprobe:** 32 Bilder aus der App (gefaltetes Papier, Beispielbilder). Zwei
+  davon (`io_0000`, `io_0020`) zeigen ein Foto eines Menschen mit sichtbaren
+  Händen; dass sie anschlagen, ist richtig.
+- **Puppenfilm:** „Round and Round“ (1939, Jam Handy, Prelinger, gemeinfrei),
+  355 Bilder, nur Holzfiguren mit Armen und Händen, keine echte Hand. Jeder
+  Treffer ist ein Fehlalarm.
+- **Starewicz:** „The Revenge of a Kinematograph Cameraman“ (1912, gemeinfrei),
+  1309 Bilder, Insektenpuppen, keine echte Hand.
 
 Die Bilder liegen nicht im Repo (`.gitignore`). Erzeugen:
 
 ```
 ffmpeg -i Learning1959.mp4 -vf fps=1 -q:v 3 eval/hands/frames/l_%04d.jpg
+ffmpeg -i Roundand1939.mp4 -vf fps=1 -q:v 3 eval/hands/archiv/round1939/f_%04d.jpg
 ```
+
+Quellen: archive.org/details/Learning1959, archive.org/details/Roundand1939,
+archive.org/details/silent-the-revenge-of-a-kinematograph-cameraman.
 
 ## Werkzeuge
 
@@ -23,6 +34,9 @@ ffmpeg -i Learning1959.mp4 -vf fps=1 -q:v 3 eval/hands/frames/l_%04d.jpg
   Kontrast, Kacheln, Personen-Segmentierung in drei Stufen, Randberührung).
   `swiftc -O handcheck.swift -o bin/handcheck && bin/handcheck frames > film.csv`
 - `auswerten.py`: wertet `film.csv`/`neg.csv` gegen `truth.py` aus.
+- `posegeo/main.swift`: je Bild Größe und Randabstand der erkannten Hand und
+  den Wert der Personenmaske an der Hand.
+- `blatt.py`: Kontaktbogen, Treffer rot umrandet, zum Nachsehen von Hand.
 - `appcheck/main.swift`: prüft den echten App-Code.
   `swiftc -O ../../FrameFold/HandDetector.swift appcheck/main.swift -o bin/appcheck`
 
@@ -44,6 +58,31 @@ immer vom Rand) und schützt Figuren mitten im Bild.
 Übersehen werden noch 19 Bilder: Bewegungsunschärfe, winzige Fingerspitzen am
 unteren Rand, völlig unscharfe Daumen im Vordergrund.
 
+## Gegenprobe mit Figuren (08.11.2026)
+
+Der Puppenfilm zeigte, dass schon die Hand-Pose von 2.8 Figurenhände für echte
+hält: 64 von 355 Bildern. Mit Segmentierung waren es 67. In Nahaufnahmen von
+Figuren wären so ganze Szenen weggefallen.
+
+Abhilfe: Ein Treffer der Hand-Pose zählt nur, wenn die Personenmaske an der
+Hand anschlägt (≥ 0,1 im Umkreis von 4 % um die Gelenkpunkte). Holzfiguren
+sieht die Segmentierung fast nie als Mensch. Die Segmentierung allein braucht
+jetzt 5 % Fläche und 3 % Rand.
+
+| Verfahren | Lehrfilm erkannt | Fehlalarm Lehrfilm | Puppenfilm | Starewicz |
+|---|---|---|---|---|
+| Hand-Pose allein (bis 2.8) | 77 % | 0 | 64 | 2 |
+| Pose + Segmentierung (erster Stand) | 96 % | 0 | 67 | 1 |
+| **Pose nur mit Maske + Segmentierung 5 %/3 %** | **91 %** | **0** | **10** | **0** |
+
+Größe oder Randnähe der Hand trennten nicht: Die Hand-Pose meldet auch echte
+Hände oft mit wenigen Gelenken, und die Konfidenz ist bei Figuren ebenfalls 1,0.
+
+Ganzer Ablauf mit Fenster-Regel: Puppenfilm 33 von 42 Fenstern behalten
+(wie 2.8). Weg fällt nur eine vier Sekunden lange Nahaufnahme einer Figur mit
+Kiste, die den Bildrand füllt. Lehrfilm 8 Bilder, davon 3 mit Hand (2.8: 22
+und 15).
+
 ## Auswahl im Fenster (08.11.2026)
 
 Die bessere Erkennung allein reichte nicht. In der App kamen am Lehrfilm weiter
@@ -64,6 +103,7 @@ Neue Regel (`ProcessingViewModel.computeCandidates`, gespiegelt in
 |---|---|---|---|
 | bis 2.8 | 22 | 15 | 0 von 4 |
 | neu | 6 | 1 | 0 von 4 |
+| neu mit Maskenregel (siehe oben) | 8 | 3 | 0 von 4 |
 
 Messung: `fenster.py` schreibt die Fenster des Films, `videocheck/main.swift`
 prüft alle 6143 Kandidaten mit dem App-Detektor (640 px wie in der App),
@@ -84,6 +124,7 @@ um erkannte Hände, Mehrheit unter den schärfsten statt über die Zeit.
 
 ## Offen
 
-- Gegenprobe mit echten Knetfiguren, Puppen und LEGO-Figuren fehlt. Figuren, die
-  den Bildrand berühren, könnte die Segmentierung für Menschen halten.
+- Gegenprobe mit Knet- und LEGO-Figuren in Farbe fehlt noch. Holz- und
+  Insektenpuppen sind geprüft. Figuren in Nahaufnahme, die den Bildrand
+  füllen, hält die Segmentierung manchmal für Menschen.
 - Farbaufnahmen aus echten Ateliers fehlen. Der Prüfsatz ist ein Schwarzweißfilm.
