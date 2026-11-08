@@ -166,6 +166,21 @@ nicht. `VisionHandDetector.contentBox` schneidet die Balken jetzt ab:
 Making-of 25 → 35 erkannt, Brickfilme 4 Fehlalarme mehr, Lehrfilm, Knete
 und Holz unverändert.
 
+## Weitere Apple-Werkzeuge geprüft (08.11.2026)
+
+`rest/main.swift`, gemessen am Lehrfilm und an 2528 Figurenbildern (Holz, Knete, LEGO):
+
+| Zusatz zur App-Regel | Lehrfilm | Fehlalarm Figuren |
+|---|---|---|
+| keiner (Stand App) | 91,4 % | 78 |
+| Hand-Pose schon ab Konfidenz 0,1/0,2 (mit Maske) | 91,4 % | 78 |
+| Handgelenk aus `VNDetectHumanBodyPoseRequest` ab 0,5 | 92,2 % | 212 |
+| `VNClassifyImageRequest` (hand, finger, people …) ab 0,3 | 92,6 % | 579 |
+| weichere Maskenschwelle | 91,4 % | 78 |
+
+Keiner lohnt sich. Die Konfidenzen der Hand-Pose liegen praktisch nur bei 0
+oder 1, Körper-Pose und Klassifikation sehen in Figuren Menschen.
+
 ## Offen
 
 - LEGO ist der schwächste Fall: 4 % Fehlalarm, Hände in dunklen oder
