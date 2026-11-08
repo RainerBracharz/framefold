@@ -1,0 +1,6 @@
+frames/
+neg/
+sheets/
+bin/
+*.csv
+fenster.json

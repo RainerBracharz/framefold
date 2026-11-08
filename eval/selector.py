@@ -30,6 +30,10 @@ class Settings:
     dedup_align: int = 0              # >0: vor dem Duplikatvergleich um bis zu so viele Pixel verschieben (Handkamera)
     stabilize: int = 0                # 1: jedes Analysebild vor dem Vergleich auf das erste ausrichten (verworfen, Runde 3)
     highpass: float = 0.0             # >0: Vergleiche auf Struktur statt Helligkeit (Bild minus Weichzeichnung, Sigma in px)
+    # --- Handprüfung je Fenster (ProcessingViewModel.handSampleCount usw.) ---
+    hand_vote: int = 9                # Stichprobe über die Zeit verteilt; 0 = aus (Verhalten bis 2.8)
+    hand_vote_share: float = 0.5      # zeigt mehr als dieser Anteil Hände, entfällt das Fenster
+    hand_confirm: float = 0.2         # Kandidat nur, wenn auch die Nachbarn so viele Sekunden davor/danach handfrei sind; 0 = aus
 
     def as_dict(self):
         return asdict(self)
@@ -147,8 +151,8 @@ def select(video_path, st: Settings = Settings(), has_hand=None):
     """Liefert die gewählten Zeitpunkte plus Diagnose.
 
     has_hand(t) -> bool ersetzt Apples Handerkennung (ProcessingViewModel):
-    fällt der schärfste Kandidat eines Fensters durch, kommt der nächstbeste
-    dran; zeigen alle eine Hand, entfällt das Fenster. Ohne has_hand läuft
+    zeigt mehr als die Hälfte einer Stichprobe Hände, entfällt das Fenster;
+    sonst kommt der schärfste Kandidat, der samt Nachbarn handfrei ist. Ohne has_hand läuft
     die Auswahl wie mit ausgeschalteter Handerkennung."""
     frames = sample(video_path, st)
     if st.stabilize and frames:
@@ -196,14 +200,28 @@ def select(video_path, st: Settings = Settings(), has_hand=None):
     if len(cur) >= min_frames:
         windows.append(cur)
 
-    chosen, hand_rejects = [], 0
+    chosen, hand_rejects, ranked_windows = [], 0, []
     for w in windows:
         ranked = sorted(w, key=lambda f: laplacian_variance(f["gray"]), reverse=True)
+        ranked_windows.append([round(f["t"], 3) for f in ranked])
         if has_hand is None:
             chosen.append(ranked[0])
             continue
+        if st.hand_vote > 0:
+            if st.hand_vote >= len(w):
+                top = w
+            else:   # gleichmäßig über die Zeit verteilt, nicht nach Schärfe
+                top = [w[round(i * (len(w) - 1) / (st.hand_vote - 1))] for i in range(st.hand_vote)] \
+                    if st.hand_vote > 1 else [w[len(w) // 2]]
+            if sum(has_hand(f["t"]) for f in top) / len(top) > st.hand_vote_share:
+                hand_rejects += len(ranked)
+                continue
         for f in ranked:
             if has_hand(f["t"]):
+                hand_rejects += 1
+                continue
+            if st.hand_confirm > 0 and any(has_hand(g["t"]) for g in w
+                                           if g is not f and abs(g["t"] - f["t"]) <= st.hand_confirm + 1e-6):
                 hand_rejects += 1
                 continue
             chosen.append(f)
@@ -232,4 +250,5 @@ def select(video_path, st: Settings = Settings(), has_hand=None):
         last = h
     return {"times": times, "threshold": thr, "windows": len(windows), "dupes": dupes,
             "hand_rejects": hand_rejects,
+            "ranked_windows": ranked_windows,
             "motion": [(round(f["t"], 3), round(f["motion"], 3)) for f in analyzed]}

@@ -187,9 +187,10 @@ def main():
     ap.add_argument("--split", choices=["train", "test", "all"], default="all",
                     help="train: darf beim Klettern gelesen werden; test: nur als Urteil")
     ap.add_argument("--only", default=None, help="nur Videos, deren Name so beginnt")
-    ap.add_argument("--hands", choices=["ideal", "aus"], default="ideal",
+    ap.add_argument("--hands", default="ideal",
                     help="ideal: perfekte Handerkennung (obere Schranke für Apple Vision); "
-                         "aus: wie mit ausgeschalteter Handerkennung")
+                         "aus: wie mit ausgeschalteter Handerkennung; "
+                         "fehl:0.05: übersieht zufällig 5 %% der Bilder mit Hand")
     a = ap.parse_args()
 
     if a.regen or not any(VIDEOS.glob("*.mp4")):
@@ -215,6 +216,12 @@ def main():
         hands = None
         if a.hands == "ideal":
             hands = lambda t, tr=truth: in_any(t, tr["hands"])   # noqa: E731
+        elif a.hands.startswith("fehl:"):
+            miss = float(a.hands.split(":")[1])
+            def hands(t, tr=truth, name=video.stem, miss=miss):
+                # fest gesät je Video und Zeitpunkt, damit Läufe vergleichbar bleiben
+                r = random.Random(f"{name}:{round(t, 2)}").random()
+                return in_any(t, tr["hands"]) and r >= miss
         sel = select(video, st, has_hand=hands)
         g = grade(truth, sel["times"])
         row = {"video": video.stem, "name": truth["name"], "seed": truth["seed"], "why": truth["why"],

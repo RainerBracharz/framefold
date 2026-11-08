@@ -36,6 +36,10 @@ final class ProcessingViewModel: ObservableObject {
     // Analyse-Cache: einmal gerechnet, beliebig oft neu ausgewertet
     private var cachedFrames: [FrameAnalyzer.AnalyzedFrame] = []
     private var cachedAsset: AVURLAsset?
+    /// Handprüfung je ruhigem Fenster, gemessen an eval/hands und eval/run_eval.py.
+    static let handSampleCount = 9
+    static let handWindowShare = 0.5
+    static let handNeighborSeconds = 0.2
     private var handCache: [Int: Bool] = [:]        // Zeit (ms) → Hände sichtbar
     private var thumbCache: [Int: UIImage] = [:]    // Zeit (ms) → Vorschaubild
     private var discardedForHands = 0
@@ -136,69 +140,101 @@ final class ProcessingViewModel: ObservableObject {
             return
         }
 
-        // Handprüfung RUNDENWEISE statt Frame für Frame:
-        // Runde 0 prüft die besten Kandidaten ALLER Fenster in einem einzigen
-        // sequentiellen Decoder-Durchlauf (statt einem teuren Seek pro Frame).
-        // Nur Fenster, deren Kandidat durchfällt, gehen mit ihrem nächstbesten
-        // in die nächste Runde. Dekodierung + Vision laufen dabei abseits des
+        // Handprüfung in zwei Schritten, jeweils in einem einzigen sequentiellen
+        // Decoder-Durchlauf (statt einem teuren Seek pro Frame), abseits des
         // MainActors – die UI bleibt flüssig.
+        //
+        // 1. Stichprobe: bis zu neun Bilder je Fenster, gleichmäßig über die Zeit
+        //    verteilt. Zeigt mehr als die Hälfte Hände, ruht dort eine Hand und
+        //    das Fenster entfällt. Früher wurde stattdessen Kandidat um Kandidat
+        //    probiert, bis einer durchkam – bei einer ruhenden Hand war das genau
+        //    das Bild, auf dem die Erkennung sie übersah (eval/hands: Lehrfilm,
+        //    22 behaltene Bilder, 15 davon mit Hand; jetzt 6, davon 1).
+        // 2. Runden: das schärfste Bild gilt erst als handfrei, wenn auch seine
+        //    Nachbarn bis 0,2 s davor und danach keine Hand zeigen. Ein einzelner
+        //    Aussetzer der Erkennung reicht so nicht mehr.
         let candidates = windows.map { KeyframeSelector.rankedCandidates(in: $0) }
         var chosenPerWindow = [(time: Double, gray: [UInt8], w: Int, h: Int)?](
             repeating: nil, count: windows.count)
         var discardedHands = 0
 
         if settings.removeHands {
-            var pending = Array(windows.indices)
-            var round = 0
             let totalWindows = windows.count
+            let byTime = windows.map { $0.frames.map(\.seconds) }
+            func key(_ t: Double) -> Int { Int(t * 1000) }
+
+            /// Prüft alle noch unbekannten Zeiten und legt sie in handCache ab.
+            /// Vorschaubilder nur für `keep`, sonst wüchse der Speicher mit jeder Stichprobe.
+            func check(_ times: [Double], keep: Set<Int>, resolved: Int, share: Double) async {
+                let unknown = Array(Set(times.filter { handCache[key($0)] == nil }.map(key)))
+                    .sorted().map { Double($0) / 1000 }
+                guard !unknown.isEmpty else { return }
+                let id = runID
+                let detected = await BatchFrameDecoder.detectHands(
+                    asset: asset, times: unknown,
+                    detector: handDetector, confidence: settings.handConfidence
+                ) { p in
+                    guard reportProgress else { return }
+                    let overall = (Double(resolved) + p * share) / Double(totalWindows)
+                    Task { @MainActor in
+                        self.report(.checkingHands(progress: min(1, overall)), run: id)
+                    }
+                }
+                for t in unknown {
+                    let k = key(t)
+                    let result = detected[k]
+                    handCache[k] = result?.hasHands ?? false
+                    if keep.contains(k), let image = result?.image, thumbCache[k] == nil {
+                        thumbCache[k] = image // Vorschaubild gratis mitgenommen
+                    }
+                }
+            }
+            func hasHands(_ t: Double) -> Bool { handCache[key(t)] ?? false }
+
+            // 1. Stichprobe
+            let samples: [[Double]] = byTime.map { ts in
+                guard ts.count > Self.handSampleCount else { return ts }
+                let n = Self.handSampleCount
+                return (0..<n).map { ts[Int((Double($0) * Double(ts.count - 1) / Double(n - 1)).rounded())] }
+            }
+            await check(samples.flatMap { $0 }, keep: [], resolved: 0, share: Double(totalWindows) / 2)
+            if Task.isCancelled { return }
+            var pending: [Int] = []
+            for wi in windows.indices {
+                let hits = samples[wi].filter(hasHands).count
+                if Double(hits) > Double(samples[wi].count) * Self.handWindowShare {
+                    discardedHands += 1
+                } else {
+                    pending.append(wi)
+                }
+            }
+
+            // 2. Runden mit Nachbarprüfung
+            var round = 0
             while !pending.isEmpty {
                 if Task.isCancelled { return }
-                var stillPending: [Int] = []
-                var needCheck: [(window: Int, time: Double)] = []
-
+                var groups: [(window: Int, times: [Double])] = []
                 for wi in pending {
                     // alle Kandidaten dieses Fensters zeigen Hände → Fenster entfällt
                     guard round < candidates[wi].count else { continue }
-                    let c = candidates[wi][round]
-                    let key = Int(c.seconds * 1000)
-                    if let cached = handCache[key] {
-                        if cached { discardedHands += 1; stillPending.append(wi) }
-                        else { chosenPerWindow[wi] = (c.seconds, c.grayPixels, c.width, c.height) }
-                    } else {
-                        needCheck.append((wi, c.seconds))
-                    }
+                    let t = candidates[wi][round].seconds
+                    let near = byTime[wi].filter { abs($0 - t) <= Self.handNeighborSeconds + 1e-6 }
+                    groups.append((wi, [t] + near))
                 }
-
-                if !needCheck.isEmpty {
-                    needCheck.sort { $0.time < $1.time }
-                    let resolvedSoFar = totalWindows - pending.count
-                    let checkCount = needCheck.count
-                    let id = runID
-                    let detected = await BatchFrameDecoder.detectHands(
-                        asset: asset, times: needCheck.map(\.time),
-                        detector: handDetector, confidence: settings.handConfidence
-                    ) { p in
-                        guard reportProgress else { return }
-                        let overall = (Double(resolvedSoFar) + p * Double(checkCount))
-                            / Double(totalWindows)
-                        Task { @MainActor in
-                            self.report(.checkingHands(progress: min(1, overall)), run: id)
-                        }
-                    }
-                    if Task.isCancelled { return }
-                    for (wi, time) in needCheck {
-                        let key = Int(time * 1000)
-                        let check = detected[key]
-                        let hasHands = check?.hasHands ?? false
-                        handCache[key] = hasHands
-                        if let image = check?.image, thumbCache[key] == nil {
-                            thumbCache[key] = image // Vorschaubild gratis mitgenommen
-                        }
-                        if hasHands { discardedHands += 1; stillPending.append(wi) }
-                        else {
-                            let c = candidates[wi][round]
-                            chosenPerWindow[wi] = (c.seconds, c.grayPixels, c.width, c.height)
-                        }
+                let resolved = totalWindows - pending.count
+                let keep = Set(groups.map { key($0.times[0]) })
+                await check(groups.flatMap(\.times), keep: keep,
+                            resolved: totalWindows / 2 + resolved / 2,
+                            share: Double(groups.count) / 2)
+                if Task.isCancelled { return }
+                var stillPending: [Int] = []
+                for (wi, times) in groups {
+                    if times.contains(where: hasHands) {
+                        discardedHands += 1
+                        stillPending.append(wi)
+                    } else {
+                        let c = candidates[wi][round]
+                        chosenPerWindow[wi] = (c.seconds, c.grayPixels, c.width, c.height)
                     }
                 }
                 pending = stillPending
