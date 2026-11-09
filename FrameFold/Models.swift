@@ -315,10 +315,18 @@ extension PipelineSettings {
     /// Die zuletzt benutzten Einstellungen – wer einmal 2 fps und Story-Format
     /// gewählt hat, will das beim nächsten Export nicht neu einstellen.
     static func restored() -> PipelineSettings {
-        guard let data = store.data(forKey: storageKey),
-              let saved = try? JSONDecoder().decode(PipelineSettings.self, from: data)
-        else { return PipelineSettings() }
-        return saved
+        var s = PipelineSettings()
+        if let data = store.data(forKey: storageKey),
+           let saved = try? JSONDecoder().decode(PipelineSettings.self, from: data) {
+            s = saved
+        }
+        #if DEBUG
+        // Testläufe: Echo-Stärke ohne den Regler im Video-Tab setzen (FF_ECHO_STRENGTH=0.5)
+        if let v = ProcessInfo.processInfo.environment["FF_ECHO_STRENGTH"], let e = Double(v) {
+            s.echoStrength = max(0.1, min(0.5, e))
+        }
+        #endif
+        return s
     }
 
     /// Feldweise dekodieren: Kommt später eine Einstellung dazu oder ändert
