@@ -1448,7 +1448,7 @@ struct StudioView: View {
 
     #if DEBUG
     /// Screenshots und Prüfungen ohne Klicks: FF_STUDIO="view=difference,
-    /// mask=scope,grid=3x3,safe=1,onion=3,play=1,select=1"
+    /// mask=scope,grid=3x3,safe=1,onion=3,play=1,select=1,ref=<Bild oder Film>,refop=0.5"
     private func debugPreset() {
         guard let spec = ProcessInfo.processInfo.environment["FF_STUDIO"] else { return }
         for pair in spec.split(separator: ",") {
@@ -1496,6 +1496,11 @@ struct StudioView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) { handle(.record) }
             case "note":
                 if let project { store.setNote(kv[1], forFrame: urls.count + 1, in: project) }
+            case "ref":
+                reference.load(URL(fileURLWithPath: kv[1]))
+                reference.setKey(settings.referenceKey)
+            case "refop":
+                settings.referenceOpacity = Double(kv[1]) ?? settings.referenceOpacity
             default: break
             }
         }
