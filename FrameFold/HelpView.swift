@@ -69,6 +69,7 @@ struct HelpView: View {
             "Im Werk „Faltvorlage“ tippen und ein Muster wählen. Das erste Bild des Werks wird mit dem Muster gedruckt.",
             "Hypar, Kreisfalte und Miura-ori haben Bergfalten (rot, Strich-Punkt) und Talfalten (blau, gestrichelt).",
             "Ausdrucken, falten und jeden Faltschritt mit FrameFold aufnehmen.",
+            "Im Sucher kann das Muster als Hilfslinie mitlaufen (Kamera-Einstellungen, auf dem Mac unter Hilfslinien).",
             "Hypar und Kreisfalte folgen dem Origami Simulator von Amanda Ghassaei, entstanden mit Erik Demaine und Tomohiro Tachi (MIT-Lizenz).",
         ]),
         Topic(id: "privacy", symbol: "lock", title: "Datenschutz", steps: [

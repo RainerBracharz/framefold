@@ -74857,6 +74857,206 @@
           }
         }
       }
+    },
+    "Faltmuster": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crease pattern"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motif de pliage"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patrón de plegado"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schema di piegatura"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vouwpatroon"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折り図"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Padrão de dobra"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vzor skládání"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wzór zgięć"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схема згинів"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схема сгибов"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Katlama deseni"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접기 패턴"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折痕图案"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foldemønster"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vikmönster"
+          }
+        }
+      }
+    },
+    "Im Sucher kann das Muster als Hilfslinie mitlaufen (Kamera-Einstellungen, auf dem Mac unter Hilfslinien).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The pattern can also run as a guide in the viewfinder (camera settings, on the Mac under Guides)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le motif peut aussi s'afficher comme repère dans le viseur (réglages de l'appareil photo, sur Mac sous Repères)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El patrón también puede verse como guía en el visor (ajustes de cámara, en el Mac en Guías)."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lo schema può comparire come guida nel mirino (impostazioni fotocamera, su Mac in Guide)."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Het patroon kan ook als hulplijn in de zoeker meelopen (camera-instellingen, op de Mac onder Hulplijnen)."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折り図はビューファインダーのガイドとしても表示できます（カメラ設定、Mac ではガイド）。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O padrão também pode aparecer como guia no visor (ajustes da câmera, no Mac em Guias)."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vzor se může zobrazit i jako vodítko v hledáčku (nastavení kamery, na Macu ve Vodítkách)."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wzór może też być linią pomocniczą w wizjerze (ustawienia aparatu, na Macu w Liniach pomocniczych)."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схему можна показати як напрямні у видошукачі (налаштування камери, на Mac у розділі Напрямні)."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схему можно показать как направляющие в видоискателе (настройки камеры, на Mac в разделе Направляющие)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desen vizörde kılavuz çizgi olarak da gösterilebilir (kamera ayarları, Mac'te Kılavuz çizgiler)."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "패턴을 뷰파인더의 안내선으로도 표시할 수 있습니다(카메라 설정, Mac에서는 안내선)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "图案也可作为取景器中的辅助线显示（相机设置，Mac 上在辅助线中）。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mønsteret kan også vises som hjælpelinje i søgeren (kameraindstillinger, på Mac under Hjælpelinjer)."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mönstret kan också visas som hjälplinje i sökaren (kamerainställningar, på Mac under Hjälplinjer)."
+          }
+        }
+      }
     }
   },
   "version": "1.3"

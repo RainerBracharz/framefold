@@ -28,6 +28,8 @@ struct StudioSettings: Codable, Equatable {
     var safeFrames = false
     var gridColumns = 0
     var gridRows = 0
+    /// Faltmuster als Hilfslinie (Hypar, Kreisfalte, Miura-ori)
+    var foldGuide: FoldGuide = .off
 
     // Referenz
     var referenceOpacity = 0.5
@@ -83,6 +85,7 @@ struct StudioSettings: Codable, Equatable {
         safeFrames = v(.safeFrames, d.safeFrames)
         gridColumns = v(.gridColumns, d.gridColumns)
         gridRows = v(.gridRows, d.gridRows)
+        foldGuide = v(.foldGuide, d.foldGuide)
         referenceOpacity = v(.referenceOpacity, d.referenceOpacity)
         referenceScale = v(.referenceScale, d.referenceScale)
         referenceOffsetX = v(.referenceOffsetX, d.referenceOffsetX)

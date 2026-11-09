@@ -77,4 +77,19 @@ final class FoldPatternTests: XCTestCase {
             }
         }
     }
+
+    func testFoldGuideMapsToPatternsAndSurvivesSettingsRoundTrip() throws {
+        XCTAssertNil(FoldGuide.off.pattern)
+        XCTAssertEqual(FoldGuide.hypar.pattern, .hypar)
+        var settings = StudioSettings()
+        XCTAssertEqual(settings.foldGuide, .off)
+        settings.foldGuide = .miura
+        let data = try JSONEncoder().encode(settings)
+        XCTAssertEqual(try JSONDecoder().decode(StudioSettings.self, from: data).foldGuide, .miura)
+        // Ältere gespeicherte Einstellungen ohne das Feld bleiben lesbar
+        var json = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        json.removeValue(forKey: "foldGuide")
+        let old = try JSONSerialization.data(withJSONObject: json)
+        XCTAssertEqual(try JSONDecoder().decode(StudioSettings.self, from: old).foldGuide, .off)
+    }
 }

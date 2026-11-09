@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 import UIKit
 
 /// Faltmuster der Faltvorlage. Raster ist die bisherige Vorlage, die anderen
@@ -46,6 +47,53 @@ enum FoldPattern: String, CaseIterable, Identifiable {
         case .miura:
             return Algorithms.miuraOri(in: rect, cols: 8, rows: 8)
         }
+    }
+}
+
+/// Faltmuster als Hilfslinie im Sucher: ein Quadrat in der Bildmitte, damit
+/// man beim Falten sieht, welche Linie als Nächstes kommt.
+enum FoldGuide: String, CaseIterable, Identifiable, Codable {
+    case off, hypar, circularPleat, miura
+    var id: String { rawValue }
+    var pattern: FoldPattern? {
+        switch self {
+        case .off: return nil
+        case .hypar: return .hypar
+        case .circularPleat: return .circularPleat
+        case .miura: return .miura
+        }
+    }
+    var label: String { pattern?.label ?? String(localized: "aus") }
+
+    /// Zeichnet das Muster quadratisch und mittig in `rect`.
+    func draw(in ctx: inout GraphicsContext, rect: CGRect, opacity: Double = 0.8) {
+        guard let pattern else { return }
+        let side = min(rect.width, rect.height) * 0.9
+        let square = CGRect(x: rect.midX - side / 2, y: rect.midY - side / 2, width: side, height: side)
+        for kind in [Algorithms.CreaseKind.cut, .facet, .valley, .mountain] {
+            var path = Path()
+            for c in pattern.creases(in: square) where c.kind == kind {
+                path.move(to: c.p0); path.addLine(to: c.p1)
+            }
+            let style: StrokeStyle
+            let color: Color
+            switch kind {
+            case .mountain: color = Color(red: 1.0, green: 0.36, blue: 0.3); style = StrokeStyle(lineWidth: 1.2, dash: [7, 3, 1.5, 3])
+            case .valley:   color = Color(red: 0.4, green: 0.6, blue: 1.0);  style = StrokeStyle(lineWidth: 1.2, dash: [5, 4])
+            case .facet:    color = .white;                                  style = StrokeStyle(lineWidth: 0.7, dash: [1, 3])
+            case .cut:      color = .white;                                  style = StrokeStyle(lineWidth: 1)
+            }
+            ctx.stroke(path, with: .color(color.opacity(opacity)), style: style)
+        }
+    }
+}
+
+/// Sucher-Ebene mit dem gewählten Faltmuster.
+struct FoldGuideOverlay: View {
+    let guide: FoldGuide
+    var body: some View {
+        Canvas { ctx, size in guide.draw(in: &ctx, rect: CGRect(origin: .zero, size: size)) }
+            .allowsHitTesting(false)
     }
 }
 

@@ -740,6 +740,7 @@ struct StudioView: View {
                     toggle("Sicherheitsrahmen", $settings.safeFrames)
                     stepper("Raster Spalten", value: $settings.gridColumns, in: 0...12) { $0 < 2 ? String(localized: "aus") : "\($0)" }
                     stepper("Raster Zeilen", value: $settings.gridRows, in: 0...12) { $0 < 2 ? String(localized: "aus") : "\($0)" }
+                    picker("Faltmuster", $settings.foldGuide, FoldGuide.allCases) { $0.label }
                 }
                 section("Referenz") {
                     if let name = reference.name {
@@ -1448,7 +1449,7 @@ struct StudioView: View {
 
     #if DEBUG
     /// Screenshots und Prüfungen ohne Klicks: FF_STUDIO="view=difference,
-    /// mask=scope,grid=3x3,safe=1,onion=3,play=1,select=1,ref=<Bild oder Film>,refop=0.5"
+    /// mask=scope,grid=3x3,safe=1,fold=hypar,onion=3,play=1,select=1,ref=<Bild oder Film>,refop=0.5"
     private func debugPreset() {
         guard let spec = ProcessInfo.processInfo.environment["FF_STUDIO"] else { return }
         for pair in spec.split(separator: ",") {
@@ -1458,6 +1459,7 @@ struct StudioView: View {
             case "view": settings.viewMode = StudioViewMode(rawValue: kv[1]) ?? .normal
             case "mask": settings.mask = MaskAspect(rawValue: kv[1]) ?? .none
             case "safe": settings.safeFrames = kv[1] == "1"
+            case "fold": settings.foldGuide = FoldGuide(rawValue: kv[1]) ?? .off
             case "onion": settings.onionFrames = Int(kv[1]) ?? 1
             case "grid":
                 let g = kv[1].split(separator: "x").compactMap { Int($0) }

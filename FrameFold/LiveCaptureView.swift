@@ -21,6 +21,7 @@ struct LiveCaptureView: View {
     @State private var recentThumbs: [UIImage] = []
     @StateObject private var level = MotionLevel()
     @AppStorage("liveShowGrid") private var showGrid = true
+    @AppStorage("liveFoldGuide") private var foldGuide: FoldGuide = .off
     @AppStorage("liveShowLevel") private var showLevel = true
     /// iPhone: Studio-Arbeitsfläche statt des einfachen Suchers (ab „Erweitert“)
     @AppStorage("iPhoneStudio") private var iPhoneStudio = false
@@ -1101,6 +1102,7 @@ struct LiveCaptureView: View {
                     .opacity(onionOpacity * 0.9).allowsHitTesting(false)
             }
             if mode.showsAdvanced, showGrid { ThirdsGrid().allowsHitTesting(false) }
+            if mode.showsTolino, foldGuide != .off { FoldGuideOverlay(guide: foldGuide) }
             if mode.showsAdvanced, showLevel, !Platform.isMac {
                 BubbleLevel(gx: level.gx, gy: level.gy, isLevel: level.isLevel)
                     .allowsHitTesting(false)

@@ -16,6 +16,7 @@ struct LiveSettingsView: View {
     @AppStorage("liveOnionFirst") private var onionFirst: Bool = false
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     @AppStorage("iPhoneStudio") private var iPhoneStudio = false
+    @AppStorage("liveFoldGuide") private var foldGuide: FoldGuide = .off
     private var mode: AppMode { AppMode.current(modeRaw) }
 
     var body: some View {
@@ -97,6 +98,12 @@ struct LiveSettingsView: View {
                 Section {
                     Toggle("Drittel-Raster", isOn: $showGrid)
                         .font(Theme.body)
+                    if mode.showsTolino {
+                        Picker("Faltmuster", selection: $foldGuide) {
+                            ForEach(FoldGuide.allCases) { Text($0.label).tag($0) }
+                        }
+                        .font(Theme.body)
+                    }
                     if !Platform.isMac {
                         Toggle("Wasserwaage", isOn: $showLevel)
                             .font(Theme.body)
