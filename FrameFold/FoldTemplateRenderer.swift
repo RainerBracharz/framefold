@@ -65,35 +65,115 @@ enum FoldGuide: String, CaseIterable, Identifiable, Codable {
     }
     var label: String { pattern?.label ?? String(localized: "aus") }
 
-    /// Zeichnet das Muster quadratisch und mittig in `rect`.
-    func draw(in ctx: inout GraphicsContext, rect: CGRect, opacity: Double = 0.8) {
-        guard let pattern else { return }
-        let side = min(rect.width, rect.height) * 0.9
-        let square = CGRect(x: rect.midX - side / 2, y: rect.midY - side / 2, width: side, height: side)
-        for kind in [Algorithms.CreaseKind.cut, .facet, .valley, .mountain] {
-            var path = Path()
-            for c in pattern.creases(in: square) where c.kind == kind {
-                path.move(to: c.p0); path.addLine(to: c.p1)
-            }
-            let style: StrokeStyle
-            let color: Color
-            switch kind {
-            case .mountain: color = Color(red: 1.0, green: 0.36, blue: 0.3); style = StrokeStyle(lineWidth: 1.2, dash: [7, 3, 1.5, 3])
-            case .valley:   color = Color(red: 0.4, green: 0.6, blue: 1.0);  style = StrokeStyle(lineWidth: 1.2, dash: [5, 4])
-            case .facet:    color = .white;                                  style = StrokeStyle(lineWidth: 0.7, dash: [1, 3])
-            case .cut:      color = .white;                                  style = StrokeStyle(lineWidth: 1)
-            }
-            ctx.stroke(path, with: .color(color.opacity(opacity)), style: style)
-        }
+    /// Das Muster im Einheitsquadrat, in Faltschritte gegliedert, dazu die Schnittkanten.
+    var unitSteps: (steps: [[Algorithms.Crease]], cuts: [Algorithms.Crease]) {
+        guard let pattern else { return ([], []) }
+        let all = pattern.creases(in: CGRect(x: 0, y: 0, width: 1, height: 1))
+        let center: CGPoint? = pattern == .miura ? nil : CGPoint(x: 0.5, y: 0.5)
+        return (Algorithms.foldSteps(all, concentricAround: center), all.filter { $0.kind == .cut })
     }
+
+    /// Zeichnet das Muster auf das Viereck `quad` (Ecken in Ansichtskoordinaten,
+    /// oben links beginnend im Uhrzeigersinn). `step` = aktueller Faltschritt:
+    /// erledigte Falten blass, die aktuelle hell und kräftig, spätere ausgeblendet.
+    /// Ohne `step` erscheint das ganze Muster.
+    func draw(in ctx: inout GraphicsContext, quad: [CGPoint], step: Int?, opacity: Double = 0.85) {
+        guard let map = Algorithms.QuadMap(quad) else { return }
+        let (steps, cuts) = unitSteps
+        func path(_ creases: [Algorithms.Crease], _ kind: Algorithms.CreaseKind? = nil) -> Path {
+            var p = Path()
+            for c in creases where kind == nil || c.kind == kind {
+                p.move(to: map.map(c.p0)); p.addLine(to: map.map(c.p1))
+            }
+            return p
+        }
+        func stroke(_ creases: [Algorithms.Crease], alpha: Double, width: CGFloat) {
+            for kind in [Algorithms.CreaseKind.facet, .valley, .mountain] {
+                let p = path(creases, kind)
+                switch kind {
+                case .mountain:
+                    ctx.stroke(p, with: .color(Color(red: 1.0, green: 0.36, blue: 0.3).opacity(alpha)),
+                               style: StrokeStyle(lineWidth: width, dash: [7, 3, 1.5, 3]))
+                case .valley:
+                    ctx.stroke(p, with: .color(Color(red: 0.4, green: 0.6, blue: 1.0).opacity(alpha)),
+                               style: StrokeStyle(lineWidth: width, dash: [5, 4]))
+                default:
+                    ctx.stroke(p, with: .color(.white.opacity(alpha)),
+                               style: StrokeStyle(lineWidth: width * 0.6, dash: [1, 3]))
+                }
+            }
+        }
+        ctx.stroke(path(cuts), with: .color(.white.opacity(opacity * 0.6)), lineWidth: 1)
+        guard let step else {
+            stroke(steps.flatMap { $0 }, alpha: opacity, width: 1.2)
+            return
+        }
+        let current = min(max(0, step), steps.count)
+        stroke(steps.prefix(current).flatMap { $0 }, alpha: opacity * 0.3, width: 1)
+        if current < steps.count { stroke(steps[current], alpha: opacity, width: 2.4) }
+    }
+
+    /// Ganzes Muster quadratisch und mittig in `rect` (ohne Blatterkennung).
+    func draw(in ctx: inout GraphicsContext, rect: CGRect, opacity: Double = 0.8) {
+        let side = min(rect.width, rect.height) * 0.9
+        let s = CGRect(x: rect.midX - side / 2, y: rect.midY - side / 2, width: side, height: side)
+        draw(in: &ctx, quad: [CGPoint(x: s.minX, y: s.minY), CGPoint(x: s.maxX, y: s.minY),
+                              CGPoint(x: s.maxX, y: s.maxY), CGPoint(x: s.minX, y: s.maxY)],
+             step: nil, opacity: opacity)
+    }
+
+    var stepCount: Int { unitSteps.steps.count }
 }
 
-/// Sucher-Ebene mit dem gewählten Faltmuster.
+/// Sucher-Ebene mit dem Faltmuster. Mit erkanntem Blatt (`paperQuad`, normiert
+/// 0…1 im Kamerabild, oben links beginnend) liegt das Muster perspektivisch
+/// auf dem Papier und zeigt den aktuellen Schritt; ohne Blatt blendet es aus.
 struct FoldGuideOverlay: View {
     let guide: FoldGuide
+    var paperQuad: [CGPoint]? = nil
+    var step: Int? = nil
+    /// Seitenverhältnis des Kamerabilds und wie es in der Ansicht liegt
+    var imageAspect: Double = 1
+    var fills = false
+
     var body: some View {
-        Canvas { ctx, size in guide.draw(in: &ctx, rect: CGRect(origin: .zero, size: size)) }
-            .allowsHitTesting(false)
+        Canvas { ctx, size in
+            guard let paperQuad else { return }
+            let image = Self.imageRect(aspect: imageAspect, in: size, fills: fills)
+            let quad = paperQuad.map { CGPoint(x: image.minX + $0.x * image.width, y: image.minY + $0.y * image.height) }
+            guide.draw(in: &ctx, quad: quad, step: step.map { max(0, $0) })
+        }
+        .opacity(paperQuad == nil ? 0 : 1)
+        .animation(.easeInOut(duration: 0.35), value: paperQuad == nil)
+        .overlay(alignment: .bottom) {
+            if guide != .off {
+                Text(label)
+                    .font(Theme.mono(11)).foregroundStyle(.white)
+                    .padding(.horizontal, 8).padding(.vertical, 4)
+                    .background(.black.opacity(0.55))
+                    .padding(.bottom, 10)
+            }
+        }
+        .allowsHitTesting(false)
+    }
+
+    private var label: String {
+        guard paperQuad != nil else { return String(localized: "Faltmuster: Blatt nicht erkannt") }
+        guard let rawStep = step else { return guide.label }
+        let step = max(0, rawStep)
+        let n = guide.stepCount
+        return step >= n ? String(localized: "Faltmuster: alle \(n) Schritte gefaltet")
+                         : String(localized: "Faltmuster: Schritt \(step + 1) von \(n)")
+    }
+
+    /// Lage des Kamerabilds in der Ansicht (eingepasst oder füllend, mittig)
+    static func imageRect(aspect: Double, in size: CGSize, fills: Bool) -> CGRect {
+        guard aspect > 0, size.width > 0, size.height > 0 else { return CGRect(origin: .zero, size: size) }
+        let viewAspect = Double(size.width / size.height)
+        let widthLimited = fills ? viewAspect > aspect : viewAspect < aspect
+        let w = widthLimited ? Double(size.width) : Double(size.height) * aspect
+        let h = widthLimited ? Double(size.width) / aspect : Double(size.height)
+        return CGRect(x: (Double(size.width) - w) / 2, y: (Double(size.height) - h) / 2, width: w, height: h)
     }
 }
 

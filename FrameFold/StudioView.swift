@@ -16,6 +16,8 @@ struct StudioView: View {
     let onFinish: () -> Void
     let onUndo: () -> Void
 
+    /// Aufnahmezahl beim Einschalten des Faltmusters – ab da zählen die Schritte
+    @State private var foldGuideBase = 0
     @State private var settings = StudioSettings.restored()
     @StateObject private var cache = StudioFrameCache()
     @StateObject private var reference = StudioReference()
@@ -324,6 +326,11 @@ struct StudioView: View {
                     OverlayLayer(overlays: overlays.filter { $0.covers(index) }, folder: project.map { store.folderURL(for: $0) })
                 }
                 StudioGuides(settings: settings)
+                if showsLive, settings.foldGuide != .off {
+                    FoldGuideOverlay(guide: settings.foldGuide, paperQuad: controller.paperQuad,
+                                     step: controller.capturedCount - foldGuideBase,
+                                     imageAspect: controller.frameAspect, fills: false)
+                }
                 if flash > 0 { Color.white.opacity(flash).allowsHitTesting(false) }
             }
             .frame(width: canvas.width, height: canvas.height)
@@ -1520,6 +1527,7 @@ struct StudioView: View {
         StudioBlackout.set(false)
         // Die übrigen Ansichten kennen diese Schalter nicht – zurück auf Standard.
         controller.publishesLiveFrames = false
+        controller.tracksPaper = false
         controller.averageFrames = 1
         controller.captureBlackout = false
         controller.autoShutter = true
@@ -1534,6 +1542,10 @@ struct StudioView: View {
 
     private func apply(_ s: StudioSettings) {
         controller.publishesLiveFrames = s.viewMode != .normal || s.loupe || s.greenPreview
+        if controller.tracksPaper != (s.foldGuide != .off) {
+            controller.tracksPaper = s.foldGuide != .off
+            foldGuideBase = controller.capturedCount   // neues Muster beginnt bei Schritt 1
+        }
         controller.averageFrames = s.averageFrames
         controller.captureBlackout = s.captureBlackout
         controller.autoShutter = s.autoShutter

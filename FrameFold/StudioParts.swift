@@ -257,7 +257,7 @@ func studioMaskRect(in size: CGSize, ratio: Double?) -> CGRect {
     }
 }
 
-/// Formatmaske, Sicherheitsrahmen, Raster und Faltmuster über dem Bild.
+/// Formatmaske, Sicherheitsrahmen und Raster über dem Bild.
 struct StudioGuides: View {
     let settings: StudioSettings
 
@@ -292,7 +292,6 @@ struct StudioGuides: View {
                 }
             }
             ctx.stroke(grid, with: .color(.white.opacity(0.35)), lineWidth: 1)
-            settings.foldGuide.draw(in: &ctx, rect: rect)
         }
         .allowsHitTesting(false)
     }

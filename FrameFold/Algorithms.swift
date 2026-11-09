@@ -481,6 +481,66 @@ enum Algorithms {
         return out
     }
 
+    /// Projektive Abbildung des Einheitsquadrats auf ein Viereck (Ecken oben
+    /// links, oben rechts, unten rechts, unten links). Gerade Linien bleiben
+    /// gerade – so legt sich ein Faltmuster perspektivisch auf ein schräg
+    /// liegendes Blatt.
+    struct QuadMap {
+        private let a, b, c, d, e, f, g, h: Double
+        init?(_ q: [CGPoint]) {
+            guard q.count == 4 else { return nil }
+            let (x0, y0, x1, y1) = (Double(q[0].x), Double(q[0].y), Double(q[1].x), Double(q[1].y))
+            let (x2, y2, x3, y3) = (Double(q[2].x), Double(q[2].y), Double(q[3].x), Double(q[3].y))
+            let dx1 = x1 - x2, dx2 = x3 - x2, dx3 = x0 - x1 + x2 - x3
+            let dy1 = y1 - y2, dy2 = y3 - y2, dy3 = y0 - y1 + y2 - y3
+            var g = 0.0, h = 0.0
+            if abs(dx3) > 1e-12 || abs(dy3) > 1e-12 {
+                let den = dx1 * dy2 - dx2 * dy1
+                guard abs(den) > 1e-12 else { return nil }
+                g = (dx3 * dy2 - dx2 * dy3) / den
+                h = (dx1 * dy3 - dx3 * dy1) / den
+            }
+            self.a = x1 - x0 + g * x1; self.b = x3 - x0 + h * x3; self.c = x0
+            self.d = y1 - y0 + g * y1; self.e = y3 - y0 + h * y3; self.f = y0
+            self.g = g; self.h = h
+        }
+        func map(_ p: CGPoint) -> CGPoint {
+            let u = Double(p.x), v = Double(p.y)
+            let w = g * u + h * v + 1
+            return CGPoint(x: (a * u + b * v + c) / w, y: (d * u + e * v + f) / w)
+        }
+    }
+
+    /// Faltreihenfolge: Gruppen von Falten, die zusammen einen Schritt bilden.
+    /// Ringmuster von außen nach innen, Miura-ori erst die Zickzackzeilen von
+    /// oben nach unten, dann die Senkrechten von links nach rechts. Schnitt-
+    /// kanten gehören zu keinem Schritt.
+    static func foldSteps(_ creases: [Crease], concentricAround center: CGPoint?) -> [[Crease]] {
+        let folds = creases.filter { $0.kind != .cut }
+        func key(_ c: Crease) -> Double {
+            if let center {
+                // Ringe: Eckpunkte eines Rings (Quadrat oder Kreis) liegen alle
+                // gleich weit vom Zentrum. Diagonalen zuletzt.
+                if c.kind == .facet { return 1_000 }
+                return -hypot(c.p0.x - center.x, c.p0.y - center.y)
+            }
+            // Miura: Zickzackzeilen (ihre Segmentmitten liegen auf der Zeile)
+            // vor den Senkrechten
+            let vertical = abs(c.p0.x - c.p1.x) < 1e-9
+            return vertical ? 1_000 + c.p0.x : (c.p0.y + c.p1.y) / 2
+        }
+        // Nach Schlüssel ordnen und mit Toleranz zusammenfassen – gerundete
+        // Schlüssel würden Ringe an Rundungsgrenzen auseinanderreißen.
+        let sorted = folds.map { (key($0), $0) }.sorted { $0.0 < $1.0 }
+        var steps: [[Crease]] = []
+        var last = -Double.infinity
+        for (k, c) in sorted {
+            if steps.isEmpty || k - last > 1e-6 * 1_000 { steps.append([c]) } else { steps[steps.count - 1].append(c) }
+            last = k
+        }
+        return steps
+    }
+
     // MARK: Faltvorlage (druckbares Falzmuster)
 
     struct FoldLine: Equatable { let p0: CGPoint; let p1: CGPoint; let cut: Bool }

@@ -74958,102 +74958,402 @@
         }
       }
     },
-    "Im Sucher kann das Muster als Hilfslinie mitlaufen (Kamera-Einstellungen, auf dem Mac unter Hilfslinien).": {
+    "Im Sucher kann das Muster als Hilfslinie mitlaufen (Kamera-Einstellungen, auf dem Mac unter Hilfslinien). Es legt sich auf das flache Blatt und zeigt mit jedem Bild die nächste Falte. Wölbt sich das Papier, blendet es aus.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The pattern can also run as a guide in the viewfinder (camera settings, on the Mac under Guides)."
+            "value": "The pattern can also run as a guide in the viewfinder (camera settings, on the Mac under Guides). It lies on the flat sheet and shows the next fold with every frame. If the paper curves, it fades out."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le motif peut aussi s'afficher comme repère dans le viseur (réglages de l'appareil photo, sur Mac sous Repères)."
+            "value": "Le motif peut aussi s'afficher comme repère dans le viseur (réglages de l'appareil photo, sur Mac sous Repères). Il se pose sur la feuille à plat et montre le pli suivant à chaque image. Si le papier se courbe, il disparaît."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El patrón también puede verse como guía en el visor (ajustes de cámara, en el Mac en Guías)."
+            "value": "El patrón también puede verse como guía en el visor (ajustes de cámara, en el Mac en Guías). Se coloca sobre la hoja plana y muestra el siguiente pliegue con cada imagen. Si el papel se curva, se desvanece."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lo schema può comparire come guida nel mirino (impostazioni fotocamera, su Mac in Guide)."
+            "value": "Lo schema può comparire come guida nel mirino (impostazioni fotocamera, su Mac in Guide). Si appoggia sul foglio piatto e mostra la piega successiva a ogni fotogramma. Se la carta si incurva, scompare."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Het patroon kan ook als hulplijn in de zoeker meelopen (camera-instellingen, op de Mac onder Hulplijnen)."
+            "value": "Het patroon kan ook als hulplijn in de zoeker meelopen (camera-instellingen, op de Mac onder Hulplijnen). Het legt zich op het platte vel en toont bij elk beeld de volgende vouw. Als het papier bolt, verdwijnt het."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "折り図はビューファインダーのガイドとしても表示できます（カメラ設定、Mac ではガイド）。"
+            "value": "折り図はビューファインダーのガイドとしても表示できます（カメラ設定、Mac ではガイド）。平らな紙に重なり、コマごとに次の折り目を示します。紙が反ると消えます。"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "O padrão também pode aparecer como guia no visor (ajustes da câmera, no Mac em Guias)."
+            "value": "O padrão também pode aparecer como guia no visor (ajustes da câmera, no Mac em Guias). Ele se ajusta à folha plana e mostra a próxima dobra a cada quadro. Se o papel se curvar, ele some."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vzor se může zobrazit i jako vodítko v hledáčku (nastavení kamery, na Macu ve Vodítkách)."
+            "value": "Vzor se může zobrazit i jako vodítko v hledáčku (nastavení kamery, na Macu ve Vodítkách). Přiloží se na rovný list a s každým snímkem ukáže další sklad. Když se papír prohne, zmizí."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wzór może też być linią pomocniczą w wizjerze (ustawienia aparatu, na Macu w Liniach pomocniczych)."
+            "value": "Wzór może też być linią pomocniczą w wizjerze (ustawienia aparatu, na Macu w Liniach pomocniczych). Kładzie się na płaskim arkuszu i z każdą klatką pokazuje następne zgięcie. Gdy papier się wygina, znika."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Схему можна показати як напрямні у видошукачі (налаштування камери, на Mac у розділі Напрямні)."
+            "value": "Схему можна показати як напрямні у видошукачі (налаштування камери, на Mac у розділі Напрямні). Вона лягає на плаский аркуш і з кожним кадром показує наступний згин. Коли папір вигинається, вона зникає."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Схему можно показать как направляющие в видоискателе (настройки камеры, на Mac в разделе Направляющие)."
+            "value": "Схему можно показать как направляющие в видоискателе (настройки камеры, на Mac в разделе Направляющие). Она ложится на плоский лист и с каждым кадром показывает следующий сгиб. Когда бумага изгибается, она исчезает."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Desen vizörde kılavuz çizgi olarak da gösterilebilir (kamera ayarları, Mac'te Kılavuz çizgiler)."
+            "value": "Desen vizörde kılavuz çizgi olarak da gösterilebilir (kamera ayarları, Mac'te Kılavuz çizgiler). Düz kâğıdın üzerine oturur ve her karede bir sonraki katı gösterir. Kâğıt kıvrılınca kaybolur."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "패턴을 뷰파인더의 안내선으로도 표시할 수 있습니다(카메라 설정, Mac에서는 안내선)."
+            "value": "패턴을 뷰파인더의 안내선으로도 표시할 수 있습니다(카메라 설정, Mac에서는 안내선). 평평한 종이에 맞춰 놓이고 프레임마다 다음 접는 선을 보여 줍니다. 종이가 휘면 사라집니다."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "图案也可作为取景器中的辅助线显示（相机设置，Mac 上在辅助线中）。"
+            "value": "图案也可作为取景器中的辅助线显示（相机设置，Mac 上在辅助线中）。它会贴合平放的纸张，每拍一帧就显示下一道折痕。纸张弯曲时会淡出。"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mønsteret kan også vises som hjælpelinje i søgeren (kameraindstillinger, på Mac under Hjælpelinjer)."
+            "value": "Mønsteret kan også vises som hjælpelinje i søgeren (kameraindstillinger, på Mac under Hjælpelinjer). Det lægger sig på det flade ark og viser næste fold for hvert billede. Når papiret buer, forsvinder det."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mönstret kan också visas som hjälplinje i sökaren (kamerainställningar, på Mac under Hjälplinjer)."
+            "value": "Mönstret kan också visas som hjälplinje i sökaren (kamerainställningar, på Mac under Hjälplinjer). Det lägger sig på det platta arket och visar nästa vikning för varje bild. När papperet böjer sig tonar det bort."
+          }
+        }
+      }
+    },
+    "Faltmuster: Blatt nicht erkannt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crease pattern: sheet not found"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motif : feuille non détectée"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patrón: hoja no detectada"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schema: foglio non rilevato"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vouwpatroon: vel niet herkend"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折り図：紙が見つかりません"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Padrão: folha não reconhecida"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vzor: list nenalezen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wzór: nie wykryto arkusza"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схема: аркуш не знайдено"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схема: лист не найден"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desen: kâğıt bulunamadı"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접기 패턴: 종이를 찾지 못함"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折痕图案：未识别到纸张"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foldemønster: ark ikke fundet"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vikmönster: arket hittades inte"
+          }
+        }
+      }
+    },
+    "Faltmuster: alle %lld Schritte gefaltet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crease pattern: all %lld steps folded"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motif : les %lld étapes sont pliées"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patrón: los %lld pasos plegados"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schema: tutti i %lld passaggi piegati"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vouwpatroon: alle %lld stappen gevouwen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折り図：%lld ステップすべて完了"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Padrão: todas as %lld etapas dobradas"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vzor: všech %lld kroků složeno"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wzór: wszystkie kroki (%lld) złożone"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схема: усі кроки (%lld) зігнуто"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схема: все шаги (%lld) сложены"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desen: %lld adımın tümü katlandı"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접기 패턴: %lld단계 모두 완료"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折痕图案：%lld 步全部折完"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foldemønster: alle %lld trin foldet"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vikmönster: alla %lld steg vikta"
+          }
+        }
+      }
+    },
+    "Faltmuster: Schritt %lld von %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crease pattern: step %lld of %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motif : étape %lld sur %lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patrón: paso %lld de %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schema: passaggio %lld di %lld"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vouwpatroon: stap %lld van %lld"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折り図：ステップ %lld / %lld"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Padrão: etapa %lld de %lld"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vzor: krok %lld z %lld"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wzór: krok %lld z %lld"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схема: крок %lld з %lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схема: шаг %lld из %lld"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desen: adım %lld / %lld"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접기 패턴: %lld / %lld단계"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折痕图案：第 %lld 步，共 %lld 步"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foldemønster: trin %lld af %lld"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vikmönster: steg %lld av %lld"
           }
         }
       }

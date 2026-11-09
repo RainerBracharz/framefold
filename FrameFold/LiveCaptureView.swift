@@ -22,6 +22,8 @@ struct LiveCaptureView: View {
     @StateObject private var level = MotionLevel()
     @AppStorage("liveShowGrid") private var showGrid = true
     @AppStorage("liveFoldGuide") private var foldGuide: FoldGuide = .off
+    /// Aufnahmezahl beim Einschalten des Faltmusters – ab da zählen die Schritte
+    @State private var foldGuideBase = 0
     @AppStorage("liveShowLevel") private var showLevel = true
     /// iPhone: Studio-Arbeitsfläche statt des einfachen Suchers (ab „Erweitert“)
     @AppStorage("iPhoneStudio") private var iPhoneStudio = false
@@ -646,6 +648,8 @@ struct LiveCaptureView: View {
         }
         #endif
         .onAppear {
+            controller.tracksPaper = mode.showsTolino && foldGuide != .off
+            foldGuideBase = controller.capturedCount
             UIApplication.shared.isIdleTimerDisabled = true
             // Am Mac wirkt der Idle-Timer nicht – dort hält eine Aktivität
             // Bildschirm und Rechner während der Aufnahme wach.
@@ -734,6 +738,7 @@ struct LiveCaptureView: View {
             if controller.isRunning { controller.captureNow() }
         }
         .onDisappear {
+            controller.tracksPaper = false
             UIApplication.shared.isIdleTimerDisabled = false
             SessionWakeLock.shared.end()
             // Den Ersetzen-Modus hier NICHT beenden: Beim Wechsel in den Modus
@@ -753,6 +758,10 @@ struct LiveCaptureView: View {
             WatchLink.shared.onShutter = nil
             WatchLink.shared.onFinish = nil
             WatchLink.shared.pushSessionEnded()
+        }
+        .onChange(of: foldGuide) { _, guide in
+            controller.tracksPaper = mode.showsTolino && guide != .off
+            foldGuideBase = controller.capturedCount   // neues Muster beginnt bei Schritt 1
         }
         .onChange(of: controller.capturedCount) { _, count in
             WatchLink.shared.push(count: count, projectName: project.name,
@@ -1102,7 +1111,11 @@ struct LiveCaptureView: View {
                     .opacity(onionOpacity * 0.9).allowsHitTesting(false)
             }
             if mode.showsAdvanced, showGrid { ThirdsGrid().allowsHitTesting(false) }
-            if mode.showsTolino, foldGuide != .off { FoldGuideOverlay(guide: foldGuide) }
+            if mode.showsTolino, foldGuide != .off {
+                FoldGuideOverlay(guide: foldGuide, paperQuad: controller.paperQuad,
+                                 step: controller.capturedCount - foldGuideBase,
+                                 imageAspect: controller.frameAspect, fills: !Platform.isMac)
+            }
             if mode.showsAdvanced, showLevel, !Platform.isMac {
                 BubbleLevel(gx: level.gx, gy: level.gy, isLevel: level.isLevel)
                     .allowsHitTesting(false)

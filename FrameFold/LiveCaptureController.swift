@@ -3,6 +3,7 @@ import AVFoundation
 import CoreImage
 import UIKit
 import AudioToolbox
+import Vision
 
 /// Threadsichere Analyse-Drossel + CIContext für den Kamera-Thread –
 /// bewusst außerhalb des MainActor-Controllers (Xcode 26 verbietet
@@ -659,6 +660,17 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Studio es anfordert (sonst kostet jedes Bild ein SwiftUI-Update).
     @Published private(set) var liveFrame: CGImage?
     var publishesLiveFrames = false { didSet { if !publishesLiveFrames { liveFrame = nil } } }
+    // MARK: Blatterkennung für das Faltmuster
+
+    /// Ecken des erkannten Blatts im Kamerabild (0…1, oben links beginnend,
+    /// im Uhrzeigersinn) – nil, wenn kein Blatt zu sehen ist.
+    @Published private(set) var paperQuad: [CGPoint]?
+    /// Nur suchen, wenn ein Faltmuster als Hilfslinie gewählt ist.
+    var tracksPaper = false { didSet { if !tracksPaper { paperQuad = nil } } }
+    private var paperBusy = false
+    private var paperLastRun = Date.distantPast
+    private var paperLastSeen = Date.distantPast
+
     /// Seitenverhältnis des Kamerabilds (Breite/Höhe) – für Masken und Raster.
     @Published private(set) var frameAspect: Double = 16.0 / 9.0
     /// Rauschminderung: so viele Kamerabilder nach dem Auslösen mitteln (1 = aus).
@@ -1429,6 +1441,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         latestGray = gray
         latestGrayWidth = w
         latestFrame = fullFrame
+        if tracksPaper { servePaperTracking(fullFrame) }
         if publishesLiveFrames { liveFrame = fullFrame }
         let aspect = Double(fullFrame.width) / Double(max(1, fullFrame.height))
         if abs(aspect - frameAspect) > 0.01 { frameAspect = aspect }
@@ -1873,5 +1886,57 @@ enum Stored {
     }
     static func set(_ value: Any, _ key: String) {
         UserDefaults.standard.set(value, forKey: key)
+    }
+}
+
+// MARK: Blatterkennung
+
+extension LiveCaptureController {
+    /// Viermal pro Sekunde reicht: Das Blatt liegt still, solange gefaltet wird.
+    func servePaperTracking(_ frame: CGImage) {
+        let now = Date()
+        guard !paperBusy, now.timeIntervalSince(paperLastRun) > 0.25 else { return }
+        paperBusy = true
+        paperLastRun = now
+        Task.detached(priority: .utility) { [weak self] in
+            let quad = PaperDetector.detect(in: frame)
+            await MainActor.run { self?.updatePaper(quad) }
+        }
+    }
+
+    /// Geglättet nachführen; erst nach einer Sekunde ohne Blatt ausblenden,
+    /// damit eine Hand über dem Papier das Muster nicht flackern lässt.
+    func updatePaper(_ quad: [CGPoint]?, now: Date = Date()) {
+        paperBusy = false
+        guard tracksPaper else { paperQuad = nil; return }
+        if let quad, quad.count == 4 {
+            paperLastSeen = now
+            if let old = paperQuad, old.count == 4 {
+                paperQuad = zip(old, quad).map { CGPoint(x: $0.x * 0.4 + $1.x * 0.6, y: $0.y * 0.4 + $1.y * 0.6) }
+            } else {
+                paperQuad = quad
+            }
+        } else if now.timeIntervalSince(paperLastSeen) > 1.0 {
+            paperQuad = nil
+        }
+    }
+}
+
+/// Sucht das größte rechteckige Blatt im Bild (Apples Vision, auf dem Gerät).
+/// Wölbt sich das Papier beim Falten, ist es kein Rechteck mehr – dann
+/// kommt nichts zurück und das Faltmuster blendet aus.
+enum PaperDetector {
+    static func detect(in image: CGImage) -> [CGPoint]? {
+        let request = VNDetectRectanglesRequest()
+        request.minimumAspectRatio = 0.3
+        request.maximumAspectRatio = 1.0
+        request.minimumSize = 0.15
+        request.quadratureTolerance = 30
+        request.minimumConfidence = 0.6
+        request.maximumObservations = 1
+        let handler = VNImageRequestHandler(cgImage: image, options: [:])
+        guard (try? handler.perform([request])) != nil, let r = request.results?.first else { return nil }
+        // Vision zählt von unten links, die Ansicht von oben links
+        return [r.topLeft, r.topRight, r.bottomRight, r.bottomLeft].map { CGPoint(x: $0.x, y: 1 - $0.y) }
     }
 }

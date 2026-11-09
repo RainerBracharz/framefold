@@ -92,4 +92,67 @@ final class FoldPatternTests: XCTestCase {
         let old = try JSONSerialization.data(withJSONObject: json)
         XCTAssertEqual(try JSONDecoder().decode(StudioSettings.self, from: old).foldGuide, .off)
     }
+
+    func testQuadMapSendsUnitCornersToQuadAndKeepsLinesStraight() throws {
+        let quad = [CGPoint(x: 10, y: 20), CGPoint(x: 200, y: 40), CGPoint(x: 220, y: 260), CGPoint(x: 5, y: 230)]
+        let map = try XCTUnwrap(Algorithms.QuadMap(quad))
+        for (u, q) in zip([CGPoint(x: 0, y: 0), CGPoint(x: 1, y: 0), CGPoint(x: 1, y: 1), CGPoint(x: 0, y: 1)], quad) {
+            let p = map.map(u)
+            XCTAssertEqual(p.x, q.x, accuracy: 1e-6); XCTAssertEqual(p.y, q.y, accuracy: 1e-6)
+        }
+        // Mitte einer Kante liegt auf der Kante (Geraden bleiben gerade)
+        let m = map.map(CGPoint(x: 0.5, y: 0))
+        let cross = (quad[1].x - quad[0].x) * (m.y - quad[0].y) - (quad[1].y - quad[0].y) * (m.x - quad[0].x)
+        XCTAssertEqual(cross, 0, accuracy: 1e-6)
+        XCTAssertNil(Algorithms.QuadMap([CGPoint.zero]))
+    }
+
+    func testFoldStepsFollowTheFoldingOrder() {
+        XCTAssertEqual(FoldGuide.hypar.stepCount, 15)          // 14 Ringe, dann Diagonalen
+        XCTAssertEqual(FoldGuide.circularPleat.stepCount, 14)  // 14 Ringe
+        XCTAssertEqual(FoldGuide.miura.stepCount, 14)          // 7 Zickzackzeilen, 7 Senkrechte
+        XCTAssertEqual(FoldGuide.off.stepCount, 0)
+        // Ringe von außen nach innen, erster Ring ist eine Bergfalte
+        let steps = FoldGuide.hypar.unitSteps.steps
+        XCTAssertTrue(steps[0].allSatisfy { $0.kind == .mountain })
+        XCTAssertTrue(steps[1].allSatisfy { $0.kind == .valley })
+        func radius(_ s: [Algorithms.Crease]) -> Double { hypot(s[0].p0.x - 0.5, s[0].p0.y - 0.5) }
+        for i in 1..<14 { XCTAssertGreaterThan(radius(steps[i - 1]), radius(steps[i])) }
+        XCTAssertTrue(steps[14].allSatisfy { $0.kind == .facet })
+        // Jede Falte kommt genau einmal vor
+        let all = FoldPattern.miura.creases(in: CGRect(x: 0, y: 0, width: 1, height: 1)).filter { $0.kind != .cut }
+        XCTAssertEqual(FoldGuide.miura.unitSteps.steps.flatMap { $0 }.count, all.count)
+    }
+
+    func testOverlayPlacesFittedAndFilledImages() {
+        let size = CGSize(width: 400, height: 300)
+        let fit = FoldGuideOverlay.imageRect(aspect: 1, in: size, fills: false)
+        XCTAssertEqual(fit, CGRect(x: 50, y: 0, width: 300, height: 300))
+        let fill = FoldGuideOverlay.imageRect(aspect: 1, in: size, fills: true)
+        XCTAssertEqual(fill, CGRect(x: 0, y: -50, width: 400, height: 400))
+    }
+
+    /// Ein helles, schräg liegendes Blatt auf dunklem Tisch wird mit seinen Ecken gefunden.
+    func testPaperDetectorFindsASheetOnTheTable() throws {
+        let w = 640, h = 480
+        let corners = [CGPoint(x: 180, y: 90), CGPoint(x: 470, y: 120), CGPoint(x: 450, y: 400), CGPoint(x: 160, y: 380)]
+        let image = UIGraphicsImageRenderer(size: CGSize(width: w, height: h), format: {
+            let f = UIGraphicsImageRendererFormat(); f.scale = 1; return f }()).image { ctx in
+            UIColor(white: 0.15, alpha: 1).setFill(); ctx.fill(CGRect(x: 0, y: 0, width: w, height: h))
+            let p = UIBezierPath(); p.move(to: corners[0]); corners.dropFirst().forEach { p.addLine(to: $0) }; p.close()
+            UIColor(white: 0.92, alpha: 1).setFill(); p.fill()
+        }
+        let quad = try XCTUnwrap(PaperDetector.detect(in: try XCTUnwrap(image.cgImage)))
+        XCTAssertEqual(quad.count, 4)
+        for c in corners {
+            let n = CGPoint(x: c.x / CGFloat(w), y: c.y / CGFloat(h))
+            let nearest = quad.map { hypot($0.x - n.x, $0.y - n.y) }.min() ?? 1
+            XCTAssertLessThan(nearest, 0.03, "Ecke \(c)")
+        }
+        // Leerer Tisch: kein Blatt
+        let empty = UIGraphicsImageRenderer(size: CGSize(width: 64, height: 48)).image { ctx in
+            UIColor(white: 0.15, alpha: 1).setFill(); ctx.fill(CGRect(x: 0, y: 0, width: 64, height: 48))
+        }
+        XCTAssertNil(PaperDetector.detect(in: try XCTUnwrap(empty.cgImage)))
+    }
 }
