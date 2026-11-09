@@ -422,11 +422,16 @@ struct LiveCaptureView: View {
             // Hintergrund kodiert, das letzte könnte sonst fehlen.
             await controller.flushCaptures()
             lastSessionFiles = sessionFiles
-            let urls = store.frameURLs(for: store.projects.first(where: { $0.id == project.id }) ?? project)
+            let current = store.projects.first(where: { $0.id == project.id }) ?? project
+            let urls = store.frameURLs(for: current)
+            let settings = PipelineSettings.restored()
             do {
-                let url = try await StopMotionAssembler().assemble(
-                    imageURLs: urls, settings: PipelineSettings.restored()
+                let film = try await StopMotionAssembler().assemble(
+                    imageURLs: urls, settings: settings
                 ) { p in Task { @MainActor in assembleProgress = p } }
+                guard !Task.isCancelled else { return }
+                // Tonspuren des Werks wie beim Export aus der Werkliste
+                let url = try await current.addingSoundtrack(to: film, fps: settings.outputFPS, store: store)
                 guard !Task.isCancelled else { return }
                 await MainActor.run {
                     resultURL = url; isAssembling = false

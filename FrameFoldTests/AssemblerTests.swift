@@ -261,6 +261,45 @@ final class AssemblerTests: XCTestCase {
         }
     }
 
+    /// Sofort-Ergebnis nach „Fertig“ und Werkliste nutzen denselben Weg:
+    /// Ein Werk mit einer Tonspur ergibt einen Film mit genau einer
+    /// Audiospur; ohne Spur bleibt der Film stumm und unverändert.
+    @MainActor
+    func testProjectSoundtrackIsUnderlaid() async throws {
+        let suite = "ff-assembler-tests-\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let store = ProjectStore(root: dir.appendingPathComponent("store", isDirectory: true), defaults: defaults)
+        let project = store.createProject(name: "Ton")
+
+        let frames = try [UIColor.red, .green, .blue, .white].enumerated().map { i, c in
+            try save(solid(c, width: 640, height: 480), "p\(i).jpg")
+        }
+        let settings = baseSettings()
+        let film = try await StopMotionAssembler().assemble(imageURLs: frames, settings: settings) { _ in }
+
+        let silent = try await project.addingSoundtrack(to: film, fps: settings.outputFPS, store: store)
+        XCTAssertEqual(silent, film, "ohne Spuren unverändert")
+        let none = try await AVURLAsset(url: silent).loadTracks(withMediaType: .audio)
+        XCTAssertTrue(none.isEmpty)
+
+        let sine = dir.appendingPathComponent("spur.m4a")
+        try writeSine(to: sine, seconds: 3, settings: [AVFormatIDKey: kAudioFormatMPEG4AAC,
+                                                       AVSampleRateKey: 44_100, AVNumberOfChannelsKey: 1])
+        XCTAssertNotNil(store.addAudioTrack(from: sine, to: project))
+        let withTrack = try XCTUnwrap(store.projects.first { $0.id == project.id })
+        XCTAssertEqual(withTrack.allAudioTracks.count, 1)
+
+        let out = try await withTrack.addingSoundtrack(to: film, fps: settings.outputFPS, store: store)
+        let asset = AVURLAsset(url: out)
+        let audio = try await asset.loadTracks(withMediaType: .audio)
+        let video = try await asset.loadTracks(withMediaType: .video)
+        XCTAssertEqual(audio.count, 1, "montierter Film hat eine Audiospur")
+        XCTAssertEqual(video.count, 1)
+        let duration = try await asset.load(.duration).seconds
+        XCTAssertEqual(duration, 2, accuracy: 0.15, "Ton auf Filmlänge")
+    }
+
     private func writeSine(to url: URL, seconds: Double, settings: [String: Any]) throws {
         let format = try XCTUnwrap(AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 1))
         let file = try AVAudioFile(forWriting: url, settings: settings)

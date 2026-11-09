@@ -49,6 +49,17 @@ extension Project {
     }
 }
 
+extension Project {
+    /// Alle hörbaren Spuren (Musik und Studio-Spuren), fertig gerechnet,
+    /// unter den montierten Film. `lead`: Sekunden Vorspann vor Bild 1.
+    @MainActor
+    func addingSoundtrack(to film: URL, fps: Int32, lead: Double = 0, store: ProjectStore) async throws -> URL {
+        var sources = await renderedAudioSources(fps: fps, store: store)
+        if lead > 0 { sources = sources.map { var a = $0; a.start += lead; return a } }
+        return try await AudioMixer.underlay(sources, under: film)
+    }
+}
+
 // MARK: Kürzen, Blenden, Effekt
 
 /// Was mit einer Spur geschehen soll – nil, wenn sie unverändert bleibt.
@@ -218,6 +229,19 @@ enum AudioShaper {
 
 enum AudioMixer {
     static let sampleRate = 48_000.0
+
+    /// Mischt `sources` auf die Länge von `film` und legt sie als Tonspur
+    /// darunter. Ohne Spuren kommt der Film unverändert zurück. Gemeinsamer
+    /// Weg für Werkliste und Sofort-Ergebnis nach „Fertig“.
+    static func underlay(_ sources: [AudioSource], under film: URL) async throws -> URL {
+        guard !sources.isEmpty else { return film }
+        let duration = try await AVURLAsset(url: film).load(.duration).seconds
+        // Offline-Mischung im Hintergrund – sonst steht die Oberfläche
+        let mix = try await Task.detached(priority: .userInitiated) {
+            try mix(sources, duration: duration)
+        }.value
+        return try await StopMotionAssembler.addAudio(mix, to: film)
+    }
 
     /// Mischt alle Spuren zu einer AAC-Datei der Länge `duration` –
     /// offline, schneller als Echtzeit. Spuren, die über das Ende reichen,

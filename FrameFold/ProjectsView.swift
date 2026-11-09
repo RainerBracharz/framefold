@@ -1146,8 +1146,6 @@ struct ProjectDetailView: View {
         let subtitle = currentProject.createdDateText
 
         Task {
-            // Gekürzte und bearbeitete Spuren im Hintergrund fertig rechnen
-            var audio = await project.renderedAudioSources(fps: settings.outputFPS, store: store)
             do {
                 var url = try await StopMotionAssembler().assemble(
                     imageURLs: urls, settings: settings, greenScreen: compositor, overlays: overlays,
@@ -1158,20 +1156,10 @@ struct ProjectDetailView: View {
                 // Titel davor, Abspann dahinter – der Ton rückt um den Vorspann nach hinten
                 let wrapped = try await TitleSequence.wrap(film: url, title: title, subtitle: subtitle,
                                                            credits: credits, settings: settings)
-                url = wrapped.url
-                if wrapped.lead > 0 {
-                    audio = audio.map { var a = $0; a.start += wrapped.lead; return a }
-                }
                 // Alle Tonspuren (Musik aus der Werkansicht und Studio-Spuren)
                 // auf Filmlänge mischen und unterlegen
-                if !audio.isEmpty {
-                    let duration = try await AVURLAsset(url: url).load(.duration).seconds
-                    // Offline-Mischung im Hintergrund – sonst steht die Oberfläche
-                    let mix = try await Task.detached(priority: .userInitiated) {
-                        try AudioMixer.mix(audio, duration: duration)
-                    }.value
-                    url = try await StopMotionAssembler.addAudio(mix, to: url)
-                }
+                url = try await project.addingSoundtrack(to: wrapped.url, fps: settings.outputFPS,
+                                                         lead: wrapped.lead, store: store)
                 await MainActor.run {
                     exportURL = url
                     if ReviewPrompt.noteFinishedFilm() { requestReview() }
