@@ -237,10 +237,10 @@ enum AudioMixer {
         guard !sources.isEmpty else { return film }
         let duration = try await AVURLAsset(url: film).load(.duration).seconds
         // Offline-Mischung im Hintergrund – sonst steht die Oberfläche
-        let mix = try await Task.detached(priority: .userInitiated) {
-            try mix(sources, duration: duration)
+        let mixed: URL = try await Task.detached(priority: .userInitiated) { () throws -> URL in
+            try AudioMixer.mix(sources, duration: duration)
         }.value
-        return try await StopMotionAssembler.addAudio(mix, to: film)
+        return try await StopMotionAssembler.addAudio(mixed, to: film)
     }
 
     /// Mischt alle Spuren zu einer AAC-Datei der Länge `duration` –
