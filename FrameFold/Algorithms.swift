@@ -396,6 +396,91 @@ enum Algorithms {
         return max(-strength, min(strength, raw * strength))
     }
 
+    // MARK: Faltmuster mit Berg und Tal
+    //
+    // Hypar und Kreisfalte folgen dem Erzeugungsskript des Origami Simulator
+    // (CreasePatternScripts/Hypar, © 2018 Amanda Ghassaei, MIT-Lizenz),
+    // Miura-ori der üblichen Zickzack-Konstruktion. Alles wird hier
+    // berechnet, es werden keine Musterdateien mitgeliefert.
+
+    enum CreaseKind: Equatable { case mountain, valley, facet, cut }
+    struct Crease: Equatable { let p0: CGPoint; let p1: CGPoint; let kind: CreaseKind }
+
+    /// Hypar (eckig) oder Kreisfalte (rund): konzentrische Ringe, abwechselnd
+    /// Berg und Tal, außen Schnittkante. `segments` 4 = Quadrate, viele = Kreise.
+    /// Beim Hypar gehen die Diagonalen als „leicht vorknicken“ mit, bei der
+    /// Kreisfalte wird die Mitte ausgeschnitten.
+    static func concentricPleat(in rect: CGRect, segments: Int, pleats: Int) -> [Crease] {
+        guard segments >= 4, pleats > 0, rect.width > 0, rect.height > 0 else { return [] }
+        let square = segments == 4
+        let c = CGPoint(x: rect.midX, y: rect.midY)
+        let half = min(rect.width, rect.height) / 2
+        // Quadrat: Ecken auf den Diagonalen, also Radius = halbe Diagonale
+        let outer = square ? half * 2.0.squareRoot() : half
+        let steps = 2 * pleats + 2
+        let spacing = outer / Double(steps)
+        let turn = square ? Double.pi / 4 : 0
+        func pt(_ r: Double, _ i: Int) -> CGPoint {
+            let th = Double(i) / Double(segments) * 2 * .pi + turn
+            return CGPoint(x: c.x + r * cos(th), y: c.y + r * sin(th))
+        }
+        var out: [Crease] = []
+        func ring(_ r: Double, _ kind: CreaseKind) {
+            for i in 0..<segments { out.append(Crease(p0: pt(r, i), p1: pt(r, i + 1), kind: kind)) }
+        }
+        ring(outer, .cut)
+        var r = outer
+        for _ in 0..<pleats {
+            r -= spacing; ring(r, .mountain)
+            r -= spacing; ring(r, .valley)
+        }
+        r -= spacing
+        if square {
+            ring(r, .facet)
+            for i in 0..<4 {
+                out.append(Crease(p0: pt(outer, i), p1: pt(r, i), kind: .facet))
+                out.append(Crease(p0: pt(r, i), p1: c, kind: .facet))
+            }
+        } else {
+            ring(r, .cut)
+        }
+        return out
+    }
+
+    /// Miura-ori: senkrechte Geraden, waagrechte Zickzacklinien. Jede innere
+    /// Ecke hat drei Falten der einen und eine der anderen Art (Maekawa).
+    static func miuraOri(in rect: CGRect, cols: Int, rows: Int) -> [Crease] {
+        guard cols >= 2, rows >= 2, rect.width > 0, rect.height > 0 else { return [] }
+        let x0 = rect.minX, y0 = rect.minY, w = rect.width, h = rect.height
+        let cw = w / Double(cols), rh = h / Double(rows)
+        let amp = rh * 0.35
+        func x(_ i: Int) -> Double { x0 + Double(i) * cw }
+        // Zickzack um die Mitte der Zeilengrenze: gerade Spalten oben, ungerade unten
+        func y(_ i: Int, _ j: Int) -> Double {
+            if j == 0 { return y0 }
+            if j == rows { return y0 + h }
+            return y0 + Double(j) * rh + (i % 2 == 0 ? -amp / 2 : amp / 2)
+        }
+        var out: [Crease] = []
+        out.append(Crease(p0: CGPoint(x: x0, y: y0), p1: CGPoint(x: x0 + w, y: y0), kind: .cut))
+        out.append(Crease(p0: CGPoint(x: x0 + w, y: y0), p1: CGPoint(x: x0 + w, y: y0 + h), kind: .cut))
+        out.append(Crease(p0: CGPoint(x: x0 + w, y: y0 + h), p1: CGPoint(x: x0, y: y0 + h), kind: .cut))
+        out.append(Crease(p0: CGPoint(x: x0, y: y0 + h), p1: CGPoint(x: x0, y: y0), kind: .cut))
+        for j in 1..<rows {
+            let kind: CreaseKind = j % 2 == 1 ? .mountain : .valley
+            for i in 0..<cols {
+                out.append(Crease(p0: CGPoint(x: x(i), y: y(i, j)), p1: CGPoint(x: x(i + 1), y: y(i + 1, j)), kind: kind))
+            }
+        }
+        for i in 1..<cols {
+            for j in 0..<rows {
+                let kind: CreaseKind = (i + j) % 2 == 0 ? .mountain : .valley
+                out.append(Crease(p0: CGPoint(x: x(i), y: y(i, j)), p1: CGPoint(x: x(i), y: y(i, j + 1)), kind: kind))
+            }
+        }
+        return out
+    }
+
     // MARK: Faltvorlage (druckbares Falzmuster)
 
     struct FoldLine: Equatable { let p0: CGPoint; let p1: CGPoint; let cut: Bool }

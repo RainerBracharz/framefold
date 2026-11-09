@@ -275,6 +275,7 @@ struct ProjectDetailView: View {
     @State private var isRenderingFlipbook = false
     @State private var foldTemplateURL: URL?
     @State private var isRenderingTemplate = false
+    @State private var showsPatternChoice = false
     @State private var shareItem: ShareItem?
     @State private var isEditingFrames = false
     @State private var showDeleteProject = false
@@ -1014,17 +1015,18 @@ struct ProjectDetailView: View {
 
                     if mode.showsTolino {
                         pdfButton(
-                            title: foldTemplateURL == nil
-                                ? (isRenderingTemplate ? "Wird gesetzt…" : "Faltvorlage")
-                                : "Faltvorlage teilen",
+                            title: isRenderingTemplate ? "Wird gesetzt…" : "Faltvorlage",
                             icon: "arrow.triangle.turn.up.right.diamond",
                             disabled: currentProject.frameCount == 0 || isRenderingTemplate
                         ) {
-                            if let foldTemplateURL {
-                                shareItem = ShareItem(url: foldTemplateURL)
-                            } else {
-                                renderFoldTemplate()
+                            showsPatternChoice = true
+                        }
+                        .confirmationDialog("Faltmuster wählen", isPresented: $showsPatternChoice, titleVisibility: .visible) {
+                            ForEach(FoldPattern.allCases) { pattern in
+                                Button(pattern.label) { renderFoldTemplate(pattern) }
                             }
+                        } message: {
+                            Text("Hypar, Kreisfalte und Miura-ori haben Berg- und Talfalten.")
                         }
                     }
                 }
@@ -1061,7 +1063,7 @@ struct ProjectDetailView: View {
         .opacity(disabled ? 0.45 : 1)
     }
 
-    private func renderFoldTemplate() {
+    private func renderFoldTemplate(_ pattern: FoldPattern) {
         isRenderingTemplate = true
         let urls = store.frameURLs(for: currentProject)
         let title = currentProject.name
@@ -1071,7 +1073,7 @@ struct ProjectDetailView: View {
             let result: URL? = {
                 guard let first = urls.first, let data = try? Data(contentsOf: first),
                       let image = UIImage(data: data) else { return nil }
-                return FoldTemplateRenderer.render(image: image, title: title)
+                return FoldTemplateRenderer.render(image: image, title: title, pattern: pattern)
             }()
             await MainActor.run {
                 foldTemplateURL = result

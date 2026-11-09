@@ -65,6 +65,12 @@ struct HelpView: View {
             "Im Export wird alles in den Film eingebrannt.",
             "Bild-Ebene legt eigene Bilder (auch mit Transparenz) über den Film. Für Rotoskopie wählst du „Video als Bilder …“, zeichnest darüber und ersetzt das Foto durch Papier.",
         ]),
+        Topic(id: "foldtemplate", symbol: "arrow.triangle.turn.up.right.diamond", title: "Faltvorlagen", steps: [
+            "Im Werk „Faltvorlage“ tippen und ein Muster wählen. Das erste Bild des Werks wird mit dem Muster gedruckt.",
+            "Hypar, Kreisfalte und Miura-ori haben Bergfalten (rot, Strich-Punkt) und Talfalten (blau, gestrichelt).",
+            "Ausdrucken, falten und jeden Faltschritt mit FrameFold aufnehmen.",
+            "Hypar und Kreisfalte folgen dem Origami Simulator von Amanda Ghassaei, entstanden mit Erik Demaine und Tomohiro Tachi (MIT-Lizenz).",
+        ]),
         Topic(id: "privacy", symbol: "lock", title: "Datenschutz", steps: [
             "Kein Konto, keine Werbung, keine Verbindung ins Internet. Licht (Art-Net) und Motion Control (Bluetooth) verbinden sich nur, wenn du sie einschaltest, und nur mit deinem eigenen Gerät.",
             "Bilder, Ton und Werke bleiben auf dem Gerät.",

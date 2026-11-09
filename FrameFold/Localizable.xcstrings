@@ -72757,6 +72757,2106 @@
           }
         }
       }
+    },
+    "Raster": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grid"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grille"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuadrícula"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Griglia"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raster"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "グリッド"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grade"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mřížka"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siatka"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сітка"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сетка"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Izgara"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "격자"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "网格"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gitter"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutnät"
+          }
+        }
+      }
+    },
+    "Hypar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ハイパー"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гіпар"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гипар"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "하이파"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "双曲抛物面"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar"
+          }
+        }
+      }
+    },
+    "Kreisfalte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Circular pleat"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plis circulaires"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pliegue circular"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pieghe circolari"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cirkelplooi"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "円形プリーツ"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prega circular"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kruhové sklady"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fałdy koliste"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Кругові складки"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Круговые складки"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dairesel pli"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "원형 주름"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "圆形褶皱"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cirkelfold"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cirkelveck"
+          }
+        }
+      }
+    },
+    "Miura-ori": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miura-ori"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miura-ori"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miura-ori"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miura-ori"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miura-ori"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ミウラ折り"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miura-ori"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miura-ori"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miura-ori"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Міура-орі"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Миура-ори"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miura-ori"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "미우라 접기"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "三浦折叠"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miura-ori"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miura-ori"
+          }
+        }
+      }
+    },
+    "Entlang der gestrichelten Linien falten.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fold along the dashed lines."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pliez le long des lignes pointillées."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dobla por las líneas discontinuas."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Piega lungo le linee tratteggiate."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vouw langs de stippellijnen."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "破線に沿って折ります。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dobre ao longo das linhas tracejadas."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skládejte podél přerušovaných čar."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Złóż wzdłuż linii przerywanych."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Згинайте вздовж пунктирних ліній."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сгибайте по пунктирным линиям."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kesikli çizgiler boyunca katlayın."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "점선을 따라 접으세요."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "沿虚线折叠。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fold langs de stiplede linjer."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vik längs de streckade linjerna."
+          }
+        }
+      }
+    },
+    "Die Quadrate abwechselnd als Berg und Tal falten, von außen nach innen. Die Diagonalen nur leicht vorknicken und das Blatt sanft zusammenschieben, bis es sich zum Sattel wölbt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fold the squares alternately as mountain and valley, from the outside in. Crease the diagonals only lightly and push the sheet together gently until it curves into a saddle."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pliez les carrés en alternant montagne et vallée, de l'extérieur vers l'intérieur. Marquez à peine les diagonales et resserrez doucement la feuille jusqu'à ce qu'elle se cambre en selle."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dobla los cuadrados alternando monte y valle, de fuera hacia dentro. Marca apenas las diagonales y junta la hoja con suavidad hasta que se curve en forma de silla."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Piega i quadrati alternando monte e valle, dall'esterno verso l'interno. Segna appena le diagonali e comprimi delicatamente il foglio finché si incurva a sella."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vouw de vierkanten afwisselend als berg en dal, van buiten naar binnen. Vouw de diagonalen maar licht voor en duw het vel voorzichtig samen tot het een zadel vormt."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正方形を外側から内側へ、山折りと谷折りを交互に折ります。対角線は軽く折り目をつけるだけにして、紙をそっと寄せると鞍の形に反ります。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dobre os quadrados alternando montanha e vale, de fora para dentro. Vinque as diagonais só de leve e empurre a folha com cuidado até ela se curvar em sela."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skládejte čtverce střídavě jako hřbet a údolí, zvenku dovnitř. Úhlopříčky jen lehce předehněte a list jemně stlačujte, až se prohne do sedla."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Składaj kwadraty na przemian jako górę i dolinę, od zewnątrz do środka. Przekątne tylko lekko zagnij i delikatnie ściskaj arkusz, aż wygnie się w siodło."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Згинайте квадрати по черзі горою й долиною, ззовні до центру. Діагоналі лише злегка намітьте й обережно стискайте аркуш, доки він не вигнеться сідлом."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сгибайте квадраты попеременно горой и долиной, снаружи к центру. Диагонали лишь слегка наметьте и осторожно сжимайте лист, пока он не изогнётся седлом."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kareleri dıştan içe doğru sırayla dağ ve vadi olarak katlayın. Köşegenleri yalnızca hafifçe işaretleyin ve kâğıdı eyer gibi kıvrılana kadar nazikçe sıkıştırın."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "정사각형을 바깥에서 안쪽으로 산접기와 골접기를 번갈아 접으세요. 대각선은 살짝만 접고 종이를 부드럽게 모으면 말안장 모양으로 휘어집니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从外向内交替以山折和谷折折叠正方形。对角线只需轻轻压出折痕，再轻轻将纸向内推，直到弯成马鞍形。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fold kvadraterne skiftevis som bjerg og dal, udefra og ind. Fold kun diagonalerne let og skub arket forsigtigt sammen, til det buer som en sadel."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vik kvadraterna växelvis som berg och dal, utifrån och in. Vik diagonalerna bara lätt och tryck försiktigt ihop arket tills det böjer sig till en sadel."
+          }
+        }
+      }
+    },
+    "Außen und die Mitte ausschneiden. Die Kreise abwechselnd als Berg und Tal falten und den Ring zusammenschieben, bis er sich zum Sattel dreht.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cut out the outside and the centre. Fold the circles alternately as mountain and valley and push the ring together until it twists into a saddle."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Découpez l'extérieur et le centre. Pliez les cercles en alternant montagne et vallée et resserrez l'anneau jusqu'à ce qu'il se torde en selle."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recorta el exterior y el centro. Dobla los círculos alternando monte y valle y junta el anillo hasta que se tuerza en forma de silla."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ritaglia l'esterno e il centro. Piega i cerchi alternando monte e valle e comprimi l'anello finché si torce a sella."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Knip de buitenkant en het midden uit. Vouw de cirkels afwisselend als berg en dal en duw de ring samen tot hij tot een zadel draait."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "外側と中央を切り取ります。円を山折りと谷折りで交互に折り、輪を寄せていくと鞍の形にねじれます。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recorte a parte de fora e o centro. Dobre os círculos alternando montanha e vale e empurre o anel até ele se torcer em sela."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vystřihněte vnějšek i střed. Kruhy skládejte střídavě jako hřbet a údolí a prstenec stlačujte, až se stočí do sedla."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wytnij zewnętrzną część i środek. Składaj okręgi na przemian jako górę i dolinę i ściskaj pierścień, aż skręci się w siodło."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Виріжте зовнішню частину й середину. Згинайте кола по черзі горою й долиною і стискайте кільце, доки воно не закрутиться сідлом."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вырежьте внешнюю часть и середину. Сгибайте круги попеременно горой и долиной и сжимайте кольцо, пока оно не закрутится седлом."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dış kısmı ve ortayı kesin. Daireleri sırayla dağ ve vadi olarak katlayın ve halkayı eyer gibi kıvrılana kadar sıkıştırın."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "바깥과 가운데를 오려 내세요. 원을 산접기와 골접기로 번갈아 접고 고리를 모으면 말안장 모양으로 비틀립니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "剪去外圈和中心。交替以山折和谷折折叠圆圈，再把圆环向内推，直到扭成马鞍形。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klip ydersiden og midten ud. Fold cirklerne skiftevis som bjerg og dal, og skub ringen sammen, til den drejer sig til en sadel."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klipp ut ytterkanten och mitten. Vik cirklarna växelvis som berg och dal och tryck ihop ringen tills den vrider sig till en sadel."
+          }
+        }
+      }
+    },
+    "Alle Linien vorfalten, Berg und Tal wie markiert. Dann zwei gegenüberliegende Ecken zusammenschieben, das Blatt legt sich flach zusammen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pre-crease all lines, mountain and valley as marked. Then push two opposite corners together and the sheet folds up flat."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquez toutes les lignes, montagne et vallée comme indiqué. Rapprochez ensuite deux coins opposés et la feuille se replie à plat."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marca todas las líneas, monte y valle según se indica. Luego junta dos esquinas opuestas y la hoja se pliega en plano."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segna tutte le linee, monte e valle come indicato. Poi avvicina due angoli opposti e il foglio si richiude in piano."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vouw alle lijnen voor, berg en dal zoals aangegeven. Duw dan twee tegenover elkaar liggende hoeken samen, het vel vouwt zich plat op."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべての線に印どおり山折り・谷折りの折り目をつけます。向かい合う2つの角を寄せると、紙が平らにたたまれます。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vinque todas as linhas, montanha e vale como marcado. Depois junte dois cantos opostos e a folha se fecha plana."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Předehněte všechny čáry, hřbet a údolí podle označení. Pak stlačte k sobě dva protilehlé rohy a list se složí naplocho."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zagnij wszystkie linie, górę i dolinę jak zaznaczono. Potem ściśnij dwa przeciwległe rogi, a arkusz złoży się na płasko."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Попередньо зігніть усі лінії, гору й долину як позначено. Потім зсуньте два протилежні кути, і аркуш складеться пласко."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Предварительно согните все линии, гору и долину как отмечено. Затем сдвиньте два противоположных угла, и лист сложится плоско."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm çizgileri işaretlendiği gibi dağ ve vadi olarak önceden katlayın. Sonra karşılıklı iki köşeyi birbirine itin, kâğıt düz biçimde katlanır."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "표시대로 모든 선을 산접기와 골접기로 미리 접어 두세요. 마주 보는 두 모서리를 모으면 종이가 납작하게 접힙니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按标记把所有线预先折出山折和谷折。然后把相对的两个角向内推，纸就会平整地折叠起来。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forfold alle linjer, bjerg og dal som markeret. Skub så to modsatte hjørner sammen, og arket folder sig fladt."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Förvik alla linjer, berg och dal som markerat. Tryck sedan ihop två motsatta hörn så viker sig arket platt."
+          }
+        }
+      }
+    },
+    "FALTVORLAGE · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FOLD TEMPLATE · %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GABARIT DE PLIAGE · %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PLANTILLA DE PLEGADO · %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MODELLO DI PIEGATURA · %@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "VOUWSJABLOON · %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折りテンプレート · %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MOLDE DE DOBRA · %@"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ŠABLONA SKLÁDÁNÍ · %@"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SZABLON SKŁADANIA · %@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ШАБЛОН ЗГИНАННЯ · %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ШАБЛОН СГИБАНИЯ · %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "KATLAMA ŞABLONU · %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접기 템플릿 · %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折叠模板 · %@"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FOLDESKABELON · %@"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "VIKMALL · %@"
+          }
+        }
+      }
+    },
+    "Bergfalte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mountain fold"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pli montagne"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pliegue monte"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Piega a monte"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bergvouw"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "山折り"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dobra montanha"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hřbet"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zgięcie górskie"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Згин горою"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сгиб горой"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dağ katı"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "산접기"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "山折"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bjergfold"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bergsvikning"
+          }
+        }
+      }
+    },
+    "Talfalte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valley fold"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pli vallée"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pliegue valle"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Piega a valle"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dalvouw"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "谷折り"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dobra vale"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Údolí"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zgięcie dolinowe"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Згин долиною"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сгиб долиной"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vadi katı"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "골접기"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "谷折"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dalfold"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dalvikning"
+          }
+        }
+      }
+    },
+    "leicht vorknicken": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "crease lightly"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "marquer légèrement"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "marcar suavemente"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "segnare appena"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "licht voorvouwen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "軽く折り目をつける"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vincar de leve"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lehce předehnout"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lekko zagiąć"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "злегка намітити"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "слегка наметить"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hafifçe işaretle"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "살짝 접기"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "轻压折痕"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fold let"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vik lätt"
+          }
+        }
+      }
+    },
+    "schneiden": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cut"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "découper"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cortar"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tagliare"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "knippen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "切る"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cortar"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "stříhat"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ciąć"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "різати"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "резать"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kes"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자르기"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "剪开"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "klip"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "klipp"
+          }
+        }
+      }
+    },
+    "Faltmuster nach dem Origami Simulator von Amanda Ghassaei (MIT-Lizenz).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crease patterns after Origami Simulator by Amanda Ghassaei (MIT License)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motifs de pliage d'après Origami Simulator d'Amanda Ghassaei (licence MIT)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patrones de plegado según Origami Simulator de Amanda Ghassaei (licencia MIT)."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schemi di piegatura da Origami Simulator di Amanda Ghassaei (licenza MIT)."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vouwpatronen naar Origami Simulator van Amanda Ghassaei (MIT-licentie)."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折り図は Amanda Ghassaei の Origami Simulator に基づきます（MIT ライセンス）。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Padrões de dobra segundo o Origami Simulator de Amanda Ghassaei (licença MIT)."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vzory skládání podle Origami Simulator od Amandy Ghassaei (licence MIT)."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wzory zgięć według Origami Simulator Amandy Ghassaei (licencja MIT)."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схеми згинів за Origami Simulator Аманди Гассаї (ліцензія MIT)."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схемы сгибов по Origami Simulator Аманды Гассаи (лицензия MIT)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Katlama desenleri Amanda Ghassaei'nin Origami Simulator'ından (MIT Lisansı)."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접기 패턴은 Amanda Ghassaei의 Origami Simulator를 따릅니다(MIT 라이선스)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折痕图案参照 Amanda Ghassaei 的 Origami Simulator（MIT 许可证）。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foldemønstre efter Origami Simulator af Amanda Ghassaei (MIT-licens)."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vikmönster efter Origami Simulator av Amanda Ghassaei (MIT-licens)."
+          }
+        }
+      }
+    },
+    "Faltmuster wählen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a crease pattern"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un motif de pliage"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir patrón de plegado"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli lo schema di piegatura"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vouwpatroon kiezen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折り図を選ぶ"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolher padrão de dobra"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vybrat vzor skládání"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wybierz wzór zgięć"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вибрати схему згинів"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрать схему сгибов"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Katlama desenini seç"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접기 패턴 선택"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择折痕图案"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vælg foldemønster"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Välj vikmönster"
+          }
+        }
+      }
+    },
+    "Hypar, Kreisfalte und Miura-ori haben Berg- und Talfalten.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, circular pleat and Miura-ori have mountain and valley folds."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, plis circulaires et Miura-ori ont des plis montagne et vallée."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, pliegue circular y Miura-ori tienen pliegues monte y valle."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, pieghe circolari e Miura-ori hanno pieghe a monte e a valle."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, cirkelplooi en Miura-ori hebben berg- en dalvouwen."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ハイパー、円形プリーツ、ミウラ折りには山折りと谷折りがあります。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, prega circular e Miura-ori têm dobras montanha e vale."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, kruhové sklady a Miura-ori mají hřbety i údolí."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, fałdy koliste i Miura-ori mają zgięcia górskie i dolinowe."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гіпар, кругові складки й міура-орі мають згини горою й долиною."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гипар, круговые складки и миура-ори имеют сгибы горой и долиной."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, dairesel pli ve Miura-ori dağ ve vadi katları içerir."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "하이파, 원형 주름, 미우라 접기에는 산접기와 골접기가 있습니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "双曲抛物面、圆形褶皱和三浦折叠都有山折和谷折。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, cirkelfold og Miura-ori har bjerg- og dalfolder."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, cirkelveck och Miura-ori har berg- och dalvikningar."
+          }
+        }
+      }
+    },
+    "Faltvorlagen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fold templates"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gabarits de pliage"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plantillas de plegado"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modelli di piegatura"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vouwsjablonen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折りテンプレート"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moldes de dobra"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Šablony skládání"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Szablony składania"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Шаблони згинання"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Шаблоны сгибания"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Katlama şablonları"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접기 템플릿"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折叠模板"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foldeskabeloner"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vikmallar"
+          }
+        }
+      }
+    },
+    "Im Werk „Faltvorlage“ tippen und ein Muster wählen. Das erste Bild des Werks wird mit dem Muster gedruckt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In a work, tap “Fold template” and choose a pattern. The work's first frame is printed with the pattern."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dans une œuvre, touchez « Gabarit de pliage » et choisissez un motif. La première image de l'œuvre est imprimée avec le motif."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En una obra, toca «Plantilla de plegado» y elige un patrón. La primera imagen de la obra se imprime con el patrón."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In un'opera tocca «Modello di piegatura» e scegli uno schema. Il primo fotogramma dell'opera viene stampato con lo schema."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tik in een werk op ‘Vouwsjabloon’ en kies een patroon. Het eerste beeld van het werk wordt met het patroon afgedrukt."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "作品で「折りテンプレート」をタップして折り図を選びます。作品の最初のコマが折り図付きで印刷されます。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Em uma obra, toque em “Molde de dobra” e escolha um padrão. O primeiro quadro da obra é impresso com o padrão."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "V díle klepněte na „Šablona skládání“ a vyberte vzor. První snímek díla se vytiskne se vzorem."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "W pracy stuknij „Szablon składania” i wybierz wzór. Pierwsza klatka pracy zostanie wydrukowana z wzorem."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "У роботі торкніться «Шаблон згинання» й виберіть схему. Перший кадр роботи друкується зі схемою."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В работе коснитесь «Шаблон сгибания» и выберите схему. Первый кадр работы печатается со схемой."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir çalışmada “Katlama şablonu”na dokunun ve bir desen seçin. Çalışmanın ilk karesi desenle birlikte yazdırılır."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "작품에서 ‘접기 템플릿’을 탭하고 패턴을 고르세요. 작품의 첫 프레임이 패턴과 함께 인쇄됩니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在作品中轻点“折叠模板”并选择图案。作品的第一帧会连同图案一起打印。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tryk på “Foldeskabelon” i et værk, og vælg et mønster. Værkets første billede udskrives med mønsteret."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tryck på ”Vikmall” i ett verk och välj ett mönster. Verkets första bild skrivs ut med mönstret."
+          }
+        }
+      }
+    },
+    "Hypar, Kreisfalte und Miura-ori haben Bergfalten (rot, Strich-Punkt) und Talfalten (blau, gestrichelt).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, circular pleat and Miura-ori have mountain folds (red, dash-dot) and valley folds (blue, dashed)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, plis circulaires et Miura-ori ont des plis montagne (rouge, trait-point) et des plis vallée (bleu, pointillés)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, pliegue circular y Miura-ori tienen pliegues monte (rojo, raya y punto) y pliegues valle (azul, discontinuo)."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, pieghe circolari e Miura-ori hanno pieghe a monte (rosse, tratto-punto) e a valle (blu, tratteggiate)."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, cirkelplooi en Miura-ori hebben bergvouwen (rood, streep-punt) en dalvouwen (blauw, gestreept)."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ハイパー、円形プリーツ、ミウラ折りには山折り（赤、一点鎖線）と谷折り（青、破線）があります。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, prega circular e Miura-ori têm dobras montanha (vermelho, traço-ponto) e vale (azul, tracejado)."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, kruhové sklady a Miura-ori mají hřbety (červeně, čerchovaně) a údolí (modře, čárkovaně)."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, fałdy koliste i Miura-ori mają zgięcia górskie (czerwone, kreska-kropka) i dolinowe (niebieskie, przerywane)."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гіпар, кругові складки й міура-орі мають згини горою (червоні, штрихпунктир) і долиною (сині, пунктир)."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гипар, круговые складки и миура-ори имеют сгибы горой (красные, штрихпунктир) и долиной (синие, пунктир)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, dairesel pli ve Miura-ori dağ katları (kırmızı, çizgi-nokta) ve vadi katları (mavi, kesikli) içerir."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "하이파, 원형 주름, 미우라 접기에는 산접기(빨강, 일점쇄선)와 골접기(파랑, 점선)가 있습니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "双曲抛物面、圆形褶皱和三浦折叠有山折（红色，点划线）和谷折（蓝色，虚线）。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, cirkelfold og Miura-ori har bjergfolder (rød, streg-prik) og dalfolder (blå, stiplet)."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar, cirkelveck och Miura-ori har bergsvikningar (röd, streck-punkt) och dalvikningar (blå, streckad)."
+          }
+        }
+      }
+    },
+    "Ausdrucken, falten und jeden Faltschritt mit FrameFold aufnehmen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Print, fold and capture every folding step with FrameFold."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imprimez, pliez et capturez chaque étape avec FrameFold."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imprime, dobla y captura cada paso con FrameFold."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stampa, piega e cattura ogni passaggio con FrameFold."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afdrukken, vouwen en elke vouwstap vastleggen met FrameFold."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "印刷して折り、折る工程を一つずつ FrameFold で撮影します。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imprima, dobre e capture cada etapa com o FrameFold."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vytiskněte, složte a každý krok skládání zachyťte ve FrameFold."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wydrukuj, złóż i nagraj każdy krok składania w FrameFold."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Надрукуйте, зігніть і зніміть кожен крок у FrameFold."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Распечатайте, сложите и снимите каждый шаг в FrameFold."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yazdırın, katlayın ve her katlama adımını FrameFold ile çekin."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "인쇄하고 접은 뒤 접는 과정을 하나하나 FrameFold로 촬영하세요."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打印、折叠，并用 FrameFold 拍下每一步折叠。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Udskriv, fold og optag hvert foldetrin med FrameFold."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skriv ut, vik och fånga varje viksteg med FrameFold."
+          }
+        }
+      }
+    },
+    "Hypar und Kreisfalte folgen dem Origami Simulator von Amanda Ghassaei, entstanden mit Erik Demaine und Tomohiro Tachi (MIT-Lizenz).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar and circular pleat follow Origami Simulator by Amanda Ghassaei, made with Erik Demaine and Tomohiro Tachi (MIT License)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar et plis circulaires suivent Origami Simulator d'Amanda Ghassaei, créé avec Erik Demaine et Tomohiro Tachi (licence MIT)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar y pliegue circular siguen Origami Simulator de Amanda Ghassaei, creado con Erik Demaine y Tomohiro Tachi (licencia MIT)."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar e pieghe circolari seguono Origami Simulator di Amanda Ghassaei, realizzato con Erik Demaine e Tomohiro Tachi (licenza MIT)."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar en cirkelplooi volgen Origami Simulator van Amanda Ghassaei, gemaakt met Erik Demaine en Tomohiro Tachi (MIT-licentie)."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ハイパーと円形プリーツは、Erik Demaine と Tomohiro Tachi と共に作られた Amanda Ghassaei の Origami Simulator に基づきます（MIT ライセンス）。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar e prega circular seguem o Origami Simulator de Amanda Ghassaei, criado com Erik Demaine e Tomohiro Tachi (licença MIT)."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar a kruhové sklady vycházejí z Origami Simulator od Amandy Ghassaei, vytvořeného s Erikem Demainem a Tomohirem Tachim (licence MIT)."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar i fałdy koliste opierają się na Origami Simulator Amandy Ghassaei, stworzonym z Erikiem Demainem i Tomohiro Tachim (licencja MIT)."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гіпар і кругові складки зроблено за Origami Simulator Аманди Гассаї, створеним з Еріком Демейном і Томохіро Тачі (ліцензія MIT)."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гипар и круговые складки сделаны по Origami Simulator Аманды Гассаи, созданному с Эриком Демейном и Томохиро Тати (лицензия MIT)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar ve dairesel pli, Erik Demaine ve Tomohiro Tachi ile geliştirilen Amanda Ghassaei'nin Origami Simulator'ını izler (MIT Lisansı)."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "하이파와 원형 주름은 Erik Demaine, Tomohiro Tachi와 함께 만든 Amanda Ghassaei의 Origami Simulator를 따릅니다(MIT 라이선스)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "双曲抛物面和圆形褶皱参照 Amanda Ghassaei 与 Erik Demaine、Tomohiro Tachi 共同开发的 Origami Simulator（MIT 许可证）。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar og cirkelfold følger Origami Simulator af Amanda Ghassaei, lavet med Erik Demaine og Tomohiro Tachi (MIT-licens)."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hypar och cirkelveck följer Origami Simulator av Amanda Ghassaei, gjord med Erik Demaine och Tomohiro Tachi (MIT-licens)."
+          }
+        }
+      }
     }
   },
   "version": "1.3"
