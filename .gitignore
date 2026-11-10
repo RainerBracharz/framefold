@@ -11,7 +11,6 @@ DerivedData/
 __pycache__/
 *.pyc
 .venv/
-reference-pipeline/.venv/
 
 # Arbeitsmaterial: Rohvideos, Screenshots, Build-Protokolle, Zwischenstände.
 # Bleibt lokal liegen, gehört aber nicht in ein öffentliches Repository —
@@ -55,5 +54,5 @@ fastlane/screenshots-mac
 # Laufzeitprofile aus Debug-Starts
 *.profraw
 
-# Gemini-Lektorat: Arbeitsstände, bleiben lokal
+# Lektorat: Arbeitsstände, bleiben lokal
 lektorat/

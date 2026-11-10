@@ -470,7 +470,11 @@ platform :ios do
     app = Spaceship::ConnectAPI::App.find(APP_ID)
 
     dir = File.expand_path("store-shots", Dir.pwd)
-    FileUtils.rm_rf(dir); FileUtils.mkdir_p(dir)
+    # Vorige Bilder in den Papierkorb statt sie zu löschen
+    if File.directory?(dir)
+      FileUtils.mv(dir, File.expand_path("~/.Trash/store-shots-#{Time.now.strftime('%Y%m%d-%H%M%S')}"))
+    end
+    FileUtils.mkdir_p(dir)
 
     v = app.get_app_store_versions.first
     UI.message("Version #{v.version_string} (#{v.app_store_state})")

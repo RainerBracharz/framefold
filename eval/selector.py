@@ -3,8 +3,7 @@ Bildauswahl – Python-Nachbau der Swift-App, Schritt für Schritt:
 
   ProcessingViewModel → FrameAnalyzer → KeyframeSelector → Algorithms
 
-Die Standardwerte sind die aus PipelineSettings (Models.swift), NICHT die der
-älteren reference-pipeline/pipeline.py (6 fps / 0,35 / 0,5 s). Weicht hier
+Die Standardwerte sind die aus PipelineSettings (Models.swift). Weicht hier
 etwas von der App ab, misst das Eval eine andere App als die im Store.
 
 Nicht nachgebaut: die Handerkennung (Apple Vision, nur auf dem Gerät).

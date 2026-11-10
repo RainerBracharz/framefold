@@ -28,8 +28,8 @@ final class FrameFoldUITests: XCTestCase {
     /// entstehen in der vollen Werkstatt, die Durchsicht im Einfach-Modus.
     private var showAll = false
     private var shotIndex = 0
-    /// Weitere Sprachen (es/it/nl): deutsch → Zielsprache aus
-    /// localization/<lang>.json (FF_L10N). Jeder gesuchte Knopf wird um seine
+    /// Weitere Sprachen: deutsch → Zielsprache aus dem Katalog
+    /// (FF_L10N = Pfad zu FrameFold/Localizable.xcstrings). Jeder gesuchte Knopf wird um seine
     /// Übersetzung ergänzt – so laufen dieselben Schritte in jeder Sprache.
     private var l10n: [String: String] = [:]
 
@@ -47,9 +47,13 @@ final class FrameFoldUITests: XCTestCase {
         }
 
         if let path = env["FF_L10N"], let data = FileManager.default.contents(atPath: path),
-           let table = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-            for (key, value) in table {
-                guard let value = value as? String, !key.hasPrefix("_") else { continue }
+           let catalog = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let strings = catalog["strings"] as? [String: Any] {
+            for (key, entry) in strings {
+                guard let entry = entry as? [String: Any],
+                      let localizations = entry["localizations"] as? [String: Any],
+                      let unit = (localizations[lang] as? [String: Any])?["stringUnit"] as? [String: Any],
+                      let value = unit["value"] as? String else { continue }
                 l10n[key] = value
                 // „Fertig · %lld“ → Präfix „Fertig ·“ für die Suche mit prefix
                 if let cut = key.range(of: " %lld"), let vcut = value.range(of: " %") {
