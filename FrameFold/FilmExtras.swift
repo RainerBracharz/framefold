@@ -19,13 +19,16 @@ final class GreenScreenCompositor: @unchecked Sendable {
     private let generator: AVAssetImageGenerator?
     private let fps: Int32
     private let context = CIContext(options: [.cacheIntermediates: false])
+    private let lock = NSLock()
+    private var lastBackground: CIImage?
 
     init?(key: ChromaKey, background: URL?, fps: Int32) {
         guard let hue = key.hue, let background else { return nil }
         self.hue = hue
         self.fps = max(1, fps)
-        if let image = UIImage(contentsOfFile: background.path), let cg = image.cgImage {
-            still = CIImage(cgImage: cg)
+        // Mit der Drehung aus der Datei – Hochkant-Fotos lägen sonst quer.
+        if let image = CIImage(contentsOf: background, options: [.applyOrientationProperty: true]) {
+            still = image
             generator = nil
         } else {
             let gen = AVAssetImageGenerator(asset: AVURLAsset(url: background))
@@ -43,7 +46,14 @@ final class GreenScreenCompositor: @unchecked Sendable {
         var background = still
         if let generator {
             let time = CMTime(value: CMTimeValue(index), timescale: fps)
-            if let cg = try? await generator.image(at: time).image { background = CIImage(cgImage: cg) }
+            if let cg = try? await generator.image(at: time).image {
+                background = CIImage(cgImage: cg)
+                lock.withLock { lastBackground = background }
+            } else {
+                // Hintergrundfilm zu Ende: sein letztes Bild bleibt stehen,
+                // statt das rohe Grün zu zeigen.
+                background = lock.withLock { lastBackground }
+            }
         }
         guard let background, let keyed = StudioImaging.keyed(frame, hue: hue) else { return frame }
         return Self.compose(foreground: CIImage(cgImage: keyed), background: background,
@@ -149,7 +159,10 @@ enum TitleSequence {
         if let title {
             parts.append(try await segment(TitleCards.title(title, subtitle: subtitle, size: size),
                                            seconds: titleSeconds, settings: settings))
-            lead = titleSeconds
+            // So lang, wie der Titel wirklich steht: ganze Bilder. Bei 3 fps
+            // sind das 2,67 s statt 2,5 – der Ton setzte sonst zu früh ein.
+            let fps = Double(max(1, settings.outputFPS))
+            lead = Double(max(1, Int((titleSeconds * fps).rounded()))) / fps
         }
         parts.append(film)
         if let credits {

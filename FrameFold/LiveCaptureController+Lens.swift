@@ -102,7 +102,7 @@ extension LiveCaptureController {
                     }
                 }
             }
-            _ = self.clapListener?.start()
+            if self.clapListener?.start() != true { self.clapTrigger = false }   // kein Mikrofon
         }
     }
 }

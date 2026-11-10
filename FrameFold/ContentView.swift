@@ -48,6 +48,8 @@ struct ContentView: View {
             // Papier übers ganze Fenster, auch wenn der Inhalt schmaler ist (Mac)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .paperStage()
+            // Im Werk gewählte Export-Einstellungen gelten auch hier
+            .onAppear { viewModel.reloadSettings() }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     LogoTile(size: 26)

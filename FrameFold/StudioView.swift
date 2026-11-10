@@ -18,6 +18,9 @@ struct StudioView: View {
 
     /// Aufnahmezahl beim Einschalten des Faltmusters – ab da zählen die Schritte
     @State private var foldGuideBase = 0
+    @FocusState private var hostFieldFocused: Bool
+    /// Zuletzt angewendetes Faltmuster – ein Wechsel beginnt wieder bei Schritt 1.
+    @State private var appliedFoldGuide: FoldGuide?
     @State private var settings = StudioSettings.restored()
     @StateObject private var cache = StudioFrameCache()
     @StateObject private var reference = StudioReference()
@@ -196,10 +199,16 @@ struct StudioView: View {
             }
             .onChange(of: controller.blackoutActive) { _, on in StudioBlackout.set(on) }
             .onChange(of: urls.count) { _, _ in referenceFollow() }
+            .onChange(of: frameOnViewer) { _, _ in referenceFollow() }   // auch beim Abspielen und Umschalten
             .onChange(of: selected) { _, _ in referenceFollow() }
             .onChange(of: project?.allAudioTracks) { _, _ in reloadAudio() }
             .onChange(of: shapes.revision) { _, _ in reloadAudio() }
             .onChange(of: project?.frameCount) { _, _ in applyLight() }
+            // Geänderter Plan (Stimmung entfernt, Überblenden, Kanäle): sofort ans Licht
+            .onChange(of: plannedLight) { _, _ in applyLight() }
+            .onChange(of: lights.universe) { _, _ in applyLight() }
+            .onChange(of: lights.channels) { _, _ in applyLight() }
+            .onChange(of: hostFieldFocused) { _, _ in updateHub() }
             .onChange(of: project?.greenScreen) { _, _ in rebuildGreenScreen() }
             .onReceive(NotificationCenter.default.publisher(for: .ffStudio)) { note in
                 if let raw = note.object as? String, let command = StudioCommand(rawValue: raw) { handle(command) }
@@ -263,7 +272,9 @@ struct StudioView: View {
     }
 
     private func updateHub() {
+        // Auch im Adressfeld ruhen die Einzeltasten – ⌫ entfernte sonst ein Bild.
         hub.isActive = !showXSheet && !showVoice && !showSpeech && overlayFrame == nil && noteFrame == nil
+            && !hostFieldFocused
     }
 
     private var xSheet: some View {
@@ -1052,6 +1063,7 @@ struct StudioView: View {
                 TextField("IP-Adresse des Art-Net-Knotens", text: $lights.host)
                     .textFieldStyle(.roundedBorder).font(Theme.mono(11))
                     .autocorrectionDisabled()
+                    .focused($hostFieldFocused)
                     .onSubmit { applyLight() }
                 stepper("Universum", value: $lights.universe, in: 0...32767) { "\($0)" }
                 stepper("Kanäle", value: $lights.channels, in: 1...32) { "\($0)" }
@@ -1350,15 +1362,22 @@ struct StudioView: View {
         playIndex = range.lowerBound
         let rate = Double(fps)
         audioPlayer.play(from: Double(range.lowerBound) / rate)
-        let interval = UInt64(1_000_000_000 / Double(fps))
+        // Das Bild folgt der Uhr, nicht der Zahl der Takte: Sonst liefe es dem
+        // Ton mit jedem Bild ein Stück weiter hinterher.
         playTask = Task { @MainActor in
+            var started = Date()
             while !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: interval)
+                let elapsed = Date().timeIntervalSince(started)
+                let wait = (floor(elapsed * rate) + 1) / rate - elapsed
+                try? await Task.sleep(nanoseconds: UInt64(max(0.001, wait) * 1_000_000_000))
                 if Task.isCancelled { break }
-                if playIndex < range.upperBound {
-                    playIndex += 1
-                    cache.preload(window(from: playIndex))
+                if let index = StudioPlayback.frame(elapsed: Date().timeIntervalSince(started), fps: rate, in: range) {
+                    if index != playIndex {
+                        playIndex = index
+                        cache.preload(window(from: index))
+                    }
                 } else if loop {
+                    started = Date()
                     playIndex = range.lowerBound
                     audioPlayer.play(from: Double(range.lowerBound) / rate)
                 } else {
@@ -1438,6 +1457,7 @@ struct StudioView: View {
         controller.intervalStartDate = settings.useStartTime ? start : nil
         controller.intervalEndDate = settings.useEndTime ? start.addingTimeInterval(settings.durationMinutes * 60) : nil
         controller.intervalFrameLimit = settings.useFrameLimit ? settings.frameLimit : nil
+        controller.intervalBaseCount = controller.capturedCount
         controller.captureMode = .interval
     }
 
@@ -1453,6 +1473,7 @@ struct StudioView: View {
         cache.preload(Array(urls.suffix(12)))
         reloadAudio()
         rebuildGreenScreen()
+        applyLight()   // „Licht steuern“ ist gemerkt: erstes Bild schon mit der geplanten Stimmung
     }
 
     #if DEBUG
@@ -1528,13 +1549,15 @@ struct StudioView: View {
         StudioBlackout.set(false)
         // Die übrigen Ansichten kennen diese Schalter nicht – zurück auf Standard.
         controller.publishesLiveFrames = false
-        controller.tracksPaper = false
+        // Die Blatterkennung stellt der Kamera-Tab passend zum einfachen Sucher.
+        appliedFoldGuide = nil
         controller.averageFrames = 1
         controller.captureBlackout = false
         controller.autoShutter = true
         controller.intervalStartDate = nil
         controller.intervalEndDate = nil
         controller.intervalFrameLimit = nil
+        controller.intervalBaseCount = nil
         if controller.intervalOverride != nil, controller.captureMode == .interval {
             controller.captureMode = .motion   // Studio-Zeitraffer endet mit dem Studio
         }
@@ -1543,7 +1566,8 @@ struct StudioView: View {
 
     private func apply(_ s: StudioSettings) {
         controller.publishesLiveFrames = s.viewMode != .normal || s.loupe || s.greenPreview
-        if controller.tracksPaper != (s.foldGuide != .off) {
+        if appliedFoldGuide != s.foldGuide {
+            appliedFoldGuide = s.foldGuide
             controller.tracksPaper = s.foldGuide != .off
             foldGuideBase = controller.capturedCount   // neues Muster beginnt bei Schritt 1
         }

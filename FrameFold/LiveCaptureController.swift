@@ -684,6 +684,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
     var intervalStartDate: Date?
     var intervalEndDate: Date?
     var intervalFrameLimit: Int?
+    /// Bildzahl beim Start des Zeitraffers – das Limit zählt von hier, auch
+    /// wenn der Takt nach „Neu fixieren“ neu anläuft.
+    var intervalBaseCount: Int?
     /// Eigener Takt des Studios (nil = gespeichertes `intervalSeconds`)
     var intervalOverride: Double?
     /// Laufende Studio-Auslösung (Abdunkeln/Mitteln) – `stop()` bricht sie ab
@@ -716,8 +719,16 @@ final class LiveCaptureController: NSObject, ObservableObject {
 
     // MARK: Lifecycle
 
+    /// Zählt jeden Start und Stopp: Ein Start, der noch auf die Kamera-
+    /// Erlaubnis wartet, darf nach einem Stopp nicht mehr anlaufen.
+    private var lifecycleGeneration = 0
+    /// Starten und Stoppen der Kamera in fester Reihenfolge.
+    private static let sessionQueue = DispatchQueue(label: "com.bracharz.framefold.capture-session")
+
     func start(onCapture: @escaping (Data) -> Void) {
         self.onCapture = onCapture
+        lifecycleGeneration += 1
+        let generation = lifecycleGeneration
         cameraUnavailable = false   // jeder Start beginnt unbelastet
 
 #if targetEnvironment(simulator) || (targetEnvironment(macCatalyst) && DEBUG)
@@ -733,6 +744,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         #if !targetEnvironment(simulator)
         Task {
             let granted = await AVCaptureDevice.requestAccess(for: .video)
+            guard generation == self.lifecycleGeneration else { return }   // inzwischen gestoppt
             guard granted else {
                 self.permissionDenied = true
                 return
@@ -743,7 +755,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 self.cameraUnavailable = true
                 return
             }
-            Task.detached { [session = self.session] in
+            Self.sessionQueue.async { [session = self.session] in
                 session.startRunning()
             }
             self.resetSessionState()
@@ -817,6 +829,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     }
 
     func stop() {
+        lifecycleGeneration += 1
         isRunning = false
         clapListener?.stop()
         prepareTask?.cancel()
@@ -852,7 +865,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         simulatorTask?.cancel()
         simulatorTask = nil
         hint = nil
-        Task.detached { [session = self.session] in
+        Self.sessionQueue.async { [session = self.session] in
             session.stopRunning()
         }
     }
@@ -1394,7 +1407,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
             }
             // Gezählt werden echte Bilder, nicht Takte: Ein Takt ohne scharfes
             // Bild ergibt keines.
-            let startCount = self?.capturedCount ?? 0
+            let startCount = self?.intervalBaseCount ?? self?.capturedCount ?? 0
             while !Task.isCancelled {
                 let seconds = self?.intervalOverride ?? self?.intervalSeconds ?? 3.0
                 try? await Task.sleep(nanoseconds: UInt64(max(0.5, seconds) * 1_000_000_000))
@@ -1402,6 +1415,12 @@ final class LiveCaptureController: NSObject, ObservableObject {
                 if Self.intervalFinished(taken: self.capturedCount - startCount, limit: self.intervalFrameLimit,
                                          end: self.intervalEndDate, now: Date()) {
                     self.hint = String(localized: "Zeitraffer beendet")
+                    // Studio-Zeitraffer: zurück zum Bewegungs-Auslöser, sonst
+                    // bliebe der Knopf auf „stoppen“ stehen.
+                    if self.intervalOverride != nil {
+                        self.intervalBaseCount = nil
+                        self.captureMode = .motion
+                    }
                     break
                 }
                 self.captureNow(userInitiated: false)
@@ -1632,7 +1651,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         if focusIsLocked, currentMotion <= motionThreshold { relockFocusOnly() }
         // Im Intervallmodus nie länger warten als bis zum nächsten Takt.
         let budget = captureMode == .interval
-            ? min(2.5, max(0.4, intervalSeconds * 0.8))
+            ? min(2.5, max(0.4, (intervalOverride ?? intervalSeconds) * 0.8))
             : 2.5
         pendingCaptureTask = Task { [weak self] in
             let deadline = Date().addingTimeInterval(budget)
@@ -1808,7 +1827,10 @@ final class LiveCaptureController: NSObject, ObservableObject {
         prepareCapture(fallback: frame)
     }
 
-    func commit(frame: CGImage, originalData: Data? = nil, allowPhoto: Bool = true) {
+    /// `systemShutterPlayed`: Das Foto wurde schon aufgenommen (Abdunkeln) –
+    /// für den Verschlusston zählt es wie ein hier angefordertes.
+    func commit(frame: CGImage, originalData: Data? = nil, allowPhoto: Bool = true,
+                systemShutterPlayed: Bool = false) {
         armed = false
         handCheckResult = nil
         stableSince = nil
@@ -1823,7 +1845,10 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // ruhig. (Beim Foto spielt das System selbst den Verschlusston.)
         let photoTask: Task<Data?, Never>? = (allowPhoto && originalData == nil && usesFullResolutionPhoto)
             ? Task { await self.capturePhotoData() } : nil
-        if playShutterSound, photoTask == nil {
+        // Der Systemton eines Fotos ist stumm geschaltet, wo das Gerät es
+        // erlaubt – dann entscheidet allein der Schalter „Auslöse-Ton“.
+        let systemSounded = (photoTask != nil || systemShutterPlayed) && !photoShutterIsSilent
+        if playShutterSound, !systemSounded {
             AudioServicesPlaySystemSound(1108) // Kamera-Verschluss
         }
 

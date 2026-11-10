@@ -23,6 +23,14 @@ final class ProcessingViewModel: ObservableObject {
     @Published var settings = PipelineSettings.restored() {
         didSet { settings.persist() }
     }
+
+    /// Im Werk geänderte Export-Einstellungen übernehmen, wenn der Video-Tab
+    /// wieder erscheint – sonst überschriebe seine ältere Kopie sie bei der
+    /// nächsten Änderung.
+    func reloadSettings() {
+        let latest = PipelineSettings.restored()
+        if latest != settings { settings = latest }
+    }
     @Published var reviewFrames: [ReviewFrame] = []
     @Published var isRecomputing = false
     /// Quelle des letzten Laufs – für "Als Projekt sichern"

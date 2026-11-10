@@ -133,7 +133,9 @@ enum OverlayRenderer {
     }
 
     static func font(_ size: CGFloat) -> UIFont {
-        UIFont(name: "Inter-SemiBold", size: size) ?? UIFont.systemFont(ofSize: size, weight: .semibold)
+        // Inter Medium ist gebündelt (Inter SemiBold war es nie – es griff
+        // immer die Systemschrift).
+        UIFont(name: "Inter-Medium", size: size) ?? UIFont.systemFont(ofSize: size, weight: .medium)
     }
 
     /// Rahmen, den Text oder Sprechblase einnehmen (für Treffer im Editor).

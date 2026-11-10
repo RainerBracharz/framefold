@@ -221,6 +221,13 @@ enum StudioPlayback {
         return lower...upper
     }
 
+    /// Bild, das `elapsed` Sekunden nach dem Start läuft – nil, wenn der
+    /// Bereich zu Ende ist. Jedes Bild steht 1 ÷ fps Sekunden.
+    static func frame(elapsed: Double, fps: Double, in range: ClosedRange<Int>) -> Int? {
+        let index = range.lowerBound + Int(max(0, elapsed) * max(1, fps))
+        return index <= range.upperBound ? index : nil
+    }
+
     /// „Kurz abspielen“: die letzten `frames` Bilder vor dem Live-Bild.
     static func shortRange(count: Int, frames: Int) -> ClosedRange<Int>? {
         guard count > 0 else { return nil }

@@ -585,10 +585,22 @@ struct LiveCaptureView: View {
     /// alles, darüber genau eine Spalte mit Status und Bedienung. Keine
     /// verschachtelten Stapel, keine Layout-Prioritäten: so kann die
     /// Bedienleiste strukturell nicht verschwinden.
+    /// Zeigt der Kamera-Tab die Studio-Arbeitsfläche statt des einfachen Suchers?
+    private var usesStudio: Bool {
+        mode.showsAdvanced && (Platform.isMac || (Platform.isPad && horizontalSizeClass == .regular)
+                               || (!Platform.isPad && iPhoneStudio))
+    }
+
+    /// Blatterkennung für das Faltmuster des einfachen Suchers. Im Studio
+    /// entscheidet dessen eigene Einstellung.
+    private func syncPaperTracking() {
+        guard !usesStudio else { return }
+        controller.tracksPaper = mode.showsTolino && foldGuide != .off
+    }
+
     private func captureView(project: Project) -> some View {
         Group {
-            if mode.showsAdvanced, Platform.isMac || (Platform.isPad && horizontalSizeClass == .regular)
-                || (!Platform.isPad && iPhoneStudio) {
+            if usesStudio {
                 // Profi-Arbeitsfläche: Betrachter, Zeitleiste, Inspektor
                 StudioView(controller: controller, projectID: project.id,
                            onFinish: { finishSession(project: project) },
@@ -647,8 +659,12 @@ struct LiveCaptureView: View {
             }
         }
         #endif
+        // Moduswechsel mitten in der Sitzung und Rückkehr aus dem Studio:
+        // Die Blatterkennung folgt dem, was der Sucher gerade zeigt.
+        .onChange(of: modeRaw) { _, _ in syncPaperTracking() }
+        .onChange(of: usesStudio) { _, _ in syncPaperTracking() }
         .onAppear {
-            controller.tracksPaper = mode.showsTolino && foldGuide != .off
+            syncPaperTracking()
             foldGuideBase = controller.capturedCount
             UIApplication.shared.isIdleTimerDisabled = true
             // Am Mac wirkt der Idle-Timer nicht – dort hält eine Aktivität
@@ -759,8 +775,8 @@ struct LiveCaptureView: View {
             WatchLink.shared.onFinish = nil
             WatchLink.shared.pushSessionEnded()
         }
-        .onChange(of: foldGuide) { _, guide in
-            controller.tracksPaper = mode.showsTolino && guide != .off
+        .onChange(of: foldGuide) { _, _ in
+            syncPaperTracking()
             foldGuideBase = controller.capturedCount   // neues Muster beginnt bei Schritt 1
         }
         .onChange(of: controller.capturedCount) { _, count in

@@ -202,7 +202,9 @@ final class StudioReference: ObservableObject {
         guard (try? FileManager.default.copyItem(at: source, to: copy)) != nil else { return }
         name = source.lastPathComponent
         lastRequest = nil
-        if let ui = UIImage(contentsOfFile: copy.path), let cg = ui.cgImage {
+        // Über die Vorschau-Funktion: Sie dreht Hochkant-Fotos richtig herum
+        // und rechnet gleich beim Dekodieren klein.
+        if let ui = UIImage.thumbnail(at: copy, maxPixelSize: 1600), let cg = ui.cgImage {
             still = cg
             generator = nil
             render(cg)
@@ -235,6 +237,8 @@ final class StudioReference: ObservableObject {
         let time = CMTime(value: CMTimeValue(frame), timescale: max(1, fps))
         Task {
             guard let cg = try? await generator.image(at: time).image else { return }
+            // Inzwischen ein anderes Bild verlangt: das ältere nicht mehr zeigen
+            guard let current = lastRequest, current == (frame, fps) else { return }
             render(cg)
         }
     }

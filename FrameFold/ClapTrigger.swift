@@ -9,8 +9,33 @@ final class ClapListener: @unchecked Sendable {
     private var lastClap = Date.distantPast
     private let onClap: @Sendable () -> Void
     private(set) var isRunning = false
+    private var observers: [NSObjectProtocol] = []
 
     init(onClap: @escaping @Sendable () -> Void) { self.onClap = onClap }
+
+    deinit { observers.forEach(NotificationCenter.default.removeObserver) }
+
+    /// Nach einem Anruf, Siri oder einem Wechsel des Mikrofons steht die
+    /// Audio-Engine still. Dann neu aufsetzen, statt taub weiterzulaufen.
+    private func observeInterruptions() {
+        guard observers.isEmpty else { return }
+        let center = NotificationCenter.default
+        let restart: @Sendable (Notification) -> Void = { [weak self] _ in
+            DispatchQueue.main.async {
+                guard let self, self.isRunning, !self.engine.isRunning else { return }
+                self.engine.inputNode.removeTap(onBus: 0)
+                self.isRunning = false
+                _ = self.start()
+            }
+        }
+        observers.append(center.addObserver(forName: .AVAudioEngineConfigurationChange, object: engine, queue: nil, using: restart))
+        #if !targetEnvironment(macCatalyst)
+        observers.append(center.addObserver(forName: AVAudioSession.interruptionNotification, object: nil, queue: nil) { note in
+            let raw = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
+            if raw == AVAudioSession.InterruptionType.ended.rawValue { restart(note) }
+        })
+        #endif
+    }
 
     func start() -> Bool {
         guard !isRunning else { return true }
@@ -30,6 +55,7 @@ final class ClapListener: @unchecked Sendable {
             return false
         }
         isRunning = true
+        observeInterruptions()
         return true
     }
 
@@ -38,6 +64,10 @@ final class ClapListener: @unchecked Sendable {
         engine.inputNode.removeTap(onBus: 0)
         engine.stop()
         isRunning = false
+        #if !targetEnvironment(macCatalyst)
+        // Mikrofon freigeben; scheitert still, wenn gerade anderer Ton läuft.
+        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        #endif
     }
 
     private func analyze(_ buffer: AVAudioPCMBuffer) {

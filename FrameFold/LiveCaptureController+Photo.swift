@@ -40,6 +40,15 @@ extension LiveCaptureController {
         #endif
     }
 
+    /// Nimmt das Foto ohne Systemton auf? Dann spielt die App ihren eigenen,
+    /// wenn „Auslöse-Ton“ an ist.
+    var photoShutterIsSilent: Bool {
+        #if !targetEnvironment(macCatalyst)
+        if #available(iOS 18.0, *) { return photoOutput?.isShutterSoundSuppressionSupported ?? false }
+        #endif
+        return false
+    }
+
     /// Soll dieses Bild als Foto in voller Auflösung kommen?
     var usesFullResolutionPhoto: Bool {
         fullResolution && photoOutput != nil && isRunning
@@ -54,6 +63,9 @@ extension LiveCaptureController {
         settings.maxPhotoDimensions = photoOutput.maxPhotoDimensions
         settings.photoQualityPrioritization = .speed
         if photoOutput.supportedFlashModes.contains(.off) { settings.flashMode = .off }
+        if #available(iOS 18.0, *), photoOutput.isShutterSoundSuppressionSupported {
+            settings.isShutterSoundSuppressionEnabled = true
+        }
         return await withCheckedContinuation { cont in
             let delegate = PhotoCaptureDelegate { data in cont.resume(returning: data) }
             photoDelegates.insert(delegate)

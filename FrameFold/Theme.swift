@@ -252,6 +252,7 @@ final class LightTilt: ObservableObject {
     @Published var offset: CGPoint = .zero
     private let manager = CMMotionManager()
     private var baseX = 0.0, baseY = 0.0, hasBase = false
+    private var smooth: CGPoint = .zero
 
     func start() {
         guard manager.isDeviceMotionAvailable, !manager.isDeviceMotionActive else { return }
@@ -265,8 +266,11 @@ final class LightTilt: ObservableObject {
             baseX = baseX * 0.995 + g.x * 0.005
             baseY = baseY * 0.995 + g.y * 0.005
             let dx = g.x - baseX, dy = g.y - baseY
-            offset = CGPoint(x: offset.x * 0.7 + dx * 0.3,
-                             y: offset.y * 0.7 + dy * 0.3)
+            smooth = CGPoint(x: smooth.x * 0.7 + dx * 0.3,
+                             y: smooth.y * 0.7 + dy * 0.3)
+            // In Ruhe nichts melden – sonst zeichnete der Startbildschirm
+            // 30-mal pro Sekunde neu, auch wenn das Gerät liegt.
+            if abs(smooth.x - offset.x) > 0.002 || abs(smooth.y - offset.y) > 0.002 { offset = smooth }
         }
     }
 

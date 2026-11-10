@@ -37,12 +37,26 @@ extension LiveCaptureController {
             // Abgebrochen (Sitzung beendet): `stop()` hat schon aufgeräumt, und
             // eine neue Auslösung darf ihr Abdunkeln behalten.
             guard !Task.isCancelled else { return }
+            // Das Foto in voller Auflösung noch im Dunkeln aufnehmen – sonst
+            // wäre es mit dem wieder hellen Bildschirm belichtet.
+            var photo: Data?
+            let wantsPhoto = blackout && count == 1 && self.usesFullResolutionPhoto
+            if wantsPhoto {
+                photo = await self.capturePhotoData()
+                guard !Task.isCancelled else { return }
+            }
             if blackout { self.setBlackout(false) }
             self.isPreparingCapture = false
             self.prepareTask = nil
             guard self.isRunning, self.sessionStart == session else { return }
-            // Gemittelt ist das Ergebnis selbst das Bild fürs Werk – kein Foto
-            self.commit(frame: Self.average(frames) ?? fallback, allowPhoto: count == 1)
+            // Gemittelt ist das Ergebnis selbst das Bild fürs Werk – kein Foto.
+            // Mitteln im Hintergrund: bis zu 16 Bilder in voller Größe.
+            let averaged = count == 1 ? frames.first : await Task.detached(priority: .userInitiated) {
+                Self.average(frames)
+            }.value
+            guard self.isRunning, self.sessionStart == session else { return }
+            self.commit(frame: averaged ?? fallback, originalData: photo,
+                        allowPhoto: count == 1 && !wantsPhoto, systemShutterPlayed: photo != nil)
         }
     }
 
@@ -55,6 +69,7 @@ extension LiveCaptureController {
         let count = width * height * 4
         var sum = [Float](repeating: 0, count: count)
         var bytes = [UInt8](repeating: 0, count: count)
+        var floats = [Float](repeating: 0, count: count)
         var used = 0
         let space = CGColorSpaceCreateDeviceRGB()
         let info = CGImageAlphaInfo.premultipliedLast.rawValue
@@ -67,7 +82,6 @@ extension LiveCaptureController {
                 return true
             }
             guard drawn else { continue }
-            var floats = [Float](repeating: 0, count: count)
             vDSP_vfltu8(bytes, 1, &floats, 1, vDSP_Length(count))
             vDSP_vadd(sum, 1, floats, 1, &sum, 1, vDSP_Length(count))
             used += 1

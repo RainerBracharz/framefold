@@ -245,4 +245,12 @@ final class StudioTests: XCTestCase {
     }
 
     private func XCTUnwrapAsync<T>(_ value: T?) throws -> T { try XCTUnwrap(value) }
+
+    func testPlaybackFollowsTheClock() {
+        // 12 fps, Bilder 10…20: nach 0,5 s läuft Bild 16, nach 1 s ist Schluss
+        XCTAssertEqual(StudioPlayback.frame(elapsed: 0, fps: 12, in: 10...20), 10)
+        XCTAssertEqual(StudioPlayback.frame(elapsed: 0.5, fps: 12, in: 10...20), 16)
+        XCTAssertEqual(StudioPlayback.frame(elapsed: 0.9, fps: 12, in: 10...20), 20)
+        XCTAssertNil(StudioPlayback.frame(elapsed: 1.0, fps: 12, in: 10...20))
+    }
 }

@@ -8,6 +8,7 @@ import CoreMotion
 final class MotionLevel: ObservableObject {
     @Published var gx: Double = 0
     @Published var gy: Double = 0
+    private var smoothX = 0.0, smoothY = 0.0
 
     /// Geglättete Drehrate in rad/s. Auf einem Stativ liegt sie im
     /// Sensorrauschen (< 0,005), in der Hand erzeugt schon ruhiges Halten
@@ -50,8 +51,14 @@ final class MotionLevel: ObservableObject {
             guard let self, let motion else { return }
             let g = motion.gravity
             // leichte Glättung gegen Zittern
-            self.gx = self.gx * 0.6 + g.x * 0.4
-            self.gy = self.gy * 0.6 + g.y * 0.4
+            self.smoothX = self.smoothX * 0.6 + g.x * 0.4
+            self.smoothY = self.smoothY * 0.6 + g.y * 0.4
+            // Nur spürbare Änderungen melden: Jede Meldung zeichnet den
+            // ganzen Sucher neu, 30-mal pro Sekunde auch auf dem Stativ.
+            if abs(self.smoothX - self.gx) > 0.004 || abs(self.smoothY - self.gy) > 0.004 {
+                self.gx = self.smoothX
+                self.gy = self.smoothY
+            }
 
             let r = motion.rotationRate
             let magnitude = (r.x * r.x + r.y * r.y + r.z * r.z).squareRoot()

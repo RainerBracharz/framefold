@@ -82,7 +82,9 @@ struct VoiceRecordSheet: View {
     let onDone: (URL?, Int) -> Void
 
     @StateObject private var recorder = VoiceRecorder()
-    @State private var images: [UIImage?] = []
+    /// Lädt nur die Bilder um die laufende Stelle – der ganze Film im
+    /// Speicher wären bei langen Werken Gigabyte.
+    @StateObject private var frames = StudioFrameCache()
     @State private var beginTask: Task<Void, Never>?
     @State private var countdown: Int?
     @State private var startDate: Date?
@@ -157,26 +159,38 @@ struct VoiceRecordSheet: View {
         .frame(minWidth: 520)
         .background(Theme.darkroom)
         .preferredColorScheme(.dark)
-        .task { await loadImages() }
+        .task {
+            while !Task.isCancelled {
+                preload(from: Date())
+                try? await Task.sleep(nanoseconds: 500_000_000)
+            }
+        }
         .onDisappear { beginTask?.cancel(); if recorder.isRecording { recorder.stop() } }
     }
 
     /// Bild, das zu diesem Zeitpunkt der Aufnahme läuft (vorher: das Startbild).
     private func frameImage(at date: Date) -> UIImage? {
-        guard !images.isEmpty else { return nil }
+        let slice = urls.dropFirst(startFrame)
+        guard !slice.isEmpty else { return nil }
         var index = 0
         if let startDate, recorder.isRecording {
             index = Int(date.timeIntervalSince(startDate) * Double(fps))
         }
-        return images[min(images.count - 1, max(0, index))]
+        let position = slice.startIndex + min(slice.count - 1, max(0, index))
+        // Ist das Bild noch nicht geladen, bleibt das vorige stehen.
+        return frames.image(urls[position]) ?? (position > slice.startIndex ? frames.image(urls[position - 1]) : nil)
     }
 
-    private func loadImages() async {
-        let slice = Array(urls.dropFirst(startFrame))
-        let loaded = await Task.detached(priority: .userInitiated) {
-            slice.map { UIImage.thumbnail(at: $0, maxPixelSize: 900) }
-        }.value
-        images = loaded
+    /// Die nächsten Bilder vorab laden, während der Film mitläuft.
+    private func preload(from date: Date) {
+        let slice = urls.dropFirst(startFrame)
+        guard !slice.isEmpty else { return }
+        var index = 0
+        if let startDate, recorder.isRecording {
+            index = Int(date.timeIntervalSince(startDate) * Double(fps))
+        }
+        let first = slice.startIndex + min(slice.count - 1, max(0, index))
+        frames.preload(Array(urls[first..<min(urls.count, first + max(12, Int(fps) * 2))]), replacing: true)
     }
 
     private func begin() {

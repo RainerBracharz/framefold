@@ -176,13 +176,14 @@ private struct SeededNoise {
 final class SpeechMaker {
     private let synthesizer = AVSpeechSynthesizer()
 
-    /// Stimmen in den Sprachen der App, die beste Qualität zuerst.
-    static var voices: [AVSpeechSynthesisVoice] {
-        let wanted = ["de", "en", "fr", "es", "it", "nl", "ja", "pt"]
+    /// Stimmen in den 17 Sprachen der App, die beste Qualität zuerst.
+    /// Einmal je Start gelesen – die Abfrage ist teuer.
+    static let voices: [AVSpeechSynthesisVoice] = {
+        let wanted = ["de", "en", "fr", "es", "it", "nl", "ja", "pt", "cs", "da", "ko", "pl", "ru", "sv", "tr", "uk", "zh"]
         return AVSpeechSynthesisVoice.speechVoices()
             .filter { voice in wanted.contains { voice.language.hasPrefix($0) } }
             .sorted { ($0.language, -$0.quality.rawValue, $0.name) < ($1.language, -$1.quality.rawValue, $1.name) }
-    }
+    }()
 
     /// Text in eine Audiodatei sprechen (nil, wenn nichts entstand).
     func render(_ text: String, voice: AVSpeechSynthesisVoice?, rate: Float) async -> URL? {

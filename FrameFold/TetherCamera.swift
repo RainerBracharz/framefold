@@ -70,6 +70,8 @@ final class TetherCamera: NSObject, ObservableObject {
         canTakePicture = false
         cameraName = nil
         waitingForPicture = false
+        catalogComplete = false
+        shootWhenCatalogued = false
     }
 
     /// Auslösen. Das Foto kommt über `onImage`, sobald die Kamera es meldet.
@@ -83,8 +85,25 @@ final class TetherCamera: NSObject, ObservableObject {
             return
         }
         lastError = nil
+        // Die Kamera meldet noch die Fotos, die schon auf der Karte liegen:
+        // erst danach auslösen, sonst käme eines davon als neue Aufnahme.
+        guard catalogComplete else { shootWhenCatalogued = true; return }
         waitingForPicture = true
         camera.perform(Self.takePicture)
+    }
+
+    /// Hat die Kamera den Inhalt der Karte fertig gemeldet?
+    private var catalogComplete = false
+    private var shootWhenCatalogued = false
+
+    fileprivate func catalogued(_ device: ICCameraDevice) {
+        guard device == camera, !catalogComplete else { return }
+        catalogComplete = true
+        known.formUnion((device.mediaFiles ?? []).compactMap { $0.name })
+        if shootWhenCatalogued {
+            shootWhenCatalogued = false
+            shoot()
+        }
     }
 
     fileprivate func handleNewItems(_ items: [ICCameraItem]) {
@@ -92,6 +111,7 @@ final class TetherCamera: NSObject, ObservableObject {
         let files = items.compactMap { $0 as? ICCameraFile }.filter { file in
             guard let name = file.name, !known.contains(name) else { return false }
             known.insert(name)
+            guard catalogComplete else { return false }   // Bestand der Karte, keine Aufnahme
             return StudioFolderWatch.imageExtensions.contains((name as NSString).pathExtension.lowercased())
         }
         guard waitingForPicture, let file = files.last else { return }
@@ -135,6 +155,13 @@ final class TetherCamera: NSObject, ObservableObject {
         isReady = true
         // Vorhandene Fotos auf der Karte zählen nicht als neue Aufnahme
         known = Set((device.mediaFiles ?? []).compactMap { $0.name })
+        catalogComplete = false
+        shootWhenCatalogued = false
+        // Manche Kameras melden das Ende des Katalogs nicht: nach 5 s gilt er als fertig.
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: 5_000_000_000)
+            self?.catalogued(device)
+        }
         canTakePicture = device.capabilities.contains("ICCameraDeviceCanTakePicture")
             && device.responds(to: Self.takePicture)
     }
@@ -188,7 +215,9 @@ extension TetherCamera: ICCameraDeviceDelegate {
         }
     }
     nonisolated func cameraDevice(_ camera: ICCameraDevice, didReceivePTPEvent eventData: Data) {}
-    nonisolated func deviceDidBecomeReady(withCompleteContentCatalog device: ICCameraDevice) {}
+    nonisolated func deviceDidBecomeReady(withCompleteContentCatalog device: ICCameraDevice) {
+        Task { @MainActor in self.catalogued(device) }
+    }
     nonisolated func cameraDeviceDidRemoveAccessRestriction(_ device: ICDevice) {}
     nonisolated func cameraDeviceDidEnableAccessRestriction(_ device: ICDevice) {}
 }

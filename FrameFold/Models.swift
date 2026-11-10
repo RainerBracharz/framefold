@@ -299,13 +299,27 @@ extension PipelineSettings {
         return .standard
     }()
 
+    private static let decodeLock = NSLock()
+    private static var decodeCache: (data: Data, settings: PipelineSettings)?
+
     /// Die zuletzt benutzten Einstellungen – wer einmal 2 fps und Story-Format
     /// gewählt hat, will das beim nächsten Export nicht neu einstellen.
     static func restored() -> PipelineSettings {
         var s = PipelineSettings()
-        if let data = store.data(forKey: storageKey),
-           let saved = try? JSONDecoder().decode(PipelineSettings.self, from: data) {
-            s = saved
+        if let data = store.data(forKey: storageKey) {
+            // Sucher und Studio fragen bei jedem Neuzeichnen: nur dekodieren,
+            // wenn sich der gespeicherte Stand geändert hat.
+            decodeLock.lock()
+            let cached = decodeCache?.data == data ? decodeCache?.settings : nil
+            decodeLock.unlock()
+            if let cached {
+                s = cached
+            } else if let saved = try? JSONDecoder().decode(PipelineSettings.self, from: data) {
+                s = saved
+                decodeLock.lock()
+                decodeCache = (data, saved)
+                decodeLock.unlock()
+            }
         }
         #if DEBUG
         // Testläufe: Echo-Stärke ohne den Regler im Video-Tab setzen (FF_ECHO_STRENGTH=0.5)

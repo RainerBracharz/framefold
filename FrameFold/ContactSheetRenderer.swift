@@ -48,9 +48,12 @@ enum ContactSheetRenderer {
                         let url = frameURLs[frameIndex]
                         frameIndex += 1
 
-                        if let data = try? Data(contentsOf: url),
-                           let image = UIImage(data: data) {
-                            drawAspectFill(image: image, in: rect)
+                        // Klein gerechnet einbetten: Das volle Foto in jeder
+                        // Kachel machte das PDF hunderte Megabyte schwer.
+                        autoreleasepool {
+                            if let image = UIImage.thumbnail(at: url, maxPixelSize: 800) {
+                                drawAspectFill(image: image, in: rect)
+                            }
                         }
                         // Haarlinienrahmen wie im Kontaktbogen der App
                         let cg = ctx.cgContext
