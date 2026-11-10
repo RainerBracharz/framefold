@@ -898,6 +898,14 @@ struct LiveCaptureView: View {
             case .tolino:   tolinoHUD
             }
 
+            if mode.showsTolino, foldGuide != .off {
+                CatalogLabel(verbatim: FoldGuideOverlay.label(guide: foldGuide, paperQuad: controller.paperQuad,
+                                                              step: controller.capturedCount - foldGuideBase),
+                             color: Theme.paperOnDark, size: 11)
+                    .padding(.horizontal, 10).padding(.vertical, 6)
+                    .background(Theme.darkroom.opacity(0.75))
+            }
+
             HStack(spacing: 8) {
                 statusBadge
                 // Im Einfach-Modus nur zeigen, wenn die App tatsächlich
@@ -1088,8 +1096,13 @@ struct LiveCaptureView: View {
         ZStack {
             if Platform.simulatedCamera {
                 if let sim = controller.simulatedPreview {
-                    Image(uiImage: sim).resizable()
-                        .aspectRatio(contentMode: Platform.isMac ? .fit : .fill)
+                    // In Color.clear gelegt: ein füllendes Bild würde den ZStack
+                    // sonst über den sichtbaren Sucher hinaus vergrößern.
+                    Color.clear.overlay {
+                        Image(uiImage: sim).resizable()
+                            .aspectRatio(contentMode: Platform.isMac ? .fit : .fill)
+                    }
+                    .clipped()
                 } else {
                     Theme.darkroom
                 }
@@ -1114,7 +1127,8 @@ struct LiveCaptureView: View {
             if mode.showsTolino, foldGuide != .off {
                 FoldGuideOverlay(guide: foldGuide, paperQuad: controller.paperQuad,
                                  step: controller.capturedCount - foldGuideBase,
-                                 imageAspect: controller.frameAspect, fills: !Platform.isMac)
+                                 imageAspect: controller.frameAspect, fills: !Platform.isMac,
+                                 showsLabel: false)
             }
             if mode.showsAdvanced, showLevel, !Platform.isMac {
                 BubbleLevel(gx: level.gx, gy: level.gy, isLevel: level.isLevel)

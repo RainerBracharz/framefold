@@ -135,6 +135,9 @@ struct FoldGuideOverlay: View {
     /// Seitenverhältnis des Kamerabilds und wie es in der Ansicht liegt
     var imageAspect: Double = 1
     var fills = false
+    /// Schrittzeile im Bild. Die iPhone-Kamera zeigt sie stattdessen in der
+    /// Bedienung: Ihr Kamerabild läuft unter Kopfleiste und Bedienung hinaus.
+    var showsLabel = true
 
     var body: some View {
         Canvas { ctx, size in
@@ -146,8 +149,8 @@ struct FoldGuideOverlay: View {
         .opacity(paperQuad == nil ? 0 : 1)
         .animation(.easeInOut(duration: 0.35), value: paperQuad == nil)
         .overlay(alignment: .bottom) {
-            if guide != .off {
-                Text(label)
+            if showsLabel, guide != .off {
+                Text(Self.label(guide: guide, paperQuad: paperQuad, step: step))
                     .font(Theme.mono(11)).foregroundStyle(.white)
                     .padding(.horizontal, 8).padding(.vertical, 4)
                     .background(.black.opacity(0.55))
@@ -157,7 +160,7 @@ struct FoldGuideOverlay: View {
         .allowsHitTesting(false)
     }
 
-    private var label: String {
+    static func label(guide: FoldGuide, paperQuad: [CGPoint]?, step: Int?) -> String {
         guard paperQuad != nil else { return String(localized: "Faltmuster: Blatt nicht erkannt") }
         guard let rawStep = step else { return guide.label }
         let step = max(0, rawStep)
