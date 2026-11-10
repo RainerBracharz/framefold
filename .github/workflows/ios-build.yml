@@ -2,7 +2,7 @@ name: iOS Build
 
 on:
   push:
-    branches: [main, mac-catalyst]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
