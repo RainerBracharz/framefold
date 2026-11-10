@@ -26,21 +26,21 @@ KEY_PATH  = File.expand_path("~/.appstoreconnect/AuthKey_#{KEY_ID}.p8")
 abort("Schlüssel fehlt: #{KEY_PATH}") unless File.exist?(KEY_PATH)
 # Apple begrenzt Beschreibung und Notiz auf je 1000 Zeichen.
 
-NAME = "FrameFold 2.1 – Folds open on iPhone Duo"
+NAME = "FrameFold 2.10 with crease patterns from Origami Simulator"
 
 DESCRIPTION = <<~TEXT.strip
-  FrameFold turns a session at the craft table into a stop-motion film. It fires by itself whenever the hands leave the frame and keeps only sharp frames – all on-device, no account, no cloud.
+  FrameFold is a free stop-motion camera for iPhone, iPad and Mac. It takes a frame by itself whenever the hands leave the picture, all on the device, with no account.
 
-  Version 2.1 is optimized for iPhone Duo. Unfolded, the viewfinder opens like a book: the camera on the left page, the film so far looping on the right, with the split exactly on the fold. Fold the phone mid-session and the capture simply carries on, on either display. An app for artists who fold paper, on a phone that folds.
+  Version 2.10 brings real crease patterns to the fold template. The hypar from Josef Albers' Bauhaus course, the circular pleat and Miura-ori are printed over your own photo with mountain and valley folds. Hypar and circular pleat follow Origami Simulator by Amanda Ghassaei, made with Erik Demaine and Tomohiro Tachi.
 
-  2.1 also reworks the auto-shutter: it waits until fingertips have left the frame, works in low and flickering light, skips duplicate frames and tells a plainer subject from a real loss of focus.
+  While folding, the pattern can run as a guide in the viewfinder. Apple's Vision framework finds the flat sheet, the pattern lies on it in perspective and lights up the next fold with every frame.
 
-  Built for Austrian artist Aldo Tolino. In English, German and French, with an Apple Watch remote and VoiceOver support.
+  In class, pupils print a pattern, fold it and film each step. One lesson links art, geometry and film, and the sheet becomes a stop-motion film about its own folding.
 TEXT
 
-# „Helpful Details": Apple bittet, die Duo-Optimierung hier zu nennen.
+# „Helpful Details"
 NOTES = <<~TEXT.strip
-  Optimized for iPhone Duo: built with the iOS 27.1 SDK, tested on both displays and across folding and unfolding in the simulator, with iPhone Duo screenshots in all three languages. Made by a one-person studio in Lower Austria. The source code is public, including the evaluation behind the new auto-shutter.
+  Made by a one-person studio in Lower Austria. The crease patterns are generated in the app from the rules of the Origami Simulator scripts (MIT License, credited on every template and in the help). A short film about the hypar pattern, recorded in FrameFold: https://youtube.com/shorts/vaGHDQDl0pw
 TEXT
 
 ATTRIBUTES = {
@@ -48,12 +48,12 @@ ATTRIBUTES = {
   type: "APP_ENHANCEMENTS",
   description: DESCRIPTION,
   notes: NOTES,
-  publishStartDate: "2026-10-23T00:00:00Z",   # Verkaufsstart des iPhone Duo
-  deviceFamilies: %w[IPHONE APPLE_WATCH],
-  locales: %w[en-US de-DE fr-FR],
+  publishStartDate: "2026-11-17T00:00:00Z",   # nach der Freigabe von 2.10
+  deviceFamilies: %w[IPHONE IPAD MAC],
+  locales: %w[en-US de-DE],
   supplementalMaterialsUris: [
-    "https://github.com/RainerBracharz/framefold",
-    "https://www.bracharz.com/en/niche-app-marketing/"
+    "https://youtube.com/shorts/vaGHDQDl0pw",
+    "https://youtu.be/ds1JtIGYU5w"
   ],
   hasInAppEvents: false,
   launchInSelectMarketsFirst: false,
