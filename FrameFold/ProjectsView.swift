@@ -452,6 +452,9 @@ struct ProjectDetailView: View {
             .padding(.bottom, 24)
         }
         .paperStage()
+        // Kleiner Titel: Der große reservierte unter der Leiste einen leeren
+        // Streifen, weil der Werktitel in der Leiste selbst steht.
+        .navigationBarTitleDisplayMode(.inline)
         #if targetEnvironment(macCatalyst)
         // Am Mac erscheint ein `.principal`-Titel nicht – ohne diesen stünde
         // im Fenster nur „FrameFold" statt des Werks.
@@ -553,6 +556,37 @@ struct ProjectDetailView: View {
         .accessibilityAddTraits(active ? .isSelected : [])
     }
 
+    /// Symbol am Zeilenanfang – feste Breite, damit die Texte aller Zeilen
+    /// an einer Kante stehen.
+    private func rowIcon(_ name: String) -> some View {
+        Image(systemName: name)
+            .font(.system(size: 16))
+            .foregroundStyle(Theme.ink)
+            .frame(width: 26, alignment: .center)
+            .accessibilityHidden(true)
+    }
+
+    /// Auswahl, deren Wert in der Schrift der Zeile steht. Das System-Menü
+    /// setzte den Wert am iPhone deutlich größer als die Beschriftung daneben.
+    @ViewBuilder
+    private func valueMenu<P: View>(_ value: String, @ViewBuilder picker: () -> P) -> some View {
+        if Platform.isMac {
+            picker().labelsHidden().fixedSize()
+        } else {
+            Menu {
+                picker().pickerStyle(.inline).labelsHidden()
+            } label: {
+                HStack(spacing: 5) {
+                    Text(verbatim: value).font(Theme.body)
+                    Image(systemName: "chevron.up.chevron.down").font(.system(size: 10, weight: .medium))
+                }
+                .foregroundStyle(Theme.ink)
+                .padding(.vertical, 6)
+                .contentShape(Rectangle())
+            }
+        }
+    }
+
     private func optionRow<Content: View>(_ label: LocalizedStringResource,
                                           @ViewBuilder content: () -> Content) -> some View {
         HStack(spacing: 12) {
@@ -571,8 +605,7 @@ struct ProjectDetailView: View {
     /// wollen ihren Film mit Musik. Nur aus Dateien, kein Mikrofon.
     private var audioRow: some View {
         HStack(spacing: 10) {
-            Image(systemName: "music.note")
-                .foregroundStyle(Theme.ink)
+            rowIcon("music.note")
             if currentProject.audioFilename == nil, let tracks = currentProject.audioTracks, !tracks.isEmpty {
                 Text("\(tracks.count) Tonspuren")
                     .font(Theme.body)
@@ -632,7 +665,7 @@ struct ProjectDetailView: View {
     /// Reihenfolge.
     private var photoImportRow: some View {
         HStack(spacing: 10) {
-            Image(systemName: "photo.on.rectangle").foregroundStyle(Theme.ink)
+            rowIcon("photo.on.rectangle")
             PhotosPicker(selection: $photoItems, matching: .images, preferredItemEncoding: .compatible) {
                 Text(importingPhotos > 0 ? "Fotos werden übernommen … \(importingPhotos)" : "Fotos als Bilder hinzufügen")
                     .font(Theme.body).foregroundStyle(Theme.ink)
@@ -691,14 +724,14 @@ struct ProjectDetailView: View {
     /// Farblook des ganzen Films – in jedem Modus.
     private var lookRow: some View {
         HStack(spacing: 10) {
-            Image(systemName: "camera.filters").foregroundStyle(Theme.ink)
+            rowIcon("camera.filters")
             Text("Look").font(Theme.body).foregroundStyle(Theme.ink)
             Spacer()
-            Picker("", selection: $exportSettings.look) {
-                ForEach(FilmLook.allCases) { Text(verbatim: $0.label).tag($0) }
+            valueMenu(exportSettings.look.label) {
+                Picker("", selection: $exportSettings.look) {
+                    ForEach(FilmLook.allCases) { Text(verbatim: $0.label).tag($0) }
+                }
             }
-            .labelsHidden()
-            .fixedSize()
         }
         .padding(.horizontal, 4)
     }
@@ -707,7 +740,7 @@ struct ProjectDetailView: View {
     private var titleRows: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 10) {
-                Image(systemName: "textformat").foregroundStyle(Theme.ink)
+                rowIcon("textformat")
                 TextField("Titel (optional)", text: Binding(
                     get: { currentProject.titleText ?? "" },
                     set: { store.setTitles(title: $0.isEmpty ? nil : $0, credits: currentProject.creditsText,
@@ -715,7 +748,7 @@ struct ProjectDetailView: View {
                     .font(Theme.body)
             }
             HStack(alignment: .top, spacing: 10) {
-                Image(systemName: "list.bullet.rectangle").foregroundStyle(Theme.ink)
+                rowIcon("list.bullet.rectangle")
                 TextField("Abspann (optional, mehrere Zeilen)", text: Binding(
                     get: { currentProject.creditsText ?? "" },
                     set: { store.setTitles(title: currentProject.titleText, credits: $0.isEmpty ? nil : $0,
@@ -730,16 +763,16 @@ struct ProjectDetailView: View {
     /// Greenscreen: Farbe wählen, Hintergrund setzen.
     private var greenScreenRow: some View {
         HStack(spacing: 10) {
-            Image(systemName: "person.crop.rectangle.stack").foregroundStyle(Theme.ink)
+            rowIcon("person.crop.rectangle.stack")
             Text("Greenscreen").font(Theme.body).foregroundStyle(Theme.ink)
             Spacer()
-            Picker("", selection: Binding(
-                get: { currentProject.greenScreen?.key ?? .none },
-                set: { store.setGreenScreenKey($0, in: currentProject.id) })) {
-                ForEach(ChromaKey.allCases) { Text(verbatim: $0.label).tag($0) }
+            valueMenu((currentProject.greenScreen?.key ?? .none).label) {
+                Picker("", selection: Binding(
+                    get: { currentProject.greenScreen?.key ?? .none },
+                    set: { store.setGreenScreenKey($0, in: currentProject.id) })) {
+                    ForEach(ChromaKey.allCases) { Text(verbatim: $0.label).tag($0) }
+                }
             }
-            .labelsHidden()
-            .fixedSize()
             if (currentProject.greenScreen?.key ?? .none) != .none {
                 Button(currentProject.greenScreen?.backgroundFilename == nil ? "Hintergrund …" : "Anderer Hintergrund …") {
                     showBackgroundImporter = true
@@ -759,7 +792,7 @@ struct ProjectDetailView: View {
     /// Schwenk und Zoom über Bildbereiche (Export).
     private var cameraMoveRow: some View {
         HStack(spacing: 10) {
-            Image(systemName: "camera.metering.center.weighted").foregroundStyle(Theme.ink)
+            rowIcon("camera.metering.center.weighted")
             Text("Kamerafahrt").font(Theme.body).foregroundStyle(Theme.ink)
             Spacer()
             if let count = currentProject.cameraMoves?.count, count > 0 {
@@ -780,7 +813,7 @@ struct ProjectDetailView: View {
     /// Einzelbilder in voller Auflösung für Schnitt und Compositing.
     private var sequenceRow: some View {
         HStack(spacing: 10) {
-            Image(systemName: "square.stack.3d.down.right").foregroundStyle(Theme.ink)
+            rowIcon("square.stack.3d.down.right")
             Text(isExportingSequence ? "Bilder werden geschrieben…" : "Bildsequenz")
                 .font(Theme.body).foregroundStyle(Theme.ink)
             Spacer()
@@ -852,39 +885,47 @@ struct ProjectDetailView: View {
                 // Beschriftete Zeilen: links wofür, rechts der Wert
                 VStack(spacing: 0) {
                     optionRow("Format") {
-                        Picker("", selection: $exportSettings.aspect) {
-                            ForEach(AspectPreset.allCases) { Text($0.rawValue).tag($0) }
+                        valueMenu(exportSettings.aspect.rawValue) {
+                            Picker("", selection: $exportSettings.aspect) {
+                                ForEach(AspectPreset.allCases) { Text($0.rawValue).tag($0) }
+                            }
                         }
                     }
                     optionDivider
                     optionRow("Abspielmodus") {
-                        Picker("", selection: $exportSettings.loopMode) {
-                            ForEach(LoopMode.allCases) { Text(verbatim: $0.label).tag($0) }
+                        valueMenu(exportSettings.loopMode.label) {
+                            Picker("", selection: $exportSettings.loopMode) {
+                                ForEach(LoopMode.allCases) { Text(verbatim: $0.label).tag($0) }
+                            }
                         }
                     }
                     optionDivider
                     optionRow("Bildrate") {
-                        Picker("", selection: $exportSettings.outputFPS) {
-                            Text("2 fps").tag(Int32(2))
-                            Text("3 fps").tag(Int32(3))
-                            Text("4 fps").tag(Int32(4))
-                            Text("6 fps").tag(Int32(6))
-                            Text("8 fps").tag(Int32(8))
-                            Text("10 fps").tag(Int32(10))
-                            Text("12 fps").tag(Int32(12))
-                            Text("15 fps").tag(Int32(15))
-                            Text("24 fps").tag(Int32(24))
-                            Text("25 fps").tag(Int32(25))
-                            Text("30 fps").tag(Int32(30))
+                        valueMenu("\(exportSettings.outputFPS) fps") {
+                            Picker("", selection: $exportSettings.outputFPS) {
+                                Text("2 fps").tag(Int32(2))
+                                Text("3 fps").tag(Int32(3))
+                                Text("4 fps").tag(Int32(4))
+                                Text("6 fps").tag(Int32(6))
+                                Text("8 fps").tag(Int32(8))
+                                Text("10 fps").tag(Int32(10))
+                                Text("12 fps").tag(Int32(12))
+                                Text("15 fps").tag(Int32(15))
+                                Text("24 fps").tag(Int32(24))
+                                Text("25 fps").tag(Int32(25))
+                                Text("30 fps").tag(Int32(30))
+                            }
                         }
                     }
                     optionDivider
                     optionRow("Letztes Bild halten") {
-                        Picker("", selection: $exportSettings.holdLastFrameSeconds) {
-                            Text("Aus").tag(0.0)
-                            Text("1 s").tag(1.0)
-                            Text("2 s").tag(2.0)
-                            Text("3 s").tag(3.0)
+                        valueMenu(exportSettings.holdLastFrameSeconds > 0 ? "\(Int(exportSettings.holdLastFrameSeconds)) s" : String(localized: "Aus")) {
+                            Picker("", selection: $exportSettings.holdLastFrameSeconds) {
+                                Text("Aus").tag(0.0)
+                                Text("1 s").tag(1.0)
+                                Text("2 s").tag(2.0)
+                                Text("3 s").tag(3.0)
+                            }
                         }
                     }
                     optionDivider
@@ -897,8 +938,10 @@ struct ProjectDetailView: View {
                     }
                     optionDivider
                     optionRow("Codec") {
-                        Picker("", selection: $exportSettings.videoCodec) {
-                            ForEach(VideoCodec.allCases) { Text(verbatim: $0.label).tag($0) }
+                        valueMenu(exportSettings.videoCodec.label) {
+                            Picker("", selection: $exportSettings.videoCodec) {
+                                ForEach(VideoCodec.allCases) { Text(verbatim: $0.label).tag($0) }
+                            }
                         }
                     }
                     if mode.showsTolino {
@@ -908,17 +951,21 @@ struct ProjectDetailView: View {
                         }
                         optionDivider
                         optionRow("Überblendung") {
-                            Picker("", selection: $exportSettings.transitionFrames) {
-                                Text("Aus").tag(0)
-                                Text("Kurz").tag(2)
-                                Text("Weich").tag(4)
+                            valueMenu(exportSettings.transitionFrames == 0 ? String(localized: "Aus") : exportSettings.transitionFrames <= 2 ? String(localized: "Kurz") : String(localized: "Weich")) {
+                                Picker("", selection: $exportSettings.transitionFrames) {
+                                    Text("Aus").tag(0)
+                                    Text("Kurz").tag(2)
+                                    Text("Weich").tag(4)
+                                }
                             }
                         }
                         if exportSettings.transitionFrames > 0 {
                             optionDivider
                             optionRow("Übergangsstil") {
-                                Picker("", selection: $exportSettings.transitionStyle) {
-                                    ForEach(TransitionStyle.allCases) { Text(verbatim: $0.label).tag($0) }
+                                valueMenu(exportSettings.transitionStyle.label) {
+                                    Picker("", selection: $exportSettings.transitionStyle) {
+                                        ForEach(TransitionStyle.allCases) { Text(verbatim: $0.label).tag($0) }
+                                    }
                                 }
                             }
                         }
@@ -1053,13 +1100,14 @@ struct ProjectDetailView: View {
                 Image(systemName: icon)
                     .font(.system(size: 15))
                     .foregroundStyle(Theme.ink)
+                    .frame(height: 20)
                 Text(title)
                     .font(Theme.caption(10)).tracking(1.2).textCase(.uppercase)
                     .foregroundStyle(Theme.ink)
                     .multilineTextAlignment(.center)
             }
             .padding(.vertical, 16)
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
         }
         .buttonStyle(.plain)
