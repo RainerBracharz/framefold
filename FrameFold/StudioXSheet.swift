@@ -146,8 +146,7 @@ struct XSheetView: View {
             }
         }
         .sheetMinSize(width: 760, height: 560)
-        .background(Theme.darkroom)
-        .preferredColorScheme(.dark)
+        .darkSheet()
         .alert("Neue Figur", isPresented: $showNewCharacter) {
             TextField("Name", text: $newCharacter)
             Button("Anlegen") {

@@ -626,11 +626,13 @@ struct ProjectDetailView: View {
                 Spacer()
             }
             MusicMenu(projectID: currentProject.id, frame: 0, fps: exportSettings.outputFPS) {
-                Image(systemName: "music.quarternote.3")
+                Image(systemName: "music.quarternote.3").touchLabel(8, 12)
             }
+            .touchButton(8, 12)
             .accessibilityLabel(Text("Musik"))
             .disabled(currentProject.frameCount == 0)
-            Button { showVoice = true } label: { Image(systemName: "mic") }
+            Button { showVoice = true } label: { Image(systemName: "mic").touchLabel(8, 12) }
+                .touchButton(8, 12)
                 .accessibilityLabel(Text("Stimme aufnehmen"))
                 .disabled(currentProject.frameCount == 0)
         }
@@ -681,9 +683,10 @@ struct ProjectDetailView: View {
                         Button("\(rate) Bilder pro Sekunde") { rotoFPS = rate; showRotoImporter = true }
                     }
                 } label: {
-                    Text("Video als Bilder …").font(Theme.caption(11))
+                    Text("Video als Bilder …").font(Theme.caption(11)).touchLabel(8, 12)
                 }
                 .fixedSize()
+                .touchButton(8, 12)
             }
         }
         .fileImporter(isPresented: $showRotoImporter, allowedContentTypes: [.movie]) { result in
@@ -774,10 +777,11 @@ struct ProjectDetailView: View {
                 }
             }
             if (currentProject.greenScreen?.key ?? .none) != .none {
-                Button(currentProject.greenScreen?.backgroundFilename == nil ? "Hintergrund …" : "Anderer Hintergrund …") {
-                    showBackgroundImporter = true
+                Button { showBackgroundImporter = true } label: {
+                    Text(currentProject.greenScreen?.backgroundFilename == nil ? "Hintergrund …" : "Anderer Hintergrund …")
+                        .font(Theme.caption(11)).touchLabel(8, 12)
                 }
-                .font(Theme.caption(11))
+                .touchButton(8, 12)
             }
         }
         .buttonStyle(.plain)
@@ -798,8 +802,12 @@ struct ProjectDetailView: View {
             if let count = currentProject.cameraMoves?.count, count > 0 {
                 Text("\(count)×").font(Theme.mono(11)).foregroundStyle(Theme.graphite)
             }
-            Button(currentProject.cameraMoves?.isEmpty == false ? "Bearbeiten …" : "Hinzufügen …") { showCameraMoves = true }
-                .font(Theme.caption(11))
+            // Größere Trefferfläche: Als bloße Textzeile war der Knopf kaum zu treffen.
+            Button { showCameraMoves = true } label: {
+                Text(currentProject.cameraMoves?.isEmpty == false ? "Bearbeiten …" : "Hinzufügen …")
+                    .font(Theme.caption(11)).touchLabel(8, 12)
+            }
+                .touchButton(8, 12)
                 .disabled(currentProject.frameCount < 2)
         }
         .buttonStyle(.plain)
@@ -818,8 +826,10 @@ struct ProjectDetailView: View {
                 .font(Theme.body).foregroundStyle(Theme.ink)
             Spacer()
             ForEach(SequenceFormat.allCases) { format in
-                Button(format.label) { exportSequence(format) }
-                    .font(Theme.caption(11))
+                Button { exportSequence(format) } label: {
+                    Text(verbatim: format.label).font(Theme.caption(11)).touchLabel(6, 12)
+                }
+                    .touchButton(6, 12)
                     .disabled(isExportingSequence || currentProject.frameCount == 0)
             }
         }

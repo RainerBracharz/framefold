@@ -118,8 +118,9 @@ struct SpeechSheet: View {
         .foregroundStyle(Theme.paperOnDark)
         .padding(20)
         .sheetMinSize(width: 480)
-        .background(Theme.darkroom)
-        .preferredColorScheme(.dark)
+        .darkSheet()
+        // Wenige Zeilen: halbe Höhe genügt am iPhone
+        .presentationDetents([.medium, .large])
     }
 
     private func add() {

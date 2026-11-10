@@ -29,15 +29,33 @@ struct CameraMoveEditor: View {
                         .pickerStyle(.menu)
                     }
                     if let move = selected { editor(move) }
-                    HStack {
-                        Button { add() } label: { Label("Neue Kamerafahrt", systemImage: "plus") }
-                            .disabled(frameCount < 2)
-                        Spacer()
+                    HStack(spacing: 10) {
+                        // Als Feld wie die übrigen Knöpfe der App – als bloßer
+                        // Text war es im leeren Blatt kaum als Knopf zu erkennen.
+                        Button { add() } label: {
+                            Label("Neue Kamerafahrt", systemImage: "plus")
+                                .font(Theme.caption(11)).tracking(1.2).textCase(.uppercase)
+                                .foregroundStyle(Theme.ink)
+                                .padding(.vertical, 14)
+                                .frame(maxWidth: .infinity)
+                                .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(frameCount < 2)
+                        .opacity(frameCount < 2 ? 0.45 : 1)
                         if let move = selected {
-                            Button(role: .destructive) { remove(move) } label: { Label("Entfernen", systemImage: "trash") }
+                            Button(role: .destructive) { remove(move) } label: {
+                                Image(systemName: "trash")
+                                    .foregroundStyle(Theme.oxblood)
+                                    .padding(.vertical, 14).padding(.horizontal, 18)
+                                    .overlay(Rectangle().stroke(Theme.oxblood.opacity(0.45), lineWidth: 1))
+                                    .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("Entfernen")
                         }
                     }
-                    .font(Theme.body)
                 }
                 .padding(20)
             }
@@ -51,6 +69,9 @@ struct CameraMoveEditor: View {
             }
         }
         .sheetMinSize(width: 520, height: 640)
+        // Ohne Fahrt steht nur ein Satz und ein Knopf im Blatt: halbe Höhe
+        // genügt. Mit dem Editor braucht es die ganze.
+        .presentationDetents(moves.isEmpty ? [.medium, .large] : [.large])
     }
 
     @ViewBuilder

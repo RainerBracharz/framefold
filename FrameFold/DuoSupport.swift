@@ -217,3 +217,20 @@ extension View {
         }
     }
 }
+
+extension View {
+    /// Dunkles Blatt (Stimme, Sprechen, X-Sheet, Zeichnen): Die Dunkelkammer
+    /// füllt das ganze Blatt, der Inhalt beginnt oben. Vorher lag der dunkle
+    /// Grund nur hinter dem Inhalt, darunter blieb am iPhone das Systemgrau.
+    @MainActor @ViewBuilder
+    func darkSheet() -> some View {
+        if Platform.isMac {
+            background(Theme.darkroom).preferredColorScheme(.dark)
+        } else {
+            frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .background(Theme.darkroom)
+                .presentationBackground(Theme.darkroom)
+                .preferredColorScheme(.dark)
+        }
+    }
+}

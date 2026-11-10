@@ -89,6 +89,9 @@ struct VoiceRecordSheet: View {
     @State private var countdown: Int?
     @State private var startDate: Date?
     @State private var finished = false
+    /// Format des Vorschaufelds. Am iPhone und iPad folgt es dem Film –
+    /// hochkante Bilder standen sonst klein zwischen schwarzen Balken.
+    @State private var previewAspect: CGFloat = 16.0 / 10.0
 
     var body: some View {
         VStack(spacing: 16) {
@@ -111,7 +114,7 @@ struct VoiceRecordSheet: View {
                         .foregroundStyle(Theme.amber)
                 }
             }
-            .aspectRatio(16.0 / 10.0, contentMode: .fit)
+            .aspectRatio(previewAspect, contentMode: .fit)
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.3), lineWidth: 1))
 
             // Pegel und Zeit
@@ -125,7 +128,7 @@ struct VoiceRecordSheet: View {
                 }
                 .frame(height: 8)
                 .background(Color.white.opacity(0.08))
-                Text(String(format: "%.1f s", recorder.elapsed)).font(Theme.mono(11))
+                Text(String(format: "%.1f s", locale: .current, recorder.elapsed)).font(Theme.mono(11))
                     .foregroundStyle(Theme.paperOnDark)
             }
 
@@ -157,9 +160,13 @@ struct VoiceRecordSheet: View {
         }
         .padding(20)
         .sheetMinSize(width: 520)
-        .background(Theme.darkroom)
-        .preferredColorScheme(.dark)
+        .darkSheet()
         .task {
+            if !Platform.isMac, let first = urls.dropFirst(startFrame).first ?? urls.first,
+               let size = await Task.detached(operation: { UIImage.thumbnail(at: first, maxPixelSize: 64)?.size }).value,
+               size.height > 0 {
+                previewAspect = min(max(size.width / size.height, 0.72), 16.0 / 9.0)
+            }
             while !Task.isCancelled {
                 preload(from: Date())
                 try? await Task.sleep(nanoseconds: 500_000_000)

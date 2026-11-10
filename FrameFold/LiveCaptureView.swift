@@ -149,6 +149,9 @@ struct LiveCaptureView: View {
                     .accessibilityLabel("Aufnahme-Einstellungen")
                 }
             }
+            // Kleiner Titel: Der große hielt unter dem Werknamen einen leeren
+            // schwarzen Streifen frei, der dem Sucher fehlte.
+            .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(Theme.darkroom, for: .navigationBar)
             // Sichtbarer Hintergrund: Erst dann folgt die Statusleiste dem
             // dunklen Schema – sonst stünden Uhrzeit und Akku dunkel auf dunkel.
@@ -939,6 +942,7 @@ struct LiveCaptureView: View {
                     rigBadge
                 }
             }
+            .fixedSize(horizontal: false, vertical: true)
 
             if let focusHint = controller.focusHint {
                 Text(focusHint)
@@ -1308,7 +1312,8 @@ struct LiveCaptureView: View {
                             threshold: controller.motionThreshold)
                     .frame(height: 10)
                     .accessibilityHidden(true)
-                Text(String(format: "%.1f / %.1f", controller.currentMotion,
+                // Dezimalzeichen der Sprache, wie bei der Filmlänge darüber
+                Text(String(format: "%.1f / %.1f", locale: .current, controller.currentMotion,
                             controller.motionThreshold))
                     .font(Theme.mono(10, .medium))
                     .foregroundStyle(Theme.paperOnDark.opacity(0.75))
@@ -1512,7 +1517,10 @@ struct LiveCaptureView: View {
                 Image(systemName: "eye").foregroundStyle(Theme.paperOnDark.opacity(0.6))
             }
             // Einfach: einen Tick größer – wird oft aus Entfernung gelesen
-            CatalogLabel(verbatim: controller.status.label(playful: mode == .basic),
+            // Der Haken steht hier schon als Symbol davor (die Watch zeigt
+            // nur den Text und braucht ihn dort).
+            CatalogLabel(verbatim: controller.status.label(playful: mode == .basic)
+                            .replacingOccurrences(of: "✓", with: "").trimmingCharacters(in: .whitespaces),
                          color: Theme.paperOnDark,
                          size: mode == .basic ? 12 : 11)
                 // Neben dem Aufnahmeart-Feld wird es auf kleinen Geräten eng.
@@ -1521,6 +1529,7 @@ struct LiveCaptureView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
+        .frame(maxHeight: .infinity)   // gleich hoch wie das Feld daneben
         .background(Theme.darkroom.opacity(0.75))
         .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
     }
@@ -1543,6 +1552,7 @@ struct LiveCaptureView: View {
             .foregroundStyle(Theme.paperOnDark.opacity(0.8))
             .padding(.horizontal, 12)
             .padding(.vertical, 12)
+            .frame(maxHeight: .infinity)
             .background(Theme.darkroom.opacity(0.75))
             .overlay(Rectangle().stroke(Theme.paperOnDark.opacity(0.25), lineWidth: 1))
         }

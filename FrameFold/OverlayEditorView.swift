@@ -107,8 +107,7 @@ struct OverlayEditorView: View {
             inspector
         }
         .sheetMinSize(width: 640, height: 600)
-        .background(Theme.darkroom)
-        .preferredColorScheme(.dark)
+        .darkSheet()
         .task { loadImage() }
         .photosPicker(isPresented: $showPhotoPicker, selection: $photoItem, matching: .images)
         .onChange(of: photoItem) { _, item in

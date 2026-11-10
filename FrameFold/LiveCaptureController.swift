@@ -1369,7 +1369,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// „1/100 s · ISO 32" – Belichtungszeit als Bruch, ISO gerundet.
     static func exposureLabel(duration: Double, iso: Double) -> String {
         let time = duration >= 1
-            ? String(format: "%.1f s", duration)
+            ? String(format: "%.1f s", locale: .current, duration)
             : "1/\(Int((1.0 / max(duration, 1e-6)).rounded())) s"
         return "\(time) · ISO \(Int(iso.rounded()))"
     }

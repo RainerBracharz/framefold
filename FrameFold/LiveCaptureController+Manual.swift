@@ -107,6 +107,6 @@ extension LiveCaptureController {
 
     /// Belichtungszeit als „1/250 s“ oder „0,5 s“.
     nonisolated static func shutterLabel(_ seconds: Double) -> String {
-        seconds >= 0.3 ? String(format: "%.1f s", seconds) : "1/\(Int((1 / max(seconds, 1e-6)).rounded())) s"
+        seconds >= 0.3 ? String(format: "%.1f s", locale: .current, seconds) : "1/\(Int((1 / max(seconds, 1e-6)).rounded())) s"
     }
 }
