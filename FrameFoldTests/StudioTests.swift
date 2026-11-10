@@ -241,7 +241,8 @@ final class StudioTests: XCTestCase {
 
     func testShutterLabel() {
         XCTAssertEqual(LiveCaptureController.shutterLabel(1.0 / 250), "1/250 s")
-        XCTAssertEqual(LiveCaptureController.shutterLabel(0.5), "0.5 s")
+        // Dezimalzeichen der Sprache: „0,5 s“ auf Deutsch, „0.5 s“ auf Englisch
+        XCTAssertEqual(LiveCaptureController.shutterLabel(0.5), String(format: "%.1f s", locale: .current, 0.5))
     }
 
     private func XCTUnwrapAsync<T>(_ value: T?) throws -> T { try XCTUnwrap(value) }
