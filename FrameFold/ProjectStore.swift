@@ -41,6 +41,9 @@ struct Project: Identifiable, Codable {
     /// Motion Control: Achspositionen je Bild und ob weich gefahren wird
     var motionKeys: [MotionKey]? = nil
     var motionSmooth: Bool? = nil
+    /// Papierkorb: hinter welchem Bild ein entferntes Bild stand ("" = ganz
+    /// vorn) – „Wiederherstellen“ setzt es dorthin zurück.
+    var trashAfter: [String: String]? = nil
 
     /// Alle Tonspuren – die einfache Musikspur aus der Werkansicht zählt
     /// als erste, mit Einsatz bei Bild 1.
@@ -112,6 +115,11 @@ final class ProjectStore: ObservableObject {
         self.defaults = defaults
         try? FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         reload()
+        for name in [UIApplication.willResignActiveNotification, UIApplication.willTerminateNotification] {
+            NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.flushPendingSaves() }
+            }
+        }
         stampLegacyTrashOnce()
         purgeOldTrash()
         Self.cleanTemporaryFiles()
@@ -180,8 +188,17 @@ final class ProjectStore: ObservableObject {
     private static func recoverProject(in dir: URL) -> Project? {
         guard let id = UUID(uuidString: dir.lastPathComponent),
               let names = try? FileManager.default.contentsOfDirectory(atPath: dir.path) else { return nil }
-        let frames = names.filter { $0.hasSuffix(".jpg") }.sorted()
+        // Nur Bilder des Films (sechs Ziffern) – Ebenen und Hintergründe
+        // liegen als .jpg daneben und sind keine Filmbilder.
+        let frames = names.filter { $0.count == 10 && $0.hasSuffix(".jpg") && $0.prefix(6).allSatisfy(\.isNumber) }.sorted()
         guard !frames.isEmpty else { return nil }
+        // Ein unlesbares Manifest (etwa aus einer neueren Fassung) aufheben
+        // statt überschreiben: Darin stehen Reihenfolge, Ton und Texte.
+        let manifest = dir.appendingPathComponent("manifest.json")
+        if FileManager.default.fileExists(atPath: manifest.path) {
+            let stamp = ISO8601DateFormatter().string(from: Date()).replacingOccurrences(of: ":", with: "-")
+            try? FileManager.default.moveItem(at: manifest, to: dir.appendingPathComponent("manifest.defekt-\(stamp).json"))
+        }
         let created = (try? FileManager.default.attributesOfItem(atPath: dir.path)[.creationDate] as? Date) ?? Date()
         let project = Project(
             id: id, name: String(localized: "Wiederhergestelltes Werk"),
@@ -198,13 +215,48 @@ final class ProjectStore: ObservableObject {
         root.appendingPathComponent(project.id.uuidString, isDirectory: true)
     }
 
-    private func save(_ project: Project) {
+    /// Manifest auf die Platte. Falsch, wenn das nicht ging (Speicher voll).
+    @discardableResult
+    private func write(_ project: Project) -> Bool {
         let dir = directory(for: project)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        if let data = try? JSONEncoder().encode(project) {
-            // Atomar: Bricht die App mitten im Schreiben ab (Akku, Absturz),
-            // bleibt das alte Manifest stehen statt eines halben.
-            try? data.write(to: dir.appendingPathComponent("manifest.json"), options: .atomic)
+        guard let data = try? JSONEncoder().encode(project) else { return false }
+        // Atomar: Bricht die App mitten im Schreiben ab (Akku, Absturz),
+        // bleibt das alte Manifest stehen statt eines halben.
+        return (try? data.write(to: dir.appendingPathComponent("manifest.json"), options: .atomic)) != nil
+    }
+
+    /// Gebündelte Schreibvorgänge je Werk (Tippen, Ziehen, Regler).
+    private var pendingWrites: [UUID: Task<Void, Never>] = [:]
+
+    /// Alles Gebündelte sofort schreiben – beim Verlassen der App.
+    func flushPendingSaves() {
+        let waiting = pendingWrites
+        pendingWrites = [:]
+        for (id, task) in waiting {
+            task.cancel()
+            if let project = projects.first(where: { $0.id == id }) { write(project) }
+        }
+    }
+
+    /// Stand übernehmen und sichern. Mit `deferred` gilt er sofort im
+    /// Speicher, die Datei folgt 0,3 s nach der letzten Änderung – beim
+    /// Tippen und Ziehen schrieb sonst jeder Schritt das ganze Manifest.
+    @discardableResult
+    private func save(_ project: Project, deferred: Bool = false) -> Bool {
+        var written = true
+        pendingWrites[project.id]?.cancel()
+        pendingWrites[project.id] = nil
+        if deferred {
+            let id = project.id
+            pendingWrites[id] = Task { [weak self] in
+                try? await Task.sleep(nanoseconds: 300_000_000)
+                guard !Task.isCancelled, let self else { return }
+                self.pendingWrites[id] = nil
+                if let current = self.projects.first(where: { $0.id == id }) { self.write(current) }
+            }
+        } else {
+            written = write(project)
         }
         // Nur das eine Projekt im Speicher aktualisieren. Das frühere
         // reload() las nach JEDEM aufgenommenen Bild sämtliche Manifeste
@@ -216,6 +268,7 @@ final class ProjectStore: ObservableObject {
             projects.sort { $0.createdAtISO > $1.createdAtISO }
         }
         // Titelbild bleibt, solange das erste Bild dasselbe ist
+        return written
     }
 
     // MARK: API
@@ -253,12 +306,15 @@ final class ProjectStore: ObservableObject {
     }
 
     func delete(_ project: Project) {
+        pendingWrites[project.id]?.cancel()
+        pendingWrites[project.id] = nil
         try? FileManager.default.removeItem(at: directory(for: project))
         projects.removeAll { $0.id == project.id }
         thumbnailCache[project.id] = nil
     }
 
     func rename(_ project: Project, to name: String) {
+        recordUndo(project.id, String(localized: "Umbenennen"))
         var updated = project
         updated.name = name
         save(updated)
@@ -271,6 +327,7 @@ final class ProjectStore: ObservableObject {
     func exportPackage(of project: Project) async throws -> URL {
         var clean = project
         clean.trashFilenames = nil
+        clean.trashAfter = nil
         let manifest = try JSONEncoder().encode(clean)
         let dir = directory(for: project)
         // Nur, was das Werk wirklich verwendet – keine verwaisten Dateien
@@ -317,6 +374,7 @@ final class ProjectStore: ObservableObject {
         json["id"] = id.uuidString
         json["createdAtISO"] = ISO8601DateFormatter().string(from: Date())
         json["trashFilenames"] = nil
+        json["trashAfter"] = nil
         guard let project = try? JSONDecoder().decode(Project.self, from: JSONSerialization.data(withJSONObject: json)) else {
             throw WorkPackage.Failure.noManifest
         }
@@ -356,7 +414,13 @@ final class ProjectStore: ObservableObject {
             try jpegData.write(to: dir.appendingPathComponent(filename))
             updated.frameFilenames.append(filename)
             updated.nextFrameNumber = number + 1
-            save(updated)
+            guard save(updated) else {
+                // Manifest ließ sich nicht schreiben: Das Bild wäre nach dem
+                // nächsten Start verschwunden. Zurücknehmen und es melden.
+                try? FileManager.default.removeItem(at: dir.appendingPathComponent(filename))
+                if let idx = projects.firstIndex(where: { $0.id == project.id }) { projects[idx] = project }
+                return nil
+            }
             // „Rückgängig“ stellt ganze Stände wieder her. Ein älterer Stand
             // kennt dieses Bild nicht und würde es in den Papierkorb legen,
             // ohne dass es dort gelistet ist. Darum endet hier der Verlauf.
@@ -391,6 +455,9 @@ final class ProjectStore: ObservableObject {
         try? FileManager.default.moveItem(at: dir.appendingPathComponent(old), to: target)
         try? FileManager.default.setAttributes([.modificationDate: Date()], ofItemAtPath: target.path)
         updated.trashFilenames = (updated.trashFilenames ?? []) + [old]
+        var after = updated.trashAfter ?? [:]
+        after[old] = index > 0 ? updated.frameFilenames[index - 1] : ""
+        updated.trashAfter = after
         updated.frameFilenames[index] = filename
         updated.nextFrameNumber = number + 1
         save(updated)
@@ -434,13 +501,13 @@ final class ProjectStore: ObservableObject {
 
     /// Notiz zu Bild `number` setzen; leerer Text entfernt sie.
     func setNote(_ text: String, forFrame number: Int, in project: Project) {
-        recordUndo(project.id, String(localized: "Notiz"))
+        recordUndo(project.id, String(localized: "Notiz"), coalesce: "note-\(number)")
         var updated = project
         var notes = updated.notes ?? [:]
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         notes[String(number)] = trimmed.isEmpty ? nil : trimmed
         updated.notes = notes.isEmpty ? nil : notes
-        save(updated)
+        save(updated, deferred: true)
     }
 
     // MARK: Tonspuren (Studio)
@@ -483,7 +550,7 @@ final class ProjectStore: ObservableObject {
         } else {
             return
         }
-        save(updated)
+        save(updated, deferred: true)
     }
 
     func updateAudioTrack(_ track: AudioTrack, in project: Project) {
@@ -632,16 +699,16 @@ final class ProjectStore: ObservableObject {
         var all = updated.overlays ?? []
         if let i = all.firstIndex(where: { $0.id == overlay.id }) { all[i] = overlay } else { all.append(overlay) }
         updated.overlays = all
-        save(updated)
+        save(updated, deferred: true)
     }
 
     func removeOverlay(id: UUID, in projectID: UUID) {
+        guard var updated = projects.first(where: { $0.id == projectID }),
+              let removed = updated.overlays?.first(where: { $0.id == id }) else { return }
         recordUndo(projectID, String(localized: "Text & Zeichnen"))
-        guard var updated = projects.first(where: { $0.id == projectID }) else { return }
-        let removed = updated.overlays?.first { $0.id == id }
         updated.overlays?.removeAll { $0.id == id }
         if updated.overlays?.isEmpty == true { updated.overlays = nil }
-        if let name = removed?.imageFilename, !(updated.overlays ?? []).contains(where: { $0.imageFilename == name }) {
+        if let name = removed.imageFilename, !(updated.overlays ?? []).contains(where: { $0.imageFilename == name }) {
             discardFile(name, of: updated)
         }
         save(updated)
@@ -706,6 +773,7 @@ final class ProjectStore: ObservableObject {
         } catch {
             return false
         }
+        recordUndo(projectID, String(localized: "Greenscreen"))
         var green = updated.greenScreen ?? GreenScreen()
         if let old = green.backgroundFilename {
             discardFile(old, of: updated)
@@ -726,7 +794,7 @@ final class ProjectStore: ObservableObject {
         guard var updated = projects.first(where: { $0.id == projectID }) else { return }
         updated.motionKeys = keys.isEmpty ? nil : keys.sorted { $0.frame < $1.frame }
         updated.motionSmooth = smooth ? true : nil
-        save(updated)
+        save(updated, deferred: true)
     }
 
     /// Lichtstimmungen des Werks setzen.
@@ -735,7 +803,7 @@ final class ProjectStore: ObservableObject {
         guard var updated = projects.first(where: { $0.id == projectID }) else { return }
         updated.lightCues = cues.isEmpty ? nil : cues.sorted { $0.frame < $1.frame }
         updated.lightFade = fade ? true : nil
-        save(updated)
+        save(updated, deferred: true)
     }
 
     /// Kamerafahrten des Werks ersetzen (leer = keine).
@@ -743,20 +811,22 @@ final class ProjectStore: ObservableObject {
         recordUndo(projectID, String(localized: "Kamerafahrt"), coalesce: "moves-\(projectID)")
         guard var updated = projects.first(where: { $0.id == projectID }) else { return }
         updated.cameraMoves = moves.isEmpty ? nil : moves
-        save(updated)
+        save(updated, deferred: true)
     }
 
     func setTitles(title: String?, credits: String?, in projectID: UUID) {
         guard var updated = projects.first(where: { $0.id == projectID }) else { return }
+        recordUndo(projectID, String(localized: "Titel und Abspann"), coalesce: "titles-\(projectID)")
         updated.titleText = title
         updated.creditsText = credits
-        save(updated)
+        save(updated, deferred: true)
     }
 
     // MARK: Dialog-Lesen
 
     /// Setzt (oder löscht mit `phoneme == nil`) den Eintrag einer Figur in einem Bild.
     func setDialogue(frame: Int, character: String, phoneme: Phoneme?, word: String?, in project: Project) {
+        recordUndo(project.id, String(localized: "X-Sheet"), coalesce: "dialogue-\(frame)-\(character)")
         var updated = project
         var entries = updated.dialogue ?? []
         entries.removeAll { $0.frame == frame && $0.character == character }
@@ -766,16 +836,53 @@ final class ProjectStore: ObservableObject {
                                          word: trimmed?.isEmpty == false ? trimmed : nil))
         }
         updated.dialogue = entries.isEmpty ? nil : entries.sorted { ($0.frame, $0.character) < ($1.frame, $1.character) }
-        save(updated)
+        save(updated, deferred: true)
     }
 
     /// Ersetzt alle Einträge einer Figur (automatisches Lesen).
     func replaceDialogue(of character: String, with entries: [DialogueEntry], in project: Project) {
+        recordUndo(project.id, String(localized: "X-Sheet"))
         var updated = project
         var all = (updated.dialogue ?? []).filter { $0.character != character }
         all += entries
         updated.dialogue = all.isEmpty ? nil : all.sorted { ($0.frame, $0.character) < ($1.frame, $1.character) }
         save(updated)
+    }
+
+    /// Text, Sprechblasen, Zeichnungen, Ebenen und Kamerafahrten hängen an
+    /// Bildern, gespeichert sind Bildnummern. Nach Entfernen, Verdoppeln,
+    /// Halten, Umstellen oder Wiederherstellen ziehen sie hier mit – sonst
+    /// läge die Zeichnung auf dem falschen Foto. Ton, Dialog, Licht und
+    /// Motion Control bleiben, wo sie sind: Sie folgen der Zeit, nicht dem Bild.
+    private func followFrames(_ project: inout Project, from old: [String],
+                              moved: String? = nil, inserted: Bool = false) {
+        let new = project.frameFilenames
+        guard new != old else { return }
+        if let overlays = project.overlays {
+            var kept: [FrameOverlay] = []
+            for var overlay in overlays {
+                guard let range = FrameRanges.remap(first: overlay.firstFrame, last: overlay.lastFrame, old: old, new: new,
+                                                    moved: moved, extendOverInserted: inserted) else { continue }
+                overlay.firstFrame = range.first
+                overlay.lastFrame = range.last
+                kept.append(overlay)
+            }
+            for name in Set(overlays.compactMap(\.imageFilename)) where !kept.contains(where: { $0.imageFilename == name }) {
+                discardFile(name, of: project)
+            }
+            project.overlays = kept.isEmpty ? nil : kept
+        }
+        if let moves = project.cameraMoves {
+            let kept: [CameraMove] = moves.compactMap { move in
+                guard let range = FrameRanges.remap(first: move.firstFrame, last: move.lastFrame, old: old, new: new,
+                                                    moved: moved, extendOverInserted: inserted) else { return nil }
+                var move = move
+                move.firstFrame = range.first
+                move.lastFrame = range.last
+                return move
+            }
+            project.cameraMoves = kept.isEmpty ? nil : kept
+        }
     }
 
     /// Ordner mit den Bildern des Werks (für „Im Finder zeigen“).
@@ -804,6 +911,7 @@ final class ProjectStore: ObservableObject {
         }
         updated.frameFilenames.insert(filename, at: index + 1)
         updated.nextFrameNumber = number + 1
+        followFrames(&updated, from: project.frameFilenames, inserted: true)
         save(updated)
         return filename
     }
@@ -825,6 +933,7 @@ final class ProjectStore: ObservableObject {
             updated.nextFrameNumber = number + 1
         }
         updated.frameFilenames.insert(contentsOf: inserted, at: index + 1)
+        followFrames(&updated, from: project.frameFilenames, inserted: true)
         save(updated)
     }
 
@@ -837,6 +946,7 @@ final class ProjectStore: ObservableObject {
         var updated = project
         updated.frameFilenames.remove(at: index)
         updated.frameFilenames.insert(name, at: target)
+        followFrames(&updated, from: project.frameFilenames, moved: name)
         save(updated)
     }
 
@@ -858,9 +968,11 @@ final class ProjectStore: ObservableObject {
         try? FileManager.default.createDirectory(at: trashDir, withIntermediateDirectories: true)
 
         var trash = updated.trashFilenames ?? []
+        var after = updated.trashAfter ?? [:]
         for index in offsets {
             guard updated.frameFilenames.indices.contains(index) else { continue }
             let filename = updated.frameFilenames[index]
+            after[filename] = index > 0 ? updated.frameFilenames[index - 1] : ""
             let target = trashDir.appendingPathComponent(filename)
             try? FileManager.default.moveItem(
                 at: dir.appendingPathComponent(filename), to: target)
@@ -872,29 +984,57 @@ final class ProjectStore: ObservableObject {
         }
         updated.frameFilenames.remove(atOffsets: offsets)
         updated.trashFilenames = trash
+        updated.trashAfter = after
+        followFrames(&updated, from: project.frameFilenames)
         updated.nextFrameNumber = nextNumber(for: updated) // für alte Manifeste fixieren
         save(updated)
     }
 
-    /// Holt alle Frames aus dem Papierkorb zurück (ans Ende der Timeline,
-    /// in ursprünglicher Reihenfolge).
+    /// Holt alle Frames aus dem Papierkorb zurück – jedes an die Stelle, an
+    /// der es stand. Die Reihenfolge der übrigen Bilder bleibt unberührt.
     func restoreTrash(in project: Project) {
+        guard let trash = project.trashFilenames, !trash.isEmpty else { return }
         recordUndo(project.id, String(localized: "Wiederherstellen"))
         var updated = project
-        guard let trash = updated.trashFilenames, !trash.isEmpty else { return }
         let dir = directory(for: updated)
         let trashDir = dir.appendingPathComponent("trash", isDirectory: true)
+        let after = updated.trashAfter ?? [:]
 
-        for filename in trash.sorted() {
-            let source = trashDir.appendingPathComponent(filename)
-            guard FileManager.default.fileExists(atPath: source.path) else { continue }
-            try? FileManager.default.moveItem(
-                at: source, to: dir.appendingPathComponent(filename))
-            updated.frameFilenames.append(filename)
+        // Zuletzt Entferntes zuerst: So findet jedes Bild seinen Vorgänger
+        // wieder, auch wenn der selbst im Papierkorb lag.
+        var pending = Array(trash.reversed()).filter {
+            FileManager.default.fileExists(atPath: trashDir.appendingPathComponent($0).path)
         }
-        // Timeline in Aufnahme-Reihenfolge halten
-        updated.frameFilenames.sort()
+        func place(_ filename: String, at index: Int) {
+            try? FileManager.default.moveItem(at: trashDir.appendingPathComponent(filename),
+                                              to: dir.appendingPathComponent(filename))
+            updated.frameFilenames.insert(filename, at: min(max(0, index), updated.frameFilenames.count))
+        }
+        var progressed = true
+        while progressed {
+            progressed = false
+            for filename in pending {
+                guard let previous = after[filename] else { continue }
+                if previous.isEmpty {
+                    place(filename, at: 0)
+                } else if let index = updated.frameFilenames.firstIndex(of: previous) {
+                    place(filename, at: index + 1)
+                } else {
+                    continue
+                }
+                pending.removeAll { $0 == filename }
+                progressed = true
+                break
+            }
+        }
+        // Ohne bekannten Platz (ältere Werke, Vorgänger endgültig gelöscht):
+        // nach Aufnahme-Nummer einreihen, vor das erste spätere Bild.
+        for filename in pending.sorted() {
+            place(filename, at: updated.frameFilenames.firstIndex { $0 > filename } ?? updated.frameFilenames.count)
+        }
         updated.trashFilenames = nil
+        updated.trashAfter = nil
+        followFrames(&updated, from: project.frameFilenames)
         save(updated)
     }
 
@@ -916,6 +1056,7 @@ final class ProjectStore: ObservableObject {
                 }
             }
             guard var trash = project.trashFilenames, !trash.isEmpty else { continue }
+            var positions = project.trashAfter ?? [:]
             var changed = false
             for filename in trash {
                 let url = trashDir.appendingPathComponent(filename)
@@ -923,12 +1064,14 @@ final class ProjectStore: ObservableObject {
                 if let modified, modified < cutoff {
                     try? FileManager.default.removeItem(at: url)
                     trash.removeAll { $0 == filename }
+                    positions[filename] = nil
                     changed = true
                 }
             }
             if changed {
                 var updated = project
                 updated.trashFilenames = trash.isEmpty ? nil : trash
+                updated.trashAfter = trash.isEmpty || positions.isEmpty ? nil : positions
                 save(updated)
             }
         }
@@ -1035,6 +1178,37 @@ final class ProjectStore: ObservableObject {
             }
         }
         return saved
+    }
+}
+
+/// Bildbereiche `first…last` (0-basiert) auf eine geänderte Bildliste
+/// umrechnen. Maßgeblich sind die Bilder selbst (Dateinamen), nicht ihre
+/// alten Nummern.
+enum FrameRanges {
+    /// - Parameters:
+    ///   - moved: Ein umgestelltes Bild zählt nicht zum Bereich, außer der
+    ///     Bereich besteht nur aus ihm – sonst zöge ein einzelnes Bild den
+    ///     ganzen Text mit.
+    ///   - extendOverInserted: Neue Bilder direkt hinter dem Ende gehören
+    ///     dazu (Verdoppeln, Halten: dieselbe Pose).
+    /// - Returns: nil, wenn kein Bild des Bereichs mehr im Werk ist.
+    static func remap(first: Int, last: Int, old: [String], new: [String],
+                      moved: String? = nil, extendOverInserted: Bool = false) -> (first: Int, last: Int)? {
+        // Liegt ganz hinter dem Film (für Bilder, die noch kommen): unverändert
+        guard last >= first, first < old.count else { return (first, last) }
+        let low = max(0, first), high = min(last, old.count - 1)
+        let beyond = last - high
+        var position: [String: Int] = [:]
+        for (index, name) in new.enumerated() { position[name] = index }
+        var members = Array(old[low...high])
+        if let moved, members.count > 1 { members.removeAll { $0 == moved } }
+        let indices = members.compactMap { position[$0] }
+        guard let newFirst = indices.min(), var newLast = indices.max() else { return nil }
+        if extendOverInserted {
+            let known = Set(old)
+            while newLast + 1 < new.count, !known.contains(new[newLast + 1]) { newLast += 1 }
+        }
+        return (newFirst, beyond > 0 ? new.count - 1 + beyond : newLast)
     }
 }
 

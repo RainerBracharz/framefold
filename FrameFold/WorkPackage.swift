@@ -168,6 +168,7 @@ enum ImportCheck {
         var seen = Set<String>()
         p.frameFilenames = p.frameFilenames.filter { seen.insert($0).inserted }
         p.trashFilenames = nil
+        p.trashAfter = nil
         let numbers = p.frameFilenames.compactMap { Int($0.prefix(6)) }.filter { $0 >= 0 && $0 < 999_999 }
         p.nextFrameNumber = (numbers.max() ?? -1) + 1
 

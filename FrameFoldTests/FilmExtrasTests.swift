@@ -111,6 +111,7 @@ final class FilmExtrasTests: XCTestCase {
         try Data([0xFF, 0xD8, 0xFF, 0xD9]).write(to: bg)
         XCTAssertTrue(store.setGreenScreenBackground(from: bg, in: project.id))
         store.setTitles(title: "Faltung", credits: "Ende", in: project.id)
+        store.flushPendingSaves()   // Titel werden gebündelt geschrieben
         let reloaded = ProjectStore(root: dir.appendingPathComponent("store"), defaults: UserDefaults(suiteName: suite)!)
         let p = try XCTUnwrap(reloaded.projects.first)
         XCTAssertEqual(p.greenScreen?.key, .blue)

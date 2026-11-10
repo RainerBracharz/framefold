@@ -199,7 +199,129 @@ final class ProjectStoreTests: XCTestCase {
         XCTAssertNil(after.trashFilenames)
     }
 
+    func testRestoreTrashKeepsOwnOrder() {
+        let store = makeStore()
+        let project = store.createProject(name: "A")
+        for i in 0..<4 { store.appendFrame(jpegData: jpeg(UInt8(i)), to: current(store, project)) }
+        // Bild 4 nach vorn stellen, dann das zweite der neuen Folge entfernen
+        store.moveFrame(named: "000003.jpg", by: -3, in: current(store, project))
+        store.removeFrames(named: ["000000.jpg"], from: current(store, project))
+        store.restoreTrash(in: current(store, project))
+        XCTAssertEqual(current(store, project).frameFilenames,
+                       ["000003.jpg", "000000.jpg", "000001.jpg", "000002.jpg"],
+                       "Die eigene Reihenfolge bleibt, das Bild steht wieder an seinem Platz")
+    }
+
+    func testRestoreTrashAfterSeparateRemovals() {
+        let store = makeStore()
+        let project = store.createProject(name: "A")
+        for i in 0..<5 { store.appendFrame(jpegData: jpeg(UInt8(i)), to: current(store, project)) }
+        store.removeFrames(named: ["000002.jpg"], from: current(store, project))
+        store.removeFrames(named: ["000003.jpg"], from: current(store, project))
+        store.restoreTrash(in: current(store, project))
+        XCTAssertEqual(current(store, project).frameFilenames,
+                       (0..<5).map { String(format: "%06d.jpg", $0) })
+    }
+
+    // MARK: Bildbereiche folgen den Bildern
+
+    func testFrameRanges() {
+        let old = ["a", "b", "c", "d", "e"]
+        // Bild davor entfernt: Bereich rückt vor
+        XCTAssertTrue(FrameRanges.remap(first: 2, last: 3, old: old, new: ["b", "c", "d", "e"])! == (1, 2))
+        // Bild im Bereich entfernt: Bereich wird kürzer
+        XCTAssertTrue(FrameRanges.remap(first: 1, last: 3, old: old, new: ["a", "b", "d", "e"])! == (1, 2))
+        // Einziges Bild entfernt: Bereich entfällt
+        XCTAssertNil(FrameRanges.remap(first: 2, last: 2, old: old, new: ["a", "b", "d", "e"]))
+        // Verdoppelt am Ende des Bereichs: gehört dazu
+        XCTAssertTrue(FrameRanges.remap(first: 1, last: 2, old: old, new: ["a", "b", "c", "x", "d", "e"],
+                                        extendOverInserted: true)! == (1, 3))
+        // Verdoppelt davor: Bereich rückt nach hinten
+        XCTAssertTrue(FrameRanges.remap(first: 2, last: 3, old: old, new: ["a", "x", "b", "c", "d", "e"],
+                                        extendOverInserted: true)! == (3, 4))
+        // Einzelbild umgestellt: Zeichnung wandert mit
+        XCTAssertTrue(FrameRanges.remap(first: 4, last: 4, old: old, new: ["e", "a", "b", "c", "d"], moved: "e")! == (0, 0))
+        // Bild aus einem Bereich heraus umgestellt: Bereich bleibt bei den übrigen
+        XCTAssertTrue(FrameRanges.remap(first: 0, last: 2, old: old, new: ["b", "c", "d", "e", "a"], moved: "a")! == (0, 1))
+        // Reicht über das Filmende hinaus: bleibt offen
+        XCTAssertTrue(FrameRanges.remap(first: 3, last: 9, old: old, new: ["b", "c", "d", "e"])! == (2, 8))
+        // Liegt ganz hinter dem Film: unverändert
+        XCTAssertTrue(FrameRanges.remap(first: 7, last: 9, old: old, new: ["b", "c", "d", "e"])! == (7, 9))
+    }
+
+    func testOverlayFollowsItsFrame() {
+        let store = makeStore()
+        let project = store.createProject(name: "A")
+        for i in 0..<4 { store.appendFrame(jpegData: jpeg(UInt8(i)), to: current(store, project)) }
+        let drawing = FrameOverlay(kind: .drawing, firstFrame: 2, lastFrame: 2)
+        store.upsertOverlay(drawing, in: project.id)
+        store.setCameraMoves([CameraMove(firstFrame: 1, lastFrame: 3)], in: project.id)
+
+        store.removeFrames(named: ["000000.jpg"], from: current(store, project))
+        var after = current(store, project)
+        XCTAssertEqual(after.overlays?.first?.firstFrame, 1)
+        XCTAssertEqual(after.cameraMoves?.first?.firstFrame, 0)
+        XCTAssertEqual(after.cameraMoves?.first?.lastFrame, 2)
+
+        store.holdFrame(named: "000002.jpg", frames: 3, in: after)
+        after = current(store, project)
+        XCTAssertEqual(after.overlays?.first?.firstFrame, 1)
+        XCTAssertEqual(after.overlays?.first?.lastFrame, 3, "Gehaltene Bilder zeigen dieselbe Zeichnung")
+
+        store.removeFrames(at: IndexSet(1...3), from: after)
+        XCTAssertNil(current(store, project).overlays, "Ohne ihr Bild entfällt die Zeichnung")
+    }
+
+    // MARK: Gebündeltes Schreiben
+
+    func testDeferredChangesReachTheDisk() {
+        let store = makeStore()
+        let project = store.createProject(name: "A")
+        store.setTitles(title: "Anfang", credits: nil, in: project.id)
+        XCTAssertEqual(current(store, project).titleText, "Anfang", "gilt sofort im Speicher")
+        store.flushPendingSaves()
+        XCTAssertEqual(current(makeStore(), project).titleText, "Anfang")
+    }
+
+    func testUndoKeepsLaterTitle() {
+        let store = makeStore()
+        let undo = UndoManager()
+        undo.groupsByEvent = false
+        store.undoManager = undo
+        let project = store.createProject(name: "A")
+        for i in 0..<3 { store.appendFrame(jpegData: jpeg(UInt8(i)), to: current(store, project)) }
+        undo.beginUndoGrouping()
+        store.moveFrame(named: "000002.jpg", by: -2, in: current(store, project))
+        undo.endUndoGrouping()
+        undo.beginUndoGrouping()
+        store.setTitles(title: "Neu", credits: nil, in: project.id)
+        undo.endUndoGrouping()
+        undo.undo()
+        XCTAssertNil(current(store, project).titleText, "erster Schritt zurück nimmt nur den Titel")
+        XCTAssertEqual(current(store, project).frameFilenames.first, "000002.jpg")
+        undo.undo()
+        XCTAssertEqual(current(store, project).frameFilenames.first, "000000.jpg")
+    }
+
     // MARK: Beschädigtes Manifest
+
+    func testUnreadableManifestIsKept() throws {
+        let store = makeStore()
+        let project = store.createProject(name: "A")
+        for i in 0..<2 { store.appendFrame(jpegData: jpeg(UInt8(i)), to: current(store, project)) }
+        let manifest = projectDir(project).appendingPathComponent("manifest.json")
+        let broken = Data("{ \"aus\": \"der Zukunft\" }".utf8)
+        try broken.write(to: manifest)
+        try jpeg(9).write(to: projectDir(project).appendingPathComponent("ebene-12345678.jpg"))
+
+        let reloaded = makeStore()
+        let recovered = try XCTUnwrap(reloaded.projects.first { $0.id == project.id })
+        XCTAssertEqual(recovered.frameFilenames, ["000000.jpg", "000001.jpg"], "Ebenen sind keine Filmbilder")
+        let names = try FileManager.default.contentsOfDirectory(atPath: projectDir(project).path)
+        let kept = try XCTUnwrap(names.first { $0.hasPrefix("manifest.defekt-") }, "Das alte Manifest bleibt liegen")
+        XCTAssertEqual(try Data(contentsOf: projectDir(project).appendingPathComponent(kept)), broken)
+    }
+
 
     func testMissingManifestIsRecoveredFromImages() throws {
         let store = makeStore()
