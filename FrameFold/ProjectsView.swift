@@ -273,7 +273,6 @@ struct ProjectDetailView: View {
     @State private var isRenderingSheet = false
     @State private var flipbookURL: URL?
     @State private var isRenderingFlipbook = false
-    @State private var foldTemplateURL: URL?
     @State private var isRenderingTemplate = false
     @State private var showsPatternChoice = false
     @State private var shareItem: ShareItem?
@@ -512,6 +511,7 @@ struct ProjectDetailView: View {
         .onChange(of: currentProject.overlays) { _, _ in exportURL = nil }
         .onChange(of: currentProject.titleText) { _, _ in exportURL = nil }
         .onChange(of: currentProject.creditsText) { _, _ in exportURL = nil }
+        .onChange(of: currentProject.cameraMoves) { _, _ in exportURL = nil }
     }
 
     /// Immer den frischen Stand aus dem Store verwenden.
@@ -1032,11 +1032,15 @@ struct ProjectDetailView: View {
                 }
             }
             .padding(.top, 8)
-            // Neue oder entfernte Bilder: fertige Drucksachen passen nicht mehr
-            .onChange(of: currentProject.frameCount) { _, _ in
+            // Neue, entfernte, umgestellte oder neu aufgenommene Bilder und
+            // ein neuer Name: fertige Drucksachen passen nicht mehr
+            .onChange(of: currentProject.frameFilenames) { _, _ in
                 flipbookURL = nil
                 contactSheetURL = nil
-                foldTemplateURL = nil
+            }
+            .onChange(of: currentProject.name) { _, _ in
+                flipbookURL = nil
+                contactSheetURL = nil
             }
         }
     }
@@ -1076,7 +1080,6 @@ struct ProjectDetailView: View {
                 return FoldTemplateRenderer.render(image: image, title: title, pattern: pattern)
             }()
             await MainActor.run {
-                foldTemplateURL = result
                 isRenderingTemplate = false
                 if let result {
                     shareItem = ShareItem(url: result)   // Teilen-Sheet direkt öffnen

@@ -1329,8 +1329,8 @@ struct StudioView: View {
             showXSheet = true
         case .testShot:
             if let frame = controller.currentLatestFrame {
-                testShots.append(UIImage(cgImage: frame))
-                testShown = testShots.count - 1
+                testShots = [UIImage(cgImage: frame)]   // nur die jüngste ist je zu sehen
+                testShown = 0
             }
         }
     }
@@ -1399,6 +1399,7 @@ struct StudioView: View {
         toggleTask = Task { @MainActor in
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: UInt64(1_000_000_000 / max(1, settings.toggleRate)))
+                if Task.isCancelled { break }
                 autoPhase.toggle()
             }
         }

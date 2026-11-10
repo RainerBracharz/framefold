@@ -47,6 +47,10 @@ extension LiveCaptureController {
     func switchLens(to lens: CameraLens) {
         #if !targetEnvironment(macCatalyst)
         UserDefaults.standard.set(lens.rawValue, forKey: CameraLens.storageKey)
+        // Vor der ersten Sitzung ist noch nichts eingerichtet: Die Wahl ist
+        // gespeichert, `configureSession` nimmt sie beim Start. Hier schon
+        // einen Eingang zu setzen, ließe den Start an „keine Kamera“ scheitern.
+        guard !session.inputs.isEmpty else { return }
         guard let newDevice = lens.device, newDevice != device,
               let input = try? AVCaptureDeviceInput(device: newDevice) else { return }
         manual = nil
@@ -88,6 +92,8 @@ extension LiveCaptureController {
                 self.clapTrigger = false
                 return
             }
+            // Die Sitzung kann während der Rückfrage geendet haben.
+            guard self.clapTrigger, self.isRunning else { return }
             if self.clapListener == nil {
                 self.clapListener = ClapListener { [weak self] in
                     Task { @MainActor in

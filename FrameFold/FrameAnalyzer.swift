@@ -1,18 +1,14 @@
 import Foundation
 import AVFoundation
-import CoreImage
-import Accelerate
 import UIKit
 
 /// Extrahiert Frames in niedriger Auflösung und berechnet Bewegungs- und Schärfe-Metriken.
 final class FrameAnalyzer {
 
-    private let ciContext = CIContext(options: [.cacheIntermediates: false])
-
     struct AnalyzedFrame {
         let seconds: Double
-        let motionScore: Double   // mittlere absolute Differenz zum Vorgänger (0 beim ersten Frame)
-        let grayPixels: [UInt8]   // downgesampeltes Graustufenbild (für dHash & Debug)
+        let motionScore: Double   // Bewegung zum Vorgänger, Helligkeit ausgeglichen (0 beim ersten Frame)
+        let grayPixels: [UInt8]   // downgesampeltes Graustufenbild (für Schärfe und Duplikate)
         let width: Int
         let height: Int
     }
@@ -111,14 +107,6 @@ final class FrameAnalyzer {
         Algorithms.laplacianVariance(gray: gray, width: width, height: height)
     }
 
-    /// dHash für Deduplizierung (delegiert an Algorithms).
-    static func dHash(gray: [UInt8], width: Int, height: Int) -> UInt64 {
-        Algorithms.dHash(gray: gray, width: width, height: height)
-    }
-
-    static func hammingDistance(_ a: UInt64, _ b: UInt64) -> Int {
-        Algorithms.hammingDistance(a, b)
-    }
 }
 
 enum PipelineError: LocalizedError {

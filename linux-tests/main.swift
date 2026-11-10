@@ -1,7 +1,6 @@
-// Linux-Testsuite für die pure Algorithmus-Logik der App.
-// Kompiliert Algorithms.swift + Models.swift mit echtem Swift (ohne Apple-
-// Frameworks) und prüft alle Kernpfade. Läuft in der Cloud-Umgebung:
-//   swiftc -o tests Algorithms.swift Models.swift Tests.swift && ./tests
+// Tests für die reine Algorithmus-Logik der App, ohne Apple-Frameworks.
+// Die CI baut und startet sie bei jedem Push:
+//   swiftc -o /tmp/fftests FrameFold/Algorithms.swift FrameFold/Models.swift linux-tests/main.swift && /tmp/fftests
 
 import Foundation
 
@@ -222,12 +221,6 @@ check(flines.allSatisfy {
 }, "alle Linien innerhalb des Bildrahmens")
 // 4 Schnitt + 3 Senkrechte + 4 Waagrechte + 20 Diagonalen = 31
 check(flines.count == 4 + 3 + 4 + 20, "Linienzahl stimmt (\(flines.count))")
-
-// MARK: Reel-Bildzahl
-print("reelFrameCount:")
-check(Algorithms.reelFrameCount(frameCounts: [10, 20, 5], titleHold: 12) == 35 + 36, "Frames + Titelkarten je Werk")
-check(Algorithms.reelFrameCount(frameCounts: [], titleHold: 12) == 0, "keine Werke → 0")
-check(Algorithms.reelFrameCount(frameCounts: [8], titleHold: 0) == 8, "ohne Titelkarte → nur Frames")
 
 // MARK: Verwebung
 print("weavePlan/weaveReveal:")

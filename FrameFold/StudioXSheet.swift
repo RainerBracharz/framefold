@@ -326,7 +326,13 @@ struct XSheetView: View {
         let locale = Locale(identifier: readLanguage)
         Task {
             do {
+                // Erkannt wird die ungekürzte Datei, zu hören ist nur der
+                // gekürzte Teil: Zeiten verschieben, Wörter außerhalb weglassen.
+                let trim = max(0, track.trimStart ?? 0)
+                let length = track.maxLength.flatMap { $0 > 0 ? $0 : nil } ?? .infinity
                 let words = try await SpeechReader.words(in: url, locale: locale)
+                    .filter { $0.start >= trim && $0.start - trim < length }
+                    .map { TimedWord(text: $0.text, start: $0.start - trim, duration: $0.duration) }
                 let entries = DialogueReading.entries(for: words, character: character, fps: fps,
                                                       offsetFrames: track.startFrame)
                 if let current = store.projects.first(where: { $0.id == projectID }) {

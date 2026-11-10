@@ -83,6 +83,7 @@ struct VoiceRecordSheet: View {
 
     @StateObject private var recorder = VoiceRecorder()
     @State private var images: [UIImage?] = []
+    @State private var beginTask: Task<Void, Never>?
     @State private var countdown: Int?
     @State private var startDate: Date?
     @State private var finished = false
@@ -143,6 +144,7 @@ struct VoiceRecordSheet: View {
                         .disabled(countdown != nil)
                 }
                 Button("Abbrechen", role: .cancel) {
+                    beginTask?.cancel()
                     if recorder.isRecording { recorder.stop() }
                     onDone(nil, startFrame)
                 }
@@ -156,7 +158,7 @@ struct VoiceRecordSheet: View {
         .background(Theme.darkroom)
         .preferredColorScheme(.dark)
         .task { await loadImages() }
-        .onDisappear { if recorder.isRecording { recorder.stop() } }
+        .onDisappear { beginTask?.cancel(); if recorder.isRecording { recorder.stop() } }
     }
 
     /// Bild, das zu diesem Zeitpunkt der Aufnahme läuft (vorher: das Startbild).
@@ -178,13 +180,15 @@ struct VoiceRecordSheet: View {
     }
 
     private func begin() {
-        Task {
+        beginTask = Task {
             guard await recorder.requestPermission() else { return }
             for n in [3, 2, 1] {
                 countdown = n
                 try? await Task.sleep(nanoseconds: 700_000_000)
             }
             countdown = nil
+            // Während des Countdowns abgebrochen: keine Aufnahme mehr starten.
+            guard !Task.isCancelled else { return }
             if recorder.start() { startDate = Date() }
         }
     }

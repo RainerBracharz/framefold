@@ -32,9 +32,6 @@ enum FoldPattern: String, CaseIterable, Identifiable {
         }
     }
 
-    /// Muster mit Berg und Tal werden quadratisch gedruckt
-    var isSquare: Bool { self != .grid }
-
     func creases(in rect: CGRect) -> [Algorithms.Crease] {
         switch self {
         case .grid:
@@ -111,15 +108,6 @@ enum FoldGuide: String, CaseIterable, Identifiable, Codable {
         let current = min(max(0, step), steps.count)
         stroke(steps.prefix(current).flatMap { $0 }, alpha: opacity * 0.3, width: 1)
         if current < steps.count { stroke(steps[current], alpha: opacity, width: 2.4) }
-    }
-
-    /// Ganzes Muster quadratisch und mittig in `rect` (ohne Blatterkennung).
-    func draw(in ctx: inout GraphicsContext, rect: CGRect, opacity: Double = 0.8) {
-        let side = min(rect.width, rect.height) * 0.9
-        let s = CGRect(x: rect.midX - side / 2, y: rect.midY - side / 2, width: side, height: side)
-        draw(in: &ctx, quad: [CGPoint(x: s.minX, y: s.minY), CGPoint(x: s.maxX, y: s.minY),
-                              CGPoint(x: s.maxX, y: s.maxY), CGPoint(x: s.minX, y: s.maxY)],
-             step: nil, opacity: opacity)
     }
 
     var stepCount: Int { unitSteps.steps.count }
@@ -206,9 +194,11 @@ enum FoldTemplateRenderer {
                 drawText(title.uppercased(), size: 11, tracking: 2.4,
                          color: UIColor.ffInk,
                          at: CGPoint(x: margin, y: margin))
-                let sub = pattern == .grid
-                    ? "FALTVORLAGE · ENTLANG DER GESTRICHELTEN LINIEN FALTEN"
-                    : String(localized: "FALTVORLAGE · \(pattern.label.uppercased())")
+                // Raster: die Anleitung selbst steht in der Kopfzeile (ohne Punkt).
+                let hint = pattern == .grid
+                    ? pattern.instructions.trimmingCharacters(in: CharacterSet(charactersIn: ".。"))
+                    : pattern.label
+                let sub = String(localized: "FALTVORLAGE · \(hint.uppercased())")
                 drawText(sub, size: 7, tracking: 2.0, color: UIColor.ffGraphite,
                          at: CGPoint(x: margin, y: margin + 16))
 

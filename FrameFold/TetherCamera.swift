@@ -49,7 +49,7 @@ final class TetherCamera: NSObject, ObservableObject {
         lastError = nil
         browser.requestControlAuthorization { [weak self] status in
             Task { @MainActor in
-                guard let self else { return }
+                guard let self, self.browser === browser else { return }   // inzwischen gestoppt
                 if status == .authorized {
                     browser.start()
                 } else {

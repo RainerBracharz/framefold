@@ -66,13 +66,6 @@ enum Theme {
     /// Warnung/Löschen – gedämpftes Oxblood statt grellem Systemrot.
     static let oxblood = Color(red: 0.510, green: 0.208, blue: 0.180) // #82352E
 
-    /// „Licht im Blatt" – Papierlicht → Amber → Teal. Für Logo und Hero-Momente.
-    static let spectrum = LinearGradient(
-        colors: [Color(red: 0.957, green: 0.929, blue: 0.855),
-                 amberLight,
-                 Color(red: 0.498, green: 0.659, blue: 0.671)],
-        startPoint: .leading, endPoint: .trailing)
-
     /// Der gebrochene Falz – Auswahl, Fortschritt, Pegel (Amber, sein Signal).
     static let crease = LinearGradient(
         colors: [amberLight, amber],
@@ -142,12 +135,8 @@ enum Theme {
 
     /// Gesperrte Grotesk-Versalien für Abschnitts- und Statuszeilen.
     static func caption(_ size: CGFloat = 11) -> Font { mono(size, .medium) }
-    /// Werktitel (Serif).
-    static var title: Font { serif(23, .light) }
     /// Kurzer Fließtext / Anmerkung (Grotesk).
     static var body: Font { mono(13, .regular) }
-    /// Zahlen – gleichbreite Ziffern (Tabellenziffern).
-    static var numeral: Font { mono(14, .medium) }
 }
 
 // MARK: Signet „Rekursion"
@@ -422,21 +411,6 @@ struct LogoTile: View {
     }
 }
 
-/// Logo-Lockup für Titelleisten: Kachel + Wortmarke in Serif.
-struct LogoLockup: View {
-    var tileSize: CGFloat = 26
-    var textSize: CGFloat = 16
-
-    var body: some View {
-        HStack(spacing: 9) {
-            LogoTile(size: tileSize)
-            Text("FrameFold")
-                .font(Theme.serif(textSize, .regular))
-                .foregroundStyle(Theme.ink)
-        }
-    }
-}
-
 // MARK: Bausteine
 
 /// Modus-Umschalter als Katalog-Reiter (statt System-Segmentschalter).
@@ -699,8 +673,6 @@ struct EditionFrame: ViewModifier {
 extension View {
     /// Gerahmte Tafel (schwarze Keyline).
     func plate() -> some View { modifier(PlateFrame()) }
-    /// Alias (Rückwärtskompatibilität mit älteren Views).
-    func passepartout() -> some View { modifier(PlateFrame()) }
     /// Edition unter Acrylglas (Glanz + Schatten).
     func editionPlate() -> some View { modifier(EditionFrame()) }
     /// Wie ein gerahmter Abzug an der Wand: weicher Schlagschatten.
@@ -726,7 +698,6 @@ extension UIColor {
     static let ffPaper = UIColor(Theme.paper)
     static let ffInk = UIColor(Theme.ink)
     static let ffGraphite = UIColor(Theme.graphite)
-    static let ffHairline = UIColor(Theme.hairline)
     static let ffAmber = UIColor(Theme.amber)
     static let ffAmberLight = UIColor(Theme.amberLight)
     static let ffDarkroom = UIColor(Theme.darkroom)

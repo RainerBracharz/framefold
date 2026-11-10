@@ -30,8 +30,7 @@ final class ProcessingViewModel: ObservableObject {
 
     private let analyzer = FrameAnalyzer()
     private let assembler = StopMotionAssembler()
-    /// CoreML-Modell (RF-DETR), falls gebündelt – sonst Apples Vision
-    private let handDetector: HandDetecting = HandDetectorFactory.make()
+    private let handDetector: HandDetecting = VisionHandDetector()
 
     // Analyse-Cache: einmal gerechnet, beliebig oft neu ausgewertet
     private var cachedFrames: [FrameAnalyzer.AnalyzedFrame] = []
@@ -43,6 +42,7 @@ final class ProcessingViewModel: ObservableObject {
     private var handCache: [Int: Bool] = [:]        // Zeit (ms) → Hände sichtbar
     private var thumbCache: [Int: UIImage] = [:]    // Zeit (ms) → Vorschaubild
     private var discardedForHands = 0
+    private var discardedAsDuplicates = 0
     private var recomputeTask: Task<Void, Never>?
     /// Laufende Analyse oder Montage – abbrechbar, und ein neuer Lauf
     /// beendet den alten, statt dass dessen Ergebnis später alles überschreibt.
@@ -99,6 +99,7 @@ final class ProcessingViewModel: ObservableObject {
     private func startRun() -> Int {
         workTask?.cancel()
         recomputeTask?.cancel()
+        isRecomputing = false   // die abgebrochene Neuberechnung setzt es nicht mehr zurück
         runID += 1
         return runID
     }
@@ -180,11 +181,16 @@ final class ProcessingViewModel: ObservableObject {
                         self.report(.checkingHands(progress: min(1, overall)), run: id)
                     }
                 }
+                // Abgebrochen: nur merken, was wirklich geprüft wurde – sonst
+                // gälten ungeprüfte Bilder für immer als handfrei.
                 for t in unknown {
                     let k = key(t)
-                    let result = detected[k]
-                    handCache[k] = result?.hasHands ?? false
-                    if keep.contains(k), let image = result?.image, thumbCache[k] == nil {
+                    guard let result = detected[k] else {
+                        if !Task.isCancelled { handCache[k] = false }
+                        continue
+                    }
+                    handCache[k] = result.hasHands
+                    if keep.contains(k), let image = result.image, thumbCache[k] == nil {
                         thumbCache[k] = image // Vorschaubild gratis mitgenommen
                     }
                 }
@@ -259,15 +265,18 @@ final class ProcessingViewModel: ObservableObject {
             * KeyframeSelector.motionThreshold(frames: cachedFrames, settings: settings)
         var deduped: [Double] = []
         var lastGray: [UInt8]? = nil
+        var duplicates = 0
         for frame in chosen {
             if let last = lastGray, last.count == frame.gray.count,
                Algorithms.maxBlockDifference(frame.gray, last, width: frame.w, height: frame.h) < dupLimit {
+                duplicates += 1
                 continue
             }
             deduped.append(frame.time)
             lastGray = frame.gray
         }
         self.discardedForHands = discardedHands
+        self.discardedAsDuplicates = duplicates
 
         // Vorschaubilder: fehlende in EINEM Decoder-Durchlauf nachladen
         let missing = deduped.filter { thumbCache[Int($0 * 1000)] == nil }
@@ -276,9 +285,12 @@ final class ProcessingViewModel: ObservableObject {
             for (key, image) in thumbs { thumbCache[key] = image }
         }
         if Task.isCancelled { return }
+        // Abgewählte Bilder bleiben abgewählt, wenn der Regler neu rechnet.
+        let deselected = Set(reviewFrames.filter { !$0.selected }.map(\.id))
         self.reviewFrames = deduped.map { time in
             let key = Int(time * 1000)
-            return ReviewFrame(id: key, time: time, thumbnail: thumbCache[key])
+            return ReviewFrame(id: key, time: time, thumbnail: thumbCache[key],
+                               selected: !deselected.contains(key))
         }
     }
 
@@ -295,6 +307,7 @@ final class ProcessingViewModel: ObservableObject {
         guard !times.isEmpty else { return }
         let duration = cachedFrames.last?.seconds ?? 0
         let discarded = discardedForHands
+        let duplicates = discardedAsDuplicates
         stage = .assembling(progress: 0)
 
         let id = startRun()
@@ -311,7 +324,7 @@ final class ProcessingViewModel: ObservableObject {
                     outputURL: outputURL,
                     sourceDuration: duration,
                     discardedForHands: discarded,
-                    discardedAsDuplicates: 0)
+                    discardedAsDuplicates: duplicates)
                 self.stage = .done
             } catch is CancellationError {
             } catch {

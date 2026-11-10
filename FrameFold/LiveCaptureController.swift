@@ -471,7 +471,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// Holt eine gedrosselte Fixierung nach, sobald es passt. Wird aus der
     /// Analyse gepulst.
     private func servePendingRigRelock() {
-        guard pendingRigRelock, rig.locksFocus, calibrationSamples == nil,
+        guard pendingRigRelock, manual == nil, rig.locksFocus, calibrationSamples == nil,
               focusTask == nil, currentMotion <= motionThreshold,
               Date().timeIntervalSince(lastRigRelock) > 5 else { return }
         pendingRigRelock = false
@@ -631,7 +631,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         let median = sorted.isEmpty ? 1.0 : sorted[sorted.count / 2]
         return min(8.0, max(1.0, (median * 3 * 2).rounded() / 2))
     }
-    private var handDetector: HandDetecting = HandDetectorFactory.make()
+    private var handDetector: HandDetecting = VisionHandDetector()
     /// Handprüfung läuft abseits des Hauptthreads – Vision auf einem
     /// Full-HD-Bild kostete dort bei jeder Auslösung spürbar Zeit im Sucher.
     private var handCheckTask: Task<Void, Never>?

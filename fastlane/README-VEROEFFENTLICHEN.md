@@ -20,7 +20,7 @@ brew install fastlane
 cd ~/Desktop/05_Projekte/framefold
 
 # 1. Neue Versionsnummer setzen
-fastlane bump version:1.0.2
+fastlane bump version:2.11
 
 # 2. Release-Notes schreiben
 open fastlane/metadata/de-DE/release_notes.txt
@@ -31,27 +31,55 @@ fastlane release
 
 Der letzte Befehl erhöht die Build-Nummer selbst, archiviert, lädt hoch,
 wartet auf Apples Verarbeitung, hängt den Build an die Version, überträgt
-die Release-Notes und reicht zur Prüfung ein.
+Texte und Screenshots und reicht zur Prüfung ein.
 
-Die **Veröffentlichung nach der Freigabe bleibt manuell** — so bestimmst du
-selbst, wann eine Version live geht (wichtig, wenn PR und Launch
-zusammenpassen sollen). Wer das automatisch will, setzt im `Fastfile`
-`automatic_release: true`.
+Nach Apples Freigabe geht die Version **von selbst in den Store**
+(`automatic_release: true` im `Fastfile`). Wer den Zeitpunkt selbst bestimmen
+will, setzt dort `automatic_release: false`.
+
+Wartet noch eine andere Version auf die Prüfung, bricht `fastlane release`
+ab. `fastlane resubmit` zieht die wartende Einreichung zurück und reicht die
+aktuelle Version ein.
+
+## Mac-Fassung
+
+```
+fastlane mac_release   # bauen, hochladen, Texte + Screenshots, einreichen
+fastlane mac_upload    # nur bauen und hochladen (TestFlight)
+fastlane mac_metadata  # nur Texte und Screenshots
+fastlane mac_submit    # jüngsten gültigen Mac-Build einreichen
+```
+
+Texte liegen in `fastlane/metadata-mac`, Screenshots in
+`fastlane/screenshots-mac`.
 
 ## Weitere Befehle
 
 ```
-fastlane upload    # nur bauen und hochladen, ohne Einreichung (TestFlight)
-fastlane status    # Zustand der letzten Versionen anzeigen
+fastlane upload     # nur bauen und hochladen, ohne Einreichung (TestFlight)
+fastlane submit     # neuesten Build der aktuellen Version einreichen
+fastlane metadata   # nur Texte hochladen
+fastlane status     # Zustand der letzten Versionen je Plattform
+fastlane shots      # welche Screenshots je Gerätetyp im Store liegen
+fastlane check      # Prüfbericht nach fastlane/bericht.txt
+fastlane creative_assets step:probe   # Creative Assets: probe | upload | submit | place
 ```
+
+## Screenshots und Vorschauvideos
+
+- Screenshots liegen in `fastlane/screenshots/<Sprache>` und gehen bei jedem
+  `fastlane release` mit. Neue Bilder ersetzen die alten nur mit
+  `fastlane release overwrite_shots:true`.
+- Vorschauvideos (`fastlane/previews`) und Duo-Screenshots
+  (`fastlane/screenshots-duo`) lädt `fastlane release` über
+  `scripts/app_preview.rb` und `scripts/duo_screenshots.rb`, sobald Dateien
+  dort liegen.
 
 ## Was fastlane nicht übernimmt
 
-- **Bedienungshilfen-Angaben** — einmalig im Browser setzen, sie gelten
+- **Bedienungshilfen-Angaben**: einmalig im Browser setzen, sie gelten
   danach für alle Folgeversionen
-- **Screenshots** — ändern sich selten; bei Bedarf über
-  `fastlane/screenshots` und `skip_screenshots: false` nachrüsten
-- **Erstveröffentlichung einer neuen App** — dafür braucht es weiterhin
+- **Erstveröffentlichung einer neuen App**: dafür braucht es weiterhin
   einige Angaben im Browser; Updates laufen vollständig über fastlane
 
 ## Sicherheit

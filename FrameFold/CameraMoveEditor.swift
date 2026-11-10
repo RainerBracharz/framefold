@@ -133,8 +133,12 @@ private struct FramingPicker: View {
                 .compositingGroup()
                 .contentShape(Rectangle())
                 .gesture(DragGesture(minimumDistance: 0).onChanged { value in
-                    framing.x = min(max(0, value.location.x / size.width), 1)
-                    framing.y = min(max(0, value.location.y / size.height), 1)
+                    // In einem Stück schreiben: Zwei Zuweisungen läsen beide den
+                    // alten Stand, die zweite überschriebe das neue x.
+                    var moved = framing
+                    moved.x = min(max(0, value.location.x / size.width), 1)
+                    moved.y = min(max(0, value.location.y / size.height), 1)
+                    framing = moved
                 })
             }
             .aspectRatio(aspect, contentMode: .fit)

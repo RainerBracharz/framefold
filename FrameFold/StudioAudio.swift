@@ -97,18 +97,22 @@ final class AudioShapeCenter: ObservableObject {
     @Published private(set) var revision = 0
     private var pending: [UUID: Task<Void, Never>] = [:]
     private var wanted: [UUID: ShapeSpec] = [:]
+    /// Fassungen, die sich nicht rechnen ließen – nicht endlos neu bestellen.
+    private var failed: [UUID: ShapeSpec] = [:]
 
     func request(_ spec: ShapeSpec) {
-        guard wanted[spec.trackID] != spec else { return }
+        guard wanted[spec.trackID] != spec, failed[spec.trackID] != spec else { return }
         wanted[spec.trackID] = spec
         pending[spec.trackID]?.cancel()
         pending[spec.trackID] = Task { [weak self] in
             try? await Task.sleep(nanoseconds: 300_000_000)
             guard !Task.isCancelled else { return }
-            _ = await Task.detached(priority: .utility) { try? AudioShaper.render(spec) }.value
+            let done = await Task.detached(priority: .utility) { (try? AudioShaper.render(spec)) != nil }.value
             guard let self, !Task.isCancelled else { return }
             self.pending[spec.trackID] = nil
             self.wanted[spec.trackID] = nil
+            guard done else { self.failed[spec.trackID] = spec; return }
+            self.failed[spec.trackID] = nil
             self.revision += 1
         }
     }

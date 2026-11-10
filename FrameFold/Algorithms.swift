@@ -579,14 +579,6 @@ enum Algorithms {
         return lines
     }
 
-    // MARK: Ausstellungs-Reel
-
-    /// Gesamtzahl der Bilder eines Reels: pro Werk eine gehaltene Titelkarte
-    /// (titleHold Bilder) plus dessen Frames.
-    static func reelFrameCount(frameCounts: [Int], titleHold: Int) -> Int {
-        frameCounts.reduce(0) { $0 + $1 } + max(0, titleHold) * frameCounts.count
-    }
-
     // MARK: Kontaktbogen-Layout
 
     /// Rasterlayout für den Kontaktbogen: quadratische Zellen in `columns`

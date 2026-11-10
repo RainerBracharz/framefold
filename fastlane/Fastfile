@@ -79,7 +79,7 @@ platform :ios do
   end
 
   # Die Mac-Fassung (Mac Catalyst) teilt sich Bundle-ID und App-Eintrag mit
-  # dem iPhone – ein Kauf, zwei Plattformen. Gebaut wird ein signiertes .pkg
+  # dem iPhone – ein Eintrag, zwei Plattformen. Gebaut wird ein signiertes .pkg
   # für den Mac App Store.
   private_lane :mac_pkg do |options|
     build_app(project: PROJECT, scheme: SCHEME,
@@ -282,8 +282,8 @@ platform :ios do
       api_key: api_key,
       app_identifier: APP_ID,
       # Metadaten kommen aus fastlane/metadata, Screenshots aus
-      # fastlane/screenshots (iPhone 6,9" in allen drei Sprachen, Watch für
-      # de-DE). `fastlane release overwrite_shots:true` ersetzt, was im Store
+      # fastlane/screenshots (iPhone 6,9" und iPad 13" in Deutsch, Englisch
+      # und Französisch, Watch für de-DE). `fastlane release overwrite_shots:true` ersetzt, was im Store
       # liegt – nötig, wenn die Bilder neu sind (2.3: „Werke", ohne alte
       # Aldo-Motive). Duo-Bilder lädt Schritt 2b danach wieder hoch.
       skip_screenshots: false,

@@ -127,8 +127,12 @@ final class StudioFrameCache: ObservableObject {
         cache.totalCostLimit = 400 << 20   // ~400 MB, Kosten = Pixelbytes
     }
 
+    /// Nicht lesbare Dateien – sonst lüde jede Neuzeichnung sie wieder.
+    private var failed: Set<URL> = []
+
     func image(_ url: URL) -> UIImage? {
         if let image = cache.object(forKey: url as NSURL) { return image }
+        guard !failed.contains(url) else { return nil }
         enqueue([url], front: true)
         return nil
     }
@@ -161,6 +165,8 @@ final class StudioFrameCache: ObservableObject {
                     if let image {
                         let cost = image.cgImage.map { $0.bytesPerRow * $0.height } ?? 0
                         self.cache.setObject(image, forKey: url as NSURL, cost: cost)
+                    } else {
+                        self.failed.insert(url)
                     }
                     self.loading.remove(url)
                     self.active -= 1

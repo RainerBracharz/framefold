@@ -2,7 +2,9 @@
 """
 FrameFold – Python-Referenzimplementierung der Stopmotion-Pipeline.
 
-Identische Logik wie die Swift-App (FrameAnalyzer + KeyframeSelector):
+Stand der ersten App-Fassung. Die App rechnet inzwischen anders
+(10 fps, Helligkeitsausgleich, Duplikate über Rasterfelder, Handprüfung);
+maßgeblich ist der Swift-Code. Ablauf hier:
   1. Sampling bei ~6 fps, downscale auf 160 px, Graustufen
   2. motion[i] = mittlere absolute Differenz zum Vorgänger
   3. Adaptive Schwelle = Perzentil der Motion-Verteilung

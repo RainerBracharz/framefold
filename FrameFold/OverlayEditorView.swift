@@ -330,6 +330,7 @@ struct OverlayEditorView: View {
 
     private func undoStroke() {
         guard var drawing = (project?.overlays ?? []).first(where: { $0.kind == .drawing && $0.firstFrame == frameIndex && $0.lastFrame == frameIndex }) else { return }
+        guard !drawing.strokes.isEmpty else { store.removeOverlay(id: drawing.id, in: projectID); return }
         drawing.strokes.removeLast()
         if drawing.strokes.isEmpty { store.removeOverlay(id: drawing.id, in: projectID) } else { store.upsertOverlay(drawing, in: projectID) }
     }

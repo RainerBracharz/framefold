@@ -115,6 +115,8 @@ final class MotionController: NSObject, ObservableObject {
 
     /// Alle Achsen an die Positionen fahren und warten, bis das Gerät die
     /// Ankunft meldet (höchstens `timeout` Sekunden).
+    private var moveGeneration = 0
+
     func move(to target: [Int], timeout: Double = 60) async -> Bool {
         guard isConnected else { return false }
         finishMove(false)
@@ -123,11 +125,15 @@ final class MotionController: NSObject, ObservableObject {
         isMoving = true
         waiting = Set(axesToMove.map { $0 + 1 })
         for i in axesToMove { send(MotionProtocol.move(axis: i + 1, to: target[i])) }
+        // Die Frist gilt nur für diese Fahrt – sonst bräche der Wecker einer
+        // früheren Fahrt eine spätere ab.
+        moveGeneration += 1
+        let generation = moveGeneration
         let ok = await withCheckedContinuation { continuation in
             moveContinuation = continuation
             Task { @MainActor [weak self] in
                 try? await Task.sleep(nanoseconds: UInt64(timeout * 1_000_000_000))
-                if self?.moveContinuation != nil {
+                if self?.moveGeneration == generation, self?.moveContinuation != nil {
                     self?.lastError = String(localized: "Das Motorsteuergerät hat die Ankunft nicht gemeldet.")
                     self?.finishMove(false)
                 }

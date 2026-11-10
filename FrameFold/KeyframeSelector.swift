@@ -6,8 +6,6 @@ struct KeyframeSelector {
 
     struct StillWindow {
         let frames: [FrameAnalyzer.AnalyzedFrame]
-        var startSeconds: Double { frames.first?.seconds ?? 0 }
-        var endSeconds: Double { frames.last?.seconds ?? 0 }
     }
 
     /// Die adaptive Bewegungsschwelle dieses Videos. Dient auch als Maßstab
@@ -24,7 +22,7 @@ struct KeyframeSelector {
 
     /// Zerlegt die Frame-Folge in Ruhefenster.
     /// Schwelle: Otsu-Split mit Perzentil-Untergrenze (siehe Algorithms) –
-    /// verifiziert gegen die Python-Referenz und die Linux-Swift-Tests.
+    /// geprüft in linux-tests/main.swift.
     static func stillWindows(
         frames: [FrameAnalyzer.AnalyzedFrame],
         settings: PipelineSettings

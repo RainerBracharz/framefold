@@ -357,6 +357,11 @@ final class ProjectStore: ObservableObject {
             updated.frameFilenames.append(filename)
             updated.nextFrameNumber = number + 1
             save(updated)
+            // „Rückgängig“ stellt ganze Stände wieder her. Ein älterer Stand
+            // kennt dieses Bild nicht und würde es in den Papierkorb legen,
+            // ohne dass es dort gelistet ist. Darum endet hier der Verlauf.
+            undoManager?.removeAllActions(withTarget: self)
+            lastUndoKey = nil
             return filename
         } catch {
             return nil
@@ -1058,26 +1063,5 @@ extension UIImage {
         ]
         guard let cg = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) else { return nil }
         return UIImage(cgImage: cg)
-    }
-
-    /// Verkleinert, ohne zu verzerren: Die längere Seite wird `maxSide`.
-    func scaledToFit(maxSide: CGFloat) -> UIImage {
-        let scale = min(1, maxSide / max(size.width, size.height, 1))
-        let target = CGSize(width: size.width * scale, height: size.height * scale)
-        return UIGraphicsImageRenderer(size: target).image { _ in
-            draw(in: CGRect(origin: .zero, size: target))
-        }
-    }
-
-    /// Füllt `target` und schneidet den Überstand mittig ab – für Kacheln
-    /// mit festem Format. Vorher wurde das Bild hineingestaucht: Querformat-
-    /// Bilder der Mac-Kamera wirkten im quadratischen Kontaktbogen platt.
-    func filled(to target: CGSize) -> UIImage {
-        let fill = max(target.width / max(size.width, 1), target.height / max(size.height, 1))
-        let drawn = CGSize(width: size.width * fill, height: size.height * fill)
-        return UIGraphicsImageRenderer(size: target).image { _ in
-            draw(in: CGRect(x: (target.width - drawn.width) / 2, y: (target.height - drawn.height) / 2,
-                            width: drawn.width, height: drawn.height))
-        }
     }
 }

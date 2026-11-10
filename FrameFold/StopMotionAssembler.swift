@@ -49,19 +49,19 @@ final class StopMotionAssembler {
         let tmpDir = FileManager.default.temporaryDirectory
         let batchID = UUID().uuidString
         var extracted: [URL] = []
+        defer { for url in extracted { try? FileManager.default.removeItem(at: url) } }
         var index = 0
         for await result in generator.images(for: times) {
+            try Task.checkCancellation()
             if case .success(requestedTime: _, image: let image, actualTime: _) = result,
                let data = UIImage(cgImage: image).jpegData(compressionQuality: 0.95) {
                 let url = tmpDir.appendingPathComponent("ff-kf-\(batchID)-\(index).jpg")
-                try? data.write(to: url)
-                extracted.append(url)
+                if (try? data.write(to: url)) != nil { extracted.append(url) }
             }
             index += 1
             progress(0.3 * Double(index) / Double(times.count))
         }
         guard !extracted.isEmpty else { throw PipelineError.noKeyframesFound }
-        defer { for url in extracted { try? FileManager.default.removeItem(at: url) } }
 
         return try await assemble(imageURLs: extracted, settings: settings) { p in
             progress(0.3 + 0.7 * p)
@@ -188,6 +188,14 @@ final class StopMotionAssembler {
         writer.add(input)
         guard writer.startWriting() else { throw PipelineError.exportFailed }
         writer.startSession(atSourceTime: .zero)
+        // Abbruch oder Fehler: keinen halben Film im Zwischenspeicher lassen.
+        var finished = false
+        defer {
+            if !finished {
+                if writer.status == .writing { writer.cancelWriting() }
+                try? FileManager.default.removeItem(at: outputURL)
+            }
+        }
 
         // Wartet, bis der Encoder wieder Daten annimmt. Scheitert der Writer
         // (Speicher voll, Encoder-Fehler), bliebe `isReadyForMoreMediaData`
@@ -265,6 +273,7 @@ final class StopMotionAssembler {
         // Stufe 1: Homographie (korrigiert auch Verdrehung/Neigung),
         // Stufe 2: Verschiebungs-Fallback per Block-Matching.
         var alignedCache: [Int: (image: CGImage, offset: CGPoint)] = [:]
+        var keep: Set<Int> = []
         func aligned(at index: Int) async throws -> (image: CGImage, offset: CGPoint) {
             if let hit = alignedCache[index] { return hit }
             let raw = try await image(at: index)
@@ -277,12 +286,15 @@ final class StopMotionAssembler {
                 }
             }
             // Basis und Überblendbild genügen – lange Filme bleiben klein.
-            if alignedCache.count > 2 { alignedCache.removeAll() }
+            // Die übrigen Bilder dieses Schritts bleiben, sonst würde die
+            // Basis bei jeder Blende ein zweites Mal ausgerichtet.
+            if alignedCache.count >= 2 { alignedCache = alignedCache.filter { keep.contains($0.key) } }
             alignedCache[index] = result
             return result
         }
 
         for (position, step) in steps.enumerated() {
+            keep = Set([step.baseIndex, step.overlayIndex].compactMap { $0 })
             let base = try await aligned(at: step.baseIndex)
             let baseImage = base.image
             let offset = base.offset
@@ -331,6 +343,7 @@ final class StopMotionAssembler {
         input.markAsFinished()
         await writer.finishWriting()
         guard writer.status == .completed else { throw PipelineError.exportFailed }
+        finished = true
         return outputURL
     }
 

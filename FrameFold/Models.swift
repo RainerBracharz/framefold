@@ -239,19 +239,6 @@ enum LoopMode: String, CaseIterable, Identifiable, Codable {
     }
 }
 
-/// Ein Kandidaten-Frame aus der Analysephase.
-struct FrameSample {
-    let time: CMTimeValueBox
-    let motionScore: Double
-    var sharpness: Double = 0
-}
-
-/// CMTime lässt sich nicht direkt in Structs ohne CoreMedia-Import verwenden;
-/// kleine Box für Zeitwerte in Sekunden.
-struct CMTimeValueBox: Hashable {
-    let seconds: Double
-}
-
 /// Ergebnis der Verarbeitung.
 struct PipelineResult {
     let keyframeTimes: [Double]

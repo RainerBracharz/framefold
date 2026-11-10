@@ -35,6 +35,9 @@ enum ExhibitionBuilder {
         s.loopMode = .none
         s.transitionFrames = 0
         s.interferenzEcho = false
+        // Nicht ausrichten: Der Bezug wäre das erste Bild, also die erste
+        // Titelkarte – jedes Werk würde gegen eine Textkarte verschoben.
+        s.alignFrames = false
         return try await StopMotionAssembler().assemble(
             imageURLs: urls, settings: s, progress: progress)
     }

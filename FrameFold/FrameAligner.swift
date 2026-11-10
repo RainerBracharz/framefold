@@ -105,10 +105,12 @@ final class FrameAligner {
     func register(_ image: CGImage) -> CGPoint {
         let (gray, w, h) = FrameAnalyzer.grayscaleDownsampled(image, targetWidth: analysisWidth)
 
-        guard let reference = referenceGray, w == refW, h == refH else {
+        guard let reference = referenceGray else {
             referenceGray = gray; refW = w; refH = h
             return .zero
         }
+        // Anderes Format: nicht ausrichten, der Bezug bleibt das erste Bild.
+        guard w == refW, h == refH else { return .zero }
 
         let maxShift = max(4, Int(Double(w) * maxShiftFraction))
         let (dx, dy) = Algorithms.estimateTranslation(
@@ -118,12 +120,6 @@ final class FrameAligner {
         // Analysepixel → Originalpixel; current um (−dx,−dy) zurückschieben.
         let scale = CGFloat(image.width) / CGFloat(max(1, w))
         return CGPoint(x: -CGFloat(dx) * scale, y: CGFloat(dy) * scale)
-    }
-
-    func reset() {
-        referenceSmall = nil
-        referenceGray = nil
-        refW = 0; refH = 0
     }
 
     // MARK: Hilfen

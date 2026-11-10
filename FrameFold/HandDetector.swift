@@ -2,12 +2,8 @@ import Foundation
 import Vision
 import CoreGraphics
 
-/// Stufe A der Handerkennung: Apples eingebaute Hand-Pose-Erkennung.
+/// Handerkennung mit Apples eingebauten Vision-Modellen.
 /// Läuft auf der Neural Engine, braucht kein externes Modell.
-///
-/// Stufe B: ein eigenes CoreML-Modell (CoreMLHandDetector) – greift nur,
-/// wenn eines gebündelt ist; die Auswahl trifft `HandDetectorFactory`.
-/// Derzeit ist keins dabei, es läuft Stufe A.
 protocol HandDetecting {
     func containsHands(cgImage: CGImage, confidence: Float) -> Bool
 }

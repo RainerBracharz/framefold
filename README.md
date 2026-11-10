@@ -9,7 +9,7 @@
 [<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="44" />](https://apps.apple.com/app/id6801045603)
 
 [![iOS Build](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml/badge.svg)](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml)
-&nbsp;·&nbsp; **Live on the App Store** &nbsp;·&nbsp; English · Deutsch · Français &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; iPhone · iPad · Mac · Apple Watch &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
+&nbsp;·&nbsp; **Live on the App Store** &nbsp;·&nbsp; 17 languages &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; iPhone · iPad · Mac · Apple Watch &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
 
 </div>
 
@@ -54,8 +54,7 @@ that decision is written up here:
 - **Video → stop-motion, automatically.** Samples the footage, scores motion and
   sharpness, keeps one clean frame per moment of rest.
 - **Hands removed.** Frames with visible hands are discarded via Apple's Vision
-  hand-pose detection (with an optional path to a custom-trained RF-DETR CoreML
-  model).
+  hand-pose detection and person segmentation.
 - **Auto-shutter camera.** Put the phone on a tripod and work. It fires by itself
   whenever your hands leave the frame and the scene settles, then **locks
   exposure and white balance** so nothing drifts between frames, and snaps the
@@ -143,8 +142,9 @@ that decision is written up here:
 - **Shutter without shake.** Hold the shutter for a three-second self-timer, or
   use the volume buttons on headphones and AirPods — Apple's capture-event API,
   which also covers cheap Bluetooth camera remotes — or simply clap.
-- **Eight languages.** German, English, French, Spanish, Italian, Dutch,
-  Japanese and Portuguese (Brazil). The whole app, from first launch to the contact
+- **17 languages.** German, English, French, Spanish, Italian, Dutch,
+  Japanese, Portuguese (Brazil), Czech, Danish, Korean, Polish, Russian,
+  Swedish, Turkish, Ukrainian and Simplified Chinese. The whole app, from first launch to the contact
   sheet, follows the phone's language. Every screen is checked in every language
   by an automated walkthrough (see *Engineering*).
 - **Private by design.** Everything happens on the device. No account, no upload,
@@ -175,7 +175,7 @@ recursion of its own image), and fold transitions in three styles — **crease**
 
 ```
 Video ─▶ sample ~10 fps ─▶ motion + sharpness scoring ─▶ Otsu rest detection
-      ─▶ hand removal (Vision / RF-DETR) ─▶ dedup ─▶ review ─▶ stabilise
+      ─▶ hand removal (Vision) ─▶ dedup ─▶ review ─▶ stabilise
       ─▶ assemble (AVAssetWriter)
 ```
 
@@ -214,13 +214,13 @@ images.
 |---|---|
 | **UI** | SwiftUI (iOS 17+), watchOS 10+ companion |
 | **Vision / capture** | AVFoundation, Vision, CoreMotion, Core Image |
-| **On-device ML** | Apple Vision hand-pose; CoreML-ready for a custom RF-DETR model |
+| **On-device ML** | Apple Vision hand pose and person segmentation, no custom model |
 | **Persistence** | File-based projects with JSON manifests |
 | **CI/CD** | GitHub Actions on macOS — builds and runs the test suite on every commit; fastlane uploads, waits for Apple's processing, submits and releases automatically |
 | **Tests** | 60+ unit tests on the pure algorithmic core, plus a UI walkthrough that taps through every screen and saves a screenshot of each — per language |
-| **Localisation** | String Catalogs, German source, English complete; plurals handled by the catalog |
+| **Localisation** | String Catalogs, German source, 16 translations; plurals handled by the catalog |
 | **Dependencies** | None. No third-party SDK, no analytics, no crash reporting |
-| **Devices** | iPhone, Apple Watch, plus any external display over HDMI or AirPlay |
+| **Devices** | iPhone, iPad, Mac (Mac Catalyst), Apple Watch, plus any external display over HDMI or AirPlay |
 
 ## Build and run
 
