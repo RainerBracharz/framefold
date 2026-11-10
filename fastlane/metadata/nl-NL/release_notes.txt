@@ -1,4 +1,3 @@
-Films uit het tabblad Video met vier of meer beelden worden weer gemaakt, ook met ‘Flikkering verminderen’ aan.
-De handherkenning vindt meer handen, ook afgesneden vingers en armen aan de rand van het beeld. Handen van klei-, houten en bouwsteenfiguren ziet ze minder vaak aan voor echte.
-Rust een hand een tijdje in beeld, dan laat FrameFold dat moment helemaal weg.
-Op de iPad spreken de introductie en de cameratips over de iPad. In de studio staand staan ‘Afdrukken’ en ‘Klaar’ op een eigen regel.
+Het vouwsjabloon biedt hypar, cirkelplooi en Miura-ori met berg- en dalvouwen. Hypar en cirkelplooi volgen Origami Simulator van Amanda Ghassaei, gemaakt met Erik Demaine en Tomohiro Tachi.
+Het vouwpatroon kan als hulplijn in de zoeker meelopen. Het legt zich op het platte vel en toont bij elk beeld de volgende vouw.
+Het resultaat na ‘Klaar’ op het tabblad Camera heeft de geluidssporen van het werk.

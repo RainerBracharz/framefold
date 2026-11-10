@@ -1,4 +1,3 @@
-Les films de l’onglet Vidéo comptant quatre images ou plus se créent de nouveau, même avec « Réduire le scintillement » activé.
-La détection des mains en trouve davantage, y compris les doigts coupés et les bras au bord de l’image. Elle prend moins souvent les mains des figurines en pâte à modeler, en bois et en briques pour de vraies mains.
-Si une main reste un moment dans l’image, FrameFold omet entièrement ce passage.
-Sur iPad, l’introduction et les conseils de caméra parlent de l’iPad. Dans le studio en portrait, « Déclencher » et « Terminé » occupent leur propre ligne.
+Le gabarit de pliage propose hypar, plis circulaires et Miura-ori avec plis montagne et vallée. Hypar et plis circulaires suivent Origami Simulator d'Amanda Ghassaei, créé avec Erik Demaine et Tomohiro Tachi.
+Le motif peut s'afficher comme repère dans le viseur. Il se pose sur la feuille à plat et montre le pli suivant à chaque image.
+Le résultat après « Terminé » dans l'onglet Caméra contient les pistes son de l'œuvre.

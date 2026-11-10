@@ -1,4 +1,3 @@
-Film fra fanen Video med fire eller flere billeder bliver igen lavet, også med »Reducer flimmer« slået til.
-Håndgenkendelsen finder flere hænder, også afskårne fingre og arme i billedets kant. Den tager sjældnere hænder på ler-, træ- og klodsfigurer for ægte.
-Hviler en hånd et stykke tid i billedet, udelader FrameFold det øjeblik helt.
-På iPad taler introduktionen og kameratipsene om iPad. I studiet i stående format står »Tag billede« og »Færdig« på deres egen linje.
+Foldeskabelonen tilbyder hypar, cirkelfold og Miura-ori med bjerg- og dalfolder. Hypar og cirkelfold følger Origami Simulator af Amanda Ghassaei, lavet med Erik Demaine og Tomohiro Tachi.
+Foldemønsteret kan vises som hjælpelinje i søgeren. Det lægger sig på det flade ark og viser næste fold for hvert billede.
+Resultatet efter “Færdig” på fanen Kamera har værkets lydspor.

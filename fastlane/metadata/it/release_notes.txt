@@ -1,4 +1,3 @@
-I film della scheda Video con quattro o più fotogrammi si creano di nuovo, anche con «Riduci sfarfallio» attivo.
-Il rilevamento delle mani ne trova di più, comprese dita tagliate e braccia al bordo dell’immagine. Scambia meno spesso le mani di figure in plastilina, legno e mattoncini per mani vere.
-Se una mano resta a lungo nell’immagine, FrameFold tralascia del tutto quel momento.
-Su iPad, l’introduzione e i suggerimenti della fotocamera parlano di iPad. Nello studio in verticale, «Scatta» e «Fine» stanno su una riga propria.
+Il modello di piegatura offre hypar, pieghe circolari e Miura-ori con pieghe a monte e a valle. Hypar e pieghe circolari seguono Origami Simulator di Amanda Ghassaei, realizzato con Erik Demaine e Tomohiro Tachi.
+Lo schema può comparire come guida nel mirino. Si appoggia sul foglio piatto e mostra la piega successiva a ogni fotogramma.
+Il risultato dopo «Fine» nella scheda Fotocamera contiene le tracce audio dell'opera.

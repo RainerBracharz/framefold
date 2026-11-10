@@ -1,4 +1,3 @@
-Filmy z karty Video se čtyřmi a více snímky se znovu vytvářejí, i se zapnutou volbou „Potlačit blikání“.
-Rozpoznávání rukou najde víc rukou, i oříznuté prsty a paže na okraji obrazu. Ruce figurek z modelíny, dřeva a stavebnic považuje za skutečné méně často.
-Když ruka chvíli spočívá v obraze, FrameFold tento okamžik úplně vynechá.
-Na iPadu mluví úvod a tipy ke kameře o iPadu. Ve studiu na výšku stojí „Snímat“ a „Hotovo“ na vlastním řádku.
+Šablona skládání nabízí hypar, kruhové sklady a Miura-ori s hřbety a údolími. Hypar a kruhové sklady vycházejí z Origami Simulator od Amandy Ghassaei, vytvořeného s Erikem Demainem a Tomohirem Tachim.
+Vzor se může zobrazit jako vodítko v hledáčku. Přiloží se na rovný list a s každým snímkem ukáže další sklad.
+Výsledek po „Hotovo“ na kartě Kamera obsahuje zvukové stopy díla.

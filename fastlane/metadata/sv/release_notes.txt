@@ -1,4 +1,3 @@
-Filmer från fliken Video med fyra eller fler bilder skapas igen, även med ”Minska flimmer” påslaget.
-Handigenkänningen hittar fler händer, även avskurna fingrar och armar i bildens kant. Den tar mer sällan händer på ler-, trä- och klossfigurer för riktiga.
-Vilar en hand en stund i bilden utelämnar FrameFold det ögonblicket helt.
-På iPad talar introduktionen och kameratipsen om iPad. I studion i stående läge står ”Ta bild” och ”Klar” på en egen rad.
+Vikmallen erbjuder hypar, cirkelveck och Miura-ori med berg- och dalvikningar. Hypar och cirkelveck följer Origami Simulator av Amanda Ghassaei, gjord med Erik Demaine och Tomohiro Tachi.
+Vikmönstret kan visas som hjälplinje i sökaren. Det lägger sig på det platta arket och visar nästa vikning för varje bild.
+Resultatet efter ”Klar” på fliken Kamera har verkets ljudspår.

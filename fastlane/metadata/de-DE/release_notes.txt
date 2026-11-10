@@ -1,4 +1,3 @@
-Filme aus dem Video-Tab mit vier oder mehr Bildern entstehen wieder, auch mit eingeschaltetem „Flimmern ausgleichen“.
-Die Handerkennung findet mehr Hände, auch angeschnittene Finger und Arme am Bildrand. Hände von Knet-, Holz- und Klemmbausteinfiguren hält sie seltener für echte.
-Ruht eine Hand länger im Bild, lässt FrameFold diese Stelle ganz aus.
-Auf dem iPad sprechen Einführung und Kamerahinweise vom iPad. Im Studio hochkant stehen „Auslösen“ und „Fertig“ in einer eigenen Zeile.
+Die Faltvorlage bietet Hypar, Kreisfalte und Miura-ori mit Berg- und Talfalten. Hypar und Kreisfalte folgen dem Origami Simulator von Amanda Ghassaei, entstanden mit Erik Demaine und Tomohiro Tachi.
+Das Faltmuster läuft auf Wunsch als Hilfslinie im Sucher mit. Es legt sich auf das flache Blatt und zeigt mit jedem Bild die nächste Falte.
+Das Ergebnis nach „Fertig“ im Kamera-Tab hat die Tonspuren des Werks.

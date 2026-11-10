@@ -1,4 +1,3 @@
-Films from the Video tab with four or more frames are created again, also with “Reduce flicker” switched on.
-Hand detection finds more hands, including cropped fingers and arms at the edge of the frame. It takes the hands of clay, wooden and brick figures for real ones less often.
-If a hand rests in the frame for a while, FrameFold leaves that moment out entirely.
-On iPad, the introduction and camera hints refer to iPad. In the studio in portrait, “Take frame” and “Done” sit on a line of their own.
+The fold template offers hypar, circular pleat and Miura-ori with mountain and valley folds. Hypar and circular pleat follow Origami Simulator by Amanda Ghassaei, made with Erik Demaine and Tomohiro Tachi.
+The crease pattern can run as a guide in the viewfinder. It lies on the flat sheet and shows the next fold with every frame.
+The result after “Done” in the Camera tab has the work's sound tracks.

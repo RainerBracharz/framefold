@@ -1,4 +1,3 @@
-Las películas de la pestaña Vídeo con cuatro o más fotogramas vuelven a crearse, también con «Reducir parpadeo» activado.
-La detección de manos encuentra más manos, incluidos dedos cortados y brazos en el borde de la imagen. Confunde con menos frecuencia las manos de figuras de plastilina, madera y bloques de construcción con manos reales.
-Si una mano se queda un rato en la imagen, FrameFold omite ese momento por completo.
-En el iPad, la introducción y los consejos de cámara hablan del iPad. En el estudio en vertical, «Disparar» y «Listo» ocupan su propia línea.
+La plantilla de plegado ofrece hypar, pliegue circular y Miura-ori con pliegues monte y valle. Hypar y pliegue circular siguen Origami Simulator de Amanda Ghassaei, creado con Erik Demaine y Tomohiro Tachi.
+El patrón puede verse como guía en el visor. Se coloca sobre la hoja plana y muestra el siguiente pliegue con cada imagen.
+El resultado tras «Listo» en la pestaña Cámara incluye las pistas de sonido de la obra.

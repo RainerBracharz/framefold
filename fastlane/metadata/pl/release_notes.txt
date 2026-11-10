@@ -1,4 +1,3 @@
-Filmy z karty Wideo z czterema lub więcej klatkami znów się tworzą, także przy włączonej opcji „Redukuj migotanie”.
-Wykrywanie dłoni znajduje więcej dłoni, także ucięte palce i ramiona przy krawędzi kadru. Rzadziej bierze dłonie figurek z plasteliny, drewna i klocków za prawdziwe.
-Jeśli dłoń dłużej spoczywa w kadrze, FrameFold całkowicie pomija ten moment.
-Na iPadzie wprowadzenie i wskazówki aparatu mówią o iPadzie. W studiu w pionie przyciski „Zrób zdjęcie” i „Gotowe” stoją we własnym wierszu.
+Szablon składania oferuje hypar, fałdy koliste i Miura-ori ze zgięciami górskimi i dolinowymi. Hypar i fałdy koliste opierają się na Origami Simulator Amandy Ghassaei, stworzonym z Erikiem Demainem i Tomohiro Tachim.
+Wzór może być linią pomocniczą w wizjerze. Kładzie się na płaskim arkuszu i z każdą klatką pokazuje następne zgięcie.
+Wynik po „Gotowe” na karcie Aparat zawiera ścieżki dźwiękowe pracy.
