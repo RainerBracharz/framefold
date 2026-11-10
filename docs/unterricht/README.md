@@ -70,6 +70,7 @@ Datenschutzerklärung: <https://www.bracharz.com/framefold-datenschutz/>
 
 ## Weiterführend
 
+- Zweiter Entwurf: [Bauhaus-Hypar falten und als Trickfilm aufnehmen](hypar/README.md), mit Faltvorlagen zum Ausdrucken
 - App Store: <https://apps.apple.com/app/id6801045603>
 - Quellcode (einsehbar): <https://github.com/RainerBracharz/framefold>
 - Anleitung zur App: [ANLEITUNG.md](../../ANLEITUNG.md)
