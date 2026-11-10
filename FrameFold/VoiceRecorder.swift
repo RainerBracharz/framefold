@@ -156,7 +156,7 @@ struct VoiceRecordSheet: View {
                 .font(Theme.mono(10)).foregroundStyle(Theme.paperOnDark.opacity(0.55))
         }
         .padding(20)
-        .frame(minWidth: 520)
+        .sheetMinSize(width: 520)
         .background(Theme.darkroom)
         .preferredColorScheme(.dark)
         .task {

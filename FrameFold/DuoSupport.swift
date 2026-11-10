@@ -203,3 +203,17 @@ struct OuterDisplayFilm: View {
         .accessibilityElement(children: .combine)
     }
 }
+
+extension View {
+    /// Mindestgröße für Blätter am Mac und iPad. Am iPhone ist jedes Blatt
+    /// schmaler als diese Maße – dort schnitte die Vorgabe den Inhalt links
+    /// und rechts ab.
+    @MainActor @ViewBuilder
+    func sheetMinSize(width: CGFloat, height: CGFloat? = nil) -> some View {
+        if Platform.isMac || Platform.isPad {
+            frame(minWidth: width, minHeight: height)
+        } else {
+            self
+        }
+    }
+}

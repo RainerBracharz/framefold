@@ -50,7 +50,7 @@ struct CameraMoveEditor: View {
                 }
             }
         }
-        .frame(minWidth: 520, minHeight: 640)
+        .sheetMinSize(width: 520, height: 640)
     }
 
     @ViewBuilder

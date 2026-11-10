@@ -117,7 +117,7 @@ struct SpeechSheet: View {
         }
         .foregroundStyle(Theme.paperOnDark)
         .padding(20)
-        .frame(minWidth: 480)
+        .sheetMinSize(width: 480)
         .background(Theme.darkroom)
         .preferredColorScheme(.dark)
     }

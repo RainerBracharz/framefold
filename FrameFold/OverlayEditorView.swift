@@ -106,7 +106,7 @@ struct OverlayEditorView: View {
             .background(Color.black)
             inspector
         }
-        .frame(minWidth: 640, minHeight: 600)
+        .sheetMinSize(width: 640, height: 600)
         .background(Theme.darkroom)
         .preferredColorScheme(.dark)
         .task { loadImage() }

@@ -145,7 +145,7 @@ struct XSheetView: View {
                 .onAppear { if let currentFrame { proxy.scrollTo(currentFrame, anchor: .center) } }
             }
         }
-        .frame(minWidth: 760, minHeight: 560)
+        .sheetMinSize(width: 760, height: 560)
         .background(Theme.darkroom)
         .preferredColorScheme(.dark)
         .alert("Neue Figur", isPresented: $showNewCharacter) {
