@@ -78,7 +78,7 @@ struct StudioView: View {
     // Der Körper ist bewusst in Stücke geteilt: Als eine lange Kette
     // überfordert er den Typprüfer älterer Xcode-Versionen (CI).
     var body: some View {
-        withDialogs(withImporter(withLifecycle(layout)))
+        withDialogs(withImporter(withLight(withLifecycle(layout))))
     }
 
     /// iPhone: alles untereinander, der Inspektor als eigenes Blatt.
@@ -203,16 +203,22 @@ struct StudioView: View {
             .onChange(of: selected) { _, _ in referenceFollow() }
             .onChange(of: project?.allAudioTracks) { _, _ in reloadAudio() }
             .onChange(of: shapes.revision) { _, _ in reloadAudio() }
+            .onChange(of: project?.greenScreen) { _, _ in rebuildGreenScreen() }
+            .onReceive(NotificationCenter.default.publisher(for: .ffStudio)) { note in
+                if let raw = note.object as? String, let command = StudioCommand(rawValue: raw) { handle(command) }
+            }
+    }
+
+    /// Eigene Kette – eine einzige lange überfordert den Typprüfer älterer
+    /// Xcode-Fassungen (CI).
+    private func withLight<V: View>(_ content: V) -> some View {
+        content
             .onChange(of: project?.frameCount) { _, _ in applyLight() }
             // Geänderter Plan (Stimmung entfernt, Überblenden, Kanäle): sofort ans Licht
             .onChange(of: plannedLight) { _, _ in applyLight() }
             .onChange(of: lights.universe) { _, _ in applyLight() }
             .onChange(of: lights.channels) { _, _ in applyLight() }
             .onChange(of: hostFieldFocused) { _, _ in updateHub() }
-            .onChange(of: project?.greenScreen) { _, _ in rebuildGreenScreen() }
-            .onReceive(NotificationCenter.default.publisher(for: .ffStudio)) { note in
-                if let raw = note.object as? String, let command = StudioCommand(rawValue: raw) { handle(command) }
-            }
     }
 
     private var importTypes: [UTType] {
