@@ -28,10 +28,10 @@ Alles läuft auf dem Gerät, ohne Konto und ohne Datenübertragung.
 | Plattformen | iPhone, iPad (iOS 17+), Mac, Apple Watch als Fernauslöser |
 | Preis | kostenlos, keine In-App-Käufe, kein Abo, keine Werbung |
 | Datenschutz | keine Daten erhoben, kein Konto, keine Verbindung ins Internet (Licht über Art-Net und Motion Control per Bluetooth nur auf Wunsch); Mikrofon nur auf Wunsch (Stimme aufnehmen, Auslösen per Klatschen); Spracherkennung und Sprachausgabe nur auf dem Gerät |
-| Sprachen | App: Deutsch, Englisch, Französisch, Spanisch, Italienisch, Niederländisch, Japanisch, Portugiesisch (Brasilien) |
+| Sprachen | App in 17 Sprachen: Deutsch, Englisch, Französisch, Spanisch, Italienisch, Niederländisch, Portugiesisch (Brasilien), Schwedisch, Dänisch, Polnisch, Tschechisch, Russisch, Ukrainisch, Türkisch, Japanisch, Koreanisch, Chinesisch (vereinfacht) |
 | Entwickler | Rainer Bracharz, Bracharz Consulting |
 | Erste Version | 24. August 2026 |
-| Aktuelle Version | 2.6 (25. Oktober 2026): iPad, Studio, Ton mit Geräuschen und Sprachausgabe, Greenscreen, Titel, Text und Zeichnen, volle Auflösung und manuelle Kamera, Rückgängig |
+| Aktuelle Version | 2.10 (November 2026): Faltvorlagen für Hypar, Kreisfalte und Miura-ori zum Ausdrucken, das Faltmuster als Hilfslinie im Sucher, Tonspuren im Ergebnis des Kamera-Tabs |
 
 ## Was FrameFold anders macht
 
@@ -68,6 +68,6 @@ FrameFold takes the shooting off your hands. The camera sees your hands and fire
 On top, it brings tools usually found only in professional software: a workspace with timeline and multi-frame onion skin, difference and exposure views, green screen, multiple audio tracks and an X-sheet with mouth shapes, ProRes export. Sound, sound effects, text to speech, green screen, titles, text, drawing and export up to 4K are all free, with no watermark.
 Everything runs on the device, without an account or data transfer.
 
-Facts: iPhone, iPad (iOS 17+), Mac, Apple Watch remote. Free, no in-app purchases. No data collected; microphone only on request, speech recognition and text to speech on the device. App in German, English, French, Spanish, Italian, Dutch, Japanese and Portuguese (Brazil). Developer: Rainer Bracharz, Bracharz Consulting. First release 24 August 2026, current version 2.6 (25 October 2026).
+Facts: iPhone, iPad (iOS 17+), Mac, Apple Watch remote. Free, no in-app purchases. No data collected; microphone only on request, speech recognition and text to speech on the device. App in 17 languages, among them German, English, French, Spanish, Italian, Japanese, Korean and Simplified Chinese. Developer: Rainer Bracharz, Bracharz Consulting. First release 24 August 2026, current version 2.10 (November 2026) with printable crease patterns and a fold guide in the viewfinder.
 
 Contact: Rainer Bracharz · rainer@bracharz.com
