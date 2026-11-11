@@ -119,6 +119,7 @@ struct LiveCaptureView: View {
             // denen sich der Simulator nicht bedienen lässt (aufgeklapptes
             // iPhone Duo), und für Store-Screenshots.
             .onAppear {
+                SiriBridge.controller = controller   // „Auslösen“ auf Zuruf
                 if Platform.autostart, !Self.autostarted, targetProject == nil {
                     Self.autostarted = true   // nur einmal je Start (Test-Schalter)
                     didSeeCameraTip = true

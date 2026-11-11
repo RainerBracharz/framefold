@@ -40,6 +40,8 @@
 		181BB47A40DDC1C5392E0DE1 /* ArtNet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C796AF5D4B8B45B3F064314 /* ArtNet.swift */; };
 		B5D9187BC7A510BB471452A4 /* TetherCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFD836334A15D79B7EC5B2 /* TetherCamera.swift */; };
 		1FB1C66CF6AE801F7114AAA9 /* CameraMoveEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E61D7FD31DD14C4FD178DFF /* CameraMoveEditor.swift */; };
+		51A1C0DE51A1C0DE51A1C002 /* SiriIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A1C0DE51A1C0DE51A1C001 /* SiriIntents.swift */; };
+		51A1C0DE51A1C0DE51A1C004 /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 51A1C0DE51A1C0DE51A1C003 /* AppShortcuts.xcstrings */; };
 		320918D380AA48FFFE331C8D /* CameraMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAC36CEF7EF184D8D1873D2 /* CameraMove.swift */; };
 		34E1DD2C18DC913C65DABB1E /* MusicLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40FA8D915709FBC84413973 /* MusicLibrary.swift */; };
 		857DAFE45094A7D6E3CB07DA /* WorkPackage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367935E5424A609B4DDD8E47 /* WorkPackage.swift */; };
@@ -144,6 +146,8 @@
 		1C796AF5D4B8B45B3F064314 /* ArtNet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtNet.swift; sourceTree = "<group>"; };
 		A0AFD836334A15D79B7EC5B2 /* TetherCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TetherCamera.swift; sourceTree = "<group>"; };
 		1E61D7FD31DD14C4FD178DFF /* CameraMoveEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraMoveEditor.swift; sourceTree = "<group>"; };
+		51A1C0DE51A1C0DE51A1C001 /* SiriIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriIntents.swift; sourceTree = "<group>"; };
+		51A1C0DE51A1C0DE51A1C003 /* AppShortcuts.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = AppShortcuts.xcstrings; sourceTree = "<group>"; };
 		CFAC36CEF7EF184D8D1873D2 /* CameraMove.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraMove.swift; sourceTree = "<group>"; };
 		E40FA8D915709FBC84413973 /* MusicLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicLibrary.swift; sourceTree = "<group>"; };
 		367935E5424A609B4DDD8E47 /* WorkPackage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkPackage.swift; sourceTree = "<group>"; };
@@ -269,6 +273,8 @@
 				1C796AF5D4B8B45B3F064314 /* ArtNet.swift */,
 				A0AFD836334A15D79B7EC5B2 /* TetherCamera.swift */,
 				1E61D7FD31DD14C4FD178DFF /* CameraMoveEditor.swift */,
+				51A1C0DE51A1C0DE51A1C001 /* SiriIntents.swift */,
+				51A1C0DE51A1C0DE51A1C003 /* AppShortcuts.xcstrings */,
 				CFAC36CEF7EF184D8D1873D2 /* CameraMove.swift */,
 				E40FA8D915709FBC84413973 /* MusicLibrary.swift */,
 				367935E5424A609B4DDD8E47 /* WorkPackage.swift */,
@@ -478,6 +484,7 @@
 				DA47649F07F31FB474676A5F /* Assets.xcassets in Resources */,
 				AA11F0F0F0F0F0F0F0F0F013 /* Localizable.xcstrings in Resources */,
 				AA11F0F0F0F0F0F0F0F0F023 /* InfoPlist.xcstrings in Resources */,
+				51A1C0DE51A1C0DE51A1C004 /* AppShortcuts.xcstrings in Resources */,
 				AA11F0F0F0F0F0F0F0F0F001 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -520,6 +527,7 @@
 				181BB47A40DDC1C5392E0DE1 /* ArtNet.swift in Sources */,
 				B5D9187BC7A510BB471452A4 /* TetherCamera.swift in Sources */,
 				1FB1C66CF6AE801F7114AAA9 /* CameraMoveEditor.swift in Sources */,
+				51A1C0DE51A1C0DE51A1C002 /* SiriIntents.swift in Sources */,
 				320918D380AA48FFFE331C8D /* CameraMove.swift in Sources */,
 				34E1DD2C18DC913C65DABB1E /* MusicLibrary.swift in Sources */,
 				857DAFE45094A7D6E3CB07DA /* WorkPackage.swift in Sources */,

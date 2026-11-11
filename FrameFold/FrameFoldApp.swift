@@ -221,7 +221,7 @@ struct OnboardingView: View {
 
 @main
 struct FrameFoldApp: App {
-    @StateObject private var projectStore = ProjectStore()
+    @StateObject private var projectStore: ProjectStore
     @State private var selectedTab = Platform.startTab ?? (Platform.autostart ? 1 : 0)
     /// Erststart: einmaliger Onboarding-Flow, der auch den Modus setzt.
     @AppStorage("didOnboard") private var didOnboard = false
@@ -247,6 +247,10 @@ struct FrameFoldApp: App {
     }
 
     init() {
+        // Ein Speicher für die Oberfläche und für die Siri-Befehle.
+        let store = ProjectStore()
+        _projectStore = StateObject(wrappedValue: store)
+        SiriBridge.store = store
         // UI-Test-Lauf: Erststart herstellen (Onboarding, Kamera-Tipp, Modus).
         // Als Löschung statt als Startargument-Wert, weil ein Argument-Wert
         // alles überstimmen würde, was die App danach selbst speichert.

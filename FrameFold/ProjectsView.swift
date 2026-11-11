@@ -503,6 +503,9 @@ struct ProjectDetailView: View {
             // … und die Wahl wird zum neuen Standard für den nächsten Export.
             newValue.persist()
         }
+        // Siri/Kurzbefehle „Stop-Motion exportieren“: einmal, für dieses Werk
+        .onAppear { exportIfRequested() }
+        .onReceive(NotificationCenter.default.publisher(for: .ffExportWork)) { _ in exportIfRequested() }
         .onChange(of: currentProject.frameFilenames) { _, _ in
             // Frames entfernt, ergänzt oder umgestellt → dito
             exportURL = nil
@@ -1194,6 +1197,12 @@ struct ProjectDetailView: View {
                 }
             }
         }
+    }
+
+    private func exportIfRequested() {
+        guard SiriBridge.pendingExport == project.id else { return }
+        SiriBridge.pendingExport = nil
+        if !isExporting, currentProject.frameCount > 0 { export() }
     }
 
     private func export() {
