@@ -135,7 +135,7 @@ The source code is published for reading. It is under a proprietary licence, see
 
 Typefaces: [Fraunces](https://github.com/undercasetype/Fraunces) and [Inter](https://github.com/rsms/inter), both under the SIL Open Font License (see `FrameFold/Fonts-Licenses/`).
 
-Built by **[Bracharz Consulting](https://www.bracharz.com)**, Rainer Bracharz, with AI assistance. The first version was a commission for **[Aldo Tolino](https://www.aldotolino.com/)**.
+Built by **[Bracharz Consulting](https://www.bracharz.com)**, Rainer Bracharz. The first version was a commission for **[Aldo Tolino](https://www.aldotolino.com/)**.
 
 ---
 
