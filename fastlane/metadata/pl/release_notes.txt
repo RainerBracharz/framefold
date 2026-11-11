@@ -1,3 +1,8 @@
-Szablon składania oferuje hypar, fałdy koliste i Miura-ori ze zgięciami górskimi i dolinowymi. Hypar i fałdy koliste opierają się na Origami Simulator Amandy Ghassaei, stworzonym z Erikiem Demainem i Tomohiro Tachim.
-Wzór może być linią pomocniczą w wizjerze. Kładzie się na płaskim arkuszu i z każdą klatką pokazuje następne zgięcie.
-Wynik po „Gotowe” na karcie Aparat zawiera ścieżki dźwiękowe pracy.
+Tekst, rysunki i jazdy kamery zostają przy swoich klatkach, gdy usuwasz, powielasz, zatrzymujesz lub przestawiasz klatki.
+„Przywróć” odkłada klatki z kosza na dawne miejsce.
+„Cofnij” obejmuje też tytuł, napisy końcowe, nazwę i dialog.
+Na iPhonie bieżący krok wzoru zgięć widać nad statusem.
+Na iPhonie wizjer jest większy, a arkusze głosu i jazdy kamery są uporządkowane.
+Przy pełnej rozdzielczości przełącznik „Dźwięk migawki” decyduje o dźwięku migawki (od iOS 18).
+Synteza mowy ma głosy we wszystkich 17 językach aplikacji.
+Odtwarzanie w Studio trzyma się dźwięku.

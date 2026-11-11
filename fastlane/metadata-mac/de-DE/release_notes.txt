@@ -1,3 +1,8 @@
-Filme aus dem Video-Tab mit vier oder mehr Bildern entstehen wieder, auch mit eingeschaltetem „Flimmern ausgleichen“.
-Die Handerkennung findet mehr Hände, auch angeschnittene Finger und Arme am Bildrand. Hände von Knet-, Holz- und Klemmbausteinfiguren hält sie seltener für echte.
-Ruht eine Hand länger im Bild, lässt FrameFold diese Stelle ganz aus.
+Die Faltvorlage bietet Hypar, Kreisfalte und Miura-ori mit Berg- und Talfalten. Hypar und Kreisfalte folgen dem Origami Simulator von Amanda Ghassaei, entstanden mit Erik Demaine und Tomohiro Tachi.
+Das Faltmuster läuft auf Wunsch als Hilfslinie im Sucher mit. Es legt sich auf das flache Blatt und zeigt mit jedem Bild die nächste Falte.
+Das Ergebnis nach „Fertig“ im Kamera-Tab hat die Tonspuren des Werks.
+Text, Zeichnungen und Kamerafahrten bleiben bei ihren Bildern, wenn du Bilder entfernst, verdoppelst, hältst oder umstellst.
+„Wiederherstellen“ setzt Bilder aus dem Papierkorb an ihren alten Platz.
+„Rückgängig“ gilt auch für Titel, Abspann, Namen und Dialog.
+Die Sprachausgabe bietet Stimmen in allen 17 Sprachen der App.
+Die Wiedergabe im Studio bleibt beim Ton.

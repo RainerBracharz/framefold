@@ -1,3 +1,8 @@
-Foldeskabelonen tilbyder hypar, cirkelfold og Miura-ori med bjerg- og dalfolder. Hypar og cirkelfold følger Origami Simulator af Amanda Ghassaei, lavet med Erik Demaine og Tomohiro Tachi.
-Foldemønsteret kan vises som hjælpelinje i søgeren. Det lægger sig på det flade ark og viser næste fold for hvert billede.
-Resultatet efter “Færdig” på fanen Kamera har værkets lydspor.
+Tekst, tegninger og kamerabevægelser bliver ved deres billeder, når du fjerner, duplikerer, holder eller flytter billeder.
+“Gendan” sætter billeder fra papirkurven tilbage på deres gamle plads.
+“Fortryd” gælder også titel, rulletekster, navn og dialog.
+På iPhone står det aktuelle trin i foldemønsteret over status.
+På iPhone er søgeren større, og arkene til stemme og kamerabevægelse er ryddet op.
+Ved fuld opløsning afgør kontakten “Udløserlyd”, om lukkeren kan høres (fra iOS 18).
+Oplæsningen har stemmer på alle appens 17 sprog.
+Afspilningen i Studio følger lyden.

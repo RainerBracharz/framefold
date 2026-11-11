@@ -1,3 +1,8 @@
-Šablona skládání nabízí hypar, kruhové sklady a Miura-ori s hřbety a údolími. Hypar a kruhové sklady vycházejí z Origami Simulator od Amandy Ghassaei, vytvořeného s Erikem Demainem a Tomohirem Tachim.
-Vzor se může zobrazit jako vodítko v hledáčku. Přiloží se na rovný list a s každým snímkem ukáže další sklad.
-Výsledek po „Hotovo“ na kartě Kamera obsahuje zvukové stopy díla.
+Text, kresby a jízdy kamery zůstávají u svých snímků, když snímky odebíráš, zdvojuješ, podržíš nebo přeuspořádáš.
+„Obnovit“ vrátí snímky z koše na jejich původní místo.
+„Zpět“ platí i pro titulek, závěrečné titulky, název a dialog.
+Na iPhonu je aktuální krok vzoru skládání nad stavem.
+Na iPhonu je hledáček větší a listy pro hlas a jízdu kamery jsou přehlednější.
+Při plném rozlišení rozhoduje o zvuku závěrky přepínač „Zvuk spouště“ (od iOS 18).
+Hlasový výstup nabízí hlasy ve všech 17 jazycích aplikace.
+Přehrávání ve Studiu se drží zvuku.

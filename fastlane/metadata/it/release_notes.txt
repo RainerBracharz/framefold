@@ -1,3 +1,8 @@
-Il modello di piegatura offre hypar, pieghe circolari e Miura-ori con pieghe a monte e a valle. Hypar e pieghe circolari seguono Origami Simulator di Amanda Ghassaei, realizzato con Erik Demaine e Tomohiro Tachi.
-Lo schema può comparire come guida nel mirino. Si appoggia sul foglio piatto e mostra la piega successiva a ogni fotogramma.
-Il risultato dopo «Fine» nella scheda Fotocamera contiene le tracce audio dell'opera.
+Testo, disegni e movimenti di camera restano con i loro fotogrammi quando rimuovi, duplichi, tieni o riordini i fotogrammi.
+«Ripristina» rimette i fotogrammi del cestino al loro vecchio posto.
+«Annulla» vale anche per titolo, titoli di coda, nome e dialogo.
+Su iPhone, il passo attuale dello schema di piegatura compare sopra lo stato.
+Su iPhone, il mirino è più grande, e i fogli per voce e movimento di camera sono più ordinati.
+A piena risoluzione, l'interruttore «Suono di scatto» decide se l'otturatore suona (da iOS 18).
+La sintesi vocale offre voci in tutte le 17 lingue dell'app.
+La riproduzione nello Studio resta sincronizzata con l'audio.

@@ -1,3 +1,8 @@
-Le gabarit de pliage propose hypar, plis circulaires et Miura-ori avec plis montagne et vallée. Hypar et plis circulaires suivent Origami Simulator d'Amanda Ghassaei, créé avec Erik Demaine et Tomohiro Tachi.
-Le motif peut s'afficher comme repère dans le viseur. Il se pose sur la feuille à plat et montre le pli suivant à chaque image.
-Le résultat après « Terminé » dans l'onglet Caméra contient les pistes son de l'œuvre.
+Le texte, les dessins et les mouvements de caméra restent avec leurs images quand tu retires, dupliques, maintiens ou réordonnes des images.
+« Restaurer » remet les images de la corbeille à leur ancienne place.
+« Annuler » vaut aussi pour le titre, le générique, le nom et le dialogue.
+Sur iPhone, l'étape en cours du motif de pliage s'affiche au-dessus du statut.
+Sur iPhone, le viseur est plus grand, et les feuilles pour la voix et le mouvement de caméra sont mieux rangées.
+En pleine résolution, le réglage « Son du déclencheur » décide du son de l'obturateur (à partir d'iOS 18).
+La synthèse vocale propose des voix dans les 17 langues de l'app.
+La lecture dans le Studio reste calée sur le son.

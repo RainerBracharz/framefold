@@ -1,3 +1,8 @@
-Video sekmesinden dört veya daha fazla kareli filmler, “Titreşimi azalt” açıkken de yeniden oluşturuluyor.
-El algılama daha fazla el buluyor, görüntünün kenarındaki kesik parmakları ve kolları da. Hamur, ahşap ve yapı taşı figürlerin ellerini daha seyrek gerçek el sanıyor.
-Bir el bir süre görüntüde kalırsa FrameFold o anı tamamen atlıyor.
+Katlama şablonu dağ ve vadi katlı hypar, dairesel pli ve Miura-ori sunar. Hypar ve dairesel pli, Erik Demaine ve Tomohiro Tachi ile geliştirilen Amanda Ghassaei'nin Origami Simulator'ını izler.
+Desen vizörde kılavuz çizgi olarak gösterilebilir. Düz kâğıdın üzerine oturur ve her karede bir sonraki katı gösterir.
+Kamera sekmesinde “Bitti”den sonraki sonuç, çalışmanın ses kanallarını içerir.
+Kareleri kaldırdığınızda, çoğalttığınızda, tuttuğunuzda veya yeniden sıraladığınızda metin, çizimler ve kamera hareketleri kendi karelerinde kalır.
+“Geri yükle”, çöp kutusundaki kareleri eski yerlerine koyar.
+“Geri al” başlık, jenerik, ad ve diyalog için de geçerlidir.
+Seslendirme, uygulamanın 17 dilinin hepsinde ses sunar.
+Stüdyo'da oynatma sesle eşzamanlı kalır.

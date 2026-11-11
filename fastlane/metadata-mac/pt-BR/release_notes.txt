@@ -1,3 +1,8 @@
-Filmes da aba Vídeo com quatro ou mais quadros voltam a ser criados, também com “Reduzir cintilação” ativado.
-A detecção de mãos encontra mais mãos, inclusive dedos cortados e braços na borda da imagem. Confunde com menos frequência mãos de bonecos de massinha, madeira e blocos de montar com mãos reais.
-Se uma mão fica um tempo parada na imagem, o FrameFold deixa esse momento de fora.
+O molde de dobra oferece hypar, prega circular e Miura-ori com dobras montanha e vale. Hypar e prega circular seguem o Origami Simulator de Amanda Ghassaei, criado com Erik Demaine e Tomohiro Tachi.
+O padrão pode aparecer como guia no visor. Ele se ajusta à folha plana e mostra a próxima dobra a cada quadro.
+O resultado após “Concluído” na aba Câmera traz as faixas de som da obra.
+Texto, desenhos e movimentos de câmera ficam com seus quadros quando você remove, duplica, segura ou reordena quadros.
+“Restaurar” devolve os quadros da lixeira ao lugar antigo.
+“Desfazer” vale também para título, créditos, nome e diálogo.
+A fala oferece vozes em todos os 17 idiomas do app.
+A reprodução no Studio fica em sincronia com o som.

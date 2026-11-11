@@ -1,3 +1,8 @@
-Film fra fanen Video med fire eller flere billeder bliver igen lavet, også med »Reducer flimmer« slået til.
-Håndgenkendelsen finder flere hænder, også afskårne fingre og arme i billedets kant. Den tager sjældnere hænder på ler-, træ- og klodsfigurer for ægte.
-Hviler en hånd et stykke tid i billedet, udelader FrameFold det øjeblik helt.
+Foldeskabelonen tilbyder hypar, cirkelfold og Miura-ori med bjerg- og dalfolder. Hypar og cirkelfold følger Origami Simulator af Amanda Ghassaei, lavet med Erik Demaine og Tomohiro Tachi.
+Foldemønsteret kan vises som hjælpelinje i søgeren. Det lægger sig på det flade ark og viser næste fold for hvert billede.
+Resultatet efter “Færdig” på fanen Kamera har værkets lydspor.
+Tekst, tegninger og kamerabevægelser bliver ved deres billeder, når du fjerner, duplikerer, holder eller flytter billeder.
+“Gendan” sætter billeder fra papirkurven tilbage på deres gamle plads.
+“Fortryd” gælder også titel, rulletekster, navn og dialog.
+Oplæsningen har stemmer på alle appens 17 sprog.
+Afspilningen i Studio følger lyden.
