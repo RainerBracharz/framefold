@@ -120,6 +120,7 @@ Sie sind nur aktiv, solange die Arbeitsfläche offen ist, damit einfache Tasten 
 | D | Bild verdoppeln |
 | ⌫ | Bild entfernen |
 | N | Notiz |
+| E | Text & Zeichnen auf dem gezeigten Bild |
 | ⇧X | X-Sheet |
 | R | Stimme aufnehmen |
 | [ / ] | Weniger / mehr Zwiebelhaut |

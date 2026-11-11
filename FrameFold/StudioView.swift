@@ -1334,6 +1334,11 @@ struct StudioView: View {
             settings.viewMode = all[(all.firstIndex(of: settings.viewMode)! + 1) % all.count]
         case .note:
             editNote((frameOnViewer ?? urls.count) + 1)
+        case .overlay:
+            // Text, Sprechblase und Zeichnung auf dem gezeigten Bild (nicht auf dem Live-Bild)
+            guard let index = frameOnViewer, urls.indices.contains(index) else { return }
+            stopPlayback()
+            overlayFrame = index
         case .loupe:
             settings.loupe.toggle()
         case .loupeZoom:

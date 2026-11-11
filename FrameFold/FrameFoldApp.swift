@@ -427,6 +427,7 @@ struct FrameFoldApp: App {
                 studioButton("Bild verdoppeln", .duplicate, "d")
                 studioButton("Bild entfernen", .delete, .delete)
                 studioButton("Notiz …", .note, "n")
+                studioButton("Text & Zeichnen …", .overlay, "e")
                 studioButton("X-Sheet …", .xsheet, "x", .shift)
                 studioButton("Stimme aufnehmen …", .record, "r")
                 Divider()
