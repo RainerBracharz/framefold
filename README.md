@@ -4,172 +4,93 @@
 
 # FrameFold
 
-**Film yourself working. Get a stop-motion back. Nothing leaves the phone.**
+**A stop-motion camera for iPhone, iPad, Mac and Apple Watch. It shoots by itself once your hands are out of the frame.**
 
 [<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="44" />](https://apps.apple.com/app/id6801045603)
 
 [![iOS Build](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml/badge.svg)](https://github.com/RainerBracharz/framefold/actions/workflows/ios-build.yml)
-&nbsp;·&nbsp; **Live on the App Store** &nbsp;·&nbsp; 17 languages &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; iPhone · iPad · Mac · Apple Watch &nbsp;·&nbsp; On-device computer vision &nbsp;·&nbsp; iOS 17+
+&nbsp;·&nbsp; Free on the App Store &nbsp;·&nbsp; 17 languages &nbsp;·&nbsp; SwiftUI &nbsp;·&nbsp; iOS 17+
 
 </div>
 
 <div align="center">
-<img src="docs/app.png" width="880" alt="FrameFold — home, contact sheet, darkroom" />
+<img src="docs/app.png" width="880" alt="FrameFold: home, contact sheet, darkroom" />
 </div>
 
 <div align="center">
-<img src="docs/demo.gif" width="320" alt="A square sheet with the FrameFold mark folds into an amber envelope and back — image, object, image" />
-<br/><sub><em>The fold from the spot, in stop-motion rhythm: image, object, image.<br/>Paper and fold generated in code — the same sequence feeds the simulator camera for the App Store preview.</em></sub>
+<img src="docs/demo.gif" width="320" alt="A square sheet with the FrameFold mark folds into an amber envelope and back" />
+<br/><sub><em>The fold from the spot in stop-motion rhythm. Paper and fold are generated in code.</em></sub>
 </div>
 
 <div align="center">
-<a href="docs/spot/framefold-spot-en.mp4"><img src="docs/spot/poster.jpg" width="640" alt="FrameFold spot, final card: Mac, iPhone and Apple Watch showing the app, “For iPhone, Apple Watch and Mac”, Download on the App Store, free" /></a>
-<br/><sub><em>▶ The 29-second spot (with sound): a 1959 typesetting film and a 1913 ragtime record give way to FrameFold — auto-shutter, focus, live loop, Mac with a document camera, Apple Watch, video import, flip book — and end on iPhone, Apple Watch and Mac.<br/>Archive: “Learning to Set Type” (1959, Prelinger Archives) and “Black and White Rag” (George Botsford, Edison 1913), both public domain via archive.org. Paper fold, animation and modular-synth soundtrack generated in code.</em></sub>
+<a href="docs/spot/framefold-spot-en.mp4"><img src="docs/spot/poster.jpg" width="640" alt="FrameFold spot, final card with Mac, iPhone and Apple Watch" /></a>
+<br/><sub><em>The spot (29 seconds, with sound). Archive material: “Learning to Set Type” (1959, Prelinger Archives) and “Black and White Rag” (George Botsford, Edison 1913), both public domain via archive.org.</em></sub>
 </div>
 
 ---
 
-## I built an app almost nobody needs. On purpose.
+## Background
 
-The audience is visual artists, craftspeople and art teachers. It is a market no
-large company will ever serve, because the numbers don't work. That is precisely
-what makes it interesting.
+The Austrian artist **[Aldo Tolino](https://www.aldotolino.com/)** folds printed photographs into objects and photographs them again. He wanted to document that process without interrupting it for every frame.
 
-The occasion was one person. The Austrian artist
-**[Aldo Tolino](https://www.aldotolino.com/)** folds printed photographs into
-objects and photographs them again — image becomes object becomes image. He
-wanted to document that process without constantly interrupting it. No shutter
-release, no assistant, no hundred frames shot by hand.
+FrameFold started as a tool for him. It finds the moments of rest in a video, drops every frame that shows hands, steadies the rest and assembles an animation. Later it became a camera that does the same while you work, and a public app for artists, craftspeople, teachers and students.
 
-So this became a tool that finds the calm moments in a video by itself. It drops
-every frame with his hands in the shot, compensates for camera shake, and
-assembles the rest into an animation. All on the device, no cloud, no account.
-
-A commission for one person turned into a public product — and the story behind
-that decision is written up here:
-**[Eigene App als Marketinginstrument](https://www.bracharz.com/nischen-app-marketing/)**.
+Why a consultancy publishes an app for a small audience is written up on [bracharz.com](https://www.bracharz.com/nischen-app-marketing/) (German).
 
 ## What it does
 
-- **Video → stop-motion, automatically.** Samples the footage, scores motion and
-  sharpness, keeps one clean frame per moment of rest.
-- **Hands removed.** Frames with visible hands are discarded via Apple's Vision
-  hand-pose detection and person segmentation.
-- **Auto-shutter camera.** Put the phone on a tripod and work. It fires by itself
-  whenever your hands leave the frame and the scene settles, then **locks
-  exposure and white balance** so nothing drifts between frames, and snaps the
-  shutter speed to the mains frequency against LED flicker. Tap-to-focus, an
-  interval trigger, a live motion gauge, spirit level, thirds grid and haptic
-  shutter are all there.
-- **Focus that has to earn it.** The app measures image sharpness on every
-  analysed frame and only locks focus once it has actually peaked — not merely
-  once autofocus stops hunting, which is a different thing entirely and the
-  reason an early build could freeze a whole session out of focus. If sharpness
-  collapses later, it refocuses on its own; a frame that isn't sharp never makes
-  it into the work. On a tripod focus stays locked; hand-held it keeps tracking,
-  because the distance to the work changes with every movement. The gyroscope
-  decides which of the two applies, and a tap overrides it.
-- **Onion skin and drift check.** Overlay the previous frame — or the very first
-  frame of the session — at adjustable opacity, plus an optional external
-  reference image. The screen stays awake for the whole session.
-- **Review before you commit.** Every candidate frame as a contact sheet.
-  Deselect with a tap, adjust the yield with one slider, play the selection as a
-  live loop.
-- **A result like an edition.** A session ends in a catalogue-style card —
-  *"Blatt 01 – 24 · Serie von 24 · datiert 2026"* — with the finished loop, ready
-  to share, keep as a project or refold.
-- **Hand-held stabilisation.** Each frame is aligned to a fixed reference
-  (verified block-matching), so free-hand footage sits still.
-- **Works, not files.** Projects collect frames across many sessions, with a
-  30-day trash, a print-ready contact-sheet PDF and a fold-template PDF.
-- **Exhibition reel.** Several works assembled into one continuous reel with
-  catalogue title cards.
-- **Studio monitor.** Plug in a screen or projector (HDMI or AirPlay) and the
-  external display shows the camera feed alone, with a catalogue line — no
-  controls, no HUD. The phone stays on the tripod; everyone in the room watches
-  the work. Without a session running it shows a gallery standby.
-- **The film grows as you work.** From the second frame on, the stop-motion
-  plays as a loop while the session is still running — small in the
-  viewfinder, large on the studio monitor next to the camera feed. Hands at
-  work on one side, the piece they're making on the other.
-- **Flip book.** Every work becomes a print-ready flip book: A4 sheets with
-  cut lines, a binding edge and numbered leaves; short series loop so the
-  little book is thick enough to flip. Image, object, image — and back to
-  object.
-- **Apple Watch remote.** Fire and finish from your wrist, with the frame count
-  and live status on the watch face. Nobody has to touch the tripod.
+### Shooting
+
+- **Auto-shutter.** Put the device on a tripod and work. The camera fires when your hands have left the frame and the scene is still. Exposure and white balance stay locked between frames, and the shutter speed follows the mains frequency so LED light does not flicker.
+- **Focus by measured sharpness.** Focus locks once sharpness has peaked and refocuses if it drops. A frame that is not sharp does not enter the work.
+- **Other triggers.** Tap, interval, clap, three-second self-timer, headphone volume buttons, Bluetooth remotes and the Apple Watch.
+- **Onion skin.** The previous frame or the first frame of the session lies over the viewfinder at adjustable opacity. A reference image can be added.
+- **Camera control.** Full sensor resolution, lens choice, manual ISO, shutter, focus and white balance.
+- **Fold guide.** Printable crease patterns for Hypar, circular pleat and Miura-ori with mountain and valley folds. The pattern can follow the flat sheet in the viewfinder and shows the next fold with every frame. Hypar and circular pleat follow the Origami Simulator by Amanda Ghassaei, created with Erik Demaine and Tomohiro Tachi.
+
+### From a video
+
+- **Video to stop-motion.** FrameFold samples the footage, scores motion and sharpness and keeps one frame per moment of rest.
+- **Hands removed.** Frames with visible hands are dropped, using Apple's Vision hand pose detection and person segmentation.
+- **Review.** All candidate frames appear as a contact sheet. Tap to deselect, change the yield with a slider, play the selection as a loop.
+
+### Editing and sound
+
+- **Frames.** Duplicate, hold, reorder, reshoot a single frame, restore from a 30-day trash, undo.
+- **Sound.** Several audio tracks, music from a file, voice recording while the film plays, ten sound effects synthesised in code and typed text spoken by an on-device voice.
+- **Text and drawing.** Titles, credits, text, speech bubbles and drawings across as many frames as needed.
+- **Green screen and camera moves.** Key out green or blue against an image or a movie. Pan and zoom across a range of frames.
+- **Export.** 2 to 30 fps, up to 4K, HEVC or ProRes, image sequence, no watermark.
+- **Paper.** Every work can be printed as a contact sheet or as a flip book with cut lines and a binding edge.
+- **Work as a file.** A work can be passed on by AirDrop or Files and opened on another device.
+
+### Studio
+
+On Mac and iPad, and on iPhone if switched on, the camera becomes a stop-motion workspace: viewer with live and captured toggle, multi-frame onion skin, difference and clipping views, aspect masks, timeline with loop marks and notes, focus loupe, a watched camera folder for DSLR and mirrorless cameras (RAW included), USB tethering on the Mac, time-lapse, and an X-sheet with Preston Blair mouth shapes. Lights can be driven over Art-Net and motion control over Bluetooth. Guide and key map: [docs/studio](docs/studio/README.md).
+
+An external display over HDMI or AirPlay shows the camera feed and the growing film without controls.
 
 <div align="center">
 <img src="docs/watch.png" width="820" alt="FrameFold viewfinder on iPhone next to the Apple Watch remote showing the frame count" />
 </div>
 
-- **Edit and score.** Duplicate a frame to hold a pose, drag frames into a new
-  order, reshoot a single frame, undo anything, export at 2 to 30 fps and up to
-  4K, and lay music or sound from a file under the film — remuxed, not
-  re-encoded, so it takes a moment, not a minute.
-- **Sound effects and text to speech.** Ten sound effects — pop, whoosh,
-  drum roll, ta-da and more — synthesised in code, so there are no licences
-  and nothing to download; and typed text spoken by an on-device voice. Both
-  land as audio tracks from the frame you choose.
-- **Text, speech bubbles and drawing.** Placed on the image, spanning as many
-  frames as the character speaks, burned into the export.
-- **Camera control.** Full sensor resolution through the photo output, lens
-  choice (ultra wide, tele, front), manual ISO, shutter, focus and white
-  balance, looks for the whole film, photos from the library as frames.
-- **iPad in a stand.** On iPad the viewfinder and the captured frames follow the
-  device's orientation, portrait or landscape.
-- **Studio on the Mac and iPad (and iPhone, if switched on).** In Advanced and Atelier mode the camera becomes a
-  full stop-motion workspace in the spirit of Dragonframe: viewer with live /
-  captured toggle and auto-toggle, multi-frame onion skin, difference and
-  clipping views, aspect masks, safe areas and grids, an image-or-movie
-  reference layer with chroma key, a draggable timeline with loop marks and
-  per-frame notes, a focus loupe, a watched camera folder that brings any
-  DSLR or mirrorless camera in at full resolution (RAW included), frame
-  averaging, capture blackout, test shots, scheduled
-  time-lapse, ProRes and image-sequence export — all on the keyboard. Sound
-  works like a studio too: multiple tracks with start frame and level, a
-  waveform under the timeline, voice recording while the film plays along,
-  synced playback and per-frame scrubbing, and
-  an X-sheet for dialogue reading with Preston Blair mouth shapes — words can
-  be recognised on-device and laid onto frames automatically.
-  Guide and key map: [docs/studio](docs/studio/README.md).
-- **Green screen, title and credits.** Key out green or blue against an image or
-  a movie that follows frame by frame, and wrap the film in a title card and
-  end credits — added as separate segments, so deflicker and stabilisation
-  never touch them and the sound shifts with the title.
-- **For the classroom.** A two-lesson plan (German) with timings, roles and a
-  privacy summary: [docs/unterricht](docs/unterricht/README.md).
-- **Shutter without shake.** Hold the shutter for a three-second self-timer, or
-  use the volume buttons on headphones and AirPods — Apple's capture-event API,
-  which also covers cheap Bluetooth camera remotes — or simply clap.
-- **17 languages.** German, English, French, Spanish, Italian, Dutch,
-  Japanese, Portuguese (Brazil), Czech, Danish, Korean, Polish, Russian,
-  Swedish, Turkish, Ukrainian and Simplified Chinese. The whole app, from first launch to the contact
-  sheet, follows the phone's language. Every screen is checked in every language
-  by an automated walkthrough (see *Engineering*).
-- **Private by design.** Everything happens on the device. No account, no upload,
-  no server, no connection to the internet. The only connections are opt-in studio
-  features for professional sets: lights via Art-Net on the local network and motion
-  control via Bluetooth. The microphone is only used when you
-  record a voice or clap to shoot; speech recognition and text to speech run
-  on the device. A short help with guides is built in.
+### School
+
+- A two-lesson plan and a Hypar lesson with printable templates (German, CC BY 4.0): [docs/unterricht](docs/unterricht/README.md)
+- A privacy fact sheet for schools (German): [docs/schule](docs/schule/README.md)
+- Press kit: [docs/presse](docs/presse/README.md)
 
 ## Three modes
 
-A three-card onboarding on first launch explains the two ways of working — pick a
-video or record live — and lets you choose a mode. It can be changed at any time.
-
 | Mode | For |
 |---|---|
-| **Simple** | Pick a video, get a stop-motion. Nothing else on screen. Playful enough for Tolino's students: big counter, warm language, instant result. |
-| **Advanced** | Frame rate, aspect, resolution, playback mode, stabilisation. |
-| **Atelier** | Everything, plus the studio effects below. |
+| **Simple** | Pick a video or shoot, get a stop-motion. Large counter, few controls. |
+| **Advanced** | Frame rate, aspect, resolution, playback mode, stabilisation, studio. |
+| **Atelier** | Everything, plus print look, paper relief, image echo and fold transitions. |
 
-**The Atelier stage:** *print look* (black and white on a warm paper tone), *paper
-relief* (each facet catching the light differently, as if the image had been
-folded and re-photographed), *image echo* (each frame lingering in the next, a
-recursion of its own image), and fold transitions in three styles — **crease**,
-**facets** and **weave**, the last drawn from his woven paper works.
+## Data
+
+FrameFold has no account, no server and no analytics. It makes no connection to the internet. Art-Net on the local network and Bluetooth motion control connect only when switched on. The microphone is used for voice recording and clap trigger. Speech recognition and text to speech run on the device. [Privacy policy](https://www.bracharz.com/framefold-datenschutz/)
 
 ## How it works
 
@@ -179,78 +100,42 @@ Video ─▶ sample ~10 fps ─▶ motion + sharpness scoring ─▶ Otsu rest d
       ─▶ assemble (AVAssetWriter)
 ```
 
-The signal-processing core — rest detection, sharpness, perceptual hashing, crop
-geometry, shift estimation — sits in a single dependency-free file and is covered
-by **60+ tests that run on every push**. The maths is verified independently of
-the Apple frameworks, which is the part that actually breaks.
+Rest detection, sharpness, perceptual hashing, crop geometry and shift estimation sit in one file without framework dependencies (`FrameFold/Algorithms.swift`). It has its own tests that run without Xcode.
 
-## Design — "Crack & Light"
+## Design
 
-The visual language comes from Tolino's 2024 series (*Full-Blown*, *Cracked*, the
-reliefs): crushed white paper on luminous gradient fields, colour glowing
-*through* the sheet, and amber as his recurring signal. The gallery is a light
-wall with a soft vertical gradient; the darkroom stays warm for capture.
+The visual language follows Tolino's 2024 series: crushed white paper on gradient fields, with amber as a signal colour. The home screen shows a fractured paper field filled with the frames of the latest work, and the light moves across the facets when the device is tilted.
 
-The home screen doesn't describe folding, it **crumples**: an irregular fractured
-paper field, filled with the frames of your latest work, hung with a soft shadow
-like a print on a wall. **Tilt the phone and the light travels across the
-facets** — as if you were turning the print under gallery light. Image, object,
-image, made physical. The finished animation is presented like one of his
-editions: sealed under acrylic glass, with a gloss, a shadow and an edition line.
-
-Typography pairs **Fraunces** (serif, with the italic as the speaking voice, as
-on his website) with **Inter** (the annotation-on-the-back-of-a-print voice).
-Selection is marked by inversion, an ink block, never by colour.
-
-**The mark** is not a letter. A sheet whose folded corner contains a sheet, whose
-folded corner contains a sheet — the endless loop drawn as a figure, with amber
-marking the layer you currently stand on. The concentric squares nod to Albers,
-whom Tolino cites directly when he asks whether the surface itself can generate
-images.
+Typography pairs **Fraunces** with **Inter**. Selection is marked by inversion. The mark is a sheet whose folded corner contains a sheet, three times over.
 
 ## Engineering
 
 | | |
 |---|---|
-| **UI** | SwiftUI (iOS 17+), watchOS 10+ companion |
-| **Vision / capture** | AVFoundation, Vision, CoreMotion, Core Image |
+| **UI** | SwiftUI (iOS 17+), watchOS 10+ companion, Mac Catalyst |
+| **Capture and vision** | AVFoundation, Vision, CoreMotion, Core Image, ImageCaptureCore |
 | **On-device ML** | Apple Vision hand pose and person segmentation, no custom model |
 | **Persistence** | File-based projects with JSON manifests |
-| **CI/CD** | GitHub Actions on macOS — builds and runs the test suite on every commit; fastlane uploads, waits for Apple's processing, submits and releases automatically |
-| **Tests** | 60+ unit tests on the pure algorithmic core, plus a UI walkthrough that taps through every screen and saves a screenshot of each — per language |
-| **Localisation** | String Catalogs, German source, 16 translations; plurals handled by the catalog |
-| **Dependencies** | None. No third-party SDK, no analytics, no crash reporting |
-| **Devices** | iPhone, iPad, Mac (Mac Catalyst), Apple Watch, plus any external display over HDMI or AirPlay |
+| **CI/CD** | GitHub Actions builds and tests every push. fastlane uploads, submits and releases. |
+| **Tests** | Unit tests for the algorithms, the project store and the studio, plus a UI walkthrough that saves a screenshot of every screen per language |
+| **Localisation** | String Catalog, German source, 16 translations |
+| **Dependencies** | None |
 
 ## Build and run
 
-1. Download the repository (green **Code → Download ZIP**) and open
-   `FrameFold.xcodeproj`.
-2. Select your Team under **Signing & Capabilities** (a free Apple ID is enough).
-3. Connect an iPhone and hit **⌘R**.
+1. Open `FrameFold.xcodeproj` in Xcode.
+2. Select your team under **Signing & Capabilities**.
+3. Connect an iPhone and press **⌘R**.
 
-Or simply
-[install it from the App Store](https://apps.apple.com/app/id6801045603) —
-it's free.
+The app is free on the [App Store](https://apps.apple.com/app/id6801045603).
 
-## Why this repository is public
+## Licence
 
-Because a claim is worth less than something you can check. The app is in the
-store, it passed Apple's review, and the unglamorous parts are done too:
-[privacy policy](https://www.bracharz.com/framefold-datenschutz/), EU trader
-status, store compliance. The code is here so you can see how it was built,
-including the parts that took three attempts.
+The source code is published for reading. It is under a proprietary licence, see [LICENSE](LICENSE). The teaching material in `docs/unterricht` is under CC BY 4.0.
 
-Built by **[Bracharz Consulting](https://www.bracharz.com)** — Rainer Bracharz,
-Certified Digital Consultant — as a commission for artist
-**[Aldo Tolino](https://www.aldotolino.com/)**. Developed AI-assisted, in weeks
-rather than months, with an automated build-and-verify pipeline. The whole
-reasoning behind doing this at all is on
-[bracharz.com](https://www.bracharz.com/nischen-app-marketing/).
+Typefaces: [Fraunces](https://github.com/undercasetype/Fraunces) and [Inter](https://github.com/rsms/inter), both under the SIL Open Font License (see `FrameFold/Fonts-Licenses/`).
 
-Typefaces: [Fraunces](https://github.com/undercasetype/Fraunces) and
-[Inter](https://github.com/rsms/inter), both under the SIL Open Font License
-(see `FrameFold/Fonts-Licenses/`).
+Built by **[Bracharz Consulting](https://www.bracharz.com)**, Rainer Bracharz, with AI assistance. The first version was a commission for **[Aldo Tolino](https://www.aldotolino.com/)**.
 
 ---
 
