@@ -31,5 +31,10 @@
 	<array>
 		<string>/private/tmp/ff-simframes-mac/</string>
 	</array>
+	<!-- Nur Debug: fertige Exporte zur Prüfung ablegen (FF_EXPORT_DIR). -->
+	<key>com.apple.security.temporary-exception.files.absolute-path.read-write</key>
+	<array>
+		<string>/private/tmp/ff-export-mac/</string>
+	</array>
 </dict>
 </plist>

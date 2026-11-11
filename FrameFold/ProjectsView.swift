@@ -1223,6 +1223,15 @@ struct ProjectDetailView: View {
                 // auf Filmlänge mischen und unterlegen
                 url = try await project.addingSoundtrack(to: wrapped.url, fps: settings.outputFPS,
                                                          lead: wrapped.lead, store: store)
+                #if DEBUG && targetEnvironment(macCatalyst)
+                // Testläufe: Kopie des Exports in einen Ordner außerhalb der
+                // Sandbox, um den Film ohne Teilen-Menü zu prüfen (FF_EXPORT_DIR).
+                if let dir = ProcessInfo.processInfo.environment["FF_EXPORT_DIR"], !dir.isEmpty {
+                    let target = URL(fileURLWithPath: dir, isDirectory: true).appendingPathComponent(url.lastPathComponent)
+                    try? FileManager.default.removeItem(at: target)
+                    try? FileManager.default.copyItem(at: url, to: target)
+                }
+                #endif
                 await MainActor.run {
                     exportURL = url
                     if ReviewPrompt.noteFinishedFilm() { requestReview() }
