@@ -27,6 +27,10 @@ struct CameraMoveEditor: View {
                             }
                         }
                         .pickerStyle(.menu)
+                        // Das Menü am Mac merkt sich seine Einträge: ohne neue
+                        // Identität bliebe nach dem Ändern der Bilder oder dem
+                        // Anlegen einer Fahrt das alte Etikett stehen.
+                        .id(moves.map { "\($0.id)-\($0.firstFrame)-\($0.lastFrame)" }.joined(separator: "|"))
                     }
                     if let move = selected { editor(move) }
                     HStack(spacing: 10) {

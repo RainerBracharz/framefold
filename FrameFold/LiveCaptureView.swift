@@ -432,8 +432,16 @@ struct LiveCaptureView: View {
             let urls = store.frameURLs(for: current)
             let settings = PipelineSettings.restored()
             do {
+                // Greenscreen, Einblendungen und Kamerafahrten wie beim Export
+                // aus der Werkliste – sonst zeigt das Ergebnis rohes Grün.
+                let compositor = current.greenScreen.flatMap {
+                    GreenScreenCompositor(key: $0.key, background: store.greenScreenBackgroundURL(for: current),
+                                          fps: settings.outputFPS)
+                }
                 let film = try await StopMotionAssembler().assemble(
-                    imageURLs: urls, settings: settings
+                    imageURLs: urls, settings: settings, greenScreen: compositor,
+                    overlays: current.overlays ?? [], cameraMoves: current.cameraMoves ?? [],
+                    overlayFolder: store.folderURL(for: current)
                 ) { p in Task { @MainActor in assembleProgress = p } }
                 guard !Task.isCancelled else { return }
                 // Tonspuren des Werks wie beim Export aus der Werkliste
