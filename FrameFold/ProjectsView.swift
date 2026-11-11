@@ -268,6 +268,8 @@ struct ProjectDetailView: View {
     @State private var isExporting = false
     @State private var exportProgress = 0.0
     @State private var exportURL: URL?
+    /// Sichtbare Höhe der Seite – begrenzt die Film-Vorschau (s. u.).
+    @State private var viewportHeight: CGFloat = 0
     @State private var errorMessage: String?
     @State private var contactSheetURL: URL?
     @State private var isRenderingSheet = false
@@ -451,6 +453,7 @@ struct ProjectDetailView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 24)
         }
+        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { viewportHeight = $0 }
         .paperStage()
         // Kleiner Titel: Der große reservierte unter der Leiste einen leeren
         // Streifen, weil der Werktitel in der Leiste selbst steht.
@@ -1000,7 +1003,11 @@ struct ProjectDetailView: View {
                 }
             } else if let exportURL {
                 // Fertig: erst ansehen (Endlos-Schleife), dann teilen
-                LoopingVideoPreview(url: exportURL)
+                // Höchstens rund 70 % der sichtbaren Höhe: Ein Hochkant-Film
+                // über die volle Breite eines Mac- oder iPad-Fensters wäre
+                // mehrere Bildschirme hoch und „Video teilen" weit weg.
+                LoopingVideoPreview(url: exportURL,
+                                    maxHeight: viewportHeight > 0 ? viewportHeight * 0.7 : nil)
                     .editionPlate()
 
                 Button {
@@ -1470,6 +1477,9 @@ struct ExhibitionSheet: View {
 /// Video-Player bei sehr kurzen Clips absolut verlässlich.
 struct LoopingVideoPreview: View {
     let url: URL
+    /// Obergrenze für die Höhe; das Seitenverhältnis bleibt, die Vorschau
+    /// wird dann schmaler und steht mittig. `nil`: volle Breite.
+    var maxHeight: CGFloat? = nil
 
     @State private var frames: [UIImage] = []
     @State private var index = 0
@@ -1509,6 +1519,9 @@ struct LoopingVideoPreview: View {
             )
         }
         .aspectRatio(aspect, contentMode: .fit)
+        // Über die Breite begrenzt: So schrumpft auch der Rahmen mit, statt
+        // um einen schmalen Film herum die volle Breite zu behalten.
+        .frame(maxWidth: maxHeight.map { $0 * aspect })
         .overlay(alignment: .bottom) { scrubBar }
         .task(id: url) {
             await loadFrames()
