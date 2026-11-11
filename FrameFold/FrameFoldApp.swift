@@ -239,6 +239,13 @@ struct FrameFoldApp: App {
         }
     }
 
+    /// Beschriftung der Tabs in der Schrift der App.
+    private static func tabTitle(_ color: UIColor) -> [NSAttributedString.Key: Any] {
+        var attributes: [NSAttributedString.Key: Any] = [.foregroundColor: color, .kern: 0.4]
+        if let font = UIFont(name: "Inter-Medium", size: 10) { attributes[.font] = font }
+        return attributes
+    }
+
     init() {
         // UI-Test-Lauf: Erststart herstellen (Onboarding, Kamera-Tipp, Modus).
         // Als Löschung statt als Startargument-Wert, weil ein Argument-Wert
@@ -265,10 +272,12 @@ struct FrameFoldApp: App {
                      tabAppearance.inlineLayoutAppearance,
                      tabAppearance.compactInlineLayoutAppearance] {
             item.selected.iconColor = UIColor(Theme.ink)
-            item.selected.titleTextAttributes = [.foregroundColor: UIColor(Theme.ink)]
+            item.selected.titleTextAttributes = Self.tabTitle(UIColor(Theme.ink))
             item.normal.iconColor = UIColor(Theme.graphite)
-            item.normal.titleTextAttributes = [.foregroundColor: UIColor(Theme.graphite)]
+            item.normal.titleTextAttributes = Self.tabTitle(UIColor(Theme.graphite))
         }
+        UITabBar.appearance().tintColor = UIColor(Theme.ink)
+        UITabBar.appearance().unselectedItemTintColor = UIColor(Theme.graphite)
         UITabBar.appearance().standardAppearance = tabAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabAppearance
 
@@ -284,19 +293,13 @@ struct FrameFoldApp: App {
         WindowGroup {
             TabView(selection: $selectedTab) {
                 ContentView(selectedTab: $selectedTab)
-                    .toolbarBackground(Theme.paper, for: .tabBar)
-                    .toolbarBackground(.visible, for: .tabBar)
-                    .tabItem { Label("Video", systemImage: "film") }
+                    .tabItem { Label("Video", image: "tab-video") }
                     .tag(0)
                 LiveCaptureView()
-                    .toolbarBackground(Theme.paper, for: .tabBar)
-                    .toolbarBackground(.visible, for: .tabBar)
-                    .tabItem { Label("Kamera", systemImage: "camera") }
+                    .tabItem { Label("Kamera", image: "tab-kamera") }
                     .tag(1)
                 ProjectsView()
-                    .toolbarBackground(Theme.paper, for: .tabBar)
-                    .toolbarBackground(.visible, for: .tabBar)
-                    .tabItem { Label("Werke", systemImage: "folder") }
+                    .tabItem { Label("Werke", image: "tab-werke") }
                     .tag(2)
             }
             .environmentObject(projectStore)
