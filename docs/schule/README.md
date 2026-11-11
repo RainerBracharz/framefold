@@ -1,6 +1,6 @@
 # FrameFold in der Schule – Datenschutz-Steckbrief
 
-Eine Seite für Schulleitung, Schulträger und Datenschutzbeauftragte. Stand: Version 2.10, November 2026.
+Eine Seite für Schulleitung, Schulträger und Datenschutzbeauftragte. Stand: Version 2.11, November 2026.
 
 ## Auf einen Blick
 
