@@ -1,8 +1,4 @@
-Le gabarit de pliage propose hypar, plis circulaires et Miura-ori avec plis montagne et vallée. Hypar et plis circulaires suivent Origami Simulator d'Amanda Ghassaei, créé avec Erik Demaine et Tomohiro Tachi.
-Le motif peut s'afficher comme repère dans le viseur. Il se pose sur la feuille à plat et montre le pli suivant à chaque image.
-Le résultat après « Terminé » dans l'onglet Caméra contient les pistes son de l'œuvre.
-Le texte, les dessins et les mouvements de caméra restent avec leurs images quand tu retires, dupliques, maintiens ou réordonnes des images.
-« Restaurer » remet les images de la corbeille à leur ancienne place.
-« Annuler » vaut aussi pour le titre, le générique, le nom et le dialogue.
-La synthèse vocale propose des voix dans les 17 langues de l'app.
-La lecture dans le Studio reste calée sur le son.
+Lettre, Tête de chien et Gobelet existent en séquences de pliage. Pour chaque étape, le viseur montre le contour, la ligne de pli et une flèche.
+Avec « Déclenchement auto (mains hors champ) », l’appareil prend l’image dès que l’étape est pliée. Une barre montre où tu en es.
+Siri et l’app Raccourcis connaissent cinq commandes, par exemple « Déclencher dans FrameFold » et « Exporter le stop motion dans FrameFold ».
+L’aide compte deux nouveaux chapitres, « Séquences de pliage » et « Siri et Raccourcis ».

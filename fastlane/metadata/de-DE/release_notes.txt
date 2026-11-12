@@ -1,8 +1,5 @@
-Text, Zeichnungen und Kamerafahrten bleiben bei ihren Bildern, wenn du Bilder entfernst, verdoppelst, hältst oder umstellst.
-„Wiederherstellen“ setzt Bilder aus dem Papierkorb an ihren alten Platz.
-„Rückgängig“ gilt auch für Titel, Abspann, Namen und Dialog.
-Am iPhone steht der aktuelle Schritt des Faltmusters über dem Status.
-Am iPhone ist der Sucher größer, und die Blätter für Stimme und Kamerafahrt sind aufgeräumt.
-Bei voller Auflösung entscheidet der Schalter „Auslöse-Ton“ über den Verschlusston (ab iOS 18).
-Die Sprachausgabe bietet Stimmen in allen 17 Sprachen der App.
-Die Wiedergabe im Studio bleibt beim Ton.
+Brief, Hundekopf und Becher gibt es als Faltfolgen. Der Sucher zeigt je Schritt den Umriss, die Faltlinie und einen Pfeil.
+Mit „Automatik (Hände weg)“ nimmt die Kamera das Bild auf, sobald der Schritt gefaltet ist. Ein Balken zeigt, wie weit du bist.
+Siri und die App „Kurzbefehle“ kennen fünf Befehle, etwa „Auslösen in FrameFold“ und „Stop-Motion exportieren in FrameFold“.
+Am iPhone füllt die Film-Vorschau im Werk im Hochformat die Breite.
+Die Hilfe hat zwei neue Kapitel, „Faltfolgen“ und „Siri und Kurzbefehle“.

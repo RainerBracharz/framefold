@@ -1,8 +1,4 @@
-Szablon składania oferuje hypar, fałdy koliste i Miura-ori ze zgięciami górskimi i dolinowymi. Hypar i fałdy koliste opierają się na Origami Simulator Amandy Ghassaei, stworzonym z Erikiem Demainem i Tomohiro Tachim.
-Wzór może być linią pomocniczą w wizjerze. Kładzie się na płaskim arkuszu i z każdą klatką pokazuje następne zgięcie.
-Wynik po „Gotowe” na karcie Aparat zawiera ścieżki dźwiękowe pracy.
-Tekst, rysunki i jazdy kamery zostają przy swoich klatkach, gdy usuwasz, powielasz, zatrzymujesz lub przestawiasz klatki.
-„Przywróć” odkłada klatki z kosza na dawne miejsce.
-„Cofnij” obejmuje też tytuł, napisy końcowe, nazwę i dialog.
-Synteza mowy ma głosy we wszystkich 17 językach aplikacji.
-Odtwarzanie w Studio trzyma się dźwięku.
+List, Głowa psa i Kubek są dostępne jako sekwencje składania. Przy każdym kroku wizjer pokazuje obrys, linię zgięcia i strzałkę.
+Z opcją „Automat (ręce precz)” aparat robi klatkę, gdy tylko krok jest złożony. Pasek pokazuje, jak daleko jesteś.
+Siri i aplikacja Skróty znają pięć poleceń, na przykład „Zrób zdjęcie w FrameFold” i „Eksportuj stop motion w FrameFold”.
+Pomoc ma dwa nowe rozdziały, „Sekwencje składania” i „Siri i Skróty”.

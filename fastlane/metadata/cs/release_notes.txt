@@ -1,8 +1,5 @@
-Text, kresby a jízdy kamery zůstávají u svých snímků, když snímky odebíráš, zdvojuješ, podržíš nebo přeuspořádáš.
-„Obnovit“ vrátí snímky z koše na jejich původní místo.
-„Zpět“ platí i pro titulek, závěrečné titulky, název a dialog.
-Na iPhonu je aktuální krok vzoru skládání nad stavem.
-Na iPhonu je hledáček větší a listy pro hlas a jízdu kamery jsou přehlednější.
-Při plném rozlišení rozhoduje o zvuku závěrky přepínač „Zvuk spouště“ (od iOS 18).
-Hlasový výstup nabízí hlasy ve všech 17 jazycích aplikace.
-Přehrávání ve Studiu se drží zvuku.
+Dopis, Psí hlava a Kelímek jsou k dispozici jako postupy skládání. U každého kroku ukazuje hledáček obrys, linii skladu a šipku.
+S volbou „Automatika (ruce pryč)“ kamera pořídí snímek, jakmile je krok složený. Pruh ukazuje, jak daleko jsi.
+Siri a aplikace Zkratky znají pět příkazů, například „Pořídit snímek v aplikaci FrameFold“ a „Exportovat stop motion v aplikaci FrameFold“.
+Na iPhonu vyplní náhled filmu v díle na výšku celou šířku.
+Nápověda má dvě nové kapitoly, „Postupy skládání“ a „Siri a Zkratky“.

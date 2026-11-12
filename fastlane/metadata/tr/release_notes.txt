@@ -1,8 +1,5 @@
-Kareleri kaldırdığınızda, çoğalttığınızda, tuttuğunuzda veya yeniden sıraladığınızda metin, çizimler ve kamera hareketleri kendi karelerinde kalır.
-“Geri yükle”, çöp kutusundaki kareleri eski yerlerine koyar.
-“Geri al” başlık, jenerik, ad ve diyalog için de geçerlidir.
-iPhone'da katlama deseninin geçerli adımı durumun üstünde yer alır.
-iPhone'da vizör daha büyük; ses ve kamera hareketi sayfaları daha düzenli.
-Tam çözünürlükte deklanşörün ses çıkarıp çıkarmayacağını “Deklanşör sesi” anahtarı belirler (iOS 18 ve sonrası).
-Seslendirme, uygulamanın 17 dilinin hepsinde ses sunar.
-Stüdyo'da oynatma sesle eşzamanlı kalır.
+Mektup, Köpek başı ve Bardak katlama sırası olarak seçilebilir. Vizör her adımda dış hattı, kat çizgisini ve bir oku gösterir.
+“Otomatik deklanşör (eller çekilince)” ile kamera, adım katlanır katlanmaz kareyi çeker. Bir çubuk ne kadar ilerlediğini gösterir.
+Siri ve Kestirmeler uygulaması beş komutu tanır, örneğin “FrameFold ile kare çek” ve “FrameFold ile stop motion'ı dışa aktar”.
+iPhone’da eserdeki film önizlemesi dikey konumda genişliği doldurur.
+Yardımda iki yeni bölüm var, “Katlama sıraları” ve “Siri ve Kestirmeler”.

@@ -72,6 +72,18 @@ struct HelpView: View {
             "Im Sucher kann das Muster als Hilfslinie mitlaufen (Kamera-Einstellungen, auf dem Mac unter Hilfslinien). Es legt sich auf das flache Blatt und zeigt mit jedem Bild die nächste Falte. Wölbt sich das Papier, blendet es aus.",
             "Hypar und Kreisfalte folgen dem Origami Simulator von Amanda Ghassaei, entstanden mit Erik Demaine und Tomohiro Tachi (MIT-Lizenz).",
         ]),
+        Topic(id: "foldsequence", symbol: "square.stack.3d.down.right", title: "Faltfolgen", steps: [
+            "In den Kamera-Einstellungen (auf dem Mac unter Hilfslinien) bietet „Faltmuster“ die Faltfolgen Brief, Hundekopf und Becher.",
+            "Lege ein flaches Blatt auf einen Tisch in anderer Farbe und nimm es als erstes Bild auf.",
+            "Der Sucher zeigt den nächsten Schritt mit dem Umriss nach der Faltung, der Faltlinie und einem Pfeil. Der Balken unter dem Blatt füllt sich, während du faltest.",
+            "Mit „Automatik (Hände weg)“ nimmt die Kamera das Bild auf, sobald der Schritt gefaltet ist. Der Auslöser von Hand geht immer.",
+            "Manche Schritte prüft die Kamera nicht, etwa wenn die Faltung den Umriss nicht ändert oder Papier und Tisch fast dieselbe Farbe haben. Das steht dann beim Schritt, und die Kamera löst wie gewohnt aus.",
+        ]),
+        Topic(id: "siri", symbol: "mic", title: "Siri und Kurzbefehle", steps: [
+            "Sag während der Aufnahme zu Siri „Auslösen in FrameFold“, und die Kamera nimmt ein Bild auf.",
+            "Ebenso gehen „Letztes Bild zurücknehmen in FrameFold“, „Aufnahme beenden in FrameFold“, „Aufnahme starten in FrameFold“ und „Stop-Motion exportieren in FrameFold“.",
+            "Die fünf Befehle stehen auch in der App „Kurzbefehle“ und lassen sich dort zu eigenen Abläufen verbinden.",
+        ]),
         Topic(id: "privacy", symbol: "lock", title: "Datenschutz", steps: [
             "Kein Konto, keine Werbung, keine Verbindung ins Internet. Licht (Art-Net) und Motion Control (Bluetooth) verbinden sich nur, wenn du sie einschaltest, und nur mit deinem eigenen Gerät.",
             "Bilder, Ton und Werke bleiben auf dem Gerät.",

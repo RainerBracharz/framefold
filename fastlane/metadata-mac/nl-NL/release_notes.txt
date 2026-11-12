@@ -1,8 +1,4 @@
-Het vouwsjabloon biedt hypar, cirkelplooi en Miura-ori met berg- en dalvouwen. Hypar en cirkelplooi volgen Origami Simulator van Amanda Ghassaei, gemaakt met Erik Demaine en Tomohiro Tachi.
-Het vouwpatroon kan als hulplijn in de zoeker meelopen. Het legt zich op het platte vel en toont bij elk beeld de volgende vouw.
-Het resultaat na ‘Klaar’ op het tabblad Camera heeft de geluidssporen van het werk.
-Tekst, tekeningen en camerabewegingen blijven bij hun beelden als je beelden verwijdert, verdubbelt, vasthoudt of herschikt.
-‘Herstellen’ zet beelden uit de prullenmand terug op hun oude plek.
-‘Ongedaan maken’ geldt ook voor titel, aftiteling, naam en dialoog.
-De spraakuitvoer biedt stemmen in alle 17 talen van de app.
-Het afspelen in de Studio blijft gelijk lopen met het geluid.
+Brief, Hondenkop en Beker zijn er als vouwreeksen. Bij elke stap toont de zoeker de omtrek, de vouwlijn en een pijl.
+Met “Automatisch (handen weg)” neemt de camera het beeld op zodra de stap gevouwen is. Een balk toont hoe ver je bent.
+Siri en de app Opdrachten kennen vijf opdrachten, zoals “Beeld maken in FrameFold” en “Stop-motion exporteren in FrameFold”.
+De hulp heeft twee nieuwe hoofdstukken, “Vouwreeksen” en “Siri en Opdrachten”.

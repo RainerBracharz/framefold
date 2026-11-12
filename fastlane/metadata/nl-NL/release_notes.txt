@@ -1,8 +1,5 @@
-Tekst, tekeningen en camerabewegingen blijven bij hun beelden als je beelden verwijdert, verdubbelt, vasthoudt of herschikt.
-‘Herstellen’ zet beelden uit de prullenmand terug op hun oude plek.
-‘Ongedaan maken’ geldt ook voor titel, aftiteling, naam en dialoog.
-Op de iPhone staat de huidige stap van het vouwpatroon boven de status.
-Op de iPhone is de zoeker groter, en de bladen voor stem en camerabeweging zijn opgeruimd.
-Bij volledige resolutie bepaalt de schakelaar ‘Sluitergeluid’ of de sluiter klinkt (vanaf iOS 18).
-De spraakuitvoer biedt stemmen in alle 17 talen van de app.
-Het afspelen in de Studio blijft gelijk lopen met het geluid.
+Brief, Hondenkop en Beker zijn er als vouwreeksen. Bij elke stap toont de zoeker de omtrek, de vouwlijn en een pijl.
+Met “Automatisch (handen weg)” neemt de camera het beeld op zodra de stap gevouwen is. Een balk toont hoe ver je bent.
+Siri en de app Opdrachten kennen vijf opdrachten, zoals “Beeld maken in FrameFold” en “Stop-motion exporteren in FrameFold”.
+Op de iPhone vult de filmvoorvertoning in een werk de breedte in staande stand.
+De hulp heeft twee nieuwe hoofdstukken, “Vouwreeksen” en “Siri en Opdrachten”.

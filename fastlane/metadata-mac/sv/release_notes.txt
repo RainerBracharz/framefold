@@ -1,8 +1,4 @@
-Vikmallen erbjuder hypar, cirkelveck och Miura-ori med berg- och dalvikningar. Hypar och cirkelveck följer Origami Simulator av Amanda Ghassaei, gjord med Erik Demaine och Tomohiro Tachi.
-Vikmönstret kan visas som hjälplinje i sökaren. Det lägger sig på det platta arket och visar nästa vikning för varje bild.
-Resultatet efter ”Klar” på fliken Kamera har verkets ljudspår.
-Text, teckningar och kameraåkningar stannar vid sina bilder när du tar bort, duplicerar, håller eller flyttar bilder.
-”Återställ” lägger bilder från papperskorgen på deras gamla plats.
-”Ångra” gäller även titel, eftertexter, namn och dialog.
-Uppläsningen har röster på appens alla 17 språk.
-Uppspelningen i Studio följer ljudet.
+Brev, Hundhuvud och Mugg finns som vikföljder. För varje steg visar sökaren konturen, viklinjen och en pil.
+Med ”Automatisk avtryckare (händerna borta)” tar kameran bilden så snart steget är vikt. En stapel visar hur långt du har kommit.
+Siri och appen Genvägar känner till fem kommandon, till exempel ”Ta bild i FrameFold” och ”Exportera stopmotion i FrameFold”.
+Hjälpen har två nya kapitel, ”Vikföljder” och ”Siri och Genvägar”.

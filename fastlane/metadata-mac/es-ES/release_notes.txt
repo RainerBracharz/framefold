@@ -1,8 +1,4 @@
-La plantilla de plegado ofrece hypar, pliegue circular y Miura-ori con pliegues monte y valle. Hypar y pliegue circular siguen Origami Simulator de Amanda Ghassaei, creado con Erik Demaine y Tomohiro Tachi.
-El patrón puede verse como guía en el visor. Se coloca sobre la hoja plana y muestra el siguiente pliegue con cada imagen.
-El resultado tras «Listo» en la pestaña Cámara incluye las pistas de sonido de la obra.
-El texto, los dibujos y los movimientos de cámara se quedan con sus fotogramas cuando eliminas, duplicas, mantienes o reordenas fotogramas.
-«Restaurar» devuelve los fotogramas de la papelera a su lugar anterior.
-«Deshacer» vale también para el título, los créditos, el nombre y el diálogo.
-La salida de voz ofrece voces en los 17 idiomas de la app.
-La reproducción en el Studio se mantiene sincronizada con el sonido.
+Carta, Cabeza de perro y Vaso están disponibles como secuencias de plegado. En cada paso, el visor muestra el contorno, la línea de pliegue y una flecha.
+Con “Automático (manos fuera)”, la cámara toma el fotograma en cuanto el paso está plegado. Una barra muestra cuánto llevas.
+Siri y la app Atajos conocen cinco comandos, como “Disparar en FrameFold” y “Exportar stop motion en FrameFold”.
+La ayuda tiene dos capítulos nuevos, “Secuencias de plegado” y “Siri y Atajos”.

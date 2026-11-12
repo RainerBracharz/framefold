@@ -1,8 +1,5 @@
-Texto, desenhos e movimentos de câmera ficam com seus quadros quando você remove, duplica, segura ou reordena quadros.
-“Restaurar” devolve os quadros da lixeira ao lugar antigo.
-“Desfazer” vale também para título, créditos, nome e diálogo.
-No iPhone, o passo atual do padrão de dobra aparece acima do status.
-No iPhone, o visor está maior, e as folhas de voz e movimento de câmera estão mais organizadas.
-Em resolução total, a chave “Som do obturador” decide se o obturador soa (a partir do iOS 18).
-A fala oferece vozes em todos os 17 idiomas do app.
-A reprodução no Studio fica em sincronia com o som.
+Carta, Cabeça de cachorro e Copo estão disponíveis como sequências de dobra. Em cada passo, o visor mostra o contorno, a linha de dobra e uma seta.
+Com “Obturador automático (mãos fora)”, a câmera captura o quadro assim que o passo está dobrado. Uma barra mostra o quanto você avançou.
+A Siri e o app Atalhos conhecem cinco comandos, como “Tirar quadro no FrameFold” e “Exportar stop motion no FrameFold”.
+No iPhone, a pré-visualização do filme em uma obra ocupa toda a largura na vertical.
+A ajuda tem dois capítulos novos, “Sequências de dobra” e “Siri e Atalhos”.

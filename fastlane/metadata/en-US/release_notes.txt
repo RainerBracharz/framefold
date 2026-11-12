@@ -1,8 +1,5 @@
-Text, drawings and camera moves stay with their frames when you remove, duplicate, hold or reorder frames.
-“Restore” puts frames from the trash back in their old place.
-“Undo” also covers title, credits, name and dialogue.
-On iPhone, the current step of the crease pattern sits above the status.
-On iPhone, the viewfinder is larger, and the sheets for voice and camera move are tidier.
-At full resolution, the “Shutter sound” switch decides whether the shutter sounds (iOS 18 and later).
-Speech output offers voices in all 17 languages of the app.
-Playback in the studio stays in sync with the sound.
+Letter, Dog face and Cup are available as fold sequences. For each step, the viewfinder shows the outline, the crease line and an arrow.
+With “Auto shutter (hands away)”, the camera takes the frame as soon as the step is folded. A bar shows how far along you are.
+Siri and the Shortcuts app know five commands, such as “Take a frame in FrameFold” and “Export stop-motion in FrameFold”.
+On iPhone, the film preview in a work fills the width in portrait.
+Help has two new chapters, “Fold sequences” and “Siri and Shortcuts”.

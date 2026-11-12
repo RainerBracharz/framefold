@@ -1,8 +1,4 @@
-Il modello di piegatura offre hypar, pieghe circolari e Miura-ori con pieghe a monte e a valle. Hypar e pieghe circolari seguono Origami Simulator di Amanda Ghassaei, realizzato con Erik Demaine e Tomohiro Tachi.
-Lo schema può comparire come guida nel mirino. Si appoggia sul foglio piatto e mostra la piega successiva a ogni fotogramma.
-Il risultato dopo «Fine» nella scheda Fotocamera contiene le tracce audio dell'opera.
-Testo, disegni e movimenti di camera restano con i loro fotogrammi quando rimuovi, duplichi, tieni o riordini i fotogrammi.
-«Ripristina» rimette i fotogrammi del cestino al loro vecchio posto.
-«Annulla» vale anche per titolo, titoli di coda, nome e dialogo.
-La sintesi vocale offre voci in tutte le 17 lingue dell'app.
-La riproduzione nello Studio resta sincronizzata con l'audio.
+Lettera, Testa di cane e Bicchiere sono disponibili come sequenze di piegatura. Per ogni passo, il mirino mostra il contorno, la linea di piega e una freccia.
+Con “Automatico (mani via)”, la fotocamera scatta il fotogramma appena il passo è piegato. Una barra mostra a che punto sei.
+Siri e l’app Comandi Rapidi conoscono cinque comandi, come “Scatta in FrameFold” e “Esporta stop motion in FrameFold”.
+L’aiuto ha due nuovi capitoli, “Sequenze di piegatura” e “Siri e Comandi Rapidi”.

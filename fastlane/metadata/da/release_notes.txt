@@ -1,8 +1,5 @@
-Tekst, tegninger og kamerabevægelser bliver ved deres billeder, når du fjerner, duplikerer, holder eller flytter billeder.
-“Gendan” sætter billeder fra papirkurven tilbage på deres gamle plads.
-“Fortryd” gælder også titel, rulletekster, navn og dialog.
-På iPhone står det aktuelle trin i foldemønsteret over status.
-På iPhone er søgeren større, og arkene til stemme og kamerabevægelse er ryddet op.
-Ved fuld opløsning afgør kontakten “Udløserlyd”, om lukkeren kan høres (fra iOS 18).
-Oplæsningen har stemmer på alle appens 17 sprog.
-Afspilningen i Studio følger lyden.
+Brev, Hundehoved og Bæger findes som foldeforløb. For hvert trin viser søgeren omridset, foldelinjen og en pil.
+Med “Auto-udløser (hænder væk)” tager kameraet billedet, så snart trinnet er foldet. En bjælke viser, hvor langt du er.
+Siri og appen Genveje kender fem kommandoer, for eksempel “Tag billede i FrameFold” og “Eksportér stopmotion i FrameFold”.
+På iPhone fylder filmeksemplet i et værk bredden i stående format.
+Hjælpen har to nye kapitler, “Foldeforløb” og “Siri og Genveje”.

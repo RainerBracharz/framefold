@@ -1,8 +1,4 @@
-The fold template offers hypar, circular pleat and Miura-ori with mountain and valley folds. Hypar and circular pleat follow Origami Simulator by Amanda Ghassaei, made with Erik Demaine and Tomohiro Tachi.
-The crease pattern can run as a guide in the viewfinder. It lies on the flat sheet and shows the next fold with every frame.
-The result after “Done” in the Camera tab has the work's sound tracks.
-Text, drawings and camera moves stay with their frames when you remove, duplicate, hold or reorder frames.
-“Restore” puts frames from the trash back in their old place.
-“Undo” also covers title, credits, name and dialogue.
-Speech output offers voices in all 17 languages of the app.
-Playback in the studio stays in sync with the sound.
+Letter, Dog face and Cup are available as fold sequences. For each step, the viewfinder shows the outline, the crease line and an arrow.
+With “Auto shutter (hands away)”, the camera takes the frame as soon as the step is folded. A bar shows how far along you are.
+Siri and the Shortcuts app know five commands, such as “Take a frame in FrameFold” and “Export stop-motion in FrameFold”.
+Help has two new chapters, “Fold sequences” and “Siri and Shortcuts”.

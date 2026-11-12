@@ -1,8 +1,4 @@
-Die Faltvorlage bietet Hypar, Kreisfalte und Miura-ori mit Berg- und Talfalten. Hypar und Kreisfalte folgen dem Origami Simulator von Amanda Ghassaei, entstanden mit Erik Demaine und Tomohiro Tachi.
-Das Faltmuster läuft auf Wunsch als Hilfslinie im Sucher mit. Es legt sich auf das flache Blatt und zeigt mit jedem Bild die nächste Falte.
-Das Ergebnis nach „Fertig“ im Kamera-Tab hat die Tonspuren des Werks.
-Text, Zeichnungen und Kamerafahrten bleiben bei ihren Bildern, wenn du Bilder entfernst, verdoppelst, hältst oder umstellst.
-„Wiederherstellen“ setzt Bilder aus dem Papierkorb an ihren alten Platz.
-„Rückgängig“ gilt auch für Titel, Abspann, Namen und Dialog.
-Die Sprachausgabe bietet Stimmen in allen 17 Sprachen der App.
-Die Wiedergabe im Studio bleibt beim Ton.
+Brief, Hundekopf und Becher gibt es als Faltfolgen. Der Sucher zeigt je Schritt den Umriss, die Faltlinie und einen Pfeil.
+Mit „Automatik (Hände weg)“ nimmt die Kamera das Bild auf, sobald der Schritt gefaltet ist. Ein Balken zeigt, wie weit du bist.
+Siri und die App „Kurzbefehle“ kennen fünf Befehle, etwa „Auslösen in FrameFold“ und „Stop-Motion exportieren in FrameFold“.
+Die Hilfe hat zwei neue Kapitel, „Faltfolgen“ und „Siri und Kurzbefehle“.

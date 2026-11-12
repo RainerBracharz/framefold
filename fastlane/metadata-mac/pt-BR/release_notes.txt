@@ -1,8 +1,4 @@
-O molde de dobra oferece hypar, prega circular e Miura-ori com dobras montanha e vale. Hypar e prega circular seguem o Origami Simulator de Amanda Ghassaei, criado com Erik Demaine e Tomohiro Tachi.
-O padrão pode aparecer como guia no visor. Ele se ajusta à folha plana e mostra a próxima dobra a cada quadro.
-O resultado após “Concluído” na aba Câmera traz as faixas de som da obra.
-Texto, desenhos e movimentos de câmera ficam com seus quadros quando você remove, duplica, segura ou reordena quadros.
-“Restaurar” devolve os quadros da lixeira ao lugar antigo.
-“Desfazer” vale também para título, créditos, nome e diálogo.
-A fala oferece vozes em todos os 17 idiomas do app.
-A reprodução no Studio fica em sincronia com o som.
+Carta, Cabeça de cachorro e Copo estão disponíveis como sequências de dobra. Em cada passo, o visor mostra o contorno, a linha de dobra e uma seta.
+Com “Obturador automático (mãos fora)”, a câmera captura o quadro assim que o passo está dobrado. Uma barra mostra o quanto você avançou.
+A Siri e o app Atalhos conhecem cinco comandos, como “Tirar quadro no FrameFold” e “Exportar stop motion no FrameFold”.
+A ajuda tem dois capítulos novos, “Sequências de dobra” e “Siri e Atalhos”.

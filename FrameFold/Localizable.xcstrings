@@ -76972,6 +76972,1016 @@
           }
         }
       }
+    },
+    "Faltfolgen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fold sequences"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Séquences de pliage"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secuencias de plegado"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sequenze di piegatura"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vouwreeksen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折り手順"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sequências de dobra"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Postupy skládání"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sekwencje składania"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Послідовності складання"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Последовательности складывания"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Katlama sıraları"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접기 순서"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折叠步骤"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foldeforløb"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vikföljder"
+          }
+        }
+      }
+    },
+    "In den Kamera-Einstellungen (auf dem Mac unter Hilfslinien) bietet „Faltmuster“ die Faltfolgen Brief, Hundekopf und Becher.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the camera settings (on the Mac under Guides), “Crease pattern” offers the fold sequences Letter, Dog face and Cup."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dans les réglages de l’appareil photo (sur Mac sous Repères), « Motif de pliage » propose les séquences de pliage Lettre, Tête de chien et Gobelet."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En los ajustes de cámara (en el Mac en Guías), “Patrón de plegado” ofrece las secuencias de plegado Carta, Cabeza de perro y Vaso."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nelle impostazioni della fotocamera (su Mac in Guide), “Schema di piegatura” offre le sequenze di piegatura Lettera, Testa di cane e Bicchiere."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In de camera-instellingen (op de Mac onder Hulplijnen) biedt “Vouwpatroon” de vouwreeksen Brief, Hondenkop en Beker."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラ設定（Mac ではガイド）の「折り図」で、折り手順の手紙、犬の顔、コップを選べます。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nos ajustes da câmera (no Mac em Guias), “Padrão de dobra” oferece as sequências de dobra Carta, Cabeça de cachorro e Copo."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "V nastavení kamery (na Macu v části Vodítka) nabízí „Vzor skládání“ postupy skládání Dopis, Psí hlava a Kelímek."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "W ustawieniach aparatu (na Macu w sekcji Linie pomocnicze) „Wzór zgięć” oferuje sekwencje składania List, Głowa psa i Kubek."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "У налаштуваннях камери (на Mac у розділі Напрямні) «Схема згинів» пропонує послідовності складання Лист, Голова собаки і Стаканчик."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В настройках камеры (на Mac в разделе Направляющие) «Схема сгибов» предлагает последовательности складывания Письмо, Голова собаки и Стаканчик."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamera ayarlarında (Mac’te Kılavuz çizgiler altında) “Katlama deseni”, Mektup, Köpek başı ve Bardak katlama sıralarını sunar."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "카메라 설정(Mac에서는 안내선)의 “접기 패턴”에서 접기 순서로 편지, 강아지 얼굴, 컵 중 하나를 고를 수 있습니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在相机设置中（Mac 上在辅助线中），“折痕图案”提供信、小狗头和纸杯三种折叠步骤。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I kameraindstillingerne (på Mac under Hjælpelinjer) tilbyder “Foldemønster” foldeforløbene Brev, Hundehoved og Bæger."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I kamerainställningarna (på Mac under Hjälplinjer) erbjuder ”Vikmönster” vikföljderna Brev, Hundhuvud och Mugg."
+          }
+        }
+      }
+    },
+    "Lege ein flaches Blatt auf einen Tisch in anderer Farbe und nimm es als erstes Bild auf.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lay a flat sheet on a table of a different color and take it as the first frame."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pose une feuille à plat sur une table d’une autre couleur et prends-la comme première image."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pon una hoja plana sobre una mesa de otro color y tómala como primer fotograma."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metti un foglio piatto su un tavolo di colore diverso e scattalo come primo fotogramma."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leg een plat vel op een tafel met een andere kleur en neem het op als eerste beeld."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "色の違うテーブルに平らな紙を置き、最初のコマとして撮影します。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coloque uma folha plana sobre uma mesa de outra cor e capture-a como primeiro quadro."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Polož rovný list na stůl jiné barvy a pořiď ho jako první snímek."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Połóż płaski arkusz na stole w innym kolorze i zrób go jako pierwszą klatkę."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Поклади плаский аркуш на стіл іншого кольору і зніми його як перший кадр."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Положи плоский лист на стол другого цвета и сними его как первый кадр."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Düz bir kâğıdı farklı renkte bir masaya koy ve ilk kare olarak çek."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "색이 다른 탁자 위에 평평한 종이를 놓고 첫 프레임으로 촬영합니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "把一张平整的纸放在颜色不同的桌面上，拍下它作为第一帧。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Læg et fladt ark på et bord i en anden farve, og tag det som første billede."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lägg ett platt ark på ett bord i en annan färg och ta det som första bild."
+          }
+        }
+      }
+    },
+    "Der Sucher zeigt den nächsten Schritt mit dem Umriss nach der Faltung, der Faltlinie und einem Pfeil. Der Balken unter dem Blatt füllt sich, während du faltest.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The viewfinder shows the next step with the outline after the fold, the crease line and an arrow. The bar below the sheet fills as you fold."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le viseur montre l’étape suivante avec le contour après le pli, la ligne de pli et une flèche. La barre sous la feuille se remplit pendant que tu plies."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El visor muestra el siguiente paso con el contorno tras el pliegue, la línea de pliegue y una flecha. La barra bajo la hoja se llena mientras pliegas."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il mirino mostra il passo successivo con il contorno dopo la piega, la linea di piega e una freccia. La barra sotto il foglio si riempie mentre pieghi."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De zoeker toont de volgende stap met de omtrek na de vouw, de vouwlijn en een pijl. De balk onder het vel vult zich terwijl je vouwt."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファインダーには次の手順が、折ったあとの輪郭、折り線、矢印で表示されます。紙の下のバーは折るにつれて伸びます。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O visor mostra o próximo passo com o contorno depois da dobra, a linha de dobra e uma seta. A barra abaixo da folha se enche enquanto você dobra."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hledáček ukazuje další krok s obrysem po složení, linií skladu a šipkou. Pruh pod listem se plní, jak skládáš."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wizjer pokazuje następny krok z obrysem po złożeniu, linią zgięcia i strzałką. Pasek pod arkuszem wypełnia się, gdy składasz."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Видошукач показує наступний крок з контуром після згину, лінією згину і стрілкою. Смужка під аркушем заповнюється, поки ти складаєш."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Видоискатель показывает следующий шаг с контуром после сгиба, линией сгиба и стрелкой. Полоса под листом заполняется, пока ты складываешь."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vizör bir sonraki adımı katlamadan sonraki dış hat, kat çizgisi ve bir okla gösterir. Kâğıdın altındaki çubuk sen katladıkça dolar."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "뷰파인더는 다음 단계를 접은 뒤의 윤곽, 접는 선, 화살표로 보여 줍니다. 종이 아래의 막대는 접는 만큼 채워집니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取景器用折叠后的轮廓、折线和箭头显示下一步。纸张下方的进度条会随着折叠逐渐填满。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Søgeren viser næste trin med omridset efter folden, foldelinjen og en pil. Bjælken under arket fyldes, mens du folder."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sökaren visar nästa steg med konturen efter vikningen, viklinjen och en pil. Stapeln under arket fylls medan du viker."
+          }
+        }
+      }
+    },
+    "Mit „Automatik (Hände weg)“ nimmt die Kamera das Bild auf, sobald der Schritt gefaltet ist. Der Auslöser von Hand geht immer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With “Auto shutter (hands away)”, the camera takes the frame as soon as the step is folded. The shutter button always works."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avec « Déclenchement auto (mains hors champ) », l’appareil prend l’image dès que l’étape est pliée. Le déclencheur manuel fonctionne toujours."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Con “Automático (manos fuera)”, la cámara toma el fotograma en cuanto el paso está plegado. El disparador manual funciona siempre."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Con “Automatico (mani via)”, la fotocamera scatta il fotogramma appena il passo è piegato. Lo scatto manuale funziona sempre."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Met “Automatisch (handen weg)” neemt de camera het beeld op zodra de stap gevouwen is. De ontspanknop werkt altijd."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「オートシャッター（手が離れたら）」では、手順が折り上がるとカメラがコマを撮影します。手動のシャッターはいつでも使えます。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Com “Obturador automático (mãos fora)”, a câmera captura o quadro assim que o passo está dobrado. O disparo manual funciona sempre."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S volbou „Automatika (ruce pryč)“ kamera pořídí snímek, jakmile je krok složený. Ruční spoušť funguje vždy."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Z opcją „Automat (ręce precz)” aparat robi klatkę, gdy tylko krok jest złożony. Ręczna migawka działa zawsze."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "З опцією «Автоматика (руки геть)» камера знімає кадр, щойно крок складено. Ручний спуск працює завжди."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "С опцией «Автозатвор (руки прочь)» камера снимает кадр, как только шаг сложен. Ручной спуск работает всегда."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Otomatik deklanşör (eller çekilince)” ile kamera, adım katlanır katlanmaz kareyi çeker. Elle deklanşör her zaman çalışır."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“자동 셔터(손을 떼면)”에서는 단계를 다 접으면 카메라가 프레임을 촬영합니다. 수동 셔터는 언제나 쓸 수 있습니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用“自动快门（手离开时）”时，这一步折好后相机就会拍下这一帧。手动快门始终可用。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Med “Auto-udløser (hænder væk)” tager kameraet billedet, så snart trinnet er foldet. Den manuelle udløser virker altid."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Med ”Automatisk avtryckare (händerna borta)” tar kameran bilden så snart steget är vikt. Den manuella avtryckaren fungerar alltid."
+          }
+        }
+      }
+    },
+    "Manche Schritte prüft die Kamera nicht, etwa wenn die Faltung den Umriss nicht ändert oder Papier und Tisch fast dieselbe Farbe haben. Das steht dann beim Schritt, und die Kamera löst wie gewohnt aus.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The camera does not check some steps, for example when the fold leaves the outline unchanged or paper and table are nearly the same color. The step then says so, and the camera triggers as usual."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’appareil ne vérifie pas certaines étapes, par exemple quand le pli ne change pas le contour ou quand le papier et la table ont presque la même couleur. L’étape l’indique alors, et l’appareil déclenche comme d’habitude."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La cámara no comprueba algunos pasos, por ejemplo cuando el pliegue no cambia el contorno o el papel y la mesa tienen casi el mismo color. El paso lo indica, y la cámara dispara como de costumbre."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La fotocamera non controlla alcuni passi, per esempio quando la piega non cambia il contorno o carta e tavolo hanno quasi lo stesso colore. Il passo lo indica, e la fotocamera scatta come al solito."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sommige stappen controleert de camera niet, bijvoorbeeld als de vouw de omtrek niet verandert of papier en tafel bijna dezelfde kleur hebben. Dat staat dan bij de stap, en de camera ontspant zoals gewoonlijk."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折っても輪郭が変わらない場合や、紙とテーブルの色がほぼ同じ場合など、カメラが確認しない手順もあります。その場合は手順に表示され、カメラは通常どおり撮影します。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A câmera não verifica alguns passos, por exemplo quando a dobra não muda o contorno ou papel e mesa têm quase a mesma cor. O passo indica isso, e a câmera dispara como de costume."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Některé kroky kamera nekontroluje, například když sklad nezmění obrys nebo mají papír a stůl téměř stejnou barvu. U kroku je to uvedeno a kamera spouští jako obvykle."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niektórych kroków aparat nie sprawdza, na przykład gdy zgięcie nie zmienia obrysu albo papier i stół mają prawie ten sam kolor. Krok to wtedy pokazuje, a aparat wyzwala jak zwykle."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Деякі кроки камера не перевіряє, наприклад коли згин не змінює контур або папір і стіл майже одного кольору. Тоді це вказано біля кроку, а камера знімає як звичайно."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Некоторые шаги камера не проверяет, например когда сгиб не меняет контур или бумага и стол почти одного цвета. Тогда это указано у шага, а камера снимает как обычно."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamera bazı adımları denetlemez, örneğin kat dış hattı değiştirmediğinde ya da kâğıt ile masa neredeyse aynı renkte olduğunda. Bu durumda adımda belirtilir ve kamera her zamanki gibi çeker."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접어도 윤곽이 바뀌지 않거나 종이와 탁자 색이 거의 같을 때처럼 카메라가 확인하지 않는 단계도 있습니다. 그런 단계에는 표시가 나타나고 카메라는 평소대로 촬영합니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "有些步骤相机不作检查，例如折叠后轮廓不变，或纸张与桌面颜色几乎相同。这时步骤旁会有提示，相机照常拍摄。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kameraet tjekker ikke alle trin, for eksempel når folden ikke ændrer omridset, eller papir og bord har næsten samme farve. Det står så ved trinnet, og kameraet udløser som normalt."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kameran kontrollerar inte alla steg, till exempel när vikningen inte ändrar konturen eller papper och bord har nästan samma färg. Det står då vid steget, och kameran tar bilden som vanligt."
+          }
+        }
+      }
+    },
+    "Siri und Kurzbefehle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri and Shortcuts"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri et Raccourcis"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri y Atajos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri e Comandi Rapidi"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri en Opdrachten"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri とショートカット"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri e Atalhos"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri a Zkratky"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri i Skróty"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri і Швидкі команди"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri и Команды"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri ve Kestirmeler"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri와 단축어"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri 与快捷指令"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri og Genveje"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri och Genvägar"
+          }
+        }
+      }
+    },
+    "Sag während der Aufnahme zu Siri „Auslösen in FrameFold“, und die Kamera nimmt ein Bild auf.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "While capturing, say “Take a frame in FrameFold” to Siri, and the camera takes a frame."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pendant la prise de vue, dis à Siri « Déclencher dans FrameFold », et l’appareil prend une image."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durante la captura, di a Siri “Disparar en FrameFold”, y la cámara toma un fotograma."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durante la ripresa, di’ a Siri “Scatta in FrameFold”, e la fotocamera scatta un fotogramma."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeg tijdens de opname tegen Siri “Beeld maken in FrameFold”, en de camera neemt een beeld op."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "撮影中に Siri に「FrameFoldでコマを撮影」と言うと、カメラがコマを撮影します。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durante a captura, diga à Siri “Tirar quadro no FrameFold”, e a câmera captura um quadro."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Během snímání řekni Siri „Pořídit snímek v aplikaci FrameFold“ a kamera pořídí snímek."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Podczas nagrywania powiedz Siri „Zrób zdjęcie w FrameFold”, a aparat zrobi klatkę."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Під час зйомки скажи Siri «Зняти кадр у FrameFold», і камера зніме кадр."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Во время съёмки скажи Siri «Снять кадр в FrameFold», и камера снимет кадр."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çekim sırasında Siri’ye “FrameFold ile kare çek” de, kamera bir kare çeker."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "촬영 중에 Siri에게 “FrameFold에서 촬영”이라고 말하면 카메라가 프레임을 촬영합니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "拍摄时对 Siri 说“在FrameFold中拍摄”，相机就会拍下一帧。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sig “Tag billede i FrameFold” til Siri under optagelsen, så tager kameraet et billede."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Säg ”Ta bild i FrameFold” till Siri under inspelningen, så tar kameran en bild."
+          }
+        }
+      }
+    },
+    "Ebenso gehen „Letztes Bild zurücknehmen in FrameFold“, „Aufnahme beenden in FrameFold“, „Aufnahme starten in FrameFold“ und „Stop-Motion exportieren in FrameFold“.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Undo the last frame in FrameFold”, “Finish capture in FrameFold”, “Start capture in FrameFold” and “Export stop-motion in FrameFold” work the same way."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "« Annuler la dernière image dans FrameFold », « Terminer la prise de vue dans FrameFold », « Démarrer la prise de vue dans FrameFold » et « Exporter le stop motion dans FrameFold » fonctionnent de la même façon."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Deshacer el último fotograma en FrameFold”, “Terminar la captura en FrameFold”, “Iniciar la captura en FrameFold” y “Exportar stop motion en FrameFold” funcionan igual."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Annulla l’ultimo fotogramma in FrameFold”, “Termina la ripresa in FrameFold”, “Avvia la ripresa in FrameFold” e “Esporta stop motion in FrameFold” funzionano allo stesso modo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Laatste beeld ongedaan maken in FrameFold”, “Opname beëindigen in FrameFold”, “Opname starten in FrameFold” en “Stop-motion exporteren in FrameFold” werken op dezelfde manier."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「FrameFoldで最後のコマを取り消す」「FrameFoldで撮影を終了」「FrameFoldで撮影を開始」「FrameFoldでコマ撮りを書き出す」も同じように使えます。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Desfazer o último quadro no FrameFold”, “Encerrar a captura no FrameFold”, “Iniciar a captura no FrameFold” e “Exportar stop motion no FrameFold” funcionam do mesmo jeito."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stejně fungují „Vrátit poslední snímek v aplikaci FrameFold“, „Ukončit snímání v aplikaci FrameFold“, „Spustit snímání v aplikaci FrameFold“ a „Exportovat stop motion v aplikaci FrameFold“."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tak samo działają „Cofnij ostatnią klatkę w FrameFold”, „Zakończ nagrywanie w FrameFold”, „Rozpocznij nagrywanie w FrameFold” i „Eksportuj stop motion w FrameFold”."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Так само працюють «Скасувати останній кадр у FrameFold», «Завершити зйомку в FrameFold», «Почати зйомку в FrameFold» і «Експортувати стоп-моушн у FrameFold»."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Так же работают «Отменить последний кадр в FrameFold», «Завершить съёмку в FrameFold», «Начать съёмку в FrameFold» и «Экспортировать стоп-моушен в FrameFold»."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“FrameFold ile son kareyi geri al”, “FrameFold ile çekimi bitir”, “FrameFold ile çekimi başlat” ve “FrameFold ile stop motion'ı dışa aktar” de aynı şekilde çalışır."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“FrameFold에서 마지막 프레임 취소”, “FrameFold에서 촬영 종료”, “FrameFold에서 촬영 시작”, “FrameFold에서 스톱모션 내보내기”도 같은 방식으로 쓸 수 있습니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“在FrameFold中撤销最后一帧”“在FrameFold中结束拍摄”“在FrameFold中开始拍摄”和“在FrameFold中导出定格动画”也可以这样使用。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Fortryd sidste billede i FrameFold”, “Afslut optagelsen i FrameFold”, “Start optagelsen i FrameFold” og “Eksportér stopmotion i FrameFold” virker på samme måde."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "”Ångra senaste bilden i FrameFold”, ”Avsluta inspelningen i FrameFold”, ”Starta inspelningen i FrameFold” och ”Exportera stopmotion i FrameFold” fungerar på samma sätt."
+          }
+        }
+      }
+    },
+    "Die fünf Befehle stehen auch in der App „Kurzbefehle“ und lassen sich dort zu eigenen Abläufen verbinden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All five commands are also in the Shortcuts app, where you can combine them into your own routines."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les cinq commandes se trouvent aussi dans l’app Raccourcis, où tu peux les combiner en automatisations."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los cinco comandos están también en la app Atajos, donde puedes combinarlos en tus propias rutinas."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I cinque comandi si trovano anche nell’app Comandi Rapidi, dove puoi combinarli in sequenze tue."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De vijf opdrachten staan ook in de app Opdrachten, waar je ze tot eigen reeksen kunt combineren."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5 つのコマンドは「ショートカット」アプリにもあり、ほかの操作と組み合わせられます。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os cinco comandos também estão no app Atalhos, onde você pode combiná-los em rotinas próprias."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Všech pět příkazů je také v aplikaci Zkratky, kde je můžeš spojit do vlastních postupů."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wszystkie pięć poleceń jest też w aplikacji Skróty, gdzie można je łączyć we własne sekwencje."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Усі п’ять команд є також у програмі «Швидкі команди», де їх можна поєднати у власні послідовності."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Все пять команд есть и в приложении «Команды», где их можно объединить в свои последовательности."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beş komut Kestirmeler uygulamasında da bulunur ve orada kendi akışlarında birleştirilebilir."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다섯 가지 명령은 단축어 앱에도 있어 다른 동작과 묶어 쓸 수 있습니다."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这五个指令也在“快捷指令”App 中，可与其他操作组合成自己的流程。"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De fem kommandoer findes også i appen Genveje, hvor du kan kombinere dem til egne forløb."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De fem kommandona finns också i appen Genvägar, där du kan kombinera dem till egna flöden."
+          }
+        }
+      }
     }
   },
   "version": "1.3"

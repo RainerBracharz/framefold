@@ -1,8 +1,5 @@
-Text, teckningar och kameraåkningar stannar vid sina bilder när du tar bort, duplicerar, håller eller flyttar bilder.
-”Återställ” lägger bilder från papperskorgen på deras gamla plats.
-”Ångra” gäller även titel, eftertexter, namn och dialog.
-På iPhone står vikmönstrets aktuella steg ovanför statusen.
-På iPhone är sökaren större, och bladen för röst och kameraåkning är uppstädade.
-Vid full upplösning avgör reglaget ”Avtryckarljud” om slutaren hörs (från iOS 18).
-Uppläsningen har röster på appens alla 17 språk.
-Uppspelningen i Studio följer ljudet.
+Brev, Hundhuvud och Mugg finns som vikföljder. För varje steg visar sökaren konturen, viklinjen och en pil.
+Med ”Automatisk avtryckare (händerna borta)” tar kameran bilden så snart steget är vikt. En stapel visar hur långt du har kommit.
+Siri och appen Genvägar känner till fem kommandon, till exempel ”Ta bild i FrameFold” och ”Exportera stopmotion i FrameFold”.
+På iPhone fyller filmförhandsvisningen i ett verk bredden i stående läge.
+Hjälpen har två nya kapitel, ”Vikföljder” och ”Siri och Genvägar”.

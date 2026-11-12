@@ -1,8 +1,5 @@
-El texto, los dibujos y los movimientos de cámara se quedan con sus fotogramas cuando eliminas, duplicas, mantienes o reordenas fotogramas.
-«Restaurar» devuelve los fotogramas de la papelera a su lugar anterior.
-«Deshacer» vale también para el título, los créditos, el nombre y el diálogo.
-En el iPhone, el paso actual del patrón de plegado aparece sobre el estado.
-En el iPhone, el visor es más grande, y las hojas de voz y movimiento de cámara están más ordenadas.
-A resolución completa, el interruptor «Sonido de disparo» decide si suena el obturador (a partir de iOS 18).
-La salida de voz ofrece voces en los 17 idiomas de la app.
-La reproducción en el Studio se mantiene sincronizada con el sonido.
+Carta, Cabeza de perro y Vaso están disponibles como secuencias de plegado. En cada paso, el visor muestra el contorno, la línea de pliegue y una flecha.
+Con “Automático (manos fuera)”, la cámara toma el fotograma en cuanto el paso está plegado. Una barra muestra cuánto llevas.
+Siri y la app Atajos conocen cinco comandos, como “Disparar en FrameFold” y “Exportar stop motion en FrameFold”.
+En el iPhone, la vista previa de la película en una obra ocupa todo el ancho en vertical.
+La ayuda tiene dos capítulos nuevos, “Secuencias de plegado” y “Siri y Atajos”.

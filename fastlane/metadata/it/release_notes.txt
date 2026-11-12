@@ -1,8 +1,5 @@
-Testo, disegni e movimenti di camera restano con i loro fotogrammi quando rimuovi, duplichi, tieni o riordini i fotogrammi.
-«Ripristina» rimette i fotogrammi del cestino al loro vecchio posto.
-«Annulla» vale anche per titolo, titoli di coda, nome e dialogo.
-Su iPhone, il passo attuale dello schema di piegatura compare sopra lo stato.
-Su iPhone, il mirino è più grande, e i fogli per voce e movimento di camera sono più ordinati.
-A piena risoluzione, l'interruttore «Suono di scatto» decide se l'otturatore suona (da iOS 18).
-La sintesi vocale offre voci in tutte le 17 lingue dell'app.
-La riproduzione nello Studio resta sincronizzata con l'audio.
+Lettera, Testa di cane e Bicchiere sono disponibili come sequenze di piegatura. Per ogni passo, il mirino mostra il contorno, la linea di piega e una freccia.
+Con “Automatico (mani via)”, la fotocamera scatta il fotogramma appena il passo è piegato. Una barra mostra a che punto sei.
+Siri e l’app Comandi Rapidi conoscono cinque comandi, come “Scatta in FrameFold” e “Esporta stop motion in FrameFold”.
+Su iPhone, l’anteprima del film in un’opera occupa tutta la larghezza in verticale.
+L’aiuto ha due nuovi capitoli, “Sequenze di piegatura” e “Siri e Comandi Rapidi”.
