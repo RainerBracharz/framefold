@@ -270,6 +270,16 @@ struct ProjectDetailView: View {
     @State private var exportURL: URL?
     /// Sichtbare Höhe der Seite – begrenzt die Film-Vorschau (s. u.).
     @State private var viewportHeight: CGFloat = 0
+    @Environment(\.horizontalSizeClass) private var hSizeClass
+    @Environment(\.verticalSizeClass) private var vSizeClass
+    /// Höchstens rund 70 % der sichtbaren Höhe: Ein Hochkant-Film über die
+    /// volle Breite eines Mac- oder iPad-Fensters wäre mehrere Bildschirme
+    /// hoch und „Video teilen" weit weg. Am iPhone im Hochformat bleibt die
+    /// Vorschau wie gewohnt bildbreit – dort passt sie ohnehin.
+    private var previewMaxHeight: CGFloat? {
+        if hSizeClass == .compact && vSizeClass == .regular { return nil }
+        return viewportHeight > 0 ? viewportHeight * 0.7 : nil
+    }
     @State private var errorMessage: String?
     @State private var contactSheetURL: URL?
     @State private var isRenderingSheet = false
@@ -1006,11 +1016,7 @@ struct ProjectDetailView: View {
                 }
             } else if let exportURL {
                 // Fertig: erst ansehen (Endlos-Schleife), dann teilen
-                // Höchstens rund 70 % der sichtbaren Höhe: Ein Hochkant-Film
-                // über die volle Breite eines Mac- oder iPad-Fensters wäre
-                // mehrere Bildschirme hoch und „Video teilen" weit weg.
-                LoopingVideoPreview(url: exportURL,
-                                    maxHeight: viewportHeight > 0 ? viewportHeight * 0.7 : nil)
+                LoopingVideoPreview(url: exportURL, maxHeight: previewMaxHeight)
                     .editionPlate()
 
                 Button {
