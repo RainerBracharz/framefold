@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		04FA675C7F188EF8179B0975 /* Algorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90F27737EE2A3D892E97F55 /* Algorithms.swift */; };
 		0CAEF231501404EE77F40FB6 /* FoldTemplateRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0054D6E78B2E0461321D7680 /* FoldTemplateRenderer.swift */; };
+		F01D5E0F01D5E0F01D5E0002 /* FoldSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01D5E0F01D5E0F01D5E0001 /* FoldSequence.swift */; };
 		0E02C30C0D9FB6293B4FD9BD /* ProcessingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6583ADB31D00356EDCE7FA83 /* ProcessingViewModel.swift */; };
 		2F97FFBA1AFB2FC17C8F6E8F /* LiveCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFA8297A3233B23D9AE700 /* LiveCaptureController.swift */; };
 		3059C6016C96E13B484F9C75 /* HandDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F57A631B9FBDA6F9338B4C /* HandDetector.swift */; };
@@ -112,6 +113,7 @@
 
 /* Begin PBXFileReference section */
 		0054D6E78B2E0461321D7680 /* FoldTemplateRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldTemplateRenderer.swift; sourceTree = "<group>"; };
+		F01D5E0F01D5E0F01D5E0001 /* FoldSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldSequence.swift; sourceTree = "<group>"; };
 		1C84F7E8C0DE1E8C227DD75C /* FrameFoldApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameFoldApp.swift; sourceTree = "<group>"; };
 		32CD31EE9EE75040932168D5 /* ExhibitionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitionBuilder.swift; sourceTree = "<group>"; };
 		37A16ED755D49527D84B6FFE /* ContactSheetRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSheetRenderer.swift; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 				9BBC799115617B1A713B60FF /* ContentView.swift */,
 				32CD31EE9EE75040932168D5 /* ExhibitionBuilder.swift */,
 				0054D6E78B2E0461321D7680 /* FoldTemplateRenderer.swift */,
+				F01D5E0F01D5E0F01D5E0001 /* FoldSequence.swift */,
 				856EF7169EBADC9E0A4E3FEB /* FrameAligner.swift */,
 				41366FECBE0FAF2939DF1DAD /* FrameAnalyzer.swift */,
 				1C84F7E8C0DE1E8C227DD75C /* FrameFoldApp.swift */,
@@ -501,6 +504,7 @@
 				6EC6DE6FF0464AC9AD90443E /* ContentView.swift in Sources */,
 				E466B79C40F7AC551AA8FCDF /* ExhibitionBuilder.swift in Sources */,
 				0CAEF231501404EE77F40FB6 /* FoldTemplateRenderer.swift in Sources */,
+				F01D5E0F01D5E0F01D5E0002 /* FoldSequence.swift in Sources */,
 				A4C483879CD17FB6351FCFDF /* FrameAligner.swift in Sources */,
 				F18E9E67D58704115602C98F /* FrameAnalyzer.swift in Sources */,
 				949020BFE94303FA69C4606D /* FrameFoldApp.swift in Sources */,
