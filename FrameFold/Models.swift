@@ -326,6 +326,10 @@ extension PipelineSettings {
         if let v = ProcessInfo.processInfo.environment["FF_ECHO_STRENGTH"], let e = Double(v) {
             s.echoStrength = max(0.1, min(0.5, e))
         }
+        // … und den Farblook (FF_LOOK=original), weil Auswahlmenüs im Hintergrund nicht bedienbar sind
+        if let v = ProcessInfo.processInfo.environment["FF_LOOK"], let look = FilmLook(rawValue: v) {
+            s.look = look
+        }
         #endif
         return s
     }

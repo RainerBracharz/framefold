@@ -1516,6 +1516,11 @@ struct StudioView: View {
                 if let project, !(project.audioTracks ?? []).contains(where: { $0.name == "dialog" }) {
                     store.addAudioTrack(from: URL(fileURLWithPath: kv[1]), startFrame: 2, to: project)
                 }
+            case "audio0":
+                // Tonspur ab dem ersten Bild (für Filme, die als Schleife laufen)
+                if let project, (project.audioTracks ?? []).isEmpty {
+                    store.addAudioTrack(from: URL(fileURLWithPath: kv[1]), startFrame: 0, to: project)
+                }
             case "dialogue":
                 // Beispiel-Dialog ohne Spracherkennung (die fragt um Erlaubnis)
                 let words = [TimedWord(text: "Hallo", start: 0.2, duration: 0.6),

@@ -1226,7 +1226,16 @@ struct ProjectDetailView: View {
         }
         let title = currentProject.titleText, credits = currentProject.creditsText
         let overlays = currentProject.overlays ?? []
-        let moves = currentProject.cameraMoves ?? []
+        var moves = currentProject.cameraMoves ?? []
+        #if DEBUG
+        // Testläufe: Kamerafahrten aus einer Datei statt aus dem Editor
+        // (FF_MOVES=<JSON mit [CameraMove]>), für Filme mit vielen Fahrten.
+        if let path = ProcessInfo.processInfo.environment["FF_MOVES"], !path.isEmpty,
+           let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
+           let fromFile = try? JSONDecoder().decode([CameraMove].self, from: data) {
+            moves = fromFile
+        }
+        #endif
         let folder = store.folderURL(for: currentProject)
         let subtitle = currentProject.createdDateText
 
