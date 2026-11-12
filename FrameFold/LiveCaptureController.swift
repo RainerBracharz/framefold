@@ -686,6 +686,9 @@ final class LiveCaptureController: NSObject, ObservableObject {
     private(set) var foldReference: FoldReference?
     /// Wie weit der aktuelle Schritt gefaltet ist (0…1) – nil ohne prüfbaren Schritt
     @Published private(set) var foldProgress: Double?
+    /// Prüft die Kamera den aktuellen Schritt am Umriss? Falsch ohne festgehaltenes
+    /// Blatt (Papier in Tischfarbe) und bei Schritten, die den Umriss nicht ändern.
+    @Published private(set) var foldStepChecked = false
     private var foldStepFolded = false
     private var foldGateBlockedSince: Date?
     private var paperLastSeen = Date.distantPast
@@ -1994,6 +1997,17 @@ extension LiveCaptureController {
         } else if foldReference == nil, let quad = paperQuad, let frame = latestFrame {
             foldReference = FoldReference(frame: frame, quad: quad)
         }
+        refreshFoldStepChecked()
+    }
+
+    /// Einmal je Schritt ausrechnen – der Vergleich der Umrisse kostet zu viel
+    /// für jedes Kamerabild.
+    private func refreshFoldStepChecked() {
+        var checked = false
+        if let sequence = foldSequence, let step = foldSequenceStep, foldReference != nil {
+            checked = sequence.isVerifiable(step: step)
+        }
+        if checked != foldStepChecked { foldStepChecked = checked }
     }
 
     private func resetFoldReference() {
@@ -2001,6 +2015,7 @@ extension LiveCaptureController {
         foldStepFolded = false
         foldGateBlockedSince = nil
         if foldProgress != nil { foldProgress = nil }
+        if foldStepChecked { foldStepChecked = false }
     }
 
     func foldObserved(_ mask: FoldSequence.Mask?) {
@@ -2021,8 +2036,7 @@ extension LiveCaptureController {
     /// Papier nicht (gleiche Farbe wie der Tisch), soll niemand festsitzen.
     /// Der Auslöser von Hand geht immer.
     private func foldGateHolds() -> Bool {
-        guard let sequence = foldSequence, let step = foldSequenceStep, foldReference != nil,
-              sequence.isVerifiable(step: step), !foldStepFolded else {
+        guard foldSequence != nil, foldStepChecked, !foldStepFolded else {
             foldGateBlockedSince = nil
             return false
         }

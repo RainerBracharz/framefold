@@ -346,7 +346,8 @@ struct StudioView: View {
                 if showsLive, settings.foldGuide != .off {
                     FoldGuideOverlay(guide: settings.foldGuide, paperQuad: controller.paperQuad,
                                      step: controller.capturedCount - foldGuideBase,
-                                     imageAspect: controller.frameAspect, fills: false)
+                                     imageAspect: controller.frameAspect, fills: false,
+                                     progress: controller.foldProgress, checked: controller.foldStepChecked)
                 }
                 if flash > 0 { Color.white.opacity(flash).allowsHitTesting(false) }
             }

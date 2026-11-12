@@ -221,6 +221,9 @@ struct FoldGuideOverlay: View {
     /// Schrittzeile im Bild. Die iPhone-Kamera zeigt sie stattdessen in der
     /// Bedienung: Ihr Kamerabild läuft unter Kopfleiste und Bedienung hinaus.
     var showsLabel = true
+    /// Faltfolge: wie weit der Schritt gefaltet ist (0…1), und ob die Kamera ihn prüft
+    var progress: Double? = nil
+    var checked = true
 
     var body: some View {
         Canvas { ctx, size in
@@ -228,12 +231,22 @@ struct FoldGuideOverlay: View {
             let image = Self.imageRect(aspect: imageAspect, in: size, fills: fills)
             let quad = paperQuad.map { CGPoint(x: image.minX + $0.x * image.width, y: image.minY + $0.y * image.height) }
             guide.draw(in: &ctx, quad: quad, step: step.map { max(0, $0) })
+            // Faltfolge: kleiner Balken unter dem Blatt – er füllt sich, während gefaltet wird.
+            if guide.sequence != nil, let progress, quad.count == 4 {
+                let bottom = CGPoint(x: (quad[2].x + quad[3].x) / 2, y: max(quad[2].y, quad[3].y) + 18)
+                let width: CGFloat = 96, height: CGFloat = 5
+                let track = CGRect(x: bottom.x - width / 2, y: bottom.y, width: width, height: height)
+                ctx.fill(Path(roundedRect: track, cornerRadius: height / 2), with: .color(.white.opacity(0.28)))
+                let filled = CGRect(x: track.minX, y: track.minY, width: width * min(max(progress, 0), 1), height: height)
+                ctx.fill(Path(roundedRect: filled, cornerRadius: height / 2),
+                         with: .color(Color(red: 0.85, green: 0.61, blue: 0.17)))
+            }
         }
         .opacity(paperQuad == nil ? 0 : 1)
         .animation(.easeInOut(duration: 0.35), value: paperQuad == nil)
         .overlay(alignment: .bottom) {
             if showsLabel, guide != .off {
-                Text(Self.label(guide: guide, paperQuad: paperQuad, step: step))
+                Text(Self.label(guide: guide, paperQuad: paperQuad, step: step, checked: checked))
                     .font(Theme.mono(11)).foregroundStyle(.white)
                     .padding(.horizontal, 8).padding(.vertical, 4)
                     .background(.black.opacity(0.55))
@@ -243,15 +256,19 @@ struct FoldGuideOverlay: View {
         .allowsHitTesting(false)
     }
 
-    static func label(guide: FoldGuide, paperQuad: [CGPoint]?, step: Int?) -> String {
+    static func label(guide: FoldGuide, paperQuad: [CGPoint]?, step: Int?, checked: Bool = true) -> String {
         guard paperQuad != nil else { return String(localized: "Faltmuster: Blatt nicht erkannt") }
         guard let rawStep = step else { return guide.label }
         // Faltfolgen zählen ab dem zweiten Bild: Das erste zeigt das flache Blatt.
         if guide.sequence != nil, rawStep <= 0 { return guide.label }
         let step = max(0, guide.sequence != nil ? rawStep - 1 : rawStep)
         let n = guide.stepCount
-        return step >= n ? String(localized: "Faltmuster: alle \(n) Schritte gefaltet")
-                         : String(localized: "Faltmuster: Schritt \(step + 1) von \(n)")
+        if step >= n { return String(localized: "Faltmuster: alle \(n) Schritte gefaltet") }
+        // Faltfolge ohne Prüfung: Die Kamera löst wie gewohnt aus, sobald die Hände weg sind.
+        if guide.sequence != nil, !checked {
+            return String(localized: "Faltmuster: Schritt \(step + 1) von \(n), ohne Prüfung")
+        }
+        return String(localized: "Faltmuster: Schritt \(step + 1) von \(n)")
     }
 
     /// Lage des Kamerabilds in der Ansicht (eingepasst oder füllend, mittig)

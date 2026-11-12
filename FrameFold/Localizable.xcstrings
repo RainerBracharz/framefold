@@ -76871,6 +76871,107 @@
           }
         }
       }
+    },
+    "Faltmuster: Schritt %lld von %lld, ohne Prüfung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crease pattern: step %lld of %lld, not checked"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motif : étape %lld sur %lld, sans vérification"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patrón: paso %lld de %lld, sin comprobación"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schema: passaggio %lld di %lld, senza verifica"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vouwpatroon: stap %lld van %lld, zonder controle"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折り図：ステップ %lld / %lld(確認なし)"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Padrão: etapa %lld de %lld, sem verificação"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vzor: krok %lld z %lld, bez kontroly"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wzór: krok %lld z %lld, bez sprawdzania"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схема: крок %lld з %lld, без перевірки"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Схема: шаг %lld из %lld, без проверки"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desen: adım %lld / %lld, denetimsiz"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접기 패턴: %lld / %lld단계, 확인 없음"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折痕图案：第 %lld 步，共 %lld 步(不检查)"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foldemønster: trin %lld af %lld, uden kontrol"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vikmönster: steg %lld av %lld, utan kontroll"
+          }
+        }
+      }
     }
   },
   "version": "1.3"

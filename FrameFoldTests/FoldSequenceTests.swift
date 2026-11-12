@@ -148,6 +148,35 @@ final class FoldSequenceTests: XCTestCase {
         XCTAssertFalse(dog.isFolded(step: 1, observed: triangle))
     }
 
+    func testEverySequenceIsConfirmedStepByStepFromThePicture() throws {
+        // Der ganze Weg wie in der Kamera: Bild → Umriss → Prüfung, für alle Folgen.
+        let sheet = CGRect(x: 110, y: 70, width: 100, height: 100)
+        let quad = [CGPoint(x: 110.0 / 320, y: 70.0 / 240), CGPoint(x: 210.0 / 320, y: 70.0 / 240),
+                    CGPoint(x: 210.0 / 320, y: 170.0 / 240), CGPoint(x: 110.0 / 320, y: 170.0 / 240)]
+        for sequence in FoldSequence.all {
+            let states = sequence.states
+            let reference = try XCTUnwrap(FoldReference(frame: picture(states[0], quad: sheet), quad: quad))
+            for index in sequence.steps.indices where sequence.isVerifiable(step: index) {
+                let before = try XCTUnwrap(reference.mask(of: picture(states[index], quad: sheet)))
+                let after = try XCTUnwrap(reference.mask(of: picture(states[index + 1], quad: sheet)))
+                XCTAssertFalse(sequence.isFolded(step: index, observed: before), "\(sequence.id) Schritt \(index): noch nicht gefaltet")
+                XCTAssertTrue(sequence.isFolded(step: index, observed: after), "\(sequence.id) Schritt \(index): gefaltet")
+            }
+        }
+    }
+
+    func testStepLabelSaysWhenTheCameraDoesNotCheck() {
+        let quad = [CGPoint(x: 0.3, y: 0.3), CGPoint(x: 0.7, y: 0.3), CGPoint(x: 0.7, y: 0.7), CGPoint(x: 0.3, y: 0.7)]
+        let checked = FoldGuideOverlay.label(guide: .cup, paperQuad: quad, step: 4, checked: true)
+        let unchecked = FoldGuideOverlay.label(guide: .cup, paperQuad: quad, step: 4, checked: false)
+        XCTAssertNotEqual(checked, unchecked)
+        // Vor dem ersten Bild steht nur der Name, ohne Schrittzahl.
+        XCTAssertEqual(FoldGuideOverlay.label(guide: .cup, paperQuad: quad, step: 0, checked: false), FoldGuide.cup.label)
+        // Gewöhnliche Faltmuster kennen keine Prüfung.
+        XCTAssertEqual(FoldGuideOverlay.label(guide: .hypar, paperQuad: quad, step: 1, checked: false),
+                       FoldGuideOverlay.label(guide: .hypar, paperQuad: quad, step: 1, checked: true))
+    }
+
     func testPaperInTableColourGivesNoReference() {
         // Lässt sich das Papier nicht vom Tisch trennen, gibt es keine Prüfung –
         // die Kamera löst dann wie gewohnt aus.
