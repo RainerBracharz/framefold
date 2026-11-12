@@ -107,4 +107,57 @@ final class FoldSequenceTests: XCTestCase {
         }
         XCTAssertTrue(cup.isFolded(step: 0, observed: FoldSequence.mask(of: shifted)))
     }
+
+    // MARK: Umriss aus dem Kamerabild
+
+    /// Tisch dunkel, Papier hell; `faces` in Blattkoordinaten auf dem Viereck `quad`.
+    private func picture(_ faces: [FoldSequence.Face], quad: CGRect, size: CGSize = CGSize(width: 320, height: 240)) -> CGImage {
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        return UIGraphicsImageRenderer(size: size, format: format).image { ctx in
+            UIColor(white: 0.15, alpha: 1).setFill()
+            ctx.fill(CGRect(origin: .zero, size: size))
+            UIColor(white: 0.92, alpha: 1).setFill()
+            for face in faces {
+                let path = UIBezierPath()
+                for (i, p) in face.polygon.enumerated() {
+                    let q = CGPoint(x: quad.minX + p.x * quad.width, y: quad.minY + p.y * quad.height)
+                    if i == 0 { path.move(to: q) } else { path.addLine(to: q) }
+                }
+                path.close()
+                path.fill()
+            }
+        }.cgImage!
+    }
+
+    func testCameraOutlineFollowsTheFoldedPaper() throws {
+        let dog = FoldSequence.dog
+        let states = dog.states
+        let sheet = CGRect(x: 110, y: 70, width: 100, height: 100)
+        let quad = [CGPoint(x: 110.0 / 320, y: 70.0 / 240), CGPoint(x: 210.0 / 320, y: 70.0 / 240),
+                    CGPoint(x: 210.0 / 320, y: 170.0 / 240), CGPoint(x: 110.0 / 320, y: 170.0 / 240)]
+        let reference = try XCTUnwrap(FoldReference(frame: picture(states[0], quad: sheet), quad: quad))
+
+        let flat = try XCTUnwrap(reference.mask(of: picture(states[0], quad: sheet)))
+        XCTAssertEqual(flat.area, 1, accuracy: 0.08)
+        XCTAssertFalse(dog.isFolded(step: 0, observed: flat))
+
+        let triangle = try XCTUnwrap(reference.mask(of: picture(states[1], quad: sheet)))
+        XCTAssertEqual(triangle.area, 0.5, accuracy: 0.06)
+        XCTAssertTrue(dog.isFolded(step: 0, observed: triangle))
+        XCTAssertFalse(dog.isFolded(step: 1, observed: triangle))
+    }
+
+    func testPaperInTableColourGivesNoReference() {
+        // Lässt sich das Papier nicht vom Tisch trennen, gibt es keine Prüfung –
+        // die Kamera löst dann wie gewohnt aus.
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        let plain = UIGraphicsImageRenderer(size: CGSize(width: 320, height: 240), format: format).image { ctx in
+            UIColor(white: 0.5, alpha: 1).setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: 320, height: 240))
+        }.cgImage!
+        let quad = [CGPoint(x: 0.35, y: 0.3), CGPoint(x: 0.65, y: 0.3), CGPoint(x: 0.65, y: 0.7), CGPoint(x: 0.35, y: 0.7)]
+        XCTAssertNil(FoldReference(frame: plain, quad: quad))
+    }
 }

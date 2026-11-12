@@ -1580,6 +1580,7 @@ struct StudioView: View {
         if appliedFoldGuide != s.foldGuide {
             appliedFoldGuide = s.foldGuide
             controller.tracksPaper = s.foldGuide != .off
+            controller.foldSequence = s.foldGuide.sequence
             foldGuideBase = controller.capturedCount   // neues Muster beginnt bei Schritt 1
         }
         controller.averageFrames = s.averageFrames

@@ -608,6 +608,7 @@ struct LiveCaptureView: View {
     private func syncPaperTracking() {
         guard !usesStudio else { return }
         controller.tracksPaper = mode.showsTolino && foldGuide != .off
+        controller.foldSequence = controller.tracksPaper ? foldGuide.sequence : nil
     }
 
     private func captureView(project: Project) -> some View {

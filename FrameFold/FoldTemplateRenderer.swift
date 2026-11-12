@@ -51,16 +51,33 @@ enum FoldPattern: String, CaseIterable, Identifiable {
 /// man beim Falten sieht, welche Linie als Nächstes kommt.
 enum FoldGuide: String, CaseIterable, Identifiable, Codable {
     case off, hypar, circularPleat, miura
+    /// Geführte Faltfolgen: Schritt für Schritt, die Kamera prüft den Umriss.
+    case letter, dog, cup
     var id: String { rawValue }
     var pattern: FoldPattern? {
         switch self {
-        case .off: return nil
+        case .off, .letter, .dog, .cup: return nil
         case .hypar: return .hypar
         case .circularPleat: return .circularPleat
         case .miura: return .miura
         }
     }
-    var label: String { pattern?.label ?? String(localized: "aus") }
+    var sequence: FoldSequence? {
+        switch self {
+        case .letter: return .letter
+        case .dog: return .dog
+        case .cup: return .cup
+        default: return nil
+        }
+    }
+    var label: String {
+        switch self {
+        case .letter: return String(localized: "Brief")
+        case .dog: return String(localized: "Hundekopf")
+        case .cup: return String(localized: "Becher")
+        default: return pattern?.label ?? String(localized: "aus")
+        }
+    }
 
     /// Das Muster im Einheitsquadrat, in Faltschritte gegliedert, dazu die Schnittkanten.
     var unitSteps: (steps: [[Algorithms.Crease]], cuts: [Algorithms.Crease]) {
@@ -76,6 +93,10 @@ enum FoldGuide: String, CaseIterable, Identifiable, Codable {
     /// Ohne `step` erscheint das ganze Muster.
     func draw(in ctx: inout GraphicsContext, quad: [CGPoint], step: Int?, opacity: Double = 0.85) {
         guard let map = Algorithms.QuadMap(quad) else { return }
+        if let sequence {
+            Self.draw(sequence, in: &ctx, map: map, framesTaken: step ?? 0, opacity: opacity)
+            return
+        }
         let (steps, cuts) = unitSteps
         func path(_ creases: [Algorithms.Crease], _ kind: Algorithms.CreaseKind? = nil) -> Path {
             var p = Path()
@@ -110,7 +131,81 @@ enum FoldGuide: String, CaseIterable, Identifiable, Codable {
         if current < steps.count { stroke(steps[current], alpha: opacity, width: 2.4) }
     }
 
-    var stepCount: Int { unitSteps.steps.count }
+    var stepCount: Int { sequence?.steps.count ?? unitSteps.steps.count }
+
+    /// Faltfolge im Sucher. Vor dem ersten Bild nur der Blattrand; danach der
+    /// Umriss, den das Papier nach dem nächsten Schritt haben soll, die
+    /// Faltlinie und ein Pfeil von der Ecke zu ihrem Ziel. Ohne Text.
+    private static func draw(_ sequence: FoldSequence, in ctx: inout GraphicsContext,
+                             map: Algorithms.QuadMap, framesTaken: Int, opacity: Double) {
+        let states = sequence.states
+        func outline(_ faces: [FoldSequence.Face]) -> Path {
+            var united = Path()
+            for face in faces {
+                var p = Path()
+                p.addLines(face.polygon.map { map.map($0) })
+                p.closeSubpath()
+                united = united.isEmpty ? p : united.union(p)
+            }
+            return united
+        }
+        let amber = Color(red: 0.85, green: 0.61, blue: 0.17)
+        guard framesTaken >= 1 else {
+            ctx.stroke(outline(states[0]), with: .color(.white.opacity(opacity * 0.7)),
+                       style: StrokeStyle(lineWidth: 1.2, dash: [5, 4]))
+            return
+        }
+        let index = framesTaken - 1
+        guard index < sequence.steps.count else {
+            ctx.stroke(outline(states[states.count - 1]), with: .color(.white.opacity(opacity * 0.4)), lineWidth: 1)
+            return
+        }
+        let step = sequence.steps[index]
+        // Wo das Papier jetzt liegt (blass) und wohin es soll (kräftig)
+        ctx.stroke(outline(states[index]), with: .color(.white.opacity(opacity * 0.35)), lineWidth: 1)
+        ctx.stroke(outline(states[index + 1]), with: .color(amber.opacity(opacity)), lineWidth: 2.4)
+
+        // Faltlinie, auf das Papier des aktuellen Zustands begrenzt
+        let dx = step.b.x - step.a.x, dy = step.b.y - step.a.y
+        let length = max(1e-9, (dx * dx + dy * dy).squareRoot())
+        let ux = dx / length, uy = dy / length
+        var crease = Path()
+        crease.move(to: map.map(CGPoint(x: step.a.x - ux * 2, y: step.a.y - uy * 2)))
+        crease.addLine(to: map.map(CGPoint(x: step.a.x + ux * 3, y: step.a.y + uy * 3)))
+        var clipped = ctx
+        clipped.clip(to: outline(states[index]))
+        let creaseColor = step.kind == .valley ? Color(red: 0.4, green: 0.6, blue: 1.0)
+                                               : Color(red: 1.0, green: 0.36, blue: 0.3)
+        clipped.stroke(crease, with: .color(creaseColor.opacity(opacity)),
+                       style: StrokeStyle(lineWidth: 2, dash: step.kind == .valley ? [5, 4] : [7, 3, 1.5, 3]))
+
+        // Pfeil: von der bewegten Ecke zu ihrem Spiegelpunkt
+        var nx = -uy, ny = ux
+        let side = (step.moving.x - step.a.x) * nx + (step.moving.y - step.a.y) * ny
+        if side < 0 { nx = -nx; ny = -ny }
+        let distance = abs(side)
+        let from = map.map(step.moving)
+        let to = map.map(CGPoint(x: step.moving.x - 2 * distance * nx, y: step.moving.y - 2 * distance * ny))
+        let ax = to.x - from.x, ay = to.y - from.y
+        let arrowLength = (ax * ax + ay * ay).squareRoot()
+        guard arrowLength > 12 else { return }
+        let hx = ax / arrowLength, hy = ay / arrowLength
+        var arrow = Path()
+        // Leicht gebogen, damit er als Bewegung über das Papier liest
+        let bend = CGPoint(x: (from.x + to.x) / 2 - hy * arrowLength * 0.18,
+                           y: (from.y + to.y) / 2 + hx * arrowLength * 0.18)
+        arrow.move(to: from)
+        arrow.addQuadCurve(to: to, control: bend)
+        let tx = to.x - bend.x, ty = to.y - bend.y
+        let tl = max(1e-9, (tx * tx + ty * ty).squareRoot())
+        let ex = tx / tl, ey = ty / tl
+        let head: CGFloat = 11
+        arrow.move(to: CGPoint(x: to.x - ex * head - ey * head * 0.55, y: to.y - ey * head + ex * head * 0.55))
+        arrow.addLine(to: to)
+        arrow.addLine(to: CGPoint(x: to.x - ex * head + ey * head * 0.55, y: to.y - ey * head - ex * head * 0.55))
+        ctx.stroke(arrow, with: .color(.white.opacity(opacity)),
+                   style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+    }
 }
 
 /// Sucher-Ebene mit dem Faltmuster. Mit erkanntem Blatt (`paperQuad`, normiert
@@ -151,7 +246,9 @@ struct FoldGuideOverlay: View {
     static func label(guide: FoldGuide, paperQuad: [CGPoint]?, step: Int?) -> String {
         guard paperQuad != nil else { return String(localized: "Faltmuster: Blatt nicht erkannt") }
         guard let rawStep = step else { return guide.label }
-        let step = max(0, rawStep)
+        // Faltfolgen zählen ab dem zweiten Bild: Das erste zeigt das flache Blatt.
+        if guide.sequence != nil, rawStep <= 0 { return guide.label }
+        let step = max(0, guide.sequence != nil ? rawStep - 1 : rawStep)
         let n = guide.stepCount
         return step >= n ? String(localized: "Faltmuster: alle \(n) Schritte gefaltet")
                          : String(localized: "Faltmuster: Schritt \(step + 1) von \(n)")

@@ -666,9 +666,28 @@ final class LiveCaptureController: NSObject, ObservableObject {
     /// im Uhrzeigersinn) – nil, wenn kein Blatt zu sehen ist.
     @Published private(set) var paperQuad: [CGPoint]?
     /// Nur suchen, wenn ein Faltmuster als Hilfslinie gewählt ist.
-    var tracksPaper = false { didSet { if !tracksPaper { paperQuad = nil } } }
+    var tracksPaper = false { didSet { if !tracksPaper { paperQuad = nil; foldSequence = nil } } }
     private var paperBusy = false
     private var paperLastRun = Date.distantPast
+    // MARK: Geführte Faltfolge
+
+    /// Gewählte Faltfolge – nil, wenn ein gewöhnliches Faltmuster oder keines läuft.
+    /// Mit dem Setzen beginnt die Folge von vorn: Das nächste Bild ist das flache Blatt.
+    var foldSequence: FoldSequence? {
+        didSet {
+            guard foldSequence != oldValue else { return }
+            foldSequenceBase = capturedCount
+            resetFoldReference()
+        }
+    }
+    /// Bildzahl, bei der die Folge begonnen hat
+    var foldSequenceBase = 0
+    /// Lage und Farben des flachen Blatts aus dem ersten Bild der Folge
+    private(set) var foldReference: FoldReference?
+    /// Wie weit der aktuelle Schritt gefaltet ist (0…1) – nil ohne prüfbaren Schritt
+    @Published private(set) var foldProgress: Double?
+    private var foldStepFolded = false
+    private var foldGateBlockedSince: Date?
     private var paperLastSeen = Date.distantPast
 
     /// Seitenverhältnis des Kamerabilds (Breite/Höhe) – für Masken und Raster.
@@ -791,6 +810,8 @@ final class LiveCaptureController: NSObject, ObservableObject {
         sessionStart = Date()
         exposureInfo = nil
         capturedCount = 0
+        foldSequenceBase = 0
+        foldFrameCountChanged()
         // Sonst speichert ein sofortiger Auslöser das letzte Bild der
         // VORHERIGEN Session – und die Zwiebelhaut zeigt das alte Motiv.
         latestFrame = nil
@@ -1575,6 +1596,15 @@ final class LiveCaptureController: NSObject, ObservableObject {
             }
         }
 
+        // Faltfolge: Erst auslösen, wenn der Schritt gefaltet ist. Die Prüfung
+        // der Faltung ist der Auslöser – ein halb gefaltetes Blatt, von dem
+        // die Hände kurz weg sind, gehört nicht in den Film.
+        if foldGateHolds() {
+            setStatus(.waitingForWork)
+            stableSince = Date()
+            return
+        }
+
         // Schärfe-Tor: Ein unscharfes Bild ist im fertigen Film nicht zu
         // reparieren, ein paar Sekunden Warten dagegen schon. Also lieber
         // gar nicht auslösen und sagen, woran es liegt.
@@ -1712,6 +1742,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         // derselbe Zustand noch einmal aufgenommen werden.
         lastCapturedGray = nil
         capturedCount = max(0, capturedCount - 1)
+        foldFrameCountChanged()
         if !loopFrames.isEmpty { loopFrames.removeLast() }
         // Das erste Bild zurückgenommen: Es taugt nicht mehr als
         // Drift-Referenz – das nächste ausgelöste tritt an seine Stelle.
@@ -1837,6 +1868,7 @@ final class LiveCaptureController: NSObject, ObservableObject {
         lastCapturedGray = latestGray
         checkCameraShift()
         capturedCount += 1
+        foldFrameCountChanged()
         setStatus(.captured)
 
         // Spürbar & hörbar: Aldo schaut aufs Werk, nicht aufs Display
@@ -1923,10 +1955,83 @@ extension LiveCaptureController {
         guard !paperBusy, now.timeIntervalSince(paperLastRun) > 0.25 else { return }
         paperBusy = true
         paperLastRun = now
+        // Läuft eine Faltfolge, liegt das Blatt fest: Gefaltet ist es kein
+        // Rechteck mehr, die Erkennung fände nichts. Stattdessen wird der
+        // Umriss gelesen und mit dem erwarteten verglichen.
+        if let reference = foldReference {
+            Task.detached(priority: .utility) { [weak self] in
+                let mask = reference.mask(of: frame)
+                await MainActor.run { self?.foldObserved(mask) }
+            }
+            return
+        }
         Task.detached(priority: .utility) { [weak self] in
             let quad = PaperDetector.detect(in: frame)
             await MainActor.run { self?.updatePaper(quad) }
         }
+    }
+
+    // MARK: Faltfolge
+
+    /// Der Schritt, der als Nächstes gefaltet wird (0 = erste Faltung). nil,
+    /// solange das flache Blatt noch nicht aufgenommen ist, und nach dem letzten Schritt.
+    var foldSequenceStep: Int? {
+        guard let foldSequence else { return nil }
+        let step = capturedCount - foldSequenceBase - 1
+        return step >= 0 && step < foldSequence.steps.count ? step : nil
+    }
+
+    /// Nach jedem abgelegten oder zurückgenommenen Bild: Mit dem ersten Bild
+    /// der Folge wird das Blatt festgehalten, vor dem ersten wieder gelöst.
+    func foldFrameCountChanged() {
+        guard foldSequence != nil else { return }
+        foldStepFolded = false
+        foldGateBlockedSince = nil
+        if foldProgress != nil { foldProgress = nil }
+        let taken = capturedCount - foldSequenceBase
+        if taken <= 0 {
+            resetFoldReference()
+        } else if foldReference == nil, let quad = paperQuad, let frame = latestFrame {
+            foldReference = FoldReference(frame: frame, quad: quad)
+        }
+    }
+
+    private func resetFoldReference() {
+        foldReference = nil
+        foldStepFolded = false
+        foldGateBlockedSince = nil
+        if foldProgress != nil { foldProgress = nil }
+    }
+
+    func foldObserved(_ mask: FoldSequence.Mask?) {
+        paperBusy = false
+        guard let mask, let sequence = foldSequence, let step = foldSequenceStep else {
+            foldStepFolded = false
+            if foldProgress != nil { foldProgress = nil }
+            return
+        }
+        let progress = sequence.progress(step: step, observed: mask)
+        foldStepFolded = sequence.isFolded(step: step, observed: mask)
+        let rounded = progress.map { ($0 * 20).rounded() / 20 }
+        if rounded != foldProgress { foldProgress = rounded }
+    }
+
+    /// Hält die Automatik zurück, solange ein prüfbarer Schritt nicht gefaltet
+    /// ist. Nach 20 Sekunden Ruhe gibt das Tor nach – erkennt die Kamera das
+    /// Papier nicht (gleiche Farbe wie der Tisch), soll niemand festsitzen.
+    /// Der Auslöser von Hand geht immer.
+    private func foldGateHolds() -> Bool {
+        guard let sequence = foldSequence, let step = foldSequenceStep, foldReference != nil,
+              sequence.isVerifiable(step: step), !foldStepFolded else {
+            foldGateBlockedSince = nil
+            return false
+        }
+        if foldGateBlockedSince == nil { foldGateBlockedSince = Date() }
+        if Date().timeIntervalSince(foldGateBlockedSince!) > 20 {
+            foldGateBlockedSince = nil
+            return false
+        }
+        return true
     }
 
     /// Geglättet nachführen; erst nach einer Sekunde ohne Blatt ausblenden,
@@ -1934,6 +2039,8 @@ extension LiveCaptureController {
     func updatePaper(_ quad: [CGPoint]?, now: Date = Date()) {
         paperBusy = false
         guard tracksPaper else { paperQuad = nil; return }
+        // Während einer Faltfolge bleibt das Viereck des flachen Blatts stehen.
+        guard foldReference == nil else { return }
         if let quad, quad.count == 4 {
             paperLastSeen = now
             if let old = paperQuad, old.count == 4 {
@@ -1963,5 +2070,79 @@ enum PaperDetector {
         guard (try? handler.perform([request])) != nil, let r = request.results?.first else { return nil }
         // Vision zählt von unten links, die Ansicht von oben links
         return [r.topLeft, r.topRight, r.bottomRight, r.bottomLeft].map { CGPoint(x: $0.x, y: 1 - $0.y) }
+    }
+}
+
+/// Das flache Blatt, wie es im ersten Bild einer Faltfolge lag: seine Ecken
+/// und die Farben von Papier und Tisch. Daraus wird in jedem späteren Bild
+/// gelesen, wo noch Papier liegt.
+struct FoldReference {
+    let quad: [CGPoint]
+    private let paper: SIMD3<Double>
+    private let table: SIMD3<Double>
+
+    /// nil, wenn sich Papier und Tisch farblich nicht trennen lassen.
+    init?(frame: CGImage, quad: [CGPoint]) {
+        guard let map = Algorithms.QuadMap(quad), let pixels = Pixels(frame) else { return nil }
+        var paperSum = SIMD3<Double>(repeating: 0), tableSum = SIMD3<Double>(repeating: 0)
+        var paperCount = 0.0, tableCount = 0.0
+        let size = 32
+        for row in 0..<size {
+            for column in 0..<size {
+                let p = FoldSequence.Mask.point(column, row, size: size)
+                guard let color = pixels.color(at: map.map(p)) else { continue }
+                let inside = p.x > 0.12 && p.x < 0.88 && p.y > 0.12 && p.y < 0.88
+                let outside = p.x < -0.08 || p.x > 1.08 || p.y < -0.08 || p.y > 1.08
+                if inside { paperSum += color; paperCount += 1 }
+                if outside { tableSum += color; tableCount += 1 }
+            }
+        }
+        guard paperCount > 20, tableCount > 20 else { return nil }
+        let paper = paperSum / paperCount, table = tableSum / tableCount
+        let difference = paper - table
+        guard (difference * difference).sum().squareRoot() > 40 else { return nil }
+        self.quad = quad
+        self.paper = paper
+        self.table = table
+    }
+
+    /// Umriss des Papiers im Bild, in Blattkoordinaten.
+    func mask(of frame: CGImage, size: Int = 48) -> FoldSequence.Mask? {
+        guard let map = Algorithms.QuadMap(quad), let pixels = Pixels(frame) else { return nil }
+        return FoldSequence.Mask(size: size) { point in
+            guard let color = pixels.color(at: map.map(point)) else { return false }
+            let toPaper = color - paper, toTable = color - table
+            return (toPaper * toPaper).sum() < (toTable * toTable).sum()
+        }
+    }
+
+    /// Verkleinertes Bild als RGB-Puffer; Koordinaten 0…1.
+    private struct Pixels {
+        let width: Int, height: Int
+        let data: [UInt8]
+
+        init?(_ image: CGImage, targetWidth: Int = 240) {
+            let width = targetWidth
+            let height = max(1, Int((Double(image.height) / Double(max(1, image.width)) * Double(width)).rounded()))
+            var data = [UInt8](repeating: 0, count: width * height * 4)
+            let drawn = data.withUnsafeMutableBytes { buffer -> Bool in
+                guard let ctx = CGContext(data: buffer.baseAddress, width: width, height: height,
+                                          bitsPerComponent: 8, bytesPerRow: width * 4,
+                                          space: CGColorSpaceCreateDeviceRGB(),
+                                          bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue) else { return false }
+                ctx.interpolationQuality = .low
+                ctx.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+                return true
+            }
+            guard drawn else { return nil }
+            self.width = width; self.height = height; self.data = data
+        }
+
+        func color(at p: CGPoint) -> SIMD3<Double>? {
+            guard p.x >= 0, p.x < 1, p.y >= 0, p.y < 1 else { return nil }
+            let x = min(width - 1, Int(p.x * CGFloat(width))), y = min(height - 1, Int(p.y * CGFloat(height)))
+            let i = (y * width + x) * 4
+            return SIMD3(Double(data[i]), Double(data[i + 1]), Double(data[i + 2]))
+        }
     }
 }
