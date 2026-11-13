@@ -22,6 +22,16 @@ final class VisionHandDetector: HandDetecting {
     /// Nähe anschlägt. Figurenhände (Holz, Knete, LEGO) erkennt die Hand-Pose
     /// oft als Hand, die Personen-Segmentierung aber nicht als Mensch.
     static let maskNearHand = 0.1
+    /// Die Fläche unter der Personenmaske muss sich vom Hintergrund abheben:
+    /// mindestens dieser Anteil ihrer Bildpunkte weicht um mehr als
+    /// `fillContrast` Helligkeitsstufen vom mittleren Hintergrund ab. Eine Hand
+    /// oder ein Arm ist eine gefüllte Fläche. Eine gezeichnete Figur (Kreide,
+    /// Stift) besteht fast nur aus Hintergrund, die Segmentierung hält sie
+    /// trotzdem für einen Menschen. Gemessen an „Humorous Phases of Funny
+    /// Faces“ (1906, 2160 Bilder): Fehlalarme 242 → 135, erkannte Hände
+    /// unverändert; Lehrfilm 470 → 469 von 514, Figuren 85 → 76 von 4221.
+    static let maskFill = 0.4
+    static let fillContrast = 20
 
     func containsHands(cgImage: CGImage, confidence: Float) -> Bool {
         let pose = VNDetectHumanHandPoseRequest()
@@ -49,7 +59,52 @@ final class VisionHandDetector: HandDetecting {
         let (area, edge) = Self.coverage(mask, content: Self.contentBox(cgImage))
         // Hände und Arme kommen beim Animieren vom Bildrand herein; eine Figur
         // mitten im Bild berührt den Rand nicht und bleibt erhalten.
-        return area >= Self.personArea && edge >= Self.personEdge
+        guard area >= Self.personArea, edge >= Self.personEdge else { return false }
+        return Self.fill(mask, image: cgImage) >= Self.maskFill
+    }
+
+    /// Anteil der Maskenfläche, der sich in der Helligkeit vom Hintergrund
+    /// (Median außerhalb der Maske) abhebt. Ohne brauchbare Maske oder ohne
+    /// Hintergrund 1, damit die bisherige Regel gilt.
+    static func fill(_ mask: CVPixelBuffer, image: CGImage) -> Double {
+        CVPixelBufferLockBaseAddress(mask, .readOnly)
+        defer { CVPixelBufferUnlockBaseAddress(mask, .readOnly) }
+        guard let base = CVPixelBufferGetBaseAddress(mask) else { return 1 }
+        let w = CVPixelBufferGetWidth(mask), h = CVPixelBufferGetHeight(mask)
+        let rowBytes = CVPixelBufferGetBytesPerRow(mask)
+        let p = base.assumingMemoryBound(to: UInt8.self)
+        var gray = [UInt8](repeating: 0, count: w * h)
+        let drawn: Bool = gray.withUnsafeMutableBytes { buffer in
+            guard let ctx = CGContext(data: buffer.baseAddress, width: w, height: h, bitsPerComponent: 8,
+                                      bytesPerRow: w, space: CGColorSpaceCreateDeviceGray(),
+                                      bitmapInfo: CGImageAlphaInfo.none.rawValue) else { return false }
+            ctx.interpolationQuality = .low
+            ctx.draw(image, in: CGRect(x: 0, y: 0, width: w, height: h))
+            return true
+        }
+        guard drawn else { return 1 }
+        var histogram = [Int](repeating: 0, count: 256)
+        var outside = 0, inside = 0
+        for y in 0..<h {
+            for x in 0..<w where p[y * rowBytes + x] <= 127 {
+                histogram[Int(gray[y * w + x])] += 1
+                outside += 1
+            }
+        }
+        inside = w * h - outside
+        guard inside > 20, outside > 20 else { return 1 }
+        var background = 0, seen = 0
+        while background < 255, seen + histogram[background] <= outside / 2 {
+            seen += histogram[background]
+            background += 1
+        }
+        var filled = 0
+        for y in 0..<h {
+            for x in 0..<w where p[y * rowBytes + x] > 127 {
+                if abs(Int(gray[y * w + x]) - background) > Self.fillContrast { filled += 1 }
+            }
+        }
+        return Double(filled) / Double(inside)
     }
 
     /// Höchster Maskenwert (0…1) im Umkreis von 4 % der Breite um die Punkte

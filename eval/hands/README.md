@@ -197,6 +197,65 @@ liegen oft nach einem Schnitt oder in einer Nahaufnahme. Eine durchgehende
 Atelieraufnahme könnte sich anders verhalten, beschriftetes Material dafür
 fehlt. Deshalb nicht in der App.
 
+## Gezeichnete Figuren: „Humorous Phases of Funny Faces“ (13.11.2026)
+
+Neuer Prüfsatz: J. Stuart Blackton, 1906, gemeinfrei. Quelle: Wikimedia Commons
+„Humorous Phases of Funny Faces HD.webm“ (1440×1080, Library of Congress).
+Zwölf Bilder je Sekunde, 2160 Bilder:
+
+```
+ffmpeg -i Humorous_Phases_of_Funny_Faces_HD.webm -vf fps=12,scale=1040:780 -q:v 2 eval/hands/archiv/blackton1906/f_%05d.jpg
+```
+
+Wahrheit (von Hand bestimmt): Hand im Bild in den Nummern 253–480 (zeichnet den
+Mann), 869–959 (wischt die Tafel) und ab 1886 (wischt den Clown weg), zusammen
+594 Bilder. Alles andere ist handfrei, zeigt aber Kreidezeichnungen von
+Menschen: zwei Gesichter, einen dicken Mann im Profil, einen Clown.
+
+| Regel | Hände erkannt (594) | Fehlalarm (1566) |
+|---|---|---|
+| Stand bis 13.11. | 436 (73 %) | 242 |
+| **Maske nur mit Füllung ≥ 0,4** | **431 (73 %)** | **133** |
+
+Die Fehlalarme kamen zu fünf Sechsteln aus der Maskenregel (5 % Fläche, 3 %
+Rand): Die schnelle Segmentierung hält die Kreidefiguren für Menschen. Die
+übrigen stammen aus der Hand-Pose an den Händen des Clowns.
+
+Abhilfe (`VisionHandDetector.fill`): Die Fläche unter der Maske muss gefüllt
+sein. Gezählt wird der Anteil ihrer Bildpunkte, der um mehr als 20
+Helligkeitsstufen vom Median außerhalb der Maske abweicht. Echte Hände liegen
+im Median bei 0,8 (Lehrfilm: 90 % über 0,72), die Kreidefiguren bei 0,4.
+
+Gegen alle Sätze gemessen (`appcheck`):
+
+| Satz | vorher | mit Füllung ≥ 0,4 |
+|---|---|---|
+| Lehrfilm, erkannt von 514 / Fehlalarm | 470 / 0 | 469 / 0 |
+| Gegenprobe App-Bilder | 2 von 2, 0 Fehlalarm | unverändert |
+| Figuren (Holz, Knete, LEGO), Fehlalarm von 4221 | 85 | 75 |
+| Modellierkurs mit echten Händen (370) | 322 | 321 |
+| Making-ofs LEGO (273 / 209) | 35 / 25 | 34 / 23 |
+
+Höhere Schwellen senken die Fehlalarme weiter (0,6: 64), kosten bei Blackton
+aber Treffer (374 statt 431), weil die dunkle Hand vor der dunklen Tafel die
+Fläche kaum füllt.
+
+Verworfen:
+- Maskenregel nur gelten lassen, wenn auch die Stufe „balanced“ etwas sieht:
+  Blackton-Fehlalarme 58, aber Lehrfilm 437 statt 470.
+- Zusätzlich „balanced“ als eigene Regel (auch mit Füllung): Blackton bis 78 %,
+  Lehrfilm bis 94 %, dafür 131 bis 249 Fehlalarme auf Figuren.
+
+Offen bleiben die 163 übersehenen Bilder. Fast alle zeigen eine verwischte
+oder dunkle Hand beim schnellen Wischen; weder Hand-Pose noch eine der
+Segmentierungsstufen sieht sie. Im ganzen Ablauf der App blieben davon 13 von
+121 Bildern stehen (alle aus den zwei Wisch-Szenen), die zeichnende Hand am
+Anfang fiel vollständig weg.
+
+Werkzeuge: `merkmale/main.swift` schreibt je Bild die Einzelwerte (Hand-Pose,
+Maske schnell und ausgewogen), `fuellung/main.swift` die Füllung unter der Maske.
+`swiftc -O ../../FrameFold/HandDetector.swift merkmale/main.swift -o bin/merkmale`
+
 ## Offen
 
 - LEGO ist der schwächste Fall: 4 % Fehlalarm, Hände in dunklen oder
