@@ -330,6 +330,13 @@ extension PipelineSettings {
         if let v = ProcessInfo.processInfo.environment["FF_LOOK"], let look = FilmLook(rawValue: v) {
             s.look = look
         }
+        // … ebenso Format (FF_ASPECT=Original), Bildrate (FF_FPS=12) und die
+        // beiden Ausgleiche (FF_ALIGN=0, FF_DEFLICKER=0) für fertige Filme als Quelle
+        let env = ProcessInfo.processInfo.environment
+        if let v = env["FF_ASPECT"], let aspect = AspectPreset(rawValue: v) { s.aspect = aspect }
+        if let v = env["FF_FPS"], let fps = Int32(v), (1...30).contains(fps) { s.outputFPS = fps }
+        if let v = env["FF_ALIGN"] { s.alignFrames = v != "0" }
+        if let v = env["FF_DEFLICKER"] { s.deflicker = v != "0" }
         #endif
         return s
     }
