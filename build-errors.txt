@@ -1,0 +1,11 @@
+2026-11-14 10:02:02.072 appintentsmetadataprocessor[5832:21027] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+/Users/runner/work/framefold/framefold/FrameFold/TetherCamera.swift:52:50: warning: capture of 'browser' with non-Sendable type 'ICDeviceBrowser' in a '@Sendable' closure
+/Users/runner/work/framefold/framefold/FrameFold/TetherCamera.swift:2:1: warning: add '@preconcurrency' to suppress 'Sendable'-related warnings from module 'ImageCaptureCore'
+/Users/runner/work/framefold/framefold/FrameFold/LiveCaptureController.swift:781:17: warning: capture of 'session' with non-Sendable type 'AVCaptureSession' in a '@Sendable' closure
+/Users/runner/work/framefold/framefold/FrameFold/LiveCaptureController.swift:2:1: warning: add '@preconcurrency' to suppress 'Sendable'-related warnings from module 'AVFoundation'
+/Users/runner/work/framefold/framefold/FrameFold/LiveCaptureController.swift:893:13: warning: capture of 'session' with non-Sendable type 'AVCaptureSession' in a '@Sendable' closure
+/Users/runner/work/framefold/framefold/FrameFold/LiveCaptureController.swift:1967:39: warning: reference to captured var 'self' in concurrently-executing code; this is an error in the Swift 6 language mode
+/Users/runner/work/framefold/framefold/FrameFold/LiveCaptureController.swift:1973:35: warning: reference to captured var 'self' in concurrently-executing code; this is an error in the Swift 6 language mode
+/Users/runner/work/framefold/framefold/FrameFold/ProjectStore.swift:383:23: warning: no calls to throwing functions occur within 'try' expression
+/Users/runner/work/framefold/framefold/FrameFold/VoiceRecorder.swift:30:96: warning: 'allowBluetooth' was deprecated in iOS 8.0: renamed to 'AVAudioSession.CategoryOptions.allowBluetoothHFP'
+/Users/runner/work/framefold/framefold/FrameFold/StudioFolderWatch.swift:109:53: warning: main actor-isolated static property 'imageExtensions' can not be referenced from a nonisolated autoclosure; this is an error in the Swift 6 language mode
