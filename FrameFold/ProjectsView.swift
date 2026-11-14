@@ -1205,7 +1205,21 @@ struct ProjectDetailView: View {
         }
     }
 
+    #if DEBUG && targetEnvironment(macCatalyst)
+    /// Testläufe ohne Klicks: FF_AUTOEXPORT=1 exportiert das geöffnete Werk
+    /// einmal von selbst (zusammen mit FF_OPEN_WORK=1 und FF_EXPORT_DIR).
+    private static var autoExportDone = false
+    #endif
+
     private func exportIfRequested() {
+        #if DEBUG && targetEnvironment(macCatalyst)
+        if ProcessInfo.processInfo.environment["FF_AUTOEXPORT"] == "1", !Self.autoExportDone,
+           !isExporting, currentProject.frameCount > 0 {
+            Self.autoExportDone = true
+            export()
+            return
+        }
+        #endif
         guard SiriBridge.pendingExport == project.id else { return }
         SiriBridge.pendingExport = nil
         if !isExporting, currentProject.frameCount > 0 { export() }
