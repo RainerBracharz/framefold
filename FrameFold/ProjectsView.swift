@@ -301,6 +301,8 @@ struct ProjectDetailView: View {
     @State private var overlayFrame: Int?
     @State private var importingPhotos = 0
     @Environment(\.requestReview) private var requestReview
+    /// Kurze Schlusskarte „Gemacht mit FrameFold“ am Filmende; in der Werkansicht abschaltbar.
+    @AppStorage("brandCard") private var brandCard = true
     @State private var sequenceFolder: ShareItem?
     @State private var isExportingSequence = false
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
@@ -530,6 +532,7 @@ struct ProjectDetailView: View {
         .onChange(of: currentProject.overlays) { _, _ in exportURL = nil }
         .onChange(of: currentProject.titleText) { _, _ in exportURL = nil }
         .onChange(of: currentProject.creditsText) { _, _ in exportURL = nil }
+        .onChange(of: brandCard) { _, _ in exportURL = nil }
         .onChange(of: currentProject.cameraMoves) { _, _ in exportURL = nil }
     }
 
@@ -774,6 +777,16 @@ struct ProjectDetailView: View {
                                            in: currentProject.id) }), axis: .vertical)
                     .lineLimit(1...5)
                     .font(Theme.body)
+            }
+            HStack(spacing: 10) {
+                rowIcon("rectangle.inset.filled")
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Schlusskarte").font(Theme.body).foregroundStyle(Theme.ink)
+                    Text("Gemacht mit FrameFold").font(Theme.caption(12)).foregroundStyle(Theme.graphite)
+                }
+                Spacer()
+                Toggle("", isOn: $brandCard).labelsHidden()
+                    .accessibilityLabel(Text("Schlusskarte"))
             }
         }
         .padding(.horizontal, 4)
@@ -1239,6 +1252,8 @@ struct ProjectDetailView: View {
                                   fps: settings.outputFPS)
         }
         let title = currentProject.titleText, credits = currentProject.creditsText
+        // Testläufe ohne Klicks vergleichen Bild für Bild mit der Quelle: dort keine Schlusskarte
+        let brand = brandCard && ProcessInfo.processInfo.environment["FF_AUTOEXPORT"] != "1"
         let overlays = currentProject.overlays ?? []
         var moves = currentProject.cameraMoves ?? []
         #if DEBUG
@@ -1263,7 +1278,7 @@ struct ProjectDetailView: View {
                 }
                 // Titel davor, Abspann dahinter – der Ton rückt um den Vorspann nach hinten
                 let wrapped = try await TitleSequence.wrap(film: url, title: title, subtitle: subtitle,
-                                                           credits: credits, settings: settings)
+                                                           credits: credits, brandCard: brand, settings: settings)
                 // Alle Tonspuren (Musik aus der Werkansicht und Studio-Spuren)
                 // auf Filmlänge mischen und unterlegen
                 url = try await project.addingSoundtrack(to: wrapped.url, fps: settings.outputFPS,

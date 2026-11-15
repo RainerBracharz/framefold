@@ -106,6 +106,20 @@ enum TitleCards {
         }
     }
 
+    /// Kurze Schlusskarte ohne eigenen Abspanntext: dunkel, „Gemacht mit FrameFold“, Falzbalken.
+    static func brand(size: CGSize) -> UIImage {
+        render(size: size) { ctx, size in
+            UIColor.ffDarkroom.setFill(); ctx.fill(CGRect(origin: .zero, size: size))
+            let unit = min(size.width, size.height)
+            draw(String(localized: "Gemacht mit FrameFold"), font: serif(unit * 0.06), color: .ffPaperOnDark,
+                 in: CGRect(x: size.width * 0.08, y: size.height * 0.5 - unit * 0.1,
+                            width: size.width * 0.84, height: unit * 0.16))
+            UIColor.ffAmber.setFill()
+            ctx.fill(CGRect(x: size.width / 2 - unit * 0.06, y: size.height * 0.5 + unit * 0.08,
+                            width: unit * 0.12, height: max(4, unit * 0.007)))
+        }
+    }
+
     private static func render(size: CGSize, _ body: (CGContext, CGSize) -> Void) -> UIImage {
         let format = UIGraphicsImageRendererFormat()
         format.scale = 1
@@ -139,15 +153,18 @@ enum TitleCards {
 enum TitleSequence {
     static let titleSeconds = 2.5
     static let creditsSeconds = 4.0
+    static let brandSeconds = 1.5
 
     /// Hängt Titel vor und Abspann hinter den fertigen Film – als eigene
     /// Stücke im selben Format, ohne den Film neu zu kodieren. Gibt den neuen
     /// Film und die Länge des Vorspanns zurück (um die der Ton verschoben wird).
-    static func wrap(film: URL, title: String?, subtitle: String, credits: String?,
+    /// `brandCard`: ohne eigenen Abspann eine kurze Schlusskarte „Gemacht mit FrameFold“ anhängen
+    /// (der Abspann trägt die Zeile ohnehin).
+    static func wrap(film: URL, title: String?, subtitle: String, credits: String?, brandCard: Bool = false,
                      settings: PipelineSettings) async throws -> (url: URL, lead: Double) {
         let title = title?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
         let credits = credits?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
-        guard title != nil || credits != nil else { return (film, 0) }
+        guard title != nil || credits != nil || brandCard else { return (film, 0) }
         guard let track = try await AVURLAsset(url: film).loadTracks(withMediaType: .video).first else {
             throw PipelineError.exportFailed
         }
@@ -168,6 +185,8 @@ enum TitleSequence {
         if let credits {
             parts.append(try await segment(TitleCards.credits(credits, size: size),
                                            seconds: creditsSeconds, settings: settings))
+        } else if brandCard {
+            parts.append(try await segment(TitleCards.brand(size: size), seconds: brandSeconds, settings: settings))
         }
         return (try await concatenate(parts, fileType: settings.videoCodec.fileType), lead)
     }

@@ -84,12 +84,24 @@ final class FilmExtrasTests: XCTestCase {
         let untouched = try await TitleSequence.wrap(film: film, title: "  ", subtitle: "", credits: nil, settings: settings)
         XCTAssertEqual(untouched.url, film, "leerer Titel, kein Abspann: Film bleibt, wie er ist")
         XCTAssertEqual(untouched.lead, 0)
+
+        let branded = try await TitleSequence.wrap(film: film, title: nil, subtitle: "", credits: nil, brandCard: true,
+                                                   settings: settings)
+        let brandedTotal = try await AVURLAsset(url: branded.url).load(.duration).seconds
+        XCTAssertEqual(brandedTotal, filmDuration + TitleSequence.brandSeconds, accuracy: 0.3, "Schlusskarte hängt hinten an")
+        XCTAssertEqual(branded.lead, 0, "der Ton rückt nicht")
+        let both = try await TitleSequence.wrap(film: film, title: nil, subtitle: "", credits: "Regie: Anna", brandCard: true,
+                                                settings: settings)
+        let bothTotal = try await AVURLAsset(url: both.url).load(.duration).seconds
+        XCTAssertEqual(bothTotal, filmDuration + TitleSequence.creditsSeconds, accuracy: 0.3,
+                       "mit eigenem Abspann keine zweite Karte")
     }
 
     func testCardsHaveRequestedSize() {
         let size = CGSize(width: 1080, height: 1920)
         XCTAssertEqual(TitleCards.title("Ein Titel", subtitle: "2026", size: size).size, size)
         XCTAssertEqual(TitleCards.credits("Zeile 1\nZeile 2", size: size).size, size)
+        XCTAssertEqual(TitleCards.brand(size: size).size, size)
         // Zum Ansehen: FF_CARDS_OUT=<ordner> legt beide Karten dort ab
         if let out = ProcessInfo.processInfo.environment["FF_CARDS_OUT"] {
             let wide = CGSize(width: 1920, height: 1080)
@@ -97,6 +109,8 @@ final class FilmExtrasTests: XCTestCase {
                 .write(to: URL(fileURLWithPath: out).appendingPathComponent("titel.png"))
             try? TitleCards.credits("Idee und Animation: Anna\nMusik: Ben\nDank an die Klasse 4b", size: wide).pngData()?
                 .write(to: URL(fileURLWithPath: out).appendingPathComponent("abspann.png"))
+            try? TitleCards.brand(size: wide).pngData()?
+                .write(to: URL(fileURLWithPath: out).appendingPathComponent("schlusskarte.png"))
         }
     }
 
