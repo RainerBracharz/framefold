@@ -2,3 +2,4 @@ Carta, Cabeza de perro y Vaso están disponibles como secuencias de plegado. En 
 Con “Automático (manos fuera)”, la cámara toma el fotograma en cuanto el paso está plegado. Una barra muestra cuánto llevas.
 Siri y la app Atajos conocen cinco comandos, como “Disparar en FrameFold” y “Exportar stop motion en FrameFold”.
 La ayuda tiene dos capítulos nuevos, “Secuencias de plegado” y “Siri y Atajos”.
+Las películas terminadas acaban con una breve tarjeta final, «Hecho con FrameFold». Puedes desactivarla en la obra.

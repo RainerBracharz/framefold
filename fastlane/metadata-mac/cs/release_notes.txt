@@ -2,3 +2,4 @@ Dopis, Psí hlava a Kelímek jsou k dispozici jako postupy skládání. U každ�
 S volbou „Automatika (ruce pryč)“ kamera pořídí snímek, jakmile je krok složený. Pruh ukazuje, jak daleko jsi.
 Siri a aplikace Zkratky znají pět příkazů, například „Pořídit snímek v aplikaci FrameFold“ a „Exportovat stop motion v aplikaci FrameFold“.
 Nápověda má dvě nové kapitoly, „Postupy skládání“ a „Siri a Zkratky“.
+Hotové filmy končí krátkou závěrečnou kartou „Vytvořeno ve FrameFoldu“. V díle ji lze vypnout.

@@ -3,3 +3,4 @@ Mit „Automatik (Hände weg)“ nimmt die Kamera das Bild auf, sobald der Schri
 Siri und die App „Kurzbefehle“ kennen fünf Befehle, etwa „Auslösen in FrameFold“ und „Stop-Motion exportieren in FrameFold“.
 Am iPhone füllt die Film-Vorschau im Werk im Hochformat die Breite.
 Die Hilfe hat zwei neue Kapitel, „Faltfolgen“ und „Siri und Kurzbefehle“.
+Fertige Filme enden mit einer kurzen Schlusskarte „Gemacht mit FrameFold“. Im Werk lässt sie sich abschalten.

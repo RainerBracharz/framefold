@@ -3,3 +3,4 @@ Med “Auto-udløser (hænder væk)” tager kameraet billedet, så snart trinne
 Siri og appen Genveje kender fem kommandoer, for eksempel “Tag billede i FrameFold” og “Eksportér stopmotion i FrameFold”.
 På iPhone fylder filmeksemplet i et værk bredden i stående format.
 Hjælpen har to nye kapitler, “Foldeforløb” og “Siri og Genveje”.
+Færdige film slutter med et kort slutkort, „Lavet med FrameFold“. Du kan slå det fra i værket.

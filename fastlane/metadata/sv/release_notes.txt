@@ -3,3 +3,4 @@ Med ”Automatisk avtryckare (händerna borta)” tar kameran bilden så snart s
 Siri och appen Genvägar känner till fem kommandon, till exempel ”Ta bild i FrameFold” och ”Exportera stopmotion i FrameFold”.
 På iPhone fyller filmförhandsvisningen i ett verk bredden i stående läge.
 Hjälpen har två nya kapitel, ”Vikföljder” och ”Siri och Genvägar”.
+Färdiga filmer avslutas med ett kort slutkort, ”Gjord med FrameFold”. Du kan stänga av det i verket.

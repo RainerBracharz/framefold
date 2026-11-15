@@ -2,3 +2,4 @@ Brief, Hundekopf und Becher gibt es als Faltfolgen. Der Sucher zeigt je Schritt 
 Mit „Automatik (Hände weg)“ nimmt die Kamera das Bild auf, sobald der Schritt gefaltet ist. Ein Balken zeigt, wie weit du bist.
 Siri und die App „Kurzbefehle“ kennen fünf Befehle, etwa „Auslösen in FrameFold“ und „Stop-Motion exportieren in FrameFold“.
 Die Hilfe hat zwei neue Kapitel, „Faltfolgen“ und „Siri und Kurzbefehle“.
+Fertige Filme enden mit einer kurzen Schlusskarte „Gemacht mit FrameFold“. Im Werk lässt sie sich abschalten.
