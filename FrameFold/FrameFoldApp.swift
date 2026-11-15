@@ -327,6 +327,12 @@ struct FrameFoldApp: App {
                     case "works": selectedTab = 2
                     default: break
                     }
+                    #if DEBUG
+                    // Testläufe: FF_LINK_LOG=<Datei> hält fest, welcher Tab nach dem Link offen ist
+                    if let path = ProcessInfo.processInfo.environment["FF_LINK_LOG"] {
+                        try? "\(url.absoluteString) -> Tab \(selectedTab)\n".write(toFile: path, atomically: true, encoding: .utf8)
+                    }
+                    #endif
                     return
                 }
                 guard url.pathExtension.lowercased() == WorkPackage.fileExtension else { return }

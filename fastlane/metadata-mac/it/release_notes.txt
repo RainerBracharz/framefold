@@ -3,3 +3,4 @@ Con “Automatico (mani via)”, la fotocamera scatta il fotogramma appena il pa
 Siri e l’app Comandi Rapidi conoscono cinque comandi, come “Scatta in FrameFold” e “Esporta stop motion in FrameFold”.
 L’aiuto ha due nuovi capitoli, “Sequenze di piegatura” e “Siri e Comandi Rapidi”.
 Nell’opera puoi attivare un breve cartello finale, «Creato con FrameFold». Compare allora alla fine del film.
+Le figure disegnate nell’inquadratura bloccano meno spesso lo scatto automatico.

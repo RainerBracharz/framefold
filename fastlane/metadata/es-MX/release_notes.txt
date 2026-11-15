@@ -4,3 +4,4 @@ Siri y la app Atajos conocen cinco comandos, como “Disparar en FrameFold” y 
 En el iPhone, la vista previa de la película en una obra ocupa todo el ancho en vertical.
 La ayuda tiene dos capítulos nuevos, “Secuencias de plegado” y “Siri y Atajos”.
 En la obra puedes activar una breve tarjeta final, «Hecho con FrameFold». Aparece entonces al final de la película.
+Las figuras dibujadas en la imagen frenan con menos frecuencia el disparo automático.

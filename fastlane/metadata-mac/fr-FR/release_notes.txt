@@ -3,3 +3,4 @@ Avec « Déclenchement auto (mains hors champ) », l’appareil prend l’image 
 Siri et l’app Raccourcis connaissent cinq commandes, par exemple « Déclencher dans FrameFold » et « Exporter le stop motion dans FrameFold ».
 L’aide compte deux nouveaux chapitres, « Séquences de pliage » et « Siri et Raccourcis ».
 Dans l’œuvre, tu peux activer un court carton de fin, « Réalisé avec FrameFold ». Il vient alors à la fin du film.
+Les personnages dessinés dans l’image retiennent moins souvent le déclenchement automatique.

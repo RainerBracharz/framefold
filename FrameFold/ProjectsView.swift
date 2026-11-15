@@ -1253,8 +1253,10 @@ struct ProjectDetailView: View {
                                   fps: settings.outputFPS)
         }
         let title = currentProject.titleText, credits = currentProject.creditsText
-        // Testläufe ohne Klicks vergleichen Bild für Bild mit der Quelle: dort keine Schlusskarte
-        let brand = brandCard && ProcessInfo.processInfo.environment["FF_AUTOEXPORT"] != "1"
+        // Testläufe ohne Klicks vergleichen Bild für Bild mit der Quelle: dort keine Schlusskarte,
+        // außer FF_BRAND=1 verlangt sie ausdrücklich (zum Ansehen der Karte im fertigen Film).
+        let env = ProcessInfo.processInfo.environment
+        let brand = brandCard && (env["FF_AUTOEXPORT"] != "1" || env["FF_BRAND"] == "1")
         let overlays = currentProject.overlays ?? []
         var moves = currentProject.cameraMoves ?? []
         #if DEBUG

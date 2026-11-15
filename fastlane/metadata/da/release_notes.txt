@@ -4,3 +4,4 @@ Siri og appen Genveje kender fem kommandoer, for eksempel “Tag billede i Frame
 På iPhone fylder filmeksemplet i et værk bredden i stående format.
 Hjælpen har to nye kapitler, “Foldeforløb” og “Siri og Genveje”.
 I værket kan du slå et kort slutkort til, „Lavet med FrameFold“. Det står så sidst i filmen.
+Tegnede figurer i billedet holder auto-udløseren tilbage sjældnere.

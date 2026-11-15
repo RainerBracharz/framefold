@@ -4,3 +4,4 @@ Siri i aplikacja Skróty znają pięć poleceń, na przykład „Zrób zdjęcie 
 Na iPhonie podgląd filmu w dziele wypełnia szerokość w orientacji pionowej.
 Pomoc ma dwa nowe rozdziały, „Sekwencje składania” i „Siri i Skróty”.
 W pracy można włączyć krótką planszę końcową „Zrobione w FrameFold”. Pojawia się wtedy na końcu filmu.
+Narysowane postacie w kadrze rzadziej wstrzymują automat.

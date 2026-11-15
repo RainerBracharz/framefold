@@ -3,3 +3,4 @@ Met “Automatisch (handen weg)” neemt de camera het beeld op zodra de stap ge
 Siri en de app Opdrachten kennen vijf opdrachten, zoals “Beeld maken in FrameFold” en “Stop-motion exporteren in FrameFold”.
 De hulp heeft twee nieuwe hoofdstukken, “Vouwreeksen” en “Siri en Opdrachten”.
 In het werk kun je een korte eindkaart aanzetten, ‘Gemaakt met FrameFold’. Die staat dan aan het einde van de film.
+Getekende figuren in beeld houden de automatische ontspanner minder vaak tegen.
