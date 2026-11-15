@@ -3,4 +3,4 @@ Con “Automático (manos fuera)”, la cámara toma el fotograma en cuanto el p
 Siri y la app Atajos conocen cinco comandos, como “Disparar en FrameFold” y “Exportar stop motion en FrameFold”.
 En el iPhone, la vista previa de la película en una obra ocupa todo el ancho en vertical.
 La ayuda tiene dos capítulos nuevos, “Secuencias de plegado” y “Siri y Atajos”.
-Las películas terminadas acaban con una breve tarjeta final, «Hecho con FrameFold». Puedes desactivarla en la obra.
+En la obra puedes activar una breve tarjeta final, «Hecho con FrameFold». Aparece entonces al final de la película.

@@ -301,8 +301,9 @@ struct ProjectDetailView: View {
     @State private var overlayFrame: Int?
     @State private var importingPhotos = 0
     @Environment(\.requestReview) private var requestReview
-    /// Kurze Schlusskarte „Gemacht mit FrameFold“ am Filmende; in der Werkansicht abschaltbar.
-    @AppStorage("brandCard") private var brandCard = true
+    /// Kurze Schlusskarte „Gemacht mit FrameFold“ am Filmende. Aus, bis jemand sie in der
+    /// Werkansicht einschaltet: der Store verspricht Filme ohne Wasserzeichen.
+    @AppStorage("brandCard") private var brandCard = false
     @State private var sequenceFolder: ShareItem?
     @State private var isExportingSequence = false
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue

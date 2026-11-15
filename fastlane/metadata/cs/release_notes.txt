@@ -3,4 +3,4 @@ S volbou „Automatika (ruce pryč)“ kamera pořídí snímek, jakmile je krok
 Siri a aplikace Zkratky znají pět příkazů, například „Pořídit snímek v aplikaci FrameFold“ a „Exportovat stop motion v aplikaci FrameFold“.
 Na iPhonu vyplní náhled filmu v díle na výšku celou šířku.
 Nápověda má dvě nové kapitoly, „Postupy skládání“ a „Siri a Zkratky“.
-Hotové filmy končí krátkou závěrečnou kartou „Vytvořeno ve FrameFoldu“. V díle ji lze vypnout.
+V díle lze zapnout krátkou závěrečnou kartu „Vytvořeno ve FrameFoldu“. Objeví se pak na konci filmu.

@@ -2,4 +2,4 @@ Brief, Hondenkop en Beker zijn er als vouwreeksen. Bij elke stap toont de zoeker
 Met “Automatisch (handen weg)” neemt de camera het beeld op zodra de stap gevouwen is. Een balk toont hoe ver je bent.
 Siri en de app Opdrachten kennen vijf opdrachten, zoals “Beeld maken in FrameFold” en “Stop-motion exporteren in FrameFold”.
 De hulp heeft twee nieuwe hoofdstukken, “Vouwreeksen” en “Siri en Opdrachten”.
-Voltooide films eindigen met een korte eindkaart, ‘Gemaakt met FrameFold’. Je kunt die in het werk uitzetten.
+In het werk kun je een korte eindkaart aanzetten, ‘Gemaakt met FrameFold’. Die staat dan aan het einde van de film.

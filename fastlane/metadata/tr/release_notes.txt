@@ -3,4 +3,4 @@ Mektup, Köpek başı ve Bardak katlama sırası olarak seçilebilir. Vizör her
 Siri ve Kestirmeler uygulaması beş komutu tanır, örneğin “FrameFold ile kare çek” ve “FrameFold ile stop motion'ı dışa aktar”.
 iPhone’da eserdeki film önizlemesi dikey konumda genişliği doldurur.
 Yardımda iki yeni bölüm var, “Katlama sıraları” ve “Siri ve Kestirmeler”.
-Biten filmler kısa bir kapanış kartıyla, “FrameFold ile yapıldı” ile sona erer. Eserde kapatabilirsin.
+Eserde kısa bir kapanış kartını, “FrameFold ile yapıldı” kartını açabilirsin. Açıldığında filmin sonunda yer alır.

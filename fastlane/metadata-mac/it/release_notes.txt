@@ -2,4 +2,4 @@ Lettera, Testa di cane e Bicchiere sono disponibili come sequenze di piegatura. 
 Con “Automatico (mani via)”, la fotocamera scatta il fotogramma appena il passo è piegato. Una barra mostra a che punto sei.
 Siri e l’app Comandi Rapidi conoscono cinque comandi, come “Scatta in FrameFold” e “Esporta stop motion in FrameFold”.
 L’aiuto ha due nuovi capitoli, “Sequenze di piegatura” e “Siri e Comandi Rapidi”.
-I film finiti si chiudono con un breve cartello finale, «Creato con FrameFold». Puoi disattivarlo nell’opera.
+Nell’opera puoi attivare un breve cartello finale, «Creato con FrameFold». Compare allora alla fine del film.

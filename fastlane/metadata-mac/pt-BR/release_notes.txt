@@ -2,4 +2,4 @@ Carta, Cabeça de cachorro e Copo estão disponíveis como sequências de dobra.
 Com “Obturador automático (mãos fora)”, a câmera captura o quadro assim que o passo está dobrado. Uma barra mostra o quanto você avançou.
 A Siri e o app Atalhos conhecem cinco comandos, como “Tirar quadro no FrameFold” e “Exportar stop motion no FrameFold”.
 A ajuda tem dois capítulos novos, “Sequências de dobra” e “Siri e Atalhos”.
-Os filmes prontos terminam com um breve cartão final, “Feito com FrameFold”. Você pode desativá-lo na obra.
+Na obra você pode ativar um breve cartão final, “Feito com FrameFold”. Ele aparece então no fim do filme.

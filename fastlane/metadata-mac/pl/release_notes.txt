@@ -2,4 +2,4 @@ List, Głowa psa i Kubek są dostępne jako sekwencje składania. Przy każdym k
 Z opcją „Automat (ręce precz)” aparat robi klatkę, gdy tylko krok jest złożony. Pasek pokazuje, jak daleko jesteś.
 Siri i aplikacja Skróty znają pięć poleceń, na przykład „Zrób zdjęcie w FrameFold” i „Eksportuj stop motion w FrameFold”.
 Pomoc ma dwa nowe rozdziały, „Sekwencje składania” i „Siri i Skróty”.
-Gotowe filmy kończą się krótką planszą końcową „Zrobione w FrameFold”. Można ją wyłączyć w pracy.
+W pracy można włączyć krótką planszę końcową „Zrobione w FrameFold”. Pojawia się wtedy na końcu filmu.

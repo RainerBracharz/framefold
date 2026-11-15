@@ -2,4 +2,4 @@ Brev, Hundehoved og Bæger findes som foldeforløb. For hvert trin viser søgere
 Med “Auto-udløser (hænder væk)” tager kameraet billedet, så snart trinnet er foldet. En bjælke viser, hvor langt du er.
 Siri og appen Genveje kender fem kommandoer, for eksempel “Tag billede i FrameFold” og “Eksportér stopmotion i FrameFold”.
 Hjælpen har to nye kapitler, “Foldeforløb” og “Siri og Genveje”.
-Færdige film slutter med et kort slutkort, „Lavet med FrameFold“. Du kan slå det fra i værket.
+I værket kan du slå et kort slutkort til, „Lavet med FrameFold“. Det står så sidst i filmen.
