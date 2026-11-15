@@ -319,6 +319,16 @@ struct FrameFoldApp: App {
             }
             // Werk-Datei per AirDrop, „Dateien“ oder Finder geöffnet
             .onOpenURL { url in
+                // Direktlink aus dem App Store (In-App-Event) oder von einer Webseite:
+                // framefold://camera öffnet die Kamera, framefold://works die Werke.
+                if url.scheme?.lowercased() == "framefold" {
+                    switch url.host?.lowercased() {
+                    case "camera": if didOnboard { selectedTab = 1 }
+                    case "works": selectedTab = 2
+                    default: break
+                    }
+                    return
+                }
                 guard url.pathExtension.lowercased() == WorkPackage.fileExtension else { return }
                 Task { await importWork(url) }
             }

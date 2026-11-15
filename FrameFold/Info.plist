@@ -51,6 +51,19 @@
 	</array>
 	<!-- Werk-Dateien direkt am Ort lesen (mit Freigabe) statt eine zweite
 	     Kopie in Documents/Inbox liegen zu lassen. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.bracharz.framefold.link</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>framefold</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 </dict>

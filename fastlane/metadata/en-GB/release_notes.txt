@@ -1,0 +1,5 @@
+Letter, Dog face and Cup are available as fold sequences. For each step, the viewfinder shows the outline, the crease line and an arrow.
+With “Auto shutter (hands away)”, the camera takes the frame as soon as the step is folded. A bar shows how far along you are.
+Siri and the Shortcuts app know five commands, such as “Take a frame in FrameFold” and “Export stop-motion in FrameFold”.
+On iPhone, the film preview in a work fills the width in portrait.
+Help has two new chapters, “Fold sequences” and “Siri and Shortcuts”.

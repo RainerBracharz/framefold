@@ -10,16 +10,16 @@ import XCTest
 
 final class FirstRunTests: XCTestCase {
 
-    func testReviewAsksAtThirdAndTenthFilmOncePerVersion() throws {
+    func testReviewAsksAtFirstFilmOncePerVersion() throws {
         let suite = "ff-review-\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
         defer { defaults.removePersistentDomain(forName: suite) }
         let asks = (1...12).map { _ in ReviewPrompt.noteFinishedFilm(defaults: defaults, version: "2.6") }
-        XCTAssertEqual(asks.enumerated().filter(\.element).map { $0.offset + 1 }, [3],
+        XCTAssertEqual(asks.enumerated().filter(\.element).map { $0.offset + 1 }, [1],
                        "in derselben Version nur einmal")
-        defaults.set(0, forKey: "finishedFilms")
+        // neue Version, Zählung läuft weiter: der nächste Meilenstein ist der 15. Film
         let next = (1...10).map { _ in ReviewPrompt.noteFinishedFilm(defaults: defaults, version: "2.7") }
-        XCTAssertEqual(next.enumerated().filter(\.element).map { $0.offset + 1 }, [3])
+        XCTAssertEqual(next.enumerated().filter(\.element).map { $0.offset + 13 }, [15])
     }
 
     @MainActor

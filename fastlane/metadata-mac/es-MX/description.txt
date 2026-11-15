@@ -1,0 +1,39 @@
+La app de stop motion para el Mac que dispara sola en cuanto tus manos salen del encuadre. Gratis, sin suscripciones, sin anuncios, sin cuenta y sin internet.
+
+TODO GRATIS, SIN MARCAS DE AGUA
+Todas las funciones son gratis, incluyendo sonido, música, croma, títulos, dibujo y exportación hasta 4K o en ProRes. Ningún vídeo lleva marca de agua. FrameFold no recopila datos. Las imágenes, el sonido y las obras se quedan en tu Mac.
+
+CÁMARA SOBRE LA MESA
+Una cámara mira desde arriba a la mesa, tú pliegas, dibujas o colocas. FrameFold dispara en cuanto tus manos salen del encuadre y la escena está quieta. Esto funciona mejor con una cámara de documentos, FrameFold selecciona por sí sola una cámara USB conectada. Un iPhone como cámara o la cámara integrada también sirven. La barra espaciadora dispara manualmente. Además hay papel cebolla, un aviso si la cámara se mueve y disparo automático por intervalo.
+
+IMÁGENES NÍTIDAS
+La app mide la nitidez continuamente. Ninguna imagen borrosa entra en la obra. Donde la cámara lo permite, la exposición y el balance de blancos se mantienen fijos para que nada parpadee entre las imágenes.
+
+RÉFLEX Y SIN ESPEJO
+A través de una carpeta supervisada, cada foto de tu cámara entra en la obra a máxima resolución, también en RAW.
+
+ESTUDIO
+A partir de "Avanzado", la cámara se convierte en un espacio de trabajo de estudio. Con línea de tiempo, cambio entre imagen en vivo y grabación, papel cebolla sobre varias imágenes, vista de diferencia y exposición, máscaras de formato, marcos de seguridad, cuadrícula, imagen o película de referencia con croma, notas por imagen, herramientas contra el ruido, oscurecimiento al disparar, tomas de prueba y secuencia automática con hora de inicio y fin. Todos los comandos funcionan también con el teclado. Ajustas la luz por DMX (Art-Net) y el control de movimiento por Bluetooth para cada imagen.
+
+LA PELÍCULA CRECE CONTIGO
+Mientras trabajas, el stop motion ya se reproduce en bucle junto a la imagen de la cámara.
+
+EDICIÓN
+Duplica imágenes, mantenlas, reordénalas arrastrando o vuelve a grabarlas individualmente. Todo se puede deshacer. El texto, los bocadillos y los dibujos van directos a la imagen, puedes superponer tus propias imágenes como capas. El croma reemplaza el verde o azul por una imagen o un vídeo. A partir de "Avanzado" hay movimientos de cámara con panorámica y zoom. Para la rotoscopia, un vídeo se convierte en imágenes sobre las que puedes dibujar. A esto se suman la tarjeta de título, los créditos y los estilos para toda la película.
+
+SONIDO
+Varias pistas de audio con forma de onda. La música proviene de tus archivos o de cinco piezas propias, desde "Alegre" hasta "Sueño". Puedes añadir diez sonidos, desde Pop hasta Tachán, a cada imagen. Grabas tu voz sobre la película en marcha, si quieres en tono agudo, grave o como un robot. Una voz en el Mac lee el texto escrito. En la hoja de exposición asignas formas de la boca a las imágenes.
+
+EXPORTACIÓN Y FLIPBOOK
+Exportación de 2 a 30 imágenes por segundo, hasta 4K, en ProRes o como secuencia de imágenes. Cada obra se convierte si lo deseas en un flipbook listo para imprimir, con hojas A4, líneas de corte y páginas numeradas.
+
+VÍDEO A STOP MOTION
+Elige un vídeo existente. FrameFold detecta los momentos de quietud, elimina las imágenes con manos y descarta las duplicadas. Antes ves cada imagen en la hoja de contactos.
+
+PARA LA ESCUELA
+El modo "Sencillo" muestra solo lo necesario. No hay cuenta ni conexión a internet. Un plan de clase de dos horas está disponible libremente, hay una breve ayuda en la app.
+
+TAMBIÉN EN IPHONE Y IPAD
+FrameFold también está disponible para iPhone y iPad, allí con trípode, Apple Watch como disparador remoto y disparo dando palmas. FrameFold está disponible en 17 idiomas.
+
+FrameFold se creó como herramienta para el artista Aldo Tolino. Él pliega fotografías impresas para formar objetos y las vuelve a fotografiar.
