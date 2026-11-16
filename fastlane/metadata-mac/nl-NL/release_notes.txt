@@ -4,3 +4,4 @@ Siri en de app Opdrachten kennen vijf opdrachten, zoals “Beeld maken in FrameF
 De hulp heeft twee nieuwe hoofdstukken, “Vouwreeksen” en “Siri en Opdrachten”.
 In het werk kun je een korte eindkaart aanzetten, ‘Gemaakt met FrameFold’. Die staat dan aan het einde van de film.
 Getekende figuren in beeld houden de automatische ontspanner minder vaak tegen.
+Het contactvel toont elk beeld volledig, staand of liggend.

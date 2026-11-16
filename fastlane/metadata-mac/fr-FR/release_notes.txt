@@ -4,3 +4,4 @@ Siri et l’app Raccourcis connaissent cinq commandes, par exemple « Déclenche
 L’aide compte deux nouveaux chapitres, « Séquences de pliage » et « Siri et Raccourcis ».
 Dans l’œuvre, tu peux activer un court carton de fin, « Réalisé avec FrameFold ». Il vient alors à la fin du film.
 Les personnages dessinés dans l’image retiennent moins souvent le déclenchement automatique.
+La planche-contact montre chaque image en entier, en portrait ou en paysage.

@@ -4,3 +4,4 @@ A Siri e o app Atalhos conhecem cinco comandos, como “Tirar quadro no FrameFol
 A ajuda tem dois capítulos novos, “Sequências de dobra” e “Siri e Atalhos”.
 Na obra você pode ativar um breve cartão final, “Feito com FrameFold”. Ele aparece então no fim do filme.
 Figuras desenhadas no quadro seguram o obturador automático com menos frequência.
+A folha de contato mostra cada imagem inteira, em retrato ou paisagem.

@@ -5,3 +5,5 @@ No iPhone, a pré-visualização do filme em uma obra ocupa toda a largura na ve
 A ajuda tem dois capítulos novos, “Sequências de dobra” e “Siri e Atalhos”.
 Na obra você pode ativar um breve cartão final, “Feito com FrameFold”. Ele aparece então no fim do filme.
 Figuras desenhadas no quadro seguram o obturador automático com menos frequência.
+Filmes feitos com fotos em resolução total ficam em pé no modo retrato.
+A folha de contato mostra cada imagem inteira, em retrato ou paisagem.

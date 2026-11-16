@@ -4,3 +4,4 @@ Siri a aplikace Zkratky znají pět příkazů, například „Pořídit snímek
 Nápověda má dvě nové kapitoly, „Postupy skládání“ a „Siri a Zkratky“.
 V díle lze zapnout krátkou závěrečnou kartu „Vytvořeno ve FrameFoldu“. Objeví se pak na konci filmu.
 Nakreslené postavy v záběru zdržují automatiku méně často.
+Kontaktní arch ukazuje každý snímek celý, na výšku i na šířku.

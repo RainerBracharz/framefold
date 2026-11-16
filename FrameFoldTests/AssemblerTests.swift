@@ -310,4 +310,52 @@ final class AssemblerTests: XCTestCase {
         for i in 0..<Int(count) { data[i] = Float(sin(Double(i) * 2 * .pi * 440 / 44_100) * 0.3) }
         try file.write(from: buffer)
     }
+
+    // MARK: Dreh-Vermerk
+
+    /// Fotos in voller Auflösung liegen quer in der Datei und tragen nur den
+    /// Vermerk „hochkant“. Der Export muss sie aufrichten, verkleinert wie
+    /// in voller Größe, und der Film muss hochkant herauskommen.
+    func testExportHonoursOrientationTag() async throws {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 400, height: 300),
+                                               format: { let f = UIGraphicsImageRendererFormat(); f.scale = 1; return f }())
+        // Quer gespeichert: linke Hälfte rot. Mit Vermerk 6 (um 90° im Uhrzeigersinn zeigen) liegt Rot oben.
+        let landscape = renderer.image { ctx in
+            UIColor.blue.setFill(); ctx.fill(CGRect(x: 0, y: 0, width: 400, height: 300))
+            UIColor.red.setFill(); ctx.fill(CGRect(x: 0, y: 0, width: 200, height: 300))
+        }
+        var urls: [URL] = []
+        for n in 0..<3 {
+            let url = dir.appendingPathComponent("o\(n).jpg")
+            let dest = try XCTUnwrap(CGImageDestinationCreateWithURL(url as CFURL, "public.jpeg" as CFString, 1, nil))
+            CGImageDestinationAddImage(dest, try XCTUnwrap(landscape.cgImage), [kCGImagePropertyOrientation: 6] as CFDictionary)
+            XCTAssertTrue(CGImageDestinationFinalize(dest))
+            urls.append(url)
+        }
+        for limit in [nil, 200] as [Int?] {
+            let image = try XCTUnwrap(StopMotionAssembler.decode(urls[0], maxPixelSize: limit))
+            XCTAssertLessThan(image.width, image.height, "aufgerichtet ist das Bild hochkant (Grenze \(String(describing: limit)))")
+            let top = try XCTUnwrap(pixel(of: image, x: image.width / 2, y: image.height / 8))
+            let bottom = try XCTUnwrap(pixel(of: image, x: image.width / 2, y: image.height * 7 / 8))
+            XCTAssertGreaterThan(top.r, top.b, "oben liegt die rote Hälfte")
+            XCTAssertGreaterThan(bottom.b, bottom.r, "unten die blaue")
+        }
+        var settings = PipelineSettings()
+        settings.aspect = .original
+        let film = try await StopMotionAssembler().assemble(imageURLs: urls, settings: settings) { _ in }
+        let tracks = try await AVURLAsset(url: film).loadTracks(withMediaType: .video)
+        let track = try XCTUnwrap(tracks.first)
+        let size = try await track.load(.naturalSize)
+        XCTAssertLessThan(size.width, size.height, "der Film ist hochkant")
+    }
+
+    private func pixel(of image: CGImage, x: Int, y: Int) -> (r: Int, g: Int, b: Int)? {
+        var px = [UInt8](repeating: 0, count: 4)
+        guard let ctx = CGContext(data: &px, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4,
+                                  space: CGColorSpaceCreateDeviceRGB(),
+                                  bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
+        // CGContext zählt y von unten
+        ctx.draw(image, in: CGRect(x: -x, y: -(image.height - 1 - y), width: image.width, height: image.height))
+        return (Int(px[0]), Int(px[1]), Int(px[2]))
+    }
 }

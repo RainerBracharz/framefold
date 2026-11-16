@@ -330,7 +330,7 @@ struct ProjectDetailView: View {
                 // eine Zelle nach dem Entfernen ihr altes Bild, und der nächste
                 // Tipp löscht ein Bild, das gar nicht zu sehen war.
                 ForEach(Array(store.frameURLs(for: currentProject).enumerated()), id: \.element) { index, url in
-                    FrameThumbnail(url: url)
+                    FrameThumbnail(url: url, whole: true)
                         // Nummerierte Zelle wie im gedruckten Kontaktbogen
                         .overlay(alignment: .bottomLeading) {
                             Text(String(format: "%02d", index + 1))
@@ -1315,7 +1315,15 @@ struct ProjectDetailView: View {
 /// Kontaktbogen-Kachel: scharfkantig, Haarlinienrahmen.
 struct FrameThumbnail: View {
     let url: URL
+    /// Ganzes Bild im eigenen Seitenverhältnis zeigen (Kontaktbogen) statt
+    /// eines quadratischen Ausschnitts: hochkant bleibt hochkant, quer bleibt quer.
+    var whole = false
     @State private var image: UIImage?
+
+    private var ratio: CGFloat {
+        guard whole, let size = image?.size, size.width > 0, size.height > 0 else { return whole ? 3.0 / 4.0 : 1 }
+        return size.width / size.height
+    }
 
     var body: some View {
         Group {
@@ -1327,8 +1335,8 @@ struct FrameThumbnail: View {
                 Rectangle().fill(Theme.paperShade)
             }
         }
-        .frame(minWidth: 90, minHeight: 90)
-        .aspectRatio(1, contentMode: .fill)
+        .frame(minWidth: whole ? 0 : 90, minHeight: whole ? 0 : 90)
+        .aspectRatio(ratio, contentMode: whole ? .fit : .fill)
         .clipped()
         .overlay(Rectangle().stroke(Theme.hairline, lineWidth: 1))
         .task(id: url) {

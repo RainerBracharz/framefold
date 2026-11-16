@@ -4,3 +4,4 @@ Siri och appen Genvägar känner till fem kommandon, till exempel ”Ta bild i F
 Hjälpen har två nya kapitel, ”Vikföljder” och ”Siri och Genvägar”.
 I verket kan du slå på ett kort slutkort, ”Gjord med FrameFold”. Det står då sist i filmen.
 Tecknade figurer i bilden håller tillbaka den automatiska avtryckaren mer sällan.
+Kontaktkartan visar varje bild i sin helhet, stående eller liggande.

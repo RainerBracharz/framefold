@@ -4,3 +4,4 @@ Siri ve Kestirmeler uygulaması beş komutu tanır, örneğin “FrameFold ile k
 Yardımda iki yeni bölüm var, “Katlama sıraları” ve “Siri ve Kestirmeler”.
 Eserde kısa bir kapanış kartını, “FrameFold ile yapıldı” kartını açabilirsin. Açıldığında filmin sonunda yer alır.
 Kadrajdaki çizilmiş figürler otomatik deklanşörü daha seyrek bekletir.
+Kontak baskı her kareyi bütün olarak gösterir, dikey ya da yatay.

@@ -115,18 +115,29 @@ final class StopMotionAssembler {
         )
     }
 
-    /// Bild laden, auf Wunsch schon beim Dekodieren verkleinert. Die
-    /// Pixel bleiben wie gespeichert (ohne EXIF-Drehung) – genau wie bisher
-    /// mit `UIImage(data:).cgImage`, damit sich kein Export verändert.
+    /// Bild laden, auf Wunsch schon beim Dekodieren verkleinert. Ein
+    /// Dreh-Vermerk in der Datei (EXIF) wird dabei angewendet: Fotos in voller
+    /// Auflösung speichert das iPhone quer und vermerkt nur, dass sie hochkant
+    /// gemeint sind. Ohne das lag der Film auf der Seite, während der
+    /// Kontaktbogen dieselben Bilder aufrecht zeigte.
     nonisolated static func decode(_ url: URL, maxPixelSize: Int?) -> CGImage? {
         autoreleasepool {
             guard let source = CGImageSourceCreateWithURL(url as CFURL, [kCGImageSourceShouldCache: false] as CFDictionary)
             else { return nil }
-            if let maxPixelSize {
+            let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any]
+            let orientation = (props?[kCGImagePropertyOrientation] as? NSNumber)?.intValue ?? 1
+            var limit = maxPixelSize
+            if limit == nil, orientation != 1 {
+                // Volle Größe, aber aufgerichtet
+                let w = (props?[kCGImagePropertyPixelWidth] as? NSNumber)?.intValue ?? 0
+                let h = (props?[kCGImagePropertyPixelHeight] as? NSNumber)?.intValue ?? 0
+                if max(w, h) > 0 { limit = max(w, h) }
+            }
+            if let limit {
                 let options: [CFString: Any] = [kCGImageSourceCreateThumbnailFromImageAlways: true,
-                                                kCGImageSourceCreateThumbnailWithTransform: false,
+                                                kCGImageSourceCreateThumbnailWithTransform: true,
                                                 kCGImageSourceShouldCacheImmediately: true,
-                                                kCGImageSourceThumbnailMaxPixelSize: maxPixelSize]
+                                                kCGImageSourceThumbnailMaxPixelSize: limit]
                 return CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
             }
             guard let data = try? Data(contentsOf: url) else { return nil }
@@ -801,8 +812,7 @@ extension StopMotionAssembler {
             if format == .jpeg {
                 try FileManager.default.copyItem(at: url, to: target)   // schon JPEG – verlustfrei kopieren
             } else {
-                guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
-                      let image = CGImageSourceCreateImageAtIndex(source, 0, nil),
+                guard let image = Self.decode(url, maxPixelSize: nil),
                       let dest = CGImageDestinationCreateWithURL(target as CFURL, format.type.identifier as CFString, 1, nil)
                 else { throw PipelineError.exportFailed }
                 CGImageDestinationAddImage(dest, image, nil)

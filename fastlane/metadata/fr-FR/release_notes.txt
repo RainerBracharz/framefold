@@ -5,3 +5,5 @@ Sur iPhone, l’aperçu du film dans une œuvre occupe toute la largeur en mode 
 L’aide compte deux nouveaux chapitres, « Séquences de pliage » et « Siri et Raccourcis ».
 Dans l’œuvre, tu peux activer un court carton de fin, « Réalisé avec FrameFold ». Il vient alors à la fin du film.
 Les personnages dessinés dans l’image retiennent moins souvent le déclenchement automatique.
+Les films faits de photos en pleine résolution sont droits en mode portrait.
+La planche-contact montre chaque image en entier, en portrait ou en paysage.

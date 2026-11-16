@@ -5,3 +5,5 @@ On iPhone, the film preview in a work fills the width in portrait.
 Help has two new chapters, “Fold sequences” and “Siri and Shortcuts”.
 In a work you can switch on a short end card, “Made with FrameFold”. It then closes the film.
 Drawn figures in the frame hold up the auto shutter less often.
+Films made from full-resolution photos stand upright in portrait.
+The contact sheet shows every frame in full, portrait or landscape.

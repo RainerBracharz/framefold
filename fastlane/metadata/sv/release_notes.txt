@@ -5,3 +5,5 @@ På iPhone fyller filmförhandsvisningen i ett verk bredden i stående läge.
 Hjälpen har två nya kapitel, ”Vikföljder” och ”Siri och Genvägar”.
 I verket kan du slå på ett kort slutkort, ”Gjord med FrameFold”. Det står då sist i filmen.
 Tecknade figurer i bilden håller tillbaka den automatiska avtryckaren mer sällan.
+Filmer av foton i full upplösning står upprätt i stående format.
+Kontaktkartan visar varje bild i sin helhet, stående eller liggande.
