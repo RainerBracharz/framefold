@@ -7,3 +7,4 @@ V díle lze zapnout krátkou závěrečnou kartu „Vytvořeno ve FrameFoldu“.
 Nakreslené postavy v záběru zdržují automatiku méně často.
 Filmy z fotek v plném rozlišení stojí na výšku rovně.
 Kontaktní arch ukazuje každý snímek celý, na výšku i na šířku.
+„Vyrovnat otřesy“ nechává snímky nové scény beze změny.

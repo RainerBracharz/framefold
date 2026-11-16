@@ -5,3 +5,4 @@ Pomoc ma dwa nowe rozdziały, „Sekwencje składania” i „Siri i Skróty”.
 W pracy można włączyć krótką planszę końcową „Zrobione w FrameFold”. Pojawia się wtedy na końcu filmu.
 Narysowane postacie w kadrze rzadziej wstrzymują automat.
 Stykówka pokazuje każdy obraz w całości, pionowy lub poziomy.
+„Kompensuj drgania” zostawia obrazy nowej sceny bez zmian.

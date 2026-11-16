@@ -7,3 +7,4 @@ Eserde kısa bir kapanış kartını, “FrameFold ile yapıldı” kartını a�
 Kadrajdaki çizilmiş figürler otomatik deklanşörü daha seyrek bekletir.
 Tam çözünürlüklü fotoğraflardan yapılan filmler dikey konumda dik durur.
 Kontak baskı her kareyi bütün olarak gösterir, dikey ya da yatay.
+“Titremeyi dengele”, yeni bir sahnenin karelerini olduğu gibi bırakır.

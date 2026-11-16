@@ -5,3 +5,4 @@ Die Hilfe hat zwei neue Kapitel, „Faltfolgen“ und „Siri und Kurzbefehle“
 Im Werk lässt sich eine kurze Schlusskarte „Gemacht mit FrameFold“ einschalten. Sie steht dann am Ende des Films.
 Gezeichnete Figuren im Bild halten die Automatik seltener auf.
 Der Kontaktbogen zeigt jedes Bild ganz, hochkant oder quer.
+„Verwacklung ausgleichen“ lässt Bilder einer neuen Szene, wie sie sind.

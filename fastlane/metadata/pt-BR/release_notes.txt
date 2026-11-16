@@ -7,3 +7,4 @@ Na obra você pode ativar um breve cartão final, “Feito com FrameFold”. Ele
 Figuras desenhadas no quadro seguram o obturador automático com menos frequência.
 Filmes feitos com fotos em resolução total ficam em pé no modo retrato.
 A folha de contato mostra cada imagem inteira, em retrato ou paisagem.
+“Compensar tremores” deixa as imagens de uma cena nova como estão.

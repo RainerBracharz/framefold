@@ -5,3 +5,4 @@ Help has two new chapters, “Fold sequences” and “Siri and Shortcuts”.
 In a work you can switch on a short end card, “Made with FrameFold”. It then closes the film.
 Drawn figures in the frame hold up the auto shutter less often.
 The contact sheet shows every frame in full, portrait or landscape.
+“Compensate for shake” leaves frames of a new scene as they are.

@@ -7,3 +7,4 @@ Im Werk lässt sich eine kurze Schlusskarte „Gemacht mit FrameFold“ einschal
 Gezeichnete Figuren im Bild halten die Automatik seltener auf.
 Filme aus Fotos in voller Auflösung stehen im Hochformat aufrecht.
 Der Kontaktbogen zeigt jedes Bild ganz, hochkant oder quer.
+„Verwacklung ausgleichen“ lässt Bilder einer neuen Szene, wie sie sind.

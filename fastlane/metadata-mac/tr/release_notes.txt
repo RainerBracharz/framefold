@@ -5,3 +5,4 @@ Yardımda iki yeni bölüm var, “Katlama sıraları” ve “Siri ve Kestirmel
 Eserde kısa bir kapanış kartını, “FrameFold ile yapıldı” kartını açabilirsin. Açıldığında filmin sonunda yer alır.
 Kadrajdaki çizilmiş figürler otomatik deklanşörü daha seyrek bekletir.
 Kontak baskı her kareyi bütün olarak gösterir, dikey ya da yatay.
+“Titremeyi dengele”, yeni bir sahnenin karelerini olduğu gibi bırakır.

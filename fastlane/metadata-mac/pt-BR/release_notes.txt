@@ -5,3 +5,4 @@ A ajuda tem dois capítulos novos, “Sequências de dobra” e “Siri e Atalho
 Na obra você pode ativar um breve cartão final, “Feito com FrameFold”. Ele aparece então no fim do filme.
 Figuras desenhadas no quadro seguram o obturador automático com menos frequência.
 A folha de contato mostra cada imagem inteira, em retrato ou paisagem.
+“Compensar tremores” deixa as imagens de uma cena nova como estão.

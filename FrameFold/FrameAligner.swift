@@ -38,6 +38,9 @@ final class FrameAligner {
     /// Größter mittlerer Helligkeitsunterschied (0…255), bei dem zwei Bilder
     /// noch als dieselbe Ansicht gelten
     private let maxResidual = 14.0
+    /// Homographie: Liegt der Unterschied danach noch über `maxResidual`,
+    /// muss er wenigstens auf diesen Anteil gefallen sein
+    private let maxResidualRatio = 0.8
     /// Plausibilität: maximale Ecken-Wanderung als Anteil der Bildgröße –
     /// größere Sprünge sind fast sicher Fehlschätzungen
     private let maxCornerShiftFraction = 0.12
@@ -98,7 +101,30 @@ final class FrameAligner {
 
         let rect = CGRect(x: 0, y: 0, width: w, height: h)
         let composed = warped.cropped(to: rect).composited(over: ci)
-        return ciContext.createCGImage(composed, from: rect)
+        guard let result = ciContext.createCGImage(composed, from: rect) else { return nil }
+
+        // Gegenprobe: Zeigt das Bild etwas anderes als das erste (neue Szene,
+        // anderes Format), findet Vision trotzdem eine Abbildung innerhalb
+        // der Grenze oben. Früher wurde das Bild damit sichtbar verzogen und
+        // lag am Rand doppelt. Die Abbildung gilt nur, wenn das Bild danach
+        // auf dem ersten liegt – oder ihm wenigstens deutlich näher kommt
+        // (echte Fotos derselben Ansicht: Abstand etwa 26 → 14; fremde
+        // Szenen: 62 → 62).
+        guard let before = residual(small, against: reference),
+              let after = residual(result, against: reference),
+              after <= maxResidual || after <= before * maxResidualRatio else { return nil }
+        return result
+    }
+
+    /// Mittlerer Helligkeitsunterschied (0…255) zweier Bilder auf
+    /// Analysegröße; nil, wenn die Formate nicht zusammenpassen.
+    private func residual(_ image: CGImage, against reference: CGImage) -> Double? {
+        let (a, aw, ah) = FrameAnalyzer.grayscaleDownsampled(image, targetWidth: analysisWidth)
+        let (b, bw, bh) = FrameAnalyzer.grayscaleDownsampled(reference, targetWidth: analysisWidth)
+        guard aw == bw, ah == bh, !a.isEmpty else { return nil }
+        var sum = 0
+        for i in a.indices { sum += abs(Int(a[i]) - Int(b[i])) }
+        return Double(sum) / Double(a.count)
     }
 
     // MARK: Stufe 2 – Verschiebungs-Fallback (Block-Matching)

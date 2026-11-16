@@ -5,3 +5,4 @@ Hjælpen har to nye kapitler, “Foldeforløb” og “Siri og Genveje”.
 I værket kan du slå et kort slutkort til, „Lavet med FrameFold“. Det står så sidst i filmen.
 Tegnede figurer i billedet holder auto-udløseren tilbage sjældnere.
 Kontaktarket viser hvert billede helt, i højformat eller bredformat.
+“Udlign rystelser” lader billeder fra en ny scene være, som de er.

@@ -7,3 +7,4 @@ Dans l’œuvre, tu peux activer un court carton de fin, « Réalisé avec Frame
 Les personnages dessinés dans l’image retiennent moins souvent le déclenchement automatique.
 Les films faits de photos en pleine résolution sont droits en mode portrait.
 La planche-contact montre chaque image en entier, en portrait ou en paysage.
+« Compenser les secousses » laisse les images d’une nouvelle scène telles quelles.

@@ -7,3 +7,4 @@ In het werk kun je een korte eindkaart aanzetten, ‘Gemaakt met FrameFold’. D
 Getekende figuren in beeld houden de automatische ontspanner minder vaak tegen.
 Films van foto's in volledige resolutie staan rechtop in staand formaat.
 Het contactvel toont elk beeld volledig, staand of liggend.
+‘Trillingen corrigeren’ laat beelden van een nieuwe scène zoals ze zijn.

@@ -7,3 +7,4 @@ Nell’opera puoi attivare un breve cartello finale, «Creato con FrameFold». C
 Le figure disegnate nell’inquadratura bloccano meno spesso lo scatto automatico.
 I filmati creati da foto a piena risoluzione sono diritti in verticale.
 Il provino a contatto mostra ogni immagine per intero, in verticale o in orizzontale.
+“Compensa il mosso” lascia le immagini di una nuova scena così come sono.

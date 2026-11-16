@@ -7,3 +7,4 @@ I værket kan du slå et kort slutkort til, „Lavet med FrameFold“. Det står
 Tegnede figurer i billedet holder auto-udløseren tilbage sjældnere.
 Film lavet af fotos i fuld opløsning står oprejst i højformat.
 Kontaktarket viser hvert billede helt, i højformat eller bredformat.
+“Udlign rystelser” lader billeder fra en ny scene være, som de er.

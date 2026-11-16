@@ -438,11 +438,18 @@ final class StopMotionAssembler {
         // sonst erschiene es verschoben oder winzig in einer Ecke.
         func drawRect(for image: CGImage, offset: CGPoint) -> CGRect {
             if image.width == referenceWidth && image.height == referenceHeight {
+                // Breite und Höhe je für sich auf den Rahmen bringen. Die
+                // Ausgabemaße sind auf gerade Zahlen abgerundet; mit einem
+                // gemeinsamen Maßstab (aus der Breite) blieb bei ungeraden
+                // Maßen oben ein schwarzer Strich stehen (443 × 961 → 442 × 960:
+                // eine Zeile; 1179 × 2556 auf 1080p: drei bis vier).
+                let sx = CGFloat(width) / max(1, cropRect.width)
+                let sy = CGFloat(height) / max(1, cropRect.height)
                 return CGRect(
-                    x: (-cropRect.minX + offset.x) * scale,
-                    y: (-(CGFloat(image.height) - cropRect.maxY) + offset.y) * scale,
-                    width: CGFloat(image.width) * scale,
-                    height: CGFloat(image.height) * scale)
+                    x: (-cropRect.minX + offset.x) * sx,
+                    y: (-(CGFloat(image.height) - cropRect.maxY) + offset.y) * sy,
+                    width: CGFloat(image.width) * sx,
+                    height: CGFloat(image.height) * sy)
             }
             let fill = max(CGFloat(width) / CGFloat(max(1, image.width)),
                            CGFloat(height) / CGFloat(max(1, image.height)))

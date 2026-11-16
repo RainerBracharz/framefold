@@ -7,3 +7,4 @@ W pracy można włączyć krótką planszę końcową „Zrobione w FrameFold”
 Narysowane postacie w kadrze rzadziej wstrzymują automat.
 Filmy ze zdjęć w pełnej rozdzielczości są w pionie ustawione prosto.
 Stykówka pokazuje każdy obraz w całości, pionowy lub poziomy.
+„Kompensuj drgania” zostawia obrazy nowej sceny bez zmian.

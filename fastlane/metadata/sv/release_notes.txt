@@ -7,3 +7,4 @@ I verket kan du slå på ett kort slutkort, ”Gjord med FrameFold”. Det står
 Tecknade figurer i bilden håller tillbaka den automatiska avtryckaren mer sällan.
 Filmer av foton i full upplösning står upprätt i stående format.
 Kontaktkartan visar varje bild i sin helhet, stående eller liggande.
+”Kompensera skakningar” lämnar bilder från en ny scen som de är.
