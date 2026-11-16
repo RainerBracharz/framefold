@@ -467,6 +467,9 @@ final class StopMotionAssembler {
             context.setAlpha(CGFloat(1 - echoStrength))
             context.beginTransparencyLayer(auxiliaryInfo: nil)
         }
+        // Ränder, die der Verwacklungsausgleich freilegt, füllt das Bild an
+        // seiner ursprünglichen Stelle (wie bei der Homographie), nicht Schwarz.
+        if offset != .zero { context.draw(base, in: drawRect(for: base, offset: .zero)) }
         context.draw(base, in: drawRect(for: base, offset: offset))
 
         // 3) Übergang: Overlay aufdecken – als Falzkante oder als Facetten.

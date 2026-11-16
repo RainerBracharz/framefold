@@ -685,12 +685,25 @@ enum Algorithms {
         reference: [UInt8], current: [UInt8],
         width: Int, height: Int, maxShift: Int, sampleStep: Int = 2
     ) -> (dx: Int, dy: Int) {
+        let r = estimateTranslationScored(reference: reference, current: current,
+                                          width: width, height: height, maxShift: maxShift, sampleStep: sampleStep)
+        return (r.dx, r.dy)
+    }
+
+    /// Wie `estimateTranslation`, dazu der mittlere Helligkeitsunterschied
+    /// (0…255) an der besten Stelle. Ein hoher Wert heißt: Die beiden Bilder
+    /// zeigen nicht dieselbe Ansicht, die gefundene Verschiebung ist Zufall.
+    static func estimateTranslationScored(
+        reference: [UInt8], current: [UInt8],
+        width: Int, height: Int, maxShift: Int, sampleStep: Int = 2
+    ) -> (dx: Int, dy: Int, residual: Double) {
         guard width > 0, height > 0,
               reference.count == width * height,
-              current.count == width * height else { return (0, 0) }
+              current.count == width * height else { return (0, 0, 0) }
         let step = max(1, sampleStep)
         var best = (dx: 0, dy: 0)
         var bestScore = Double.greatestFiniteMagnitude
+        var bestResidual = 0.0
 
         for sy in -maxShift...maxShift {
             for sx in -maxShift...maxShift {
@@ -716,11 +729,12 @@ enum Algorithms {
                 let score = sum / Double(n) + 0.001 * Double(abs(sx) + abs(sy))
                 if score < bestScore {
                     bestScore = score
+                    bestResidual = sum / Double(n)
                     best = (sx, sy)
                 }
             }
         }
-        return best
+        return (best.dx, best.dy, bestResidual)
     }
 
     // MARK: Export-Geometrie

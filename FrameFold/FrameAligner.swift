@@ -35,6 +35,9 @@ final class FrameAligner {
     private let analysisWidth = 160
     /// Maximale Fallback-Korrektur als Anteil der Breite (15 %)
     private let maxShiftFraction = 0.15
+    /// Größter mittlerer Helligkeitsunterschied (0…255), bei dem zwei Bilder
+    /// noch als dieselbe Ansicht gelten
+    private let maxResidual = 14.0
     /// Plausibilität: maximale Ecken-Wanderung als Anteil der Bildgröße –
     /// größere Sprünge sind fast sicher Fehlschätzungen
     private let maxCornerShiftFraction = 0.12
@@ -113,9 +116,15 @@ final class FrameAligner {
         guard w == refW, h == refH else { return .zero }
 
         let maxShift = max(4, Int(Double(w) * maxShiftFraction))
-        let (dx, dy) = Algorithms.estimateTranslation(
+        let (dx, dy, residual) = Algorithms.estimateTranslationScored(
             reference: reference, current: gray,
             width: w, height: h, maxShift: maxShift)
+        // Plausibilität wie bei der Homographie: Passt das Bild auch an der
+        // besten Stelle nicht zum ersten (neue Szene, anderer Ausschnitt,
+        // aus der Hand gefilmt), oder liegt die beste Stelle am Rand des
+        // Suchfelds, dann ist die Verschiebung Zufall. Früher wurde das Bild
+        // trotzdem bis zu 15 % weit geschoben.
+        guard residual <= maxResidual, abs(dx) < maxShift, abs(dy) < maxShift else { return .zero }
 
         // Analysepixel → Originalpixel; current um (−dx,−dy) zurückschieben.
         let scale = CGFloat(image.width) / CGFloat(max(1, w))

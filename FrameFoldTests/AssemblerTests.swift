@@ -311,6 +311,43 @@ final class AssemblerTests: XCTestCase {
         try file.write(from: buffer)
     }
 
+    // MARK: Verwacklungsausgleich
+
+    /// Aus der Hand gefilmt, jedes Bild eine andere Szene: Der Ausgleich darf
+    /// ein Bild, das nicht zum ersten passt, nicht verschieben. Früher schob
+    /// er es bis zu 15 % weit und ließ einen schwarzen Balken stehen.
+    func testAlignerLeavesUnrelatedImageAlone() throws {
+        let aligner = FrameAligner()
+        XCTAssertEqual(aligner.register(try XCTUnwrap(pattern(shift: 0).cgImage)), .zero)
+        // Dieselbe Ansicht, leicht verwackelt: wird zurückgeschoben
+        let shaken = aligner.register(try XCTUnwrap(pattern(shift: 12).cgImage))
+        XCTAssertEqual(shaken.x, -12, accuracy: 4.5)
+        // Andere Szene: bleibt, wo sie ist
+        let other = UIGraphicsImageRenderer(size: CGSize(width: 640, height: 480),
+                                            format: { let f = UIGraphicsImageRendererFormat(); f.scale = 1; return f }()).image { ctx in
+            UIColor(white: 0.9, alpha: 1).setFill(); ctx.fill(CGRect(x: 0, y: 0, width: 640, height: 480))
+            UIColor(white: 0.1, alpha: 1).setFill(); ctx.cgContext.fillEllipse(in: CGRect(x: 60, y: 200, width: 300, height: 260))
+        }
+        XCTAssertEqual(aligner.register(try XCTUnwrap(other.cgImage)), .zero)
+    }
+
+    /// Wo der Ausgleich ein Bild verschiebt, bleibt am Rand kein Schwarz.
+    func testAlignmentLeavesNoBlackEdge() async throws {
+        let urls = [try save(pattern(shift: 0), "p0.jpg"), try save(pattern(shift: 14), "p1.jpg"),
+                    try save(solid(.orange, width: 640, height: 480), "p2.jpg")]
+        var settings = baseSettings()
+        settings.alignFrames = true
+        let film = try await StopMotionAssembler().assemble(imageURLs: urls, settings: settings) { _ in }
+        for t in [0.75, 1.25] {
+            let image = try await frame(film, at: t)
+            for (x, y) in [(2, image.height / 2), (image.width - 3, image.height / 2),
+                           (image.width / 2, 2), (image.width / 2, image.height - 3)] {
+                let c = rgb(image, x, y)
+                XCTAssertGreaterThan(c.r + c.g + c.b, 0.12, "Rand bei (\(x), \(y)) zur Zeit \(t) ist schwarz: \(c)")
+            }
+        }
+    }
+
     // MARK: Dreh-Vermerk
 
     /// Fotos in voller Auflösung liegen quer in der Datei und tragen nur den
