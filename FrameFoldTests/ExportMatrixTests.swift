@@ -385,7 +385,9 @@ final class ExportMatrixTests: XCTestCase {
             : CGRect(x: 0, y: (th - tw / ratio) / 2, width: tw, height: tw / ratio)
         guard let cut = thumb.cropping(to: crop.integral), let b = Bitmap(cut, width: side, height: side) else { return nil }
         let ga = a.gray(), gb = b.gray()
-        return zip(ga, gb).reduce(0) { $0 + abs($1.0 - $1.1) } / Double(ga.count)
+        var sum: Double = 0
+        for (a, b) in zip(ga, gb) { sum += abs(Double(a) - Double(b)) }
+        return sum / Double(ga.count)
     }
 
     // MARK: Film prüfen
@@ -898,9 +900,14 @@ final class ExportMatrixTests: XCTestCase {
                     let image = try await generator.image(at: CMTime(seconds: (Double(i) + 0.5) / 4, preferredTimescale: 600)).image
                     grays.append(try XCTUnwrap(Bitmap(image, width: 120, height: 160)).gray())
                 }
-                distance[align] = (1..<grays.count).map { i in
-                    zip(grays[0], grays[i]).reduce(0) { $0 + abs($1.0 - $1.1) } / Double(grays[0].count)
-                }.reduce(0, +) / Double(grays.count - 1)
+                // In Einzelschritten: Als ein Ausdruck brauchte das ältere Xcode der CI zu lange für die Typprüfung.
+                var total: Double = 0
+                for i in 1..<grays.count {
+                    var sum: Double = 0
+                    for (a, b) in zip(grays[0], grays[i]) { sum += abs(a - b) }
+                    total += sum / Double(grays[0].count)
+                }
+                distance[align] = total / Double(grays.count - 1)
             }
             let with = try XCTUnwrap(distance[true]), without = try XCTUnwrap(distance[false])
             XCTAssertLessThan(with, without * 0.8,
