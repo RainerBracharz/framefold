@@ -56,3 +56,6 @@ fastlane/screenshots-mac
 
 # Lektorat: Arbeitsstände, bleiben lokal
 lektorat/
+
+# Test-Videos der Export-Matrix gehören ins Repo (klein, gemeinfreier Archivfilm)
+!FrameFoldTests/Fixtures/export/*.mp4
