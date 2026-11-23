@@ -60,17 +60,35 @@ enum CameraMoves {
     }
 
     /// Bild auf den Ausschnitt zuschneiden und wieder auf volle Größe bringen.
-    static func apply(_ framing: Framing, to image: CGImage) -> CGImage? {
+    /// `longEdge`: Ergebnis höchstens so groß (lange Kante) – der Export lädt
+    /// für Kamerafahrten doppelt so große Bilder, damit beim Hineinzoomen
+    /// Schärfe bleibt; gezeichnet wird aber nur in Filmgröße. In voller
+    /// Fotogröße kostete jedes Bild am Mac 0,7 s (ExportTortureTests, 23.11.2026).
+    static func apply(_ framing: Framing, to image: CGImage, longEdge: Int? = nil) -> CGImage? {
         let size = CGSize(width: image.width, height: image.height)
         let crop = framing.rect(in: size)
-        guard crop.width < size.width - 0.5 || crop.height < size.height - 0.5,
-              let ctx = CGContext(data: nil, width: image.width, height: image.height, bitsPerComponent: 8,
+        guard crop.width < size.width - 0.5 || crop.height < size.height - 0.5 else { return nil }
+        return draw(image, crop: crop, longEdge: longEdge)
+    }
+
+    /// Ganzes Bild auf höchstens `longEdge` verkleinern (Bilder ohne Fahrt
+    /// im selben Film, damit alle Bilder gleich groß sind); nil, wenn es schon passt.
+    static func scaled(_ image: CGImage, longEdge: Int) -> CGImage? {
+        guard max(image.width, image.height) > longEdge else { return nil }
+        return draw(image, crop: CGRect(x: 0, y: 0, width: image.width, height: image.height), longEdge: longEdge)
+    }
+
+    private static func draw(_ image: CGImage, crop: CGRect, longEdge: Int?) -> CGImage? {
+        let size = CGSize(width: image.width, height: image.height)
+        let k = longEdge.map { min(1, CGFloat($0) / max(size.width, size.height)) } ?? 1
+        let outW = max(1, Int((size.width * k).rounded())), outH = max(1, Int((size.height * k).rounded()))
+        guard let ctx = CGContext(data: nil, width: outW, height: outH, bitsPerComponent: 8,
                                   bytesPerRow: 0, space: CGColorSpace(name: CGColorSpace.sRGB)!,
                                   bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue
                                       | CGBitmapInfo.byteOrder32Little.rawValue) else { return nil }
         ctx.interpolationQuality = .high
         // CGContext zählt y von unten – Ausschnitt entsprechend spiegeln
-        let scale = size.width / crop.width
+        let scale = CGFloat(outW) / crop.width
         let originX = -crop.minX * scale
         let originY = -(size.height - crop.maxY) * scale
         ctx.draw(image, in: CGRect(x: originX, y: originY, width: size.width * scale, height: size.height * scale))

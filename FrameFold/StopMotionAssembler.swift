@@ -89,27 +89,53 @@ final class StopMotionAssembler {
         // iPhones unter der Grenze, ab der iOS die App beendet.
         let needsHeadroom = settings.aspect.ratio != nil || !cameraMoves.isEmpty
         let decodeLimit = Int(Self.maxEdge(settings) * (needsHeadroom ? 2 : 1))
+        // Lange Kante, auf die Kamerafahrten zeichnen: Filmgröße, bei Zuschnitt
+        // so viel mehr, wie der Zuschnitt später wegnimmt (höchstens doppelt).
+        let filmEdge = Int(Self.maxEdge(settings) * (settings.aspect.ratio != nil ? 2 : 1))
+        // Ein beschädigtes oder fehlendes Bild bricht den Film nicht ab: an
+        // seiner Stelle steht das nächstgelegene lesbare Bild (zuerst das
+        // vorige). Erst wenn gar keins lesbar ist, scheitert der Export.
+        let skipped = ExportSafety.SkipCounter()
+        func readable(_ index: Int) throws -> CGImage {
+            if let image = Self.decode(imageURLs[index], maxPixelSize: decodeLimit) { return image }
+            skipped.note(index)
+            for distance in 1..<max(2, imageURLs.count) {
+                for candidate in [index - distance, index + distance] where imageURLs.indices.contains(candidate) {
+                    if let image = Self.decode(imageURLs[candidate], maxPixelSize: decodeLimit) { return image }
+                }
+            }
+            throw Self.failure("Bild unlesbar", writer: nil)
+        }
+        defer { ExportSafety.reportSkipped(skipped.count) }
         return try await write(
             frameCount: imageURLs.count,
             settings: settings,
             frameProvider: { index in
-                guard let image = Self.decode(imageURLs[index], maxPixelSize: decodeLimit) else {
-                    throw PipelineError.exportFailed
-                }
+                try await ExportSafety.waitWhileInBackground()
+                let image = try readable(index)
                 // Greenscreen vor allem anderen: Flimmerausgleich und
                 // Effekte sehen schon das fertige Bild mit Hintergrund.
                 var result = image
                 if let greenScreen { result = await greenScreen.composite(result, index: index) }
-                // Text, Sprechblasen, Zeichnungen obenauf
-                if !overlays.isEmpty, let drawn = OverlayRenderer.apply(overlays, frame: index, to: result, folder: overlayFolder) {
-                    result = drawn
+                // Eigener Pool je Bild (wie in write): Einblendungen und
+                // Kamerafahrt erzeugen Zwischenbilder, die sich sonst über den
+                // ganzen Film ansammeln.
+                return autoreleasepool {
+                    // Text, Sprechblasen, Zeichnungen obenauf
+                    if !overlays.isEmpty, let drawn = OverlayRenderer.apply(overlays, frame: index, to: result, folder: overlayFolder) {
+                        result = drawn
+                    }
+                    // Kamerafahrt zuletzt: Schwenk und Zoom über das fertige Bild,
+                    // gezeichnet in Filmgröße; Bilder ohne Fahrt auf dieselbe Größe
+                    if !cameraMoves.isEmpty {
+                        if let framing = CameraMoves.framing(cameraMoves, at: index) {
+                            if let moved = CameraMoves.apply(framing, to: result, longEdge: filmEdge) { result = moved }
+                        } else if let smaller = CameraMoves.scaled(result, longEdge: filmEdge) {
+                            result = smaller
+                        }
+                    }
+                    return result
                 }
-                // Kamerafahrt zuletzt: Schwenk und Zoom über das fertige Bild
-                if let framing = CameraMoves.framing(cameraMoves, at: index),
-                   let moved = CameraMoves.apply(framing, to: result) {
-                    result = moved
-                }
-                return result
             },
             lumaProvider: { index in
                 // Für den Flimmerausgleich reicht ein Briefmarkenbild
@@ -157,6 +183,13 @@ final class StopMotionAssembler {
         settings.exportResolution.maxDimension ?? originalEdgeLimit
     }
 
+    /// Exportfehler mit Grund im Protokoll (Konsole, Gerätetests).
+    nonisolated static func failure(_ why: String, writer: AVAssetWriter?) -> PipelineError {
+        let detail = writer.map { "status \($0.status.rawValue), \($0.error.map { String(describing: $0) } ?? "kein Fehler")" } ?? ""
+        print("FrameFold-Export gescheitert: \(why) \(detail) | frei: \(ExportSafety.availableMB().map { "\(Int($0)) MB" } ?? "?")")
+        return .exportFailed
+    }
+
     // MARK: Kern
 
     private func write(
@@ -171,7 +204,7 @@ final class StopMotionAssembler {
         let look = settings.look
         let frameProvider: (Int) async throws -> CGImage = look == .original ? rawProvider : { index in
             let image = try await rawProvider(index)
-            return Self.apply(look: look, to: image) ?? image
+            return autoreleasepool { Self.apply(look: look, to: image) ?? image }
         }
         let order = settings.loopMode.frameOrder(count: frameCount)
 
@@ -207,9 +240,9 @@ final class StopMotionAssembler {
                 kCVPixelBufferHeightKey as String: height
             ])
 
-        guard writer.canAdd(input) else { throw PipelineError.exportFailed }
+        guard writer.canAdd(input) else { throw Self.failure("canAdd", writer: writer) }
         writer.add(input)
-        guard writer.startWriting() else { throw PipelineError.exportFailed }
+        guard writer.startWriting() else { throw Self.failure("startWriting", writer: writer) }
         writer.startSession(atSourceTime: .zero)
         // Abbruch oder Fehler: keinen halben Film im Zwischenspeicher lassen.
         var finished = false
@@ -225,7 +258,7 @@ final class StopMotionAssembler {
         // für immer falsch – darum abbrechen statt endlos zu warten.
         func waitUntilReady() async throws {
             while !input.isReadyForMoreMediaData {
-                if writer.status == .failed { throw PipelineError.exportFailed }
+                if writer.status == .failed { throw Self.failure("Writer failed (warten)", writer: writer) }
                 try Task.checkCancellation()
                 try await Task.sleep(nanoseconds: 10_000_000)
             }
@@ -246,7 +279,7 @@ final class StopMotionAssembler {
                 let status = CVPixelBufferPoolCreatePixelBufferWithAuxAttributes(nil, pool, aux, &buffer)
                 if status == kCVReturnSuccess, let buffer { return buffer }
                 guard status == kCVReturnWouldExceedAllocationThreshold, Date() < deadline else { return nil }
-                if writer.status == .failed { throw PipelineError.exportFailed }
+                if writer.status == .failed { throw Self.failure("Writer failed (Puffer)", writer: writer) }
                 try Task.checkCancellation()
                 try await Task.sleep(nanoseconds: 5_000_000)
             }
@@ -345,6 +378,9 @@ final class StopMotionAssembler {
         }
 
         for (position, step) in steps.enumerated() {
+            // Im Hintergrund darf iOS den Video-Encoder nicht laufen lassen:
+            // anhalten und beim Zurückkehren weitermachen, statt zu scheitern.
+            try await ExportSafety.waitWhileInBackground()
             keep = Set([step.baseIndex, step.overlayIndex].compactMap { $0 })
             let base = try await aligned(at: step.baseIndex)
             let baseImage = base.image
@@ -377,7 +413,7 @@ final class StopMotionAssembler {
             try await waitUntilReady()
             let presentationTime = CMTimeMultiply(frameDuration, multiplier: Int32(position))
             guard adaptor.append(pixelBuffer, withPresentationTime: presentationTime) else {
-                throw PipelineError.exportFailed
+                throw Self.failure("append", writer: writer)
             }
             progress(Double(position + 1) / Double(steps.count))
         }
@@ -399,7 +435,7 @@ final class StopMotionAssembler {
 
         input.markAsFinished()
         await writer.finishWriting()
-        guard writer.status == .completed else { throw PipelineError.exportFailed }
+        guard writer.status == .completed else { throw Self.failure("finishWriting", writer: writer) }
         finished = true
         return outputURL
     }
@@ -751,7 +787,11 @@ enum GIFMaker {
     /// insgesamt: hält die Datei bei langen Filmen handlich.
     static let maxSide: CGFloat = 640
     static let maxFPS: Double = 15
-    static let maxFrames = 400
+    /// Apples GIF-Encoder hält jedes Bild bis zum Schluss ungepackt (640 px:
+    /// rund 2 MB je Bild; 400 Bilder brauchten am Mac 874 MB, ExportTortureTests
+    /// 23.11.2026). 150 Bilder sind 10 s in voller Bildrate; längere Filme
+    /// werden ausgedünnt, statt den Speicher zu sprengen.
+    static let maxFrames = 150
 
     static func make(from videoURL: URL) async throws -> URL {
         let asset = AVURLAsset(url: videoURL)
@@ -786,7 +826,7 @@ enum GIFMaker {
             try Task.checkCancellation()
             let time = CMTime(seconds: (Double(i) + 0.5) / fps, preferredTimescale: 600)
             let image = try await generator.image(at: time).image
-            CGImageDestinationAddImage(dest, image, frameProps)
+            autoreleasepool { CGImageDestinationAddImage(dest, image, frameProps) }
         }
         guard CGImageDestinationFinalize(dest) else { throw PipelineError.exportFailed }
         return url
@@ -908,5 +948,206 @@ extension StopMotionAssembler {
             output = input.applyingFilter("CIPhotoEffectFade")
         }
         return lookContext.createCGImage(output, from: input.extent)
+    }
+}
+
+// MARK: - Absicherung des Exports
+
+/// Rahmen um jeden Film-Export, damit nach getaner Arbeit immer ein Film
+/// entsteht (Anlass: Absturz am Ende des Exports, Bewertung vom 15.11.2026):
+/// Bildschirm bleibt an, im Hintergrund wird pausiert, vor dem Start wird
+/// der freie Speicher geprüft, ein gescheiterter Export läuft ein zweites
+/// Mal mit sicheren Einstellungen, und ein Absturz mitten im Export wird
+/// beim nächsten Start erkannt – dann gleich mit sicheren Einstellungen.
+enum ExportSafety {
+    struct Outcome {
+        let url: URL
+        /// Mit sicheren Einstellungen gerechnet (zweiter Versuch, wenig Speicher oder nach Absturz)
+        let usedSafeSettings: Bool
+        /// Bilder, die sich nicht lesen ließen und ersetzt wurden
+        let skippedFrames: Int
+    }
+
+    /// Zählt nicht lesbare Bilder eines Exports (jedes Bild einmal).
+    final class SkipCounter: @unchecked Sendable {
+        private let lock = NSLock()
+        private var indices = Set<Int>()
+        func note(_ index: Int) { lock.lock(); indices.insert(index); lock.unlock() }
+        var count: Int { lock.lock(); defer { lock.unlock() }; return indices.count }
+    }
+
+    private final class State: @unchecked Sendable {
+        let lock = NSLock()
+        var background = false
+        var skipped = 0
+    }
+    private static let state = State()
+
+    static func reportSkipped(_ n: Int) {
+        guard n > 0 else { return }
+        state.lock.lock(); state.skipped += n; state.lock.unlock()
+    }
+    private static func takeSkipped() -> Int {
+        state.lock.lock(); defer { state.skipped = 0; state.lock.unlock() }; return state.skipped
+    }
+
+    static var isInBackground: Bool {
+        state.lock.lock(); defer { state.lock.unlock() }; return state.background
+    }
+    static func setBackground(_ value: Bool) {
+        state.lock.lock(); state.background = value; state.lock.unlock()
+    }
+
+    /// Ist die App vorne und aktiv? Am Mac immer: dort rechnet sie auch im
+    /// Hintergrund weiter. Am iPhone nicht nur auf die Meldung „im
+    /// Hintergrund“ hören – App-Umschalter, Mitteilungszentrale oder eine
+    /// andere App vorne melden sich nicht immer so, und iOS beendet eine App,
+    /// die dann weiter voll rechnet (Gerätetest 23.11.2026: „cpu usage,
+    /// Process killed, Non-Frontmost App“ nach 51 s).
+    @MainActor static func appIsActive() -> Bool {
+        #if targetEnvironment(macCatalyst)
+        return true
+        #else
+        return UIApplication.shared.applicationState == .active
+        #endif
+    }
+
+    /// Wartet, solange die App nicht vorne ist (am Mac nie).
+    static func waitWhileInBackground() async throws {
+        while true {
+            let active = await MainActor.run { appIsActive() }
+            if active && !isInBackground { return }
+            try Task.checkCancellation()
+            try await Task.sleep(nanoseconds: 200_000_000)
+        }
+    }
+
+    // MARK: Start der App
+
+    private static let markerKey = "ff.exportRunning"
+    /// Werke, deren Export beim letzten Lauf mitten drin abbrach (App beendet).
+    @MainActor static private(set) var interruptedProjects: Set<UUID> = []
+    @MainActor private static var observers: [NSObjectProtocol] = []
+
+    /// Einmal beim Start: Hintergrund beobachten, abgebrochenen Export erkennen.
+    @MainActor static func install() {
+        if let raw = UserDefaults.standard.string(forKey: markerKey) {
+            if let id = UUID(uuidString: raw) { interruptedProjects.insert(id) }
+            UserDefaults.standard.removeObject(forKey: markerKey)
+        }
+        #if !targetEnvironment(macCatalyst)
+        guard observers.isEmpty else { return }
+        let center = NotificationCenter.default
+        // Schon „inaktiv“ zählt: sofort anhalten, nicht erst im Hintergrund
+        observers.append(center.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { _ in
+            setBackground(true)
+        })
+        observers.append(center.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { _ in
+            setBackground(false)
+        })
+        #endif
+    }
+
+    // MARK: Einstellungen
+
+    /// Was sicher läuft: 1080p, H.264, ohne Verwacklungs- und Flimmerausgleich.
+    /// Format, Bildrate, Look, Überblendungen und Schleife bleiben – der Film
+    /// sieht aus wie gewünscht, nur kleiner und ohne die teuren Ausgleiche.
+    static func safe(_ settings: PipelineSettings) -> PipelineSettings {
+        var s = settings
+        s.exportResolution = .p1080
+        s.videoCodec = .h264
+        s.alignFrames = false
+        s.deflicker = false
+        return s
+    }
+
+    /// Gemessener Spitzenbedarf je Auflösung mit Reserve (Mac und iPhone 17
+    /// Pro Max, ExportTortureTests, 23.11.2026): schlichtes Werk 1080p
+    /// ~140 MB, 4K ~600 MB; mit Greenscreen, Einblendungen, Kamerafahrt und
+    /// Effekten zugleich bis 560 MB (1080p) bzw. 975 MB (4K).
+    static func estimatedNeedMB(_ resolution: ExportResolution) -> Double {
+        switch resolution {
+        case .p1080: return 650
+        case .uhd: return 1150
+        case .original: return 1250
+        }
+    }
+
+    /// Freier Speicher, den iOS der App noch lässt (MB); nil, wenn unbekannt (Mac).
+    static func availableMB() -> Double? {
+        #if targetEnvironment(macCatalyst)
+        return nil
+        #else
+        let bytes = os_proc_available_memory()
+        return bytes > 0 ? Double(bytes) / 1_048_576 : nil
+        #endif
+    }
+
+    /// Reicht der Speicher nicht für die gewählte Auflösung, eine Stufe
+    /// kleiner beginnen statt mitten im Export beendet zu werden.
+    static func fitted(_ settings: PipelineSettings, availableMB: Double?) -> PipelineSettings {
+        guard let free = availableMB else { return settings }
+        var s = settings
+        while free < estimatedNeedMB(s.exportResolution), s.exportResolution != .p1080 {
+            s.exportResolution = s.exportResolution == .original ? .uhd : .p1080
+        }
+        return s
+    }
+
+    // MARK: Export
+
+    /// Führt einen Export abgesichert aus. `work` bekommt die Einstellungen,
+    /// mit denen es rechnen soll, und liefert den fertigen Film.
+    @MainActor
+    static func perform(project: UUID?, settings: PipelineSettings,
+                        _ work: @escaping (PipelineSettings) async throws -> URL) async throws -> Outcome {
+        let afterCrash = project.map { interruptedProjects.contains($0) } ?? false
+        let safeSettings = safe(settings)
+        let first = afterCrash ? safeSettings : fitted(settings, availableMB: availableMB())
+
+        let app = UIApplication.shared
+        let idleBefore = app.isIdleTimerDisabled
+        app.isIdleTimerDisabled = true
+        if let project { UserDefaults.standard.set(project.uuidString, forKey: markerKey) }
+        defer {
+            app.isIdleTimerDisabled = idleBefore
+            UserDefaults.standard.removeObject(forKey: markerKey)
+        }
+        _ = takeSkipped()
+
+        do {
+            let url = try await work(first)
+            if let project { interruptedProjects.remove(project) }
+            return Outcome(url: url, usedSafeSettings: first != settings, skippedFrames: takeSkipped())
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch {
+            guard first != safeSettings, !Task.isCancelled else { throw error }
+            _ = takeSkipped()
+            try await waitWhileInBackground()
+            let url = try await work(safeSettings)
+            if let project { interruptedProjects.remove(project) }
+            return Outcome(url: url, usedSafeSettings: true, skippedFrames: takeSkipped())
+        }
+    }
+
+    /// Hinweis unter dem fertigen Film, nil wenn alles wie gewünscht lief.
+    static func notice(for outcome: Outcome) -> String? {
+        var parts: [String] = []
+        if outcome.usedSafeSettings {
+            parts.append(String(localized: "Mit sicheren Einstellungen gespeichert (1080p, H.264, ohne Ausgleich)."))
+        }
+        if outcome.skippedFrames > 0 {
+            parts.append(String(localized: "Nicht lesbare Bilder durch das nächste ersetzt: \(outcome.skippedFrames)"))
+        }
+        return parts.isEmpty ? nil : parts.joined(separator: " ")
+    }
+
+    /// Seite zum Melden eines Fehlers, Deutsch oder Englisch.
+    static var supportURL: URL {
+        let german = Locale.preferredLanguages.first?.hasPrefix("de") ?? false
+        return URL(string: german ? "https://www.bracharz.com/framefold-support/"
+                                  : "https://www.bracharz.com/en/framefold-support/")!
     }
 }

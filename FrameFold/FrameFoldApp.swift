@@ -251,6 +251,8 @@ struct FrameFoldApp: App {
         let store = ProjectStore()
         _projectStore = StateObject(wrappedValue: store)
         SiriBridge.store = store
+        // Export absichern: Hintergrund beobachten, abgebrochenen Export erkennen
+        ExportSafety.install()
         // UI-Test-Lauf: Erststart herstellen (Onboarding, Kamera-Tipp, Modus).
         // Als Löschung statt als Startargument-Wert, weil ein Argument-Wert
         // alles überstimmen würde, was die App danach selbst speichert.

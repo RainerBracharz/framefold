@@ -281,6 +281,8 @@ struct ProjectDetailView: View {
         return viewportHeight > 0 ? viewportHeight * 0.7 : nil
     }
     @State private var errorMessage: String?
+    /// Hinweis unter dem fertigen Film (sichere Einstellungen, ersetzte Bilder)
+    @State private var exportNotice: String?
     @State private var contactSheetURL: URL?
     @State private var isRenderingSheet = false
     @State private var flipbookURL: URL?
@@ -1040,6 +1042,11 @@ struct ProjectDetailView: View {
                 }
                 .buttonStyle(InkButtonStyle())
                 GIFShareButton(videoURL: exportURL)
+                if let exportNotice {
+                    Text(exportNotice)
+                        .font(Theme.mono(11))
+                        .foregroundStyle(Theme.graphite)
+                }
                 // Kein „Neu exportieren": ändern sich Einstellungen oder
                 // Frames, verfällt das Video ohnehin und der Export-Knopf
                 // kehrt von selbst zurück.
@@ -1061,6 +1068,9 @@ struct ProjectDetailView: View {
                 Text(errorMessage)
                     .font(Theme.mono(11))
                     .foregroundStyle(Theme.oxblood)
+                Link("Fehler melden", destination: ExportSafety.supportURL)
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.ink)
             }
 
             // Drucksachen – bewusst leiser als der Export. Das Daumenkino gibt
@@ -1271,21 +1281,29 @@ struct ProjectDetailView: View {
         let folder = store.folderURL(for: currentProject)
         let subtitle = currentProject.createdDateText
 
+        exportNotice = nil
         Task {
             do {
-                var url = try await StopMotionAssembler().assemble(
-                    imageURLs: urls, settings: settings, greenScreen: compositor, overlays: overlays,
-                    cameraMoves: moves, overlayFolder: folder
-                ) { p in
-                    Task { @MainActor in exportProgress = p }
+                // Abgesichert: Bildschirm bleibt an, Pause im Hintergrund, bei
+                // Fehlern ein zweiter Versuch mit sicheren Einstellungen.
+                let outcome = try await ExportSafety.perform(project: project.id, settings: settings) { settings in
+                    await MainActor.run { exportProgress = 0 }
+                    var url = try await StopMotionAssembler().assemble(
+                        imageURLs: urls, settings: settings, greenScreen: compositor, overlays: overlays,
+                        cameraMoves: moves, overlayFolder: folder
+                    ) { p in
+                        Task { @MainActor in exportProgress = p }
+                    }
+                    // Titel davor, Abspann dahinter – der Ton rückt um den Vorspann nach hinten
+                    let wrapped = try await TitleSequence.wrap(film: url, title: title, subtitle: subtitle,
+                                                               credits: credits, brandCard: brand, settings: settings)
+                    // Alle Tonspuren (Musik aus der Werkansicht und Studio-Spuren)
+                    // auf Filmlänge mischen und unterlegen
+                    url = try await project.addingSoundtrack(to: wrapped.url, fps: settings.outputFPS,
+                                                             lead: wrapped.lead, store: store)
+                    return url
                 }
-                // Titel davor, Abspann dahinter – der Ton rückt um den Vorspann nach hinten
-                let wrapped = try await TitleSequence.wrap(film: url, title: title, subtitle: subtitle,
-                                                           credits: credits, brandCard: brand, settings: settings)
-                // Alle Tonspuren (Musik aus der Werkansicht und Studio-Spuren)
-                // auf Filmlänge mischen und unterlegen
-                url = try await project.addingSoundtrack(to: wrapped.url, fps: settings.outputFPS,
-                                                         lead: wrapped.lead, store: store)
+                let url = outcome.url
                 #if DEBUG && targetEnvironment(macCatalyst)
                 // Testläufe: Kopie des Exports in einen Ordner außerhalb der
                 // Sandbox, um den Film ohne Teilen-Menü zu prüfen (FF_EXPORT_DIR).
@@ -1297,6 +1315,7 @@ struct ProjectDetailView: View {
                 #endif
                 await MainActor.run {
                     exportURL = url
+                    exportNotice = ExportSafety.notice(for: outcome)
                     if ReviewPrompt.noteFinishedFilm() { requestReview() }
                     isExporting = false
                     // Kein automatisches Teilen-Sheet mehr: das Ergebnis läuft
@@ -1516,9 +1535,11 @@ struct ExhibitionSheet: View {
         }
         Task {
             do {
-                let url = try await ExhibitionBuilder.build(
-                    works: works, settings: PipelineSettings()
-                ) { p in Task { @MainActor in progress = p } }
+                let url = try await ExportSafety.perform(project: nil, settings: PipelineSettings()) { settings in
+                    try await ExhibitionBuilder.build(works: works, settings: settings) { p in
+                        Task { @MainActor in progress = p }
+                    }
+                }.url
                 await MainActor.run {
                     reelURL = url
                     isBuilding = false   // läuft direkt als Vorschau

@@ -55,9 +55,14 @@ final class GreenScreenCompositor: @unchecked Sendable {
                 background = lock.withLock { lastBackground }
             }
         }
-        guard let background, let keyed = StudioImaging.keyed(frame, hue: hue) else { return frame }
-        return Self.compose(foreground: CIImage(cgImage: keyed), background: background,
-                            size: CGSize(width: frame.width, height: frame.height), context: context) ?? frame
+        guard let background else { return frame }
+        // Eigener Pool je Bild: ohne ihn sammelten sich die Zwischenbilder
+        // eines langen Films an (40 Bilder: fast 1 GB, siehe ExportTortureTests).
+        return autoreleasepool {
+            guard let keyed = StudioImaging.keyed(frame, hue: hue) else { return frame }
+            return Self.compose(foreground: CIImage(cgImage: keyed), background: background,
+                                size: CGSize(width: frame.width, height: frame.height), context: context) ?? frame
+        }
     }
 
     /// Vordergrund (mit Durchsicht) über den bildfüllend skalierten Hintergrund.

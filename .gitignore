@@ -59,3 +59,4 @@ lektorat/
 
 # Test-Videos der Export-Matrix gehören ins Repo (klein, gemeinfreier Archivfilm)
 !FrameFoldTests/Fixtures/export/*.mp4
+fastlane/export_check.log

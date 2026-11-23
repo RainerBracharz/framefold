@@ -134,8 +134,32 @@ platform :ios do
     UI.success("Mac-Texte und -Screenshots sind in App Store Connect.")
   end
 
+  desc "Export-Belastungstest am Mac (Pflicht vor jeder Einreichung)"
+  # Pflicht vor jeder Einreichung: der Export muss mit allem fertig werden,
+  # was ein Werk enthalten kann (ExportTortureTests + LongExportTests, am Mac
+  # mit Hardware-Encoder wie am iPhone, rund 15 Minuten). Anlass: Absturz am
+  # Ende des Exports, Bewertung vom 15.11.2026. Überspringen nur bewusst:
+  # `fastlane release skip_export_check:true`.
+  lane :export_check do
+    # Mindestsystem des Testlaufs = System dieses Macs (falls er älter läuft als das Ziel)
+    FileUtils.touch("/tmp/ff-long-export")
+    begin
+      sh("cd .. && xcodebuild test -project #{PROJECT} -scheme #{SCHEME} " \
+         "-destination 'platform=macOS,variant=Mac Catalyst' " \
+         "-only-testing:FrameFoldTests/ExportTortureTests -only-testing:FrameFoldTests/LongExportTests " \
+         "-parallel-testing-enabled NO " \
+         "MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion | cut -d. -f1,2) " \
+         "> fastlane/export_check.log 2>&1 " \
+         "|| (grep -E 'error: -|failed \\(' fastlane/export_check.log | head -20; exit 1)")
+    ensure
+      FileUtils.rm_f("/tmp/ff-long-export")
+    end
+    UI.success("Export-Belastungstest grün (Protokoll: fastlane/export_check.log)")
+  end
+
   desc "Kompletter Mac-Release: bauen, hochladen, Version + Texte + Screenshots, einreichen"
-  lane :mac_release do
+  lane :mac_release do |options|
+    export_check unless options[:skip_export_check] || ENV["FF_EXPORT_CHECKED"] == "1"
     api_key = login
     require "spaceship"
     Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
@@ -244,6 +268,7 @@ platform :ios do
 
   desc "Kompletter Release: bauen, hochladen, Version anlegen, einreichen"
   lane :release do |options|
+    export_check unless options[:skip_export_check] || ENV["FF_EXPORT_CHECKED"] == "1"
     api_key = login
 
     # Apple erlaubt nur EINE Version in der Prüfung. Wartet noch eine andere,

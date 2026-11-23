@@ -266,20 +266,132 @@ final class LongExportTests: XCTestCase {
 /// Nur zur Ursachensuche: welche Stufe kostet Speicher und Zeit? (FF_DIAG=1)
 @MainActor
 final class LongExportDiagnosis: XCTestCase {
+    /// Echter App-Wechsel am Gerät: langer Export über ExportSafety.perform
+    /// (wie in der App); währenddessen von Hand die App wechseln.
+    func testRealBackgroundSwitch() async throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["FF_DIAG"] == "1" || FileManager.default.fileExists(atPath: "/tmp/ff-diag"))
+        let helper = LongExportTests()
+        let urls = try helper.makeWork(count: 1200, width: 4032, height: 3024, orientation: 6)
+        var s = PipelineSettings(); s.exportResolution = .uhd
+        print("DIAGNOSE Wechsel: Export startet jetzt")
+        let t = Date()
+        var attempts = 0
+        var marks: [String] = []
+        let outcome = try await ExportSafety.perform(project: UUID(), settings: s) { s in
+            attempts += 1
+            return try await StopMotionAssembler().assemble(imageURLs: urls, settings: s) { p in
+                let step = Int(p * 20)
+                if marks.count < step { marks.append(String(format: "%d%%@%.0fs", step * 5, Date().timeIntervalSince(t))) }
+            }
+        }
+        let tracks = try await AVURLAsset(url: outcome.url).loadTracks(withMediaType: .video)
+        print(String(format: "DIAGNOSE Wechsel: fertig nach %.0f s, Versuche %d, sicher %@, Bildspur %@ | %@",
+                     Date().timeIntervalSince(t), attempts, outcome.usedSafeSettings ? "ja" : "nein",
+                     tracks.isEmpty ? "fehlt" : "da", marks.joined(separator: " ")))
+        XCTAssertFalse(tracks.isEmpty)
+    }
+
+    /// Mehrere Exporte hintereinander: bleibt nach jedem etwas liegen?
+    func testRepeatedExportsDoNotAccumulate() async throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["FF_DIAG"] == "1" || FileManager.default.fileExists(atPath: "/tmp/ff-diag"))
+        let helper = LongExportTests()
+        let urls = try helper.makeWork(count: 40, width: 4032, height: 3024, orientation: 6)
+        let dir = FileManager.default.temporaryDirectory
+        let background = dir.appendingPathComponent("diag-bg3.jpg")
+        try LongExportTests.writePhoto(to: background, width: 1920, height: 1080, step: 0, orientation: 1)
+        let overlays = [FrameOverlay(kind: .text, firstFrame: 0, lastFrame: 39, text: "Eins")]
+        let moves = [CameraMove(firstFrame: 5, lastFrame: 35, from: Framing(x: 0.3, y: 0.5, zoom: 1),
+                                to: Framing(x: 0.7, y: 0.4, zoom: 2), smooth: true)]
+        var line: [String] = [String(format: "start %.0f", LongExportTests.footprintMB())]
+        for round in 1...8 {
+            var s = PipelineSettings()
+            s.exportResolution = round % 2 == 0 ? .uhd : .p1080
+            s.videoCodec = round % 3 == 0 ? .h264 : .hevc
+            s.look = FilmLook.allCases[round % FilmLook.allCases.count]
+            s.transitionFrames = 1
+            let comp = GreenScreenCompositor(key: .green, background: background, fps: s.outputFPS)
+            let film = try await StopMotionAssembler().assemble(imageURLs: urls, settings: s, greenScreen: comp,
+                                                                overlays: overlays, cameraMoves: moves, overlayFolder: dir) { _ in }
+            let wrapped = try await TitleSequence.wrap(film: film, title: "T", subtitle: "", credits: nil, brandCard: true, settings: s)
+            let gif = try await GIFMaker.make(from: wrapped.url)
+            for u in [film, wrapped.url, gif] { try? FileManager.default.removeItem(at: u) }
+            try await Task.sleep(nanoseconds: 500_000_000)
+            line.append(String(format: "%d:%.0f/frei %@", round, LongExportTests.footprintMB(),
+                               ExportSafety.availableMB().map { String(Int($0)) } ?? "?"))
+        }
+        print("DIAGNOSE Folge (MB nach jedem Export): " + line.joined(separator: " | "))
+    }
+
+    /// Alles zugleich in 4K, mit Speicherverlauf während des Exports.
+    func testEverythingProgress() async throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["FF_DIAG"] == "1" || FileManager.default.fileExists(atPath: "/tmp/ff-diag"))
+        let helper = LongExportTests()
+        let urls = try helper.makeWork(count: 60, width: 4032, height: 3024, orientation: 6)
+        let dir = FileManager.default.temporaryDirectory
+        let background = dir.appendingPathComponent("diag-bg2.jpg")
+        try LongExportTests.writePhoto(to: background, width: 1920, height: 1080, step: 0, orientation: 1)
+        let overlays = [FrameOverlay(kind: .text, firstFrame: 0, lastFrame: 40, text: "Kapitel eins"),
+                        FrameOverlay(kind: .bubble, firstFrame: 15, lastFrame: 45, x: 0.5, y: 0.25, text: "Hallo!", size: 0.1, color: .white)]
+        let moves = [CameraMove(firstFrame: 10, lastFrame: 50, from: Framing(x: 0.3, y: 0.5, zoom: 1),
+                                to: Framing(x: 0.7, y: 0.4, zoom: 3), smooth: true)]
+        let combos: [(String, (inout PipelineSettings) -> Void)] = [
+            ("alles", { $0.transitionFrames = 2; $0.interferenzEcho = true; $0.paperRelief = true; $0.loopMode = .boomerang; $0.holdLastFrameSeconds = 1; $0.look = FilmLook.allCases.last! }),
+            ("ohne Effekte", { $0.loopMode = .boomerang; $0.holdLastFrameSeconds = 1 }),
+            ("nur Effekte", { $0.transitionFrames = 2; $0.interferenzEcho = true; $0.paperRelief = true }),
+        ]
+        for (name, apply) in combos {
+            var s = PipelineSettings(); apply(&s); s.exportResolution = .uhd
+            let comp = GreenScreenCompositor(key: .green, background: background, fps: s.outputFPS)
+            let before = LongExportTests.footprintMB(); let sampler = LongExportTests.PeakSampler(); let t = Date()
+            var marks: [String] = []
+            do {
+                let url = try await StopMotionAssembler().assemble(imageURLs: urls, settings: s, greenScreen: comp,
+                                                                   overlays: overlays, cameraMoves: moves, overlayFolder: dir) { p in
+                    let step = Int(p * 10)
+                    if marks.count < step { marks.append(String(format: "%d%%:%.0f", step * 10, LongExportTests.footprintMB() - before)) }
+                }
+                try? FileManager.default.removeItem(at: url)
+                print(String(format: "DIAGNOSE %@ 4K: Spitze +%.0f MB, %.1f s | %@", name, sampler.stop() - before, Date().timeIntervalSince(t), marks.joined(separator: " ")))
+            } catch {
+                print(String(format: "DIAGNOSE %@ 4K: FEHLER %@ nach %.1f s, Spitze +%.0f MB | %@", name, "\(error)", Date().timeIntervalSince(t), sampler.stop() - before, marks.joined(separator: " ")))
+            }
+        }
+    }
+
     func testWhichStageCosts() async throws {
         try XCTSkipUnless(ProcessInfo.processInfo.environment["FF_DIAG"] == "1" || FileManager.default.fileExists(atPath: "/tmp/ff-diag"))
         let helper = LongExportTests()
         let urls = try helper.makeWork(count: 40, width: 4032, height: 3024, orientation: 6)
-        let variants: [(String, (inout PipelineSettings) -> Void)] = [
-            ("4K beide hevc", { $0.exportResolution = .uhd }),
-            ("4K aus hevc", { $0.exportResolution = .uhd; $0.alignFrames = false; $0.deflicker = false }),
-            ("4K aus h264", { $0.exportResolution = .uhd; $0.alignFrames = false; $0.deflicker = false; $0.videoCodec = .h264 }),
-            ("1080 aus hevc", { $0.alignFrames = false; $0.deflicker = false }),
+        let dir = FileManager.default.temporaryDirectory
+        let background = dir.appendingPathComponent("diag-bg.jpg")
+        try LongExportTests.writePhoto(to: background, width: 1920, height: 1080, step: 0, orientation: 1)
+        let overlays = [
+            FrameOverlay(kind: .text, firstFrame: 0, lastFrame: 39, text: "Kapitel eins"),
+            FrameOverlay(kind: .bubble, firstFrame: 0, lastFrame: 39, x: 0.5, y: 0.25, text: "Hallo!", size: 0.1, color: .white),
+            FrameOverlay(kind: .drawing, firstFrame: 0, lastFrame: 39,
+                         strokes: [OverlayStroke(points: [CGPoint(x: 0.1, y: 0.5), CGPoint(x: 0.9, y: 0.6)], width: 0.02, color: .red)]),
         ]
-        for (name, apply) in variants {
-            var s = PipelineSettings(); apply(&s)
+        let moves = [CameraMove(firstFrame: 0, lastFrame: 39, from: Framing(x: 0.3, y: 0.5, zoom: 1),
+                                to: Framing(x: 0.7, y: 0.4, zoom: 3), smooth: true)]
+        typealias V = (String, (inout PipelineSettings) -> Void, Bool, Bool, Bool)
+        let variants: [V] = [
+            ("nichts", { _ in }, false, false, false),
+            ("Greenscreen", { _ in }, true, false, false),
+            ("Einblendungen", { _ in }, false, true, false),
+            ("Kamerafahrt", { _ in }, false, false, true),
+            ("Überblendung", { $0.transitionFrames = 2 }, false, false, false),
+            ("Echo", { $0.interferenzEcho = true }, false, false, false),
+            ("Papierrelief", { $0.paperRelief = true }, false, false, false),
+            ("Look", { $0.look = FilmLook.allCases.last! }, false, false, false),
+            ("Boomerang+Halten", { $0.loopMode = .boomerang; $0.holdLastFrameSeconds = 1 }, false, false, false),
+        ]
+        for (name, apply, green, over, move) in variants {
+            var s = PipelineSettings(); apply(&s); s.exportResolution = .uhd
+            let comp = green ? GreenScreenCompositor(key: .green, background: background, fps: s.outputFPS) : nil
             let before = LongExportTests.footprintMB(); let sampler = LongExportTests.PeakSampler(); let t = Date()
-            let url = try await StopMotionAssembler().assemble(imageURLs: urls, settings: s) { _ in }
+            let url = try await StopMotionAssembler().assemble(imageURLs: urls, settings: s, greenScreen: comp,
+                                                               overlays: over ? overlays : [], cameraMoves: move ? moves : [],
+                                                               overlayFolder: dir) { _ in }
             let peak = sampler.stop()
             print(String(format: "DIAGNOSE %@: Spitze +%.0f MB, %.1f s", name, peak - before, Date().timeIntervalSince(t)))
             try? FileManager.default.removeItem(at: url)

@@ -439,14 +439,17 @@ struct LiveCaptureView: View {
                     GreenScreenCompositor(key: $0.key, background: store.greenScreenBackgroundURL(for: current),
                                           fps: settings.outputFPS)
                 }
-                let film = try await StopMotionAssembler().assemble(
-                    imageURLs: urls, settings: settings, greenScreen: compositor,
-                    overlays: current.overlays ?? [], cameraMoves: current.cameraMoves ?? [],
-                    overlayFolder: store.folderURL(for: current)
-                ) { p in Task { @MainActor in assembleProgress = p } }
-                guard !Task.isCancelled else { return }
-                // Tonspuren des Werks wie beim Export aus der Werkliste
-                let url = try await current.addingSoundtrack(to: film, fps: settings.outputFPS, store: store)
+                let outcome = try await ExportSafety.perform(project: current.id, settings: settings) { settings in
+                    let film = try await StopMotionAssembler().assemble(
+                        imageURLs: urls, settings: settings, greenScreen: compositor,
+                        overlays: current.overlays ?? [], cameraMoves: current.cameraMoves ?? [],
+                        overlayFolder: store.folderURL(for: current)
+                    ) { p in Task { @MainActor in assembleProgress = p } }
+                    try Task.checkCancellation()
+                    // Tonspuren des Werks wie beim Export aus der Werkliste
+                    return try await current.addingSoundtrack(to: film, fps: settings.outputFPS, store: store)
+                }
+                let url = outcome.url
                 guard !Task.isCancelled else { return }
                 await MainActor.run {
                     resultURL = url; isAssembling = false
