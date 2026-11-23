@@ -84,7 +84,11 @@ final class StopMotionAssembler {
         // Ausgabekante deckt auch einen Zuschnitt 4:3 → 9:16 ab). Der
         // JPEG-Decoder verkleinert dabei schon beim Entpacken – ein 48-MP-Foto
         // läuft so nicht viermal in voller Größe durch die Kette.
-        let decodeLimit = settings.exportResolution.maxDimension.map { Int($0 * 2) }
+        // Ohne Zuschnitt und ohne Kamerafahrt (Zoom) reicht die Ausgabekante:
+        // ein Viertel des Speichers je Bild, lange Filme bleiben auf älteren
+        // iPhones unter der Grenze, ab der iOS die App beendet.
+        let needsHeadroom = settings.aspect.ratio != nil || !cameraMoves.isEmpty
+        let decodeLimit = Int(Self.maxEdge(settings) * (needsHeadroom ? 2 : 1))
         return try await write(
             frameCount: imageURLs.count,
             settings: settings,
@@ -145,6 +149,14 @@ final class StopMotionAssembler {
         }
     }
 
+    /// Längste Kante des Films. „Original“ behält die Quellgröße bis 4096 px:
+    /// 48-MP-Fotos (8064 px) ergäben Bilder von 195 MB, der Export bräuchte
+    /// über 2 GB, und nicht jeder Encoder nimmt das Format überhaupt an.
+    static let originalEdgeLimit = 4096.0
+    nonisolated static func maxEdge(_ settings: PipelineSettings) -> Double {
+        settings.exportResolution.maxDimension ?? originalEdgeLimit
+    }
+
     // MARK: Kern
 
     private func write(
@@ -172,7 +184,7 @@ final class StopMotionAssembler {
         // deutlich kleinere Dateien, für Social-Clips ohne sichtbaren Verlust
         let (width, height) = Algorithms.exportSize(
             cropWidth: cropRect.width, cropHeight: cropRect.height,
-            maxDimension: settings.exportResolution.maxDimension)
+            maxDimension: Self.maxEdge(settings))
         let renderScale = CGFloat(width) / max(1, cropRect.width)
 
         let outputURL = FileManager.default.temporaryDirectory
@@ -216,6 +228,27 @@ final class StopMotionAssembler {
                 if writer.status == .failed { throw PipelineError.exportFailed }
                 try Task.checkCancellation()
                 try await Task.sleep(nanoseconds: 10_000_000)
+            }
+        }
+
+        // Höchstens so viele Bilder dürfen beim Encoder auf Kodierung warten.
+        // Ohne Grenze nimmt er bei 4K und Original Dutzende Bilder auf Vorrat
+        // an (je 45 MB und mehr) – der Export brauchte so knapp 2 GB.
+        // Gibt der Encoder einen Puffer nicht rechtzeitig frei, geht es nach
+        // zwei Sekunden ohne Pool weiter, damit nichts hängen bleibt.
+        let inFlightLimit = 6
+        func nextBuffer() async throws -> CVPixelBuffer? {
+            guard let pool = adaptor.pixelBufferPool else { return nil }
+            let aux = [kCVPixelBufferPoolAllocationThresholdKey: inFlightLimit] as CFDictionary
+            let deadline = Date().addingTimeInterval(2)
+            while true {
+                var buffer: CVPixelBuffer?
+                let status = CVPixelBufferPoolCreatePixelBufferWithAuxAttributes(nil, pool, aux, &buffer)
+                if status == kCVReturnSuccess, let buffer { return buffer }
+                guard status == kCVReturnWouldExceedAllocationThreshold, Date() < deadline else { return nil }
+                if writer.status == .failed { throw PipelineError.exportFailed }
+                try Task.checkCancellation()
+                try await Task.sleep(nanoseconds: 5_000_000)
             }
         }
 
@@ -266,8 +299,9 @@ final class StopMotionAssembler {
         var cache: [Int: CGImage] = [order[0]: corrected(firstImage, order[0])]
         func image(at index: Int) async throws -> CGImage {
             if let cached = cache[index] { return cached }
-            let img = corrected(try await frameProvider(index), index)
-            if cache.count > 3 { cache.removeAll() }
+            let loaded = try await frameProvider(index)
+            let img = autoreleasepool { corrected(loaded, index) }
+            if cache.count > 2 { cache.removeAll() }
             cache[index] = img
             return img
         }
@@ -290,10 +324,16 @@ final class StopMotionAssembler {
             let raw = try await image(at: index)
             var result = (image: raw, offset: CGPoint.zero)
             if let aligner {
-                if let warped = aligner.warp(raw) {
-                    result.image = warped
-                } else {
-                    result.offset = aligner.register(raw)
+                // Eigener Pool je Bild: Swift-Concurrency leert den Pool des
+                // Threads erst am Ende der ganzen Aufgabe – ohne ihn sammelten
+                // sich die Zwischenbilder eines langen Films im Speicher an
+                // (83 Bilder: weit über 1 GB, iOS beendet die App).
+                autoreleasepool {
+                    if let warped = aligner.warp(raw) {
+                        result.image = warped
+                    } else {
+                        result.offset = aligner.register(raw)
+                    }
                 }
             }
             // Basis und Überblendbild genügen – lange Filme bleiben klein.
@@ -317,16 +357,22 @@ final class StopMotionAssembler {
                 overlayOffset = overlay.offset
             }
 
-            guard let pixelBuffer = Self.renderStep(
-                base: baseImage, overlay: overlayImage, revealProgress: step.progress,
-                previousComposed: lastComposed, echoStrength: echo,
-                transitionStyle: settings.transitionStyle, facets: facets, weave: weave,
-                reliefFacets: reliefFacets, reliefStrength: settings.reliefStrength,
-                printLook: settings.printLook,
-                cropRect: cropRect, referenceWidth: firstImage.width, referenceHeight: firstImage.height,
-                width: width, height: height, scale: renderScale,
-                offset: offset, overlayOffset: overlayOffset, pool: adaptor.pixelBufferPool,
-                composedOut: &lastComposed) else { continue }
+            var composed = lastComposed
+            let prepared = try await nextBuffer()
+            let rendered: CVPixelBuffer? = autoreleasepool {
+                Self.renderStep(
+                    base: baseImage, overlay: overlayImage, revealProgress: step.progress,
+                    previousComposed: composed, echoStrength: echo,
+                    transitionStyle: settings.transitionStyle, facets: facets, weave: weave,
+                    reliefFacets: reliefFacets, reliefStrength: settings.reliefStrength,
+                    printLook: settings.printLook,
+                    cropRect: cropRect, referenceWidth: firstImage.width, referenceHeight: firstImage.height,
+                    width: width, height: height, scale: renderScale,
+                    offset: offset, overlayOffset: overlayOffset, pool: adaptor.pixelBufferPool,
+                    into: prepared, composedOut: &composed)
+            }
+            lastComposed = composed
+            guard let pixelBuffer = rendered else { continue }
 
             try await waitUntilReady()
             let presentationTime = CMTimeMultiply(frameDuration, multiplier: Int32(position))
@@ -403,10 +449,11 @@ final class StopMotionAssembler {
         cropRect: CGRect, referenceWidth: Int, referenceHeight: Int,
         width: Int, height: Int, scale: CGFloat,
         offset: CGPoint, overlayOffset: CGPoint = .zero, pool: CVPixelBufferPool?,
+        into prepared: CVPixelBuffer? = nil,
         composedOut: inout CGImage?
     ) -> CVPixelBuffer? {
-        var buffer: CVPixelBuffer?
-        if let pool {
+        var buffer: CVPixelBuffer? = prepared
+        if buffer == nil, let pool {
             CVPixelBufferPoolCreatePixelBuffer(nil, pool, &buffer)
         }
         if buffer == nil {
