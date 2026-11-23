@@ -1,10 +1,2 @@
-Brief, Hondenkop en Beker zijn er als vouwreeksen. Bij elke stap toont de zoeker de omtrek, de vouwlijn en een pijl.
-Met “Automatisch (handen weg)” neemt de camera het beeld op zodra de stap gevouwen is. Een balk toont hoe ver je bent.
-Siri en de app Opdrachten kennen vijf opdrachten, zoals “Beeld maken in FrameFold” en “Stop-motion exporteren in FrameFold”.
-Op de iPhone vult de filmvoorvertoning in een werk de breedte in staande stand.
-De hulp heeft twee nieuwe hoofdstukken, “Vouwreeksen” en “Siri en Opdrachten”.
-In het werk kun je een korte eindkaart aanzetten, ‘Gemaakt met FrameFold’. Die staat dan aan het einde van de film.
-Getekende figuren in beeld houden de automatische ontspanner minder vaak tegen.
-Films van foto's in volledige resolutie staan rechtop in staand formaat.
-Het contactvel toont elk beeld volledig, staand of liggend.
-‘Trillingen corrigeren’ laat beelden van een nieuwe scène zoals ze zijn.
+Het exporteren van lange films kost veel minder geheugen, ook met honderden beelden.
+De resolutie ‘Origineel’ exporteert tot 4096 pixels aan de lange zijde.

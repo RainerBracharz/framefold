@@ -1,8 +1,2 @@
-Mektup, Köpek başı ve Bardak katlama sırası olarak seçilebilir. Vizör her adımda dış hattı, kat çizgisini ve bir oku gösterir.
-“Otomatik deklanşör (eller çekilince)” ile kamera, adım katlanır katlanmaz kareyi çeker. Bir çubuk ne kadar ilerlediğini gösterir.
-Siri ve Kestirmeler uygulaması beş komutu tanır, örneğin “FrameFold ile kare çek” ve “FrameFold ile stop motion'ı dışa aktar”.
-Yardımda iki yeni bölüm var, “Katlama sıraları” ve “Siri ve Kestirmeler”.
-Eserde kısa bir kapanış kartını, “FrameFold ile yapıldı” kartını açabilirsin. Açıldığında filmin sonunda yer alır.
-Kadrajdaki çizilmiş figürler otomatik deklanşörü daha seyrek bekletir.
-Kontak baskı her kareyi bütün olarak gösterir, dikey ya da yatay.
-“Titremeyi dengele”, yeni bir sahnenin karelerini olduğu gibi bırakır.
+Uzun filmlerin dışa aktarımı, yüzlerce karede bile çok daha az bellek kullanır.
+“Orijinal” çözünürlük, uzun kenarda en fazla 4096 piksel ile dışa aktarır.

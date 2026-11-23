@@ -1,10 +1,2 @@
-Dopis, Psí hlava a Kelímek jsou k dispozici jako postupy skládání. U každého kroku ukazuje hledáček obrys, linii skladu a šipku.
-S volbou „Automatika (ruce pryč)“ kamera pořídí snímek, jakmile je krok složený. Pruh ukazuje, jak daleko jsi.
-Siri a aplikace Zkratky znají pět příkazů, například „Pořídit snímek v aplikaci FrameFold“ a „Exportovat stop motion v aplikaci FrameFold“.
-Na iPhonu vyplní náhled filmu v díle na výšku celou šířku.
-Nápověda má dvě nové kapitoly, „Postupy skládání“ a „Siri a Zkratky“.
-V díle lze zapnout krátkou závěrečnou kartu „Vytvořeno ve FrameFoldu“. Objeví se pak na konci filmu.
-Nakreslené postavy v záběru zdržují automatiku méně často.
-Filmy z fotek v plném rozlišení stojí na výšku rovně.
-Kontaktní arch ukazuje každý snímek celý, na výšku i na šířku.
-„Vyrovnat otřesy“ nechává snímky nové scény beze změny.
+Export dlouhých filmů potřebuje mnohem méně paměti, i se stovkami snímků.
+Rozlišení „Originál“ exportuje nejvýše 4096 pixelů na delší straně.

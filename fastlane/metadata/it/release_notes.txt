@@ -1,10 +1,2 @@
-Lettera, Testa di cane e Bicchiere sono disponibili come sequenze di piegatura. Per ogni passo, il mirino mostra il contorno, la linea di piega e una freccia.
-Con “Automatico (mani via)”, la fotocamera scatta il fotogramma appena il passo è piegato. Una barra mostra a che punto sei.
-Siri e l’app Comandi Rapidi conoscono cinque comandi, come “Scatta in FrameFold” e “Esporta stop motion in FrameFold”.
-Su iPhone, l’anteprima del film in un’opera occupa tutta la larghezza in verticale.
-L’aiuto ha due nuovi capitoli, “Sequenze di piegatura” e “Siri e Comandi Rapidi”.
-Nell’opera puoi attivare un breve cartello finale, «Creato con FrameFold». Compare allora alla fine del film.
-Le figure disegnate nell’inquadratura bloccano meno spesso lo scatto automatico.
-I filmati creati da foto a piena risoluzione sono diritti in verticale.
-Il provino a contatto mostra ogni immagine per intero, in verticale o in orizzontale.
-“Compensa il mosso” lascia le immagini di una nuova scena così come sono.
+L’esportazione di film lunghi richiede molta meno memoria, anche con centinaia di fotogrammi.
+La risoluzione «Originale» esporta fino a 4096 pixel sul lato lungo.

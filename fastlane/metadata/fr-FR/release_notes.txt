@@ -1,10 +1,2 @@
-Lettre, Tête de chien et Gobelet existent en séquences de pliage. Pour chaque étape, le viseur montre le contour, la ligne de pli et une flèche.
-Avec « Déclenchement auto (mains hors champ) », l’appareil prend l’image dès que l’étape est pliée. Une barre montre où tu en es.
-Siri et l’app Raccourcis connaissent cinq commandes, par exemple « Déclencher dans FrameFold » et « Exporter le stop motion dans FrameFold ».
-Sur iPhone, l’aperçu du film dans une œuvre occupe toute la largeur en mode portrait.
-L’aide compte deux nouveaux chapitres, « Séquences de pliage » et « Siri et Raccourcis ».
-Dans l’œuvre, tu peux activer un court carton de fin, « Réalisé avec FrameFold ». Il vient alors à la fin du film.
-Les personnages dessinés dans l’image retiennent moins souvent le déclenchement automatique.
-Les films faits de photos en pleine résolution sont droits en mode portrait.
-La planche-contact montre chaque image en entier, en portrait ou en paysage.
-« Compenser les secousses » laisse les images d’une nouvelle scène telles quelles.
+L’export de longs films demande beaucoup moins de mémoire, même avec des centaines d’images.
+La résolution « Original » exporte jusqu’à 4096 pixels sur le grand côté.

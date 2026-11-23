@@ -1,8 +1,2 @@
-Letter, Dog face and Cup are available as fold sequences. For each step, the viewfinder shows the outline, the crease line and an arrow.
-With “Auto shutter (hands away)”, the camera takes the frame as soon as the step is folded. A bar shows how far along you are.
-Siri and the Shortcuts app know five commands, such as “Take a frame in FrameFold” and “Export stop-motion in FrameFold”.
-Help has two new chapters, “Fold sequences” and “Siri and Shortcuts”.
-In a work you can switch on a short end card, “Made with FrameFold”. It then closes the film.
-Drawn figures in the frame hold up the auto shutter less often.
-The contact sheet shows every frame in full, portrait or landscape.
-“Compensate for shake” leaves frames of a new scene as they are.
+Exporting long films needs much less memory, even with hundreds of frames.
+The “Original” resolution exports at up to 4096 pixels on the long edge.

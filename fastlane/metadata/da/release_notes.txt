@@ -1,10 +1,2 @@
-Brev, Hundehoved og Bæger findes som foldeforløb. For hvert trin viser søgeren omridset, foldelinjen og en pil.
-Med “Auto-udløser (hænder væk)” tager kameraet billedet, så snart trinnet er foldet. En bjælke viser, hvor langt du er.
-Siri og appen Genveje kender fem kommandoer, for eksempel “Tag billede i FrameFold” og “Eksportér stopmotion i FrameFold”.
-På iPhone fylder filmeksemplet i et værk bredden i stående format.
-Hjælpen har to nye kapitler, “Foldeforløb” og “Siri og Genveje”.
-I værket kan du slå et kort slutkort til, „Lavet med FrameFold“. Det står så sidst i filmen.
-Tegnede figurer i billedet holder auto-udløseren tilbage sjældnere.
-Film lavet af fotos i fuld opløsning står oprejst i højformat.
-Kontaktarket viser hvert billede helt, i højformat eller bredformat.
-“Udlign rystelser” lader billeder fra en ny scene være, som de er.
+Eksport af lange film bruger langt mindre hukommelse, også med hundredvis af billeder.
+Opløsningen “Original” eksporterer med højst 4096 pixels på den lange kant.

@@ -1,10 +1,2 @@
-Carta, Cabeza de perro y Vaso están disponibles como secuencias de plegado. En cada paso, el visor muestra el contorno, la línea de pliegue y una flecha.
-Con “Automático (manos fuera)”, la cámara toma el fotograma en cuanto el paso está plegado. Una barra muestra cuánto llevas.
-Siri y la app Atajos conocen cinco comandos, como “Disparar en FrameFold” y “Exportar stop motion en FrameFold”.
-En el iPhone, la vista previa de la película en una obra ocupa todo el ancho en vertical.
-La ayuda tiene dos capítulos nuevos, “Secuencias de plegado” y “Siri y Atajos”.
-En la obra puedes activar una breve tarjeta final, «Hecho con FrameFold». Aparece entonces al final de la película.
-Las figuras dibujadas en la imagen frenan con menos frecuencia el disparo automático.
-Las películas hechas con fotos a resolución completa quedan derechas en vertical.
-La hoja de contactos muestra cada imagen entera, en vertical u horizontal.
-«Compensar temblor» deja las imágenes de una escena nueva tal como están.
+Exportar películas largas necesita mucha menos memoria, incluso con cientos de fotogramas.
+La resolución «Original» exporta hasta 4096 píxeles en el lado largo.

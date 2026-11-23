@@ -1,10 +1,2 @@
-Carta, Cabeça de cachorro e Copo estão disponíveis como sequências de dobra. Em cada passo, o visor mostra o contorno, a linha de dobra e uma seta.
-Com “Obturador automático (mãos fora)”, a câmera captura o quadro assim que o passo está dobrado. Uma barra mostra o quanto você avançou.
-A Siri e o app Atalhos conhecem cinco comandos, como “Tirar quadro no FrameFold” e “Exportar stop motion no FrameFold”.
-No iPhone, a pré-visualização do filme em uma obra ocupa toda a largura na vertical.
-A ajuda tem dois capítulos novos, “Sequências de dobra” e “Siri e Atalhos”.
-Na obra você pode ativar um breve cartão final, “Feito com FrameFold”. Ele aparece então no fim do filme.
-Figuras desenhadas no quadro seguram o obturador automático com menos frequência.
-Filmes feitos com fotos em resolução total ficam em pé no modo retrato.
-A folha de contato mostra cada imagem inteira, em retrato ou paisagem.
-“Compensar tremores” deixa as imagens de uma cena nova como estão.
+Exportar filmes longos usa muito menos memória, mesmo com centenas de quadros.
+A resolução “Original” exporta com até 4096 pixels no lado maior.
