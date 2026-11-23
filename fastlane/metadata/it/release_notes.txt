@@ -1,2 +1,4 @@
-L’esportazione di film lunghi richiede molta meno memoria, anche con centinaia di fotogrammi.
+L’esportazione di film lunghi richiede molta meno memoria, anche con green screen, sovrapposizioni e movimenti di camera.
 La risoluzione «Originale» esporta fino a 4096 pixel sul lato lungo.
+Se lasci l’app durante un’esportazione, si mette in pausa e riprende quando torni. Lo schermo resta acceso nel frattempo.
+Se un’esportazione non riesce, FrameFold riprova con impostazioni sicure. Un fotogramma danneggiato viene sostituito dal più vicino.

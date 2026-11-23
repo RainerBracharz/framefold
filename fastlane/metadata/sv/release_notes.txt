@@ -1,2 +1,4 @@
-Export av långa filmer kräver mycket mindre minne, även med hundratals bildrutor.
+Export av långa filmer kräver mycket mindre minne, även med greenscreen, överlägg och kamerarörelser.
 Upplösningen ”Original” exporterar med högst 4096 pixlar på den långa sidan.
+Lämnar du appen under en export pausas den och fortsätter när du kommer tillbaka. Skärmen förblir på under tiden.
+Om en export misslyckas försöker FrameFold igen med säkra inställningar. En skadad bildruta ersätts av den närmaste.

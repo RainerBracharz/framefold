@@ -1,2 +1,4 @@
-L’export de longs films demande beaucoup moins de mémoire, même avec des centaines d’images.
+L’export de longs films demande beaucoup moins de mémoire, y compris avec fond vert, incrustations et mouvements de caméra.
 La résolution « Original » exporte jusqu’à 4096 pixels sur le grand côté.
+Si tu quittes l’app pendant un export, il se met en pause et reprend à ton retour. L’écran reste allumé pendant l’export.
+Si un export échoue, FrameFold réessaie avec des réglages sûrs. Une image endommagée est remplacée par la plus proche.

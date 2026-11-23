@@ -1,2 +1,3 @@
-Het exporteren van lange films kost veel minder geheugen, ook met honderden beelden.
+Het exporteren van lange films kost veel minder geheugen, ook met greenscreen, overlays en camerabewegingen.
 De resolutie ‘Origineel’ exporteert tot 4096 pixels aan de lange zijde.
+Mislukt een export, dan probeert FrameFold het opnieuw met veilige instellingen. Een beschadigd beeld wordt vervangen door het dichtstbijzijnde.

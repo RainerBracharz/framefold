@@ -1,2 +1,4 @@
-Exportar películas largas necesita mucha menos memoria, incluso con cientos de cuadros.
+Exportar películas largas necesita mucha menos memoria, también con pantalla verde, superposiciones y movimientos de cámara.
 La resolución “Original” exporta hasta 4096 píxeles en el lado largo.
+Si sales de la app durante una exportación, se pausa y continúa cuando regresas. La pantalla permanece encendida mientras tanto.
+Si una exportación falla, FrameFold lo intenta de nuevo con ajustes seguros. Un cuadro dañado se reemplaza por el más cercano.

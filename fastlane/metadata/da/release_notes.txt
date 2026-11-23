@@ -1,2 +1,4 @@
-Eksport af lange film bruger langt mindre hukommelse, også med hundredvis af billeder.
+Eksport af lange film bruger langt mindre hukommelse, også med greenscreen, overlejringer og kamerabevægelser.
 Opløsningen “Original” eksporterer med højst 4096 pixels på den lange kant.
+Forlader du appen under en eksport, holder den pause og fortsætter, når du kommer tilbage. Skærmen forbliver tændt imens.
+Mislykkes en eksport, prøver FrameFold igen med sikre indstillinger. Et beskadiget billede erstattes af det nærmeste.

@@ -1,2 +1,3 @@
-Export dlouhých filmů potřebuje mnohem méně paměti, i se stovkami snímků.
+Export dlouhých filmů potřebuje mnohem méně paměti, i se zeleným pozadím, překryvy a pohyby kamery.
 Rozlišení „Originál“ exportuje nejvýše 4096 pixelů na delší straně.
+Pokud export selže, FrameFold to zkusí znovu s bezpečným nastavením. Poškozený snímek se nahradí nejbližším.

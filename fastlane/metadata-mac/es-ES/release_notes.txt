@@ -1,2 +1,3 @@
-Exportar películas largas necesita mucha menos memoria, incluso con cientos de fotogramas.
+Exportar películas largas necesita mucha menos memoria, también con croma, superposiciones y movimientos de cámara.
 La resolución «Original» exporta hasta 4096 píxeles en el lado largo.
+Si una exportación falla, FrameFold lo intenta de nuevo con ajustes seguros. Un fotograma dañado se sustituye por el más cercano.

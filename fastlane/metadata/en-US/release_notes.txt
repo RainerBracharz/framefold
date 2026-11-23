@@ -1,2 +1,4 @@
-Exporting long films needs much less memory, even with hundreds of frames.
+Exporting long films needs much less memory, also with green screen, overlays and camera moves.
 The “Original” resolution exports at up to 4096 pixels on the long edge.
+If you leave the app during an export, it pauses and continues when you come back. The screen stays on meanwhile.
+If an export fails, FrameFold tries again with safe settings. A damaged frame is replaced by the nearest one.

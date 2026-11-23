@@ -1,2 +1,3 @@
-Eksport długich filmów zużywa znacznie mniej pamięci, nawet przy setkach klatek.
+Eksport długich filmów zużywa znacznie mniej pamięci, także z green screenem, nakładkami i ruchami kamery.
 Rozdzielczość „Oryginał” eksportuje do 4096 pikseli na dłuższym boku.
+Jeśli eksport się nie powiedzie, FrameFold spróbuje ponownie z bezpiecznymi ustawieniami. Uszkodzona klatka zostanie zastąpiona najbliższą.

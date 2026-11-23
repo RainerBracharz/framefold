@@ -1,2 +1,3 @@
-Der Export langer Filme braucht viel weniger Arbeitsspeicher, auch bei Hunderten von Bildern.
+Der Export langer Filme braucht viel weniger Arbeitsspeicher, auch mit Greenscreen, Einblendungen und Kamerafahrt.
 Die Auflösung „Original“ exportiert mit höchstens 4096 Pixeln an der langen Kante.
+Scheitert ein Export, versucht FrameFold es mit sicheren Einstellungen noch einmal. Ein beschädigtes Bild wird durch das nächste ersetzt.
