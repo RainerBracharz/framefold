@@ -1,3 +1,2 @@
 Uzun filmlerin dışa aktarımı, yeşil ekran, katmanlar ve kamera hareketleriyle de çok daha az bellek kullanır.
-“Orijinal” çözünürlük, uzun kenarda en fazla 4096 piksel ile dışa aktarır.
 Bir dışa aktarma başarısız olursa FrameFold güvenli ayarlarla yeniden dener. Hasarlı bir kare en yakın kareyle değiştirilir.

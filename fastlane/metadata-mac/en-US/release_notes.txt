@@ -1,3 +1,2 @@
 Exporting long films needs much less memory, also with green screen, overlays and camera moves.
-The “Original” resolution exports at up to 4096 pixels on the long edge.
 If an export fails, FrameFold tries again with safe settings. A damaged frame is replaced by the nearest one.

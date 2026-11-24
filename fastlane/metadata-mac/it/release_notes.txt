@@ -1,3 +1,2 @@
 L’esportazione di film lunghi richiede molta meno memoria, anche con green screen, sovrapposizioni e movimenti di camera.
-La risoluzione «Originale» esporta fino a 4096 pixel sul lato lungo.
 Se un’esportazione non riesce, FrameFold riprova con impostazioni sicure. Un fotogramma danneggiato viene sostituito dal più vicino.
