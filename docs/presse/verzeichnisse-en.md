@@ -6,7 +6,7 @@ Ready to paste into ISTE EdTech Index and EdTech Impact. Facts as of version 2.7
 
 **Category:** Creativity / video and animation
 
-**Website:** https://github.com/RainerBracharz/framefold
+**Website:** https://www.bracharz.com/en/framefold/
 
 **App Store:** https://apps.apple.com/app/id6801045603
 
@@ -40,7 +40,7 @@ Simple mode shows only the essentials. Advanced tools include onion skin, multip
 - No ads, no tracking, no data collected by the developer
 - Photos, sound and films stay on the device unless a user shares them
 - The app connects to the internet at no point. Two optional studio features for professional sets connect only when switched on: lighting control on the local network and motion control via Bluetooth
-- A two-lesson plan is available under CC BY 4.0 (German): https://github.com/RainerBracharz/framefold/tree/main/docs/unterricht
+- A two-lesson plan is available under CC BY 4.0 (German): https://rainerbracharz.github.io/framefold/unterricht/
 - Privacy fact sheet for school administrators (German): https://github.com/RainerBracharz/framefold/tree/main/docs/schule
 
 ## Learning goals
