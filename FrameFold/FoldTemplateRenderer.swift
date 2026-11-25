@@ -208,6 +208,78 @@ enum FoldGuide: String, CaseIterable, Identifiable, Codable {
     }
 }
 
+extension FoldGuide {
+    /// Faltmuster auf dem flachen Blatt für die kleine Karte: was schon gefaltet
+    /// ist, was gerade dran ist, und die Schnittkanten. `step` zählt wie im
+    /// Sucher (bei Faltfolgen ist das erste Bild das flache Blatt). `nil`, wenn
+    /// es noch nichts zu zeigen gibt.
+    func mapCreases(step rawStep: Int?) -> (done: [Algorithms.Crease], current: [Algorithms.Crease],
+                                           cuts: [Algorithms.Crease])? {
+        if let sequence {
+            guard let rawStep, rawStep >= 1 else { return nil }
+            let all = sequence.creases.map { step in
+                step.map { Algorithms.Crease(p0: $0.a, p1: $0.b, kind: $0.kind == .valley ? .valley : .mountain) }
+            }
+            let index = rawStep - 1
+            return (all.prefix(min(index, all.count)).flatMap { $0 }, index < all.count ? all[index] : [], [])
+        }
+        guard pattern != nil else { return nil }
+        let (steps, cuts) = unitSteps
+        let index = min(max(0, rawStep ?? 0), steps.count)
+        return (steps.prefix(index).flatMap { $0 }, index < steps.count ? steps[index] : [], cuts)
+    }
+}
+
+/// Kleine Karte mit dem flachen Blatt: Das Faltmuster füllt sich mit jedem
+/// Schritt. Erledigte Falten blass, die aktuelle kräftig. Ohne Text.
+struct FoldMapCard: View {
+    let guide: FoldGuide
+    let step: Int?
+    var size: CGFloat = 84
+
+    var body: some View {
+        if let map = guide.mapCreases(step: step) {
+            Canvas { ctx, canvasSize in
+                let inset: CGFloat = max(4, canvasSize.width * 0.07)
+                let sheet = CGRect(x: inset, y: inset, width: canvasSize.width - 2 * inset,
+                                   height: canvasSize.height - 2 * inset)
+                func point(_ p: CGPoint) -> CGPoint {
+                    CGPoint(x: sheet.minX + p.x * sheet.width, y: sheet.minY + p.y * sheet.height)
+                }
+                ctx.stroke(Path(sheet), with: .color(Theme.ink.opacity(0.35)), lineWidth: 0.75)
+                let blue = Color(red: 0.2, green: 0.42, blue: 0.85), red = Color(red: 0.85, green: 0.25, blue: 0.2)
+                func stroke(_ creases: [Algorithms.Crease], alpha: Double, width: CGFloat) {
+                    for crease in creases {
+                        var path = Path()
+                        path.move(to: point(crease.p0)); path.addLine(to: point(crease.p1))
+                        switch crease.kind {
+                        case .valley:
+                            ctx.stroke(path, with: .color(blue.opacity(alpha)),
+                                       style: StrokeStyle(lineWidth: width, dash: [3, 2.5]))
+                        case .mountain:
+                            ctx.stroke(path, with: .color(red.opacity(alpha)),
+                                       style: StrokeStyle(lineWidth: width, dash: [4, 2, 1, 2]))
+                        case .facet:
+                            ctx.stroke(path, with: .color(Theme.ink.opacity(alpha * 0.6)),
+                                       style: StrokeStyle(lineWidth: width * 0.6, dash: [1, 2]))
+                        case .cut:
+                            ctx.stroke(path, with: .color(Theme.ink.opacity(alpha * 0.8)), lineWidth: width * 0.6)
+                        }
+                    }
+                }
+                stroke(map.cuts, alpha: 0.6, width: 1)
+                stroke(map.done, alpha: 0.4, width: 1)
+                stroke(map.current, alpha: 1, width: 1.8)
+            }
+            .frame(width: size, height: size)
+            .background(Theme.paper)
+            .overlay(Rectangle().stroke(.white.opacity(0.6), lineWidth: 0.5))
+            .shadow(color: .black.opacity(0.25), radius: 3, y: 1)
+            .accessibilityHidden(true)
+        }
+    }
+}
+
 /// Sucher-Ebene mit dem Faltmuster. Mit erkanntem Blatt (`paperQuad`, normiert
 /// 0…1 im Kamerabild, oben links beginnend) liegt das Muster perspektivisch
 /// auf dem Papier und zeigt den aktuellen Schritt; ohne Blatt blendet es aus.
@@ -224,6 +296,9 @@ struct FoldGuideOverlay: View {
     /// Faltfolge: wie weit der Schritt gefaltet ist (0…1), und ob die Kamera ihn prüft
     var progress: Double? = nil
     var checked = true
+    /// Kleine Karte mit dem Faltmuster unten rechts. Die Kamera-Seite zeigt sie
+    /// stattdessen in der Bedienung neben der Schrittzeile.
+    var showsMap = true
 
     var body: some View {
         Canvas { ctx, size in
@@ -244,6 +319,11 @@ struct FoldGuideOverlay: View {
         }
         .opacity(paperQuad == nil ? 0 : 1)
         .animation(.easeInOut(duration: 0.35), value: paperQuad == nil)
+        .overlay(alignment: .bottomTrailing) {
+            if showsMap, paperQuad != nil {
+                FoldMapCard(guide: guide, step: step.map { max(0, $0) }).padding(10)
+            }
+        }
         .overlay(alignment: .bottom) {
             if showsLabel, guide != .off {
                 Text(Self.label(guide: guide, paperQuad: paperQuad, step: step, checked: checked))

@@ -40,6 +40,16 @@ struct FoldSequence: Identifiable, Equatable {
     struct Face: Equatable {
         var polygon: [CGPoint]
         var layer: Int
+        /// Bildet die Lage zurück auf das flache Blatt ab. Eine negative
+        /// Determinante heißt: Die Lage liegt umgedreht, oben ist die Rückseite.
+        var toSheet: CGAffineTransform = .identity
+    }
+
+    /// Eine Faltkante auf dem flachen Blatt, so wie sie auf der Vorderseite liegt
+    struct Crease: Equatable {
+        let a: CGPoint
+        let b: CGPoint
+        let kind: Kind
     }
 
     let id: String
@@ -57,35 +67,64 @@ struct FoldSequence: Identifiable, Equatable {
         return out
     }
 
+    /// Faltkanten je Schritt auf dem flachen Blatt (`steps.count` Einträge).
+    /// Zusammen ergeben sie das Faltmuster, das nach dem Auffalten bleibt.
+    var creases: [[Crease]] {
+        var faces = states[0]
+        var out: [[Crease]] = []
+        for step in steps {
+            let result = Self.foldWithCreases(faces, step)
+            faces = result.faces
+            out.append(result.creases)
+        }
+        return out
+    }
+
     static func fold(_ faces: [Face], _ step: Step) -> [Face] {
+        foldWithCreases(faces, step).faces
+    }
+
+    static func foldWithCreases(_ faces: [Face], _ step: Step) -> (faces: [Face], creases: [Crease]) {
         // Normale der Faltlinie, zur bewegten Seite hin
         let dx = step.b.x - step.a.x, dy = step.b.y - step.a.y
         let length = (dx * dx + dy * dy).squareRoot()
-        guard length > 1e-9 else { return faces }
+        guard length > 1e-9 else { return (faces, []) }
         var nx = -dy / length, ny = dx / length
         if (step.moving.x - step.a.x) * nx + (step.moving.y - step.a.y) * ny < 0 { nx = -nx; ny = -ny }
         func distance(_ p: CGPoint) -> CGFloat { (p.x - step.a.x) * nx + (p.y - step.a.y) * ny }
 
-        var staying: [Face] = [], moving: [Face] = []
-        for face in faces {
-            let (inside, outside) = split(face.polygon, distance)
-            if let inside { moving.append(Face(polygon: inside, layer: face.layer)) }
-            if let outside { staying.append(Face(polygon: outside, layer: face.layer)) }
+        // Welche Lagen gehen mit? Bei „nur vorderste/hinterste“ bleiben die
+        // übrigen ungeteilt liegen, damit ein späterer Schritt sie noch teilt.
+        let parts = faces.map { split($0.polygon, distance) }
+        let touched = faces.indices.filter { parts[$0].inside != nil }
+        guard !touched.isEmpty else { return (faces, []) }
+        let touchedLayers = touched.map { faces[$0].layer }
+        func goes(_ i: Int) -> Bool {
+            switch step.layers {
+            case .all: return true
+            case .front: return faces[i].layer == touchedLayers.max()!
+            case .back: return faces[i].layer == touchedLayers.min()!
+            }
         }
-        guard !moving.isEmpty else { return faces }
 
-        // Nur die oberste oder unterste Lage: der Rest der bewegten Seite bleibt liegen
-        let movingLayers = moving.map(\.layer)
-        switch step.layers {
-        case .all: break
-        case .front:
-            let top = movingLayers.max()!
-            staying += moving.filter { $0.layer != top }
-            moving = moving.filter { $0.layer == top }
-        case .back:
-            let bottom = movingLayers.min()!
-            staying += moving.filter { $0.layer != bottom }
-            moving = moving.filter { $0.layer == bottom }
+        var staying: [Face] = [], moving: [Face] = [], creases: [Crease] = []
+        let ux = dx / length, uy = dy / length
+        for (i, face) in faces.enumerated() {
+            let (inside, outside) = parts[i]
+            guard let inside, goes(i) else { staying.append(face); continue }
+            moving.append(Face(polygon: inside, layer: face.layer, toSheet: face.toSheet))
+            guard let outside else { continue }
+            staying.append(Face(polygon: outside, layer: face.layer, toSheet: face.toSheet))
+            // Die Linie teilt die Lage, und ihr Teil geht mit: Hier entsteht eine Kante.
+            let onLine = inside.filter { abs(distance($0)) < 1e-7 }
+            guard let lo = onLine.min(by: { $0.x * ux + $0.y * uy < $1.x * ux + $1.y * uy }),
+                  let hi = onLine.max(by: { $0.x * ux + $0.y * uy < $1.x * ux + $1.y * uy }) else { continue }
+            let t = face.toSheet
+            let flipped = t.a * t.d - t.b * t.c < 0
+            let kind: Kind = flipped ? (step.kind == .valley ? .mountain : .valley) : step.kind
+            let a = lo.applying(t), b = hi.applying(t)
+            guard hypot(b.x - a.x, b.y - a.y) > 1e-6 else { continue }
+            creases.append(Crease(a: a, b: b, kind: kind))
         }
 
         // Spiegeln; die bewegten Lagen landen in umgekehrter Reihenfolge
@@ -93,6 +132,10 @@ struct FoldSequence: Identifiable, Equatable {
         let all = (staying + moving).map(\.layer)
         let highest = all.max()!, lowest = all.min()!
         let movingTop = moving.map(\.layer).max()!, movingBottom = moving.map(\.layer).min()!
+        // Spiegelung an der Linie als Abbildung (sie ist ihre eigene Umkehrung)
+        let offset = step.a.x * nx + step.a.y * ny
+        let mirror = CGAffineTransform(a: 1 - 2 * nx * nx, b: -2 * nx * ny, c: -2 * nx * ny, d: 1 - 2 * ny * ny,
+                                       tx: 2 * offset * nx, ty: 2 * offset * ny)
         let flipped = moving.map { face -> Face in
             let polygon = face.polygon.map { p -> CGPoint in
                 let d = distance(p)
@@ -100,9 +143,9 @@ struct FoldSequence: Identifiable, Equatable {
             }
             let layer = step.kind == .valley ? highest + 1 + (movingTop - face.layer)
                                              : lowest - 1 - (face.layer - movingBottom)
-            return Face(polygon: polygon, layer: layer)
+            return Face(polygon: polygon, layer: layer, toSheet: mirror.concatenating(face.toSheet))
         }
-        return staying + flipped
+        return (staying + flipped, creases)
     }
 
     /// Teilt ein konvexes Vieleck an einer Geraden (`distance` > 0 = bewegte Seite).

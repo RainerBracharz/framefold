@@ -189,4 +189,64 @@ final class FoldSequenceTests: XCTestCase {
         let quad = [CGPoint(x: 0.35, y: 0.3), CGPoint(x: 0.65, y: 0.3), CGPoint(x: 0.65, y: 0.7), CGPoint(x: 0.35, y: 0.7)]
         XCTAssertNil(FoldReference(frame: plain, quad: quad))
     }
+
+    // MARK: Faltmuster auf dem flachen Blatt
+
+    private func mid(_ c: FoldSequence.Crease) -> CGPoint {
+        CGPoint(x: (c.a.x + c.b.x) / 2, y: (c.a.y + c.b.y) / 2)
+    }
+
+    func testLetterLeavesTwoHorizontalCreases() {
+        let creases = FoldSequence.letter.creases
+        XCTAssertEqual(creases.count, 2)
+        for (step, y) in [(0, 2.0 / 3), (1, 1.0 / 3)] {
+            XCTAssertEqual(creases[step].count, 1)
+            let c = creases[step][0]
+            XCTAssertEqual(c.a.y, y, accuracy: 1e-6)
+            XCTAssertEqual(c.b.y, y, accuracy: 1e-6)
+            XCTAssertEqual(abs(c.b.x - c.a.x), 1, accuracy: 1e-6, "über die ganze Breite")
+            XCTAssertEqual(c.kind, .valley)
+        }
+    }
+
+    func testDogFirstCreaseIsTheDiagonal() {
+        let first = FoldSequence.dog.creases[0]
+        XCTAssertEqual(first.count, 1)
+        let c = first[0]
+        let ends = Set([c.a, c.b].map { "\(Int(($0.x * 1000).rounded())),\(Int(($0.y * 1000).rounded()))" })
+        XCTAssertEqual(ends, ["1000,0", "0,1000"])
+        XCTAssertEqual(FoldSequence.dog.creases.count, 4)
+        // Ohren und Schnauze liegen auf dem Blatt, nicht außerhalb
+        for crease in FoldSequence.dog.creases.flatMap({ $0 }) {
+            for p in [crease.a, crease.b] {
+                XCTAssertTrue((-1e-6...1 + 1e-6).contains(p.x) && (-1e-6...1 + 1e-6).contains(p.y))
+            }
+        }
+    }
+
+    func testCupFlapsLandOnDifferentHalves() {
+        let creases = FoldSequence.cup.creases
+        XCTAssertEqual(creases.count, 5)
+        XCTAssertEqual(creases[3].count, 1, "nur die vordere Klappe")
+        XCTAssertEqual(creases[4].count, 1, "nur die hintere Klappe")
+        let front = mid(creases[3][0]), back = mid(creases[4][0])
+        // Die Diagonale (0,0)–(1,1) trennt die Blatthälften: Die vordere Klappe
+        // stammt aus der umgelegten unteren Hälfte, die hintere aus der oberen.
+        XCTAssertGreaterThan(front.y - front.x, 0)
+        XCTAssertLessThan(back.y - back.x, 0)
+        // Beide Klappen zeigen auf der Vorderseite als Bergfalte
+        XCTAssertEqual(creases[3][0].kind, .mountain)
+        XCTAssertEqual(creases[4][0].kind, .mountain)
+    }
+
+    func testFoldingKeepsTheSheetMapping() {
+        // Jede Lage bildet über toSheet wieder auf das Blatt ab
+        for sequence in FoldSequence.all {
+            for face in sequence.states.last! {
+                for p in face.polygon.map({ $0.applying(face.toSheet) }) {
+                    XCTAssertTrue((-1e-6...1 + 1e-6).contains(p.x) && (-1e-6...1 + 1e-6).contains(p.y), sequence.id)
+                }
+            }
+        }
+    }
 }
