@@ -795,9 +795,8 @@ struct LiveCaptureView: View {
             WatchLink.shared.onFinish = nil
             WatchLink.shared.pushSessionEnded()
         }
-        .onChange(of: controller.loopFrames.count) { _, _ in refreshForecast() }
-        .onChange(of: forecastOn) { _, _ in refreshForecast() }
-        .onChange(of: forecastPace) { _, _ in refreshForecast() }
+        .modifier(ForecastRefresh(count: controller.loopFrames.count, on: forecastOn,
+                                  pace: forecastPace, refresh: refreshForecast))
         .onChange(of: foldGuide) { _, _ in
             syncPaperTracking()
             foldGuideBase = controller.capturedCount   // neues Muster beginnt bei Schritt 1
@@ -1618,5 +1617,21 @@ struct LiveCaptureView: View {
                             ? "Aufnahmeart: Stativ. Tippen für aus der Hand."
                             : "Aufnahmeart: aus der Hand. Tippen für Stativ.")
         .accessibilityHint("Am Stativ wird der Fokus fixiert, aus der Hand läuft er mit.")
+    }
+}
+
+/// Rechnet die Vorschau des nächsten Schritts neu, sobald ein Bild dazukommt
+/// oder die Einstellung wechselt. Eigener Modifier: Die Kette im Sucher ist
+/// für ältere Compiler (CI) sonst zu lang.
+private struct ForecastRefresh: ViewModifier {
+    let count: Int
+    let on: Bool
+    let pace: String
+    let refresh: () -> Void
+    func body(content: Content) -> some View {
+        content
+            .onChange(of: count) { _, _ in refresh() }
+            .onChange(of: on) { _, _ in refresh() }
+            .onChange(of: pace) { _, _ in refresh() }
     }
 }
