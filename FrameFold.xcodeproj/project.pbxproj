@@ -22,6 +22,7 @@
 		96CBCC018099EE0B7B40AC86 /* ProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC61E3411A52FB19A5D7E /* ProjectsView.swift */; };
 		A3DE04E07922CC8BB966001C /* LiveCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C12FBC1940CDA6F9C95797 /* LiveCaptureView.swift */; };
 		A4C483879CD17FB6351FCFDF /* FrameAligner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856EF7169EBADC9E0A4E3FEB /* FrameAligner.swift */; };
+		861C4D30E46C1E635CC97828 /* PoseForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04976D01FE2CD3330ED13B8 /* PoseForecast.swift */; };
 		AA11F0F0F0F0F0F0F0F0F001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */; };
 		AA11F0F0F0F0F0F0F0F0F013 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F012 /* Localizable.xcstrings */; };
 		AA11F0F0F0F0F0F0F0F0F023 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA11F0F0F0F0F0F0F0F0F022 /* InfoPlist.xcstrings */; };
@@ -125,6 +126,7 @@
 		6D927AFD3235879AD294246A /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		6F0AC61E3411A52FB19A5D7E /* ProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsView.swift; sourceTree = "<group>"; };
 		856EF7169EBADC9E0A4E3FEB /* FrameAligner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameAligner.swift; sourceTree = "<group>"; };
+		D04976D01FE2CD3330ED13B8 /* PoseForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoseForecast.swift; sourceTree = "<group>"; };
 		86AC7761875A3A3F18126E58 /* StopMotionAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopMotionAssembler.swift; sourceTree = "<group>"; };
 		9BBC799115617B1A713B60FF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AA11F0F0F0F0F0F0F0F0F002 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 				0054D6E78B2E0461321D7680 /* FoldTemplateRenderer.swift */,
 				F01D5E0F01D5E0F01D5E0001 /* FoldSequence.swift */,
 				856EF7169EBADC9E0A4E3FEB /* FrameAligner.swift */,
+				D04976D01FE2CD3330ED13B8 /* PoseForecast.swift */,
 				41366FECBE0FAF2939DF1DAD /* FrameAnalyzer.swift */,
 				1C84F7E8C0DE1E8C227DD75C /* FrameFoldApp.swift */,
 				57F57A631B9FBDA6F9338B4C /* HandDetector.swift */,
@@ -506,6 +509,7 @@
 				0CAEF231501404EE77F40FB6 /* FoldTemplateRenderer.swift in Sources */,
 				F01D5E0F01D5E0F01D5E0002 /* FoldSequence.swift in Sources */,
 				A4C483879CD17FB6351FCFDF /* FrameAligner.swift in Sources */,
+				861C4D30E46C1E635CC97828 /* PoseForecast.swift in Sources */,
 				F18E9E67D58704115602C98F /* FrameAnalyzer.swift in Sources */,
 				949020BFE94303FA69C4606D /* FrameFoldApp.swift in Sources */,
 				3059C6016C96E13B484F9C75 /* HandDetector.swift in Sources */,

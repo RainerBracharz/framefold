@@ -32,6 +32,10 @@ struct LiveCaptureView: View {
     @State private var loopLarge = false
     @AppStorage("liveOnionOpacity") private var onionOpacity: Double = 0.35
     @AppStorage("liveOnionFirst") private var onionFirst: Bool = false
+    /// Zwiebelhaut in die Zukunft: zeigt, wo das Bewegte im nächsten Bild läge.
+    @AppStorage("liveForecast") private var forecastOn: Bool = false
+    @AppStorage("liveForecastPace") private var forecastPace: String = ForecastPace.even.rawValue
+    @StateObject private var forecaster = PoseForecaster()
     @State private var referenceImage: UIImage?
     @State private var refPickerItem: PhotosPickerItem?
     /// Im Einfach-Modus bleiben nur Auslöser und Fertig – alles andere
@@ -791,6 +795,9 @@ struct LiveCaptureView: View {
             WatchLink.shared.onFinish = nil
             WatchLink.shared.pushSessionEnded()
         }
+        .onChange(of: controller.loopFrames.count) { _, _ in refreshForecast() }
+        .onChange(of: forecastOn) { _, _ in refreshForecast() }
+        .onChange(of: forecastPace) { _, _ in refreshForecast() }
         .onChange(of: foldGuide) { _, _ in
             syncPaperTracking()
             foldGuideBase = controller.capturedCount   // neues Muster beginnt bei Schritt 1
@@ -1007,6 +1014,16 @@ struct LiveCaptureView: View {
                 shiftBanner
             }
 
+            if showsForecast, forecaster.inbetweens > 0 {
+                Text("Großer Sprung. Kleinere Schritte machen die Bewegung weicher.")
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.paperOnDark)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.black.opacity(0.45))
+            }
+
             if mode.showsAdvanced, !recentThumbs.isEmpty {
                 thumbStrip(project: project)
             }
@@ -1016,6 +1033,19 @@ struct LiveCaptureView: View {
         .padding(.horizontal, 20)
         .padding(.bottom, 24)
         .frame(width: width)
+    }
+
+    /// Die Vorhersage gilt nur für die Zwiebelhaut des letzten Bilds: beim
+    /// Ausrichten am ersten Bild oder beim Ersetzen stünde sie im Weg.
+    private var showsForecast: Bool {
+        mode.showsAdvanced && forecastOn && onionSkin && !onionFirst && retakeGhost == nil
+    }
+
+    private func refreshForecast() {
+        let frames = controller.loopFrames
+        guard forecastOn, frames.count >= 2 else { forecaster.clear(); return }
+        forecaster.update(previous: frames[frames.count - 2], last: frames[frames.count - 1],
+                          pace: (ForecastPace(rawValue: forecastPace) ?? .even).factor)
     }
 
     /// „Kamera verrutscht?“ – der Rand liegt anders als beim ersten Bild.
@@ -1158,6 +1188,11 @@ struct LiveCaptureView: View {
                let ghost = retakeGhost ?? (onionFirst ? controller.firstCapturedImage : controller.lastCapturedImage) {
                 Image(uiImage: ghost).resizable().aspectRatio(contentMode: Platform.isMac ? .fit : .fill)
                     .opacity(onionOpacity).allowsHitTesting(false)
+            }
+            if showsForecast, let next = forecaster.ghost {
+                Image(uiImage: next).resizable().aspectRatio(contentMode: Platform.isMac ? .fit : .fill)
+                    .opacity(min(0.9, onionOpacity + 0.3)).allowsHitTesting(false)
+                    .accessibilityHidden(true)
             }
             if let referenceImage {
                 Image(uiImage: referenceImage).resizable().aspectRatio(contentMode: Platform.isMac ? .fit : .fill)

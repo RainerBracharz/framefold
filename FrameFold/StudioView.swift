@@ -24,6 +24,7 @@ struct StudioView: View {
     @State private var settings = StudioSettings.restored()
     @StateObject private var cache = StudioFrameCache()
     @StateObject private var reference = StudioReference()
+    @StateObject private var forecaster = PoseForecaster()
     @ObservedObject private var hub = StudioHub.shared
 
     /// Gezeigtes Bild der Zeitleiste; nil = Live-Bild
@@ -189,6 +190,7 @@ struct StudioView: View {
             .onChange(of: settings) { _, new in
                 new.persist()
                 apply(new)
+                refreshForecast()
             }
             .onChange(of: controller.liveFrame) { _, _ in updateProcessed() }
             .onChange(of: controller.capturedCount) { old, new in
@@ -198,7 +200,7 @@ struct StudioView: View {
                 withAnimation(.easeOut(duration: 0.3)) { flash = 0 }
             }
             .onChange(of: controller.blackoutActive) { _, on in StudioBlackout.set(on) }
-            .onChange(of: urls.count) { _, _ in referenceFollow() }
+            .onChange(of: urls.count) { _, _ in referenceFollow(); refreshForecast() }
             .onChange(of: frameOnViewer) { _, _ in referenceFollow() }   // auch beim Abspielen und Umschalten
             .onChange(of: selected) { _, _ in referenceFollow() }
             .onChange(of: project?.allAudioTracks) { _, _ in reloadAudio() }
@@ -328,7 +330,7 @@ struct StudioView: View {
             let canvas = fit(aspect: controller.frameAspect, in: geo.size)
             ZStack {
                 base
-                if showsLive { onionLayers }
+                if showsLive { onionLayers; nextStepLayer }
                 if let image = reference.image {
                     Image(uiImage: image).resizable().scaledToFit()
                         .scaleEffect(settings.referenceScale)
@@ -443,6 +445,37 @@ struct StudioView: View {
                 }
             }
         }
+    }
+
+    /// Zwiebelhaut in die Zukunft: das Bewegte einen Schritt weiter, in Amber.
+    @ViewBuilder
+    private var nextStepLayer: some View {
+        if settings.nextStep, settings.viewMode == .normal, let ghost = forecaster.ghost {
+            Image(uiImage: ghost).resizable().scaledToFill()
+                .opacity(min(0.9, settings.onionOpacity + 0.3))
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+        }
+        if settings.nextStep, forecaster.inbetweens > 0 {
+            VStack {
+                Spacer()
+                Text("Großer Sprung. Kleinere Schritte machen die Bewegung weicher.")
+                    .font(Theme.mono(11))
+                    .foregroundStyle(Theme.paperOnDark)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(Color.black.opacity(0.55))
+                    .padding(.bottom, 44)
+            }
+            .allowsHitTesting(false)
+        }
+    }
+
+    private func refreshForecast() {
+        let all = urls
+        guard settings.nextStep, all.count >= 2 else { forecaster.clear(); return }
+        forecaster.update(previousURL: all[all.count - 2], lastURL: all[all.count - 1],
+                          pace: settings.nextStepPace.factor)
     }
 
     private var viewerBadge: some View {
@@ -748,6 +781,10 @@ struct StudioView: View {
                     picker("Modus", $settings.viewMode, StudioViewMode.allCases) { $0.label }
                     stepper("Zwiebelhaut", value: $settings.onionFrames, in: 0...6) { $0 == 0 ? String(localized: "aus") : String(localized: "\($0) Bilder") }
                     slider("Deckkraft", $settings.onionOpacity, 0.1...0.8)
+                    toggle("Nächsten Schritt zeigen", $settings.nextStep)
+                    if settings.nextStep {
+                        picker("Tempo", $settings.nextStepPace, ForecastPace.allCases) { String(localized: $0.label) }
+                    }
                     toggle("Lupe (Z)", $settings.loupe)
                     if settings.loupe {
                         picker("Vergrößerung", Binding(get: { LoupeZoom(id: settings.loupeZoom) },
@@ -1483,6 +1520,7 @@ struct StudioView: View {
         #endif
         apply(settings)
         cache.preload(Array(urls.suffix(12)))
+        refreshForecast()
         reloadAudio()
         rebuildGreenScreen()
         applyLight()   // „Licht steuern“ ist gemerkt: erstes Bild schon mit der geplanten Stimmung
@@ -1490,7 +1528,7 @@ struct StudioView: View {
 
     #if DEBUG
     /// Screenshots und Prüfungen ohne Klicks: FF_STUDIO="view=difference,
-    /// mask=scope,grid=3x3,safe=1,fold=hypar,onion=3,play=1,select=1,ref=<Bild oder Film>,refop=0.5"
+    /// mask=scope,grid=3x3,safe=1,fold=hypar,onion=3,next=1,play=1,select=1,ref=<Bild oder Film>,refop=0.5"
     private func debugPreset() {
         guard let spec = ProcessInfo.processInfo.environment["FF_STUDIO"] else { return }
         for pair in spec.split(separator: ",") {
@@ -1502,6 +1540,7 @@ struct StudioView: View {
             case "safe": settings.safeFrames = kv[1] == "1"
             case "fold": settings.foldGuide = FoldGuide(rawValue: kv[1]) ?? .off
             case "onion": settings.onionFrames = Int(kv[1]) ?? 1
+            case "next": settings.nextStep = kv[1] == "1"
             case "grid":
                 let g = kv[1].split(separator: "x").compactMap { Int($0) }
                 if g.count == 2 { settings.gridColumns = g[0]; settings.gridRows = g[1] }

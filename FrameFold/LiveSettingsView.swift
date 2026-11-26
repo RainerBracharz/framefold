@@ -14,6 +14,8 @@ struct LiveSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @AppStorage("liveOnionOpacity") private var onionOpacity: Double = 0.35
     @AppStorage("liveOnionFirst") private var onionFirst: Bool = false
+    @AppStorage("liveForecast") private var forecastOn: Bool = false
+    @AppStorage("liveForecastPace") private var forecastPace: String = ForecastPace.even.rawValue
     @AppStorage("appMode") private var modeRaw: Int = AppMode.basic.rawValue
     @AppStorage("iPhoneStudio") private var iPhoneStudio = false
     @AppStorage("liveFoldGuide") private var foldGuide: FoldGuide = .off
@@ -184,6 +186,19 @@ struct LiveSettingsView: View {
                             .font(Theme.mono(11))
                             .foregroundStyle(Theme.graphite)
                     }
+                    Toggle("Nächsten Schritt zeigen", isOn: $forecastOn)
+                        .font(Theme.body)
+                    if forecastOn {
+                        Picker("Tempo", selection: $forecastPace) {
+                            ForEach(ForecastPace.allCases) { pace in
+                                Text(pace.label).tag(pace.rawValue)
+                            }
+                        }
+                        .font(Theme.body)
+                    }
+                    Text("Schätzt aus den letzten zwei Bildern, wohin sich das Bewegte als Nächstes schiebt, und zeigt es in Amber. Läuft auf dem Gerät.")
+                        .font(Theme.mono(11))
+                        .foregroundStyle(Theme.graphite)
                 } header: {
                     CatalogLabel("Zwiebelhaut")
                 }

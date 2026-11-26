@@ -9,6 +9,9 @@ struct StudioSettings: Codable, Equatable {
     var viewMode: StudioViewMode = .normal
     var onionFrames = 1
     var onionOpacity = 0.35
+    /// Zwiebelhaut in die Zukunft: wohin sich das Bewegte als Nächstes schiebt
+    var nextStep = false
+    var nextStepPace: ForecastPace = .even
     /// Auto-Umschalten Live ↔ letztes Bild: Wechsel pro Sekunde
     var toggleRate = 2.0
     var shortPlayFrames = 12
@@ -73,6 +76,8 @@ struct StudioSettings: Codable, Equatable {
         viewMode = v(.viewMode, d.viewMode)
         onionFrames = v(.onionFrames, d.onionFrames)
         onionOpacity = v(.onionOpacity, d.onionOpacity)
+        nextStep = v(.nextStep, d.nextStep)
+        nextStepPace = v(.nextStepPace, d.nextStepPace)
         toggleRate = v(.toggleRate, d.toggleRate)
         shortPlayFrames = v(.shortPlayFrames, d.shortPlayFrames)
         loupe = v(.loupe, d.loupe)

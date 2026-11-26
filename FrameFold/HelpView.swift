@@ -29,6 +29,7 @@ struct HelpView: View {
             "Kleine Schritte machen weiche, große Schritte schnelle Bewegung.",
             "10 Bilder sind eine Sekunde Film bei 10 Bildern pro Sekunde.",
             "Die Zwiebelhaut zeigt das vorige Bild durchscheinend. So sieht man den letzten Schritt.",
+            "In den Kamera-Einstellungen (ab „Erweitert“) blendet „Nächsten Schritt zeigen“ in Amber ein, wohin sich das Bewegte als Nächstes schiebt.",
         ]),
         Topic(id: "works", symbol: "square.grid.3x3", title: "Werke und Kontaktbogen", steps: [
             "Ein Bild lange drücken: neu aufnehmen, verdoppeln, verschieben, Text & Zeichnen, Geräusch.",
