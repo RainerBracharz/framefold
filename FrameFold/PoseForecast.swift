@@ -283,21 +283,38 @@ enum PoseForecast {
                        provider: provider, decode: nil, shouldInterpolate: true, intent: .defaultIntent)
     }
 
-    /// Getrennter Kastenfilter (waagrecht, dann senkrecht).
+    /// Getrennter Kastenfilter (waagrecht, dann senkrecht), mit laufender
+    /// Summe: Aufwand unabhängig vom Radius.
     static func boxBlur(_ v: [Float], _ w: Int, _ h: Int, radius r: Int) -> [Float] {
+        guard w > 0, h > 0 else { return v }
         var tmp = v, out = v
-        for y in 0..<h {
-            for x in 0..<w {
-                var sum: Float = 0, n: Float = 0
-                for k in max(0, x - r)...min(w - 1, x + r) { sum += v[y * w + k]; n += 1 }
-                tmp[y * w + x] = sum / n
+        v.withUnsafeBufferPointer { src in
+            tmp.withUnsafeMutableBufferPointer { dst in
+                for y in 0..<h {
+                    let row = y * w
+                    var sum: Float = 0
+                    for k in 0...min(w - 1, r) { sum += src[row + k] }
+                    for x in 0..<w {
+                        let lo = max(0, x - r), hi = min(w - 1, x + r)
+                        dst[row + x] = sum / Float(hi - lo + 1)
+                        if x + r + 1 < w { sum += src[row + x + r + 1] }
+                        if x - r >= 0 { sum -= src[row + x - r] }
+                    }
+                }
             }
         }
-        for y in 0..<h {
-            for x in 0..<w {
-                var sum: Float = 0, n: Float = 0
-                for k in max(0, y - r)...min(h - 1, y + r) { sum += tmp[k * w + x]; n += 1 }
-                out[y * w + x] = sum / n
+        tmp.withUnsafeBufferPointer { src in
+            out.withUnsafeMutableBufferPointer { dst in
+                for x in 0..<w {
+                    var sum: Float = 0
+                    for k in 0...min(h - 1, r) { sum += src[k * w + x] }
+                    for y in 0..<h {
+                        let lo = max(0, y - r), hi = min(h - 1, y + r)
+                        dst[y * w + x] = sum / Float(hi - lo + 1)
+                        if y + r + 1 < h { sum += src[(y + r + 1) * w + x] }
+                        if y - r >= 0 { sum -= src[(y - r) * w + x] }
+                    }
+                }
             }
         }
         return out
@@ -351,7 +368,10 @@ final class PoseForecaster: ObservableObject {
 
     func update(previous: Data?, last: Data?, pace: Double) {
         task?.cancel()
-        guard let previous, let last else { ghost = nil; inbetweens = 0; return }
+        // Der alte Geist gehört zum vorigen Bildpaar: sofort weg, sonst steht
+        // er bis zur neuen Schätzung genau auf der gerade gemachten Aufnahme
+        ghost = nil; inbetweens = 0
+        guard let previous, let last else { return }
         task = Task { [weak self] in
             let result = await Task.detached(priority: .utility) { () -> PoseForecast.Forecast? in
                 guard let p = UIImage(data: previous)?.cgImage, let l = UIImage(data: last)?.cgImage else { return nil }
@@ -366,7 +386,8 @@ final class PoseForecaster: ObservableObject {
     /// Studio: aus den Bilddateien des Werks.
     func update(previousURL: URL?, lastURL: URL?, pace: Double) {
         task?.cancel()
-        guard let previousURL, let lastURL else { ghost = nil; inbetweens = 0; return }
+        ghost = nil; inbetweens = 0
+        guard let previousURL, let lastURL else { return }
         task = Task { [weak self] in
             let result = await Task.detached(priority: .utility) { () -> PoseForecast.Forecast? in
                 guard let p = UIImage(contentsOfFile: previousURL.path)?.cgImage,

@@ -187,10 +187,12 @@ struct StudioView: View {
         content
             .onAppear(perform: activate)
             .onDisappear(perform: deactivate)
-            .onChange(of: settings) { _, new in
+            .onChange(of: settings) { old, new in
                 new.persist()
                 apply(new)
-                refreshForecast()
+                // Nur bei eigenen Einstellungen neu schätzen: Beim Ziehen der
+                // Deckkraft soll der Geist stehen bleiben
+                if old.nextStep != new.nextStep || old.nextStepPace != new.nextStepPace { refreshForecast() }
             }
             .onChange(of: controller.liveFrame) { _, _ in updateProcessed() }
             .onChange(of: controller.capturedCount) { old, new in

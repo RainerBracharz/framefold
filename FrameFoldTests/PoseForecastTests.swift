@@ -118,4 +118,30 @@ final class PoseForecastTests: XCTestCase {
         XCTAssertEqual(f.ghost.width, 360)
         XCTAssertNil(PoseForecast.forecast(previous: prev, last: prev))
     }
+
+    #if targetEnvironment(simulator) || (targetEnvironment(macCatalyst) && DEBUG)
+    /// Bilder der Ersatzkamera (Papierquadrat, 70 px pro Schritt bei 640 px):
+    /// Der Geist liegt auf der nächsten Stelle, nicht auf der letzten.
+    @MainActor func testGhostOnSimulatedCameraLandsOnNextStep() throws {
+        let a = try XCTUnwrap(LiveCaptureController.makeSimulatedFrame(step: 3, moving: false, progress: 0))
+        let b = try XCTUnwrap(LiveCaptureController.makeSimulatedFrame(step: 4, moving: false, progress: 0))
+        let f = try XCTUnwrap(PoseForecast.forecast(previous: a, last: b, ghostWidth: 640))
+        let r = try XCTUnwrap(PoseForecast.Raster(f.ghost, width: 640))
+        var sum = 0.0, n = 0.0
+        for y in 0..<r.height { for x in 0..<r.width where r.rgba[(y * r.width + x) * 4 + 3] > 100 { sum += Double(x); n += 1 } }
+        XCTAssertGreaterThan(n, 1000)
+        // Letztes Quadrat 320…400, nächstes 390…470: Mitte des Geists bei ~430
+        XCTAssertEqual(sum / n, 430, accuracy: 20)
+    }
+    #endif
+
+    func testBoxBlurKeepsAverageAndEdges() {
+        var v = [Float](repeating: 0, count: 20 * 10)
+        for y in 0..<10 { for x in 10..<20 { v[y * 20 + x] = 1 } }
+        let b = PoseForecast.boxBlur(v, 20, 10, radius: 2)
+        XCTAssertEqual(b[5 * 20 + 2], 0, accuracy: 1e-5)
+        XCTAssertEqual(b[5 * 20 + 17], 1, accuracy: 1e-5)
+        XCTAssertEqual(b[5 * 20 + 10], 0.6, accuracy: 1e-5)   // 3 von 5
+        XCTAssertEqual(b[0 * 20 + 19], 1, accuracy: 1e-5)     // Rand ohne Abfall
+    }
 }
